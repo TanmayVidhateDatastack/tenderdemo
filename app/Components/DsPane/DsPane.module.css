@@ -1,0 +1,43 @@
+.DsPane{
+    display:flex;
+    position:fixed;
+    flex-direction: column;
+    min-width: 20vw;
+    height:100vh;
+    min-height: 100vh;
+    background-color: white;
+    box-shadow: rgba(17, 17, 26, 0.05) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
+    padding:0 1rem;
+}
+.DsPane.left{
+    right:0;
+    top:0;
+}
+.DsPane.right{
+    left:0;
+    top:0;
+}
+.DsPane.left.close{
+    right:-100%;
+}
+.DsPane.right.close{
+    left:-100%;
+}
+.PaneTitleBar{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 2rem;
+    min-height: fit-content;
+    height:fit-content;
+    flex:0;
+}
+.PaneMenus{
+    padding:0 1rem;
+}
+.PaneContent{
+    margin: 1rem;
+    margin-bottom: 4px;
+    flex:1;
+    overflow-y: auto;
+}
