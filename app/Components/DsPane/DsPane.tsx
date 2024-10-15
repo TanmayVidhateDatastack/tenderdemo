@@ -63,10 +63,11 @@ function DsPane({id, type,side, className, title, paneMenus, children }: DsPaneP
           )
         }</div>
         </div>
-        <div className="PaneContent">
+        <div className={styles.PaneContent}>
           {children ? children : "DsPane Content Area"}
         </div>
       </div>
+
     </>
   );
 }

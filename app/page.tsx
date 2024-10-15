@@ -1,7 +1,7 @@
 // import Image from "next/image";
 // import styles from "./page.module.css";
- import buttonStyles from "./Components/DsButton/Ds_Button.module.css";
- import PaneStyles from "./Components/DsPane/DsPane.module.css";
+import buttonStyles from "./Components/DsButton/Ds_Button.module.css";
+import PaneStyles from "./Components/DsPane/DsPane.module.css";
 import addIcon from "./Icons/add.svg";
 import DSButton from "./Components/DsButton/DsButton";
 import DsPane from "./Components/DsPane/DsPane";
@@ -34,19 +34,18 @@ export default function Home() {
         startIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
         buttonText="New"
         />
-    </div>
+      </div>
       <DsPane id="PaneLeft" type="ClosePane" side={PaneStyles.left}>
-      <div className={buttonStyles.btn}>
-      <DSButton
-        id="actionBtn"
-        buttonClass={buttonStyles.action_btn}
-        // handleOnHover={handleMouseHover}
-        beforeIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
-        buttonText="New"
-        />
-    </div>
+        <div className={buttonStyles.btn}>
+          <DSButton
+            id="actionBtn"
+            buttonClass={buttonStyles.action_btn}
+            // handleOnHover={handleMouseHover}
+            beforeIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
+            buttonText="New"
+          />
+        </div>
       </DsPane>
-    
-        </>
+    </>
   );
 }
