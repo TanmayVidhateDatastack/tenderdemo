@@ -20,6 +20,7 @@
   display: flex;
   justify-content: space-between;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  z-index: 1;
 }
 .titleBarItem {
   flex: 1;
@@ -42,5 +43,8 @@
     width: 10vw; 
   }
 .applicationViewArea {
+    flex:1;
   padding: 10px;
+  position: relative;
+
 }
