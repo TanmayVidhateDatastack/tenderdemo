@@ -1,0 +1,141 @@
+.btn{
+   
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    color:black;
+}
+ 
+.filter_btn{
+    width: 10vw;
+    height: 9vh;
+    align-items: center;
+    margin-top: 10px;
+    background-color:transparent;
+    color:#41428E;
+    font-size: 15px;
+    border: 2px solid #41428E;
+    border-radius: 25px;
+    size: 30px;
+}
+ 
+.action_btn{
+    top: 164px;
+    left: 120px;
+    width: 82px;
+    height: 36px;
+    border: 1.5px solid var(--s-d-700);
+    border: 2px solid #41428E;
+    border-radius: 4px;
+    opacity: 1;
+ 
+}
+ 
+.action_btn:hover{
+    top: 164px;
+    left: 120px;
+    width: 82px;
+    height: 36px;
+    background-color: #41428E;
+    color: #fff;
+    border: 1.5px solid var(--s-d-700);
+    border: 2px solid #41428E;
+    border-radius: 4px;
+    opacity: 1;
+ 
+}
+ 
+.autowidth_btn{
+    top: 1253px;
+    left: 0px;
+    width: 100%;
+    height: auto;
+    color: #fff;
+    font-size: 15px;
+    background: var(--s-d-500) 0% 0% no-repeat padding-box;
+    background: #4F54A4 0% 0% no-repeat padding-box;
+    border-radius: 4px;
+    opacity: 1;
+}
+ 
+.close_btn{
+    margin-top: 3px;
+    margin-bottom: 3px;
+    top: 462px;
+    left: 455px;
+    width: 89px;
+    height: 46px;
+   
+    border-radius: 4px;
+    opacity: 1;
+}
+.close_btn:hover{
+    margin-top: 3px;
+    margin-bottom: 3px;
+    top: 462px;
+    left: 455px;
+    width: 89px;
+    height: 46px;
+   
+    background: var(---262626-grey-800-) 0% 0% no-repeat padding-box;
+    background: #262626 0% 0% no-repeat padding-box;
+    color: #fff;
+    border-radius: 4px;
+    opacity: 1;
+}
+ 
+ 
+.save_btn{
+    margin-top: 3px;
+    margin-bottom: 3px;
+    top: 462px;
+    left: 132px;
+    width: 89px;
+    height: 46px;
+    /* border: 1px solid var(---262626-grey-800-); */
+    color: #262626;
+    border: 2px solid #262626;
+    border-radius: 4px;
+    opacity: 1;
+}
+.logout_btn{
+    margin-top: 3px;
+    margin-bottom: 3px;
+    top: 164px;
+    left: 120px;
+    width: 82px;
+    height: 36px;
+    border: 1.5px solid var(--s-d-700);
+    border: 2px solid #41428E;
+    border-radius: 4px;
+    opacity: 1;
+}
+.logout_btn:hover{
+    margin-top: 3px;
+    margin-bottom: 3px;
+    top: 164px;
+    left: 120px;
+    width: 82px;
+    height: 36px;
+    background-color: #41428E;
+    color: #fff;
+    border: 1.5px solid var(--s-d-700);
+    border: 2px solid #41428E;
+    border-radius: 4px;
+    opacity: 1;
+}
+ 
+/* .addicon{
+    background-image: url('../../assets/smallIcons/add.svg');
+}
+ 
+.addicon:hover{
+    background-image: url('../../assets/smallIcons/whiteadd.svg');
+} */
+ 
+.button-icon{
+    margin-right: 2px;
+}
+ 
