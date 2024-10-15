@@ -1,5 +1,6 @@
+"use client";
 import styles from "../DsButton/Ds_Button.module.css";
- 
+
 interface DSButtonProps {
   children?: React.ReactNode;
   id?: string;
