@@ -5,6 +5,7 @@ import Image from "next/image";
 import addIcon from "./Icons/add.svg";
 import DSButton from "./Components/DsButton/DsButton";
 import DsPane from "./Components/DsPane/DsPane";
+import InputText from "./Components/DsTextField/DsTextField";
 
 export default function Home() {
   // const handleMouseHover = (e) => {
@@ -45,7 +46,25 @@ export default function Home() {
         />
     </div>
       </DsPane>
-    
+      <DsPane type="ClosePane" side={PaneStyles.left}>
+      <div className={styles.input}>
+
+      <InputText
+       placeholder="placeholder" 
+       label="label" 
+       disable={false} 
+       onClick={false} 
+       type="text"  
+       icon="📋"
+       iconEnd="📋"
+
+
+        />
+      
+      </div>
+      </DsPane>
+      
+      
         </>
   );
 }
