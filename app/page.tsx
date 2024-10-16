@@ -1,5 +1,5 @@
 import Image from "next/image";
-// import styles from "./page.module.css";
+import styles from "./page.module.css";
 import buttonStyles from "./Components/DsButton/Ds_Button.module.css";
 import PaneStyles from "./Components/DsPane/DsPane.module.css";
 import addIcon from "./Icons/add.svg";
@@ -24,19 +24,30 @@ export default function Home() {
 
   return (
     <>
-      {/* <DsPane type="ClosePane" side={PaneStyles.right}></DsPane> */}
-      <div className={buttonStyles.btn}>
+    <div className={styles.container}>
+
+      <DsPane id="PaneInset" type="inset" side={PaneStyles.left}></DsPane>
+      <div className={styles.fluidContainer}>
         <PaneOpenButton
           id="actionBtn"
           buttonClass={buttonStyles.action_btn}
-          paneId="PaneLeft"
+          paneId="PaneInset"
           // handleOnClick={handleActionClick}
           // handleOnHover={handleMouseHover}
           beforeIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
-          buttonText="New"
-        />
+          buttonText="Inset"
+          />
+          <PaneOpenButton
+          id="actionBtn"
+          buttonClass={buttonStyles.action_btn}
+          paneId="PaneRight"
+          // handleOnClick={handleActionClick}
+          // handleOnHover={handleMouseHover}
+          beforeIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
+          buttonText="Overlay"
+          />
       </div>
-      <DsPane id="PaneLeft" type="ClosePane" side={PaneStyles.left}>
+      <DsPane id="PaneRight" type="ClosePane" side={PaneStyles.right}>
         <div className={buttonStyles.btn}>
           <DSButton
             id="actionBtn"
@@ -44,9 +55,10 @@ export default function Home() {
             // handleOnHover={handleMouseHover}
             beforeIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
             buttonText="New"
-          />
+            />
         </div>
       </DsPane>
+            </div>
     </>
   );
 }
