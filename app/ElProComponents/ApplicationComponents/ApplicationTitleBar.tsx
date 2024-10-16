@@ -11,16 +11,16 @@ function ApplicationTitleBar() {
           <Image src={addIcon} alt="Add Icon" />
         </div>
         <div className={styles.col}>
-          <div className={styles.titleBarItem + " " + styles.separator}>
+          <div className={styles.titleBarItem + " " + styles.left_separator}>
             <Image src={addIcon} alt="Add Icon" />
           </div>
-          <div className={styles.titleBarItem + " " + styles.separator}>
+          <div className={styles.titleBarItem + " " + styles.left_separator}>
             <Image src={addIcon} alt="Add Icon" />
           </div>
-          <div className={styles.titleBarItem + " " + styles.separator}>
+          <div className={styles.titleBarItem + " " + styles.left_separator}>
             <Image src={addIcon} alt="Add Icon" />
           </div>
-          <div className={styles.titleBarItem + " " + styles.separator}>
+          <div className={styles.titleBarItem + " " + styles.left_separator}>
             <Image src={addIcon} alt="Add Icon" />
           </div>
         </div>

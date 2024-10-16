@@ -35,7 +35,7 @@ export default function Home() {
         buttonText="New"
         />
       </div>
-      <DsPane id="PaneLeft" type="ClosePane" side={PaneStyles.left}>
+      <DsPane id="PaneRight" type="ClosePane" side={PaneStyles.right}>
         <div className={buttonStyles.btn}>
           <DSButton
             id="actionBtn"
@@ -43,9 +43,10 @@ export default function Home() {
             // handleOnHover={handleMouseHover}
             beforeIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
             buttonText="New"
-          />
+            />
         </div>
       </DsPane>
+            </div>
     </>
   );
 }
