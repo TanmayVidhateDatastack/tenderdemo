@@ -1,14 +1,54 @@
 :root {
-  --background: #ffffff;
+  --background: #fff;
   --foreground: #171717;
-}
+  --backgroundt:rgb(246, 242, 242);
 
+  --blue: #41428E;
+  --semiblue: #4F54A4;
+  --red: #c50606;
+  --orange:#EB0F0F;
+  --black: #000000;
+  --lightred:#f9aeae;
+  --lightviolet: #abafe1;
+  --darkskyblue:#0076BA;
+  --skyblue:#0FAEEF;
+  --gray:#c4c4c4;
+  --brick: #f1818198;
+  --blush:#efe3fade;
+  --periwinkle:#d2cbd2;
+  --semiblack:#383838;
+  --heather:#A4A9D1;
+
+  --primary:var(--semiblue);
+  --primary-hover:var(--blue);
+  --secondary:var(--gray);
+  --danger:var(--red);
+  --danger-hover:var(--orange);
+  --warning:var(--lightred);
+  --warning-hover:var(--brick);
+  --dark:var(--black);
+  --info:var(--darkskyblue);
+  --info-hover:var(--skyblue);
+  --midviolet:var(--blush);  
+  --semiviolet:var(--periwinkle);       
+  --lightviolet:var(--lightviolet);
+
+
+  /* --primary:var(--backgroundt); */
+  /* --primary-hover:var(--backgroundt); */
+  /* --secondary:var(--backgroundt);
+  --secondary-hover:var(--backgroundt);
+  --warning:var(--backgroundt);
+  --transparent:var(var(var(--backgroundt))) */
+
+}
+/* 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 html,
 body {
