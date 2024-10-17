@@ -14,6 +14,7 @@
   .input::placeholder {
     position: absolute;
     left: 70px;
+    align-content: center;
     top: 50%;
     transform: translateY(-50%);
     color: var(--blue-600);
@@ -21,6 +22,7 @@
     transition: all 0.3s ease;
      background-color: var(--background);
     padding: 0 5px;
+    align-content: center;
     color: #aaa; 
 
 }
@@ -34,6 +36,7 @@
     position: relative;
     display: flex;
     /* justify-content: space-between; */
+    align-items:flex-end;
     width: 300px;
     padding: 10px;
     border: 1px solid var(--blue-600);
@@ -69,13 +72,14 @@
   /* Legend as the floating label */
   .floating-label {
     position: absolute;
+
     left: 30px;
     top: 50%;
     transform: translateY(-50%);
     color: var(--blue-600);
     font-size: 16px;
     transition: all 0.3s ease;
-     background-color: var(--background);
+    background-color: var(--background);
     padding: 0 5px;
   }
 
