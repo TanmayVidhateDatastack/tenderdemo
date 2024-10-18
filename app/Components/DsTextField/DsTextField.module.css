@@ -37,7 +37,7 @@
     display: flex;
     /* justify-content: space-between; */
     align-items:flex-end;
-    width: 300px;
+    /* width: 300px; */
     padding: 10px;
     border: 1px solid var(--blue-600);
     border-radius: 5px;
@@ -67,7 +67,13 @@
     outline: none;
     position: relative;
     z-index: 1;
+    resize:vertical;
+    overflow:hidden;
+ 
+  
+
   }
+  
   
   /* Legend as the floating label */
   .floating-label {

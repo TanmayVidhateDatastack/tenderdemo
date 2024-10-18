@@ -86,7 +86,8 @@ const TextField: React.FC<InputTextAreaProps> = ({
             {type == "singleline" && (<div className={styles["iconwrapper"]}>{icon && <div className={styles.icon_left}>{icon}</div>}</div>)}
             <div className={styles["input-wrapper"]}>
               {type === 'multiline' ? (
-                <textarea
+               
+               <textarea
                   className={`${styles['custom-input']}  ${className || ''}`}
                   onFocus={() => setIsFocused(true)}
                   onChange={(e) => {
@@ -99,8 +100,8 @@ const TextField: React.FC<InputTextAreaProps> = ({
                   onMouseOut={onMouseOut}
                   onMouseMove={Onmousehover}
                   onMouseOver={onMouseOver}
-
-
+                  minRows={minRows}
+            
                   onMouseLeave={onMouseOut}
 
                   placeholder={isFocused ? placeholder : ""}
