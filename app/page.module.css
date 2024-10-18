@@ -16,13 +16,19 @@
   font-family: var(--font-geist-sans);
 }
 .container {
+  flex:1;
   display: flex;
   flex-direction: row;
   width: 100%;
   height: 100%;
+  padding:0.5rem
 }
 .fluidContainer{
   flex:1;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
 }
 .row {
   display: flex;
@@ -32,6 +38,12 @@
 }
 .col {
   display: flex;
+}
+.left_separator {
+  border-left: 1px solid grey;
+}
+.right_separator {
+  border-left: 1px solid grey;
 }
 @media (prefers-color-scheme: dark) {
   .page {

@@ -16,7 +16,7 @@
 
 .layout {
 }
-.applicationTitleBar {
+.appTitleBar {
   display: flex;
   justify-content: space-between;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
@@ -24,31 +24,100 @@
 }
 .titleBarItem {
   flex: 1;
-  min-width: 5vw;
+  min-width: fit-content;
   padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.left_separator {
-    border-left: 1px solid grey;
-  }
-  .right_separator {
-    border-left: 1px solid grey;
-  }
-.applicationContent {
+.appContent {
   flex: 1;
 }
-.applicationNavigator {
-  padding: 10px;
-  width:5vw;
-  background-color: black;
+.appNavigator {
+  display:flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width:0;
+  min-width:fit-content;
+  background-color: #0F0F0F;
   transition: width 0.7s ease;
   z-index: 1;
+
 }
-.applicationNavigator:hover {
-    width: 10vw; 
+.appNavigator:hover {
+    width: 15vw; 
   }
-.applicationViewArea {
+.appRoutes{
+  flex:1;
+  padding: 10px;
+}
+.app{
+  display:flex;
+  align-items: center;
+}
+.appTitle ,.poweredBy{
+  display:none;
+  width:0;
+  height:0;
+  opacity:0;
+  visibility: hidden;
+  color: #0F0F0F;
+  padding:0;
+  margin:0;
+  transition: width 0.7s ease,height 0.7s ease,color 0.7s ease, opacity 0.7s ease, visibility 0.7s ease, display 0.7s ease;
+
+}
+.appNavigator:hover .poweredBy{
+  justify-content: start;
+  align-items: center;
+}
+.appNavigator:hover .appTitle,.appNavigator:hover .poweredBy{
+  display:flex;
+  height: auto;
+
+  animation: showUp 0.9s ease forwards; /* Animate after delay */
+  animation-delay: 0.3s;
+}
+@keyframes showUp {
+  to {
+  width:10vw;
+  color:white;
+    opacity: 1;
+    visibility: visible; /* Fade in after delay */
+  }
+}
+
+.navigationFooter{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding:10px;
+  align-items: flex-end;
+  background-color: #ffffff05;
+  color:rgba(250, 254, 255, 0.80);
+  transition:  align-items 0.7s ease;
+
+}
+.appNavigator:hover .navigationFooter{
+  animation: aligns 0.1ms ease forwards; /* Animate after delay */
+  animation-delay: 0.7s;
+}
+@keyframes aligns {
+  to {
+  align-items: center; /* Fade in after delay */
+  }
+}
+.poweredByLogo{
+  margin-right: 0.5rem;
+  height: fit-content;
+}
+
+.appViewArea {
     flex:1;
   /* padding: 10px; */
   position: relative;
 
+}
+.left_align{
+  justify-content: start;
 }

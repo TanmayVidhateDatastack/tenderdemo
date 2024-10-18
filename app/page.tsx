@@ -24,10 +24,10 @@ export default function Home() {
 
   return (
     <>
-    <div className={styles.container}>
+    <div className={styles.fluidContainer}>
 
       <DsPane id="PaneInset" type="inset" side={PaneStyles.left}></DsPane>
-      <div className={styles.fluidContainer}>
+      <div className={styles.container}>
         <PaneOpenButton
           id="actionBtn"
           buttonClass={buttonStyles.action_btn}
