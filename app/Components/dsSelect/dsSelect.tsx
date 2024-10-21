@@ -59,11 +59,15 @@ const DsSelect:React.FC<SelectProps> =({options, placeholder= "Click to Select"}
             onClick= {()=>handleSelect(option)}
             className={styles.option}
         >
-           {option } 
+          <input type="checkbox" name="check" id='check' contentEditable ></input>
+           {option} 
         </div>
       ))}
     </div>
     )} 
+    <div>
+    <p>{`${selectedOption}`}</p>
+    </div>
     </div>
     );
 };

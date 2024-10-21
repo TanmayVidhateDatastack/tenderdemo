@@ -22,8 +22,7 @@ export default function Home() {
   // const handleActionClick = () => {
   //   console.log("Action button clicked");
   // };
-  const options=[ "option1" , "option2" , "option3"
- ];
+  const options=[ "option1" , "option2" , "option3"];
 
   
 
