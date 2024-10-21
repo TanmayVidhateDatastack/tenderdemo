@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import styles from "../ElLayout/ElLayout.module.css";
+import styles from "./ElLayout.module.css";
 import pageStyles from "../../page.module.css";
 
 import addIcon from "../../Icons/add.svg";
