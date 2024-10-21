@@ -1,8 +1,8 @@
 // import Image from "next/image";
 import React from "react";
 import styles from "./ElLayout.module.css";
-import ApplicationTitleBar from "../ApplicationComponents/ApplicationTitleBar";
-import ApplicationNavigator from "../ApplicationComponents/ApplicationNavigator";
+import ApplicationTitleBar from "./ApplicationTitleBar";
+import ApplicationNavigator from "./ApplicationNavigator";
 
 export interface ElLayoutProps {
     children:React.ReactNode
