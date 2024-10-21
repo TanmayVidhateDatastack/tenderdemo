@@ -29,11 +29,11 @@ const DSButton: React.FC<DSButtonProps> = ({
       className={styles.btn +" "+ buttonClass}
       onClick={handleOnClick}
       onMouseOver={handleOnHover}
-    >
+    > 
       {beforeIcon !== undefined && (
         <span className={styles.button_icon}>{beforeIcon}</span>
-      )}
-      {buttonText || children}
+      )} 
+      {buttonText  ||  children}  
       {afterIcon !== undefined && (
         <span className="button-icon">{afterIcon}</span>
       )}

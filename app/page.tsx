@@ -1,64 +1,45 @@
-import Image from "next/image";
-import styles from "./page.module.css";
-import buttonStyles from "./Components/DsButton/Ds_Button.module.css";
-import PaneStyles from "./Components/DsPane/DsPane.module.css";
-import addIcon from "./Icons/add.svg";
-import DSButton from "./Components/DsButton/DsButton";
-import DsPane from "./Components/DsPane/DsPane";
-import PaneOpenButton from "./Components/DsPane/PaneOpenButton";
+// import Image from "next/image";
+// import styles from "./page.module.css";
+// import buttonStyles from "./Components/DsButton/Ds_Button.module.css";
+// import PaneStyles from "./Components/DsPane/DsPane.module.css";
+// import addIcon from "./Icons/add.svg";
+// import DSButton from "./Components/DsButton/DsButton";
+// import DsPane from "./Components/DsPane/DsPane";
+// import PaneOpenButton from "./Components/DsPane/PaneOpenButton";
+"use client";
+import { useState } from "react";
+import Ds_UserProfile from "./Components/DsUserProfile/DsUserProfile";
+import Ds_Usershort from "./Components/DsUserProfile/DsUsershort";
+
 
 export default function Home() {
-  // const handleMouseHover = (e) => {
-  //   const button = e.target;
-  //   if (button) {
-  //     const icon = button.querySelector(".add") as HTMLImageElement;
-  //     if (icon) {
-  //       icon.src = addIconHover;
-  //       console.log(addIconHover);
-  //     }
-  //   }
-  // };
-  // const handleActionClick = () => {
-  //   console.log("Action button clicked");
-  // };
+
+
+  const user = {
+    name: 'Abhishek Kumar',
+    email: 'abhishek.kumar@Ipca.com',
+    Id: '5212',
+    Company: 'IPCA Labs',
+    Department: 'Formulation',
+    Location: 'Pune'
+    
+  };
+  const [isVisible,setIsVisible]=useState<boolean>(false);
+const toggleValue=()=>{
+setIsVisible(!isVisible);
+  };
 
   return (
-    <>
-    <div className={styles.container}>
-
-      <DsPane id="PaneInset" type="inset" side={PaneStyles.left}></DsPane>
-      <div className={styles.fluidContainer}>
-        <PaneOpenButton
-          id="actionBtn"
-          buttonClass={buttonStyles.action_btn}
-          paneId="PaneInset"
-          // handleOnClick={handleActionClick}
-          // handleOnHover={handleMouseHover}
-          beforeIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
-          buttonText="Inset"
-          />
-          <PaneOpenButton
-          id="actionBtn"
-          buttonClass={buttonStyles.action_btn}
-          paneId="PaneRight"
-          // handleOnClick={handleActionClick}
-          // handleOnHover={handleMouseHover}
-          beforeIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
-          buttonText="Overlay"
-          />
-      </div>
-      <DsPane id="PaneRight" type="ClosePane" side={PaneStyles.right}>
-        <div className={buttonStyles.btn}>
-          <DSButton
-            id="actionBtn"
-            buttonClass={buttonStyles.action_btn}
-            // handleOnHover={handleMouseHover}
-            beforeIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
-            buttonText="New"
-            />
-        </div>
-      </DsPane>
-            </div>
-    </>
+    <div className="Ds_UserProfile">
+      
+<Ds_Usershort onProfileClick={toggleValue}  user={user}></Ds_Usershort>
+      {isVisible &&  (
+      <Ds_UserProfile user={user} onProfileClick={toggleValue}/>
+      )}
+    </div>
   );
-}
+};
+
+
+
+
