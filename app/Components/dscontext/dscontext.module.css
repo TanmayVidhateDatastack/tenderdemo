@@ -1,0 +1,132 @@
+.container {
+    display: flex;
+    justify-content: center; /* Center the button horizontally */
+    align-items: center; /* Center vertically */
+    height: 100%;
+    width:100%;
+    
+    background-color: #f0f0f0;
+    position: relative; /* So the popup is positioned relative to this container */
+}
+  
+.button {
+    padding: 10px 20px;
+    background-color: #4a5cbe;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    position: absolute; /* Positioning relative to this button */
+}
+  
+.popUp {
+    background-color: #4a5cbe;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 14px;
+    text-align: center;
+    white-space: nowrap; /* Prevent text wrapping */
+    position: fixed; /* Relative to the button */
+    z-index: 10; /* Ensure it's above other elements */
+}
+  
+.arrow {
+    position: absolute;
+    bottom: -5px; /* Keep it positioned just below the popup */
+    left: 50%; /* Center it horizontally */
+    transform: translateX(-50%); /* Shift it left by 50% of its width */
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #4a5cbe; /* Color of the arrow */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

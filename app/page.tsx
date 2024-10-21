@@ -6,6 +6,7 @@ import addIcon from "./Icons/add.svg";
 import DSButton from "./Components/DsButton/DsButton";
 import DsPane from "./Components/DsPane/DsPane";
 import PaneOpenButton from "./Components/DsPane/PaneOpenButton";
+import PopUpContext from "./Components/dscontext/dscontext.tsx";
 
 export default function Home() {
   // const handleMouseHover = (e) => {
