@@ -1,0 +1,33 @@
+.allselect{
+   height:auto;
+   width:fit-content; 
+   position:relative; 
+   margin:20px;
+}
+.mainselection{  
+    padding:10px;
+    color:black;
+    border:1px solid;
+    border-radius:5px ;
+    border-style: groove;
+    border-color:gray;
+    justify-content: center;
+}
+
+.list{
+    display: block;
+    block-size: 100%;
+    padding:10px;
+    justify-content: center;
+    caret-color: blue;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    border-radius: 2px;
+  
+}
+
+.option{
+    /* height:auto;
+    width: auto; */
+    /* padding:10 px; */
+    margin:10px;
+}
