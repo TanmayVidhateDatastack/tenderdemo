@@ -1,6 +1,4 @@
 import styles from "../dsButton/dsButton.module.css";
-import btnStyles from "./dsButton.module.css";
-import pageStyle from "../../page.module.css";
 
 interface DSButtonProps {
   children?: React.ReactNode;
@@ -10,12 +8,19 @@ interface DSButtonProps {
   type?: string;
   buttonSize?: "btnSmall" | "btnMedium" | "btnLarge";
   iconSize?: "iconSmall" | "iconMedium" | "iconLarge";
+  buttonColor?:
+    | "btnPrimary"
+    | "btnSecondary"
+    | "btnDanger"
+    | "btnWarning"
+    | "btnDark"
+    | "btnInfo";
   buttonClass?: string;
   handleOnClick?: (e: React.MouseEvent<HTMLElement>) => void;
   img?: string;
-  startIcon?: React.ReactNode;
-  endIcon?: React.ReactNode;
-  spliticon?: React.ReactNode;
+  startIcon?: React.ReactElement;
+  endIcon?: React.ReactElement;
+  spliticon?: React.ReactElement;
   handleOnHover?: (e: React.MouseEvent<HTMLElement>) => void;
   handleMouseLeave?: (e: React.MouseEvent<HTMLElement>) => void;
 }
@@ -25,6 +30,7 @@ const DSButton: React.FC<DSButtonProps> = ({
   buttonClass,
   buttonSize = "btnMedium",
   iconSize = "iconSmall",
+  buttonColor = "btnPrimary",
   type = "standard",
   tooltip,
   handleOnClick,
@@ -35,12 +41,24 @@ const DSButton: React.FC<DSButtonProps> = ({
   endIcon,
   spliticon,
 }) => {
+  function displayFileBrowser(e: React.MouseEvent<HTMLButtonElement>) {
+    const id = (e.target as HTMLElement)?.id;
+    document.getElementById(id + "_upload")?.click();
+  }
   return (
     <>
       {type == "standard" && (
         <button
           id={id}
-          className={styles.btn + " " + buttonClass + " " + styles[buttonSize]}
+          className={
+            styles.btn +
+            " " +
+            buttonClass +
+            " " +
+            styles[buttonSize] +
+            " " +
+            styles[buttonColor]
+          }
           title={tooltip !== undefined ? tooltip : label}
           onClick={handleOnClick}
           onMouseOver={handleOnHover}
@@ -50,7 +68,6 @@ const DSButton: React.FC<DSButtonProps> = ({
             <span
               className={"icon " + styles.startIcon + " " + styles[iconSize]}
             >
-              {/* <Image src={startIcon} alt="icon" /> */}
               {startIcon}
             </span>
           )}
@@ -58,18 +75,25 @@ const DSButton: React.FC<DSButtonProps> = ({
 
           {endIcon !== undefined && (
             <span className={"icon " + styles.endIcon + " " + styles[iconSize]}>
-              {/* <Image src={endIcon} alt="icon" /> */}
               {endIcon}
             </span>
           )}
         </button>
       )}
       {type == "split" && (
-        <div className={btnStyles.split_container}>
+        <div className={styles.split_container}>
           <button
             id={id}
             className={
-              styles.btn + " " + buttonClass + " " + styles[buttonSize]
+              styles.btn +
+              " " +
+              buttonClass +
+              " " +
+              styles.split_btn +
+              " " +
+              styles[buttonSize] +
+              " " +
+              styles[buttonColor]
             }
             title={tooltip !== undefined ? tooltip : label}
             onClick={handleOnClick}
@@ -80,7 +104,6 @@ const DSButton: React.FC<DSButtonProps> = ({
               <span
                 className={"icon " + styles.startIcon + " " + styles[iconSize]}
               >
-                {/* <Image src={startIcon} alt="icon" /> */}
                 {startIcon}
               </span>
             )}
@@ -92,30 +115,25 @@ const DSButton: React.FC<DSButtonProps> = ({
                   "icon " +
                   styles.endIcon +
                   " " +
-                  btnStyles.split_icon_btn +
+                  styles.split_icon_btn +
                   " " +
-                  styles[iconSize]
+                  styles[iconSize] +
+                  " " +
+                  styles[buttonColor]
                 }
               >
-                {/* <Image src={endIcon} alt="icon" /> */}
                 {endIcon}
               </span>
             )}
           </button>
 
-          <div
-            // className={"icon" + " " + styles.button_icon + " " + styles[iconSize]}
-            className={
-              btnStyles.split_icon_btn + " " + pageStyle.left_separator
-            }
-          >
-            {/* {spliticon !== undefined && <Image src={spliticon} alt="icon" />} */}
+          <div className={styles.split_icon_btn + " " + styles.left_separator}>
             {spliticon}
           </div>
         </div>
       )}
       {type == "toggle" && (
-        <div className={btnStyles.toggle}>
+        <div className={styles.toggle}>
           <button
             id={id}
             className={
@@ -125,9 +143,92 @@ const DSButton: React.FC<DSButtonProps> = ({
             onMouseOver={handleOnHover}
             onMouseLeave={handleMouseLeave}
           >
-            <div className={btnStyles.thumb}></div>
+            <div className={styles.thumb}></div>
           </button>
         </div>
+      )}
+      {type == "icon_image" && (
+        <div className={styles.icon_image}>
+          <button
+            id={id}
+            className={
+              styles.btn +
+              " " +
+              buttonClass +
+              " " +
+              styles.icon_image +
+              " " +
+              styles[buttonSize]
+            }
+            onClick={handleOnClick}
+            onMouseOver={handleOnHover}
+            onMouseLeave={handleMouseLeave}
+          >
+            {startIcon !== undefined && (
+              <span
+                className={"icon " + styles.startIcon + " " + styles[iconSize]}
+                title={tooltip !== undefined ? tooltip : tooltip}
+              >
+                {startIcon}
+              </span>
+            )}
+          </button>
+        </div>
+      )}
+      {type == "button_icon" && (
+        <div className={styles.icon_image}>
+          <button
+            id={id}
+            className={
+              styles.btn +
+              " " +
+              buttonClass +
+              " " +
+              styles.icon_btn +
+              " " +
+              styles[buttonSize]
+            }
+            onClick={handleOnClick}
+            onMouseOver={handleOnHover}
+            onMouseLeave={handleMouseLeave}
+          >
+            {startIcon !== undefined && (
+              <span
+                className={"icon " + styles[iconSize]}
+                title={tooltip !== undefined ? tooltip : tooltip}
+              >
+                {startIcon}
+              </span>
+            )}
+          </button>
+        </div>
+      )}
+      {type == "upload" && (
+        <button
+          id={id}
+          className={styles.btn + " " + buttonClass + " " + styles[buttonSize]}
+          title={tooltip !== undefined ? tooltip : label}
+          onClick={displayFileBrowser}
+          onMouseOver={handleOnHover}
+          onMouseLeave={handleMouseLeave}
+        >
+          {startIcon !== undefined && (
+            <span
+              className={"icon " + styles.startIcon + " " + styles[iconSize]}
+              onClick={displayFileBrowser}
+            >
+              {startIcon}
+            </span>
+          )}
+          {label || children}
+
+          {endIcon !== undefined && (
+            <span className={"icon " + styles.endIcon + " " + styles[iconSize]}>
+              {endIcon}
+            </span>
+          )}
+          <input id={id + "_upload"} type="file" hidden />
+        </button>
       )}
     </>
   );

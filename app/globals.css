@@ -15,13 +15,20 @@
   --gray:#c4c4c4;
   --brick: #f1818198;
   --blush:#efe3fade;
-  --periwinkle:#d2cbd2;
+  --periwinkle:#e4e4e4;
   --semiblack:#383838;
   --heather:#A4A9D1;
+
+
+ --text-primary:var(--blue);
+ --text-white:var(--background);
+ --text-dark:var(--black);
+ --text-warning:var(--red);
 
   --primary:var(--semiblue);
   --primary-hover:var(--blue);
   --secondary:var(--gray);
+  --secondary-hover:var(--gray);
   --danger:var(--red);
   --danger-hover:var(--orange);
   --warning:var(--lightred);
@@ -31,8 +38,21 @@
   --info-hover:var(--skyblue);
   --midviolet:var(--blush);  
   --semiviolet:var(--periwinkle);       
-  --lightviolet:var(--lightviolet);
+  /* --lightviolet:var(--lightviolet); */
 
+  /* --sndPrimary:var(--semiblue);
+  --sndPrimary-hover:var(--blue);
+  --sndSecondary:var(--gray);
+  --sndDanger:var(--red);
+  --sndDanger-hover:var(--orange);
+  --sndWarning:var(--lightred);
+  --sndWarning-hover:var(--brick);
+  --sndDark:var(--black);
+  --sndInfo:var(--darkskyblue);
+  --sndInfo-hover:var(--skyblue);
+  --sndMidviolet:var(--blush);  
+  --sndSemiviolet:var(--periwinkle);       
+  --sndLightviolet:var(--lightviolet); */
 
   /* --primary:var(--backgroundt); */
   /* --primary-hover:var(--backgroundt); */
@@ -74,7 +94,12 @@ a {
   color: inherit;
   text-decoration: none;
 }
-
+span{
+  height: auto;
+    min-height: fit-content;
+    display: flex;
+    align-items: center;
+}
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;

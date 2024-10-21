@@ -9,6 +9,11 @@ import btnStyles from "./dsButton.module.css";
 import whiteupdate from "../../Icons/whiteupdate.svg";
 import whiteadd from "../../Icons/whiteadd.svg";
 import spliticon from "../../Icons/downarrowwhite.svg";
+import notificationicon from "../../Icons/notificationbell.svg";
+import chat from "../../Icons/chat.svg";
+import leftarrow from "../../Icons/grayleftarrow.svg";
+import darkleftarrow from "../../Icons/darkleftarrow.svg";
+import upload from "../../Icons/uploadicon.svg";
 import { useState } from "react";
 import { ImgProps } from "next/dist/shared/lib/get-img-props";
 import DSButton from "./dsButton";
@@ -32,13 +37,8 @@ const DemoButtons: React.FC = () => {
     <div className={btnStyles.btn_div + " " + btnStyles.flex}>
       <DSButton
         id="actionBtn"
-        buttonClass={
-          btnStyles.btnMedium +
-          " " +
-          btnStyles.btnOutlined +
-          " " +
-          btnStyles.btnPrimary
-        }
+        buttonColor="btnPrimary"
+        buttonClass={btnStyles.btnOutlined}
         handleOnHover={(e) => changeImage(e, whiteadd)}
         handleMouseLeave={(e) => changeImage(e, addIcon)}
         startIcon={<Image src={addIcon} alt="icon" />}
@@ -47,107 +47,69 @@ const DemoButtons: React.FC = () => {
       />
       <DSButton
         id="closeBtn"
-        buttonClass={
-          btnStyles.btnMedium +
-          " " +
-          btnStyles.btnOutlined +
-          " " +
-          btnStyles.btnDark
-        }
+        buttonColor="btnDark"
+        buttonClass={btnStyles.btnOutlined}
         handleOnClick={(e) => clickHandler(e)}
         label="Close"
       />
       <DSButton
         id="iconfilterBtn"
-        buttonClass={
-          btnStyles.btnText +
-          " " +
-          btnStyles.btnMedium +
-          " " +
-          btnStyles.btnFilter
-        }
+        buttonColor="btnPrimary"
+        buttonClass={btnStyles.btnText + " " + btnStyles.btnTextPrimary}
         handleOnClick={(e) => clickHandler(e)}
         startIcon={<Image src={filter} alt="icon" />}
         label="Filter"
       />
       <DSButton
         id="deleteBtn"
-        buttonClass={
-          btnStyles.btnSmall +
-          " " +
-          btnStyles.btnOutlined +
-          " " +
-          btnStyles.btnDanger
-        }
+        buttonColor="btnDanger"
+        buttonSize="btnSmall"
+        buttonClass={btnStyles.btnOutlined}
         handleOnClick={(e) => clickHandler(e)}
         label="Delete"
       />
       <DSButton
         id="cancelBtn"
-        buttonClass={btnStyles.btnSmall + " " + btnStyles.btnDark}
+        buttonColor="btnDark"
+        buttonSize="btnSmall"
+        // buttonClass={btnStyles.btnSmall}
         handleOnClick={(e) => clickHandler(e)}
         label="Cancel"
       />
       <DSButton
         id="loginBtn"
-        buttonClass={
-          btnStyles.btnLarge +
-          " " +
-          btnStyles.btnContained +
-          " " +
-          btnStyles.btnInfo +
-          " " +
-          btnStyles.btnAutoWidth
-        }
+        buttonColor="btnInfo"
+        buttonSize="btnLarge"
+        buttonClass={btnStyles.btnContained + " " + btnStyles.btnAutoWidth}
         handleOnClick={(e) => clickHandler(e)}
         label="Login"
       />
       <DSButton
         id="backBtn"
-        buttonClass={
-          btnStyles.btnMedium +
-          " " +
-          btnStyles.btnText +
-          " " +
-          btnStyles.btnSecondary
-        }
+        buttonColor="btnSecondary"
+        buttonClass={btnStyles.btnText}
         handleOnClick={(e) => clickHandler(e)}
         label="Back"
       />
       <DSButton
         id="ewaybillBtn"
-        buttonClass={
-          btnStyles.btnMedium +
-          " " +
-          btnStyles.btnContained +
-          " " +
-          btnStyles.btnPrimary
-        }
+        buttonColor="btnPrimary"
+        buttonClass={btnStyles.btnContained}
         handleOnClick={(e) => clickHandler(e)}
         label="E-Way Bill"
       />
       <DSButton
         id="deleteBtn"
-        buttonClass={
-          btnStyles.btnMedium +
-          " " +
-          btnStyles.btnText +
-          " " +
-          btnStyles.btnRedWarning
-        }
+        buttonColor="btnWarning"
+        buttonClass={btnStyles.btnText}
         handleOnClick={(e) => clickHandler(e)}
         startIcon={<Image src={trashbtn} alt="icon" />}
         label="Delete"
       />
       <DSButton
         id="deviationBtn"
-        buttonClass={
-          btnStyles.btnContained +
-          " " +
-          btnStyles.btnMedium +
-          " " +
-          btnStyles.btnDanger
-        }
+        buttonColor="btnDanger"
+        buttonClass={btnStyles.btnContained}
         buttonSize="btnMedium"
         handleOnClick={(e) => clickHandler(e)}
         endIcon={<Image src={deviation} alt="icon" />}
@@ -155,51 +117,30 @@ const DemoButtons: React.FC = () => {
       />
       <DSButton
         id="filterBtn"
-        buttonClass={
-          btnStyles.btnMedium +
-          " " +
-          btnStyles.btnOutlined +
-          " " +
-          btnStyles.btnPrimary
-        }
+        buttonColor="btnPrimary"
+        buttonClass={btnStyles.btnOutlined}
         handleOnClick={(e) => clickHandler(e)}
         label="Apply Filter"
       />
       <DSButton
         id="invoiceBtn"
-        buttonClass={
-          btnStyles.btnLarge +
-          " " +
-          btnStyles.btnContained +
-          " " +
-          btnStyles.btnPrimary
-        }
+        buttonColor="btnPrimary"
+        buttonSize="btnLarge"
+        buttonClass={btnStyles.btnContained}
         handleOnClick={(e) => clickHandler(e)}
         label="View Invoice"
       />
       <DSButton
         id="logoutBtn"
-        buttonClass={
-          btnStyles.btnMedium +
-          " " +
-          btnStyles.btnOutlined +
-          " " +
-          btnStyles.btnPrimary
-        }
+        buttonColor="btnDark"
+        buttonClass={btnStyles.btnOutlined}
         handleOnClick={(e) => clickHandler(e)}
         label="Log Out"
       />
       <DSButton
         id="updateBtn"
-        buttonClass={
-          btnStyles.btnMedium +
-          " " +
-          btnStyles.btnText +
-          " " +
-          btnStyles.btnPrimary +
-          " " +
-          btnStyles.btnFilter
-        }
+        buttonColor="btnPrimary"
+        buttonClass={btnStyles.btnContained + " " + btnStyles.btnSecondary}
         handleOnClick={(e) => clickHandler(e)}
         handleOnHover={(e) => changeImage(e, whiteupdate)}
         handleMouseLeave={(e) => changeImage(e, update)}
@@ -208,31 +149,17 @@ const DemoButtons: React.FC = () => {
       />
       <DSButton
         id="autoWidthBtn"
-        buttonClass={
-          btnStyles.btnContained +
-          " " +
-          btnStyles.btnMedium +
-          " " +
-          btnStyles.btnPrimary +
-          " " +
-          btnStyles.btnAutoWidth
-        }
+        buttonColor="btnPrimary"
+        buttonClass={btnStyles.btnContained + " " + btnStyles.btnAutoWidth}
         handleOnClick={(e) => clickHandler(e)}
         label="Apply"
       />
 
       <DSButton
         id="saveBtn"
+        buttonColor="btnPrimary"
         type="split"
-        buttonClass={
-          btnStyles.btnContained +
-          " " +
-          btnStyles.btnMedium +
-          " " +
-          btnStyles.btnPrimary +
-          " " +
-          btnStyles.spilt_btn
-        }
+        buttonClass={btnStyles.btnContained}
         handleOnClick={(e) => clickHandler(e)}
         label="Save"
         spliticon={<Image src={spliticon} alt="icon" />}
@@ -245,6 +172,46 @@ const DemoButtons: React.FC = () => {
           toggled ? btnStyles.toggled : ""
         }`}
         handleOnClick={() => setToggled(!toggled)}
+      />
+
+      <DSButton
+        id="uploadBtn"
+        type="upload"
+        buttonSize="btnSmall"
+        buttonClass={btnStyles.btnText + " " + btnStyles.btnTextPrimary}
+        handleOnClick={(e) => clickHandler(e)}
+        startIcon={<Image src={upload} alt="icon" />}
+        label="CSV File"
+      />
+
+      <DSButton
+        id="notificationBtn"
+        type="icon_image"
+        buttonSize="btnSmall"
+        // buttonClass={btnStyles.btnSmall + " " + btnStyles.icon_image}
+        handleOnClick={(e) => clickHandler(e)}
+        startIcon={<Image src={notificationicon} alt="icon" />}
+        tooltip="Notification"
+      />
+      <DSButton
+        id="chatBtn"
+        type="icon_image"
+        buttonSize="btnSmall"
+        // buttonClass={btnStyles.btnSmall + " " + btnStyles.icon_image}
+        handleOnClick={(e) => clickHandler(e)}
+        startIcon={<Image src={chat} alt="icon" />}
+        tooltip="Chat"
+      />
+
+      <DSButton
+        id="leftarrowBtn"
+        type="button_icon"
+        // buttonClass={btnStyles.icon_btn}
+        handleOnClick={(e) => clickHandler(e)}
+        handleOnHover={(e) => changeImage(e, darkleftarrow)}
+        handleMouseLeave={(e) => changeImage(e, leftarrow)}
+        startIcon={<Image src={leftarrow} alt="icon" />}
+        tooltip="Back"
       />
     </div>
   );
