@@ -3,9 +3,9 @@
   --foreground: #171717;
   /*Pane*/
 
-  /*Pane*/  
+  /*Pane*/
   /*Layout*/
-  
+
   /*Layout*/
 }
 
@@ -15,6 +15,12 @@
     --foreground: #ededed;
   }
 } */
+.sort-icon.active {
+  background-color: blue;
+}
+.cursor-pointer {
+  cursor: pointer;
+}
 
 html,
 body {
