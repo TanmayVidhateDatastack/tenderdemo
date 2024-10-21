@@ -8,6 +8,7 @@ import CloseBtn from "../../Icons/mediumIcons/cross.svg";
 
 
 export interface DsPaneProps {
+    id?:string;
   type?:string;
   side?: string;
   className?: string;
@@ -23,9 +24,8 @@ function ClosePane(e:React.MouseEvent<HTMLDivElement>){
       currentPane.classList.toggle(styles.close);
     }
   }
-  export function DisplayPane(e:React.MouseEvent<HTMLDivElement>){
-    e.preventDefault();
-    const currentPane=(e.target as HTMLElement).closest(".DsPane");
+  export function DisplayPane(id:string){
+    const currentPane=document.getElementById(id);
     if(currentPane){
       currentPane.classList.toggle(styles.close);
     }
@@ -33,6 +33,7 @@ function ClosePane(e:React.MouseEvent<HTMLDivElement>){
 /**
  * DsPane component displays pane.
  *
+ * @param {string} id - Set id for pane.
  * @param {string} type - Set type of pane i.e. Simple (default), ClosePane(DsPane with close button)
  * @param {string} side - The side where the Ane will be displayed (e.g., left, right).
  * @param {string} className - Additional class names to be applied to the main DsPane div.
@@ -40,10 +41,10 @@ function ClosePane(e:React.MouseEvent<HTMLDivElement>){
  * @param {React.ReactNode} paneMenus - The menu items that will be displayed in the DsPane.
  * @param {React.ReactNode} children - The child elements to be rendered inside the DsPane component.
  */
-function DsPane({ type,side, className, title, paneMenus, children }: DsPaneProps) {
+function DsPane({id, type,side, className, title, paneMenus, children }: DsPaneProps) {
   return (
     <>
-      <div className={styles.DsPane + ` DsPane ${className!==undefined && className!==null && className} ${side!==undefined && side!==null && side}`}>
+      <div id={id!==undefined?id:""} className={styles.DsPane + ` DsPane ${className!==undefined && className!==null && className} ${side!==undefined && side!==null && side}`}>
         <div className={styles.PaneTitleBar}>
           <div className={styles.PaneTitle}>{title ? title : "DsPane"}</div>
           <div className={styles.PaneMenus}>{
