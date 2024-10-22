@@ -1,12 +1,12 @@
 // import Image from "next/image";
 // import styles from "./page.module.css";
-import buttonStyles from "./Components/DsButton/Ds_Button.module.css";
-import PaneStyles from "./Components/DsPane/DsPane.module.css";
-import addIcon from "./Icons/add.svg";
-import DSButton from "./Components/DsButton/DsButton";
-import DsPane from "./Components/DsPane/DsPane";
-import PaneOpenButton from "./Components/DsPane/PaneOpenButton";
-import PopUpContext from "./Components/dscontext/dscontext.tsx";
+// import buttonStyles from "./Components/DsButton/Ds_Button.module.css";
+// import PaneStyles from "./Components/DsPane/DsPane.module.css";
+// import addIcon from "./Icons/add.svg";
+// import DSButton from "./Components/DsButton/DsButton";
+// import DsPane from "./Components/DsPane/DsPane";
+// import PaneOpenButton from "./Components/DsPane/PaneOpenButton";
+import PopUPContext from "./Components/dscontext/dscontext";
 
 export default function Home() {
   // const handleMouseHover = (e) => {
@@ -23,31 +23,11 @@ export default function Home() {
   //   console.log("Action button clicked");
   // };
  
-  return (<>
-    <DsPane type="ClosePane" side={PaneStyles.right}></DsPane>
-    <div className={buttonStyles.btn}>
-      <PaneOpenButton
-        id="actionBtn"
-        buttonClass={buttonStyles.action_btn}
-        paneId="PaneLeft"
-        // handleOnClick={handleActionClick}
-        // handleOnHover={handleMouseHover}
-        startIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
-        buttonText="New"
-        />
-      </div>
-      <DsPane id="PaneRight" type="ClosePane" side={PaneStyles.right}>
-        <div className={buttonStyles.btn}>
-          <DSButton
-            id="actionBtn"
-            buttonClass={buttonStyles.action_btn}
-            // handleOnHover={handleMouseHover}
-            beforeIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
-            buttonText="New"
-            />
-        </div>
-      </DsPane>
-            </div>
-    </>
+  return (
+  
+     <PopUPContext/>
+   
+   
+            
   );
 }
