@@ -4,7 +4,7 @@ import Image from "next/image";
 import React from "react";
 import styles from "./DsPane.module.css";
 
-import CloseBtn from "../../Icons/mediumIcons/cross.svg";
+// import CloseBtn from "../../Icons/mediumIcons/cross.svg";
 
 
 export interface DsPaneProps {
@@ -52,13 +52,13 @@ function DsPane({ type,side, className, title, paneMenus, children }: DsPaneProp
               {paneMenus}
               {
                 type=="ClosePane" &&
-                <div className={styles.closePane} onClick={(e)=>ClosePane(e)}><Image src={CloseBtn} alt="Close"/></div>
+                <div className={styles.closePane} onClick={(e)=>ClosePane(e)}></div>
               }
             </>
           ) : (
             type=="ClosePane" &&
 
-            <div className="close-pane" onClick={(e)=>ClosePane(e)}><Image src={CloseBtn} alt="Close"/></div>
+            <div className="close-pane" onClick={(e)=>ClosePane(e)}></div>
           )
         }</div>
         </div>

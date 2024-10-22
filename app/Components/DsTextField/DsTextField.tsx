@@ -1,13 +1,23 @@
-'use client';
+"use client";
 import { useState } from "react";
 import styles from "./DsTextField.module.css";
 
 interface InputTextAreaProps {
-  handleInputChange?: (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
-  handleKeyUp?: (e: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
-  Onmousehover?: (e: React.MouseEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
-  onMouseOver?: (e: React.MouseEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
-  onMouseOut?: (e: React.MouseEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
+  handleInputChange?: (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => void;
+  handleKeyUp?: (
+    e: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => void;
+  Onmousehover?: (
+    e: React.MouseEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => void;
+  onMouseOver?: (
+    e: React.MouseEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => void;
+  onMouseOut?: (
+    e: React.MouseEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => void;
 
   id?: string;
   className?: string;
@@ -15,13 +25,13 @@ interface InputTextAreaProps {
   label?: string;
   disable?: boolean;
 
-  type?: 'singleline' | 'multiline';
-  inputType?: 'password' | 'text' | 'number';
+  type?: "singleline" | "multiline";
+  inputType?: "password" | "text" | "number" | "date";
   icon?: string;
   iconEnd?: string;
   rows?: number;
   cols?: number;
-  minRows?: number
+  minRows?: number;
 }
 
 /**
@@ -45,7 +55,6 @@ interface InputTextAreaProps {
  
  */
 
-
 const TextField: React.FC<InputTextAreaProps> = ({
   handleInputChange,
   handleKeyUp,
@@ -58,106 +67,93 @@ const TextField: React.FC<InputTextAreaProps> = ({
   disable,
   placeholder,
   label,
-  type = 'singleline',
+  type = "singleline",
   icon,
   iconEnd,
 
   inputType,
-  minRows = 4,
-
-
-}
-) => {
+  
+}) => {
   {
-
-    const [value, setValue] = useState('');
+    const [value, setValue] = useState("");
 
     const [isFocused, setIsFocused] = useState(false);
     return (
       <>
-        <div >
-
-          <fieldset className={`${styles['custom-fieldset']} ${isFocused || value !== "" ? styles['focused'] : ''} ${disable ? styles.disabled : ""}`}>
-
-            <legend className={`${styles['floating-label']} ${isFocused || value !== "" ? styles['shrink'] : ''}`}>
+        <div>
+          <fieldset
+            className={`${styles["custom-fieldset"]} ${
+              isFocused || value !== "" ? styles["focused"] : ""
+            } ${disable ? styles.disabled : ""}`}
+          >
+            <legend
+              className={`${styles["floating-label"]} ${
+                isFocused || value !== "" ? styles["shrink"] : ""
+              }`}
+            >
               {label}
             </legend>
 
-            {type == "singleline" && (<div className={styles["iconwrapper"]}>{icon && <div className={styles.icon_left}>{icon}</div>}</div>)}
+            {type == "singleline" && (
+              <div className={styles["iconwrapper"]}>
+                {icon && <div className={styles.icon_left}>{icon}</div>}
+              </div>
+            )}
             <div className={styles["input-wrapper"]}>
-              {type === 'multiline' ? (
-               
-               <textarea
-                  className={`${styles['custom-input']}  ${className || ''}`}
+              {type === "multiline" ? (
+                <textarea
+                  className={`${styles["custom-textarea"]}  ${className || ""}`}
                   onFocus={() => setIsFocused(true)}
                   onChange={(e) => {
                     setValue(e.target.value);
-                    if(handleInputChange)
-                    handleInputChange(e);
+                    if (handleInputChange) handleInputChange(e);
                   }}
                   required
                   onKeyUp={handleKeyUp}
                   onMouseOut={onMouseOut}
                   onMouseMove={Onmousehover}
                   onMouseOver={onMouseOver}
-                  minRows={minRows}
-            
+                
                   onMouseLeave={onMouseOut}
-
                   placeholder={isFocused ? placeholder : ""}
                   disabled={disable}
                   aria-multiline={true}
                   // minRows={minRows}
                   onBlur={() => setIsFocused(false)}
                   id={id}
-
-                />) :
-
-                (
-                  <input
-                    className={`${styles['custom-input']}  ${className || ''}`}
-
-                    type={inputType}
-                    onFocus={() => setIsFocused(true)}
-                    onChange={(e) => {
-                      setValue(e.target.value);
-                      if(handleInputChange)
-                      handleInputChange(e);
-                    }}
-                    required
-                    onKeyUp={handleKeyUp}
-                    onMouseOut={onMouseOut}
-                    onMouseMove={Onmousehover}
-                    onMouseOver={onMouseOver}
-                    onMouseLeave={onMouseOut}
-                    placeholder={isFocused ? placeholder : ""}
-                    disabled={disable}
-
-                    onBlur={() => setIsFocused(false)}
-                    id={id}
-
-                  />
-
-                )}
+                />
+              ) : (
+                <input
+                  className={`${styles["custom-input"]}  ${className || ""}`}
+                  type={inputType}
+                  onFocus={() => setIsFocused(true)}
+                  onChange={(e) => {
+                    setValue(e.target.value);
+                    if (handleInputChange) handleInputChange(e);
+                  }}
+                  required
+                  onKeyUp={handleKeyUp}
+                  onMouseOut={onMouseOut}
+                  onMouseMove={Onmousehover}
+                  onMouseOver={onMouseOver}
+                  onMouseLeave={onMouseOut}
+                  placeholder={isFocused ? placeholder : ""}
+                  disabled={disable}
+                  onBlur={() => setIsFocused(false)}
+                  id={id}
+                />
+              )}
             </div>
 
-            {type == "singleline" &&
-
+            {type == "singleline" && (
               <div className={styles["iconwrapper"]}>
-                {iconEnd && <div className={styles.icon_right}>{iconEnd}</div>}</div>}
-
+                {iconEnd && <div className={styles.icon_right}>{iconEnd}</div>}
+              </div>
+            )}
           </fieldset>
-
         </div>
       </>
     );
-  };
-
-}
+  }
+};
 export default TextField;
-
-
-
-
-
-
