@@ -4,9 +4,11 @@ import buttonStyles from "./Components/DsButton/Ds_Button.module.css";
 import PaneStyles from "./Components/DsPane/DsPane.module.css";
 import addIcon from "./Icons/add.svg";
 import DSButton from "./Components/DsButton/DsButton";
-import DsPane from "./Components/DsPane/DsPane";
-import PaneOpenButton from "./Components/DsPane/PaneOpenButton";
+import DsPane from "./Components/dsPane/dsPane";
+import PaneOpenButton from "./Components/dsPane/paneOpenButton";
 import Application from "./ElProComponents/ApplicationComponents/Application";
+import DsPopup from "./Components/dsPopup/dsPopup";
+import PopupOpenButton from "./Components/dsPopup/popupOpenButton";
 
 export default function Home() {
   // const handleMouseHover = (e) => {
@@ -57,40 +59,64 @@ export default function Home() {
         <div className={styles.fluidContainer}>
           <DsPane id="PaneInset" type="inset" side={PaneStyles.left}></DsPane>
           <div className={styles.container}>
-        <PaneOpenButton
-          id="actionBtn"
-          buttonClass={buttonStyles.action_btn}
-          paneId="PaneInset"
-          // handleOnClick={handleActionClick}
-          // handleOnHover={handleMouseHover}
-          beforeIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
-          buttonText="Inset"
-          />
-          <PaneOpenButton
-          id="actionBtn"
-          buttonClass={buttonStyles.action_btn}
-          paneId="PaneRight"
-          // handleOnClick={handleActionClick}
-          // handleOnHover={handleMouseHover}
-          beforeIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
-          buttonText="Overlay"
-          />
-      </div>
-          <DsPane id="PaneRight" type="ClosePane" side={PaneStyles.right}>
-            <div className={buttonStyles.btn}>
-              <DSButton
-                id="actionBtn"
-                buttonClass={buttonStyles.action_btn}
-                // handleOnHover={handleMouseHover}
-                beforeIcon={
-                  <Image className="add" src={addIcon} alt="Add Icon" />
-                }
-                buttonText="New"
-              />
-            </div>
-          </DsPane>
+            <PaneOpenButton
+              id="actionBtn"
+              buttonClass={buttonStyles.action_btn}
+              paneId="PaneInset"
+              // handleOnClick={handleActionClick}
+              // handleOnHover={handleMouseHover}
+              beforeIcon={
+                <Image className="add" src={addIcon} alt="Add Icon" />
+              }
+              buttonText="Inset"
+            />
+            <PaneOpenButton
+              id="actionBtn"
+              buttonClass={buttonStyles.action_btn}
+              paneId="PaneRight"
+              // handleOnClick={handleActionClick}
+              // handleOnHover={handleMouseHover}
+              beforeIcon={
+                <Image className="add" src={addIcon} alt="Add Icon" />
+              }
+              buttonText="Overlay"
+            />
+            <PopupOpenButton
+              id="actionBtn"
+              buttonClass={buttonStyles.action_btn}
+              popupId="test"
+              // handleOnClick={handleActionClick}
+              // handleOnHover={handleMouseHover}
+              beforeIcon={
+                <Image className="add" src={addIcon} alt="Add Icon" />
+              }
+              buttonText="Popup"
+            />
+          </div>
         </div>
+        
+        
       </Application>
+      <DsPopup id={"test"} /*position="center" type="document"*/ title={"check"} ><div className={buttonStyles.btn}>
+          <DSButton
+            id="actionBtn"
+            buttonClass={buttonStyles.action_btn}
+            // handleOnHover={handleMouseHover}
+            beforeIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
+            buttonText="New"
+          />
+        </div></DsPopup>
+      <DsPane id="PaneRight" side={"right"}>
+        <div className={buttonStyles.btn}>
+          <DSButton
+            id="actionBtn"
+            buttonClass={buttonStyles.action_btn}
+            // handleOnHover={handleMouseHover}
+            beforeIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
+            buttonText="New"
+          />
+        </div>
+      </DsPane>
     </>
   );
 }
