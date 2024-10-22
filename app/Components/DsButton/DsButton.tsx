@@ -230,6 +230,39 @@ const DSButton: React.FC<DSButtonProps> = ({
           <input id={id + "_upload"} type="file" hidden />
         </button>
       )}
+      {type == "tab" && (
+        <button
+          id={id}
+          className={
+            styles.btn +
+            " " +
+            buttonClass +
+            " " +
+            styles.tab_btn +
+            " " +
+            styles[buttonSize]
+          }
+          title={tooltip !== undefined ? tooltip : label}
+          onClick={displayFileBrowser}
+          onMouseOver={handleOnHover}
+          onMouseLeave={handleMouseLeave}
+        >
+          {startIcon !== undefined && (
+            <span
+              className={"icon " + styles.startIcon + " " + styles[iconSize]}
+            >
+              {startIcon}
+            </span>
+          )}
+          {label || children}
+
+          {endIcon !== undefined && (
+            <span className={"icon " + styles.endIcon + " " + styles[iconSize]}>
+              {endIcon}
+            </span>
+          )}
+        </button>
+      )}
     </>
   );
 };

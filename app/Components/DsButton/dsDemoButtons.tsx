@@ -3,6 +3,7 @@ import Image from "next/image";
 import addIcon from "../../Icons/add.svg";
 import filter from "../../Icons/filtericon.svg";
 import trashbtn from "../../Icons/trashbtn.svg";
+import whitetrashbtn from "../../Icons/whitetrash.svg";
 import deviation from "../../Icons/deviation.svg";
 import update from "../../Icons/update.svg";
 import btnStyles from "./dsButton.module.css";
@@ -17,6 +18,8 @@ import upload from "../../Icons/uploadicon.svg";
 import { useState } from "react";
 import { ImgProps } from "next/dist/shared/lib/get-img-props";
 import DSButton from "./dsButton";
+import DSButtonGroup from "./dsButtonGroup";
+import DSFilterButton from "./dsFilterButton";
 
 const DemoButtons: React.FC = () => {
   const [toggled, setToggled] = useState(false);
@@ -30,6 +33,21 @@ const DemoButtons: React.FC = () => {
     ) as HTMLImageElement;
     if (icon) {
       icon.src = imgSrc.src;
+    }
+  };
+
+  const handleButtonClick = (id: string) => {
+    const buttons = ["button1", "button2", "button3", "button4"];
+    buttons.forEach((buttonId) => {
+      const button = document.getElementById(buttonId);
+      if (button) {
+        button.classList.remove(btnStyles.active);
+      }
+    });
+
+    const clickedButton = document.getElementById(id);
+    if (clickedButton) {
+      clickedButton.classList.add(btnStyles.active);
     }
   };
 
@@ -103,6 +121,8 @@ const DemoButtons: React.FC = () => {
         buttonColor="btnWarning"
         buttonClass={btnStyles.btnText}
         handleOnClick={(e) => clickHandler(e)}
+        handleOnHover={(e) => changeImage(e, whitetrashbtn)}
+        handleMouseLeave={(e) => changeImage(e, trashbtn)}
         startIcon={<Image src={trashbtn} alt="icon" />}
         label="Delete"
       />
@@ -117,6 +137,7 @@ const DemoButtons: React.FC = () => {
       />
       <DSButton
         id="filterBtn"
+        type="tab"
         buttonColor="btnPrimary"
         buttonClass={btnStyles.btnOutlined}
         handleOnClick={(e) => clickHandler(e)}
@@ -213,6 +234,38 @@ const DemoButtons: React.FC = () => {
         startIcon={<Image src={leftarrow} alt="icon" />}
         tooltip="Back"
       />
+
+      <DSButtonGroup id="btngroup1" buttonClass={btnStyles.btngroup}>
+        <DSFilterButton
+          id="button1"
+          buttonClass={btnStyles.btngroupcontained + " " + btnStyles.group_btn}
+          label="Button 1"
+          count="00"
+          handleOnClick={() => handleButtonClick("button1")}
+        />
+        <DSFilterButton
+          id="button2"
+          buttonClass={btnStyles.btngroupcontained + " " + btnStyles.group_btn}
+          label="Button 2"
+          count="00"
+          handleOnClick={() => handleButtonClick("button2")}
+        />
+
+        <DSFilterButton
+          id="button3"
+          buttonClass={btnStyles.btngroupcontained + " " + btnStyles.group_btn}
+          label="Button 3"
+          count="00"
+          handleOnClick={() => handleButtonClick("button3")}
+        />
+        <DSFilterButton
+          id="button4"
+          buttonClass={btnStyles.btngroupcontained + " " + btnStyles.group_btn}
+          label="Button 4"
+          count="00"
+          handleOnClick={() => handleButtonClick("button4")}
+        />
+      </DSButtonGroup>
     </div>
   );
 };
