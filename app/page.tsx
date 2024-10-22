@@ -1,12 +1,14 @@
-import Image from "next/image";
-import styles from "./page.module.css";
-import buttonStyles from "./Components/DsButton/Ds_Button.module.css";
-import PaneStyles from "./Components/DsPane/DsPane.module.css";
-import addIcon from "./Icons/add.svg";
-import DSButton from "./Components/DsButton/DsButton";
-import DsPane from "./Components/DsPane/DsPane";
-import PaneOpenButton from "./Components/DsPane/PaneOpenButton";
+// import Image from "next/image";
+// import styles from "./page.module.css";
+// import buttonStyles from "./Components/DsButton/Ds_Button.module.css";
+// import PaneStyles from "./Components/DsPane/DsPane.module.css";
+// import addIcon from "./Icons/add.svg";
+// import DSButton from "./Components/DsButton/DsButton";
+// import DsPane from "./Components/DsPane/DsPane";
+// import PaneOpenButton from "./Components/DsPane/PaneOpenButton";
+// import select from "./Components/dsSelect/dsSelect.module.css"
 import DsSelect from "./Components/dsSelect/dsSelect";
+
 
 export default function Home() {
   // const handleMouseHover = (e) => {
@@ -22,7 +24,7 @@ export default function Home() {
   // const handleActionClick = () => {
   //   console.log("Action button clicked");
   // };
-  const options=[ "option1" , "option2" , "option3"];
+  const options=[ "option1" , "option2" , "option3","option4","option5"];
 
   
 
