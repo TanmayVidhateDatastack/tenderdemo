@@ -21,6 +21,7 @@ import PopupOpenButton from "./Components/dsPopup/popupOpenButton";
 // import ButtonLibrary from "./Components/dsButton/DS_ButtonLibrary";
 import DemoButtons from "./Components/dsButton/dsDemoButtons";
 import DsSelect from "./Components/dsSelect/dsSelect";
+import PopUPContext from "./Components/dscontext/dscontext";
 
 // import SaveButton from "./Components/DsButton/Ds_SaveBtn";
 
@@ -142,6 +143,7 @@ export default function Home() {
               }
               buttonText="Popup"
             />
+            <PopUPContext/>
         <DemoButtons />
 
           </div>

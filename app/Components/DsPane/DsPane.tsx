@@ -5,7 +5,6 @@ import React from "react";
 import styles from "./DsPane.module.css";
 
 import CloseBtn from "../../Icons/mediumIcons/cross.svg";
-// import CloseBtn from "../../Icons/mediumIcons/cross.svg";
 
 export interface DsPaneProps {
   id?: string;
