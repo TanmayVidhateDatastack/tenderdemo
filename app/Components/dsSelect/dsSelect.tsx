@@ -8,10 +8,11 @@ import remove from "../../Icons/mediumIcons/remove.svg"
 interface SelectProps{
     options: string[];
     placeholder: string;
+    label?:string;
 }
  
  
-const DsSelect:React.FC<SelectProps> =({options, placeholder= "Click to Select"})=>{
+const DsSelect:React.FC<SelectProps> =({options, placeholder= "Click to Select",label})=>{
  
     // const[selectedOption, setSelectedOption]=useState('');
 //     const handleChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
@@ -49,25 +50,38 @@ const DsSelect:React.FC<SelectProps> =({options, placeholder= "Click to Select"}
         const removeItem=selectedOption.filter(option=> option !== select);
         setSelectedOption(removeItem);
     };
+    const[isFocused,setIsFocused]=useState(false);
+    const[value,setValue]=useState("");
  
     return(
-    <div className={styles.allselect}>
+      <div className={styles.allselect}>
+      <legend
+        className={`${styles["floating-label"]} ${
+          isFocused || value !== "" ? styles["shrink"] : ""
+        }`}
+      >
+        {label}
+      </legend>
         <input
           type="text"
           value={selectedOption}
           name="title"
-          placeholder={placeholder}
+          placeholder={isFocused || value !== "" ? placeholder :""}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          onChange={(e) => setValue(e.target.value)}
           onClick={toggleDropdown}
           className={styles.mainselection}
         />    
         {isOpen && (
-        <div className={styles.list}>
+        <div className={styles.list }>
           {options.map((option, index) => (
             <div key={index} className={styles.option}>
               <input
                 type="checkbox"
                 name="check"
                 id="check"
+                className={styles.checkbox_container}
                 checked={selectedOption.includes(option)}
                 onChange={() => handleSelect(option)}
               />

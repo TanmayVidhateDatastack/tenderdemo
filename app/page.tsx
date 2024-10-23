@@ -30,7 +30,7 @@ export default function Home() {
 
   return (
     <>
-      <DsSelect options={options} placeholder={"Click me to select"}></DsSelect>
+      <DsSelect options={options} placeholder= "Click me to select" label="multiselect"></DsSelect>
     </>
   );
 };
