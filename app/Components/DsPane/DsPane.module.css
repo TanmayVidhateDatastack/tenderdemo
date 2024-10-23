@@ -14,7 +14,7 @@
   opacity: 1; /* Fully visible */
   transform: translateX(0); /* Slide to original position */
   visibility: visible; /* Visible in the layout */
-  transition: opacity 0.5s ease, transform 0.5s ease,width 1.2s ease,min-width 1.2s ease;
+  transition: opacity 0.5s ease, transform 0.5s ease,width 1.5s ease,min-width 1.5s ease;
 }
 .DsPane.inset{
     position: relative;

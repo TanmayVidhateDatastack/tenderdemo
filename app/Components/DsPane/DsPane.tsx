@@ -50,8 +50,8 @@ export function DisplayPane(id: string) {
  * DsPane component displays pane.
  *
  * @param {string} id - Set id for pane.
- * @param {string} type - #Set type of pane i.e.  #default, closeable and over the elements(overlay) ,<inset> - #closeable but occupies width of the container
- * @param {string} side -<left> / <right> The side where the Ane will be displayed (e.g., left, right).
+ * @param {string} type - (default/ inset)#Set type of pane i.e.  #default, closeable and over the elements(overlay) ,inset - #closeable but occupies width of the container
+ * @param {string} side -(left / right) The side where the Ane will be displayed (e.g., left, right).
  * @param {string} className - #Additional class names to be applied to the main DsPane div.
  * @param {string} title - The title displayed in the DsPane component.
  * @param {React.ReactNode} paneMenus - The menu items that will be displayed in the DsPane.
@@ -74,7 +74,7 @@ function DsPane({
           styles.DsPane +
           ` DsPane ${
             className !== undefined && className !== null && className
-          } ${side !== undefined && side !== null && side} ${
+          } ${side !== undefined && side !== null && styles[side]} ${
             type !== undefined ? styles[type] : ""
           }`
         }

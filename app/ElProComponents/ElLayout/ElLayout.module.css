@@ -3,6 +3,8 @@
   flex-direction: column;
   width: 100vw;
   height: 100vh;
+  overflow: hidden; /* Ensure the parent does not hide overflow */
+  position: relative;
 }
 .row {
   display: flex;
@@ -32,6 +34,7 @@
 }
 .appContent {
   flex: 1;
+  overflow: hidden;
 }
 .appNavigator {
   display:flex;
@@ -120,7 +123,6 @@
   flex-direction: column;
   height:100%;
   width:100%;
-
 }
 .left_align{
   justify-content: start;

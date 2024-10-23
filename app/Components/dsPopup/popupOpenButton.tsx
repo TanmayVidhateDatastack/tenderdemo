@@ -1,11 +1,11 @@
 "use client";
 import DSButton from "../dsButton/dsButton";
-import { DisplayPane } from "./dsPane";
+import { OpenPopup } from "./dsPopup";
 
-interface PaneOpenButtonProps {
+interface PopupOpenButtonProps {
   children?: React.ReactNode;
   id?: string;
-  paneId:string;
+  popupId:string;
   buttonText?: string;
   buttonClass?: string;
   img?: string;
@@ -13,9 +13,9 @@ interface PaneOpenButtonProps {
   afterIcon?: React.ReactElement;
   handleOnHover?: (e: React.MouseEvent<HTMLElement>) => void;
 }
-const PaneOpenButton: React.FC<PaneOpenButtonProps> = ({
+const PopupOpenButton: React.FC<PopupOpenButtonProps> = ({
   id,
-  paneId,
+  popupId,
   buttonText,
   buttonClass,
   children,
@@ -27,7 +27,7 @@ const PaneOpenButton: React.FC<PaneOpenButtonProps> = ({
     <DSButton
         id={id}
         buttonClass={buttonClass}
-        handleOnClick={()=>DisplayPane(paneId)}
+        handleOnClick={()=>OpenPopup(popupId)}
         handleOnHover={handleOnHover}
         startIcon={beforeIcon}
         endIcon={afterIcon}
@@ -38,4 +38,4 @@ const PaneOpenButton: React.FC<PaneOpenButtonProps> = ({
   );
 };
  
-export default PaneOpenButton;
+export default PopupOpenButton;

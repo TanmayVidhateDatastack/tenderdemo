@@ -1,7 +1,7 @@
 // import Image from "next/image";
 import React from "react";
 import styles from "./Application.module.css";
-import pageStyles from "../../page.module.css";
+// import pageStyles from "../../page.module.css";
 
 import ApplicationHeader from "./ApplicationHeader";
 
