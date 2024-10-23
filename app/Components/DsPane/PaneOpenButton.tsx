@@ -9,8 +9,8 @@ interface PaneOpenButtonProps {
   buttonText?: string;
   buttonClass?: string;
   img?: string;
-  beforeIcon?: React.ReactNode;
-  afterIcon?: React.ReactNode;
+  beforeIcon?: React.ReactElement;
+  afterIcon?: React.ReactElement;
   handleOnHover?: (e: React.MouseEvent<HTMLElement>) => void;
 }
 const PaneOpenButton: React.FC<PaneOpenButtonProps> = ({
@@ -29,9 +29,9 @@ const PaneOpenButton: React.FC<PaneOpenButtonProps> = ({
         buttonClass={buttonClass}
         handleOnClick={()=>DisplayPane(paneId)}
         handleOnHover={handleOnHover}
-        beforeIcon={beforeIcon}
-        afterIcon={afterIcon}
-        buttonText={buttonText}
+        startIcon={beforeIcon}
+        endIcon={afterIcon}
+        label={buttonText}
         >{children}</DSButton>
     
 

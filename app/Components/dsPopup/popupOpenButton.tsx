@@ -1,5 +1,5 @@
 "use client";
-import DSButton from "../DsButton/DsButton";
+import DSButton from "../dsButton/dsButton";
 import { OpenPopup } from "./dsPopup";
 
 interface PopupOpenButtonProps {
@@ -9,8 +9,8 @@ interface PopupOpenButtonProps {
   buttonText?: string;
   buttonClass?: string;
   img?: string;
-  beforeIcon?: React.ReactNode;
-  afterIcon?: React.ReactNode;
+  beforeIcon?: React.ReactElement;
+  afterIcon?: React.ReactElement;
   handleOnHover?: (e: React.MouseEvent<HTMLElement>) => void;
 }
 const PopupOpenButton: React.FC<PopupOpenButtonProps> = ({
@@ -29,9 +29,9 @@ const PopupOpenButton: React.FC<PopupOpenButtonProps> = ({
         buttonClass={buttonClass}
         handleOnClick={()=>OpenPopup(popupId)}
         handleOnHover={handleOnHover}
-        beforeIcon={beforeIcon}
-        afterIcon={afterIcon}
-        buttonText={buttonText}
+        startIcon={beforeIcon}
+        endIcon={afterIcon}
+        label={buttonText}
         >{children}</DSButton>
     
 

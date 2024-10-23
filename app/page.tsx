@@ -1,20 +1,16 @@
 'use client'
 import { useState } from "react";
 import DSButton from "./Components/dsButton/dsButton";
-import styles from "./Components/dsButton/dsButton.module.css";
+import styles from "./page.module.css";
+import buttonStyles from "./Components/dsButton/dsButton.module.css";
 import PaneStyles from "./Components/Dspane/DsPane.module.css";
 // import addIcon from "./Icons/add.svg";
 // import DSButton from "./Components/DsButton/DsButton";
 // import ButtonLibrary from "./Components/dsButton/DS_ButtonLibrary";
-import DemoButtons from "./Components/dsButton/dsDemoButtons";
 import Toaster from "./Components/DsToaster/DsToaster";
 // import SaveButton from "./Components/DsButton/Ds_SaveBtn";
-// import Image from "next/image";
-import styles from "./page.module.css";
-//import buttonStyles from "./Components/DsButton/Ds_Button.module.css";
-import PaneStyles from "./Components/DsPane/DsPane.module.css";
-import styles from "./Components/dsButton/dsButton.module.css";
-// import addIcon from "./Icons/add.svg";
+import Image from "next/image";
+import addIcon from "./Icons/add.svg";
 // import Image from "next/image";
 import TextField from "./Components/DsTextField/DsTextField";
 import DsPane from "./Components/dsPane/dsPane";
@@ -147,15 +143,15 @@ export default function Home() {
           </div>
         </div>
         
-        
+        <DemoButtons />
       </Application>
       <DsPopup id={"test"} /*position="center" type="document"*/ title={"check"} ><div className={buttonStyles.btn}>
           <DSButton
             id="actionBtn"
             buttonClass={buttonStyles.action_btn}
             // handleOnHover={handleMouseHover}
-            beforeIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
-            buttonText="New"
+            startIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
+            label="New"
           />
         </div></DsPopup>
       <DsPane id="PaneRight" side={"right"}>
@@ -164,8 +160,8 @@ export default function Home() {
             id="actionBtn"
             buttonClass={buttonStyles.action_btn}
             // handleOnHover={handleMouseHover}
-            beforeIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
-            buttonText="New"
+            startIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
+            label="New"
           />
         </div>
       </DsPane>
