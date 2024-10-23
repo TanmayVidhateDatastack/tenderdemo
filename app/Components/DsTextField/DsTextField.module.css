@@ -23,7 +23,6 @@ width:100%  }
    background-color: var(--background);
   padding: 0 5px;
   align-content: center;
-  color: #aaa;
 
 }
 
@@ -39,6 +38,7 @@ width:100%  }
   align-items:flex-end;
   /* width: 300px; */
   padding: 10px;
+  margin-top: 10px;
   border: 1px solid var(--blue-600);
   border-radius: 5px;
   /* background-color: transparent; */
@@ -67,6 +67,8 @@ width:100%  }
   outline: none;
   position: relative;
   z-index: 1;
+  color:black;
+
   /* resize:vertical;
   overflow:hidden;
   width:100%; */
@@ -85,6 +87,7 @@ width:100%  }
   resize:vertical;
   overflow:hidden;
   width:100%;  
+  color:black;
 }
 
 

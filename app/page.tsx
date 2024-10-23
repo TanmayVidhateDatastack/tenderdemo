@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { useState } from "react";
 import DSButton from "./Components/dsButton/dsButton";
 import styles from "./page.module.css";
@@ -71,40 +71,36 @@ export default function Home() {
       >
         <div className={styles.fluidContainer}>
           <DsPane id="PaneInset" type="inset" side={PaneStyles.left}>
-          <TextField
-          placeholder="placeholder"
-          label="label"
-          disable={false}
-          // onClick={false}
-          type="multiline"
-          icon="📋"
-          iconEnd="📋" 
-        
+            <TextField
+              placeholder="placeholder"
+              label="label"
+              disable={false}
+              // onClick={false}
+              type="multiline"
+              icon="📋"
+              iconEnd="📋"
+            />
+            <div className={styles.btn}>
+              <DSButton
+                id="actionBtn"
+                buttonClass={styles.action_btn}
+                handleOnClick={() => setShowNotification(true)}
+                // handleOnClick={handleActionClick}
+                // handleOnHover={handleMouseHover}
+                // beforeIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
+                label="show notification "
+              />
 
-        />
-      <div className={styles.btn}>
-
-      <DSButton
-        id="actionBtn"
-        buttonClass={styles.action_btn}
-        handleOnClick={() => setShowNotification(true)}
-        // handleOnClick={handleActionClick}
-        // handleOnHover={handleMouseHover}
-        // beforeIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
-        label="show notification "
-        />
-
-{ showNotification && (
-      <Toaster
-          handleClose={() => setShowNotification(false)}
-          type="error"
-          message="this is simple error msg you cant acess this side now .............!"
-          position="bottomright" 
-          duration={3000}
-         />
-    )}
-
-</div>
+              {showNotification && (
+                <Toaster
+                  handleClose={() => setShowNotification(false)}
+                  type="error"
+                  message="this is simple error msg you cant acess this side now .............!"
+                  position="bottomright"
+                  duration={3000}
+                />
+              )}
+            </div>
           </DsPane>
           <div className={styles.container}>
             <PaneOpenButton
@@ -140,12 +136,16 @@ export default function Home() {
               }
               buttonText="Popup"
             />
+        <DemoButtons />
+
           </div>
         </div>
-        
-        <DemoButtons />
       </Application>
-      <DsPopup id={"test"} /*position="center" type="document"*/ title={"check"} ><div className={buttonStyles.btn}>
+      <DsPopup
+        id={"test"}
+        /*position="center" type="document"*/ title={"check"}
+      >
+        <div className={buttonStyles.btn}>
           <DSButton
             id="actionBtn"
             buttonClass={buttonStyles.action_btn}
@@ -153,7 +153,8 @@ export default function Home() {
             startIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
             label="New"
           />
-        </div></DsPopup>
+        </div>
+      </DsPopup>
       <DsPane id="PaneRight" side={"right"}>
         <div className={buttonStyles.btn}>
           <DSButton

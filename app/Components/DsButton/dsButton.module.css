@@ -4,6 +4,7 @@
     width: 100%;
     height: 100%;
     background-color: var(--backgroundt);
+    padding: 10px;
 }
 .btn,.btnOutlined,.btnSmall, .btnText, .btnContained, .btnMedium, .btnAutoWidth, .btnLarge, .btnPrimary, .btnSecondary, .btnRedWarning, .btnDanger, .btnDark, .btnInfo {
     display: flex;
@@ -363,6 +364,7 @@
 .flex{
     display: flex;
     flex-wrap: wrap;
+    align-content: flex-start;
 }
 
 .autowidth_btn, .autowidth_btn:hover{
@@ -444,7 +446,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
 }
 
 .toggle_btn{

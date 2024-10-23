@@ -1,6 +1,5 @@
 import styles from "../dsButton/dsButton.module.css";
 
-import styles from "../dsButton/dsButton.module.css";
 
 interface DSButtonProps {
   children?: React.ReactNode;
