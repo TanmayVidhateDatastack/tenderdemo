@@ -1,10 +1,5 @@
 .container {
-    flex:1;
-    display: flex;
-    justify-content: center; /* Center the button horizontally */
-    align-items: center; /* Center vertically */
-    height: 100%;
-    width:100%;
+
     
     background-color: #f0f0f0;
     position: relative; /* So the popup is positioned relative to this container */
@@ -17,14 +12,12 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    position: absolute; 
-   
+    height:min-content
    /* Positioning relative to this button */
 }
   
 .popUp {
     background-color: #f6f6f8;
-    color: white;
     padding: 5px 10px;
     border-radius: 4px;
     font-size: 14px;

@@ -110,6 +110,8 @@ export default function Home() {
           </DsPane>
           <div className={styles.container}>
           <DsSelect options={options} placeholder= "Click me to select" label="multiselect"></DsSelect>
+          <PopUPContext/>
+
             <PaneOpenButton
               id="actionBtn"
               buttonClass={buttonStyles.action_btn}
@@ -143,7 +145,6 @@ export default function Home() {
               }
               buttonText="Popup"
             />
-            <PopUPContext/>
         <DemoButtons />
 
           </div>

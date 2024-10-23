@@ -33,8 +33,7 @@ const PopUpContext: React.FC<PopUpContextProps> = ({ positionProp ="top",showArr
     setIsVisible(!isVisible);
   };
 
-  return (
-    <div className={styles.container}>
+  return (<>
       <button onClick={handleClick} className={styles.button}>
         Save
       </button>
@@ -52,7 +51,7 @@ const PopUpContext: React.FC<PopUpContextProps> = ({ positionProp ="top",showArr
          
         </div>
       )}
-    </div>
+    </>
   );
 };
 
