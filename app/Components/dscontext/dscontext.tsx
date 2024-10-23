@@ -8,12 +8,14 @@ interface PopUpContextProps {
   showArrow:boolean;
 }
 
-const PopUpContext: React.FC<PopUpContextProps> = ({ positionProp ="top",showArrow="false"}) => {
+const PopUpContext: React.FC<PopUpContextProps> = ({ positionProp ="top",showArrow="true"}) => {
   const [isVisible, setIsVisible] = useState(false);
   const [position, setPosition] = useState<{ x: number; y: number }>({ x:0, y:0 });
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const buttonRect = event.currentTarget.getBoundingClientRect();
+    const buttonRect = event.currentTarget.getBoundingClientRect();//This method is used to get the position and size of the element
+    // which returns the button's dimensions and position on the page.
+
     let x = buttonRect.left ;
     let y = buttonRect.top;
 
@@ -25,7 +27,7 @@ const PopUpContext: React.FC<PopUpContextProps> = ({ positionProp ="top",showArr
       x = buttonRect.left - 68; // Left of the button
       y = buttonRect.top + buttonRect.height / 4;
     } else if (positionProp === "right") {
-      x = buttonRect.right+5; // Right of the button
+      x = buttonRect.right+5; // Right of the button  
       y = buttonRect.top + buttonRect.height / 4;
     }
 
@@ -59,7 +61,7 @@ const PopUpContext: React.FC<PopUpContextProps> = ({ positionProp ="top",showArr
 const PopUpExample = () => {
   return (
 
-      <PopUpContext positionProp="bottom"  showArrow={false}/>
+      <PopUpContext positionProp="bottom"  showArrow={true}></PopUpContext>
 
   );
 };

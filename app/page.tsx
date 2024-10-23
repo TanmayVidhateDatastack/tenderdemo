@@ -22,12 +22,23 @@ export default function Home() {
   // const handleActionClick = () => {
   //   console.log("Action button clicked");
   // };
- 
   return (
-  
-     <PopUPContext/>
-   
-   
-            
+    <div>
+      <PopUPContext />
+      <button
+        onClick={handleClick}
+        style={{
+          padding: '10px 20px',
+          backgroundColor: '#4a5cbe',
+          color: 'white',
+          border: 'none',
+          borderRadius: '5px',
+          cursor: 'pointer',
+          position: 'absolute', 
+        }}
+      >
+        Save
+      </button>
+    </div>
   );
 }
