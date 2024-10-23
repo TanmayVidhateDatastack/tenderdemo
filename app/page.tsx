@@ -12,7 +12,6 @@ import Toaster from "./Components/DsToaster/DsToaster";
 import Image from "next/image";
 import addIcon from "./Icons/add.svg";
 // import Image from "next/image";
-import TextField from "./Components/DsTextField/DsTextField";
 import DsPane from "./Components/dsPane/dsPane";
 import PaneOpenButton from "./Components/dsPane/paneOpenButton";
 import Application from "./ElProComponents/ApplicationComponents/Application";
@@ -25,6 +24,9 @@ import PopUPContext from "./Components/dscontext/dscontext";
 
 // import SaveButton from "./Components/DsButton/Ds_SaveBtn";
 import DsTableComponent from "./Components/DsTablecomponent/DsTableComponent";
+// import DataList from "./Components/dsDatalist/dsDatalist";
+import DemoTextField from "./Components/dsTextField/dsDemoTextField";
+import DemoToaster from "./Components/dsToaster/dsDemoToaster";
 
 export default function Home() {
   const tempTableData = {
@@ -208,6 +210,8 @@ export default function Home() {
   const options = ["option1", "option2", "option3", "option4", "option5"];
 
   const [showNotification, setShowNotification] = useState<boolean>(false);
+  const [pos, setPos] = useState<"top" | "topleft" | "topright" | "middle" | "bottom" | "bottomleft" | "bottomright">("bottom");
+ 
 
   return (
     <>
@@ -242,7 +246,7 @@ export default function Home() {
       >
         <div className={styles.fluidContainer}>
           <DsPane id="PaneInset" type="inset" side={PaneStyles.left}>
-            <TextField
+            {/* <TextField
               placeholder="placeholder"
               label="label"
               disable={false}
@@ -250,8 +254,146 @@ export default function Home() {
               type="multiline"
               icon="📋"
               iconEnd="📋"
-            />
-            <div className={styles.btn}>
+            /> */}
+
+<DemoTextField/>
+<div className="demo-toaster">
+<div className={styles.btn}>
+    <DSButton
+      id="actionBtn"
+      buttonClass={styles.action_btn}
+      handleOnClick={() =>{ setShowNotification(true)
+        setPos("top")
+      }}
+      // handleOnClick={handleActionClick}
+      // handleOnHover={handleMouseHover}
+      // beforeIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
+      label="info-top"
+    />
+
+   
+
+
+<DSButton
+      id="actionBtn"
+      buttonClass={styles.action_btn}
+      handleOnClick={() =>{ setShowNotification(true)
+        setPos("bottom")
+      }
+      }
+      // handleOnClick={handleActionClick}
+      // handleOnHover={handleMouseHover}
+      // beforeIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
+      label="info-bottom"
+    />
+    <DSButton
+      id="actionBtn"
+      buttonClass={styles.action_btn}
+      handleOnClick={() =>{ setShowNotification(true)
+        setPos("top")
+      }}
+      // handleOnClick={handleActionClick}
+      // handleOnHover={handleMouseHover}
+      // beforeIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
+      label="info-top"
+    />
+
+   
+
+<DSButton
+      id="actionBtn"
+      buttonClass={styles.action_btn}
+      handleOnClick={() =>{ setShowNotification(true)
+        setPos("bottom")
+      }
+      }
+      // handleOnClick={handleActionClick}
+      // handleOnHover={handleMouseHover}
+      // beforeIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
+      label="info-bottom"
+    />
+    <DSButton
+      id="actionBtn"
+      buttonClass={styles.action_btn}
+      handleOnClick={() =>{ setShowNotification(true)
+        setPos("top")
+      }}
+      // handleOnClick={handleActionClick}
+      // handleOnHover={handleMouseHover}
+      // beforeIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
+      label="info-top"
+    />
+
+   
+
+<DSButton
+      id="actionBtn"
+      buttonClass={styles.action_btn}
+      handleOnClick={() =>{ setShowNotification(true)
+        setPos("bottom")
+      }
+      }
+      // handleOnClick={handleActionClick}
+      // handleOnHover={handleMouseHover}
+      // beforeIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
+      label="info-bottom"
+    />
+    <DSButton
+      id="actionBtn"
+      buttonClass={styles.action_btn}
+      handleOnClick={() =>{ setShowNotification(true)
+        setPos("top")
+      }}
+      // handleOnClick={handleActionClick}
+      // handleOnHover={handleMouseHover}
+      // beforeIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
+      label="info-top"
+    />
+
+   
+
+<DSButton
+      id="actionBtn"
+      buttonClass={styles.action_btn}
+      handleOnClick={() =>{ setShowNotification(true)
+        setPos("bottom")
+      }
+      }
+      // handleOnClick={handleActionClick}
+      // handleOnHover={handleMouseHover}
+      // beforeIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
+      label="info-bottom"
+    />
+    <DSButton
+      id="actionBtn"
+      buttonClass={styles.action_btn}
+      handleOnClick={() =>{ setShowNotification(true)
+        setPos("top")
+      }}
+      // handleOnClick={handleActionClick}
+      // handleOnHover={handleMouseHover}
+      // beforeIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
+      label="info-top"
+    />
+
+   
+
+<DSButton
+      id="actionBtn"
+      buttonClass={styles.action_btn}
+      handleOnClick={() =>{ setShowNotification(true)
+        setPos("bottom")
+      }
+      }
+      // handleOnClick={handleActionClick}
+      // handleOnHover={handleMouseHover}
+      // beforeIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
+      label="info-bottom"
+    />
+</div>
+ </div>
+
+            {/* <div className={styles.btn}>
               <DSButton
                 id="actionBtn"
                 buttonClass={styles.action_btn}
@@ -267,11 +409,25 @@ export default function Home() {
                   handleClose={() => setShowNotification(false)}
                   type="error"
                   message="this is simple error msg you cant acess this side now .............!"
-                  position="bottomright"
+                  position="middle"
                   duration={3000}
                 />
               )}
-            </div>
+            </div> */}
+
+<div className={styles.datalist}>
+{/* 
+<DataList
+                placeholder="Search an supervisor"
+                inputId="userSelect"
+                dataListId="user-list" options={[
+                ]}  
+ ></DataList> */}
+
+
+</div>
+
+
           </DsPane>
           <div className={styles.container +" "+styles["flex-column"]}>
             <DsSelect
@@ -325,6 +481,14 @@ export default function Home() {
           </div>
         </div>
       </Application>
+      {showNotification && (
+      <Toaster
+        handleClose={() => setShowNotification(false)}
+        type="info"
+        message="this is simple error msg you cant acess this side now .............!"
+        position={pos}
+      />
+    )}
       <DsPopup
         id={"test"}
         /*position="center" type="document"*/ title={"check"}
