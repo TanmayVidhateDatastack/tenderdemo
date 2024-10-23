@@ -32,7 +32,7 @@ const DSButtonGroup: React.FC<DSButtonGroupProps> = ({
   buttonClass,
 }) => {
   return (
-    <>
+    <div className={styles.flex}>
       {React.Children.map(children, (child, index) => (
         <div key={index} className={buttonClass}>
           {label || child}
@@ -42,7 +42,7 @@ const DSButtonGroup: React.FC<DSButtonGroupProps> = ({
           )}
         </div>
       ))}
-    </>
+    </div>
   );
 };
 
