@@ -20,6 +20,8 @@ import DsPopup from "./Components/dsPopup/dsPopup";
 import PopupOpenButton from "./Components/dsPopup/popupOpenButton";
 // import ButtonLibrary from "./Components/dsButton/DS_ButtonLibrary";
 import DemoButtons from "./Components/dsButton/dsDemoButtons";
+import DsSelect from "./Components/dsSelect/dsSelect";
+
 // import SaveButton from "./Components/DsButton/Ds_SaveBtn";
 
 export default function Home() {
@@ -36,6 +38,9 @@ export default function Home() {
   // const handleActionClick = () => {
   //   console.log("Action button clicked");
   // };
+  const options=[ "option1" , "option2" , "option3","option4","option5"];
+
+  
   const [showNotification, setShowNotification] = useState<boolean>(false);
 
   return (
@@ -103,6 +108,7 @@ export default function Home() {
             </div>
           </DsPane>
           <div className={styles.container}>
+          <DsSelect options={options} placeholder= "Click me to select" label="multiselect"></DsSelect>
             <PaneOpenButton
               id="actionBtn"
               buttonClass={buttonStyles.action_btn}
@@ -168,4 +174,4 @@ export default function Home() {
       </DsPane>
     </>
   );
-}
+};
