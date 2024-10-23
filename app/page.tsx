@@ -1,4 +1,4 @@
-import NewTableComponent from "./Components/DsTablecomponent/DsTableComponent";
+import DsTableComponent from "./Components/DsTablecomponent/DsTableComponent";
 
 export default function Home() {
   const tempTableData = {
@@ -169,12 +169,12 @@ export default function Home() {
   return (
     <>
       <div className={"table-container"}>
-        <NewTableComponent
+        <DsTableComponent
           className={tempTableData.className}
           id={tempTableData.id}
           columns={tempTableData.columns}
           rows={tempTableData.rows}
-        ></NewTableComponent>
+        ></DsTableComponent>
       </div>
     </>
   );
