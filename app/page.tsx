@@ -16,7 +16,7 @@ import PaneStyles from "./Components/DsPane/DsPane.module.css";
 import addIcon from "./Icons/add.svg";
 import Image from "next/image";
 import TextField from "./Components/DsTextField/DsTextField";
-import DsPane from "./Components/dspane/dsPane";
+import DsPane from "./Components/dsPane/dsPane";
 import PaneOpenButton from "./Components/dsPane/paneOpenButton";
 import Application from "./ElProComponents/ApplicationComponents/Application";
 import DsPopup from "./Components/dsPopup/dsPopup";
@@ -36,6 +36,7 @@ export default function Home() {
   // const handleActionClick = () => {
   //   console.log("Action button clicked");
   // };
+  const [showNotification, setShowNotification] = useState<boolean>(false);
 
   return (
     <>
