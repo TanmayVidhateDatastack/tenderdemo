@@ -2,6 +2,7 @@ import { useState } from "react";
 import IconButton from "./IconButton";
 import MenuDivider from "./MenuDivider";
 import TabViewMenuItem from "./TabViewMenuItem";
+import styles from "./DsTable.module.css";
 
 export interface menuprops {
   columnIndex: number;
@@ -37,9 +38,7 @@ const MenuComponent: React.FC<menuprops> = ({
 
   return (
     <>
-      <div
-        className={`d-flex h-7 icon-button bg-blue-500 w-5 justify-content-center ml-3 align-items-left ${className}`}
-      >
+      <div className={`${styles["slide-component"]}   ${className}`}>
         <IconButton
           id="icon-button"
           srcImg={"dotsFillIMG"}
@@ -49,7 +48,7 @@ const MenuComponent: React.FC<menuprops> = ({
       </div>
 
       {menuVisible && columnKey === columnIndex && (
-        <div key={columnIndex} className="absolute bg-blue-500 ml-auto">
+        <div key={columnIndex} className={`${styles["menu-component"]}`}>
           <TabViewMenuItem
             menu="Sort By Asc"
             handleOnClick={() => sortTableAscending(columnIndex)}

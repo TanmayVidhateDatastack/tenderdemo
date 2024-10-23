@@ -1,3 +1,4 @@
+import styles from "./DsTable.module.css";
 export interface tbodyprops {
   className: string;
   children?: React.ReactNode;
@@ -6,7 +7,9 @@ export interface tbodyprops {
 const TbodyComponent: React.FC<tbodyprops> = ({ className, children }) => {
   return (
     <>
-      <tbody className={className}>{children}</tbody>
+      <tbody className={`${styles["ds-tableBody"]} ${className}`}>
+        {children}
+      </tbody>
     </>
   );
 };

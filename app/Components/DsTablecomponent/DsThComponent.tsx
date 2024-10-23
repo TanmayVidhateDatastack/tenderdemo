@@ -1,3 +1,4 @@
+import styles from "./DsTable.module.css";
 export interface thprops {
   className: string;
   children?: React.ReactNode;
@@ -16,14 +17,14 @@ const ThComponent: React.FC<thprops> = ({
   return (
     <>
       <th
-        className={`ds_tableHeader d-flex ${className}`}
+        className={`${styles["ds-th-component"]} ${className}`}
         data-column-name={columnHeader}
         data-column-index={columnIndex}
       >
-        {children != null && content != null && (
-          <span className="text-content">{content}</span>
+        {content != null && (
+          <span className={`${styles["th-text-content"]}`}>{content}</span>
         )}
-        {children || content}
+        {children}
       </th>
     </>
   );

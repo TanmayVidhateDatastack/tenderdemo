@@ -1,4 +1,4 @@
-import NewTableComponent from "./Components/DsTablecomponent/NewTableComponent";
+import NewTableComponent from "./Components/DsTablecomponent/DsTableComponent";
 
 export default function Home() {
   const tempTableData = {
@@ -64,7 +64,7 @@ export default function Home() {
           {
             columnIndex: 3,
             className: "cell",
-            content: "2024-12-02",
+            content: "2014-12-02",
             contentType: "date",
           },
         ],
@@ -94,7 +94,7 @@ export default function Home() {
           {
             columnIndex: 3,
             className: "cell",
-            content: "2024-11-02",
+            content: "2014-11-02",
             contentType: "date",
           },
         ],
@@ -124,7 +124,7 @@ export default function Home() {
           {
             columnIndex: 3,
             className: "cell",
-            content: "2024-10-02",
+            content: "2011-10-02",
             contentType: "date",
           },
         ],

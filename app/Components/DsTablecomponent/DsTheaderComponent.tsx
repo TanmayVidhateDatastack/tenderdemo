@@ -1,3 +1,4 @@
+import styles from "./DsTable.module.css";
 export interface theaderprops {
   className: string;
   children?: React.ReactNode;
@@ -6,7 +7,9 @@ export interface theaderprops {
 const TheaderComponent: React.FC<theaderprops> = ({ className, children }) => {
   return (
     <>
-      <thead className={`py-2 ${className}`}>{children}</thead>
+      <thead className={`${styles["ds-tableHeader"]}${className}`}>
+        {children}
+      </thead>
     </>
   );
 };

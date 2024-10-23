@@ -1,3 +1,4 @@
+import styles from "./DsTable.module.css";
 export interface tdprops {
   className: string;
   children?: React.ReactNode;
@@ -7,11 +8,9 @@ export interface tdprops {
 const TdComponent: React.FC<tdprops> = ({ className, children, content }) => {
   return (
     <>
-      <td className={className}>
-        {children != null && content != null && (
-          <span className="text-content">{content}</span>
-        )}
-        {children || content}
+      <td className={`${styles["ds-td-component"]} ${className}`}>
+        {content != null && <span>{content}</span>}
+        {children}
       </td>
     </>
   );

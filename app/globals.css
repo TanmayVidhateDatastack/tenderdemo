@@ -1,26 +1,73 @@
 :root {
-  --background: #ffffff;
+  --background: #fff;
   --foreground: #171717;
-  /*Pane*/
+  --backgroundt: rgb(246, 242, 242);
 
-  /*Pane*/
-  /*Layout*/
+  --blue: #41428e;
+  --semiblue: #4f54a4;
+  --red: #c50606;
+  --orange: #eb0f0f;
+  --black: #000000;
+  --lightred: #f9aeae;
+  --lightviolet: #abafe1;
+  --blue-600: #82b1ff;
+  --darkskyblue: #0076ba;
+  --skyblue: #0faeef;
+  --gray: #c4c4c4;
+  --brick: #f1818198;
+  --blush: #efe3fade;
+  --periwinkle: #e4e4e4;
+  --semiblack: #383838;
+  --heather: #a4a9d1;
 
-  /*Layout*/
+  --text-primary: var(--blue);
+  --text-white: var(--background);
+  --text-dark: var(--black);
+  --text-warning: var(--red);
+
+  --primary: var(--semiblue);
+  --primary-hover: var(--blue);
+  --secondary: var(--gray);
+  --secondary-hover: var(--gray);
+  --danger: var(--red);
+  --danger-hover: var(--orange);
+  --warning: var(--lightred);
+  --warning-hover: var(--brick);
+  --dark: var(--black);
+  --info: var(--darkskyblue);
+  --info-hover: var(--skyblue);
+  --midviolet: var(--blush);
+  --semiviolet: var(--periwinkle);
+  /* --lightviolet:var(--lightviolet); */
+
+  /* --sndPrimary:var(--semiblue);
+  --sndPrimary-hover:var(--blue);
+  --sndSecondary:var(--gray);
+  --sndDanger:var(--red);
+  --sndDanger-hover:var(--orange);
+  --sndWarning:var(--lightred);
+  --sndWarning-hover:var(--brick);
+  --sndDark:var(--black);
+  --sndInfo:var(--darkskyblue);
+  --sndInfo-hover:var(--skyblue);
+  --sndMidviolet:var(--blush);  
+  --sndSemiviolet:var(--periwinkle);       
+  --sndLightviolet:var(--lightviolet); */
+
+  /* --primary:var(--backgroundt); */
+  /* --primary-hover:var(--backgroundt); */
+  /* --secondary:var(--backgroundt);
+  --secondary-hover:var(--backgroundt);
+  --warning:var(--backgroundt);
+  --transparent:var(var(var(--backgroundt))) */
 }
-
-/* @media (prefers-color-scheme: dark) {
+/* 
+@media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
 } */
-.sort-icon.active {
-  background-color: blue;
-}
-.cursor-pointer {
-  cursor: pointer;
-}
 
 html,
 body {
@@ -46,7 +93,12 @@ a {
   color: inherit;
   text-decoration: none;
 }
-
+span {
+  height: auto;
+  min-height: fit-content;
+  display: flex;
+  align-items: center;
+}
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;

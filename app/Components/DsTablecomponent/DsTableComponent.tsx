@@ -13,6 +13,7 @@ import SortComponent from "./sortComponent";
 import MenuComponent from "./DsMenuComponent";
 import DSButton from "../DsButton/DsButton";
 import TextField from "../DsTextField/DsTextField";
+import styles from "./DsTable.module.css";
 
 // Define the component props
 interface TableComponentProps {
@@ -443,8 +444,8 @@ const TableComponent: React.FC<TableComponentProps> = ({
 
   return (
     <>
-      <div className="h-parent overflow-auto data-table">
-        <div className="column-visibility">
+      <div className="data-table">
+        {/* <div className="column-visibility">
           <RadioCheckButton
             groupName="columnVisibility"
             options={columns.map((col) => ({
@@ -513,12 +514,10 @@ const TableComponent: React.FC<TableComponentProps> = ({
             onChange={setGrossRangeValue}
           ></input>
           <DSButton buttonText={"Apply"} handleOnClick={applyFilter}></DSButton>
-        </div>
+        </div> */}
 
         <table
-          className={`flex flex-col h-parent w-full ${
-            className ? className : ""
-          } divide-y divide-gray-200`}
+          className={`${className ? className : ""} ${styles["ds-table"]} `}
           id={id}
         >
           <TheaderComponent className={""}>
@@ -538,6 +537,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
                         columnIndex={column.columnIndex}
                         sortTable={sortTable}
                       />
+
                       <MenuComponent
                         columnIndex={column.columnIndex}
                         sortDataOnlyOnSpecifiedColumn={sortTableAscending}
@@ -552,33 +552,22 @@ const TableComponent: React.FC<TableComponentProps> = ({
             </TrComponent>
           </TheaderComponent>
 
-          <TbodyComponent
-            className={`h-parent overflow-auto divide-y divide-gray-200`}
-          >
+          <TbodyComponent className={""}>
             {tableRows.map((newRow) => {
               const row = rows.find((x) => x.rowIndex === newRow.rowIndex);
 
               return (
-                <TrComponent
-                  className={`${row?.className}`}
-                  key={newRow.rowIndex}
-                >
+                <TrComponent className={""} key={newRow.rowIndex}>
                   {columns.map((col) => {
                     const cell = row?.content?.find(
                       (data) => data.columnIndex == col.columnIndex
                     );
 
                     if (!col.isHidden && cell) {
-                      const cellClassName = col.className
-                        ? `${cell.className ? cell.className : ""} py-2 ${
-                            col.className
-                          }`
-                        : `${cell.className ? cell.className : "py-2"}`;
-
                       return (
                         <TdComponent
                           key={col.columnHeader}
-                          className={cellClassName}
+                          className={""}
                           content={cell.content}
                         ></TdComponent>
                       );

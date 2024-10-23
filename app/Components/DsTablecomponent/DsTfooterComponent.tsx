@@ -1,3 +1,4 @@
+import styles from "./DsTable.module.css";
 export interface tfooterprops {
   className: string;
   children?: React.ReactNode;
@@ -6,7 +7,9 @@ export interface tfooterprops {
 const TfooterComponent: React.FC<tfooterprops> = ({ className, children }) => {
   return (
     <>
-      <tbody className={className}>{children}</tbody>
+      <tfoot className={`${styles["ds-footer"]} ${className}`}>
+        {children}
+      </tfoot>
     </>
   );
 };
