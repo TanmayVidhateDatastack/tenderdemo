@@ -205,9 +205,8 @@ export default function Home() {
   // const handleActionClick = () => {
   //   console.log("Action button clicked");
   // };
-  const options=[ "option1" , "option2" , "option3","option4","option5"];
+  const options = ["option1", "option2", "option3", "option4", "option5"];
 
-  
   const [showNotification, setShowNotification] = useState<boolean>(false);
 
   return (
@@ -274,9 +273,13 @@ export default function Home() {
               )}
             </div>
           </DsPane>
-          <div className={styles.container}>
-          <DsSelect options={options} placeholder= "Click me to select" label="multiselect"></DsSelect>
-          <PopUPContext/>
+          <div className={styles.container +" "+styles["flex-column"]}>
+            <DsSelect
+              options={options}
+              placeholder="Click me to select"
+              label="multiselect"
+            ></DsSelect>
+            <PopUPContext />
 
             <PaneOpenButton
               id="actionBtn"
@@ -311,16 +314,14 @@ export default function Home() {
               }
               buttonText="Popup"
             />
-              <div className={"table-container"}>
-        <DsTableComponent
-          className={tempTableData.className}
-          id={tempTableData.id}
-          columns={tempTableData.columns}
-          rows={tempTableData.rows}
-        ></DsTableComponent>
-      </div>
-        <DemoButtons />
-
+            <DsTableComponent
+                className={tempTableData.className}
+                id={tempTableData.id}
+                columns={tempTableData.columns}
+                rows={tempTableData.rows}
+              ></DsTableComponent>
+            
+            <DemoButtons />
           </div>
         </div>
       </Application>
@@ -351,4 +352,4 @@ export default function Home() {
       </DsPane>
     </>
   );
-};
+}

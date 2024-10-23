@@ -21,7 +21,12 @@
   flex-direction: row;
   width: 100%;
   height: 100%;
-  padding:0.5rem
+  padding:0.5rem;
+  overflow:auto
+}
+.flex-column{
+  flex-direction: column;
+
 }
 .fluidContainer{
   flex:1;
@@ -30,6 +35,9 @@
   width: 100%;
   height: 100%;
 }
+.table-container{
+  display: flex;
+}
 .row {
   display: flex;
   flex-direction: row;
@@ -37,7 +45,7 @@
   width: 100%;
 }
 .col {
-  display: flex;
+  display: block;
 }
 .left_separator {
   border-left: 1px solid grey;

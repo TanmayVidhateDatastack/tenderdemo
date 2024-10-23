@@ -1,8 +1,9 @@
 .ds-table {
   width: 100%;
-  position: fixed;
+  /* position: fixed; */
   overflow: auto;
   margin-left: 15px;
+  
 }
 
 .ds-tableHeader {
@@ -55,12 +56,11 @@
 }
 
 .ds-tr-component {
+  flex:1;
   display: flex;
 
   /* Layout Properties */
-  top: 321px;
-  left: 84px;
-  width: 1258px;
+ 
   height: 40px;
   /* UI Properties */
   background: var(--white) 0% 0% no-repeat padding-box;
@@ -70,9 +70,7 @@
 
 .ds-tr-component.approved:hover {
   /* Layout Properties */
-  top: 321px;
-  left: 84px;
-  width: 1258px;
+ 
   height: 40px;
   /* UI Properties */
   opacity: 1;
@@ -145,4 +143,7 @@
 
 .cursor-pointer {
   cursor: pointer;
+}
+.menu-component{
+  display: flex;
 }

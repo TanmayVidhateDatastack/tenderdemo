@@ -11,7 +11,7 @@ import TfooterComponent from "./DsTfooterComponent";
 import TdComponent from "./DsTdComponent";
 import SortComponent from "./sortComponent";
 import MenuComponent from "./DsMenuComponent";
-import DSButton from "../DsButton/DsButton";
+import DSButton from "../dsButton/dsButton";
 import TextField from "../DsTextField/DsTextField";
 import styles from "./DsTable.module.css";
 
@@ -281,22 +281,25 @@ const TableComponent: React.FC<TableComponentProps> = ({
     setRangeTo(Number(e.target.value));
   };
 
+  const rangeFilter = () => {
+    const filteredRows = [...rows].filter((row) =>
+      row.content?.some(
+        (cell) =>
+          cell.contentType === "number" &&
+          cell.columnIndex === 0 &&
+          Number(cell.content) >= rangeFrom &&
+          Number(cell.content) <= rangeTo
+      )
+    );
+ 
+    setNewRows(filteredRows);
+  };
   const applyFilter = (e: React.MouseEvent<HTMLElement>) => {
     console.log(e);
-    // const filteredRows = [...rows].filter((row) =>
-    //   row.content?.some(
-    //     (cell) =>
-    //       cell.contentType === "number" &&
-    //       cell.columnIndex === 0 &&
-    //       Number(cell.content) >= rangeFrom &&
-    //       Number(cell.content) <= rangeTo
-    //   )
-    // );
-
-    // setNewRows(filteredRows);
+    rangeFilter();
     // filterOnDate(3);
     // filterRowsOnInputTypeRange(2);
-    searchDataOnSpecifiedColumnUsingCommaSeparatedValues(1);
+    // searchDataOnSpecifiedColumnUsingCommaSeparatedValues(1);
   };
 
   const [dateFrom, setDateFrom] = useState<Date>(new Date("2024-10-02"));
@@ -445,7 +448,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
   return (
     <>
       <div className="data-table">
-        {/* <div className="column-visibility">
+        <div className="column-visibility">
           <RadioCheckButton
             groupName="columnVisibility"
             options={columns.map((col) => ({
@@ -513,8 +516,8 @@ const TableComponent: React.FC<TableComponentProps> = ({
             className="range-input"
             onChange={setGrossRangeValue}
           ></input>
-          <DSButton buttonText={"Apply"} handleOnClick={applyFilter}></DSButton>
-        </div> */}
+          <DSButton label={"Apply"} handleOnClick={applyFilter}></DSButton>
+        </div>
 
         <table
           className={`${className ? className : ""} ${styles["ds-table"]} `}

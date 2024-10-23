@@ -36,7 +36,7 @@ width:100%  }
   display: flex;
   /* justify-content: space-between; */
   align-items:flex-end;
-  /* width: 300px; */
+  width: fit-content;
   padding: 10px;
   margin-top: 10px;
   border: 1px solid var(--blue-600);
@@ -137,4 +137,28 @@ font-size: 12px;
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none; /* Prevent icon from blocking clicks */
+}
+.custom-input[type="date"] {
+  position: relative;
+  color: transparent; /* Hide the default date text */
+}
+
+.custom-input[type="date"]::before {
+  content: attr(data-placeholder);
+  position: absolute;
+  color: #999; /* Style for the placeholder text */
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none; /* Make sure the placeholder is not clickable */
+}
+
+.custom-input[type="date"]:focus {
+  color: initial; /* Show the real date when focused */
+}
+.custom-input[type="date"]:valid {
+  color: initial; /* Show the real date when focused */
+}
+.custom-input[type="date"]:valid::before {
+  content: ""; /* Remove placeholder when a valid date is selected */
 }

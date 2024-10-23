@@ -12,7 +12,8 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    height:min-content
+    height:min-content;
+    width:min-content;
    /* Positioning relative to this button */
 }
   
