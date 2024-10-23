@@ -1,10 +1,22 @@
+'use client'
+import { useState } from "react";
+import DSButton from "./Components/dsButton/dsButton";
+import styles from "./Components/dsButton/dsButton.module.css";
+import PaneStyles from "./Components/Dspane/DsPane.module.css";
+// import addIcon from "./Icons/add.svg";
+// import DSButton from "./Components/DsButton/DsButton";
+// import ButtonLibrary from "./Components/dsButton/DS_ButtonLibrary";
+import DemoButtons from "./Components/dsButton/dsDemoButtons";
+import Toaster from "./Components/DsToaster/DsToaster";
+// import SaveButton from "./Components/DsButton/Ds_SaveBtn";
 import Image from "next/image";
 import styles from "./page.module.css";
 import buttonStyles from "./Components/DsButton/Ds_Button.module.css";
 import PaneStyles from "./Components/DsPane/DsPane.module.css";
 import addIcon from "./Icons/add.svg";
-import DSButton from "./Components/DsButton/DsButton";
-import DsPane from "./Components/dsPane/dsPane";
+import Image from "next/image";
+import TextField from "./Components/DsTextField/DsTextField";
+import DsPane from "./Components/dspane/dsPane";
 import PaneOpenButton from "./Components/dsPane/paneOpenButton";
 import Application from "./ElProComponents/ApplicationComponents/Application";
 import DsPopup from "./Components/dsPopup/dsPopup";
@@ -57,7 +69,42 @@ export default function Home() {
         }
       >
         <div className={styles.fluidContainer}>
-          <DsPane id="PaneInset" type="inset" side={PaneStyles.left}></DsPane>
+          <DsPane id="PaneInset" type="inset" side={PaneStyles.left}>
+          <TextField
+          placeholder="placeholder"
+          label="label"
+          disable={false}
+          // onClick={false}
+          type="multiline"
+          icon="📋"
+          iconEnd="📋" 
+        
+
+        />
+      <div className={styles.btn}>
+
+      <DSButton
+        id="actionBtn"
+        buttonClass={styles.action_btn}
+        handleOnClick={() => setShowNotification(true)}
+        // handleOnClick={handleActionClick}
+        // handleOnHover={handleMouseHover}
+        // beforeIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
+        label="show notification "
+        />
+
+{ showNotification && (
+      <Toaster
+          handleClose={() => setShowNotification(false)}
+          type="error"
+          message="this is simple error msg you cant acess this side now .............!"
+          position="bottomright" 
+          duration={3000}
+         />
+    )}
+
+</div>
+          </DsPane>
           <div className={styles.container}>
             <PaneOpenButton
               id="actionBtn"
