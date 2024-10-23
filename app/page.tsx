@@ -6,7 +6,8 @@
 // import DSButton from "./Components/DsButton/DsButton";
 // import DsPane from "./Components/DsPane/DsPane";
 // import PaneOpenButton from "./Components/DsPane/PaneOpenButton";
-import PopUPContext from "./Components/dscontext/dscontext";
+// import PopUPContext from "./Components/dscontext/dscontext";
+import ContextDemo from "./Components/dscontext/dsDemoContext";
 
 export default function Home() {
   // const handleMouseHover = (e) => {
@@ -22,23 +23,11 @@ export default function Home() {
   // const handleActionClick = () => {
   //   console.log("Action button clicked");
   // };
+ 
   return (
-    <div>
-      <PopUPContext />
-      <button
-        onClick={handleClick}
-        style={{
-          padding: '10px 20px',
-          backgroundColor: '#4a5cbe',
-          color: 'white',
-          border: 'none',
-          borderRadius: '5px',
-          cursor: 'pointer',
-          position: 'absolute', 
-        }}
-      >
-        Save
-      </button>
-    </div>
+  
+     <ContextDemo/>
+  
+            
   );
 }
