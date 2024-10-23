@@ -25,6 +25,7 @@ import PopUPContext from "./Components/dscontext/dscontext";
 
 // import SaveButton from "./Components/DsButton/Ds_SaveBtn";
 import DsTableComponent from "./Components/DsTablecomponent/DsTableComponent";
+import DemoSelect from "./Components/dsSelect/dsDemoSelect";
 
 export default function Home() {
   const tempTableData = {
@@ -205,7 +206,7 @@ export default function Home() {
   // const handleActionClick = () => {
   //   console.log("Action button clicked");
   // };
-  const options = ["option1", "option2", "option3", "option4", "option5"];
+  // const options = ["option1", "option2", "option3", "option4", "option5"];
 
   const [showNotification, setShowNotification] = useState<boolean>(false);
 
@@ -215,6 +216,7 @@ export default function Home() {
         appTitle="Sales and Order"
         appMenu={
           <div className={styles.container}>
+            
             <PaneOpenButton
               id="actionBtn"
               buttonClass={buttonStyles.action_btn}
@@ -274,11 +276,13 @@ export default function Home() {
             </div>
           </DsPane>
           <div className={styles.container +" "+styles["flex-column"]}>
-            <DsSelect
+            {/* <DsSelect
               options={options}
+              type="multi"
               placeholder="Click me to select"
               label="multiselect"
-            ></DsSelect>
+            ></DsSelect> */}
+            <DemoSelect/>
             <PopUPContext />
 
             <PaneOpenButton

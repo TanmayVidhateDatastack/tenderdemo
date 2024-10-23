@@ -9,14 +9,15 @@
      justify-content: center;
  } */
  .allselect{
-   height:auto;
+   height:min-content;
    width:min-content;
    position:relative;
    margin:20px;
+   
 }
 .mainselection{  
     padding:10px;
-    color:white;
+    color:black;
     border:1px solid;
     border-radius:5px ;
     border-style: groove;
@@ -52,6 +53,7 @@
      box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
      border-radius: 2px;
      margin-left: 2px;
+     height: min-content;
  }
  
  .option{
@@ -79,7 +81,7 @@
     font-size: 12px;
     border-radius: 25px !important;
     margin: 2px;
-    height: fit-content;
+    height: min-content;
     background-color: #dacfcf;
     color: black;
     display:flex;

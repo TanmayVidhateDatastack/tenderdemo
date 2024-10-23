@@ -7,44 +7,31 @@ import remove from "../../Icons/mediumIcons/remove.svg"
  
 interface SelectProps{
     options: string[];
+    type: "single" | "multi" ;
     placeholder: string;
     label?:string;
 }
- 
- 
-const DsSelect:React.FC<SelectProps> =({options, placeholder= "Click to Select",label})=>{
- 
-    // const[selectedOption, setSelectedOption]=useState('');
-//     const handleChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
-//         // setSelectedOption(selectedOption);
-//         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-//         setSelectedOption(e.target.value);
-//       };
-//     return(
-//         <div >
-//             <h3>Dropdown</h3>
-           
-//             <select value={selectedOption} onChange={handleChange} className={styles.mainselection}  >
-//                 <option value="Option" > </option>
-//                 <option value="option1">Option 2</option>
-//                 <option value="option2">Option 3</option>
-//                 <option value="option3">Option 4</option>
-//             </select>
- 
-//         </div>
-//     );
+const DsSelect:React.FC<SelectProps> =({options,type, placeholder= "Click to Select",label})=>{
  
     const[selectedOption, setSelectedOption]= useState<string[]>([]);
     const[isOpen, setIsopen]=useState(false)
- 
+
+    const[singleSelectedOption, setSingleSelectedOption]= useState<string>("");
     const toggleDropdown =()=> setIsopen(!isOpen);
+    const handleSelect=(option: string)=>{
+      if(type=="single"){
+
+        setSingleSelectedOption(option);
+        setIsopen(false);
+      }
    
-    const handleSelect = (option: string) => {
+    if(type=="multi"){
       if (selectedOption.includes(option)) {
         setSelectedOption(selectedOption.filter((selected) => selected !== option));
       } else {
         setSelectedOption([...selectedOption, option]);
       }
+    }
     };
     const removeOption=(select: string)=>{
         const removeItem=selectedOption.filter(option=> option !== select);
@@ -52,8 +39,11 @@ const DsSelect:React.FC<SelectProps> =({options, placeholder= "Click to Select",
     };
     const[isFocused,setIsFocused]=useState(false);
     const[value,setValue]=useState("");
- 
     return(
+      <>
+    
+      { type=="multi" && (
+
       <div className={styles.allselect}>
       <legend
         className={`${styles["floating-label"]} ${
@@ -64,11 +54,11 @@ const DsSelect:React.FC<SelectProps> =({options, placeholder= "Click to Select",
       </legend>
         <input
           type="text"
-          value={selectedOption}
+          value={isFocused ? placeholder:""}
           name="title"
           placeholder={isFocused || value !== "" ? placeholder :""}
           onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
+          onBlur={() => setIsFocused(true)}
           onChange={(e) => setValue(e.target.value)}
           onClick={toggleDropdown}
           className={styles.mainselection}
@@ -94,13 +84,45 @@ const DsSelect:React.FC<SelectProps> =({options, placeholder= "Click to Select",
          {selectedOption.map((select, index) => (
           <div key={index} className={styles.selectoption}>
           <button className={styles.selecteditem}>{select}<Image className={styles.remove} src={remove} alt="Remove Icon" onClick={()=>removeOption(select)}/></button>
- 
-    </div>
+</div>
   ))}
 </div>
+<div>
+</div>
     </div>
+)
+}
+{ type=="single" && (
+  <div>
+    <div className={styles.allselect}>
+        <input
+          type="text"
+          value={singleSelectedOption}
+          name="title"
+          placeholder={placeholder}
+          onClick={toggleDropdown}
+          className={styles.mainselection}
+        />
+    {isOpen &&( 
+    <div className={styles.list}>
+      {options.map((option,index)=>(
+        <div
+            key={index}
+            onClick= {()=>handleSelect(option)}
+            className={styles.option}
+        >
+           {option } 
+        </div>
+      ))}
+    </div>
+    )} 
+    </div>
+  </div>
+)}
+</>
   );
 };
+
  
 export default DsSelect;
  
