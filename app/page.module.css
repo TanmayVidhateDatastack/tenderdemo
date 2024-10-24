@@ -53,6 +53,10 @@
 .right_separator {
   border-left: 1px solid grey;
 }
+.demo{
+  display:flex;
+  flex-direction: column;
+}
 @media (prefers-color-scheme: dark) {
   .page {
     --gray-rgb: 255, 255, 255;
