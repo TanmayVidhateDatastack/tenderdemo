@@ -109,20 +109,20 @@
   --btngroup-text-primary-hover:#4F54A4;
 
   /*status indicator colors*/
-  --under-approval:rgba(226, 187, 31, 0.1);
-  --under-approval-text:rgb(226 187 31);
-  --pending:rgba(204, 132, 0, 0.1);
-  --pending-text:rgb(204 132 0);
-  --under-review:rgba(110, 196, 232, 0.1);
-  --under-review-text:rgb(110 196 232);
-  --approved:rgba(40, 167, 69, 0.1 );
-  --approved-text:rgb(40 167 69);
-  --submitted:rgba(0, 123, 255, 0.1);
-  --submitted-text:rgb(0 123 255 );
-  --inProcess:rgba(111, 66, 193, 0.1);
-  --inProcess-text:rgb(111 66 193);
-  --cancelled:rgba(220, 53, 69, 0.1);
-  --cancelled-text:rgb(220 53 69);
+  --under-approval:#e2bb1f1a;
+  --under-approval-text:#e2bb1f;
+  --pending:#cc84001a;
+  --pending-text:#cc8400;
+  --under-review:#6ec4e81a;
+  --under-review-text:#6ec4e8;
+  --approved:#28a7451a;
+  --approved-text:#28a745;
+  --submitted:#007bff1a;
+  --submitted-text:#007bff;
+  --inProcess:#6f42c11a;
+  --inProcess-text:#6f42c1;
+  --cancelled:#dc35451a;
+  --cancelled-text:#dc3545;
 }
 /* 
 /* @media (prefers-color-scheme: dark) {
