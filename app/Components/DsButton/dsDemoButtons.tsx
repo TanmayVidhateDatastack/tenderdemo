@@ -20,6 +20,7 @@ import { ImgProps } from "next/dist/shared/lib/get-img-props";
 import DSButton from "./dsButton";
 import DSButtonGroup from "./dsButtonGroup";
 import DSFilterButton from "./dsFilterButton";
+import DemoLayout from "@/app/ElProComponents/Demo/demoLayout";
 
 const DemoButtons: React.FC = () => {
   const [toggled, setToggled] = useState(false);
@@ -52,6 +53,8 @@ const DemoButtons: React.FC = () => {
   };
 
   return (
+    <DemoLayout title="Button (DsButton)">
+
     <div className={btnStyles.btn_div + " " + btnStyles.flex}>
       <DSButton
         id="actionBtn"
@@ -62,14 +65,14 @@ const DemoButtons: React.FC = () => {
         startIcon={<Image src={addIcon} alt="icon" />}
         label="New"
         handleOnClick={(e) => clickHandler(e)}
-      />
+        />
       <DSButton
         id="closeBtn"
         buttonColor="btnDark"
         buttonClass={btnStyles.btnOutlined}
         handleOnClick={(e) => clickHandler(e)}
         label="Close"
-      />
+        />
       <DSButton
         id="iconfilterBtn"
         buttonColor="btnPrimary"
@@ -77,7 +80,7 @@ const DemoButtons: React.FC = () => {
         handleOnClick={(e) => clickHandler(e)}
         startIcon={<Image src={filter} alt="icon" />}
         label="Filter"
-      />
+        />
       <DSButton
         id="deleteBtn"
         buttonColor="btnDanger"
@@ -85,7 +88,7 @@ const DemoButtons: React.FC = () => {
         buttonClass={btnStyles.btnOutlined}
         handleOnClick={(e) => clickHandler(e)}
         label="Delete"
-      />
+        />
       <DSButton
         id="cancelBtn"
         buttonColor="btnDark"
@@ -93,7 +96,7 @@ const DemoButtons: React.FC = () => {
         // buttonClass={btnStyles.btnSmall}
         handleOnClick={(e) => clickHandler(e)}
         label="Cancel"
-      />
+        />
       <DSButton
         id="loginBtn"
         buttonColor="btnInfo"
@@ -101,21 +104,21 @@ const DemoButtons: React.FC = () => {
         buttonClass={btnStyles.btnContained + " " + btnStyles.btnAutoWidth}
         handleOnClick={(e) => clickHandler(e)}
         label="Login"
-      />
+        />
       <DSButton
         id="backBtn"
         buttonColor="btnSecondary"
         buttonClass={btnStyles.btnText}
         handleOnClick={(e) => clickHandler(e)}
         label="Back"
-      />
+        />
       <DSButton
         id="ewaybillBtn"
         buttonColor="btnPrimary"
         buttonClass={btnStyles.btnContained}
         handleOnClick={(e) => clickHandler(e)}
         label="E-Way Bill"
-      />
+        />
       <DSButton
         id="deleteBtn"
         buttonColor="btnWarning"
@@ -125,7 +128,7 @@ const DemoButtons: React.FC = () => {
         handleMouseLeave={(e) => changeImage(e, trashbtn)}
         startIcon={<Image src={trashbtn} alt="icon" />}
         label="Delete"
-      />
+        />
       <DSButton
         id="deviationBtn"
         buttonColor="btnDanger"
@@ -134,7 +137,7 @@ const DemoButtons: React.FC = () => {
         handleOnClick={(e) => clickHandler(e)}
         endIcon={<Image src={deviation} alt="icon" />}
         label="Deviation Failed "
-      />
+        />
       <DSButton
         id="filterBtn"
         type="tab"
@@ -142,7 +145,7 @@ const DemoButtons: React.FC = () => {
         buttonClass={btnStyles.btnOutlined}
         handleOnClick={(e) => clickHandler(e)}
         label="Apply Filter"
-      />
+        />
       <DSButton
         id="invoiceBtn"
         buttonColor="btnPrimary"
@@ -150,14 +153,14 @@ const DemoButtons: React.FC = () => {
         buttonClass={btnStyles.btnContained}
         handleOnClick={(e) => clickHandler(e)}
         label="View Invoice"
-      />
+        />
       <DSButton
         id="logoutBtn"
         buttonColor="btnDark"
         buttonClass={btnStyles.btnOutlined}
         handleOnClick={(e) => clickHandler(e)}
         label="Log Out"
-      />
+        />
       <DSButton
         id="updateBtn"
         buttonColor="btnPrimary"
@@ -167,14 +170,14 @@ const DemoButtons: React.FC = () => {
         handleMouseLeave={(e) => changeImage(e, update)}
         startIcon={<Image src={update} alt="icon" />}
         label="Update"
-      />
+        />
       <DSButton
         id="autoWidthBtn"
         buttonColor="btnPrimary"
         buttonClass={btnStyles.btnContained + " " + btnStyles.btnAutoWidth}
         handleOnClick={(e) => clickHandler(e)}
         label="Apply"
-      />
+        />
 
       <DSButton
         id="saveBtn"
@@ -184,7 +187,7 @@ const DemoButtons: React.FC = () => {
         handleOnClick={(e) => clickHandler(e)}
         label="Save"
         spliticon={<Image src={spliticon} alt="icon" />}
-      />
+        />
 
       <DSButton
         id="toggleBtn"
@@ -193,7 +196,7 @@ const DemoButtons: React.FC = () => {
           toggled ? btnStyles.toggled : ""
         }`}
         handleOnClick={() => setToggled(!toggled)}
-      />
+        />
 
       <DSButton
         id="uploadBtn"
@@ -203,7 +206,7 @@ const DemoButtons: React.FC = () => {
         handleOnClick={(e) => clickHandler(e)}
         startIcon={<Image src={upload} alt="icon" />}
         label="CSV File"
-      />
+        />
 
       <DSButton
         id="notificationBtn"
@@ -213,7 +216,7 @@ const DemoButtons: React.FC = () => {
         handleOnClick={(e) => clickHandler(e)}
         startIcon={<Image src={notificationicon} alt="icon" />}
         tooltip="Notification"
-      />
+        />
       <DSButton
         id="chatBtn"
         type="icon_image"
@@ -222,7 +225,7 @@ const DemoButtons: React.FC = () => {
         handleOnClick={(e) => clickHandler(e)}
         startIcon={<Image src={chat} alt="icon" />}
         tooltip="Chat"
-      />
+        />
 
       <DSButton
         id="leftarrowBtn"
@@ -233,7 +236,7 @@ const DemoButtons: React.FC = () => {
         handleMouseLeave={(e) => changeImage(e, leftarrow)}
         startIcon={<Image src={leftarrow} alt="icon" />}
         tooltip="Back"
-      />
+        />
 
       <DSButtonGroup id="btngroup1" buttonClass={btnStyles.btngroup}>
         <DSFilterButton
@@ -242,14 +245,14 @@ const DemoButtons: React.FC = () => {
           label="Button 1"
           count="00"
           handleOnClick={() => handleButtonClick("button1")}
-        />
+          />
         <DSFilterButton
           id="button2"
           buttonClass={btnStyles.btngroupcontained + " " + btnStyles.group_btn}
           label="Button 2"
           count="00"
           handleOnClick={() => handleButtonClick("button2")}
-        />
+          />
 
         <DSFilterButton
           id="button3"
@@ -257,16 +260,17 @@ const DemoButtons: React.FC = () => {
           label="Button 3"
           count="00"
           handleOnClick={() => handleButtonClick("button3")}
-        />
+          />
         <DSFilterButton
           id="button4"
           buttonClass={btnStyles.btngroupcontained + " " + btnStyles.group_btn}
           label="Button 4"
           count="00"
           handleOnClick={() => handleButtonClick("button4")}
-        />
+          />
       </DSButtonGroup>
     </div>
+          </DemoLayout>
   );
 };
 

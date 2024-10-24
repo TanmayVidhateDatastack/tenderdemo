@@ -70,7 +70,7 @@ const TextField: React.FC<InputTextAreaProps> = ({
   type = "singleline",
   icon,
   iconEnd,
-
+  minRows,
   inputType,
   
 }) => {
@@ -80,7 +80,7 @@ const TextField: React.FC<InputTextAreaProps> = ({
     const [isFocused, setIsFocused] = useState(false);
     return (
       <>
-        <div>
+        <div className={styles.textFiledContainer}>
           <fieldset
             className={`${styles["custom-fieldset"]} ${
               isFocused || value !== "" ? styles["focused"] : ""
@@ -118,7 +118,7 @@ const TextField: React.FC<InputTextAreaProps> = ({
                   placeholder={isFocused ? placeholder : ""}
                   disabled={disable}
                   aria-multiline={true}
-                  // minRows={minRows}
+                  rows={minRows}
                   onBlur={() => setIsFocused(false)}
                   id={id}
                 />

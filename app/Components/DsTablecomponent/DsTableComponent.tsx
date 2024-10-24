@@ -302,32 +302,32 @@ const TableComponent: React.FC<TableComponentProps> = ({
     // searchDataOnSpecifiedColumnUsingCommaSeparatedValues(1);
   };
 
-  const [dateFrom, setDateFrom] = useState<Date>(new Date("2024-10-02"));
-  const [dateTo, setDateTo] = useState<Date>(new Date(Date.now.toString()));
-  const setDateFromValue = (
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => {
-    setDateFrom(new Date(e.target.value));
-  };
-  const setDateToValue = (
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => {
-    setDateTo(new Date(e.target.value));
-  };
+  // const [dateFrom, setDateFrom] = useState<Date>(new Date("2024-10-02"));
+  // const [dateTo, setDateTo] = useState<Date>(new Date(Date.now.toString()));
+  // const setDateFromValue = (
+    // e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  // ) => {
+    // setDateFrom(new Date(e.target.value));
+  // };
+  // const setDateToValue = (
+  //   e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  // ) => {
+  //   setDateTo(new Date(e.target.value));
+  // };
 
-  const filterOnDate = (columnIndex: number) => {
-    const filteredRows = rows.filter((row) =>
-      row.content?.some(
-        (cell) =>
-          typeof cell.content === "string" &&
-          cell.contentType === "date" &&
-          cell.columnIndex === columnIndex &&
-          new Date(cell.content.toString()) >= new Date(dateFrom?.toString()) &&
-          new Date(cell.content.toString()) <= new Date(dateTo?.toString())
-      )
-    );
-    setNewRows(filteredRows);
-  };
+  // const filterOnDate = (columnIndex: number) => {
+  //   const filteredRows = rows.filter((row) =>
+  //     row.content?.some(
+  //       (cell) =>
+  //         typeof cell.content === "string" &&
+  //         cell.contentType === "date" &&
+  //         cell.columnIndex === columnIndex &&
+  //         new Date(cell.content.toString()) >= new Date(dateFrom?.toString()) &&
+  //         new Date(cell.content.toString()) <= new Date(dateTo?.toString())
+  //     )
+  //   );
+  //   setNewRows(filteredRows);
+  // };
 
   const minValue = useRef<number>(0);
   const maxValue = useRef<number>(0);
@@ -364,86 +364,86 @@ const TableComponent: React.FC<TableComponentProps> = ({
 
   getLowestBiggestValue(2);
 
-  const [rangeValue, setRangeValue] = useState<number>(25);
-  const setGrossRangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRangeValue(Number(e.target.value));
-  };
-  const filterRowsOnInputTypeRange = (columnIndex: number) => {
-    const filteredRows = rows.filter((row) =>
-      row.content?.some(
-        (cell) =>
-          typeof cell.content === "string" &&
-          cell.contentType === "number" &&
-          cell.columnIndex === columnIndex &&
-          Number(cell.content) >= minValue.current &&
-          Number(cell.content) <= rangeValue
-      )
-    );
-    setNewRows(filteredRows);
-  };
+  // const [rangeValue, setRangeValue] = useState<number>(25);
+  // const setGrossRangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setRangeValue(Number(e.target.value));
+  // };
+  // const filterRowsOnInputTypeRange = (columnIndex: number) => {
+  //   const filteredRows = rows.filter((row) =>
+  //     row.content?.some(
+  //       (cell) =>
+  //         typeof cell.content === "string" &&
+  //         cell.contentType === "number" &&
+  //         cell.columnIndex === columnIndex &&
+  //         Number(cell.content) >= minValue.current &&
+  //         Number(cell.content) <= rangeValue
+  //     )
+  //   );
+  //   setNewRows(filteredRows);
+  // };
 
-  const [commaSeparatedValue, setCommaSeparatedValue] = useState<string[]>([]);
-  const setCommaValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const commaValue = e.target.value.split(",");
-    setCommaSeparatedValue(commaValue);
-  };
-  const searchDataOnSpecifiedColumnUsingCommaSeparatedValues = (
-    columnIndex: number
-  ) => {
-    const filteredRows = rows.filter((row) =>
-      row.content?.some(
-        (cell) =>
-          typeof cell.content === "string" &&
-          cell.contentType === "string" &&
-          cell.columnIndex === columnIndex &&
-          commaSeparatedValue.some((item) =>
-            cell.content
-              ?.toString()
-              .toLowerCase()
-              .includes(item.toString().toLowerCase())
-          )
-      )
-    );
-    setNewRows(filteredRows);
-  };
+  // const [commaSeparatedValue, setCommaSeparatedValue] = useState<string[]>([]);
+  // const setCommaValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const commaValue = e.target.value.split(",");
+  //   setCommaSeparatedValue(commaValue);
+  // };
+  // const searchDataOnSpecifiedColumnUsingCommaSeparatedValues = (
+  //   columnIndex: number
+  // ) => {
+  //   const filteredRows = rows.filter((row) =>
+  //     row.content?.some(
+  //       (cell) =>
+  //         typeof cell.content === "string" &&
+  //         cell.contentType === "string" &&
+  //         cell.columnIndex === columnIndex &&
+  //         commaSeparatedValue.some((item) =>
+  //           cell.content
+  //             ?.toString()
+  //             .toLowerCase()
+  //             .includes(item.toString().toLowerCase())
+  //         )
+  //     )
+  //   );
+  //   setNewRows(filteredRows);
+  // };
 
-  const [dropDownOptions, setDropDownOptions] = useState<string[]>([]);
-  const filterOnDropdown = (columnIndex: number) => {
-    const filteredRows = rows.filter((row) =>
-      row.content?.some(
-        (cell) =>
-          typeof cell.content === "string" &&
-          cell.contentType === "string" &&
-          cell.columnIndex === columnIndex &&
-          dropDownOptions.some((item) =>
-            cell.content
-              ?.toString()
-              .toLowerCase()
-              .includes(item.toString().toLowerCase())
-          )
-      )
-    );
-    setNewRows(filteredRows);
-  };
+  // const [dropDownOptions, setDropDownOptions] = useState<string[]>([]);
+  // const filterOnDropdown = (columnIndex: number) => {
+  //   const filteredRows = rows.filter((row) =>
+  //     row.content?.some(
+  //       (cell) =>
+  //         typeof cell.content === "string" &&
+  //         cell.contentType === "string" &&
+  //         cell.columnIndex === columnIndex &&
+  //         dropDownOptions.some((item) =>
+  //           cell.content
+  //             ?.toString()
+  //             .toLowerCase()
+  //             .includes(item.toString().toLowerCase())
+  //         )
+  //     )
+  //   );
+  //   setNewRows(filteredRows);
+  // };
 
-  const [statusOptions, setStatusOptions] = useState<string[]>([]);
-  const filterOnStatus = (columnIndex: number) => {
-    const filteredRows = rows.filter((row) =>
-      row.content?.some(
-        (cell) =>
-          typeof cell.content === "string" &&
-          cell.contentType === "string" &&
-          cell.columnIndex === columnIndex &&
-          statusOptions.some((item) =>
-            cell.content
-              ?.toString()
-              .toLowerCase()
-              .includes(item.toString().toLowerCase())
-          )
-      )
-    );
-    setNewRows(filteredRows);
-  };
+  // const [statusOptions, setStatusOptions] = useState<string[]>([]);
+  // const filterOnStatus = (columnIndex: number) => {
+  //   const filteredRows = rows.filter((row) =>
+  //     row.content?.some(
+  //       (cell) =>
+  //         typeof cell.content === "string" &&
+  //         cell.contentType === "string" &&
+  //         cell.columnIndex === columnIndex &&
+  //         statusOptions.some((item) =>
+  //           cell.content
+  //             ?.toString()
+  //             .toLowerCase()
+  //             .includes(item.toString().toLowerCase())
+  //         )
+  //     )
+  //   );
+  //   setNewRows(filteredRows);
+  // };
 
   return (
     <>
@@ -495,7 +495,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
             <TextField
               placeholder={"Date From "}
               type={"singleline"}
-              handleInputChange={setDateFromValue}
+              // handleInputChange={setDateFromValue}
               inputType="date"
               label={"date from"}
               disable={false}
@@ -503,7 +503,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
             <TextField
               placeholder={"Date To "}
               type={"singleline"}
-              handleInputChange={setDateToValue}
+              // handleInputChange={setDateToValue}
               inputType="date"
               label={"date to"}
               disable={false}
@@ -514,7 +514,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
             min={minValue.current}
             max={maxValue.current}
             className="range-input"
-            onChange={setGrossRangeValue}
+            // onChange={setGrossRangeValue}
           ></input>
           <DSButton label={"Apply"} handleOnClick={applyFilter}></DSButton>
         </div>
