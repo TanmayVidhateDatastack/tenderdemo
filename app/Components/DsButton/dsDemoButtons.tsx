@@ -17,7 +17,7 @@ import darkleftarrow from "../../Icons/darkleftarrow.svg";
 import upload from "../../Icons/uploadicon.svg";
 import { useState } from "react";
 import { ImgProps } from "next/dist/shared/lib/get-img-props";
-import DSButton from "./dsButton";
+import DSButton from "./DsButton";
 import DSButtonGroup from "./dsButtonGroup";
 import DSFilterButton from "./dsFilterButton";
 

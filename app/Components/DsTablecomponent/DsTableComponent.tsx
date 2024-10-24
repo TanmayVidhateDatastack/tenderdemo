@@ -2,7 +2,7 @@
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import RadioCheckButton from "./RadioCheckButton";
 import InputText from "./Input_component";
-import { tcolumn, trow } from "./types";
+import { convertToDate, tcolumn, trow } from "./types";
 import TheaderComponent from "./DsTheaderComponent";
 import TrComponent from "./DsTrComponent";
 import ThComponent from "./DsThComponent";
@@ -11,7 +11,7 @@ import TfooterComponent from "./DsTfooterComponent";
 import TdComponent from "./DsTdComponent";
 import SortComponent from "./sortComponent";
 import MenuComponent from "./DsMenuComponent";
-import DSButton from "../dsButton/dsButton";
+import DSButton from "../dsButton/DsButton";
 import TextField from "../DsTextField/DsTextField";
 import styles from "./DsTable.module.css";
 
@@ -94,36 +94,77 @@ const TableComponent: React.FC<TableComponentProps> = ({
   };
 
   const sortTableAscending = (columnIndex: number | string) => {
-    const sortedRows = [...newRows].sort((rowA, rowB) => {
-      const cellA = getComparableValue(
-        rowA.content?.find((x) => x.columnIndex === columnIndex)?.content
-      );
-      const cellB = getComparableValue(
-        rowB.content?.find((x) => x.columnIndex === columnIndex)?.content
-      );
-      return cellA.localeCompare(cellB);
-    });
-    setNewRows(sortedRows);
+    if (
+      columns.find((x) => x.columnIndex == columnIndex)?.columnContentType ==
+      "date"
+    ) {
+      sortDateColumn(3, "ASC");
+    } else {
+      const sortedRows = [...newRows].sort((rowA, rowB) => {
+        const cellA = getComparableValue(
+          rowA.content?.find((x) => x.columnIndex === columnIndex)?.content
+        );
+        const cellB = getComparableValue(
+          rowB.content?.find((x) => x.columnIndex === columnIndex)?.content
+        );
+        return cellA.localeCompare(cellB);
+      });
+      setNewRows(sortedRows);
+    }
   };
 
   const sortTableDescending = (columnIndex: number) => {
-    const sortedRows = [...newRows].sort((rowA, rowB) => {
-      const cellA = getComparableValue(
-        rowA.content?.find((x) => x.columnIndex === columnIndex)?.content
-      );
-      const cellB = getComparableValue(
-        rowB.content?.find((x) => x.columnIndex === columnIndex)?.content
-      );
-      return cellB.localeCompare(cellA);
-    });
+    if (
+      columns.find((x) => x.columnIndex == columnIndex)?.columnContentType ==
+      "date"
+    ) {
+      sortDateColumn(3, "DESC");
+    } else {
+      const sortedRows = [...newRows].sort((rowA, rowB) => {
+        const cellA = getComparableValue(
+          rowA.content?.find((x) => x.columnIndex === columnIndex)?.content
+        );
+        const cellB = getComparableValue(
+          rowB.content?.find((x) => x.columnIndex === columnIndex)?.content
+        );
+        return cellB.localeCompare(cellA);
+      });
 
-    setNewRows(sortedRows);
+      setNewRows(sortedRows);
+    }
   };
 
   const sortTableAccordingToRowIndex = () => {
     const sortedRows = [...newRows].sort(
       (rowA, rowB) => rowA.rowIndex - rowB.rowIndex
     );
+    setNewRows(sortedRows);
+  };
+
+  const sortDateColumn = (columnIndex: number, sortType: string) => {
+    const sortedRows = [...newRows].sort((rowA, rowB) => {
+      const cellA =
+        rowA.content?.find((x) => x.columnIndex === columnIndex)?.content || "";
+      const cellB =
+        rowB.content?.find((x) => x.columnIndex === columnIndex)?.content || "";
+
+      // Convert cells to Date objects
+      const dateA = convertToDate(cellA.toString());
+      const dateB = convertToDate(cellB.toString());
+
+      // Handle undefined or invalid dates
+      if (isNaN(dateA.getTime()) && isNaN(dateB.getTime())) return 0; // Both invalid
+      if (isNaN(dateA.getTime())) return 1; // Place invalid dateA last
+      if (isNaN(dateB.getTime())) return -1; // Place invalid dateB last
+
+      // Compare dates based on sort type
+      if (sortType === "ASC") {
+        return dateA.getTime() - dateB.getTime(); // Ascending order
+      } else {
+        return dateB.getTime() - dateA.getTime(); // Descending order
+      }
+    });
+
     setNewRows(sortedRows);
   };
 
@@ -251,8 +292,8 @@ const TableComponent: React.FC<TableComponentProps> = ({
     }
   };
 
-  const clearSortOnColumn = (e: React.MouseEvent, column: string | number) => {
-    console.log(column);
+  // const clearSortOnColumn = (e: React.MouseEvent, column: string | number) => {
+  const clearSortOnColumn = (e: React.MouseEvent) => {
     sortTableAccordingToRowIndex();
     const activeElement = e.currentTarget
       .closest("th")
@@ -291,14 +332,31 @@ const TableComponent: React.FC<TableComponentProps> = ({
           Number(cell.content) <= rangeTo
       )
     );
- 
+
     setNewRows(filteredRows);
+    return filteredRows;
   };
   const applyFilter = (e: React.MouseEvent<HTMLElement>) => {
     console.log(e);
-    rangeFilter();
-    // filterOnDate(3);
-    // filterRowsOnInputTypeRange(2);
+    const rows1 = rangeFilter();
+    const rows2 = filterOnDate(3);
+    const rows3 = filterRowsOnInputTypeRange(2);
+    const rows4: trow[] = [];
+    rows.map((row) => {
+      if (
+        rows1.some((x) => x.rowIndex === row.rowIndex) &&
+        rows2.some((y) => y.rowIndex === row.rowIndex) &&
+        rows3.some((z) => z.rowIndex === row.rowIndex)
+      ) {
+        rows4.push(row);
+      }
+    });
+    setNewRows(rows4);
+    console.log("rows1 length = ", rows1.length);
+    console.log("rows2 length = ", rows2.length);
+    console.log("rows3 length = ", rows3.length);
+
+    console.log("rows4 length = ", rows4.length);
     // searchDataOnSpecifiedColumnUsingCommaSeparatedValues(1);
   };
 
@@ -308,6 +366,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
     setDateFrom(new Date(e.target.value));
+    // console.log(dateFrom);
   };
   const setDateToValue = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -316,17 +375,18 @@ const TableComponent: React.FC<TableComponentProps> = ({
   };
 
   const filterOnDate = (columnIndex: number) => {
-    const filteredRows = rows.filter((row) =>
+    const filteredRows = [...rows].filter((row) =>
       row.content?.some(
         (cell) =>
           typeof cell.content === "string" &&
           cell.contentType === "date" &&
           cell.columnIndex === columnIndex &&
-          new Date(cell.content.toString()) >= new Date(dateFrom?.toString()) &&
-          new Date(cell.content.toString()) <= new Date(dateTo?.toString())
+          convertToDate(cell.content) >= dateFrom &&
+          convertToDate(cell.content) <= dateTo
       )
     );
     setNewRows(filteredRows);
+    return filteredRows;
   };
 
   const minValue = useRef<number>(0);
@@ -369,81 +429,89 @@ const TableComponent: React.FC<TableComponentProps> = ({
     setRangeValue(Number(e.target.value));
   };
   const filterRowsOnInputTypeRange = (columnIndex: number) => {
-    const filteredRows = rows.filter((row) =>
-      row.content?.some(
-        (cell) =>
-          typeof cell.content === "string" &&
+    const min = Number(minValue.current); // Ensure minValue is a number
+    const max = Number(rangeValue); // Ensure rangeValue is a number
+
+    const filteredRows = [...rows].filter((row) =>
+      row.content?.some((cell) => {
+        const isNumericString =
+          typeof cell.content === "string" && !isNaN(Number(cell.content)); // Ensure it's a valid number string
+        return (
+          isNumericString &&
           cell.contentType === "number" &&
           cell.columnIndex === columnIndex &&
-          Number(cell.content) >= minValue.current &&
-          Number(cell.content) <= rangeValue
-      )
+          Number(cell.content) >= min &&
+          Number(cell.content) <= max
+        );
+      })
     );
+
     setNewRows(filteredRows);
+    return filteredRows;
   };
 
-  const [commaSeparatedValue, setCommaSeparatedValue] = useState<string[]>([]);
-  const setCommaValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const commaValue = e.target.value.split(",");
-    setCommaSeparatedValue(commaValue);
-  };
-  const searchDataOnSpecifiedColumnUsingCommaSeparatedValues = (
-    columnIndex: number
-  ) => {
-    const filteredRows = rows.filter((row) =>
-      row.content?.some(
-        (cell) =>
-          typeof cell.content === "string" &&
-          cell.contentType === "string" &&
-          cell.columnIndex === columnIndex &&
-          commaSeparatedValue.some((item) =>
-            cell.content
-              ?.toString()
-              .toLowerCase()
-              .includes(item.toString().toLowerCase())
-          )
-      )
-    );
-    setNewRows(filteredRows);
-  };
+  // const [commaSeparatedValue, setCommaSeparatedValue] = useState<string[]>([]);
+  // const setCommaValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const commaValue = e.target.value.split(",");
+  //   setCommaSeparatedValue(commaValue);
+  // };
+  // const searchDataOnSpecifiedColumnUsingCommaSeparatedValues = (
+  //   columnIndex: number
+  // ) => {
+  //   const filteredRows = rows.filter((row) =>
+  //     row.content?.some(
+  //       (cell) =>
+  //         typeof cell.content === "string" &&
+  //         cell.contentType === "string" &&
+  //         cell.columnIndex === columnIndex &&
+  //         commaSeparatedValue.some((item) =>
+  //           cell.content
+  //             ?.toString()
+  //             .toLowerCase()
+  //             .includes(item.toString().toLowerCase())
+  //         )
+  //     )
+  //   );
+  //   setNewRows(filteredRows);
+  // };
 
-  const [dropDownOptions, setDropDownOptions] = useState<string[]>([]);
-  const filterOnDropdown = (columnIndex: number) => {
-    const filteredRows = rows.filter((row) =>
-      row.content?.some(
-        (cell) =>
-          typeof cell.content === "string" &&
-          cell.contentType === "string" &&
-          cell.columnIndex === columnIndex &&
-          dropDownOptions.some((item) =>
-            cell.content
-              ?.toString()
-              .toLowerCase()
-              .includes(item.toString().toLowerCase())
-          )
-      )
-    );
-    setNewRows(filteredRows);
-  };
+  // const [dropDownOptions, setDropDownOptions] = useState<string[]>([]);
+  // const filterOnDropdown = (columnIndex: number) => {
+  //   const filteredRows = rows.filter((row) =>
+  //     row.content?.some(
+  //       (cell) =>
+  //         typeof cell.content === "string" &&
+  //         cell.contentType === "string" &&
+  //         cell.columnIndex === columnIndex &&
+  //         dropDownOptions.some((item) =>
+  //           cell.content
+  //             ?.toString()
+  //             .toLowerCase()
+  //             .includes(item.toString().toLowerCase())
+  //         )
+  //     )
+  //   );
+  //   setNewRows(filteredRows);
+  // };
 
-  const [statusOptions, setStatusOptions] = useState<string[]>([]);
-  const filterOnStatus = (columnIndex: number) => {
-    const filteredRows = rows.filter((row) =>
-      row.content?.some(
-        (cell) =>
-          typeof cell.content === "string" &&
-          cell.contentType === "string" &&
-          cell.columnIndex === columnIndex &&
-          statusOptions.some((item) =>
-            cell.content
-              ?.toString()
-              .toLowerCase()
-              .includes(item.toString().toLowerCase())
-          )
-      )
-    );
-    setNewRows(filteredRows);
-  };
+  // const [statusOptions, setStatusOptions] = useState<string[]>([]);
+  // const filterOnStatus = (columnIndex: number) => {
+  //   const filteredRows = rows.filter((row) =>
+  //     row.content?.some(
+  //       (cell) =>
+  //         typeof cell.content === "string" &&
+  //         cell.contentType === "string" &&
+  //         cell.columnIndex === columnIndex &&
+  //         statusOptions.some((item) =>
+  //           cell.content
+  //             ?.toString()
+  //             .toLowerCase()
+  //             .includes(item.toString().toLowerCase())
+  //         )
+  //     )
+  //   );
+  //   setNewRows(filteredRows);
+  // };
 
   return (
     <>
@@ -582,7 +650,11 @@ const TableComponent: React.FC<TableComponentProps> = ({
           </TbodyComponent>
 
           <TfooterComponent className={""}>
-            Showing {newRows.length} of {rowsContainer.current.length} Rows
+            <TrComponent>
+              <TdComponent className={""}>
+                Showing {newRows.length} of {rowsContainer.current.length} Rows
+              </TdComponent>
+            </TrComponent>
           </TfooterComponent>
         </table>
       </div>
