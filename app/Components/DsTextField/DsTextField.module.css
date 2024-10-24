@@ -32,6 +32,7 @@ width:100%  }
 
 
 .custom-fieldset {
+  flex:1;
   position: relative;
   display: flex;
   /* justify-content: space-between; */
@@ -122,26 +123,22 @@ font-size: 12px;
 }
 
 
-.icon_left {
+.icon_left,.icon_right {
   flex:1;
   width:fit-content;
-  position: absolute;
+  position: relative;
   display: flex;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
   pointer-events: none;    /* Prevent icon from blocking clicks */
 }
-.icon_right {
-  flex:1;
-  width:fit-content;
-  position: absolute;
-  right: 10px;
-  display: flex;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none; /* Prevent icon from blocking clicks */
+.icon_left
+{
+  margin-right:  0.5rem;
 }
+.icon_right
+{
+  margin-left:  0.5rem;
+}
+
 .custom-input[type="date"] {
   position: relative;
   color: transparent; /* Hide the default date text */

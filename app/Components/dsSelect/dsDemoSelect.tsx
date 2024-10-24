@@ -1,14 +1,16 @@
 "use client";
 
 import DsSelect from "./dsSelect";
-import styles from "../../page.module.css";
+import DemoLayout from "@/app/ElProComponents/Demo/demoLayout";
+
 
 
 const DemoSelect: React.FC = () => {
 const options = ["option1", "option2", "option3", "option4", "option5"];
   return (
   
-        <div className={styles.demo}>
+          <DemoLayout title="DsSelect">
+
           <DsSelect
               options={options}
               type="single"
@@ -21,7 +23,8 @@ const options = ["option1", "option2", "option3", "option4", "option5"];
               placeholder="Click me to select"
               label="multiselect"
             ></DsSelect>
-        </div>    
+    </DemoLayout>
+            
     
      
        

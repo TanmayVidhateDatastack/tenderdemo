@@ -13,20 +13,19 @@ import Image from "next/image";
 import addIcon from "../../Icons/add.svg";
 // import Image from "next/image";
 import TextField from "../../Components/DsTextField/DsTextField";
-import DsPane from "../../Components/dsPane/DsPane";
-import PaneOpenButton from "../../Components/dsPane/PaneOpenButton";
+import DsPane from "../../Components/dsPane/dsPane";
 import Application from "../../ElProComponents/ApplicationComponents/Application";
 import DsPopup from "../../Components/dsPopup/dsPopup";
 import PopupOpenButton from "../../Components/dsPopup/popupOpenButton";
 // import ButtonLibrary from "./Components/dsButton/DS_ButtonLibrary";
 import DemoButtons from "../../Components/dsButton/dsDemoButtons";
-import DsSelect from "../../Components/dsSelect/dsSelect";
-import PopUPContext from "../../Components/dscontext/dscontext";
 
 // import SaveButton from "./Components/DsButton/Ds_SaveBtn";
 import DsTableComponent from "../../Components/DsTablecomponent/DsTableComponent";
 import DemoSelect from "@/app/Components/dsSelect/dsDemoSelect";
 import DemoContext from "@/app/Components/dscontext/dsDemoContext";
+import DemoPane from "@/app/Components/dsPane/dsDemoPane";
+import DemoTextField from "@/app/Components/DsTextField/dsDemoTextField";
 
 export default function Demo() {
   const tempTableData = {
@@ -207,7 +206,6 @@ export default function Demo() {
   // const handleActionClick = () => {
   //   console.log("Action button clicked");
   // };
-  const options = ["option1", "option2", "option3", "option4", "option5"];
 
   const [showNotification, setShowNotification] = useState<boolean>(false);
 
@@ -217,27 +215,13 @@ export default function Demo() {
         appTitle="Sales and Order"
         appMenu={
           <div className={styles.container}>
-            <PaneOpenButton
+             <PopupOpenButton
               id="actionBtn"
               buttonClass={buttonStyles.action_btn}
-              paneId="PaneInset"
+              popupId="test"
               // handleOnClick={handleActionClick}
               // handleOnHover={handleMouseHover}
-              beforeIcon={
-                <Image className="add" src={addIcon} alt="Add Icon" />
-              }
-              buttonText="Inset"
-            />
-            <PaneOpenButton
-              id="actionBtn"
-              buttonClass={buttonStyles.action_btn}
-              paneId="PaneRight"
-              // handleOnClick={handleActionClick}
-              // handleOnHover={handleMouseHover}
-              beforeIcon={
-                <Image className="add" src={addIcon} alt="Add Icon" />
-              }
-              buttonText="Overlay"
+              buttonText="Popup"
             />
           </div>
         }
@@ -279,40 +263,10 @@ export default function Demo() {
             
             <DemoSelect></DemoSelect>
             <DemoContext></DemoContext>
-
-            <PaneOpenButton
-              id="actionBtn"
-              buttonClass={buttonStyles.action_btn}
-              paneId="PaneInset"
-              // handleOnClick={handleActionClick}
-              // handleOnHover={handleMouseHover}
-              beforeIcon={
-                <Image className="add" src={addIcon} alt="Add Icon" />
-              }
-              buttonText="Inset"
-            />
-            <PaneOpenButton
-              id="actionBtn"
-              buttonClass={buttonStyles.action_btn}
-              paneId="PaneRight"
-              // handleOnClick={handleActionClick}
-              // handleOnHover={handleMouseHover}
-              beforeIcon={
-                <Image className="add" src={addIcon} alt="Add Icon" />
-              }
-              buttonText="Overlay"
-            />
-            <PopupOpenButton
-              id="actionBtn"
-              buttonClass={buttonStyles.action_btn}
-              popupId="test"
-              // handleOnClick={handleActionClick}
-              // handleOnHover={handleMouseHover}
-              beforeIcon={
-                <Image className="add" src={addIcon} alt="Add Icon" />
-              }
-              buttonText="Popup"
-            />
+            <DemoButtons />
+              <DemoPane></DemoPane>
+            <DemoTextField/>
+           
             <DsTableComponent
                 className={tempTableData.className}
                 id={tempTableData.id}
@@ -320,7 +274,6 @@ export default function Demo() {
                 rows={tempTableData.rows}
               ></DsTableComponent>
             
-            <DemoButtons />
           </div>
         </div>
       </Application>
