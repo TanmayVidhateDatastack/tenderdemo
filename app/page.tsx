@@ -14,6 +14,7 @@ import DemoDeviation from "./Components/DsDeviations/demoDeviation";
 // import Ds_UserProfile from "./Components/DsUserProfile/DsUserProfile";
 
 import Ds_Deviations from "./Components/DsDeviations/DsDeviations";
+import DemoSummaryCount from "./Components/DsSummaryCount/demoSummaryCount";
 import DemoUserProfile from "./Components/DsUserProfile/demoUserProfile";
 
 
@@ -23,8 +24,9 @@ export default function Home() {
  
   return (
     <>
+    
     <DemoDeviation></DemoDeviation>
-    <DemoUserProfile></DemoUserProfile>
+    <DemoUserProfile></DemoUserProfile> 
     </>
 
   );
