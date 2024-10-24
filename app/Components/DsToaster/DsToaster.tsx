@@ -19,8 +19,8 @@ interface ToasterProps {
 }
 const Toaster: React.FC<ToasterProps> = ({
   message,
-  type,
-  position,
+  type="info",
+  position="top",
   duration,
   handleClose
 
