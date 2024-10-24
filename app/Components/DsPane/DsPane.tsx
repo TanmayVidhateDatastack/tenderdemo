@@ -28,20 +28,20 @@ export function DisplayPane(id: string) {
   const currentPane = document.getElementById(id);
   // const currentPane = document.getElementById('container');
 
-//   currentPane?.addEventListener("transitionend", (event) => {
-//     // Ensure the event is for the opacity property
-//     if (event.propertyName === "opacity") {
-//       // Check if the opacity is 0 after the transition
-//       if (window.getComputedStyle(currentPane).opacity == "0") {
-//         currentPane.style.minWidth="0px"; // Set display to none after fade-out
-//         currentPane.style.maxWidth="0px"; // Set display to none after fade-out
-//       }
-//       else{
-//         currentPane.style.minWidth="20vw"; // Set display to none after fade-out
-//         currentPane.style.maxWidth="100vw";
-//       }
-//     }
-//   });
+  //   currentPane?.addEventListener("transitionend", (event) => {
+  //     // Ensure the event is for the opacity property
+  //     if (event.propertyName === "opacity") {
+  //       // Check if the opacity is 0 after the transition
+  //       if (window.getComputedStyle(currentPane).opacity == "0") {
+  //         currentPane.style.minWidth="0px"; // Set display to none after fade-out
+  //         currentPane.style.maxWidth="0px"; // Set display to none after fade-out
+  //       }
+  //       else{
+  //         currentPane.style.minWidth="20vw"; // Set display to none after fade-out
+  //         currentPane.style.maxWidth="100vw";
+  //       }
+  //     }
+  //   });
   if (currentPane) {
     currentPane.classList.toggle(styles.close);
   }

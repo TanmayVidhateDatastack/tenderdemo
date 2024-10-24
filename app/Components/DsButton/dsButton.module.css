@@ -291,12 +291,12 @@
 
 
 .btnContained.btnInfo{
-    color: white;
+    color: var(--background);
     background-color: var(--darkskyblue);
 }
 
 .btnContained.btnInfo:hover{
-    color: white;
+    color: var(--background);
     background-color: var(--skyblue);
 }
 
@@ -393,7 +393,7 @@
     font-weight: bold;
     border-radius: 4px 0 0 4px;
     border: 0px;
-    border-right: 0.5px solid white;
+    border-right: 0.5px solid var(--background);
     opacity: 1;
 }
 
@@ -434,12 +434,12 @@
     width: 32px !important;
     height: 32px !important;
     border-radius: 99px;
-    border: 1px solid black;
+    border: 1px solid var(--dark);
     min-width: 0px;
 }
 
 .icon_btn:hover{
-    box-shadow: gray 3px 3px 6px;
+    box-shadow: var(--grey) 3px 3px 6px;
 }
 
 .toggle{
@@ -483,16 +483,16 @@
 }
 
 .left_separator {
-    border-left: 1px solid grey;
+    border-left: 1px solid var(--grey);
   }
   .right_separator {
-    border-left: 1px solid grey;
+    border-left: 1px solid var(--grey);
   }
 
 
 /*button group variations*/
 .btngroupoutlined{
-    border: 1px solid black;
+    border: 1px solid var(--dark);
     border-radius: 4px;
 }
 
@@ -546,7 +546,7 @@
     margin-top: 5px;
     padding: 0px;
     height: 21px;
-    border: 1px solid grey;
+    border: 1px solid var(--grey);
 }
 
 .count{

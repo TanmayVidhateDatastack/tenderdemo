@@ -13,7 +13,7 @@
   --lightviolet: #abafe1;
   --darkskyblue:#0076BA;
   --skyblue:#0FAEEF;
-  --gray:#c4c4c4;
+  --grey:#c4c4c4;
   --brick: #f1818198;
   --blush:#efe3fade;
   --periwinkle:#e4e4e4;
@@ -28,8 +28,8 @@
 
   --primary:var(--semiblue);
   --primary-hover:var(--blue);
-  --secondary:var(--gray);
-  --secondary-hover:var(--gray);
+  --secondary:var(--grey);
+  --secondary-hover:var(--grey);
   --danger:var(--red);
   --danger-hover:var(--orange);
   --warning:var(--lightred);
@@ -58,11 +58,22 @@
   --dspadding:0.5rem !important;
   --dsmargin:3px 0.6vw !important;
   --dsmin-width:5rem;
+  --dsmin-height:3rem;
   --dswidth:fit-content;
   --dsheight:fit-content;
   --dsfont-size:16px;
-  --dsborder:0px;
+  --dsborder:1px solid;
   --dsborder-radius:4px;
+
+  --heading1:21px;
+  --heading2:18px;
+  --subtitle1:12px;
+  --subtitle2:11px;
+  --bodyText1:14px;
+  --buttonTextMedium:16px;
+  --buttonTextSmall:14px;
+  --link:12px;
+  --custome:50px;
 
   --disable:#CCCCCC;
   --placeholder:#C4C4C4;
@@ -89,21 +100,29 @@
   --grey-800:#262626;
   --grey-900:#0F0F0F;
 
-  --heading1:21px;
-  --heading2:18px;
-  --subtitle1:12px;
-  --subtitle2:11px;
-  --bodyText1:14px;
-  --buttonTextMedium:16px;
-  --buttonTextSmall:14px;
-  --link:12px;
-  --custome:50px;
+ 
 
   /*button group colors*/
   --btngroup-primary:#F8F9FF;
   --btngroup-text-primary:#0F0F0F;
   --btngroup-primary-hover:#EDEDF6;
   --btngroup-text-primary-hover:#4F54A4;
+
+  /*status indicator colors*/
+  --under-approval:rgba(226, 187, 31, 0.1);
+  --under-approval-text:rgb(226 187 31);
+  --pending:rgba(204, 132, 0, 0.1);
+  --pending-text:rgb(204 132 0);
+  --under-review:rgba(110, 196, 232, 0.1);
+  --under-review-text:rgb(110 196 232);
+  --approved:rgba(40, 167, 69, 0.1 );
+  --approved-text:rgb(40 167 69);
+  --submitted:rgba(0, 123, 255, 0.1);
+  --submitted-text:rgb(0 123 255 );
+  --inProcess:rgba(111, 66, 193, 0.1);
+  --inProcess-text:rgb(111 66 193);
+  --cancelled:rgba(220, 53, 69, 0.1);
+  --cancelled-text:rgb(220 53 69);
 }
 /* 
 /* @media (prefers-color-scheme: dark) {
@@ -143,6 +162,28 @@ span{
     display: flex;
     align-items: center;
 }
+
+
+/*scrollbar css*/
+*::-webkit-scrollbar {
+  display: block;
+  overflow: auto;
+  padding: 1em;
+  margin: 1em auto;
+
+  background-color: #ede8e8;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: #c2c0c0; /* Color of the scrollbar thumb */
+  border-radius: 5px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+   background-color: #cdc5c5; /*Color of the scrollbar thumb on hover */
+  /* background: var(--danger); Color of the scrollbar thumb on hover */
+}
+
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: light;

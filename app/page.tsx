@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import DSButton from "./Components/dsButton/dsButton";
+import DSButton from "./Components/dsButton/DsButton";
 import styles from "./page.module.css";
 import buttonStyles from "./Components/dsButton/dsButton.module.css";
 import PaneStyles from "./Components/Dspane/DsPane.module.css";
@@ -10,11 +10,11 @@ import PaneStyles from "./Components/Dspane/DsPane.module.css";
 import Toaster from "./Components/DsToaster/DsToaster";
 // import SaveButton from "./Components/DsButton/Ds_SaveBtn";
 import Image from "next/image";
-import addIcon from "./Icons/add.svg";
+import addIcon from "./Icons/smallIcons/add.svg";
 // import Image from "next/image";
 import TextField from "./Components/DsTextField/DsTextField";
-import DsPane from "./Components/dsPane/dsPane";
-import PaneOpenButton from "./Components/dsPane/paneOpenButton";
+import DsPane from "./Components/DsPane/DsPane";
+import PaneOpenButton from "./Components/DsPane/PaneOpenButton";
 import Application from "./ElProComponents/ApplicationComponents/Application";
 import DsPopup from "./Components/dsPopup/dsPopup";
 import PopupOpenButton from "./Components/dsPopup/popupOpenButton";
@@ -25,6 +25,7 @@ import PopUPContext from "./Components/dscontext/dscontext";
 
 // import SaveButton from "./Components/DsButton/Ds_SaveBtn";
 import DsTableComponent from "./Components/DsTablecomponent/DsTableComponent";
+import DsDemoStatusIndocator from "./Components/DsStatusIndicator/dsDemoStatusIndicator";
 
 export default function Home() {
   const tempTableData = {
@@ -265,7 +266,7 @@ export default function Home() {
               {showNotification && (
                 <Toaster
                   handleClose={() => setShowNotification(false)}
-                  type="error"
+                  type="success"
                   message="this is simple error msg you cant acess this side now .............!"
                   position="bottomright"
                   duration={3000}
@@ -273,7 +274,7 @@ export default function Home() {
               )}
             </div>
           </DsPane>
-          <div className={styles.container +" "+styles["flex-column"]}>
+          <div className={styles.container + " " + styles["flex-column"]}>
             <DsSelect
               options={options}
               placeholder="Click me to select"
@@ -315,13 +316,16 @@ export default function Home() {
               buttonText="Popup"
             />
             <DsTableComponent
-                className={tempTableData.className}
-                id={tempTableData.id}
-                columns={tempTableData.columns}
-                rows={tempTableData.rows}
-              ></DsTableComponent>
-            
+              className={tempTableData.className}
+              id={tempTableData.id}
+              columns={tempTableData.columns}
+              rows={tempTableData.rows}
+            ></DsTableComponent>
+
             <DemoButtons />
+            <div className={buttonStyles.btn}>
+              <DsDemoStatusIndocator />
+            </div>
           </div>
         </div>
       </Application>

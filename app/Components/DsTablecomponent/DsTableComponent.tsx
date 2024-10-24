@@ -11,7 +11,7 @@ import TfooterComponent from "./DsTfooterComponent";
 import TdComponent from "./DsTdComponent";
 import SortComponent from "./sortComponent";
 import MenuComponent from "./DsMenuComponent";
-import DSButton from "../dsButton/dsButton";
+import DSButton from "../dsButton/DsButton";
 import TextField from "../DsTextField/DsTextField";
 import styles from "./DsTable.module.css";
 
@@ -291,7 +291,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
           Number(cell.content) <= rangeTo
       )
     );
- 
+
     setNewRows(filteredRows);
   };
   const applyFilter = (e: React.MouseEvent<HTMLElement>) => {
