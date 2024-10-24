@@ -7,8 +7,18 @@ import addIcon from "../../Icons/add.svg";
 import IpcaLogo from "../../Icons/mediumIcons/Ipca.svg";
 import ChatIcon from "../../Icons/mediumIcons/chat.svg";
 import NotiIcon from "../../Icons/mediumIcons/Bell.svg";
+import Ds_Usershort from "@/app/Components/DsUserProfile/DsUsershort";
 
 function ApplicationTitleBar() {
+  const user = {
+    name: 'Abhishek Kumar',
+    email: 'abhishek.kumar@Ipca.com',
+    Id: '5212',
+    Company: 'IPCA Labs',
+    Department: 'Formulation',
+    Location: 'Pune'
+    
+  };
   return (
     <>
       <div className={styles.appTitleBar + " " + styles.row}>
@@ -25,8 +35,8 @@ function ApplicationTitleBar() {
           <div className={styles.titleBarItem + " " + pageStyles.left_separator}>
             <Image src={addIcon} alt="Add Icon" />
           </div>
-          <div className={styles.titleBarItem + " " + pageStyles.left_separator}>
-            <Image src={addIcon} alt="Add Icon" />
+          <div className={styles.titleBarItem + " " + pageStyles.left_separator +" "+pageStyles["pad-0"]}>
+          <Ds_Usershort  user={user}></Ds_Usershort>
           </div>
             
         </div>

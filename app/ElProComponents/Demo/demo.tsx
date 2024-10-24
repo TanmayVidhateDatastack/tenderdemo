@@ -25,6 +25,8 @@ import PopUPContext from "../../Components/dscontext/dscontext";
 
 // import SaveButton from "./Components/DsButton/Ds_SaveBtn";
 import DsTableComponent from "../../Components/DsTablecomponent/DsTableComponent";
+import DemoSelect from "@/app/Components/dsSelect/dsDemoSelect";
+import DemoContext from "@/app/Components/dscontext/dsDemoContext";
 
 export default function Demo() {
   const tempTableData = {
@@ -275,12 +277,8 @@ export default function Demo() {
           </DsPane>
           <div className={styles.container +" "+styles["flex-column"]}>
             
-            <DsSelect
-              options={options}
-              placeholder="Click me to select"
-              label="multiselect"
-            ></DsSelect>
-            <PopUPContext />
+            <DemoSelect></DemoSelect>
+            <DemoContext></DemoContext>
 
             <PaneOpenButton
               id="actionBtn"
@@ -340,7 +338,7 @@ export default function Demo() {
           />
         </div>
       </DsPopup>
-      <DsPane id="PaneRight" side={"right"}>
+      <DsPane id="PaneRight" side={"right"} title="Filter" >
         <div className={buttonStyles.btn}>
           <DSButton
             id="actionBtn"

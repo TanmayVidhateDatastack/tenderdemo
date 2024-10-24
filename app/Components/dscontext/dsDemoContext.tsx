@@ -1,7 +1,7 @@
 
 import PopUpContext from "./dscontext";
 import styles from "../../page.module.css";
-export default function ContextDemo() {
+export default function DemoContext() {
 
  
   return (
