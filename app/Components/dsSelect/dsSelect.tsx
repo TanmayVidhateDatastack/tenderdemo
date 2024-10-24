@@ -61,7 +61,7 @@ const DsSelect:React.FC<SelectProps> =({options,type, placeholder= "Click to Sel
           onBlur={() => setIsFocused(true)}
           onChange={(e) => setValue(e.target.value)}
           onClick={toggleDropdown}
-          className={styles.mainselection}
+          className={`${styles["mainselection"]} ${styles["hide"]}`}
         />    
         {isOpen && (
         <div className={styles.list }>
