@@ -38,7 +38,7 @@ const Toaster: React.FC<ToasterProps> = ({
 
     return () => clearTimeout(timer);
   }
-  }, [duration]);
+  }, [duration, handleClose]);
 
   if (!visible) return null;
 

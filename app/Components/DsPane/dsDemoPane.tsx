@@ -2,7 +2,7 @@ import PaneOpenButton from "./PaneOpenButton";
 import DemoLayout from "@/app/ElProComponents/Demo/demoLayout";
 export default function DemoPane() {
   return (
-    <DemoLayout title={"DsPane"}>
+    <DemoLayout title={"Panels (DsPane)"}>
       <PaneOpenButton
         id="actionBtn"
         paneId="PaneInset"

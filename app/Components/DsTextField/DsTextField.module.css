@@ -1,4 +1,7 @@
- 
+.textFiledContainer{
+  margin:10px 10px;
+
+} 
 .input-wrapper {
   display: flex;
   justify-content: center;

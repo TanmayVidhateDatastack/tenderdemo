@@ -9,7 +9,7 @@ const DemoSelect: React.FC = () => {
 const options = ["option1", "option2", "option3", "option4", "option5"];
   return (
   
-          <DemoLayout title="DsSelect">
+          <DemoLayout title="Dropdown (DsSelect)">
 
           <DsSelect
               options={options}

@@ -53,7 +53,7 @@ const DemoButtons: React.FC = () => {
   };
 
   return (
-    <DemoLayout title="DsButton">
+    <DemoLayout title="Button (DsButton)">
 
     <div className={btnStyles.btn_div + " " + btnStyles.flex}>
       <DSButton

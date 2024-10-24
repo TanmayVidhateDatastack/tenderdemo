@@ -4,13 +4,14 @@ import DemoLayout from "@/app/ElProComponents/Demo/demoLayout";
 
 const DemoTextField: React.FC = () => {
   return (
-    <DemoLayout title="DsTextField">
+    <DemoLayout title="TextField (DsTextField)">
       <TextField
         placeholder="placeholder"
         label="label"
         disable={false}
         // onClick={false}
         type="multiline"
+        minRows={10}
         icon="Test"
         iconEnd="📋"
       />
@@ -21,7 +22,6 @@ const DemoTextField: React.FC = () => {
         disable={false}
         // onClick={false}
         type="singleline"
-        icon="Test"
         iconEnd="📋"
       />
     </DemoLayout>
