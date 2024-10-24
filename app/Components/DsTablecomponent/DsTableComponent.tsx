@@ -309,8 +309,8 @@ const TableComponent: React.FC<TableComponentProps> = ({
     });
   };
 
-  const [rangeFrom, setRangeFrom] = useState<number>(0);
-  const [rangeTo, setRangeTo] = useState<number>(0);
+  const [rangeFrom, setRangeFrom] = useState<number>(1);
+  const [rangeTo, setRangeTo] = useState<number>(3);
   const setRangeFromValue = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
@@ -352,16 +352,18 @@ const TableComponent: React.FC<TableComponentProps> = ({
       }
     });
     setNewRows(rows4);
-    console.log("rows1 length = ", rows1.length);
-    console.log("rows2 length = ", rows2.length);
-    console.log("rows3 length = ", rows3.length);
+    // console.log("rows1 length = ", rows1.length);
+    // console.log("rows2 length = ", rows2.length);
+    // console.log("rows3 length = ", rows3.length);
 
-    console.log("rows4 length = ", rows4.length);
+    // console.log("rows4 length = ", rows4.length);
     // searchDataOnSpecifiedColumnUsingCommaSeparatedValues(1);
   };
 
-  const [dateFrom, setDateFrom] = useState<Date>(new Date("2024-10-02"));
-  const [dateTo, setDateTo] = useState<Date>(new Date(Date.now.toString()));
+  const [dateFrom, setDateFrom] = useState<Date>(new Date("2022-10-19"));
+  const [dateTo, setDateTo] = useState<Date>(new Date("2024-12-11"));
+
+  // const [dateTo, setDateTo] = useState<Date>(new Date(Date.now.toString()));
   const setDateFromValue = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
@@ -424,7 +426,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
 
   getLowestBiggestValue(2);
 
-  const [rangeValue, setRangeValue] = useState<number>(25);
+  const [rangeValue, setRangeValue] = useState<number>(34);
   const setGrossRangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRangeValue(Number(e.target.value));
   };
