@@ -7,25 +7,30 @@
 // import DsPane from "./Components/DsPane/DsPane";
 // import PaneOpenButton from "./Components/DsPane/PaneOpenButton";
 "use client";
-import DemoDeviation from "./Components/DsDeviations/demoDeviation";
 // import { useState } from "react";
 // import Ds_UserProfile from "./Components/DsUserProfile/DsUserProfile";
 // import Ds_Usershort from "./Components/DsUserProfile/DsUsershort";
 // import Ds_UserProfile from "./Components/DsUserProfile/DsUserProfile";
 
-import Ds_Deviations from "./Components/DsDeviations/DsDeviations";
-import DemoUserProfile from "./Components/DsUserProfile/demoUserProfile";
+import Ds_Deviations from "./DsDeviations";
+
+export default function DemoDeviation() {
 
 
-export default function Home() {
-
-
- 
+  const deviation = {
+  Title:'Basic Check Fail',
+  Reasons:["Drug licence no.has Expired ",
+           "FSSAI licence No.has Expired"
+          ],
+  status:"Approvel Pending ",
+  Actions:[ <button key="reject"> Reject</button>,
+            <button key="approve"> Approve</button>]
+     
+  };
   return (
-    <>
-    <DemoDeviation></DemoDeviation>
-    <DemoUserProfile></DemoUserProfile>
-    </>
+    <div className="Ds_Deviations">
+      <Ds_Deviations deviation={deviation} />
+    </div>
 
   );
 };
