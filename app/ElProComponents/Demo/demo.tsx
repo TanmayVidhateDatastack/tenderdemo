@@ -27,6 +27,8 @@ import DemoContext from "@/app/Components/dscontext/dsDemoContext";
 import DemoPane from "@/app/Components/dsPane/dsDemoPane";
 import DemoTextField from "@/app/Components/DsTextField/dsDemoTextField";
 import DemoLayout from "./demoLayout";
+import DemoDeviation from "@/app/Components/DsDeviations/demoDeviation";
+import DemoUserProfile from "@/app/Components/DsUserProfile/demoUserProfile";
 
 export default function Demo() {
   const tempTableData = {
@@ -354,7 +356,8 @@ export default function Demo() {
             <DemoPane></DemoPane>
             <DemoSelect></DemoSelect>
             <DemoTextField />
-
+            <DemoDeviation></DemoDeviation>
+            <DemoUserProfile></DemoUserProfile>
             <DsTableComponent
               className={tempTableData.className}
               id={tempTableData.id}
@@ -393,7 +396,7 @@ export default function Demo() {
         <Toaster
           handleClose={() => setShowNotification(false)}
           type={notiType}
-          message="this is simple error msg you cant acess this side now .............!"
+          message={`this is simple ${notiType} msg you cant acess this side now .............!`}
           position={pos}
           duration={3000}
         />
