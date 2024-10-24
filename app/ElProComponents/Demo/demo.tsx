@@ -3,7 +3,7 @@ import { useState } from "react";
 import DSButton from "../../Components/dsButton/dsButton";
 import styles from "../../page.module.css";
 import buttonStyles from "../../Components/dsButton/dsButton.module.css";
-import PaneStyles from "../../Components/Dspane/DsPane.module.css";
+import PaneStyles from "../../Components/dsPane/dsPane.module.css";
 // import addIcon from "./Icons/add.svg";
 // import DSButton from "./Components/DsButton/DsButton";
 // import ButtonLibrary from "./Components/dsButton/DS_ButtonLibrary";
