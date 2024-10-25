@@ -170,19 +170,35 @@ span{
   overflow: auto;
   padding: 1em;
   margin: 1em auto;
-
-  background-color: #ede8e8;
 }
+
 *::-webkit-scrollbar-thumb {
   background-color: #c2c0c0; /* Color of the scrollbar thumb */
   border-radius: 5px;
+  height: 4px !important;
 }
 
 *::-webkit-scrollbar-thumb:hover {
    background-color: #cdc5c5; /*Color of the scrollbar thumb on hover */
-  /* background: var(--danger); Color of the scrollbar thumb on hover */
 }
 
+*::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;  
+}
+
+*::-webkit-scrollbar-track{
+  background-color: transparent;
+  /* display: hidden; */
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+*:hover::-webkit-scrollbar-thumb {
+  background-color: #555;
+}
 
 @media (prefers-color-scheme: dark) {
   html {
