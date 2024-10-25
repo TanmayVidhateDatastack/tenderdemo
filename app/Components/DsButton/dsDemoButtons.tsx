@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ImgProps } from "next/dist/shared/lib/get-img-props";
 import DSButtonGroup from "./dsButtonGroup";
 import DSFilterButton from "./dsFilterButton";
-import DSButton from "./DsButton";
+import DSButton from "./dsButton";
 import btnStyles from "./dsButton.module.css";
 
 import addIcon from "../../Icons/smallIcons/add.svg";
