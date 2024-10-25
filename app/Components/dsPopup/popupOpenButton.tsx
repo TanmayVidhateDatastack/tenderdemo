@@ -5,7 +5,7 @@ import { OpenPopup } from "./dsPopup";
 interface PopupOpenButtonProps {
   children?: React.ReactNode;
   id?: string;
-  popupId:string;
+  popupId: string;
   buttonText?: string;
   buttonClass?: string;
   img?: string;
@@ -25,17 +25,17 @@ const PopupOpenButton: React.FC<PopupOpenButtonProps> = ({
 }) => {
   return (
     <DSButton
-        id={id}
-        buttonClass={buttonClass}
-        handleOnClick={()=>OpenPopup(popupId)}
-        handleOnHover={handleOnHover}
-        startIcon={beforeIcon}
-        endIcon={afterIcon}
-        label={buttonText}
-        >{children}</DSButton>
-    
-
+      id={id}
+      buttonClass={buttonClass}
+      handleOnClick={() => OpenPopup(popupId)}
+      handleOnHover={handleOnHover}
+      startIcon={beforeIcon}
+      endIcon={afterIcon}
+      label={buttonText}
+    >
+      {children}
+    </DSButton>
   );
 };
- 
+
 export default PopupOpenButton;

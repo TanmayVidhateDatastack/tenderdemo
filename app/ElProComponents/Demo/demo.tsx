@@ -94,7 +94,7 @@ export default function Demo() {
           {
             columnIndex: 3,
             className: "cell",
-            content: "2014-12-02",
+            content: "19-12-2022",
             contentType: "date",
           },
         ],
@@ -124,7 +124,7 @@ export default function Demo() {
           {
             columnIndex: 3,
             className: "cell",
-            content: "2014-11-02",
+            content: "17-11-2023",
             contentType: "date",
           },
         ],
@@ -154,7 +154,7 @@ export default function Demo() {
           {
             columnIndex: 3,
             className: "cell",
-            content: "2011-10-02",
+            content: "22-08-2024",
             contentType: "date",
           },
         ],

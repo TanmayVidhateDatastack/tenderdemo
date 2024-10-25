@@ -39,5 +39,5 @@ const PaneOpenButton: React.FC<PaneOpenButtonProps> = ({
         >{children}</DSButton>
   );
 };
- 
+
 export default PaneOpenButton;
