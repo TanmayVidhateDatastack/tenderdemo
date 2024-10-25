@@ -4,7 +4,7 @@ import DemoLayout from "@/app/ElProComponents/Demo/demoLayout";
 
 const DemoTextField: React.FC = () => {
   return (
-    <DemoLayout title="TextField (DsTextField)">
+    <DemoLayout title="Text Field (DsTextField)">
       <TextField
         placeholder="placeholder"
         label="label"

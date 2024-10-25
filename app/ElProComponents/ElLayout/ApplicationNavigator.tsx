@@ -14,8 +14,8 @@ function ApplicationNavigator() {
           <div className={styles.appTitle}>Pro Desk</div>
         </div>
         <div className={styles.app}>
-          <Image src={salesNorder} alt="Sales and Order"></Image>
-          <div className={styles.appTitle}>Sales and Order</div>
+          <Image src={salesNorder} alt="Sales Order"></Image>
+          <div className={styles.appTitle}>Sales Order</div>
         </div>
       </div>
       <div className={styles.navigationFooter}>

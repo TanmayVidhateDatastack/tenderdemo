@@ -226,7 +226,7 @@ export default function Demo() {
   return (
     <>
       <Application
-        appTitle="Sales and Order"
+        appTitle="Sales Order"
         appMenu={
           <div className={styles.container}>
             <PopupOpenButton
@@ -396,7 +396,7 @@ export default function Demo() {
         <Toaster
           handleClose={() => setShowNotification(false)}
           type={notiType}
-          message={`this is simple ${notiType} msg you cant acess this side now .............!`}
+          message={`This is simple ${notiType} msg.!`}
           position={pos}
           duration={3000}
         />

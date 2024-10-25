@@ -67,6 +67,9 @@
   display:flex;
   flex-direction: row;
 }
+.flex-column{
+  flex-direction: column;
+}
 .pad-0{
   padding:0;
 }

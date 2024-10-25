@@ -20,7 +20,7 @@ const Ds_UserProfile:React.FC<userprops>=({ user,onProfileClick }) => {
 
 
 
-   <div className={styles.UserProfile} onClick={onProfileClick}>
+   <div className={styles.UserProfile+" "+styles.fullProfile} onClick={onProfileClick}>
       
       <div className="profileImage">
        
