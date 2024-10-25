@@ -19,14 +19,14 @@ export default function DemoDeviation() {
   const deviation:DeviationProps = {
     Title: "Basic Check Fail",
     Reasons: ["Drug licence no.has Expired ", "FSSAI licence No.has Expired"],
-    status: "Approvel Pending ",
+    status: "Approval Pending ",
     Actions: [
       <button key="reject"> Reject</button>,
       <button key="approve"> Approve</button>,
     ],
   };
   return (
-    <DemoLayout title="Devition Card (dsDeviation)">
+    <DemoLayout title="Deviation Card (dsDeviation)">
       <Ds_Deviations Actions={deviation.Actions} Reasons={deviation.Reasons} Title={deviation.Title} status={deviation.status} />
     </DemoLayout>
   );

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import addIcon from "../../Icons/add.svg";
+import addIcon from "../../Icons/smallIcons/add.svg";
 import React from "react";
 import styles from "../ElLayout/ElLayout.module.css";
 

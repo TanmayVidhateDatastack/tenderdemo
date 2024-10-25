@@ -27,8 +27,8 @@ export default function DemoUserProfile() {
   };
 
   return (
-    <DemoLayout title="User Card (DsUserProfile)">
-      <Ds_Usershort onProfileClick={toggleValue} user={user}></Ds_Usershort>
+    <DemoLayout title="User Card (DsUserProfile)" className="flex-column">
+      <Ds_Usershort onProfileClick={toggleValue} user={user} ></Ds_Usershort>
       {isVisible && <Ds_UserProfile user={user} onProfileClick={toggleValue} />}
     </DemoLayout>
   );

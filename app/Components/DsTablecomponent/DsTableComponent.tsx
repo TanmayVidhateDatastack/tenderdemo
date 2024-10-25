@@ -1,8 +1,7 @@
 "use client";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import RadioCheckButton from "./RadioCheckButton";
-import InputText from "./Input_component";
-import { tcolumn, trow } from "./types";
+import { convertToDate, tcolumn, trow } from "./types";
 import TheaderComponent from "./DsTheaderComponent";
 import TrComponent from "./DsTrComponent";
 import ThComponent from "./DsThComponent";
@@ -14,6 +13,8 @@ import MenuComponent from "./DsMenuComponent";
 import DSButton from "../dsButton/dsButton";
 import TextField from "../DsTextField/DsTextField";
 import styles from "./DsTable.module.css";
+import pageStyles from "../../page.module.css";
+import DemoLayout from "@/app/ElProComponents/Demo/demoLayout";
 
 // Define the component props
 interface TableComponentProps {
@@ -94,36 +95,77 @@ const TableComponent: React.FC<TableComponentProps> = ({
   };
 
   const sortTableAscending = (columnIndex: number | string) => {
-    const sortedRows = [...newRows].sort((rowA, rowB) => {
-      const cellA = getComparableValue(
-        rowA.content?.find((x) => x.columnIndex === columnIndex)?.content
-      );
-      const cellB = getComparableValue(
-        rowB.content?.find((x) => x.columnIndex === columnIndex)?.content
-      );
-      return cellA.localeCompare(cellB);
-    });
-    setNewRows(sortedRows);
+    if (
+      columns.find((x) => x.columnIndex == columnIndex)?.columnContentType ==
+      "date"
+    ) {
+      sortDateColumn(3, "ASC");
+    } else {
+      const sortedRows = [...newRows].sort((rowA, rowB) => {
+        const cellA = getComparableValue(
+          rowA.content?.find((x) => x.columnIndex === columnIndex)?.content
+        );
+        const cellB = getComparableValue(
+          rowB.content?.find((x) => x.columnIndex === columnIndex)?.content
+        );
+        return cellA.localeCompare(cellB);
+      });
+      setNewRows(sortedRows);
+    }
   };
 
   const sortTableDescending = (columnIndex: number) => {
-    const sortedRows = [...newRows].sort((rowA, rowB) => {
-      const cellA = getComparableValue(
-        rowA.content?.find((x) => x.columnIndex === columnIndex)?.content
-      );
-      const cellB = getComparableValue(
-        rowB.content?.find((x) => x.columnIndex === columnIndex)?.content
-      );
-      return cellB.localeCompare(cellA);
-    });
+    if (
+      columns.find((x) => x.columnIndex == columnIndex)?.columnContentType ==
+      "date"
+    ) {
+      sortDateColumn(3, "DESC");
+    } else {
+      const sortedRows = [...newRows].sort((rowA, rowB) => {
+        const cellA = getComparableValue(
+          rowA.content?.find((x) => x.columnIndex === columnIndex)?.content
+        );
+        const cellB = getComparableValue(
+          rowB.content?.find((x) => x.columnIndex === columnIndex)?.content
+        );
+        return cellB.localeCompare(cellA);
+      });
 
-    setNewRows(sortedRows);
+      setNewRows(sortedRows);
+    }
   };
 
   const sortTableAccordingToRowIndex = () => {
     const sortedRows = [...newRows].sort(
       (rowA, rowB) => rowA.rowIndex - rowB.rowIndex
     );
+    setNewRows(sortedRows);
+  };
+
+  const sortDateColumn = (columnIndex: number, sortType: string) => {
+    const sortedRows = [...newRows].sort((rowA, rowB) => {
+      const cellA =
+        rowA.content?.find((x) => x.columnIndex === columnIndex)?.content || "";
+      const cellB =
+        rowB.content?.find((x) => x.columnIndex === columnIndex)?.content || "";
+
+      // Convert cells to Date objects
+      const dateA = convertToDate(cellA.toString());
+      const dateB = convertToDate(cellB.toString());
+
+      // Handle undefined or invalid dates
+      if (isNaN(dateA.getTime()) && isNaN(dateB.getTime())) return 0; // Both invalid
+      if (isNaN(dateA.getTime())) return 1; // Place invalid dateA last
+      if (isNaN(dateB.getTime())) return -1; // Place invalid dateB last
+
+      // Compare dates based on sort type
+      if (sortType === "ASC") {
+        return dateA.getTime() - dateB.getTime(); // Ascending order
+      } else {
+        return dateB.getTime() - dateA.getTime(); // Descending order
+      }
+    });
+
     setNewRows(sortedRows);
   };
 
@@ -152,11 +194,11 @@ const TableComponent: React.FC<TableComponentProps> = ({
 
   const [inputValue, setInputValue] = useState<string>("");
   const sortDataUsingInputValue = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLElement>
   ) => {
-    const searchValue = event.target.value.toLowerCase();
-    setInputValue(event.target.value);
-
+    const searchValue = (event.target as HTMLInputElement).value.toLowerCase();
+    setInputValue((event.target as HTMLInputElement).value);
+    inputValue.trim();
     let filteredRows: trow[] = [];
 
     if (searchValue === "") {
@@ -251,8 +293,8 @@ const TableComponent: React.FC<TableComponentProps> = ({
     }
   };
 
-  const clearSortOnColumn = (e: React.MouseEvent, column: string | number) => {
-    console.log(column);
+  // const clearSortOnColumn = (e: React.MouseEvent, column: string | number) => {
+  const clearSortOnColumn = (e: React.MouseEvent) => {
     sortTableAccordingToRowIndex();
     const activeElement = e.currentTarget
       .closest("th")
@@ -268,8 +310,8 @@ const TableComponent: React.FC<TableComponentProps> = ({
     });
   };
 
-  const [rangeFrom, setRangeFrom] = useState<number>(0);
-  const [rangeTo, setRangeTo] = useState<number>(0);
+  const [rangeFrom, setRangeFrom] = useState<number>(1);
+  const [rangeTo, setRangeTo] = useState<number>(3);
   const setRangeFromValue = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
@@ -291,43 +333,64 @@ const TableComponent: React.FC<TableComponentProps> = ({
           Number(cell.content) <= rangeTo
       )
     );
- 
+
     setNewRows(filteredRows);
+    return filteredRows;
   };
   const applyFilter = (e: React.MouseEvent<HTMLElement>) => {
     console.log(e);
-    rangeFilter();
-    // filterOnDate(3);
-    // filterRowsOnInputTypeRange(2);
+    const rows1 = rangeFilter();
+    const rows2 = filterOnDate(3);
+    const rows3 = filterRowsOnInputTypeRange(2);
+    const rows4: trow[] = [];
+    rows.map((row) => {
+      if (
+        rows1.some((x) => x.rowIndex === row.rowIndex) &&
+        rows2.some((y) => y.rowIndex === row.rowIndex) &&
+        rows3.some((z) => z.rowIndex === row.rowIndex)
+      ) {
+        rows4.push(row);
+      }
+    });
+    setNewRows(rows4);
+    // console.log("rows1 length = ", rows1.length);
+    // console.log("rows2 length = ", rows2.length);
+    // console.log("rows3 length = ", rows3.length);
+
+    // console.log("rows4 length = ", rows4.length);
     // searchDataOnSpecifiedColumnUsingCommaSeparatedValues(1);
   };
 
-  // const [dateFrom, setDateFrom] = useState<Date>(new Date("2024-10-02"));
-  // const [dateTo, setDateTo] = useState<Date>(new Date(Date.now.toString()));
-  // const setDateFromValue = (
-    // e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  // ) => {
-    // setDateFrom(new Date(e.target.value));
-  // };
-  // const setDateToValue = (
-  //   e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  // ) => {
-  //   setDateTo(new Date(e.target.value));
-  // };
+  const [dateFrom, setDateFrom] = useState<Date>(new Date("2022-10-19"));
+  const [dateTo, setDateTo] = useState<Date>(new Date("2024-12-11"));
 
-  // const filterOnDate = (columnIndex: number) => {
-  //   const filteredRows = rows.filter((row) =>
-  //     row.content?.some(
-  //       (cell) =>
-  //         typeof cell.content === "string" &&
-  //         cell.contentType === "date" &&
-  //         cell.columnIndex === columnIndex &&
-  //         new Date(cell.content.toString()) >= new Date(dateFrom?.toString()) &&
-  //         new Date(cell.content.toString()) <= new Date(dateTo?.toString())
-  //     )
-  //   );
-  //   setNewRows(filteredRows);
-  // };
+  // const [dateTo, setDateTo] = useState<Date>(new Date(Date.now.toString()));
+  const setDateFromValue = (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    setDateFrom(new Date(e.target.value));
+    // console.log(dateFrom);
+  };
+  const setDateToValue = (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    setDateTo(new Date(e.target.value));
+  };
+
+  const filterOnDate = (columnIndex: number) => {
+    const filteredRows = [...rows].filter((row) =>
+      row.content?.some(
+        (cell) =>
+          typeof cell.content === "string" &&
+          cell.contentType === "date" &&
+          cell.columnIndex === columnIndex &&
+          convertToDate(cell.content) >= dateFrom &&
+          convertToDate(cell.content) <= dateTo
+      )
+    );
+    setNewRows(filteredRows);
+    return filteredRows;
+  };
 
   const minValue = useRef<number>(0);
   const maxValue = useRef<number>(0);
@@ -364,23 +427,31 @@ const TableComponent: React.FC<TableComponentProps> = ({
 
   getLowestBiggestValue(2);
 
-  // const [rangeValue, setRangeValue] = useState<number>(25);
-  // const setGrossRangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setRangeValue(Number(e.target.value));
-  // };
-  // const filterRowsOnInputTypeRange = (columnIndex: number) => {
-  //   const filteredRows = rows.filter((row) =>
-  //     row.content?.some(
-  //       (cell) =>
-  //         typeof cell.content === "string" &&
-  //         cell.contentType === "number" &&
-  //         cell.columnIndex === columnIndex &&
-  //         Number(cell.content) >= minValue.current &&
-  //         Number(cell.content) <= rangeValue
-  //     )
-  //   );
-  //   setNewRows(filteredRows);
-  // };
+  const [rangeValue, setRangeValue] = useState<number>(34);
+  const setGrossRangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRangeValue(Number(e.target.value));
+  };
+  const filterRowsOnInputTypeRange = (columnIndex: number) => {
+    const min = Number(minValue.current); // Ensure minValue is a number
+    const max = Number(rangeValue); // Ensure rangeValue is a number
+
+    const filteredRows = [...rows].filter((row) =>
+      row.content?.some((cell) => {
+        const isNumericString =
+          typeof cell.content === "string" && !isNaN(Number(cell.content)); // Ensure it's a valid number string
+        return (
+          isNumericString &&
+          cell.contentType === "number" &&
+          cell.columnIndex === columnIndex &&
+          Number(cell.content) >= min &&
+          Number(cell.content) <= max
+        );
+      })
+    );
+
+    setNewRows(filteredRows);
+    return filteredRows;
+  };
 
   // const [commaSeparatedValue, setCommaSeparatedValue] = useState<string[]>([]);
   // const setCommaValue = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -447,10 +518,13 @@ const TableComponent: React.FC<TableComponentProps> = ({
 
   return (
     <>
+    <DemoLayout title="Table (DsTable)">
       <div className="data-table">
-        <div className="column-visibility">
+        
+        <div className={"column-visibility "+pageStyles.demo}>
+
           <RadioCheckButton
-            groupName="columnVisibility"
+            groupName="Column visibility"
             options={columns.map((col) => ({
               id: col.columnIndex.toString(),
               type: "checkbox",
@@ -463,58 +537,62 @@ const TableComponent: React.FC<TableComponentProps> = ({
           />
         </div>
         <div>
-          <InputText
-            placeholder="Search data"
+        <div className={styles["range-filter"]}>
+
+          <TextField
+            placeholder="Search Names"
             id="serach-data"
-            value={inputValue}
-            handleInputChange={(e: ChangeEvent<HTMLInputElement>) =>
+            label="Search Names"
+            handleInputChange={(e: ChangeEvent<HTMLElement>) =>
               sortDataUsingInputValue(e)
             }
           />
+          </div>
         </div>
         <div className="apply-filter">
-          <div className="range-filter">
+          <div className={styles["range-filter"]}>
             <TextField
-              placeholder={"Range From "}
+              placeholder={"ID From "}
               type={"singleline"}
               handleInputChange={setRangeFromValue}
               inputType="number"
-              label={"range from"}
+              label={"ID from"}
               disable={false}
             ></TextField>
             <TextField
-              placeholder={"Range To "}
+              placeholder={"ID To "}
               type={"singleline"}
               handleInputChange={setRangeToValue}
               inputType="number"
-              label={"range to"}
+              label={"ID to"}
               disable={false}
             ></TextField>
           </div>
-          <div className="date-filter">
+          <div className={styles["date-filter"]}>
             <TextField
-              placeholder={"Date From "}
+              placeholder={"DOB From "}
               type={"singleline"}
-              // handleInputChange={setDateFromValue}
+              handleInputChange={setDateFromValue}
               inputType="date"
-              label={"date from"}
+              label={"DOB from"}
               disable={false}
             ></TextField>
             <TextField
-              placeholder={"Date To "}
+              placeholder={"DOB To "}
               type={"singleline"}
-              // handleInputChange={setDateToValue}
+              handleInputChange={setDateToValue}
               inputType="date"
-              label={"date to"}
+              label={"DOB to"}
               disable={false}
             ></TextField>
           </div>
+          Age Upto:
           <input
             type="range"
             min={minValue.current}
             max={maxValue.current}
             className="range-input"
-            // onChange={setGrossRangeValue}
+            onChange={setGrossRangeValue}
           ></input>
           <DSButton label={"Apply"} handleOnClick={applyFilter}></DSButton>
         </div>
@@ -582,10 +660,15 @@ const TableComponent: React.FC<TableComponentProps> = ({
           </TbodyComponent>
 
           <TfooterComponent className={""}>
-            Showing {newRows.length} of {rowsContainer.current.length} Rows
+            <TrComponent>
+              <TdComponent className={""}>
+                Showing {newRows.length} of {rowsContainer.current.length} Rows
+              </TdComponent>
+            </TrComponent>
           </TfooterComponent>
         </table>
       </div>
+      </DemoLayout>
     </>
   );
 };

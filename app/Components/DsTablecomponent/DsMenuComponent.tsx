@@ -3,9 +3,8 @@ import { useState } from "react";
 import MenuDivider from "./MenuDivider";
 import TabViewMenuItem from "./TabViewMenuItem";
 import styles from "./DsTable.module.css";
+import addIcon from "../../Icons/smallIcons/add.svg";
 import DSButton from "../dsButton/dsButton";
-import addIcon from "../../Icons/add.svg";
-
 
 export interface menuprops {
   columnIndex: number;
@@ -42,21 +41,15 @@ const MenuComponent: React.FC<menuprops> = ({
   return (
     <>
       <div className={`${styles["slide-component"]}   ${className}`}>
-      <DSButton
-        id="chatBtn"
-        type="icon_image"
-        buttonSize="btnSmall"
-        // buttonClass={btnStyles.btnSmall + " " + btnStyles.icon_image}
-        handleOnClick={handleOnClick}
-        startIcon={<Image src={addIcon} alt="menu" />}
-        tooltip="Menu"
-      />
-        {/* <IconButton
-          id="icon-button"
-          srcImg={"dotsFillIMG"}
-          title="column-menu"
+        <DSButton
+          id="chatBtn"
+          type="icon_image"
+          buttonSize="btnSmall"
+          // buttonClass={btnStyles.btnSmall + " " + btnStyles.icon_image}
           handleOnClick={handleOnClick}
-        /> */}
+          startIcon={<Image src={addIcon} alt="menu" />}
+          tooltip="Menu"
+        />
       </div>
 
       {menuVisible && columnKey === columnIndex && (

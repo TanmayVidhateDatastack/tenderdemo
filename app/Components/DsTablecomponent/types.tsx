@@ -27,3 +27,8 @@ export const formatDate = (date: Date): string => {
   const year = date.getFullYear();
   return `${day}/${month}/${year}`;
 };
+
+export const convertToDate = (dateStr: string) => {
+  const [day, month, year] = dateStr.split("-").map(Number);
+  return new Date(year, month - 1, day); // month is 0-indexed
+};

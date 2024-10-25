@@ -1,6 +1,10 @@
 .UserProfile{
 width: fit-content;
 background-color: whitesmoke;
+
+}
+.UserProfile.fullProfile{
+    margin: 0.5rem;
 }
 .UserDetailed{
     

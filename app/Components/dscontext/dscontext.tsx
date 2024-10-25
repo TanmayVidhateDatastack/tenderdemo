@@ -9,9 +9,15 @@ interface PopUpContextProps {
   showArrow: boolean;
 }
 
-const PopUpContext: React.FC<PopUpContextProps> = ({ positionProp = "top", showArrow = false }) => {
+const PopUpContext: React.FC<PopUpContextProps> = ({
+  positionProp = "top",
+  showArrow = false,
+}) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [position, setPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [position, setPosition] = useState<{ x: number; y: number }>({
+    x: 0,
+    y: 0,
+  });
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     const buttonRect = event.currentTarget.getBoundingClientRect();
@@ -34,10 +40,9 @@ const PopUpContext: React.FC<PopUpContextProps> = ({ positionProp = "top", showA
     setIsVisible(!isVisible);
   };
 
-  return (<>
-      <DSButton handleOnClick={handleClick} >
-        Save
-      </DSButton>
+  return (
+    <>
+      <DSButton handleOnClick={handleClick}>Save</DSButton>
 
       {isVisible && (
         <div
@@ -56,7 +61,5 @@ const PopUpContext: React.FC<PopUpContextProps> = ({ positionProp = "top", showA
     </>
   );
 };
-
-
 
 export default PopUpContext;

@@ -3,16 +3,12 @@ import { useState } from "react";
 import DSButton from "../../Components/dsButton/dsButton";
 import styles from "../../page.module.css";
 import buttonStyles from "../../Components/dsButton/dsButton.module.css";
-import PaneStyles from "../../Components/Dspane/DsPane.module.css";
+import PaneStyles from "../../Components/dsPane/dsPane.module.css";
 // import addIcon from "./Icons/add.svg";
 // import DSButton from "./Components/DsButton/DsButton";
 // import ButtonLibrary from "./Components/dsButton/DS_ButtonLibrary";
 import Toaster from "../../Components/DsToaster/DsToaster";
 // import SaveButton from "./Components/DsButton/Ds_SaveBtn";
-import Image from "next/image";
-import addIcon from "../../Icons/add.svg";
-// import Image from "next/image";
-import TextField from "../../Components/DsTextField/DsTextField";
 import DsPane from "../../Components/dsPane/dsPane";
 import Application from "../../ElProComponents/ApplicationComponents/Application";
 import DsPopup from "../../Components/dsPopup/dsPopup";
@@ -29,6 +25,7 @@ import DemoTextField from "@/app/Components/DsTextField/dsDemoTextField";
 import DemoLayout from "./demoLayout";
 import DemoDeviation from "@/app/Components/DsDeviations/demoDeviation";
 import DemoUserProfile from "@/app/Components/DsUserProfile/demoUserProfile";
+import DsDemoStatusIndocator from "@/app/Components/DsStatusIndicator/dsDemoStatusIndicator";
 
 export default function Demo() {
   const tempTableData = {
@@ -94,7 +91,7 @@ export default function Demo() {
           {
             columnIndex: 3,
             className: "cell",
-            content: "2014-12-02",
+            content: "19-12-2022",
             contentType: "date",
           },
         ],
@@ -124,7 +121,7 @@ export default function Demo() {
           {
             columnIndex: 3,
             className: "cell",
-            content: "2014-11-02",
+            content: "17-11-2023",
             contentType: "date",
           },
         ],
@@ -154,7 +151,7 @@ export default function Demo() {
           {
             columnIndex: 3,
             className: "cell",
-            content: "2011-10-02",
+            content: "22-08-2024",
             contentType: "date",
           },
         ],
@@ -226,7 +223,7 @@ export default function Demo() {
   return (
     <>
       <Application
-        appTitle="Sales and Order"
+        appTitle="Sales Order"
         appMenu={
           <div className={styles.container}>
             <PopupOpenButton
@@ -241,16 +238,7 @@ export default function Demo() {
         }
       >
         <div className={styles.fluidContainer}>
-          <DsPane id="PaneInset" type="inset" side={PaneStyles.left}>
-            <TextField
-              placeholder="placeholder"
-              label="label"
-              disable={false}
-              // onClick={false}
-              type="multiline"
-              icon="📋"
-              iconEnd="📋"
-            />
+          <DsPane id="PaneInset" title="Toaster" type="inset" side={PaneStyles.left}>
             <DemoLayout title={"Toaster (DsToaster)"}>
               <div className={styles.btn}>
                 <DSButton
@@ -369,34 +357,26 @@ export default function Demo() {
       </Application>
       <DsPopup
         id={"test"}
-        /*position="center" type="document"*/ title={"check"}
+        /*position="center" type="document"*/ title={"Popup"}
       >
         <div className={buttonStyles.btn}>
           <DSButton
             id="actionBtn"
             buttonClass={buttonStyles.action_btn}
             // handleOnHover={handleMouseHover}
-            startIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
+            // startIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
             label="New"
           />
         </div>
       </DsPopup>
-      <DsPane id="PaneRight" side={"right"} title="Filter">
-        <div className={buttonStyles.btn}>
-          <DSButton
-            id="actionBtn"
-            buttonClass={buttonStyles.action_btn}
-            // handleOnHover={handleMouseHover}
-            startIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
-            label="New"
-          />
-        </div>
+      <DsPane id="PaneRight" side={"right"} title="Status">
+        <DsDemoStatusIndocator></DsDemoStatusIndocator>
       </DsPane>
       {showNotification && (
         <Toaster
           handleClose={() => setShowNotification(false)}
           type={notiType}
-          message={`this is simple ${notiType} msg you cant acess this side now .............!`}
+          message={`This is simple ${notiType} msg.!`}
           position={pos}
           duration={3000}
         />
