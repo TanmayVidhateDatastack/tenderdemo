@@ -71,7 +71,7 @@
   flex-direction: column;
 }
 .pad-0{
-  padding:0;
+  padding:0 !important;
 }
 @media (prefers-color-scheme: dark) {
   .page {

@@ -1,5 +1,6 @@
 "use client";
 import styles from "./dsstatusIndicator.module.css";
+import btnStyles from "../dsButton/dsButton.module.css";
 import dsStatus from "../../constant";
 
 interface DsStatusIndicatorProps {
@@ -19,7 +20,7 @@ const DsStateChange: React.FC<DsStatusIndicatorProps> = ({
     <>
       <div
         className={
-          styles.statusIndicator + " " + stateClass + " " + styles[status]
+          btnStyles.btnContained+" "+ styles.statusIndicator + " " + stateClass + " "  + styles[status]
         }
         id={id}
       >

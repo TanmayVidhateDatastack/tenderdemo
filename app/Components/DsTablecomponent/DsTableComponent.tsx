@@ -10,7 +10,7 @@ import TfooterComponent from "./DsTfooterComponent";
 import TdComponent from "./DsTdComponent";
 import SortComponent from "./sortComponent";
 import MenuComponent from "./DsMenuComponent";
-import DSButton from "../dsButton/DsButton";
+import DSButton from "../dsButton/dsButton";
 import TextField from "../DsTextField/DsTextField";
 import styles from "./DsTable.module.css";
 import pageStyles from "../../page.module.css";

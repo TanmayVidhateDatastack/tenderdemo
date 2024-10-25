@@ -9,10 +9,6 @@ import PaneStyles from "../../Components/dsPane/dsPane.module.css";
 // import ButtonLibrary from "./Components/dsButton/DS_ButtonLibrary";
 import Toaster from "../../Components/DsToaster/DsToaster";
 // import SaveButton from "./Components/DsButton/Ds_SaveBtn";
-import Image from "next/image";
-import addIcon from "../../Icons/add.svg";
-// import Image from "next/image";
-import TextField from "../../Components/DsTextField/DsTextField";
 import DsPane from "../../Components/dsPane/dsPane";
 import Application from "../../ElProComponents/ApplicationComponents/Application";
 import DsPopup from "../../Components/dsPopup/dsPopup";
@@ -29,6 +25,7 @@ import DemoTextField from "@/app/Components/DsTextField/dsDemoTextField";
 import DemoLayout from "./demoLayout";
 import DemoDeviation from "@/app/Components/DsDeviations/demoDeviation";
 import DemoUserProfile from "@/app/Components/DsUserProfile/demoUserProfile";
+import DsDemoStatusIndocator from "@/app/Components/DsStatusIndicator/dsDemoStatusIndicator";
 
 export default function Demo() {
   const tempTableData = {
@@ -241,16 +238,7 @@ export default function Demo() {
         }
       >
         <div className={styles.fluidContainer}>
-          <DsPane id="PaneInset" type="inset" side={PaneStyles.left}>
-            <TextField
-              placeholder="placeholder"
-              label="label"
-              disable={false}
-              // onClick={false}
-              type="multiline"
-              icon="📋"
-              iconEnd="📋"
-            />
+          <DsPane id="PaneInset" title="Toaster" type="inset" side={PaneStyles.left}>
             <DemoLayout title={"Toaster (DsToaster)"}>
               <div className={styles.btn}>
                 <DSButton
@@ -369,28 +357,20 @@ export default function Demo() {
       </Application>
       <DsPopup
         id={"test"}
-        /*position="center" type="document"*/ title={"check"}
+        /*position="center" type="document"*/ title={"Popup"}
       >
         <div className={buttonStyles.btn}>
           <DSButton
             id="actionBtn"
             buttonClass={buttonStyles.action_btn}
             // handleOnHover={handleMouseHover}
-            startIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
+            // startIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
             label="New"
           />
         </div>
       </DsPopup>
-      <DsPane id="PaneRight" side={"right"} title="Filter">
-        <div className={buttonStyles.btn}>
-          <DSButton
-            id="actionBtn"
-            buttonClass={buttonStyles.action_btn}
-            // handleOnHover={handleMouseHover}
-            startIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
-            label="New"
-          />
-        </div>
+      <DsPane id="PaneRight" side={"right"} title="Status">
+        <DsDemoStatusIndocator></DsDemoStatusIndocator>
       </DsPane>
       {showNotification && (
         <Toaster
