@@ -3,7 +3,7 @@ import { useState } from "react";
 import MenuDivider from "./MenuDivider";
 import TabViewMenuItem from "./TabViewMenuItem";
 import styles from "./DsTable.module.css";
-import addIcon from "../../Icons/add.svg";
+import addIcon from "../../Icons/smallIcons/add.svg";
 import DSButton from "../dsButton/dsButton";
 
 export interface menuprops {

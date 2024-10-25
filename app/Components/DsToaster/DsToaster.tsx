@@ -1,12 +1,13 @@
 "use client";
+"use client";
 import React, { useEffect, useState } from "react";
 
 import Image from "next/image";
 
-import success from "../../Icons/success.svg";
-import error from "../../Icons/error.svg";
-import warning from "../../Icons/info.svg";
-import normal from "../../Icons/bonus.svg";
+import success from "../../Icons/mediumIcons/success.svg";
+import error from "../../Icons/mediumIcons/error.svg";
+import warning from "../../Icons/mediumIcons/info.svg";
+import normal from "../../Icons/mediumIcons/bonus.svg";
 import styles from "./DsToaster.module.css";
 import DSButton from "../dsButton/dsButton";
 

@@ -9,21 +9,20 @@
      justify-content: center;
  } */
  .allselect{
-   height:min-content;
-   width:min-content;
+   height:auto;
+   width:var(--dswidth);
    position:relative;
-   margin:20px;
-   
+   margin: var(--dsmargin);
 }
 .mainselection{  
-    padding:10px;
-    color:black;
-    border:1px solid;
-    border-radius:5px ;
+    padding:var(--dspadding);
+    color:var(--background);
+    border:var(--dsborder);
+    border-radius: var(--dsborder-radius);
     border-style: groove;
-    border-color:gray;
+    border-color:var(--secondary);
     justify-content: center;
-    padding-top: 20px;
+    padding-top: var(--dspadding);
     box-sizing: border-box;
 }
 
@@ -32,24 +31,25 @@
   left: 10px;
   top: 10px;
   transition: 0.1s ease all;
-  color: black;
+  color: var(--dark);
   background-color: var(--background);
   pointer-events: none;
 }
 
 .shrink {
   top: -10px;
-  font-size: 12px;
-  color: blue;
+  font-size: var(--subtitle1);
+  /* color: blue; */
+  color: var(--text-primary);
 }
 
  
  .list{
      /* display: block; */
      /* block-size: 100%; */
-     padding:10px;
+     padding:var(--dspadding);
      justify-content: center;
-     caret-color: blue;
+     caret-color: var(--text-primary);
      box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
      border-radius: 2px;
      /* margin-left: 2px; */
@@ -61,13 +61,13 @@
  }
  
  .option{
-     margin: 8px;
+     margin: var(--dsmargin);
  }
  
  .selectcontainer{
     display: flex ;
     margin:2px;
-    min-width: 2rem;
+    min-width: var(--dsmin-width);
     flex-wrap:wrap;
  }
  .selectoption{
@@ -76,18 +76,19 @@
     flex-wrap: wrap;
  }
  .remove{
-    margin-left: 5px;
-    font-size:10px ;
+    margin-left: var(--dsmargin);
+    font-size: var(--subtitle2);
  }
  .selecteditem{
     padding: 7px 12px 7px 12px;
     border: 0px;
-    font-size: 12px;
+    font-size: var(--subtitle1);
     border-radius: 25px !important;
     margin: 2px;
-    height: min-content;
-    background-color: #dacfcf;
-    color: black;
+    height: var(--dsheight);
+    /* background-color: #dacfcf; */
+    background-color: var(--semiviolet);
+    color: var(--dark);
     display:flex;
     align-items: center;
     justify-content: space-between;
