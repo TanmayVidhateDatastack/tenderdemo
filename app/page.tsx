@@ -255,7 +255,7 @@ export default function Home() {
             <div className={styles.btn}>
               <DSButton
                 id="actionBtn"
-                buttonClass={styles.action_btn}
+                className={styles.action_btn}
                 handleOnClick={() => setShowNotification(true)}
                 // handleOnClick={handleActionClick}
                 // handleOnHover={handleMouseHover}
@@ -336,7 +336,7 @@ export default function Home() {
         <div className={buttonStyles.btn}>
           <DSButton
             id="actionBtn"
-            buttonClass={buttonStyles.action_btn}
+            className={buttonStyles.action_btn}
             // handleOnHover={handleMouseHover}
             startIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
             label="New"
@@ -347,7 +347,7 @@ export default function Home() {
         <div className={buttonStyles.btn}>
           <DSButton
             id="actionBtn"
-            buttonClass={buttonStyles.action_btn}
+            className={buttonStyles.action_btn}
             // handleOnHover={handleMouseHover}
             startIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
             label="New"

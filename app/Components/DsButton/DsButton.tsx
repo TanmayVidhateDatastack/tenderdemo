@@ -1,6 +1,5 @@
 import styles from "../dsButton/dsButton.module.css";
 
-
 interface DSButtonProps {
   children?: React.ReactNode;
   id?: string;
@@ -16,7 +15,7 @@ interface DSButtonProps {
     | "btnWarning"
     | "btnDark"
     | "btnInfo";
-  buttonClass?: string;
+  className?: string;
   handleOnClick?: (e: React.MouseEvent<HTMLElement>) => void;
   img?: string;
   startIcon?: React.ReactElement;
@@ -28,7 +27,7 @@ interface DSButtonProps {
 const DSButton: React.FC<DSButtonProps> = ({
   id,
   label,
-  buttonClass,
+  className,
   buttonSize = "btnMedium",
   iconSize = "iconSmall",
   buttonColor = "btnPrimary",
@@ -54,7 +53,7 @@ const DSButton: React.FC<DSButtonProps> = ({
           className={
             styles.btn +
             " " +
-            buttonClass +
+            className +
             " " +
             styles[buttonSize] +
             " " +
@@ -88,7 +87,7 @@ const DSButton: React.FC<DSButtonProps> = ({
             className={
               styles.btn +
               " " +
-              buttonClass +
+              className +
               " " +
               styles.split_btn +
               " " +
@@ -137,9 +136,7 @@ const DSButton: React.FC<DSButtonProps> = ({
         <div className={styles.toggle}>
           <button
             id={id}
-            className={
-              styles.btn + " " + buttonClass + " " + styles[buttonSize]
-            }
+            className={styles.btn + " " + className + " " + styles[buttonSize]}
             onClick={handleOnClick}
             onMouseOver={handleOnHover}
             onMouseLeave={handleMouseLeave}
@@ -155,7 +152,7 @@ const DSButton: React.FC<DSButtonProps> = ({
             className={
               styles.btn +
               " " +
-              buttonClass +
+              className +
               " " +
               styles.icon_image +
               " " +
@@ -183,7 +180,7 @@ const DSButton: React.FC<DSButtonProps> = ({
             className={
               styles.btn +
               " " +
-              buttonClass +
+              className +
               " " +
               styles.icon_btn +
               " " +
@@ -207,7 +204,7 @@ const DSButton: React.FC<DSButtonProps> = ({
       {type == "upload" && (
         <button
           id={id}
-          className={styles.btn + " " + buttonClass + " " + styles[buttonSize]}
+          className={styles.btn + " " + className + " " + styles[buttonSize]}
           title={tooltip !== undefined ? tooltip : label}
           onClick={displayFileBrowser}
           onMouseOver={handleOnHover}
@@ -237,7 +234,7 @@ const DSButton: React.FC<DSButtonProps> = ({
           className={
             styles.btn +
             " " +
-            buttonClass +
+            className +
             " " +
             styles.tab_btn +
             " " +

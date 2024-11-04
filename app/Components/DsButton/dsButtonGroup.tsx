@@ -1,6 +1,6 @@
 import styles from "./dsButton.module.css";
 
-import React from "react";
+import React, { useEffect } from "react";
 
 interface DSButtonGroupProps {
   children?: React.ReactNode;
@@ -17,8 +17,7 @@ interface DSButtonGroupProps {
     | "btnWarning"
     | "btnDark"
     | "btnInfo";
-  buttonClass?: string;
-  handleOnClick?: (e: React.MouseEvent<HTMLElement>) => void;
+  className?: string;
   img?: string;
   startIcon?: React.ReactElement;
   endIcon?: React.ReactElement;
@@ -27,20 +26,59 @@ interface DSButtonGroupProps {
   handleMouseLeave?: (e: React.MouseEvent<HTMLElement>) => void;
 }
 const DSButtonGroup: React.FC<DSButtonGroupProps> = ({
+  id,
   label,
   children,
-  buttonClass,
+  className,
+  handleMouseLeave,
+  handleOnHover,
 }) => {
+  useEffect(() => {
+    const buttonGroup = document.getElementById("btngroup1");
+    if (buttonGroup) {
+      const buttons = buttonGroup.querySelectorAll("button");
+      buttons?.forEach((button) => {
+        if (button) {
+          button.addEventListener("click", (e) =>
+            handleButtonClick(e, button.id)
+          );
+        }
+      });
+    }
+  }, []);
+  const handleButtonClick = (e: React.MouseEvent<HTMLElement>, id: string) => {
+    const buttonGroup = document.getElementById("btngroup1");
+    if (buttonGroup) {
+      const buttons = buttonGroup.querySelectorAll("button");
+      buttons?.forEach((button) => {
+        if (button) {
+          if (button.classList.contains(styles.active)) {
+            button.classList.remove(styles.active);
+          }
+        }
+      });
+    }
+
+    const clickedButton = document.getElementById(id);
+    if (clickedButton) {
+      clickedButton.classList.add(styles.active);
+    }
+  };
   return (
-    <div className={styles.flex}>
+    <div
+      className={styles.flex + " " + className}
+      id={id}
+      onMouseLeave={handleMouseLeave}
+      onMouseOver={handleOnHover}
+    >
       {React.Children.map(children, (child, index) => (
-        <div key={index} className={buttonClass}>
+        <>
           {label || child}
 
           {index < React.Children.count(children) - 1 && (
             <div className={styles.separator}></div>
           )}
-        </div>
+        </>
       ))}
     </div>
   );

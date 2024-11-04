@@ -16,7 +16,7 @@ interface DSFilterButtonProps {
     | "btnWarning"
     | "btnDark"
     | "btnInfo";
-  buttonClass?: string;
+  className?: string;
   handleOnClick?: (e: React.MouseEvent<HTMLElement>) => void;
   img?: string;
   startIcon?: React.ReactElement;
@@ -29,7 +29,7 @@ const DSFilterButton: React.FC<DSFilterButtonProps> = ({
   id,
   label,
   count = "00",
-  buttonClass,
+  className,
   buttonSize = "btnMedium",
   iconSize = "iconSmall",
   buttonColor = "btnPrimary",
@@ -48,7 +48,7 @@ const DSFilterButton: React.FC<DSFilterButtonProps> = ({
         className={
           styles.btn +
           " " +
-          buttonClass +
+          className +
           " " +
           styles[buttonSize] +
           " " +

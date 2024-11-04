@@ -10,6 +10,18 @@
     width: auto;
     height: var(--dswidth);
     margin: 4px;
+    padding: 4px;
+    border: 0px !important;
+}
+.button_label{
+    border: 0px !important;
+    margin: 2px;
+}
+
+.status_icon{
+    border: 0px !important;
+    width: fit-content;
+    height: fit-content;
 }
 .statusIndicator.underReview{
     background-color: var(--under-review);

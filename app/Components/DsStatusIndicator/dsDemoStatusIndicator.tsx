@@ -1,49 +1,94 @@
 import React from "react";
 import DsStateChange from "./dsStatusIndicator";
 import styles from "./dsstatusIndicator.module.css";
+import commentIcon from "../../Icons/smallIcons/commenticon.svg";
+import Image from "next/image";
 
 const DsDemoStatusIndocator: React.FC = () => {
   return (
     <>
       <div className={styles.status_change}>
         <DsStateChange
-          stateClass={styles.statusIndicator}
+          className={styles.statusIndicator}
+          type="user_defined"
           id="state1"
           status="Approved"
           label="approved"
+          status_icon={<Image src={commentIcon} alt="icon" />}
+          comment="Justification and Comments"
+        />
+
+        <DsStateChange
+          className={styles.statusIndicator}
+          type="system_default"
+          id="state8"
+          status="Pending"
+          label="Deviation Pending"
+          btn_label="Check Failed"
         />
         <DsStateChange
-          stateClass={styles.statusIndicator}
+          className={styles.statusIndicator}
+          type="system_default"
           id="state2"
           status="Cancelled"
           label="cancelled"
         />
         <DsStateChange
-          stateClass={styles.statusIndicator}
+          className={styles.statusIndicator}
+          type="user_defined"
+          id="state2"
+          status="Cancelled"
+          label="Rejected"
+          status_icon={<Image src={commentIcon} alt="icon" />}
+          comment="Reason of Rejection"
+        />
+        <DsStateChange
+          className={styles.statusIndicator}
           id="state3"
+          type="system_default"
           status="Pending"
           label="pending"
         />
         <DsStateChange
-          stateClass={styles.statusIndicator}
+          className={styles.statusIndicator}
+          type="system_default"
           id="state4"
           status="Submitted"
           label="submitted"
         />
         <DsStateChange
-          stateClass={styles.statusIndicator}
+          className={styles.statusIndicator}
+          type="system_default"
+          id="state4"
+          status="Submitted"
+          label="Open"
+          btn_label="Partial qty awail"
+        />
+        <DsStateChange
+          className={styles.statusIndicator}
+          type="system_default"
+          id="state4"
+          status="Submitted"
+          label="Open"
+          btn_label="Quantity unavailable"
+        />
+        <DsStateChange
+          className={styles.statusIndicator}
+          type="system_default"
           id="state5"
           status="underApproval"
           label="under approvel"
         />
         <DsStateChange
-          stateClass={styles.statusIndicator}
+          className={styles.statusIndicator}
+          type="system_default"
           id="state6"
           status="underReview"
           label="under review"
         />
         <DsStateChange
-          stateClass={styles.statusIndicator}
+          className={styles.statusIndicator}
+          type="system_default"
           id="state7"
           status="InProcess"
           label="In Process"
