@@ -37,7 +37,7 @@ export default function Demo() {
       {
         columnIndex: 0,
         className: "header-column",
-        columnHeader: "ID",
+        columnHeader: "ORDER ID",
         isHidden: false,
         sort: "ASC",
         columnContentType: "number",
@@ -45,26 +45,50 @@ export default function Demo() {
       {
         columnIndex: 1,
         className: "header-column",
-        columnHeader: "Name",
+        columnHeader: "DATE",
         isHidden: false,
-        sort: "NONE",
-        columnContentType: "string",
+        sort: "ASC",
+        columnContentType: "date",
       },
       {
         columnIndex: 2,
         className: "header-column",
-        columnHeader: "Age",
+        columnHeader: "CUSTOMER ID",
         isHidden: false,
-        sort: "DESC",
-        columnContentType: "number",
+        sort: "ASC",
+        columnContentType: "string",
       },
       {
         columnIndex: 3,
         className: "header-column",
-        columnHeader: "Date of birth",
+        columnHeader: "CUSTOMER",
         isHidden: false,
-        sort: "NONE",
-        columnContentType: "date",
+        sort: "ASC",
+        columnContentType: "string",
+      },
+      {
+        columnIndex: 4,
+        className: "header-column",
+        columnHeader: "QTY",
+        isHidden: false,
+        sort: "ASC",
+        columnContentType: "number",
+      },
+      {
+        columnIndex: 5,
+        className: "header-column",
+        columnHeader: "NET VALUE (₹)",
+        isHidden: false,
+        sort: "ASC",
+        columnContentType: "number",
+      },
+      {
+        columnIndex: 6,
+        className: "header-column",
+        columnHeader: "GROSS VALUE (₹)",
+        isHidden: false,
+        sort: "ASC",
+        columnContentType: "number",
       },
     ],
     rows: [
@@ -75,26 +99,44 @@ export default function Demo() {
           {
             columnIndex: 0,
             className: "cell",
-            content: "1",
+            content: 20240199900001,
             contentType: "number",
           },
           {
             columnIndex: 1,
             className: "cell",
-            content: "John Doe",
-            contentType: "string",
+            content: "24/09/2024",
+            contentType: "date",
           },
           {
             columnIndex: 2,
             className: "cell",
-            content: "28",
-            contentType: "number",
+            content: "DF09",
+            contentType: "string",
           },
           {
             columnIndex: 3,
             className: "cell",
-            content: "19-12-2022",
-            contentType: "date",
+            content: "Medplus Health Services",
+            contentType: "string",
+          },
+          {
+            columnIndex: 4,
+            className: "cell",
+            content: 400,
+            contentType: "number",
+          },
+          {
+            columnIndex: 5,
+            className: "cell",
+            content: "12,00,000",
+            contentType: "string",
+          },
+          {
+            columnIndex: 6,
+            className: "cell",
+            content: "12,02,000",
+            contentType: "number",
           },
         ],
       },
@@ -105,26 +147,44 @@ export default function Demo() {
           {
             columnIndex: 0,
             className: "cell",
-            content: "2",
+            content: 20240199900002,
             contentType: "number",
           },
           {
             columnIndex: 1,
             className: "cell",
-            content: "Jane Smith",
-            contentType: "string",
+            content: "24/09/2024",
+            contentType: "date",
           },
           {
             columnIndex: 2,
             className: "cell",
-            content: "34",
-            contentType: "number",
+            content: "CD34",
+            contentType: "string",
           },
           {
             columnIndex: 3,
             className: "cell",
-            content: "17-11-2023",
-            contentType: "date",
+            content: "Apollo Pharmacy",
+            contentType: "string",
+          },
+          {
+            columnIndex: 4,
+            className: "cell",
+            content: 1200,
+            contentType: "number",
+          },
+          {
+            columnIndex: 5,
+            className: "cell",
+            content: "13,00,900",
+            contentType: "string",
+          },
+          {
+            columnIndex: 6,
+            className: "cell",
+            content: "13,03,900",
+            contentType: "number",
           },
         ],
       },
@@ -135,79 +195,627 @@ export default function Demo() {
           {
             columnIndex: 0,
             className: "cell",
-            content: "3",
+            content: 20240199900003,
             contentType: "number",
           },
           {
             columnIndex: 1,
             className: "cell",
-            content: "Alice Johnson",
-            contentType: "string",
+            content: "24/09/2024",
+            contentType: "date",
           },
           {
             columnIndex: 2,
             className: "cell",
-            content: "25",
-            contentType: "number",
+            content: "HJ65",
+            contentType: "string",
           },
           {
             columnIndex: 3,
             className: "cell",
-            content: "22-08-2024",
+            content: "Hetero Drugs Ltd.",
+            contentType: "string",
+          },
+          {
+            columnIndex: 4,
+            className: "cell",
+            content: 8000,
+            contentType: "number",
+          },
+          {
+            columnIndex: 5,
+            className: "cell",
+            content: "12,00,000",
+            contentType: "string",
+          },
+          {
+            columnIndex: 6,
+            className: "cell",
+            content: "12,04,000",
+            contentType: "number",
+          },
+        ],
+      },
+      {
+        rowIndex: 3,
+        className: "row",
+        content: [
+          {
+            columnIndex: 0,
+            className: "cell",
+            content: 20240199900004,
+            contentType: "number",
+          },
+          {
+            columnIndex: 1,
+            className: "cell",
+            content: "24/09/2024",
             contentType: "date",
+          },
+          {
+            columnIndex: 2,
+            className: "cell",
+            content: "OP65",
+            contentType: "string",
+          },
+          {
+            columnIndex: 3,
+            className: "cell",
+            content: "Mediwell Diagnostics",
+            contentType: "string",
+          },
+          {
+            columnIndex: 4,
+            className: "cell",
+            content: 3400,
+            contentType: "number",
+          },
+          {
+            columnIndex: 5,
+            className: "cell",
+            content: "11,00,000",
+            contentType: "string",
+          },
+          {
+            columnIndex: 6,
+            className: "cell",
+            content: "11,03,000",
+            contentType: "number",
+          },
+        ],
+      },
+      {
+        rowIndex: 4,
+        className: "row",
+        content: [
+          {
+            columnIndex: 0,
+            className: "cell",
+            content: 20240199900007,
+            contentType: "number",
+          },
+          {
+            columnIndex: 1,
+            className: "cell",
+            content: "24/09/2024",
+            contentType: "date",
+          },
+          {
+            columnIndex: 2,
+            className: "cell",
+            content: "HB08",
+            contentType: "string",
+          },
+          {
+            columnIndex: 3,
+            className: "cell",
+            content: "Vikram Medical Agency",
+            contentType: "string",
+          },
+          {
+            columnIndex: 4,
+            className: "cell",
+            content: 500,
+            contentType: "number",
+          },
+          {
+            columnIndex: 5,
+            className: "cell",
+            content: "10,000",
+            contentType: "string",
+          },
+          {
+            columnIndex: 6,
+            className: "cell",
+            content: "25,200",
+            contentType: "number",
+          },
+        ],
+      },
+      {
+        rowIndex: 5,
+        className: "row",
+        content: [
+          {
+            columnIndex: 0,
+            className: "cell",
+            content: 20240199900006,
+            contentType: "number",
+          },
+          {
+            columnIndex: 1,
+            className: "cell",
+            content: "24/09/2024",
+            contentType: "date",
+          },
+          {
+            columnIndex: 2,
+            className: "cell",
+            content: "MN04",
+            contentType: "string",
+          },
+          {
+            columnIndex: 3,
+            className: "cell",
+            content: "Sree Mookambika Agency",
+            contentType: "string",
+          },
+          {
+            columnIndex: 4,
+            className: "cell",
+            content: 4000,
+            contentType: "number",
+          },
+          {
+            columnIndex: 5,
+            className: "cell",
+            content: "1,00,900",
+            contentType: "string",
+          },
+          {
+            columnIndex: 6,
+            className: "cell",
+            content: "3,900",
+            contentType: "number",
+          },
+        ],
+      },
+      {
+        rowIndex: 6,
+        className: "row",
+        content: [
+          {
+            columnIndex: 0,
+            className: "cell",
+            content: 20220199900007,
+            contentType: "number",
+          },
+          {
+            columnIndex: 1,
+            className: "cell",
+            content: "24/09/2024",
+            contentType: "date",
+          },
+          {
+            columnIndex: 2,
+            className: "cell",
+            content: "GH67",
+            contentType: "string",
+          },
+          {
+            columnIndex: 3,
+            className: "cell",
+            content: "Bharat Serums Ltd.",
+            contentType: "string",
+          },
+          {
+            columnIndex: 4,
+            className: "cell",
+            content: 8000,
+            contentType: "number",
+          },
+          {
+            columnIndex: 5,
+            className: "cell",
+            content: "12,00,000",
+            contentType: "string",
+          },
+          {
+            columnIndex: 6,
+            className: "cell",
+            content: "12,04,000",
+            contentType: "number",
+          },
+        ],
+      },
+      {
+        rowIndex: 7,
+        className: "row",
+        content: [
+          {
+            columnIndex: 0,
+            className: "cell",
+            content: 20240199900008,
+            contentType: "number",
+          },
+          {
+            columnIndex: 1,
+            className: "cell",
+            content: "24/09/2024",
+            contentType: "date",
+          },
+          {
+            columnIndex: 2,
+            className: "cell",
+            content: "TR65",
+            contentType: "string",
+          },
+          {
+            columnIndex: 3,
+            className: "cell",
+            content: "Sulekha Healthcare",
+            contentType: "string",
+          },
+          {
+            columnIndex: 4,
+            className: "cell",
+            content: 3400,
+            contentType: "number",
+          },
+          {
+            columnIndex: 5,
+            className: "cell",
+            content: "11,00,000",
+            contentType: "string",
+          },
+          {
+            columnIndex: 6,
+            className: "cell",
+            content: "11,03,000",
+            contentType: "number",
+          },
+        ],
+      },
+      {
+        rowIndex: 8,
+        className: "row",
+        content: [
+          {
+            columnIndex: 0,
+            className: "cell",
+            content: 20240199900009,
+            contentType: "number",
+          },
+          {
+            columnIndex: 1,
+            className: "cell",
+            content: "24/09/2024",
+            contentType: "date",
+          },
+          {
+            columnIndex: 2,
+            className: "cell",
+            content: "PU78",
+            contentType: "string",
+          },
+          {
+            columnIndex: 3,
+            className: "cell",
+            content: "Lupin Limited",
+            contentType: "string",
+          },
+          {
+            columnIndex: 4,
+            className: "cell",
+            content: 2340,
+            contentType: "number",
+          },
+          {
+            columnIndex: 5,
+            className: "cell",
+            content: "22,000",
+            contentType: "string",
+          },
+          {
+            columnIndex: 6,
+            className: "cell",
+            content: "22,06,000",
+            contentType: "number",
+          },
+        ],
+      },
+      {
+        rowIndex: 9,
+        className: "row",
+        content: [
+          {
+            columnIndex: 0,
+            className: "cell",
+            content: 20240199900010,
+            contentType: "number",
+          },
+          {
+            columnIndex: 1,
+            className: "cell",
+            content: "24/09/2024",
+            contentType: "date",
+          },
+          {
+            columnIndex: 2,
+            className: "cell",
+            content: "UT60",
+            contentType: "string",
+          },
+          {
+            columnIndex: 3,
+            className: "cell",
+            content: "Lupin Limited",
+            contentType: "string",
+          },
+          {
+            columnIndex: 4,
+            className: "cell",
+            content: 8756,
+            contentType: "number",
+          },
+          {
+            columnIndex: 5,
+            className: "cell",
+            content: "12,90,900",
+            contentType: "string",
+          },
+          {
+            columnIndex: 6,
+            className: "cell",
+            content: "12,99,900",
+            contentType: "number",
+          },
+        ],
+      },
+      {
+        rowIndex: 10,
+        className: "row",
+        content: [
+          {
+            columnIndex: 0,
+            className: "cell",
+            content: 20240199900011,
+            contentType: "number",
+          },
+          {
+            columnIndex: 1,
+            className: "cell",
+            content: "24/09/2024",
+            contentType: "date",
+          },
+          {
+            columnIndex: 2,
+            className: "cell",
+            content: "AB43",
+            contentType: "string",
+          },
+          {
+            columnIndex: 3,
+            className: "cell",
+            content: "Lupin Limited",
+            contentType: "string",
+          },
+          {
+            columnIndex: 4,
+            className: "cell",
+            content: 1100,
+            contentType: "number",
+          },
+          {
+            columnIndex: 5,
+            className: "cell",
+            content: "11,09,000",
+            contentType: "string",
+          },
+          {
+            columnIndex: 6,
+            className: "cell",
+            content: "11,11,000",
+            contentType: "number",
+          },
+        ],
+      },
+      {
+        rowIndex: 11,
+        className: "row",
+        content: [
+          {
+            columnIndex: 0,
+            className: "cell",
+            content: 20240199900012,
+            contentType: "number",
+          },
+          {
+            columnIndex: 1,
+            className: "cell",
+            content: "24/09/2024",
+            contentType: "date",
+          },
+          {
+            columnIndex: 2,
+            className: "cell",
+            content: "SF45",
+            contentType: "string",
+          },
+          {
+            columnIndex: 3,
+            className: "cell",
+            content: "Lupin Limited",
+            contentType: "string",
+          },
+          {
+            columnIndex: 4,
+            className: "cell",
+            content: 12341,
+            contentType: "number",
+          },
+          {
+            columnIndex: 5,
+            className: "cell",
+            content: "10,02,000",
+            contentType: "string",
+          },
+          {
+            columnIndex: 6,
+            className: "cell",
+            content: "10,22,000",
+            contentType: "number",
+          },
+        ],
+      },
+      {
+        rowIndex: 12,
+        className: "row",
+        content: [
+          {
+            columnIndex: 0,
+            className: "cell",
+            content: 20240199900013,
+            contentType: "number",
+          },
+          {
+            columnIndex: 1,
+            className: "cell",
+            content: "24/09/2024",
+            contentType: "date",
+          },
+          {
+            columnIndex: 2,
+            className: "cell",
+            content: "GR65",
+            contentType: "string",
+          },
+          {
+            columnIndex: 3,
+            className: "cell",
+            content: "Lupin Limited",
+            contentType: "string",
+          },
+          {
+            columnIndex: 4,
+            className: "cell",
+            content: 2000,
+            contentType: "number",
+          },
+          {
+            columnIndex: 5,
+            className: "cell",
+            content: "20,03,000",
+            contentType: "string",
+          },
+          {
+            columnIndex: 6,
+            className: "cell",
+            content: "20,08,000",
+            contentType: "number",
+          },
+        ],
+      },
+      {
+        rowIndex: 13,
+        className: "row",
+        content: [
+          {
+            columnIndex: 0,
+            className: "cell",
+            content: 20240199900014,
+            contentType: "number",
+          },
+          {
+            columnIndex: 1,
+            className: "cell",
+            content: "24/09/2024",
+            contentType: "date",
+          },
+          {
+            columnIndex: 2,
+            className: "cell",
+            content: "MX09",
+            contentType: "string",
+          },
+          {
+            columnIndex: 3,
+            className: "cell",
+            content: "Pharma XYZ",
+            contentType: "string",
+          },
+          {
+            columnIndex: 4,
+            className: "cell",
+            content: 500,
+            contentType: "number",
+          },
+          {
+            columnIndex: 5,
+            className: "cell",
+            content: "15,05,000",
+            contentType: "string",
+          },
+          {
+            columnIndex: 6,
+            className: "cell",
+            content: "15,08,000",
+            contentType: "number",
+          },
+        ],
+      },
+      {
+        rowIndex: 14,
+        className: "row",
+        content: [
+          {
+            columnIndex: 0,
+            className: "cell",
+            content: 20240199900015,
+            contentType: "number",
+          },
+          {
+            columnIndex: 1,
+            className: "cell",
+            content: "24/09/2024",
+            contentType: "date",
+          },
+          {
+            columnIndex: 2,
+            className: "cell",
+            content: "MX09",
+            contentType: "string",
+          },
+          {
+            columnIndex: 3,
+            className: "cell",
+            content: "Medicare Pharma Ltd.",
+            contentType: "string",
+          },
+          {
+            columnIndex: 4,
+            className: "cell",
+            content: 500,
+            contentType: "number",
+          },
+          {
+            columnIndex: 5,
+            className: "cell",
+            content: "15,05,000",
+            contentType: "string",
+          },
+          {
+            columnIndex: 6,
+            className: "cell",
+            content: "15,08,000",
+            contentType: "number",
           },
         ],
       },
     ],
   };
 
-  // let minValue = 0;
-  // let maxValue = 0;
-
-  // const getLowestBiggestValue = (columnIndex: number) => {
-  //   tempTableData.rows.map((row) =>
-  //     row.content.forEach((cell) => {
-  //       if (cell.columnIndex == columnIndex) {
-  //         minValue = Number(cell.content);
-  //       }
-  //     })
-  //   );
-
-  //   tempTableData.columns.map((col: tcolumn) => {
-  //     tempTableData.rows.map((row) => {
-  //       row.content.forEach((cell) => {
-  //         if (
-  //           col.columnIndex == columnIndex &&
-  //           col.columnIndex == row.content[0].columnIndex &&
-  //           Number(cell.content) < minValue
-  //         ) {
-  //           minValue = Number(cell.content);
-  //         }
-  //         if (
-  //           col.columnIndex == columnIndex &&
-  //           Number(cell.content) > maxValue
-  //         ) {
-  //           maxValue = Number(cell.content);
-  //         }
-  //       });
-  //     });
-  //   });
-  // };
-
-  // getLowestBiggestValue(2);
-  // const handleMouseHover = (e) => {
-  //   const button = e.target;
-  //   if (button) {
-  //     const icon = button.querySelector(".add") as HTMLImageElement;
-  //     if (icon) {
-  //       icon.src = addIconHover;
-  //       console.log(addIconHover);
-  //     }
-  //   }
-  // };
-  // const handleActionClick = () => {
-  //   console.log("Action button clicked");
-  // };
+  
 
   const [showNotification, setShowNotification] = useState<boolean>(false);
   const [pos, setPos] = useState<
