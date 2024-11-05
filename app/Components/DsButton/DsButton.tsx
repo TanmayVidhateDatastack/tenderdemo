@@ -16,6 +16,7 @@ interface DSButtonProps {
     | "btnDark"
     | "btnInfo";
   className?: string;
+  count?: string | "00";
   handleOnClick?: (e: React.MouseEvent<HTMLElement>) => void;
   img?: string;
   startIcon?: React.ReactElement;
@@ -32,6 +33,7 @@ const DSButton: React.FC<DSButtonProps> = ({
   iconSize = "iconSmall",
   buttonColor = "btnPrimary",
   type = "standard",
+  count = "00",
   tooltip,
   handleOnClick,
   children,
@@ -253,6 +255,44 @@ const DSButton: React.FC<DSButtonProps> = ({
             </span>
           )}
           {label || children}
+
+          {endIcon !== undefined && (
+            <span className={"icon " + styles.endIcon + " " + styles[iconSize]}>
+              {endIcon}
+            </span>
+          )}
+        </button>
+      )}
+      {type == "count" && (
+        <button
+          id={id}
+          className={
+            styles.btn +
+            " " +
+            className +
+            " " +
+            styles[buttonSize] +
+            " " +
+            styles[buttonColor]
+          }
+          title={tooltip !== undefined ? tooltip : label}
+          onClick={handleOnClick}
+          onMouseOver={handleOnHover}
+          onMouseLeave={handleMouseLeave}
+        >
+          {startIcon !== undefined && (
+            <span
+              className={"icon " + styles.startIcon + " " + styles[iconSize]}
+            >
+              {startIcon}
+            </span>
+          )}
+          {(label && (
+            <>
+              {label} <div className={styles.count}>{count}</div>
+            </>
+          )) ||
+            children}
 
           {endIcon !== undefined && (
             <span className={"icon " + styles.endIcon + " " + styles[iconSize]}>

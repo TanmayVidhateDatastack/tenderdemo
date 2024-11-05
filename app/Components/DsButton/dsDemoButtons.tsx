@@ -3,7 +3,6 @@ import Image from "next/image";
 // import { useRef, useState } from "react";
 import { ImgProps } from "next/dist/shared/lib/get-img-props";
 import DSButtonGroup from "./dsButtonGroup";
-import DSFilterButton from "./dsFilterButton";
 import DSButton from "./DsButton";
 import btnStyles from "./dsButton.module.css";
 
@@ -241,16 +240,18 @@ const DemoButtons: React.FC = () => {
       />
 
       <DSButtonGroup id="btngroup1" className={btnStyles.btngroup}>
-        <DSFilterButton
+        <DSButton
           id="button1"
+          type="count"
           className={btnStyles.btngroupcontained + " " + btnStyles.group_btn}
           label="Button 1"
           count="00"
           // handleOnClick={(e) => handleButtonClick(e, "button1")}
           tooltip="variants: btngroupcontained"
         />
-        <DSFilterButton
+        <DSButton
           id="button2"
+          type="count"
           className={btnStyles.btngroupcontained + " " + btnStyles.group_btn}
           label="Button 2"
           count="00"
@@ -258,16 +259,18 @@ const DemoButtons: React.FC = () => {
           tooltip="variants: btngroupcontained"
         />
 
-        <DSFilterButton
+        <DSButton
           id="button3"
+          type="count"
           className={btnStyles.btngroupcontained + " " + btnStyles.group_btn}
           label="Button 3"
           count="00"
           // handleOnClick={(e) => handleButtonClick(e, "button3")}
           tooltip="variants: btngroupcontained"
         />
-        <DSFilterButton
+        <DSButton
           id="button4"
+          type="count"
           className={btnStyles.btngroupcontained + " " + btnStyles.group_btn}
           label="Button 4"
           count="00"

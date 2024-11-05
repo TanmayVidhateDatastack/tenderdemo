@@ -37,8 +37,11 @@ const DSButtonGroup: React.FC<DSButtonGroupProps> = ({
     const buttonGroup = document.getElementById("btngroup1");
     if (buttonGroup) {
       const buttons = buttonGroup.querySelectorAll("button");
-      buttons?.forEach((button) => {
+      buttons?.forEach((button, index) => {
         if (button) {
+          if (index === 0) {
+            button.classList.add(styles.active);
+          }
           button.addEventListener("click", (e) =>
             handleButtonClick(e, button.id)
           );
