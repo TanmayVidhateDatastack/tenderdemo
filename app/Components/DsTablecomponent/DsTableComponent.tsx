@@ -618,7 +618,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
   return (
     <>
     <DemoLayout title="Table (DsTable)">
-      <div className="data-table">
+      <div className={styles.tableContainer}>
         {/* <div className="column-visibility">
           <RadioCheckButton
             groupName="Column visibility"
@@ -634,7 +634,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
           />
         </div>*/}
         <div className={`${styles["ds-search-input-div"]}`}>
-          <InputText
+          <TextField
             placeholder="Search data"
             id="serach-data"
             label="Search Names"
@@ -643,7 +643,6 @@ const TableComponent: React.FC<TableComponentProps> = ({
             }
           />
           </div>
-        </div>
         {/* <div className="apply-filter">
           <div className="range-filter">
             <TextField
