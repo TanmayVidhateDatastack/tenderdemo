@@ -18,13 +18,19 @@ const PopUpContext: React.FC<PopUpContextProps> = ({
     x: 0,
     y: 0,
   });
+  const [position, setPosition] = useState<{ x: number; y: number }>({
+    x: 0,
+    y: 0,
+  });
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     const buttonRect = event.currentTarget.getBoundingClientRect();
     let x = buttonRect.left;
+    let x = buttonRect.left;
     let y = buttonRect.top;
 
     if (positionProp === "top") {
+      y = buttonRect.top - buttonRect.height; // Above the button
       y = buttonRect.top - buttonRect.height; // Above the button
     } else if (positionProp === "bottom") {
       y = buttonRect.bottom + 3; // Below the button
@@ -32,6 +38,7 @@ const PopUpContext: React.FC<PopUpContextProps> = ({
       x = buttonRect.left - 68; // Left of the button
       y = buttonRect.top + buttonRect.height / 4;
     } else if (positionProp === "right") {
+      x = buttonRect.right + 5; // Right of the button
       x = buttonRect.right + 5; // Right of the button
       y = buttonRect.top + buttonRect.height / 4;
     }
@@ -53,6 +60,9 @@ const PopUpContext: React.FC<PopUpContextProps> = ({
           }}
         >
           Submit
+          {showArrow && (
+            <div className={`${styles.arrow} ${styles[positionProp]}`}></div>
+          )}
           {showArrow && (
             <div className={`${styles.arrow} ${styles[positionProp]}`}></div>
           )}
