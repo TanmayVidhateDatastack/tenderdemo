@@ -1,62 +1,77 @@
 "use client";
-import React, { useState } from "react";
 import styles from "./dscontext.module.css";
+import React from 'react';
 
-// Define type for position prop
 interface PopUpContextProps {
-  positionProp?: "top" | "bottom" | "left" | "right";
-  showArrow: boolean;
+  id: string;
+  containerId: string;
+
 }
 
-const PopUpContext: React.FC<PopUpContextProps> = ({ positionProp = "top", showArrow = false }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [position, setPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+export const displaycontext = (
+  event: React.MouseEvent<HTMLButtonElement>,
+  id: string,
+  containerId: string,
+ 
+ 
+) => {
+  event.preventDefault();
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const buttonRect = event.currentTarget.getBoundingClientRect();
-    let x = buttonRect.left;
-    let y = buttonRect.top;
+  const contextMenu = document.getElementById(id);
+  const container = document.getElementById(containerId);
 
-    if (positionProp === "top") {
-      y = buttonRect.top - buttonRect.height; // Above the button
-    } else if (positionProp === "bottom") {
-      y = buttonRect.bottom + 3; // Below the button
-    } else if (positionProp === "left") {
-      x = buttonRect.left - 68; // Left of the button
-      y = buttonRect.top + buttonRect.height / 4;
-    } else if (positionProp === "right") {
-      x = buttonRect.right + 5; // Right of the button
-      y = buttonRect.top + buttonRect.height / 4;
-    }
+  if (contextMenu?.style.display === "block") {
+    contextMenu.style.display = "none";
+    return;
+  }
 
-    setPosition({ x, y });
-    setIsVisible(!isVisible);
-  };
+  const button = event.currentTarget as HTMLButtonElement;
+  if (!contextMenu || !button ||!container) return;
+  contextMenu.style.display = "block";
 
+  const buttonRect = button.getBoundingClientRect();
+  const containerRect = container?.getBoundingClientRect();
+
+  const padx = 4;
+  const pady = 4;
+  const offset=10;
+
+
+  const w = contextMenu.offsetWidth;
+  const h = contextMenu.offsetHeight;
+  const x = buttonRect.left - containerRect.left;
+  const y = buttonRect.bottom - containerRect.top;
+  const ww = container.clientWidth;
+  const wh = container.clientHeight;
+  let fx = x;
+  let fy = y+offset;
+
+  contextMenu.style.width = `${buttonRect.width}px`;
+  contextMenu.style.height = `${buttonRect.height}px`;
+   
+  if ((y + h+offset) > (wh - pady))
+  {
+     fy = buttonRect.top - containerRect.top - h-offset;
+
+  }
+  if ((x + w) > (ww - padx)) 
+  {
+    fx = buttonRect.right - containerRect.left - w;
+   
+  }
+
+  contextMenu.style.left = `${fx}px`;
+  contextMenu.style.top = `${fy}px`;
+};
+
+const PopUpContext: React.FC<PopUpContextProps> = ({ id, containerId }) => {
   return (
-    <div className={styles.container}>
-      <button onClick={handleClick} className={styles.button}>
-        Save
-      </button>
-
-      {isVisible && (
-        <div
-          className={styles.popUp}
-          style={{
-            top: `${position.y}px`,
-            left: `${position.x}px`,
-          }}
-        >
-          Submit
-          {showArrow && (
-            <div className={`${styles.arrow} ${styles[positionProp]}`}></div>
-          )}
-        </div>
-      )}
+    <div id={containerId} className={styles.container}> 
+      <div id={id} className={styles.contextMenu}>
+      
+      </div>
     </div>
   );
 };
-
-
 
 export default PopUpContext;
