@@ -1,5 +1,5 @@
 .floatter {
-    position: fixed;
+    position: absolute;
     z-index: 1;
   }
   
@@ -93,7 +93,6 @@ border-left:8px solid var(--hold);
 
 
 .messageContainer {
-  margin-bottom: 10px;
 }
 
 .buttonContainer {

@@ -4,7 +4,7 @@ import MenuDivider from "./MenuDivider";
 import TabViewMenuItem from "./TabViewMenuItem";
 import styles from "./DsTable.module.css";
 import addIcon from "../../Icons/smallIcons/add.svg";
-import DSButton from "../dsButton/DsButton";
+import DSButton from "../dsButton/dsButton";
 
 export interface menuprops {
   columnIndex: number;
@@ -50,12 +50,6 @@ const MenuComponent: React.FC<menuprops> = ({
           startIcon={<Image src={addIcon} alt="menu" />}
           tooltip="Menu"
         />
-        {/* <IconButton
-          id="icon-button"
-          srcImg={"dotsFillIMG"}
-          title="column-menu"
-          handleOnClick={handleOnClick}
-        /> */}
       </div>
 
       {menuVisible && columnKey === columnIndex && (

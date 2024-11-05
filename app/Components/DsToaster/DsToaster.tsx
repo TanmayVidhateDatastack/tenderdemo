@@ -1,4 +1,5 @@
 "use client";
+"use client";
 import React, { useEffect, useState } from "react";
 
 import Image from "next/image";
@@ -8,7 +9,7 @@ import error from "../../Icons/mediumIcons/error.svg";
 import warning from "../../Icons/mediumIcons/info.svg";
 import normal from "../../Icons/mediumIcons/bonus.svg";
 import styles from "./DsToaster.module.css";
-import DSButton from "../dsButton/DsButton";
+import DSButton from "../dsButton/dsButton";
 
 interface ToasterProps {
   message: string;
@@ -26,8 +27,8 @@ interface ToasterProps {
 }
 const Toaster: React.FC<ToasterProps> = ({
   message,
-  type,
-  position,
+  type = "info",
+  position = "top",
   duration,
   handleClose,
 }) => {
@@ -40,9 +41,9 @@ const Toaster: React.FC<ToasterProps> = ({
         setVisible(false);
       }, duration);
 
-      return () => clearTimeout(timer);
-    }
-  }, [duration]);
+    return () => clearTimeout(timer);
+  }
+  }, [duration, handleClose]);
 
   if (!visible) return null;
 

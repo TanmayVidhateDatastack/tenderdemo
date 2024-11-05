@@ -3,11 +3,13 @@ import DsStateChange from "./dsStatusIndicator";
 import styles from "./dsstatusIndicator.module.css";
 import commentIcon from "../../Icons/smallIcons/commenticon.svg";
 import Image from "next/image";
+import DemoLayout from "@/app/ElProComponents/Demo/demoLayout";
 
 const DsDemoStatusIndocator: React.FC = () => {
   return (
     <>
-      <div className={styles.status_change}>
+      <DemoLayout title="Staus indicators (DsStatusIndicator)" className="flex-column">
+
         <DsStateChange
           className={styles.statusIndicator}
           type="user_defined"
@@ -93,7 +95,8 @@ const DsDemoStatusIndocator: React.FC = () => {
           status="InProcess"
           label="In Process"
         />
-      </div>
+      </DemoLayout>
+      
     </>
   );
 };

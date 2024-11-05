@@ -2,7 +2,7 @@
 import Image from "next/image";
 
 import React from "react";
-import styles from "./DsPane.module.css";
+import styles from "./dsPane.module.css";
 
 import CloseBtn from "../../Icons/mediumIcons/cross.svg";
 

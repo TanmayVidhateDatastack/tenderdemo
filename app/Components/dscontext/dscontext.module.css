@@ -1,8 +1,12 @@
 .container {
-
-    
-    background-color: var(--background);
-    position: relative; /* So the popup is positioned relative to this container */
+    flex:1;
+    display: flex;
+   /* justify-content: center; 
+    align-items: center;*/ 
+    height: 100%;
+    width:100%;
+    background-color:  var(--background);
+    position: relative; 
 }
   
 .button {
@@ -16,6 +20,9 @@
     height:var(--dswidth);
     width:var(--dsheight);
    /* Positioning relative to this button */
+    /* position: relative;  */
+   
+  
 }
   
 .popUp {
@@ -24,9 +31,9 @@
     border-radius: var(--dsborder-radius);
     font-size: var(--bodyText1);
     text-align: center;
-    white-space: nowrap; /* Prevent text wrapping */
-    position: fixed; /* Relative to the button */
-    z-index: 10; /* Ensure it's above other elements */
+    white-space: nowrap; /*text align in one line*/
+    position: fixed; 
+    z-index: 10;/*  ensure that pop up makes appers on the top of the other element..*/
     box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
     box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
     box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
@@ -34,14 +41,14 @@
   
 .arrow {
     position: absolute;
-  /* bottom: -5px; /* Keep it positioned just below the popup */
-   /* left: 50%; /* Center it horizontally */
-    transform: translateX(-50%); /* Shift it left by 50% of its width */
+  /* bottom: -5px; */
+   /* left: 50%;  */
+    transform: translateX(-50%); 
     width: 0;
     height: 0;
     box-shadow: rgba(252, 9, 9, 0.56) 0px 22px 70px 4px;
     box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
-    box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
+   /* box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
    /* border-left: 5px solid transparent;
     border-right: 5px solid transparent;
     border-top: 5px solid #4a5cbe; /* Color of the arrow */

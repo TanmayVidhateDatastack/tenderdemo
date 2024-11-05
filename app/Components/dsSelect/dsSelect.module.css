@@ -45,14 +45,19 @@
 
  
  .list{
-     display: block;
-     block-size: 100%;
+     /* display: block; */
+     /* block-size: 100%; */
      padding:var(--dspadding);
      justify-content: center;
      caret-color: var(--text-primary);
      box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-     border-radius: var(--dsborder-radius);
-     margin-left: 2px;
+     border-radius: 2px;
+     /* margin-left: 2px; */
+     height: min-content;
+     background: white;
+     position: absolute;
+     width: 100%;
+     z-index: 99;
  }
  
  .option{

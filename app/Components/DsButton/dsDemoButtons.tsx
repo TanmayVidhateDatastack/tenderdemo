@@ -38,6 +38,8 @@ const DemoButtons: React.FC = () => {
   };
 
   return (
+    <DemoLayout title="Button (DsButton)">
+
     <div className={btnStyles.btn_div + " " + btnStyles.flex}>
       <DSButton
         id="actionBtn"
@@ -49,7 +51,7 @@ const DemoButtons: React.FC = () => {
         tooltip="variants : btnPrimary, btnOutlined, btnMedium"
         label="New"
         handleOnClick={(e) => clickHandler(e)}
-      />
+        />
       <DSButton
         id="closeBtn"
         buttonColor="btnDark"
@@ -57,7 +59,7 @@ const DemoButtons: React.FC = () => {
         handleOnClick={(e) => clickHandler(e)}
         tooltip="variants : btnDark, btnOutlined, btnMedium"
         label="Close"
-      />
+        />
       <DSButton
         id="iconfilterBtn"
         buttonColor="btnPrimary"
@@ -66,7 +68,7 @@ const DemoButtons: React.FC = () => {
         startIcon={<Image src={filter} alt="icon" />}
         tooltip="variants : btnPrimary, btnText, btnMedium"
         label="Filter"
-      />
+        />
       <DSButton
         id="deleteBtn"
         buttonColor="btnDanger"
@@ -75,7 +77,7 @@ const DemoButtons: React.FC = () => {
         handleOnClick={(e) => clickHandler(e)}
         tooltip="variants : btnDanger, btnOutlined, btnSmall"
         label="Delete"
-      />
+        />
       <DSButton
         id="cancelBtn"
         buttonColor="btnDark"
@@ -84,7 +86,7 @@ const DemoButtons: React.FC = () => {
         handleOnClick={(e) => clickHandler(e)}
         tooltip="variants : btnDark, btnOutlined, btnSmall"
         label="Cancel"
-      />
+        />
       <DSButton
         id="loginBtn"
         buttonColor="btnInfo"
@@ -93,7 +95,7 @@ const DemoButtons: React.FC = () => {
         handleOnClick={(e) => clickHandler(e)}
         tooltip="variants : btnInfo, btnContained, btnLarge, btnAutoWidth"
         label="Login"
-      />
+        />
       <DSButton
         id="backBtn"
         buttonColor="btnSecondary"
@@ -101,7 +103,7 @@ const DemoButtons: React.FC = () => {
         handleOnClick={(e) => clickHandler(e)}
         tooltip="variants : btnSecondary, btnText, btnMedium"
         label="Back"
-      />
+        />
       <DSButton
         id="ewaybillBtn"
         buttonColor="btnPrimary"
@@ -109,7 +111,7 @@ const DemoButtons: React.FC = () => {
         handleOnClick={(e) => clickHandler(e)}
         tooltip="variants : btnPrimary, btnContained, btnMedium"
         label="E-Way Bill"
-      />
+        />
       <DSButton
         id="deleteBtn"
         buttonColor="btnWarning"
@@ -120,7 +122,7 @@ const DemoButtons: React.FC = () => {
         startIcon={<Image src={trashbtn} alt="icon" />}
         tooltip="variants : btnWarning, btnText, btnMedium"
         label="Delete"
-      />
+        />
       <DSButton
         id="deviationBtn"
         buttonColor="btnDanger"
@@ -130,7 +132,7 @@ const DemoButtons: React.FC = () => {
         endIcon={<Image src={deviation} alt="icon" />}
         tooltip="variants : btnDanger, btnContained, btnMedium"
         label="Deviation Failed "
-      />
+        />
       <DSButton
         id="filterBtn"
         type="tab"
@@ -139,7 +141,7 @@ const DemoButtons: React.FC = () => {
         handleOnClick={(e) => clickHandler(e)}
         tooltip="variants : btnPrimary, btnOutlined, btnMedium"
         label="Apply Filter"
-      />
+        />
       <DSButton
         id="invoiceBtn"
         buttonColor="btnPrimary"
@@ -148,7 +150,7 @@ const DemoButtons: React.FC = () => {
         handleOnClick={(e) => clickHandler(e)}
         tooltip="variants : btnPrimary, btnContained, btnLarge"
         label="View Invoice"
-      />
+        />
       <DSButton
         id="logoutBtn"
         buttonColor="btnPrimary"
@@ -167,7 +169,7 @@ const DemoButtons: React.FC = () => {
         startIcon={<Image src={update} alt="icon" />}
         tooltip="variants : btnPrimary, btnContained, btnMedium"
         label="Update"
-      />
+        />
       <DSButton
         id="autoWidthBtn"
         buttonColor="btnPrimary"
@@ -175,7 +177,7 @@ const DemoButtons: React.FC = () => {
         handleOnClick={(e) => clickHandler(e)}
         tooltip="variants : btnPrimary, btnContained, btnMedium, btnAutoWidth"
         label="Apply"
-      />
+        />
 
       <DSButton
         id="saveBtn"
@@ -186,7 +188,7 @@ const DemoButtons: React.FC = () => {
         tooltip="variants : btnPrimary, btnContained, btnMedium, split_btn"
         label="Save"
         spliticon={<Image src={spliticon} alt="icon" />}
-      />
+        />
 
       <DSButton
         id="toggleBtn"
@@ -207,7 +209,7 @@ const DemoButtons: React.FC = () => {
         startIcon={<Image src={upload} alt="icon" />}
         tooltip="variants : btnText, btnSmall, upload_btn"
         label="CSV File"
-      />
+        />
 
       <DSButton
         id="notificationBtn"
@@ -279,6 +281,7 @@ const DemoButtons: React.FC = () => {
         />
       </DSButtonGroup>
     </div>
+          </DemoLayout>
   );
 };
 
