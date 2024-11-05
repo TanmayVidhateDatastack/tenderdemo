@@ -5,14 +5,14 @@ export class tcolumn {
   columnHeader: string = "";
   isHidden?: boolean = false;
   sort?: string;
-  columnContentType?: string | "string";
+  columnContentType?: string;
 }
 
 export class cellData {
   columnIndex: number = 1;
   className?: string;
   content: React.ReactNode | string | number;
-  contentType?: string | number | boolean | Date;
+  contentType?: string;
 }
 
 export class trow {

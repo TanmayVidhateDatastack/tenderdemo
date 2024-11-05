@@ -616,7 +616,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
   return (
     <>
       <div className="data-table">
-        <div className="column-visibility">
+        {/* <div className="column-visibility">
           <RadioCheckButton
             groupName="columnVisibility"
             options={columns.map((col) => ({
@@ -629,8 +629,8 @@ const TableComponent: React.FC<TableComponentProps> = ({
             handleOnChange={(e) => hideShowColumn(e.currentTarget.value)}
             selectedOption={optionsArray}
           />
-        </div>
-        <div>
+        </div>*/}
+        <div className={`${styles["ds-search-input-div"]}`}>
           <InputText
             placeholder="Search data"
             id="serach-data"
@@ -640,7 +640,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
             }
           />
         </div>
-        <div className="apply-filter">
+        {/* <div className="apply-filter">
           <div className="range-filter">
             <TextField
               placeholder={"Range From "}
@@ -688,7 +688,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
           ></input>
           Gross Value To
           <DSButton label={"Apply"} handleOnClick={applyFilter}></DSButton>
-        </div>
+        </div>  */}
 
         <table
           className={`${className ? className : ""} ${styles["ds-table"]} `}
