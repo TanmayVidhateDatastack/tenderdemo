@@ -243,7 +243,7 @@ const DSButton: React.FC<DSButtonProps> = ({
             styles[buttonSize]
           }
           title={tooltip !== undefined ? tooltip : label}
-          onClick={displayFileBrowser}
+          // onClick={displayFileBrowser}
           onMouseOver={handleOnHover}
           onMouseLeave={handleMouseLeave}
         >
