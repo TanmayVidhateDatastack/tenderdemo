@@ -18,15 +18,15 @@ const PopUpContext: React.FC<PopUpContextProps> = ({
     x: 0,
     y: 0,
   });
-  const [position, setPosition] = useState<{ x: number; y: number }>({
-    x: 0,
-    y: 0,
-  });
+  // const [position, setPosition] = useState<{ x: number; y: number }>({
+  //   x: 0,
+  //   y: 0,
+  // });
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     const buttonRect = event.currentTarget.getBoundingClientRect();
     let x = buttonRect.left;
-    let x = buttonRect.left;
+    // let x = buttonRect.left;
     let y = buttonRect.top;
 
     if (positionProp === "top") {

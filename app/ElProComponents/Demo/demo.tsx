@@ -26,6 +26,8 @@ import DemoLayout from "./demoLayout";
 import DemoDeviation from "@/app/Components/DsDeviations/demoDeviation";
 import DemoUserProfile from "@/app/Components/DsUserProfile/demoUserProfile";
 import DsDemoStatusIndocator from "@/app/Components/DsStatusIndicator/dsDemoStatusIndicator";
+import TabContainer from "@/app/Components/dsTabs/TabContainer";
+import TabView from "@/app/Components/dsTabs/TabView";
 
 export default function Demo() {
   const tempTableData = {
@@ -238,12 +240,17 @@ export default function Demo() {
         }
       >
         <div className={styles.fluidContainer}>
-          <DsPane id="PaneInset" title="Toaster" type="inset" side={PaneStyles.left}>
+          <DsPane
+            id="PaneInset"
+            title="Toaster"
+            type="inset"
+            side={PaneStyles.left}
+          >
             <DemoLayout title={"Toaster (DsToaster)"}>
               <div className={styles.btn}>
                 <DSButton
                   id="actionBtn"
-                  buttonClass={styles.action_btn}
+                  className={styles.action_btn}
                   handleOnClick={() => {
                     setShowNotification(true);
                     setPos("top");
@@ -257,7 +264,7 @@ export default function Demo() {
 
                 <DSButton
                   id="actionBtn"
-                  buttonClass={styles.action_btn}
+                  className={styles.action_btn}
                   handleOnClick={() => {
                     setShowNotification(true);
                     setPos("bottom");
@@ -270,7 +277,7 @@ export default function Demo() {
                 />
                 <DSButton
                   id="actionBtn"
-                  buttonClass={styles.action_btn}
+                  className={styles.action_btn}
                   handleOnClick={() => {
                     setShowNotification(true);
                     setPos("middle");
@@ -284,7 +291,7 @@ export default function Demo() {
 
                 <DSButton
                   id="actionBtn"
-                  buttonClass={styles.action_btn}
+                  className={styles.action_btn}
                   handleOnClick={() => {
                     setShowNotification(true);
                     setPos("bottomleft");
@@ -297,7 +304,7 @@ export default function Demo() {
                 />
                 <DSButton
                   id="actionBtn"
-                  buttonClass={styles.action_btn}
+                  className={styles.action_btn}
                   handleOnClick={() => {
                     setShowNotification(true);
                     setPos("bottomright");
@@ -311,7 +318,7 @@ export default function Demo() {
 
                 <DSButton
                   id="actionBtn"
-                  buttonClass={styles.action_btn}
+                  className={styles.action_btn}
                   handleOnClick={() => {
                     setShowNotification(true);
                     setPos("topright");
@@ -324,7 +331,7 @@ export default function Demo() {
                 />
                 <DSButton
                   id="actionBtn"
-                  buttonClass={styles.action_btn}
+                  className={styles.action_btn}
                   handleOnClick={() => {
                     setShowNotification(true);
                     setPos("topleft");
@@ -339,19 +346,37 @@ export default function Demo() {
             </DemoLayout>
           </DsPane>
           <div className={styles.container + " " + styles["flex-column"]}>
-            <DemoButtons />
-            <DemoContext></DemoContext>
-            <DemoPane></DemoPane>
-            <DemoSelect></DemoSelect>
-            <DemoTextField />
-            <DemoDeviation></DemoDeviation>
-            <DemoUserProfile></DemoUserProfile>
-            <DsTableComponent
-              className={tempTableData.className}
-              id={tempTableData.id}
-              columns={tempTableData.columns}
-              rows={tempTableData.rows}
-            ></DsTableComponent>
+            <TabContainer selectedTabId={"1"} tabs={[{tabId:"1",tabName:"Button"},{tabId:"2",tabName:"Context"},{tabId:"3",tabName:"Panel"},{tabId:"4",tabName:"Dropdown"},{tabId:"5",tabName:"Text Field"},{tabId:"6",tabName:"Deviation"},{tabId:"7",tabName:"User Profile"},{tabId:"8",tabName:"Table"}]}>
+              <TabView tabId={"1"}>
+                <DemoButtons />
+              </TabView>
+              <TabView tabId={"2"}>
+                <DemoContext></DemoContext>
+              </TabView>
+              <TabView tabId={"3"}>
+                <DemoPane></DemoPane>
+              </TabView>
+              <TabView tabId={"4"}>
+                <DemoSelect></DemoSelect>
+              </TabView>
+              <TabView tabId={"5"}>
+                <DemoTextField />
+              </TabView>
+              <TabView tabId={"6"}>
+                <DemoDeviation></DemoDeviation>
+              </TabView>
+              <TabView tabId={"7"}>
+                <DemoUserProfile></DemoUserProfile>
+              </TabView>
+              <TabView tabId={"8"}>
+                <DsTableComponent
+                  className={tempTableData.className}
+                  id={tempTableData.id}
+                  columns={tempTableData.columns}
+                  rows={tempTableData.rows}
+                ></DsTableComponent>
+              </TabView>
+            </TabContainer>
           </div>
         </div>
       </Application>
@@ -362,7 +387,7 @@ export default function Demo() {
         <div className={buttonStyles.btn}>
           <DSButton
             id="actionBtn"
-            buttonClass={buttonStyles.action_btn}
+            className={buttonStyles.action_btn}
             // handleOnHover={handleMouseHover}
             // startIcon={<Image className="add" src={addIcon} alt="Add Icon" />}
             label="New"

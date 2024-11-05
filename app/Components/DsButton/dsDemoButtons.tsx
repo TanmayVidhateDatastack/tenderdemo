@@ -3,7 +3,7 @@ import Image from "next/image";
 // import { useRef, useState } from "react";
 import { ImgProps } from "next/dist/shared/lib/get-img-props";
 import DSButtonGroup from "./dsButtonGroup";
-import DSButton from "./DsButton";
+import DSButton from "./dsButton";
 import btnStyles from "./dsButton.module.css";
 
 import addIcon from "../../Icons/smallIcons/add.svg";
@@ -21,6 +21,7 @@ import leftarrow from "../../Icons/mediumIcons/grayleftarrow.svg";
 import darkleftarrow from "../../Icons/mediumIcons/darkleftarrow.svg";
 import upload from "../../Icons/smallIcons/uploadicon.svg";
 import { useState } from "react";
+import DemoLayout from "@/app/ElProComponents/Demo/demoLayout";
 
 const DemoButtons: React.FC = () => {
   const [toggled, setToggled] = useState(false);

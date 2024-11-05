@@ -34,39 +34,32 @@ const DSButtonGroup: React.FC<DSButtonGroupProps> = ({
   handleOnHover,
 }) => {
   useEffect(() => {
-    const buttonGroup = document.getElementById("btngroup1");
-    if (buttonGroup) {
-      const buttons = buttonGroup.querySelectorAll("button");
-      buttons?.forEach((button, index) => {
-        if (button) {
-          if (index === 0) {
-            button.classList.add(styles.active);
+    if (id) {
+      const buttonGroup = document.getElementById(id);
+      if (buttonGroup) {
+        const buttons = buttonGroup.querySelectorAll("button");
+        buttons?.forEach((button, index) => {
+          if (button) {
+            if (index === 0) {
+              button.classList.add(styles.active);
+            }
+            button.addEventListener("click", (e) => {
+              buttons?.forEach((button) => {
+                if (button) {
+                  if (button.classList.contains(styles.active)) {
+                    button.classList.remove(styles.active);
+                  }
+                }
+              });
+
+              (e.target as HTMLElement).classList.add(styles.active);
+            });
           }
-          button.addEventListener("click", (e) =>
-            handleButtonClick(e, button.id)
-          );
-        }
-      });
+        });
+      }
     }
   }, []);
-  const handleButtonClick = (e: React.MouseEvent<HTMLElement>, id: string) => {
-    const buttonGroup = document.getElementById("btngroup1");
-    if (buttonGroup) {
-      const buttons = buttonGroup.querySelectorAll("button");
-      buttons?.forEach((button) => {
-        if (button) {
-          if (button.classList.contains(styles.active)) {
-            button.classList.remove(styles.active);
-          }
-        }
-      });
-    }
-
-    const clickedButton = document.getElementById(id);
-    if (clickedButton) {
-      clickedButton.classList.add(styles.active);
-    }
-  };
+  
   return (
     <div
       className={styles.flex + " " + className}
