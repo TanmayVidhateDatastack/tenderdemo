@@ -238,7 +238,12 @@ export default function Demo() {
         }
       >
         <div className={styles.fluidContainer}>
-          <DsPane id="PaneInset" title="Toaster" type="inset" side={PaneStyles.left}>
+          <DsPane
+            id="PaneInset"
+            title="Toaster"
+            type="inset"
+            side={PaneStyles.left}
+          >
             <DemoLayout title={"Toaster (DsToaster)"}>
               <div className={styles.btn}>
                 <DSButton
