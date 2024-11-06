@@ -7,11 +7,11 @@ interface ContextMenuProps {
   containerId: string;
   position?: "vertical" | "horizontal";
   alignment?: "right" | "left" | "center";
-  content?: string;s
+  content?: string;
 }
 
 export const displaycontext = (
-  event: React.MouseEvent<HTMLButtonElement>,
+  event: React.MouseEvent<HTMLElement>,
   id: string,
   containerId: string,
   position: "vertical" | "horizontal" = "vertical",
@@ -24,7 +24,7 @@ export const displaycontext = (
 
   
 
-  const button = event.currentTarget as HTMLButtonElement;
+  const button = event.currentTarget as HTMLElement;
   if (!contextMenu || !button || !container) return;
   if (!contextMenu || !button || !container) return;
 
@@ -94,7 +94,7 @@ export const closecontext = (
 const ContextMenu: React.FC<ContextMenuProps> = ({
   id,
   containerId,
-  content,
+  content
 
 }) => {
   return (
