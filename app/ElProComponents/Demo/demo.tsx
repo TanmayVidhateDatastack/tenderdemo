@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DSButton from "../../Components/dsButton/dsButton";
 import styles from "../../page.module.css";
 import buttonStyles from "../../Components/dsButton/dsButton.module.css";
@@ -27,8 +27,11 @@ import DemoContext from "@/app/Components/dscontext/dsDemoContext";
 import DemoPane from "@/app/Components/dsPane/dsDemoPane";
 import DemoTextField from "@/app/Components/DsTextField/dsDemoTextField";
 import DemoLayout from "./demoLayout";
+import DataList from "@/app/Components/dsDatalist/dsDatalist";
+import SpotlightSearch from "@/app/Components/dsSpotlightSearch/dsSpotlightSearch";
 
 export default function Demo() {
+
   const tempTableData = {
     className: "sample-table",
     id: "table-1",
@@ -207,6 +210,47 @@ export default function Demo() {
   // const handleActionClick = () => {
   //   console.log("Action button clicked");
   // };
+  
+  
+  // const data: string[] = [
+  //   'Document 1',
+  //   'Spreadsheet 1',
+  //   'Presentation 1',
+  //   'Report 2023',
+  //   'Meeting Notes',
+  // ];
+
+
+  // const [isSearchOpen, setSearchOpen] = useState<boolean>(false);
+
+  // useEffect(() => {
+  //   const handleKeyDown = (event: KeyboardEvent) =>
+  //      {
+  //     if (event.ctrlKey && event.key === 'k') {
+  //       event.preventDefault();
+  //       setSearchOpen((prev) => !prev);
+  //     }
+  //   };
+
+  //   window.addEventListener('keydown', handleKeyDown);
+
+  //   return () => {
+  //     window.removeEventListener('keydown', handleKeyDown);
+  //   };
+  // }, []);
+
+
+  const data: string[] = [
+    'Document',
+    'Spreadsheet',
+    'Presentation',
+    'Report',
+    'Meeting Notes',
+  ];
+
+
+
+
 
   const [showNotification, setShowNotification] = useState<boolean>(false);
   const [pos, setPos] = useState<
@@ -245,10 +289,37 @@ export default function Demo() {
               label="label"
               disable={false}
               // onClick={false}
-              type="multiline"
+              type="singleline"
               icon="📋"
               iconEnd="📋"
             />
+
+
+
+{/* 
+      <button onClick={() => setSearchOpen(true)}>
+        Open Search
+      </button>
+      {isSearchOpen && (
+        <SpotlightSearch data={data} onClose={() => setSearchOpen(false)} />
+      )} */}
+
+
+<DataList
+              placeholder="Search"
+              label="label"
+              inputId="userSelect"
+              dataListId="user-list"
+              disable={false}
+              options={[
+                { attributes: { 'key': 'key1' }, id: 'emp1', value: 'emp1' },
+                { attributes: { 'key': 'key2' }, id: 'emp2', value: 'emp2' },
+                { attributes: { 'key': 'key3' }, id: 'emp3', value: 'emp3' },
+                { attributes: { 'key': 'key4' }, id: 'emp4', value: 'emp4' },
+                { attributes: { 'key': 'key5' }, id: 'emp5', value: 'emp5' },
+              ]} className={""} ></DataList>
+
+
             <DemoLayout title={"Toaster (DsToaster)"}>
               <div className={styles.btn}>
                 <DSButton
@@ -389,7 +460,8 @@ export default function Demo() {
           />
         </div>
       </DsPane>
-      {showNotification && (
+   
+    {showNotification && (
         <Toaster
           handleClose={() => setShowNotification(false)}
           type={notiType}
@@ -401,3 +473,12 @@ export default function Demo() {
     </>
   );
 }
+
+
+
+
+
+
+
+
+

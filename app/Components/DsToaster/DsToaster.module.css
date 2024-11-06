@@ -3,6 +3,42 @@
     z-index: 1;
   }
   
+  .toast {
+    padding: 16px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+background: var(--white) 0% 0% no-repeat padding-box;
+background: #FFFFFF 0% 0% no-repeat padding-box;
+box-shadow: 8px 8px 16px #00000033;
+border-radius: 4px;
+opacity: 1;
+  }
+  .toastImg 
+{
+    margin-right:0.5rem;
+}
+
+
+
+.messageContainer {
+  margin-bottom: 10px;
+}
+
+.buttonContainer {
+  align-content: baseline;
+  padding-left: 24px;
+  align-self: left; 
+  padding-top: 90px;
+
+}
+
+
+.btn{
+  background-color:gray ;
+}
   
   .top {
     top: 1rem;
@@ -27,7 +63,6 @@
     transform: translate(-50%, -50%);
   }
   
-  
   .bottom {
     bottom: 1rem;
     left: 50%;
@@ -46,24 +81,6 @@
   
   }
 
-  .toast {
-    padding: 16px;
-    border-radius: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-background: var(--white) 0% 0% no-repeat padding-box;
-background: #FFFFFF 0% 0% no-repeat padding-box;
-box-shadow: 8px 8px 16px #00000033;
-border-radius: 4px;
-opacity: 1;
-  }
-
-.toastImg 
-{
-    margin-right:0.5rem;
-}
 .floatter.success
 { 
 border-left:  8px solid #28A745  ;
@@ -79,9 +96,7 @@ border-left:8px solid #41428E;
 .floatter.error
 { 
 border-left:8px solid #D20C0C;
-
-} 
-
+}
 .floatter.bonus
 { 
 border-left:8px solid #FD8C00;
@@ -90,18 +105,4 @@ border-left:8px solid #FD8C00;
 
 
 
-.messageContainer {
-  margin-bottom: 10px;
-}
 
-.buttonContainer {
-  align-content: baseline;
-  padding-left: 24px;
-  align-self: left; 
-  padding-top: 90px;
-
-}
-
-.btn{
-  background-color:#41428E ;
-}

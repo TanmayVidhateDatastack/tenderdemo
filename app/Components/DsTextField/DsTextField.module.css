@@ -2,37 +2,6 @@
   margin:10px 10px;
 
 } 
-.input-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-width:100%  }
-.custom-fieldset.disabled{
-  border-color: gray;
-}
-.custom-fieldset:not(.disabled):hover{
-  border-color: black;
-}
-.input::placeholder {
-  position: absolute;
-  left: 70px;
-  align-content: center;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--blue-600);
-  font-size: 16px;
-  transition: all 0.3s ease;
-   background-color: var(--background);
-  padding: 0 5px;
-  align-content: center;
-}
-
-.input:focus::placeholder {
-  color: transparent;
-  align-items: center;
-}
-
 
 .custom-fieldset {
   flex:1;
@@ -49,19 +18,78 @@ width:100%  }
   /* background-color: transparent; */
   /* background-color: var(--background); */
 }
+
+.custom-fieldset:not(.disabled):hover{
+  border-color: black;
+}
+.custom-fieldset.focused {
+  border-color: var(--blue-600);
+}
+.custom-fieldset.disabled{
+  border-color: gray;
+}
+/* Legend as the floating label */
+.floating-label {
+  position: absolute;
+  
+
+  left: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--blue-600);
+  font-size: 16px;
+  transition: all 0.3s ease;
+  background-color: var(--background);
+  padding: 0 5px;
+}
+
+.shrink {
+  top: -10px;
+  font-size: 12px;
+}
+
 .iconwrapper{
   flex:1;
   width:fit-content;
 
 }
+.icon_left
+{
+  margin-right:  0.5rem;
+}
+
+.input-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+width:100%  }
+
+
 .input-wrapper{
   flex:1;
   height:fit-content;
   width:fit-content;
 }
-.custom-fieldset.focused {
-  border-color: var(--blue-600);
+
+.custom-textarea {
+  flex:1;
+  display:flex;
+  align-items: flex-end;
+  font-size: 16px;
+  border: none;
+  background-color: transparent;
+  outline: none;
+  position: relative;
+  z-index: 1;
+  resize:vertical;
+  overflow:hidden;
+  width:100%;  
+  color:black;
 }
+
+
+
 .custom-input {
   flex:1;
   display:flex;
@@ -81,49 +109,6 @@ width:100%  }
   width:100%; */
 
 }
-.custom-textarea {
-  flex:1;
-  display:flex;
-  align-items: flex-end;
-  font-size: 16px;
-  border: none;
-  background-color: transparent;
-  outline: none;
-  position: relative;
-  z-index: 1;
-  resize:vertical;
-  overflow:hidden;
-  width:100%;  
-  color:black;
-}
-
-
-
-/* Legend as the floating label */
-.floating-label {
-  position: absolute;
-  
-
-  left: 30px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--blue-600);
-  font-size: 16px;
-  transition: all 0.3s ease;
-  background-color: var(--background);
-  padding: 0 5px;
-}
-
-.custom-fieldset.focused .floating-label,
-.custom-input:not(:placeholder-shown) + .floating-label
-.custom-input:valid + .floating-label {
- top: 0px;
-font-size: 12px;
-}
-.shrink {
-  top: -10px;
-  font-size: 12px;
-}
 
 
 .icon_left,.icon_right {
@@ -133,14 +118,31 @@ font-size: 12px;
   display: flex;
   pointer-events: none;    /* Prevent icon from blocking clicks */
 }
-.icon_left
-{
-  margin-right:  0.5rem;
-}
+
 .icon_right
 {
   margin-left:  0.5rem;
 }
+
+.input::placeholder {
+  position: absolute;
+  left: 70px;
+  align-content: center;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--blue-600);
+  font-size: 16px;
+  transition: all 0.3s ease;
+   background-color: var(--background);
+  padding: 0 5px;
+  align-content: center;
+}
+
+.input:focus::placeholder {
+  color: transparent;
+  align-items: center;
+}
+
 
 .custom-input[type="date"] {
   position: relative;
@@ -166,3 +168,16 @@ font-size: 12px;
 .custom-input[type="date"]:valid::before {
   content: ""; /* Remove placeholder when a valid date is selected */
 }
+
+
+
+
+.custom-fieldset.focused .floating-label,
+.custom-input:not(:placeholder-shown) + .floating-label
+.custom-input:valid + .floating-label {
+ top: 0px;
+font-size: 12px;
+}
+
+
+
