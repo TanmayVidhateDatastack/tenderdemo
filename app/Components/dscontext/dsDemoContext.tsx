@@ -1,6 +1,8 @@
+"use client";
 import DSButton from "../dsButton/dsButton";
 import ContextMenu, { closecontext, displaycontext } from "./dscontext";
 import DemoLayout from "@/app/ElProComponents/Demo/demoLayout";
+import styles from "./dscontext.module.css";
 export default function DemoContext() {
   return (
     <DemoLayout title="Context holder (DsContext)">
@@ -10,6 +12,8 @@ export default function DemoContext() {
         alignment="center"
         position="vertical"
         content="Vertical Center"
+
+        showArrow={true} 
       />
       <ContextMenu
         id={"contextMenuId2"}
@@ -17,6 +21,7 @@ export default function DemoContext() {
         alignment="right"
         position="vertical"
         content=" vertical Right"
+        showArrow={true} 
       />
       <ContextMenu
         id={"contextMenuId3"}
@@ -24,6 +29,7 @@ export default function DemoContext() {
         alignment="left"
         position="vertical"
         content="vertical left"
+        showArrow={true} 
       />
       <ContextMenu
         id={"contextMenuId4"}
@@ -31,11 +37,13 @@ export default function DemoContext() {
         alignment="center"
         position="horizontal"
         content="horizontal center"
-      />
-      <DSButton handleOnHover={(e)=>displaycontext(e,"contextMenuId1","containerId1","vertical","center")} handleMouseLeave={()=>closecontext("contextMenuId1")}>Context1</DSButton>
+        showArrow={true} 
+      /><div className={styles.demobtns}>
+      <DSButton  handleOnHover={(e)=>displaycontext(e,"contextMenuId1","containerId1","vertical","center")} handleMouseLeave={()=>closecontext("contextMenuId1")}>Context1</DSButton>
       <DSButton handleOnHover={(e)=>displaycontext(e,"contextMenuId2","containerId2","vertical","right")} handleMouseLeave={()=>closecontext("contextMenuId2")}>Context2</DSButton>
       <DSButton handleOnHover={(e)=>displaycontext(e,"contextMenuId3","containerId3","vertical","left")} handleMouseLeave={()=>closecontext("contextMenuId3")}>Context3</DSButton>
       <DSButton handleOnHover={(e)=>displaycontext(e,"contextMenuId4","containerId4","horizontal","center")} handleMouseLeave={()=>closecontext("contextMenuId4")}>Context4</DSButton>
+      </div>
     </DemoLayout>
     
   );

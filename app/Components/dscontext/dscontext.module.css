@@ -41,13 +41,15 @@
     border-right: 5px solid transparent;
     border-top: 5px solid #4a5cbe; /* Color of the arrow */
 }
+
+  
 .top
 {
     bottom: -5px; /* Keep it positioned just below the popup */
     left: 50%; /* Center it horizontally */
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
-    border-top: 5px solid  var(--background); /* Color of the arrow */
+    border-top: 5px solid  var(--dark); /* Color of the arrow */
 
 }
 
@@ -57,8 +59,37 @@
     left: 50%;
     border-left: 5px solid transparent; /* Left border for the triangle */
     border-right: 5px solid transparent; /* Right border for the triangle */
-    border-bottom: 5px solid var(--background);
+    border-bottom: 5px solid var(--dark);
 }
+.right
+{  
+    left: -6px; /* Positions it just above the popup */
+    top: 50%; /* Centers the arrow vertically relative to the popup */
+    border-top: 10px solid transparent; /* Creates the top side of the triangle */
+    border-bottom: 10px solid transparent; /* Creates the bottom side of the triangle */
+    border-right: 10px solid var(--dark);
+    transform: translateY(-50%);
+}
+ .left
+ {
+    right: -4px; /* Positions it just above the popup */
+    top: 50%; /* Centers the arrow vertically relative to the popup */
+    border-top: 5px solid transparent; /* Creates the top side of the triangle */
+    border-bottom: 5px solid transparent; /* Creates the bottom side of the triangle */
+    border-left: 5px solid var(--dark);
+    transform: translateY(-50%);
+ }
+ .demobtns:first-child
+ {
+    
+   margin-top:100px;
+   margin-bottom:100px;
+   justify-content: left;
+ }
+ .demobtns:first-child
+ {
+    display:flex;
+ }
 
 
 
