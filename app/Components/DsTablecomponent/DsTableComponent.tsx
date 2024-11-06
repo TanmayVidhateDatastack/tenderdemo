@@ -1,6 +1,5 @@
 "use client";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import RadioCheckButton from "./RadioCheckButton";
 import InputText from "./Input_component";
 import { convertToDate, parseFormattedNumber, tcolumn, trow } from "./types";
 import TheaderComponent from "./DsTheaderComponent";
@@ -11,9 +10,9 @@ import TfooterComponent from "./DsTfooterComponent";
 import TdComponent from "./DsTdComponent";
 import SortComponent from "./sortComponent";
 import MenuComponent from "./DsMenuComponent";
-import DSButton from "../dsButton/DsButton";
-import TextField from "../DsTextField/DsTextField";
 import styles from "./DsTable.module.css";
+import AdvancedFilterComponent from "./AdvancedFilterComponent";
+import RadioCheckButton from "./RadioCheckButton";
 
 // Define the component props
 interface TableComponentProps {
@@ -616,7 +615,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
   return (
     <>
       <div className="data-table">
-        {/* <div className="column-visibility">
+        <div className="column-visibility">
           <RadioCheckButton
             groupName="columnVisibility"
             options={columns.map((col) => ({
@@ -629,7 +628,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
             handleOnChange={(e) => hideShowColumn(e.currentTarget.value)}
             selectedOption={optionsArray}
           />
-        </div>*/}
+        </div>
         <div className={`${styles["ds-search-input-div"]}`}>
           <InputText
             placeholder="Search data"
@@ -640,56 +639,18 @@ const TableComponent: React.FC<TableComponentProps> = ({
             }
           />
         </div>
-        {/* <div className="apply-filter">
-          <div className="range-filter">
-            <TextField
-              placeholder={"Range From "}
-              type={"singleline"}
-              handleInputChange={setRangeFromValue}
-              inputType="number"
-              label={"Order ID From"}
-              disable={false}
-            ></TextField>
-            <TextField
-              placeholder={"Range To "}
-              type={"singleline"}
-              handleInputChange={setRangeToValue}
-              inputType="number"
-              label={"Order ID To"}
-              disable={false}
-            ></TextField>
-          </div>
-          <div className="date-filter">
-            <TextField
-              placeholder={"Date From "}
-              type={"singleline"}
-              handleInputChange={setDateFromValue}
-              inputType="date"
-              label={"date from"}
-              disable={false}
-            ></TextField>
-            <TextField
-              placeholder={"Date To "}
-              type={"singleline"}
-              handleInputChange={setDateToValue}
-              inputType="date"
-              label={"date to"}
-              disable={false}
-            ></TextField>
-          </div>
-          Gross Value From
-          <input
-            type="range"
-            min={minValue.current}
-            max={maxValue.current}
-            value={rangeValue}
-            className="range-input"
-            onChange={setGrossRangeValue}
-          ></input>
-          Gross Value To
-          <DSButton label={"Apply"} handleOnClick={applyFilter}></DSButton>
-        </div>  */}
 
+        <AdvancedFilterComponent
+          setRangeFromValue={setRangeFromValue}
+          setRangeToValue={setRangeToValue}
+          setDateFromValue={setDateFromValue}
+          setDateToValue={setDateToValue}
+          setGrossRangeValue={setGrossRangeValue}
+          applyFilter={applyFilter}
+          minValue={minValue.current}
+          maxValue={maxValue.current}
+          rangeValue={rangeValue}
+        ></AdvancedFilterComponent>
         <table
           className={`${className ? className : ""} ${styles["ds-table"]} `}
           id={id}

@@ -79,7 +79,7 @@ export default function Demo() {
           {
             columnIndex: 1,
             className: "cell",
-            content: "24/09/2024",
+            content: "24/09/2022",
             contentType: "date",
           },
           {
