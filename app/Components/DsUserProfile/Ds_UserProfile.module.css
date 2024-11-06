@@ -1,60 +1,60 @@
 .UserProfile{
-  width: 300px;
-  background-color: whitesmoke;
-  }
-  .UserDetailed{
-      
-      margin-left: 70px;
-      margin-top: 5px;
-      padding: 5px;  
-  
-  }
-  .UserName{
-      font-size: 15px;
-      margin-bottom: 5px;
-  }
-  .UserId{
-      margin-bottom: 5px;
-      font-size: 12px;
-  
-  }
-  .UserEmail{
-      margin-bottom: 5px;
-      font-size: 12px;
-  }
-  
-  .CompanyDetails{
-      display: flex;
-      /* margin-top: 5px; */
-      justify-content: space-around;
-      padding: 9px;
-      font-size: 14px;
-  
-      
-  }
-  .Buttons{
-      display: flex;
-      justify-content: space-between;
-      margin: 10px;
-      height: 40px;
-      
-  }
-  .SettingBtn{
-      padding: 5px;
-      border: none;
-      font-size: 14px;
-  }
-  .LogoutBtn{
-      border-color: #6464f7;
-      border-radius: 5px;
-      color: #6464f7;
-      padding: 5px;
-      font-size: 14px;
-  }
-  .LogoutBtn:hover{
-      background-color: rgb(30, 30, 253);
-  }
-  .hr {
-      width: 90%;
-      margin: auto; 
-  }
+width: fit-content;
+background-color: whitesmoke;
+}
+.UserDetailed{
+    
+    margin-left: 70px;
+    margin-top: 5px;
+    padding: 5px;  
+
+}
+.UserName{
+    font-size: 15px;
+    margin-bottom: 5px;
+}
+.UserId{
+    margin-bottom: 5px;
+    font-size: 12px;
+
+}
+.UserEmail{
+    margin-bottom: 5px;
+    font-size: 12px;
+}
+
+.CompanyDetails{
+    display: flex;
+    /* margin-top: 5px; */
+    justify-content: space-around;
+    padding: 9px;
+    font-size: 14px;
+
+    
+}
+.Buttons{
+    display: flex;
+    justify-content: space-between;
+    margin: 10px;
+    height: 40px;
+    
+}
+.SettingBtn{
+    padding: 5px;
+    border: none;
+    font-size: 14px;
+}
+.LogoutBtn{
+    border-color: #6464f7;
+    border-radius: 5px;
+    color: #6464f7;
+    padding: 5px;
+    font-size: 14px;
+}
+.LogoutBtn:hover{
+    background-color: rgb(30, 30, 253);
+}
+.hr {
+    width: 90%;
+    margin: auto; 
+}

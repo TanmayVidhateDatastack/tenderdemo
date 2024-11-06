@@ -2,11 +2,17 @@
 import React from "react";
 import styles from "./DsDeviations.module.css";
 
-const Ds_Deviations = ({ deviation }) => {
+export interface DeviationProps{
+  Title:string;
+    Reasons:string[];
+    status:string;
+    Actions:React.ReactNode[]
+}
+const Ds_Deviations:React.FC<DeviationProps> = (deviation) => {
   return (
 
     <div className={styles.Deviation}>
-
+     
         
       <div className={styles.title}><b>{deviation.Title}</b></div>
       

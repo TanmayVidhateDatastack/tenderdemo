@@ -1,5 +1,84 @@
-.Summarycount{
-    height: 200px;
-    width: 100px;
-    background-color: whitesmoke;
+.scount{
+    height: 260px;
+    width: 190px;
+    background-color:var(--background);
+    border-radius: 4px; 
+    color: var(--bodytext);
 }
+.title{
+  font-size: 11px;
+  display: flex;
+  justify-content: space-between;
+  margin: 9px;
+  color: var(--bodytext);
+  margin-bottom: 18px;
+}
+.items{
+    font-size: 11px;
+    display: flex;
+    justify-content: space-between; 
+    margin-bottom: 13px;
+}
+.values{
+    margin-right: 10px;
+    
+}
+.summaryVariation{
+    height: 260px;
+    width: 190px;
+    background-color:var(--background);
+    border-radius: 4px; 
+    color: var(--bodytext);
+}
+
+
+.statusIndicator {
+    position: relative;
+    padding-left: 20px; 
+  }
+  
+  .statusIndicator::before {
+    content: '';
+    position: absolute;
+    left: 9px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;         
+    height: 8px;       
+    background-color: #B0B0B0;
+    border-radius: 50%; 
+  }
+
+  .Draft::before{
+    background-color: var(--draft);
+  }
+
+  .Hold::before{
+    background-color: var(--hold);
+  }
+
+  .Open::before{
+    background-color: var(--open);
+  }
+  .Approved::before{
+    background-color: var(--approved);
+  }
+  .Cancelled::before{
+    background-color: var(--cancelled);
+  }
+  .Ready_to_Dispatch::before{
+    background-color: var(--dispatch);
+  }
+  
+  .Rejected::before{
+    background-color: var(--rejected);
+  }
+  .Deviation_Pending::before{
+    background-color: var(--deviationpending);
+  }
+  .Submitted::before{
+    background-color: var(--submitted);
+  }
+
+
+  

@@ -19,7 +19,6 @@ const Ds_UserProfile:React.FC<userprops>=({ user,onProfileClick }) => {
   return ( 
 
 
-
    <div className={styles.UserProfile} onClick={onProfileClick}>
       
       <div className="profileImage">

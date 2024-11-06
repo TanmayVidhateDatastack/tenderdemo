@@ -10,33 +10,26 @@
 import { useState } from "react";
 import Ds_UserProfile from "./DsUserProfile";
 import Ds_Usershort from "./DsUsershort";
-
+import DemoLayout from "@/app/ElProComponents/Demo/demoLayout";
 
 export default function DemoUserProfile() {
-
-
   const user = {
-    name: 'Abhishek Kumar',
-    email: 'abhishek.kumar@Ipca.com',
-    Id: '5212',
-    Company: 'IPCA Labs',
-    Department: 'Formulation',
-    Location: 'Pune'
-    
+    name: "Abhishek Kumar",
+    email: "abhishek.kumar@Ipca.com",
+    Id: "5212",
+    Company: "IPCA Labs",
+    Department: "Formulation",
+    Location: "Pune",
   };
-  const [isVisible,setIsVisible]=useState<boolean>(false);
-const toggleValue=()=>{
-setIsVisible(!isVisible);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const toggleValue = () => {
+    setIsVisible(!isVisible);
   };
 
   return (
-    <div className="Ds_UserProfile">
-      
-<Ds_Usershort onProfileClick={toggleValue}  user={user}></Ds_Usershort>
-      {isVisible &&  (
-      <Ds_UserProfile user={user} onProfileClick={toggleValue}/>
-      )}
-    </div>
+    <DemoLayout title="User Card (DsUserProfile)">
+      <Ds_Usershort onProfileClick={toggleValue} user={user}></Ds_Usershort>
+      {isVisible && <Ds_UserProfile user={user} onProfileClick={toggleValue} />}
+    </DemoLayout>
   );
-};
-
+}

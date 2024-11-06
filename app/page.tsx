@@ -19,15 +19,17 @@ import DemoUserProfile from "./Components/DsUserProfile/demoUserProfile";
 
 
 export default function Home() {
+  
 
-
- 
   return (
     <>
-    
+    <DemoSummaryCount></DemoSummaryCount>
     <DemoDeviation></DemoDeviation>
-    <DemoUserProfile></DemoUserProfile> 
+    <DemoUserProfile></DemoUserProfile>
     </>
-
   );
 };
+
+
+
+

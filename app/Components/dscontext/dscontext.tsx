@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import styles from "./dscontext.module.css";
+import DSButton from "../dsButton/dsButton";
 
 // Define type for position prop
 interface PopUpContextProps {
@@ -12,7 +13,7 @@ const PopUpContext: React.FC<PopUpContextProps> = ({ positionProp = "top", showA
   const [isVisible, setIsVisible] = useState(false);
   const [position, setPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     const buttonRect = event.currentTarget.getBoundingClientRect();
     let x = buttonRect.left;
     let y = buttonRect.top;
@@ -34,9 +35,9 @@ const PopUpContext: React.FC<PopUpContextProps> = ({ positionProp = "top", showA
   };
 
   return (<>
-      <button onClick={handleClick} className={styles.button}>
+      <DSButton handleOnClick={handleClick} >
         Save
-      </button>
+      </DSButton>
 
       {isVisible && (
         <div

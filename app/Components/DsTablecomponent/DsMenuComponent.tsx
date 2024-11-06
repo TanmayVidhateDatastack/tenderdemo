@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { useState } from "react";
-import IconButton from "./IconButton";
 import MenuDivider from "./MenuDivider";
 import TabViewMenuItem from "./TabViewMenuItem";
 import styles from "./DsTable.module.css";

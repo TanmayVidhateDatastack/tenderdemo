@@ -2,10 +2,15 @@
 import React from "react";
 import styles from "./DsDeviations.module.css";
 
-const Ds_DeviationVariation = ({ deviationVariation }) => {
+export interface DeviationVariationProps{
+    Title:string;
+    Reasons:string[];
+    status:string
+}
+const Ds_DeviationVariation:React.FC<DeviationVariationProps> = (deviationVariation) => {
   return (
 
-    <div className={styles.variation}>
+    <div className={styles.vari}>
 
         
       <div className={styles.title}><b>{deviationVariation?.Title}</b></div>
@@ -18,12 +23,9 @@ const Ds_DeviationVariation = ({ deviationVariation }) => {
       </ul>  
      </div>
      
-        <div className={styles.Statusvariation}>{deviationVariation.status}</div>
- 
-         
+        <div className={styles.Statusvariation}>{deviationVariation.status}</div>   
 
     </div>
-
     
   );
 };

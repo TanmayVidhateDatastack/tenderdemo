@@ -7,31 +7,26 @@
 // import DsPane from "./Components/DsPane/DsPane";
 // import PaneOpenButton from "./Components/DsPane/PaneOpenButton";
 "use client";
-import Ds_DeviationsVariation from "./DsDeviations";
+import DemoLayout from "@/app/ElProComponents/Demo/demoLayout";
 // import { useState } from "react";
 // import Ds_UserProfile from "./Components/DsUserProfile/DsUserProfile";
 // import Ds_Usershort from "./Components/DsUserProfile/DsUsershort";
 // import Ds_UserProfile from "./Components/DsUserProfile/DsUserProfile";
 
-import Ds_Deviations from "./DsDeviations";
-import Ds_DeviationVariation from "./DsDeviationVariation";
+import Ds_Deviations, { DeviationProps } from "./DsDeviations";
+import Ds_DeviationVariation,{DeviationVariationProps} from "./DsDeviationVariation";
 
 export default function DemoDeviation() {
-
-
-  const deviation = {
-  Title:'Basic Check Fail', 
-  Reasons:["Drug licence no.has Expired ",
-           "FSSAI licence No.has Expired"
-          ],
-  status:"Approvel Pending ",
-  Actions:[ <button key="reject"> Reject</button>,
-            <button key="approve"> Approve</button>]
-
-
-     
+  const deviation:DeviationProps = {
+    Title: "Basic Check Fail",
+    Reasons: ["Drug licence no.has Expired ", "FSSAI licence No.has Expired"],
+    status: "Approvel Pending ",
+    Actions: [
+      <button key="reject"> Reject</button>,
+      <button key="approve"> Approve</button>,
+    ],
   };
-  const deviationVariation = {
+  const deviationVariation:DeviationVariationProps = {
     Title:'Credit Check Fail', 
     Reasons:[
              "On hold for cheque bounce"
@@ -39,12 +34,10 @@ export default function DemoDeviation() {
     status:"Deviation Pending " 
     };
 
-  
   return (
-    <div className="Ds_Deviations">
-      <Ds_Deviations deviation={deviation} />
-      <Ds_DeviationVariation deviationVariation={deviationVariation}/>
-     </div>
-
+    <DemoLayout title="Devition Card (dsDeviation)">
+      <Ds_Deviations Actions={deviation.Actions} Reasons={deviation.Reasons} Title={deviation.Title} status={deviation.status}/>
+      <Ds_DeviationVariation Reasons={deviationVariation.Reasons} Title={deviationVariation.Title}  status={deviationVariation.status}/>
+    </DemoLayout>
   );
-};
+}
