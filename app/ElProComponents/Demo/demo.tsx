@@ -28,6 +28,7 @@ import DemoUserProfile from "@/app/Components/DsUserProfile/demoUserProfile";
 import DsDemoStatusIndocator from "@/app/Components/DsStatusIndicator/dsDemoStatusIndicator";
 import TabContainer from "@/app/Components/dsTabs/TabContainer";
 import TabView from "@/app/Components/dsTabs/TabView";
+import DemoSummaryCount from "@/app/Components/DsSummaryCount/demoSummaryCount";
 
 export default function Demo() {
   const tempTableData = {
@@ -815,8 +816,6 @@ export default function Demo() {
     ],
   };
 
-  
-
   const [showNotification, setShowNotification] = useState<boolean>(false);
   const [pos, setPos] = useState<
     | "top"
@@ -954,7 +953,20 @@ export default function Demo() {
             </DemoLayout>
           </DsPane>
           <div className={styles.container + " " + styles["flex-column"]}>
-            <TabContainer selectedTabId={"1"} tabs={[{tabId:"1",tabName:"Button"},{tabId:"2",tabName:"Context"},{tabId:"3",tabName:"Panel"},{tabId:"4",tabName:"Dropdown"},{tabId:"5",tabName:"Text Field"},{tabId:"6",tabName:"Deviation"},{tabId:"7",tabName:"User Profile"},{tabId:"8",tabName:"Table"}]}>
+            <TabContainer
+              selectedTabId={"1"}
+              tabs={[
+                { tabId: "1", tabName: "Button" },
+                { tabId: "2", tabName: "Context" },
+                { tabId: "3", tabName: "Panel" },
+                { tabId: "4", tabName: "Dropdown" },
+                { tabId: "5", tabName: "Text Field" },
+                { tabId: "6", tabName: "Deviation" },
+                { tabId: "7", tabName: "User Profile" },
+                { tabId: "8", tabName: "Summary Count" },
+                { tabId: "9", tabName: "Table" },
+              ]}
+            >
               <TabView tabId={"1"}>
                 <DemoButtons />
               </TabView>
@@ -976,7 +988,10 @@ export default function Demo() {
               <TabView tabId={"7"}>
                 <DemoUserProfile></DemoUserProfile>
               </TabView>
-              <TabView tabId={"8"}>
+              <TabView tabId="8">
+                <DemoSummaryCount></DemoSummaryCount>
+              </TabView>
+              <TabView tabId={"9"}>
                 <DsTableComponent
                   className={tempTableData.className}
                   id={tempTableData.id}
