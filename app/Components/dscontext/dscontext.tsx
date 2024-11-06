@@ -7,7 +7,7 @@ interface ContextMenuProps {
   containerId: string;
   position?: "vertical" | "horizontal";
   alignment?: "right" | "left" | "center";
-  content?: string;s
+  content?: string;
 }
 
 export const displaycontext = (
