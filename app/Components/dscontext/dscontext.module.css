@@ -8,37 +8,25 @@
     background-color:  var(--background);
     position: relative; 
 }
-  
-.button {
-    padding: 10px 20px;
-    /* background-color: #4a5cbe; */
-    background-color: var(--primary);
-    color: var(--background);
-    border: none;
-    border-radius: var(--dsborder-radius);
-    cursor: pointer;
-    height:var(--dswidth);
-    width:var(--dsheight);
-   /* Positioning relative to this button */
-    /* position: relative;  */
-   
-  
-}
-  
-.popUp {
-    background-color: var(--background);
+.contextMenu {
+    background-color: var(--dark) !important;
+    color: var(--background); /* Changed to black for better visibility */
     padding: 5px 10px;
-    border-radius: var(--dsborder-radius);
-    font-size: var(--bodyText1);
-    text-align: center;
-    white-space: nowrap; /*text align in one line*/
-    position: fixed; 
-    z-index: 10;/*  ensure that pop up makes appers on the top of the other element..*/
-    box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
-    box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
+    border-radius: 0px;
+    font-size: 14px;
+    text-align: center; 
+    white-space: nowrap; /* Keeps text in a single line */
+    position: absolute; /* Position relative to the button */
+    z-index: 10; /* Make sure it's on top */
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    max-width: 200px; /* Set a maximum width */
+    width: 25px;
+    max-width: fit-content; /* Set a maximum width */
+    width: 200px;
+    height:25px; /* Automatically adjust width based on content */
+    display: none; /* Start hidden */
+
 }
-  
 .arrow {
     position: absolute;
   /* bottom: -5px; */
@@ -71,50 +59,6 @@
     border-right: 5px solid transparent; /* Right border for the triangle */
     border-bottom: 5px solid var(--background);
 }
-.right
-{  
-    left: -6px; /* Positions it just above the popup */
-    top: 50%; /* Centers the arrow vertically relative to the popup */
-    border-top: 10px solid transparent; /* Creates the top side of the triangle */
-    border-bottom: 10px solid transparent; /* Creates the bottom side of the triangle */
-    border-right: 10px solid var(--background);
-    transform: translateY(-50%);
-}
- .left
- {
-    right: -4px; /* Positions it just above the popup */
-    top: 50%; /* Centers the arrow vertically relative to the popup */
-    border-top: 5px solid transparent; /* Creates the top side of the triangle */
-    border-bottom: 5px solid transparent; /* Creates the bottom side of the triangle */
-    border-left: 5px solid var(--background);
-    transform: translateY(-50%);
- }   
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -3,6 +3,11 @@ import styles from "./dsstatusIndicator.module.css";
 // import btnStyles from "../dsButton/dsButton.module.css";
 import dsStatus from "../../constant";
 import React, { useState } from "react";
+import PopUpContext, {
+  displaycontext,
+  // handlerblur,
+} from "../dscontext/dscontext";
+// import PopUpContext from "../dscontext/dscontext";
 
 interface DsStatusIndicatorProps {
   status?: dsStatus;
@@ -32,7 +37,7 @@ const DsStateChange: React.FC<DsStatusIndicatorProps> = ({
   btn_label,
   tooltip,
   positionProp = "top",
-  showArrow = "false",
+  showArrow = "true",
   comment,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -40,6 +45,8 @@ const DsStateChange: React.FC<DsStatusIndicatorProps> = ({
     x: 0,
     y: 0,
   });
+  const contextMenuId = "context-display";
+  const containerId = "context-container";
 
   const handleonmousehover = (event: React.MouseEvent<HTMLButtonElement>) => {
     const buttonRect = event.currentTarget.getBoundingClientRect();
@@ -59,6 +66,8 @@ const DsStateChange: React.FC<DsStatusIndicatorProps> = ({
     }
 
     setPosition({ x, y });
+    // setIsVisible(true);
+    // return isVisible && <PopUpContext id={id} containerId={id} />;
     setIsVisible(!isVisible);
   };
   return (
@@ -96,7 +105,7 @@ const DsStateChange: React.FC<DsStatusIndicatorProps> = ({
       )}
       {type == "user_defined" && (
         <>
-          <div className={styles.statusIndicator}>
+          <div id={id} className={styles.statusIndicator}>
             <div
               className={
                 styles.btnContained + " " + className + " " + styles[status]
@@ -108,9 +117,19 @@ const DsStateChange: React.FC<DsStatusIndicatorProps> = ({
             {status_icon && (
               <button
                 id={id}
-                onClick={handleOnClick}
+                // onClick={handleOnClick}
                 className={"icon " + styles.status_icon}
-                onMouseOver={handleonmousehover}
+                // onMouseOver={handleonmousehover}
+                // onClick={(e) => displaycontext(e, contextMenuId, containerId)}
+                // onMouseOver={(e) =>
+                //   displaycontext(e, contextMenuId, containerId)
+                // }
+                onMouseOver={(e) => {
+                  handleonmousehover(e); // Call second function
+
+                  displaycontext(e, contextMenuId, containerId); // Call first function
+                }}
+                // onMouseLeave={() => handlerblur(contextMenuId)}
               >
                 {status_icon}
               </button>
@@ -118,13 +137,20 @@ const DsStateChange: React.FC<DsStatusIndicatorProps> = ({
           </div>
           {isVisible && (
             <div
+              id={containerId}
               className={styles.popUp}
               style={{
                 top: `${position.y}px`,
                 left: `${position.x}px`,
               }}
             >
-              {comment}
+              <PopUpContext
+                id={contextMenuId}
+                containerId={containerId}
+                content={comment}
+              />
+
+              {/* {comment} */}
               {showArrow && (
                 <div
                   className={`${styles.arrow} ${styles[positionProp]}`}

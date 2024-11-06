@@ -1,75 +1,109 @@
 "use client";
-import React, { useState } from "react";
 import styles from "./dscontext.module.css";
-import DSButton from "../dsButton/dsButton";
+import React from "react";
 
-// Define type for position prop
-interface PopUpContextProps {
-  positionProp?: "top" | "bottom" | "left" | "right";
-  showArrow: boolean;
+interface ContextMenuProps {
+  id: string;
+  containerId: string;
+  position?: "vertical" | "horizontal";
+  alignment?: "right" | "left" | "center";
+  content?: string;s
 }
 
-const PopUpContext: React.FC<PopUpContextProps> = ({
-  positionProp = "top",
-  showArrow = false,
-}) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [position, setPosition] = useState<{ x: number; y: number }>({
-    x: 0,
-    y: 0,
-  });
-  // const [position, setPosition] = useState<{ x: number; y: number }>({
-  //   x: 0,
-  //   y: 0,
-  // });
+export const displaycontext = (
+  event: React.MouseEvent<HTMLButtonElement>,
+  id: string,
+  containerId: string,
+  position: "vertical" | "horizontal" = "vertical",
+  alignment: "right" | "left" | "center",
+) => {
+  event.preventDefault();
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    const buttonRect = event.currentTarget.getBoundingClientRect();
-    let x = buttonRect.left;
-    // let x = buttonRect.left;
-    let y = buttonRect.top;
+  const contextMenu = document.getElementById(id);
+  const container = document.getElementById(containerId);
 
-    if (positionProp === "top") {
-      y = buttonRect.top - buttonRect.height; // Above the button
-      y = buttonRect.top - buttonRect.height; // Above the button
-    } else if (positionProp === "bottom") {
-      y = buttonRect.bottom + 3; // Below the button
-    } else if (positionProp === "left") {
-      x = buttonRect.left - 68; // Left of the button
-      y = buttonRect.top + buttonRect.height / 4;
-    } else if (positionProp === "right") {
-      x = buttonRect.right + 5; // Right of the button
-      x = buttonRect.right + 5; // Right of the button
-      y = buttonRect.top + buttonRect.height / 4;
+  
+
+  const button = event.currentTarget as HTMLButtonElement;
+  if (!contextMenu || !button || !container) return;
+  if (!contextMenu || !button || !container) return;
+
+  
+  contextMenu.style.display = "flex";
+
+  const buttonRect = button.getBoundingClientRect();
+  const containerRect = container?.getBoundingClientRect();
+
+  const padx = 4;
+  const pady = 4;
+  const offset = 10;
+
+  const w = contextMenu.offsetWidth;
+  const h = contextMenu.offsetHeight;
+  const x = buttonRect.left - containerRect.left;
+  const y = buttonRect.bottom - containerRect.top;
+  const ww = container.clientWidth;
+  const wh = container.clientHeight;
+  let fx = x;
+  let fy = y + offset;
+
+ 
+  if ((y + h + offset) > (wh - pady)) {
+    fy = buttonRect.top - containerRect.top - h - offset;
+
+  }
+
+  if (position === "horizontal") {
+
+    fy = buttonRect.top-containerRect.top;
+    if (x + buttonRect.width + w + offset <= ww - padx) {
+      fx = x + buttonRect.width + offset;
+  
     }
+    else{
+      fx=x-buttonRect.width;
+    }
+    
+  }
+  else {
+    if (alignment === "center") {
+      fx = x + (buttonRect.width - w) / 2;
+    } else if (alignment === "right") {
+      fx = x + buttonRect.width - w;
+    } else if (alignment === "left") {
+      fx = x;
+    }
+  }
 
-    setPosition({ x, y });
-    setIsVisible(!isVisible);
-  };
 
+
+
+  contextMenu.style.left = `${fx}px`;
+  contextMenu.style.top = `${fy}px`;
+};
+export const closecontext = (
+  id: string,
+) => {
+  const contextMenu = document.getElementById(id);
+  if (contextMenu) {
+    contextMenu.style.display = "none";
+  }
+
+};
+
+const ContextMenu: React.FC<ContextMenuProps> = ({
+  id,
+  containerId,
+  content,
+
+}) => {
   return (
-    <>
-      <DSButton handleOnClick={handleClick}>Save</DSButton>
-
-      {isVisible && (
-        <div
-          className={styles.popUp}
-          style={{
-            top: `${position.y}px`,
-            left: `${position.x}px`,
-          }}
-        >
-          Submit
-          {showArrow && (
-            <div className={`${styles.arrow} ${styles[positionProp]}`}></div>
-          )}
-          {showArrow && (
-            <div className={`${styles.arrow} ${styles[positionProp]}`}></div>
-          )}
-        </div>
-      )}
-    </>
+    <div id={containerId} className={styles.container}>
+      <div id={id} className={styles.contextMenu}>
+        {content}
+      </div>
+    </div>
   );
 };
 
-export default PopUpContext;
+export default ContextMenu;
