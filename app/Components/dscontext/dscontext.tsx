@@ -20,16 +20,14 @@ export const displaycontext = (
   event.preventDefault();
 
   const contextMenu = document.getElementById(id);
-  const container = document.getElementById(containerId);
 
-  const button = event.currentTarget as HTMLElement;
-  if (!contextMenu || !button || !container) return;
-  if (!contextMenu || !button || !container) return;
+  const button = event.target as HTMLElement;
+  if (!contextMenu || !button ) return;
+  if (!contextMenu || !button ) return;
 
   contextMenu.style.display = "flex";
 
   const buttonRect = button.getBoundingClientRect();
-  const containerRect = container?.getBoundingClientRect();
 
   const padx = 4;
   const pady = 4;
@@ -37,21 +35,21 @@ export const displaycontext = (
 
   const w = contextMenu.offsetWidth;
   const h = contextMenu.offsetHeight;
-  const x = buttonRect.left - containerRect.left;
-  const y = buttonRect.bottom - containerRect.top;
+  const x = buttonRect.left ;
+  const y = buttonRect.bottom ;
   const ww = window.innerWidth;
   const wh = window.innerHeight;
   let fx = x;
   let fy = y + offset;
 
   if (y + h + offset > wh - pady) {
-    fy = buttonRect.top - containerRect.top - h - offset;
+    fy = buttonRect.top - h - offset;
   }
 
   if (position === "horizontal") {
-    fy = buttonRect.top - containerRect.top;
-    if (x + buttonRect.width + w + offset <= ww - padx) {
-      fx = x + buttonRect.width + offset;
+    fy = buttonRect.top;
+    if (buttonRect.right + w + offset <= ww - padx) {
+      fx = buttonRect.right + offset;
     } else {
       fx = x - buttonRect.width;
     }
@@ -77,15 +75,12 @@ export const closecontext = (id: string) => {
 
 const ContextMenu: React.FC<ContextMenuProps> = ({
   id,
-  containerId,
   content,
 }) => {
   return (
-    <div id={containerId} className={styles.container}>
       <div id={id} className={styles.contextMenu}>
         {content}
       </div>
-    </div>
   );
 };
 
