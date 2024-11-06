@@ -28,8 +28,13 @@ export const displaycontext = (
   const button = event.currentTarget as HTMLButtonElement;
   if (!contextMenu || !button || !container) return;
 
+  // If context menu is already displayed, no need to show it again
+  if (contextMenu.style.display === "flex") return;
+
+  contextMenu.style.display = "flex"; // Show context menu
+
   // Otherwise, show the contextMenu with 'flex' display
-  contextMenu.style.display = "flex";
+  // contextMenu.style.display = "flex";
 
   const buttonRect = button.getBoundingClientRect();
   const containerRect = container?.getBoundingClientRect();
@@ -60,7 +65,7 @@ export const displaycontext = (
   contextMenu.style.left = `${fx}px`;
   contextMenu.style.top = `${fy}px`;
 };
-export const handlerblur = (id: string) => {
+export const closeContext = (id: string) => {
   const contextMenu = document.getElementById(id);
   if (contextMenu) {
     contextMenu.style.display = "none";

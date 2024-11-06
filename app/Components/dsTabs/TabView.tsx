@@ -3,13 +3,10 @@ import React, { useContext } from "react";
 import { TabContext } from "./TabsContextProvider";
 
 export interface TabProps {
- tabId:string;
+  tabId: string;
   children: React.ReactNode;
 }
-const TabView: React.FC<TabProps> = ({
-  tabId,
-  children,
-}) => {
+const TabView: React.FC<TabProps> = ({ tabId, children }) => {
   const tabContext = useContext(TabContext);
 
   if (!tabContext) {
@@ -17,12 +14,8 @@ const TabView: React.FC<TabProps> = ({
   }
 
   const { selectedTabId } = tabContext;
-  
-  return (
-    <>
-     {selectedTabId==tabId && children}
-    </>
-  );
+
+  return <>{selectedTabId == tabId && children}</>;
 };
 
 export default TabView;

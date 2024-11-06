@@ -11,9 +11,9 @@
 .contextMenu {
     background-color: var(--dark) !important;
     color: var(--background); /* Changed to black for better visibility */
-    padding: 5px 10px;
+    padding: 5px 6px 5px 6px;
     border-radius: 0px;
-    font-size: 14px;
+    font-size: var(--subtitle1);
     text-align: center;
     white-space: nowrap; /* Keeps text in a single line */
     position: absolute; /* Position relative to the button */
@@ -24,6 +24,21 @@
     height:25px; /* Automatically adjust width based on content */
     display: none; /* Start hidden */
 
+}
+
+.contextMenu::before{
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%) rotate(40deg);
+    bottom: -4px;
+    height: 10px;
+    width: 15px;
+    z-index: -2;
+    border-radius: 0px;
+    background-color: var(--dark);
+    border-bottom-right-radius: 5px;
+    box-shadow: 2px 2px 5px 0px #dcdcdc;
 }
 .arrow {
     position: absolute;

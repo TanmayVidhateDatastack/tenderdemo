@@ -1,6 +1,6 @@
 .btn_div{
     align-items: center;
-    justify-content: center;
+    justify-content: left;
     width: 100%;
     height: 100%;
     background-color: var(--backgroundt);
@@ -503,6 +503,7 @@
 
 .btngroup {
     display: flex;
+    flex-wrap: nowrap;
     width: fit-content;
     color: var(--btngroup-text-primary) !important;
     padding: 0 !important;

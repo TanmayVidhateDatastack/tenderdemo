@@ -1,12 +1,18 @@
 // /src/contexts/AppContext.tsx
-import React, { createContext, useState, ReactNode, Dispatch, SetStateAction } from 'react';
+import React, {
+  createContext,
+  useState,
+  ReactNode,
+  Dispatch,
+  SetStateAction,
+} from "react";
 
 // 1. Define the context types
 interface TabContextType {
   selectedTabId: string;
   setSelectedTabId: Dispatch<SetStateAction<string>>;
-//   tabs: string;
-//   setTabs: Dispatch<SetStateAction<string>>;
+  //   tabs: string;
+  //   setTabs: Dispatch<SetStateAction<string>>;
 }
 
 // 2. Create the context with a default value of `undefined` for initial typing
@@ -18,8 +24,8 @@ interface TabsProviderProps {
 }
 
 // 4. Define the provider component
-export const AppProvider: React.FC<TabsProviderProps> = ({ children }) => {
-  const [selectedTabId, setSelectedTabId] = useState<string>('');
+export const TabProvider: React.FC<TabsProviderProps> = ({ children }) => {
+  const [selectedTabId, setSelectedTabId] = useState<string>("");
 
   const contextValue: TabContextType = {
     selectedTabId,
@@ -27,8 +33,7 @@ export const AppProvider: React.FC<TabsProviderProps> = ({ children }) => {
   };
 
   return (
-    <TabContext.Provider value={contextValue}>
-      {children}
-    </TabContext.Provider>
+    <TabContext.Provider value={contextValue}>{children}</TabContext.Provider>
   );
 };
+export default TabProvider;

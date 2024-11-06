@@ -1,10 +1,11 @@
 "use client";
 import styles from "./dsstatusIndicator.module.css";
+// import btnStyles from "../dsButton/dsButton.module.css";
 import dsStatus from "../../constant";
 import React, { useState } from "react";
 import PopUpContext, {
   displaycontext,
-  handlerblur,
+  closeContext,
   // handlerblur,
 } from "../dscontext/dscontext";
 // import PopUpContext from "../dscontext/dscontext";
@@ -45,8 +46,8 @@ const DsStateChange: React.FC<DsStatusIndicatorProps> = ({
     x: 0,
     y: 0,
   });
-  const contextMenuId = "context-display";
-  const containerId = "context-container";
+  const contextMenuId = comment + "context-display";
+  const containerId = comment + "context-container";
 
   const handleonmousehover = (event: React.MouseEvent<HTMLButtonElement>) => {
     const buttonRect = event.currentTarget.getBoundingClientRect();
@@ -65,10 +66,10 @@ const DsStateChange: React.FC<DsStatusIndicatorProps> = ({
       y = buttonRect.top + buttonRect.height / 4;
     }
 
-    setPosition({ x, y });
-    // setIsVisible(true);
-    // return isVisible && <PopUpContext id={id} containerId={id} />;
-    setIsVisible(!isVisible);
+    if (positionProp) {
+      setPosition({ x, y });
+      setIsVisible(true);
+    }
   };
   return (
     <>
@@ -117,46 +118,35 @@ const DsStateChange: React.FC<DsStatusIndicatorProps> = ({
             {status_icon && (
               <button
                 id={id}
-                // onClick={handleOnClick}
                 className={"icon " + styles.status_icon}
-                // onMouseOver={handleonmousehover}
-                // onClick={(e) => displaycontext(e, contextMenuId, containerId)}
-                // onMouseOver={(e) =>
-                //   displaycontext(e, contextMenuId, containerId)
-                // }
                 onMouseOver={(e) => {
                   handleonmousehover(e); // Call second function
                   displaycontext(e, contextMenuId, containerId); // Call first function
                 }}
-                onMouseLeave={() => handlerblur(contextMenuId)}
+                onMouseLeave={() => closeContext(contextMenuId)}
               >
                 {status_icon}
+                <PopUpContext
+                  id={contextMenuId}
+                  containerId={id}
+                  content={comment}
+                />
               </button>
             )}
           </div>
-          {isVisible && (
-            <div
-              id={containerId}
-              className={styles.popUp}
-              style={{
-                top: `${position.y}px`,
-                left: `${position.x}px`,
-              }}
-            >
-              <PopUpContext
-                id={contextMenuId}
-                containerId={containerId}
-                content={comment}
-              />
-
-              {/* {comment} */}
-              {showArrow && (
-                <div
-                  className={`${styles.arrow} ${styles[positionProp]}`}
-                ></div>
-              )}
-            </div>
-          )}
+          <div
+            id={containerId}
+            className={styles.popUp}
+            style={{
+              top: `${position.y}px`,
+              left: `${position.x}px`,
+            }}
+          >
+            {/* {comment} */}
+            {showArrow && (
+              <div className={`${styles.arrow} ${styles[positionProp]}`}></div>
+            )}
+          </div>
         </>
       )}
     </>
