@@ -12,7 +12,7 @@ const Ds_Deviations:React.FC<DeviationProps> = (deviation) => {
   return (
 
     <div className={styles.Deviation}>
-
+     
         
       <div className={styles.title}><b>{deviation.Title}</b></div>
       

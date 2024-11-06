@@ -1,6 +1,6 @@
 import styles from "./DsTable.module.css";
 export interface thprops {
-  className: string;
+  className?: string;
   children?: React.ReactNode;
   content?: string;
   columnHeader?: string;

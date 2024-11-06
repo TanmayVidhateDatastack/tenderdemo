@@ -18,7 +18,7 @@ interface TabsProviderProps {
 }
 
 // 4. Define the provider component
-export const AppProvider: React.FC<TabsProviderProps> = ({ children }) => {
+export const TabProvider: React.FC<TabsProviderProps> = ({ children }) => {
   const [selectedTabId, setSelectedTabId] = useState<string>('');
 
   const contextValue: TabContextType = {
@@ -32,3 +32,4 @@ export const AppProvider: React.FC<TabsProviderProps> = ({ children }) => {
     </TabContext.Provider>
   );
 };
+export default TabProvider;
