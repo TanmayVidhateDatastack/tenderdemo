@@ -46,7 +46,7 @@ const DsSelect: React.FC<SelectProps> = ({
   const handleSelect = (option: string) => {
     if (type == "single") {
       setSingleSelectedOption(option);
-      setIsopen(false);
+      closecontext("test");
     }
 
     if (type == "multi") {
@@ -67,6 +67,7 @@ const DsSelect: React.FC<SelectProps> = ({
         setSelectedOption([...selectedOption, option]);
       }
     }
+    
   };
   const removeOption = (select: string) => {
     const removeItem = selectedOption.filter((option) => option !== select);

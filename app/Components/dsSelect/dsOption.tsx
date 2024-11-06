@@ -1,4 +1,8 @@
-import PopUpContext, { closecontext, displaycontext } from "../dsContext/dscontext";
+import DSButton from "../dsButton/dsButton";
+import PopUpContext, {
+  closecontext,
+  displaycontext,
+} from "../dsContext/dscontext";
 import styles from "./dsSelect.module.css";
 
 interface Option {
@@ -31,31 +35,32 @@ const DsOption: React.FC<DsOptionProps> = ({
                   <>
                     <div
                       key={index}
-                      onClick={() => handleSelect(option.label)}
+                      onClick={() =>{ handleSelect(option.label);
+                        closecontext(label !== "" ? label + "test" : "test")
+                      }}
                       className={styles.option}
-                        
                     >
                       {option.label}
-                    {typeof option.value !== "string" && (
-                      <div className={styles.ShowContext}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (typeof option.value !== "string")
-                          displaycontext(
-                            e,
-                            option.label + "test",
-                            option.label + "test1",
-                            "vertical",
-                            "left"
-                          );
-                      }}
-                      onBlur={()=>{
-                        if (typeof option.value !== "string")
-                        closecontext(option.label+"test");
-                      }}>
-                        d
-                      </div>
-                    )}
+                      {typeof option.value !== "string" && (
+                        <DSButton
+                          className={styles.ShowContext}
+                          handleOnClick={(e) => {
+                            e.stopPropagation();
+                            if (typeof option.value !== "string") {
+                              displaycontext(
+                                e,
+                                option.label + "test",
+                                option.label + "test1",
+                                "vertical",
+                                "left"
+                              );
+                              
+                            }
+                          }}
+                        >
+                          d
+                        </DSButton>
+                      )}
                     </div>
                     {typeof option.value !== "string" && (
                       <DsOption
