@@ -1,34 +1,31 @@
 "use client";
-import styles from "./dscontext.module.css";
 import React from "react";
+import styles from "./dscontext.module.css";
 
 interface ContextMenuProps {
   id: string;
   containerId: string;
   position?: "vertical" | "horizontal";
   alignment?: "right" | "left" | "center";
-  content?: string;
+  content?: string | React.ReactElement;
 }
 
 export const displaycontext = (
-  event: React.MouseEvent<HTMLElement>,
+  event: React.MouseEvent<HTMLElement> | React.FocusEvent,
   id: string,
   containerId: string,
   position: "vertical" | "horizontal" = "vertical",
-  alignment: "right" | "left" | "center",
+  alignment: "right" | "left" | "center"
 ) => {
   event.preventDefault();
 
   const contextMenu = document.getElementById(id);
   const container = document.getElementById(containerId);
 
-  
-
   const button = event.currentTarget as HTMLElement;
   if (!contextMenu || !button || !container) return;
   if (!contextMenu || !button || !container) return;
 
-  
   contextMenu.style.display = "flex";
 
   const buttonRect = button.getBoundingClientRect();
@@ -47,25 +44,18 @@ export const displaycontext = (
   let fx = x;
   let fy = y + offset;
 
- 
-  if ((y + h + offset) > (wh - pady)) {
+  if (y + h + offset > wh - pady) {
     fy = buttonRect.top - containerRect.top - h - offset;
-
   }
 
   if (position === "horizontal") {
-
-    fy = buttonRect.top-containerRect.top;
+    fy = buttonRect.top - containerRect.top;
     if (x + buttonRect.width + w + offset <= ww - padx) {
       fx = x + buttonRect.width + offset;
-  
+    } else {
+      fx = x - buttonRect.width;
     }
-    else{
-      fx=x-buttonRect.width;
-    }
-    
-  }
-  else {
+  } else {
     if (alignment === "center") {
       fx = x + (buttonRect.width - w) / 2;
     } else if (alignment === "right") {
@@ -75,27 +65,20 @@ export const displaycontext = (
     }
   }
 
-
-
-
   contextMenu.style.left = `${fx}px`;
   contextMenu.style.top = `${fy}px`;
 };
-export const closecontext = (
-  id: string,
-) => {
+export const closecontext = (id: string) => {
   const contextMenu = document.getElementById(id);
   if (contextMenu) {
     contextMenu.style.display = "none";
   }
-
 };
 
 const ContextMenu: React.FC<ContextMenuProps> = ({
   id,
   containerId,
-  content
-
+  content,
 }) => {
   return (
     <div id={containerId} className={styles.container}>
