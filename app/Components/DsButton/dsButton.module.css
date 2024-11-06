@@ -179,7 +179,7 @@
 }
 
 .btnOutlined.tab_btn:hover{
-    border-radius: 25px !important;
+    /* border-radius: 25px !important; */
     background-color: var(--secondary-hover);
 }
 
@@ -514,7 +514,6 @@
 
 .btngroupcontained.group_btn{
     position: relative;
-    padding: 0 !important;
     margin: 0 !important;
     background-color: var(--btngroup-primary) !important;
     color: var(--btngroup-text-primary) !important;

@@ -14,6 +14,7 @@ import DemoLayout from "@/app/ElProComponents/Demo/demoLayout";
 // import Ds_UserProfile from "./Components/DsUserProfile/DsUserProfile";
 
 import Ds_Deviations, { DeviationProps } from "./DsDeviations";
+import Ds_DeviationVariation,{DeviationVariationProps} from "./DsDeviationVariation";
 
 export default function DemoDeviation() {
   const deviation:DeviationProps = {
@@ -25,9 +26,18 @@ export default function DemoDeviation() {
       <button key="approve"> Approve</button>,
     ],
   };
+  const deviationVariation:DeviationVariationProps = {
+    Title:'Credit Check Fail', 
+    Reasons:[
+             "On hold for cheque bounce"
+            ],
+    status:"Deviation Pending " 
+    };
+
   return (
-    <DemoLayout title="Deviation Card (dsDeviation)">
-      <Ds_Deviations Actions={deviation.Actions} Reasons={deviation.Reasons} Title={deviation.Title} status={deviation.status} />
+    <DemoLayout title="Devition Card (dsDeviation)">
+      <Ds_Deviations Actions={deviation.Actions} Reasons={deviation.Reasons} Title={deviation.Title} status={deviation.status}/>
+      <Ds_DeviationVariation Reasons={deviationVariation.Reasons} Title={deviationVariation.Title}  status={deviationVariation.status}/>
     </DemoLayout>
   );
 }

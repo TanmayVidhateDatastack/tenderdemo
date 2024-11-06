@@ -28,6 +28,7 @@ import DemoUserProfile from "@/app/Components/DsUserProfile/demoUserProfile";
 import DsDemoStatusIndocator from "@/app/Components/DsStatusIndicator/dsDemoStatusIndicator";
 import TabContainer from "@/app/Components/dsTabs/TabContainer";
 import TabView from "@/app/Components/dsTabs/TabView";
+import DemoSummaryCount from "@/app/Components/DsSummaryCount/demoSummaryCount";
 import DemoPane from "@/app/Components/DsPane/dsDemoPane";
 import DsPane from "@/app/Components/dsPane/dsPane";
 
@@ -107,7 +108,7 @@ export default function Demo() {
           {
             columnIndex: 1,
             className: "cell",
-            content: "24/09/2024",
+            content: "24/09/2022",
             contentType: "date",
           },
           {
@@ -964,7 +965,8 @@ export default function Demo() {
                 { tabId: "5", tabName: "Text Field" },
                 { tabId: "6", tabName: "Deviation" },
                 { tabId: "7", tabName: "User Profile" },
-                { tabId: "8", tabName: "Table" },
+                { tabId: "8", tabName: "Summary Count" },
+                { tabId: "9", tabName: "Table" },
               ]}
             >
               <TabView tabId={"1"}>
@@ -988,7 +990,10 @@ export default function Demo() {
               <TabView tabId={"7"}>
                 <DemoUserProfile></DemoUserProfile>
               </TabView>
-              <TabView tabId={"8"}>
+              <TabView tabId="8">
+                <DemoSummaryCount></DemoSummaryCount>
+              </TabView>
+              <TabView tabId={"9"}>
                 <DsTableComponent
                   className={tempTableData.className}
                   id={tempTableData.id}

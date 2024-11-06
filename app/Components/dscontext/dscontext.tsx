@@ -1,17 +1,21 @@
 "use client";
+import React from "react";
 import styles from "./dscontext.module.css";
-import React, { ReactNode } from "react";
 
-interface PopUpContextProps {
-  id?: string;
-  containerId?: string;
-  content?: string | ReactNode;
+interface ContextMenuProps {
+  id: string;
+  containerId: string;
+  position?: "vertical" | "horizontal";
+  alignment?: "right" | "left" | "center";
+  content?: string | React.ReactNode;
 }
 
 export const displaycontext = (
-  event: React.MouseEvent<HTMLElement>,
+  event: React.MouseEvent<HTMLElement> | React.FocusEvent,
   id: string,
-  containerId: string
+  containerId: string,
+  position: "vertical" | "horizontal" = "vertical",
+  alignment: "right" | "left" | "center"
 ) => {
   event.preventDefault();
 
@@ -34,44 +38,56 @@ export const displaycontext = (
   contextMenu.style.display = "flex"; // Show context menu
 
   // Otherwise, show the contextMenu with 'flex' display
-  // contextMenu.style.display = "flex";
+  contextMenu.style.display = "flex";
 
   const buttonRect = button.getBoundingClientRect();
   const containerRect = container?.getBoundingClientRect();
 
   const padx = 4;
   const pady = 4;
-  const offset = 10;
+  const offset = 3;
 
   const w = contextMenu.offsetWidth;
   const h = contextMenu.offsetHeight;
   const x = buttonRect.left - containerRect.left;
   const y = buttonRect.bottom - containerRect.top;
-  const ww = container.clientWidth;
-  const wh = container.clientHeight;
+  const ww = window.innerWidth;
+  const wh = window.innerHeight;
   let fx = x;
   let fy = y + offset;
-
-  // contextMenu.style.width = `${buttonRect.width}px`;
-  // contextMenu.style.height = `${buttonRect.height}px`;
 
   if (y + h + offset > wh - pady) {
     fy = buttonRect.top - containerRect.top - h - offset;
   }
-  if (x + w > ww - padx) {
-    fx = buttonRect.right - containerRect.left - w;
+
+  if (position === "horizontal") {
+    fy = buttonRect.top - containerRect.top;
+    if (x + buttonRect.width + w + offset <= ww - padx) {
+      fx = x + buttonRect.width + offset;
+    } else {
+      fx = x - buttonRect.width;
+    }
+  } else {
+    if (alignment === "center") {
+      fx = x + (buttonRect.width - w) / 2;
+    } else if (alignment === "right") {
+      fx = x + buttonRect.width - w;
+    } else if (alignment === "left") {
+      fx = x;
+    }
   }
 
   contextMenu.style.left = `${fx}px`;
   contextMenu.style.top = `${fy}px`;
 };
-export const closeContext = (id: string) => {
+export const closecontext = (id: string) => {
   const contextMenu = document.getElementById(id);
   if (contextMenu) {
     contextMenu.style.display = "none";
   }
 };
-const PopUpContext: React.FC<PopUpContextProps> = ({
+
+const ContextMenu: React.FC<ContextMenuProps> = ({
   id,
   containerId,
   content,
@@ -85,4 +101,4 @@ const PopUpContext: React.FC<PopUpContextProps> = ({
   );
 };
 
-export default PopUpContext;
+export default ContextMenu;
