@@ -64,6 +64,9 @@
   
   .option{
       margin: 8px;
+      display:flex;
+      align-items: center;
+      justify-content: space-between;
   }
   .option:hover{
     background-color:gray;

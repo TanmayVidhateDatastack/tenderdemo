@@ -33,14 +33,14 @@ export const displaycontext = (
 
   const padx = 4;
   const pady = 4;
-  const offset = 10;
+  const offset = 3;
 
   const w = contextMenu.offsetWidth;
   const h = contextMenu.offsetHeight;
   const x = buttonRect.left - containerRect.left;
   const y = buttonRect.bottom - containerRect.top;
-  const ww = container.clientWidth;
-  const wh = container.clientHeight;
+  const ww = window.innerWidth;
+  const wh = window.innerHeight;
   let fx = x;
   let fy = y + offset;
 

@@ -1,4 +1,4 @@
-import PopUpContext, { displaycontext } from "../dsContext/dscontext";
+import PopUpContext, { closecontext, displaycontext } from "../dsContext/dscontext";
 import styles from "./dsSelect.module.css";
 
 interface Option {
@@ -33,7 +33,13 @@ const DsOption: React.FC<DsOptionProps> = ({
                       key={index}
                       onClick={() => handleSelect(option.label)}
                       className={styles.option}
-                      onMouseOver={(e) => {
+                        
+                    >
+                      {option.label}
+                    {typeof option.value !== "string" && (
+                      <div className={styles.ShowContext}
+                      onClick={(e) => {
+                        e.stopPropagation();
                         if (typeof option.value !== "string")
                           displaycontext(
                             e,
@@ -43,14 +49,19 @@ const DsOption: React.FC<DsOptionProps> = ({
                             "left"
                           );
                       }}
-                    >
-                      {option.label}
+                      onBlur={()=>{
+                        if (typeof option.value !== "string")
+                        closecontext(option.label+"test");
+                      }}>
+                        d
+                      </div>
+                    )}
                     </div>
                     {typeof option.value !== "string" && (
                       <DsOption
                         key={index}
                         label={option.label}
-                        isOpen={false}
+                        isOpen={true}
                         options={option.value}
                         handleSelect={handleSelect}
                       ></DsOption>
