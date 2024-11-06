@@ -1,0 +1,102 @@
+/* 
+ .mainselection{  
+     padding:10px;
+     color:black;
+     border:1px solid;
+     border-radius:5px ;
+     border-style: groove;
+     border-color:gray;
+     justify-content: center;
+ } */
+ .allselect{
+   height:auto;
+   width:var(--dswidth);
+   position:relative;
+   margin: var(--dsmargin);
+}
+.mainselection{  
+    padding:var(--dspadding);
+    color:var(--background);
+    border:var(--dsborder);
+    border-radius: var(--dsborder-radius);
+    border-style: groove;
+    border-color:var(--secondary);
+    justify-content: center;
+    padding-top: var(--dspadding);
+    box-sizing: border-box;
+}
+
+.floating-label {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  transition: 0.1s ease all;
+  color: var(--dark);
+  background-color: var(--background);
+  pointer-events: none;
+}
+
+.shrink {
+  top: -10px;
+  font-size: var(--subtitle1);
+  /* color: blue; */
+  color: var(--text-primary);
+}
+
+ 
+ .list{
+     /* display: block; */
+     /* block-size: 100%; */
+     padding:var(--dspadding);
+     justify-content: center;
+     caret-color: var(--text-primary);
+     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+     border-radius: 2px;
+     /* margin-left: 2px; */
+     height: min-content;
+     background: white;
+     position: absolute;
+     width: 100%;
+     z-index: 99;
+ }
+ 
+ .option{
+     margin: var(--dsmargin);
+ }
+ 
+ .selectcontainer{
+    display: flex ;
+    margin:2px;
+    min-width: var(--dsmin-width);
+    flex-wrap:wrap;
+ }
+ .selectoption{
+    display: flex ;
+    padding: 1px;
+    flex-wrap: wrap;
+ }
+ .remove{
+    margin-left: var(--dsmargin);
+    font-size: var(--subtitle2);
+ }
+ .selecteditem{
+    padding: 7px 12px 7px 12px;
+    border: 0px;
+    font-size: var(--subtitle1);
+    border-radius: 25px !important;
+    margin: 2px;
+    height: var(--dsheight);
+    /* background-color: #dacfcf; */
+    background-color: var(--semiviolet);
+    color: var(--dark);
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 4.5rem !important;
+    flex-wrap: wrap;
+ }
+
+ 
+.checkbox_container{
+   margin-right: 8px;
+}

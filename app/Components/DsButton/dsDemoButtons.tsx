@@ -1,22 +1,26 @@
 "use client";
 import Image from "next/image";
-import addIcon from "../../Icons/add.svg";
-import filter from "../../Icons/filtericon.svg";
-import trashbtn from "../../Icons/trashbtn.svg";
-import deviation from "../../Icons/deviation.svg";
-import update from "../../Icons/update.svg";
-import btnStyles from "./dsButton.module.css";
-import whiteupdate from "../../Icons/whiteupdate.svg";
-import whiteadd from "../../Icons/whiteadd.svg";
-import spliticon from "../../Icons/downarrowwhite.svg";
-import notificationicon from "../../Icons/notificationbell.svg";
-import chat from "../../Icons/chat.svg";
-import leftarrow from "../../Icons/grayleftarrow.svg";
-import darkleftarrow from "../../Icons/darkleftarrow.svg";
-import upload from "../../Icons/uploadicon.svg";
-import { useState } from "react";
+// import { useRef, useState } from "react";
 import { ImgProps } from "next/dist/shared/lib/get-img-props";
+import btnStyles from "./dsButton.module.css";
+import addIcon from "../../Icons/smallIcons/add.svg";
+import filter from "../../Icons/smallIcons/filtericon.svg";
+import trashbtn from "../../Icons/smallIcons/trashbtn.svg";
+import whitetrashbtn from "../../Icons/smallIcons/whitetrash.svg";
+import deviation from "../../Icons/mediumIcons/deviation.svg";
+import update from "../../Icons/smallIcons/update.svg";
+import whiteupdate from "../../Icons/smallIcons/whiteupdate.svg";
+import whiteadd from "../../Icons/smallIcons/whiteadd.svg";
+import spliticon from "../../Icons/mediumIcons/downarrowwhite.svg";
+import notificationicon from "../../Icons/mediumIcons/notificationbell.svg";
+import chat from "../../Icons/mediumIcons/chat.svg";
+import leftarrow from "../../Icons/mediumIcons/grayleftarrow.svg";
+import darkleftarrow from "../../Icons/mediumIcons/darkleftarrow.svg";
+import upload from "../../Icons/smallIcons/uploadicon.svg";
+import { useState } from "react";
+import DemoLayout from "@/app/ElProComponents/Demo/demoLayout";
 import DSButton from "./dsButton";
+import DSButtonGroup from "./dsButtonGroup";
 
 const DemoButtons: React.FC = () => {
   const [toggled, setToggled] = useState(false);
@@ -34,186 +38,249 @@ const DemoButtons: React.FC = () => {
   };
 
   return (
-    <div className={btnStyles.btn_div + " " + btnStyles.flex}>
-      <DSButton
-        id="actionBtn"
-        buttonColor="btnPrimary"
-        buttonClass={btnStyles.btnOutlined}
-        handleOnHover={(e) => changeImage(e, whiteadd)}
-        handleMouseLeave={(e) => changeImage(e, addIcon)}
-        startIcon={<Image src={addIcon} alt="icon" />}
-        label="New"
-        handleOnClick={(e) => clickHandler(e)}
-      />
-      <DSButton
-        id="closeBtn"
-        buttonColor="btnDark"
-        buttonClass={btnStyles.btnOutlined}
-        handleOnClick={(e) => clickHandler(e)}
-        label="Close"
-      />
-      <DSButton
-        id="iconfilterBtn"
-        buttonColor="btnPrimary"
-        buttonClass={btnStyles.btnText + " " + btnStyles.btnTextPrimary}
-        handleOnClick={(e) => clickHandler(e)}
-        startIcon={<Image src={filter} alt="icon" />}
-        label="Filter"
-      />
-      <DSButton
-        id="deleteBtn"
-        buttonColor="btnDanger"
-        buttonSize="btnSmall"
-        buttonClass={btnStyles.btnOutlined}
-        handleOnClick={(e) => clickHandler(e)}
-        label="Delete"
-      />
-      <DSButton
-        id="cancelBtn"
-        buttonColor="btnDark"
-        buttonSize="btnSmall"
-        // buttonClass={btnStyles.btnSmall}
-        handleOnClick={(e) => clickHandler(e)}
-        label="Cancel"
-      />
-      <DSButton
-        id="loginBtn"
-        buttonColor="btnInfo"
-        buttonSize="btnLarge"
-        buttonClass={btnStyles.btnContained + " " + btnStyles.btnAutoWidth}
-        handleOnClick={(e) => clickHandler(e)}
-        label="Login"
-      />
-      <DSButton
-        id="backBtn"
-        buttonColor="btnSecondary"
-        buttonClass={btnStyles.btnText}
-        handleOnClick={(e) => clickHandler(e)}
-        label="Back"
-      />
-      <DSButton
-        id="ewaybillBtn"
-        buttonColor="btnPrimary"
-        buttonClass={btnStyles.btnContained}
-        handleOnClick={(e) => clickHandler(e)}
-        label="E-Way Bill"
-      />
-      <DSButton
-        id="deleteBtn"
-        buttonColor="btnWarning"
-        buttonClass={btnStyles.btnText}
-        handleOnClick={(e) => clickHandler(e)}
-        startIcon={<Image src={trashbtn} alt="icon" />}
-        label="Delete"
-      />
-      <DSButton
-        id="deviationBtn"
-        buttonColor="btnDanger"
-        buttonClass={btnStyles.btnContained}
-        buttonSize="btnMedium"
-        handleOnClick={(e) => clickHandler(e)}
-        endIcon={<Image src={deviation} alt="icon" />}
-        label="Deviation Failed "
-      />
-      <DSButton
-        id="filterBtn"
-        buttonColor="btnPrimary"
-        buttonClass={btnStyles.btnOutlined}
-        handleOnClick={(e) => clickHandler(e)}
-        label="Apply Filter"
-      />
-      <DSButton
-        id="invoiceBtn"
-        buttonColor="btnPrimary"
-        buttonSize="btnLarge"
-        buttonClass={btnStyles.btnContained}
-        handleOnClick={(e) => clickHandler(e)}
-        label="View Invoice"
-      />
-      <DSButton
-        id="logoutBtn"
-        buttonColor="btnDark"
-        buttonClass={btnStyles.btnOutlined}
-        handleOnClick={(e) => clickHandler(e)}
-        label="Log Out"
-      />
-      <DSButton
-        id="updateBtn"
-        buttonColor="btnPrimary"
-        buttonClass={btnStyles.btnContained + " " + btnStyles.btnSecondary}
-        handleOnClick={(e) => clickHandler(e)}
-        handleOnHover={(e) => changeImage(e, whiteupdate)}
-        handleMouseLeave={(e) => changeImage(e, update)}
-        startIcon={<Image src={update} alt="icon" />}
-        label="Update"
-      />
-      <DSButton
-        id="autoWidthBtn"
-        buttonColor="btnPrimary"
-        buttonClass={btnStyles.btnContained + " " + btnStyles.btnAutoWidth}
-        handleOnClick={(e) => clickHandler(e)}
-        label="Apply"
-      />
+    <DemoLayout title="Button (DsButton)">
+      <div className={btnStyles.btn_div + " " + btnStyles.flex}>
+        <DSButton
+          id="actionBtn"
+          buttonColor="btnPrimary"
+          className={btnStyles.btnOutlined}
+          handleOnHover={(e) => changeImage(e, whiteadd)}
+          handleMouseLeave={(e) => changeImage(e, addIcon)}
+          startIcon={<Image src={addIcon} alt="icon" />}
+          tooltip="variants : btnPrimary, btnOutlined, btnMedium"
+          label="New"
+          handleOnClick={(e) => clickHandler(e)}
+        />
+        <DSButton
+          id="closeBtn"
+          buttonColor="btnDark"
+          className={btnStyles.btnOutlined}
+          handleOnClick={(e) => clickHandler(e)}
+          tooltip="variants : btnDark, btnOutlined, btnMedium"
+          label="Close"
+        />
+        <DSButton
+          id="iconfilterBtn"
+          buttonColor="btnPrimary"
+          className={btnStyles.btnText + " " + btnStyles.btnTextPrimary}
+          handleOnClick={(e) => clickHandler(e)}
+          startIcon={<Image src={filter} alt="icon" />}
+          tooltip="variants : btnPrimary, btnText, btnMedium"
+          label="Filter"
+        />
+        <DSButton
+          id="deleteBtn"
+          buttonColor="btnDanger"
+          buttonSize="btnSmall"
+          className={btnStyles.btnOutlined}
+          handleOnClick={(e) => clickHandler(e)}
+          tooltip="variants : btnDanger, btnOutlined, btnSmall"
+          label="Delete"
+        />
+        <DSButton
+          id="cancelBtn"
+          buttonColor="btnDark"
+          buttonSize="btnSmall"
+          className={btnStyles.btnOutlined}
+          handleOnClick={(e) => clickHandler(e)}
+          tooltip="variants : btnDark, btnOutlined, btnSmall"
+          label="Cancel"
+        />
+        <DSButton
+          id="loginBtn"
+          buttonColor="btnInfo"
+          buttonSize="btnLarge"
+          className={btnStyles.btnContained + " " + btnStyles.btnAutoWidth}
+          handleOnClick={(e) => clickHandler(e)}
+          tooltip="variants : btnInfo, btnContained, btnLarge, btnAutoWidth"
+          label="Login"
+        />
+        <DSButton
+          id="backBtn"
+          buttonColor="btnSecondary"
+          className={btnStyles.btnText}
+          handleOnClick={(e) => clickHandler(e)}
+          tooltip="variants : btnSecondary, btnText, btnMedium"
+          label="Back"
+        />
+        <DSButton
+          id="ewaybillBtn"
+          buttonColor="btnPrimary"
+          className={btnStyles.btnContained}
+          handleOnClick={(e) => clickHandler(e)}
+          tooltip="variants : btnPrimary, btnContained, btnMedium"
+          label="E-Way Bill"
+        />
+        <DSButton
+          id="deleteBtn"
+          buttonColor="btnWarning"
+          className={btnStyles.btnText}
+          handleOnClick={(e) => clickHandler(e)}
+          handleOnHover={(e) => changeImage(e, whitetrashbtn)}
+          handleMouseLeave={(e) => changeImage(e, trashbtn)}
+          startIcon={<Image src={trashbtn} alt="icon" />}
+          tooltip="variants : btnWarning, btnText, btnMedium"
+          label="Delete"
+        />
+        <DSButton
+          id="deviationBtn"
+          buttonColor="btnDanger"
+          className={btnStyles.btnContained}
+          buttonSize="btnMedium"
+          handleOnClick={(e) => clickHandler(e)}
+          endIcon={<Image src={deviation} alt="icon" />}
+          tooltip="variants : btnDanger, btnContained, btnMedium"
+          label="Deviation Failed "
+        />
+        <DSButton
+          id="filterBtn"
+          type="tab"
+          buttonColor="btnPrimary"
+          className={btnStyles.btnOutlined}
+          handleOnClick={(e) => clickHandler(e)}
+          tooltip="variants : btnPrimary, btnOutlined, btnMedium"
+          label="Apply Filter"
+        />
+        <DSButton
+          id="invoiceBtn"
+          buttonColor="btnPrimary"
+          buttonSize="btnLarge"
+          className={btnStyles.btnContained}
+          handleOnClick={(e) => clickHandler(e)}
+          tooltip="variants : btnPrimary, btnContained, btnLarge"
+          label="View Invoice"
+        />
+        <DSButton
+          id="logoutBtn"
+          buttonColor="btnPrimary"
+          className={btnStyles.btnOutlined}
+          handleOnClick={(e) => clickHandler(e)}
+          tooltip="variants : btnPrimary, btnOutlined, btnMedium"
+          label="LogOut"
+        />
+        <DSButton
+          id="updateBtn"
+          buttonColor="btnPrimary"
+          className={btnStyles.btnContained + " " + btnStyles.btnSecondary}
+          handleOnClick={(e) => clickHandler(e)}
+          handleOnHover={(e) => changeImage(e, whiteupdate)}
+          handleMouseLeave={(e) => changeImage(e, update)}
+          startIcon={<Image src={update} alt="icon" />}
+          tooltip="variants : btnPrimary, btnContained, btnMedium"
+          label="Update"
+        />
+        <DSButton
+          id="autoWidthBtn"
+          buttonColor="btnPrimary"
+          className={btnStyles.btnContained + " " + btnStyles.btnAutoWidth}
+          handleOnClick={(e) => clickHandler(e)}
+          tooltip="variants : btnPrimary, btnContained, btnMedium, btnAutoWidth"
+          label="Apply"
+        />
 
-      <DSButton
-        id="saveBtn"
-        buttonColor="btnPrimary"
-        type="split"
-        buttonClass={btnStyles.btnContained}
-        handleOnClick={(e) => clickHandler(e)}
-        label="Save"
-        spliticon={<Image src={spliticon} alt="icon" />}
-      />
+        <DSButton
+          id="saveBtn"
+          buttonColor="btnPrimary"
+          type="split"
+          className={btnStyles.btnContained}
+          handleOnClick={(e) => clickHandler(e)}
+          tooltip="variants : btnPrimary, btnContained, btnMedium, split_btn"
+          label="Save"
+          spliticon={<Image src={spliticon} alt="icon" />}
+        />
 
-      <DSButton
-        id="toggleBtn"
-        type="toggle"
-        buttonClass={`${btnStyles.toggle_btn} ${
-          toggled ? btnStyles.toggled : ""
-        }`}
-        handleOnClick={() => setToggled(!toggled)}
-      />
+        <DSButton
+          id="toggleBtn"
+          type="toggle"
+          className={`${btnStyles.toggle_btn} ${
+            toggled ? btnStyles.toggled : ""
+          }`}
+          handleOnClick={() => setToggled(!toggled)}
+          tooltip="variants: toggle_btn"
+        />
 
-      <DSButton
-        id="uploadBtn"
-        type="upload"
-        buttonSize="btnSmall"
-        buttonClass={btnStyles.btnText + " " + btnStyles.btnTextPrimary}
-        handleOnClick={(e) => clickHandler(e)}
-        startIcon={<Image src={upload} alt="icon" />}
-        label="CSV File"
-      />
+        <DSButton
+          id="uploadBtn"
+          type="upload"
+          buttonSize="btnSmall"
+          className={btnStyles.btnText + " " + btnStyles.btnTextPrimary}
+          handleOnClick={(e) => clickHandler(e)}
+          startIcon={<Image src={upload} alt="icon" />}
+          tooltip="variants : btnText, btnSmall, upload_btn"
+          label="CSV File"
+        />
 
-      <DSButton
-        id="notificationBtn"
-        type="icon_image"
-        buttonSize="btnSmall"
-        // buttonClass={btnStyles.btnSmall + " " + btnStyles.icon_image}
-        handleOnClick={(e) => clickHandler(e)}
-        startIcon={<Image src={notificationicon} alt="icon" />}
-        tooltip="Notification"
-      />
-      <DSButton
-        id="chatBtn"
-        type="icon_image"
-        buttonSize="btnSmall"
-        // buttonClass={btnStyles.btnSmall + " " + btnStyles.icon_image}
-        handleOnClick={(e) => clickHandler(e)}
-        startIcon={<Image src={chat} alt="icon" />}
-        tooltip="Chat"
-      />
+        <DSButton
+          id="notificationBtn"
+          type="icon_image"
+          buttonSize="btnSmall"
+          // className={btnStyles.btnSmall + " " + btnStyles.icon_image}
+          handleOnClick={(e) => clickHandler(e)}
+          startIcon={<Image src={notificationicon} alt="icon" />}
+          tooltip="variants: Notification, icon_image, btnSmall"
+        />
+        <DSButton
+          id="chatBtn"
+          type="icon_image"
+          buttonSize="btnSmall"
+          // className={btnStyles.btnSmall + " " + btnStyles.icon_image}
+          handleOnClick={(e) => clickHandler(e)}
+          startIcon={<Image src={chat} alt="icon" />}
+          tooltip="variants: Chat, icon_image, btnSmall"
+        />
 
-      <DSButton
-        id="leftarrowBtn"
-        type="button_icon"
-        // buttonClass={btnStyles.icon_btn}
-        handleOnClick={(e) => clickHandler(e)}
-        handleOnHover={(e) => changeImage(e, darkleftarrow)}
-        handleMouseLeave={(e) => changeImage(e, leftarrow)}
-        startIcon={<Image src={leftarrow} alt="icon" />}
-        tooltip="Back"
-      />
-    </div>
+        <DSButton
+          id="leftarrowBtn"
+          type="button_icon"
+          // className={btnStyles.icon_btn}
+          handleOnClick={(e) => clickHandler(e)}
+          handleOnHover={(e) => changeImage(e, darkleftarrow)}
+          handleMouseLeave={(e) => changeImage(e, leftarrow)}
+          startIcon={<Image src={leftarrow} alt="icon" />}
+          tooltip="variants: Back, button_icon"
+        />
+
+        <DSButtonGroup id="btngroup1" className={btnStyles.btngroup}>
+          <DSButton
+            id="button1"
+            type="count"
+            className={btnStyles.btngroupcontained + " " + btnStyles.group_btn}
+            label="Button 1"
+            count="00"
+            // handleOnClick={(e) => handleButtonClick(e, "button1")}
+            tooltip="variants: btngroupcontained"
+          />
+          <DSButton
+            id="button2"
+            type="count"
+            className={btnStyles.btngroupcontained + " " + btnStyles.group_btn}
+            label="Button 2"
+            count="00"
+            // handleOnClick={(e) => handleButtonClick(e, "button2")}
+            tooltip="variants: btngroupcontained"
+          />
+
+          <DSButton
+            id="button3"
+            type="count"
+            className={btnStyles.btngroupcontained + " " + btnStyles.group_btn}
+            label="Button 3"
+            count="00"
+            // handleOnClick={(e) => handleButtonClick(e, "button3")}
+            tooltip="variants: btngroupcontained"
+          />
+          <DSButton
+            id="button4"
+            type="count"
+            className={btnStyles.btngroupcontained + " " + btnStyles.group_btn}
+            label="Button 4"
+            count="00"
+            // handleOnClick={(e) => handleButtonClick(e, "button4")}
+            tooltip="variants: btngroupcontained"
+          />
+        </DSButtonGroup>
+      </div>
+    </DemoLayout>
   );
 };
 

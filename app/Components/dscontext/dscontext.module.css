@@ -5,22 +5,24 @@
     align-items: center;*/ 
     height: 100%;
     width:100%;
-    background-color: #f0f0f0;
+    background-color:  var(--background);
     position: relative; 
 }
 .contextMenu {
-    background-color: #f6f6f8;
-    color: black; /* Changed to black for better visibility */
+    background-color: var(--dark) !important;
+    color: var(--background); /* Changed to black for better visibility */
     padding: 5px 10px;
-    border-radius: 10px;
+    border-radius: 0px;
     font-size: 14px;
     text-align: center; 
     white-space: nowrap; /* Keeps text in a single line */
     position: absolute; /* Position relative to the button */
     z-index: 10; /* Make sure it's on top */
-    box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     max-width: 200px; /* Set a maximum width */
     width: 25px;
+    max-width: fit-content; /* Set a maximum width */
+    width: 200px;
     height:25px; /* Automatically adjust width based on content */
     display: none; /* Start hidden */
 
@@ -45,7 +47,7 @@
     left: 50%; /* Center it horizontally */
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
-    border-top: 5px solid  #f9fafc; /* Color of the arrow */
+    border-top: 5px solid  var(--background); /* Color of the arrow */
 
 }
 
@@ -55,7 +57,7 @@
     left: 50%;
     border-left: 5px solid transparent; /* Left border for the triangle */
     border-right: 5px solid transparent; /* Right border for the triangle */
-    border-bottom: 5px solid #fafafc;
+    border-bottom: 5px solid var(--background);
 }
 
 

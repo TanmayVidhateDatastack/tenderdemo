@@ -1,7 +1,8 @@
 // import Image from "next/image";
 import React from "react";
 import styles from "./ElLayout.module.css";
-import ApplicationTitleBar from "../ApplicationComponents/ApplicationTitleBar";
+import ApplicationTitleBar from "./ApplicationTitleBar";
+import ApplicationNavigator from "./ApplicationNavigator";
 
 export interface ElLayoutProps {
     children:React.ReactNode
@@ -12,14 +13,11 @@ function ElLayout({children}: ElLayoutProps) {
       <div className={styles.layout+" "+styles.container}>
         <ApplicationTitleBar></ApplicationTitleBar>
         
-        <div className={styles.applicationTitleBar+" "+styles.row}></div>
-        <div className={styles.row+" "+styles.applicationContent}>
-            {/* <ApplicationNavigator></ApplicationNavigator>
-            <Application></Application> */}
-          <div className={styles.applicationNavigator}>
+        <div className={styles.row+" "+styles.appContent}>
+            <ApplicationNavigator></ApplicationNavigator>
+            {/* <Application></Application> */}
 
-          </div>
-          <div className={styles.applicationViewArea}>
+          <div className={styles.appViewArea}>
             {children}
           </div>
         </div>

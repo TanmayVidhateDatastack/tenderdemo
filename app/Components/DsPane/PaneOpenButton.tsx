@@ -1,41 +1,43 @@
 "use client";
-import DSButton from "../DsButton/DsButton";
-import { DisplayPane } from "./DsPane";
+import DSButton, { DSButtonProps } from "../dsButton/dsButton";
+import { DisplayPane } from "./dsPane";
 
-interface PaneOpenButtonProps {
-  children?: React.ReactNode;
-  id?: string;
+interface PaneOpenButtonProps extends DSButtonProps{
   paneId:string;
-  buttonText?: string;
-  buttonClass?: string;
-  img?: string;
-  beforeIcon?: React.ReactNode;
-  afterIcon?: React.ReactNode;
-  handleOnHover?: (e: React.MouseEvent<HTMLElement>) => void;
 }
 const PaneOpenButton: React.FC<PaneOpenButtonProps> = ({
   id,
   paneId,
-  buttonText,
+  label,
   buttonClass,
+  buttonSize = "btnMedium",
+  iconSize = "iconSmall",
+  buttonColor = "btnPrimary",
+  type = "standard",
+  tooltip,
   children,
   handleOnHover,
-  beforeIcon,
-  afterIcon,
+  handleMouseLeave,
+  startIcon,
+  endIcon,
 }) => {
   return (
     <DSButton
         id={id}
         buttonClass={buttonClass}
-        handleOnClick={()=>DisplayPane(paneId)}
+        buttonSize={buttonSize}
+        iconSize={iconSize}
+        buttonColor={buttonColor}
+        type={type}
+        handleOnClick={()=>{DisplayPane(paneId)}}
         handleOnHover={handleOnHover}
-        beforeIcon={beforeIcon}
-        afterIcon={afterIcon}
-        buttonText={buttonText}
+        handleMouseLeave={handleMouseLeave}
+        tooltip={tooltip}
+        startIcon={startIcon}
+        endIcon={endIcon}
+        label={label}
         >{children}</DSButton>
-    
-
   );
 };
- 
+
 export default PaneOpenButton;

@@ -15,7 +15,8 @@ interface DSButtonProps {
     | "btnWarning"
     | "btnDark"
     | "btnInfo";
-  buttonClass?: string;
+  className?: string;
+  count?: string | "00";
   handleOnClick?: (e: React.MouseEvent<HTMLElement>) => void;
   img?: string;
   startIcon?: React.ReactElement;
@@ -27,11 +28,12 @@ interface DSButtonProps {
 const DSButton: React.FC<DSButtonProps> = ({
   id,
   label,
-  buttonClass,
+  className,
   buttonSize = "btnMedium",
   iconSize = "iconSmall",
   buttonColor = "btnPrimary",
   type = "standard",
+  count = "00",
   tooltip,
   handleOnClick,
   children,
@@ -53,7 +55,7 @@ const DSButton: React.FC<DSButtonProps> = ({
           className={
             styles.btn +
             " " +
-            buttonClass +
+            className +
             " " +
             styles[buttonSize] +
             " " +
@@ -87,7 +89,7 @@ const DSButton: React.FC<DSButtonProps> = ({
             className={
               styles.btn +
               " " +
-              buttonClass +
+              className +
               " " +
               styles.split_btn +
               " " +
@@ -136,9 +138,7 @@ const DSButton: React.FC<DSButtonProps> = ({
         <div className={styles.toggle}>
           <button
             id={id}
-            className={
-              styles.btn + " " + buttonClass + " " + styles[buttonSize]
-            }
+            className={styles.btn + " " + className + " " + styles[buttonSize]}
             onClick={handleOnClick}
             onMouseOver={handleOnHover}
             onMouseLeave={handleMouseLeave}
@@ -154,7 +154,7 @@ const DSButton: React.FC<DSButtonProps> = ({
             className={
               styles.btn +
               " " +
-              buttonClass +
+              className +
               " " +
               styles.icon_image +
               " " +
@@ -182,7 +182,7 @@ const DSButton: React.FC<DSButtonProps> = ({
             className={
               styles.btn +
               " " +
-              buttonClass +
+              className +
               " " +
               styles.icon_btn +
               " " +
@@ -206,7 +206,7 @@ const DSButton: React.FC<DSButtonProps> = ({
       {type == "upload" && (
         <button
           id={id}
-          className={styles.btn + " " + buttonClass + " " + styles[buttonSize]}
+          className={styles.btn + " " + className + " " + styles[buttonSize]}
           title={tooltip !== undefined ? tooltip : label}
           onClick={displayFileBrowser}
           onMouseOver={handleOnHover}
@@ -228,6 +228,77 @@ const DSButton: React.FC<DSButtonProps> = ({
             </span>
           )}
           <input id={id + "_upload"} type="file" hidden />
+        </button>
+      )}
+      {type == "tab" && (
+        <button
+          id={id}
+          className={
+            styles.btn +
+            " " +
+            className +
+            " " +
+            styles.tab_btn +
+            " " +
+            styles[buttonSize]
+          }
+          title={tooltip !== undefined ? tooltip : label}
+          // onClick={displayFileBrowser}
+          onMouseOver={handleOnHover}
+          onMouseLeave={handleMouseLeave}
+        >
+          {startIcon !== undefined && (
+            <span
+              className={"icon " + styles.startIcon + " " + styles[iconSize]}
+            >
+              {startIcon}
+            </span>
+          )}
+          {label || children}
+
+          {endIcon !== undefined && (
+            <span className={"icon " + styles.endIcon + " " + styles[iconSize]}>
+              {endIcon}
+            </span>
+          )}
+        </button>
+      )}
+      {type == "count" && (
+        <button
+          id={id}
+          className={
+            styles.btn +
+            " " +
+            className +
+            " " +
+            styles[buttonSize] +
+            " " +
+            styles[buttonColor]
+          }
+          title={tooltip !== undefined ? tooltip : label}
+          onClick={handleOnClick}
+          onMouseOver={handleOnHover}
+          onMouseLeave={handleMouseLeave}
+        >
+          {startIcon !== undefined && (
+            <span
+              className={"icon " + styles.startIcon + " " + styles[iconSize]}
+            >
+              {startIcon}
+            </span>
+          )}
+          {(label && (
+            <>
+              {label} <div className={styles.count}>{count}</div>
+            </>
+          )) ||
+            children}
+
+          {endIcon !== undefined && (
+            <span className={"icon " + styles.endIcon + " " + styles[iconSize]}>
+              {endIcon}
+            </span>
+          )}
         </button>
       )}
     </>

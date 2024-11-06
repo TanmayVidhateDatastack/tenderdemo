@@ -4,6 +4,7 @@
   --backgroundt:rgb(246, 242, 242);
 
   --blue: #41428E;
+  --blue-600:#82b1ff;
   --semiblue: #4F54A4;
   --red: #c50606;
   --orange:#EB0F0F;
@@ -12,7 +13,7 @@
   --lightviolet: #abafe1;
   --darkskyblue:#0076BA;
   --skyblue:#0FAEEF;
-  --gray:#c4c4c4;
+  --grey:#c4c4c4;
   --brick: #f1818198;
   --blush:#efe3fade;
   --periwinkle:#e4e4e4;
@@ -27,8 +28,8 @@
 
   --primary:var(--semiblue);
   --primary-hover:var(--blue);
-  --secondary:var(--gray);
-  --secondary-hover:var(--gray);
+  --secondary:var(--grey);
+  --secondary-hover:var(--grey);
   --danger:var(--red);
   --danger-hover:var(--orange);
   --warning:var(--lightred);
@@ -54,13 +55,74 @@
   --sndSemiviolet:var(--periwinkle);       
   --sndLightviolet:var(--lightviolet); */
 
-  /* --primary:var(--backgroundt); */
-  /* --primary-hover:var(--backgroundt); */
-  /* --secondary:var(--backgroundt);
-  --secondary-hover:var(--backgroundt);
-  --warning:var(--backgroundt);
-  --transparent:var(var(var(--backgroundt))) */
+  --dspadding:0.5rem !important;
+  --dsmargin:3px 0.6vw !important;
+  --dsmin-width:5rem;
+  --dsmin-height:3rem;
+  --dswidth:fit-content;
+  --dsheight:fit-content;
+  --dsfont-size:16px;
+  --dsborder:1px solid;
+  --dsborder-radius:4px;
 
+  --heading1:21px;
+  --heading2:18px;
+  --subtitle1:12px;
+  --subtitle2:11px;
+  --bodyText1:14px;
+  --buttonTextMedium:16px;
+  --buttonTextSmall:14px;
+  --link:12px;
+  --custome:50px;
+
+  --disable:#CCCCCC;
+  --placeholder:#C4C4C4;
+  --bodytext:#434343;
+  --hold:#CC8400;
+  --draft:#B0B0B0;
+  --dispatch:#DCA500;
+  --approved:#28A745;
+  --open:#007BFF;
+  --deviationpending:#6F42C1;
+  --cancelled:#DC3545;
+  --rejected:#A50F1D;
+  --submitted:#87CEEB;
+  --completed:#126E27;
+
+  --grey-50:#F5F5F5;
+  --grey-100:#E9E9E9;
+  --grey-200:#D9D9D9;
+  --grey-300:#C4C4C4;
+  --grey-400:#9D9D9D;
+  --grey-500:#7B7B7B;
+  --grey-600:#555555;
+  --grey-700:#434343;
+  --grey-800:#262626;
+  --grey-900:#0F0F0F;
+
+ 
+
+  /*button group colors*/
+  --btngroup-primary:#F8F9FF;
+  --btngroup-text-primary:#0F0F0F;
+  --btngroup-primary-hover:#EDEDF6;
+  --btngroup-text-primary-hover:#4F54A4;
+
+  /*status indicator colors*/
+  --under-approval:#e2bb1f1a;
+  --under-approval-text:#e2bb1f;
+  --pending:#cc84001a;
+  --pending-text:#cc8400;
+  --under-review:#6ec4e81a;
+  --under-review-text:#6ec4e8;
+  --approved:#28a7451a;
+  --approved-text:#28a745;
+  --submitted:#007bff1a;
+  --submitted-text:#007bff;
+  --inProcess:#6f42c11a;
+  --inProcess-text:#6f42c1;
+  --cancelled:#dc35451a;
+  --cancelled-text:#dc3545;
 }
 /* 
 /* @media (prefers-color-scheme: dark) {
@@ -100,8 +162,46 @@ span{
     display: flex;
     align-items: center;
 }
+
+
+/*scrollbar css*/
+*::-webkit-scrollbar {
+  display: block;
+  overflow: auto;
+  padding: 1em;
+  margin: 1em auto;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #c2c0c0; /* Color of the scrollbar thumb */
+  border-radius: 5px;
+  height: 4px !important;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+   background-color: #cdc5c5; /*Color of the scrollbar thumb on hover */
+}
+
+*::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;  
+}
+
+*::-webkit-scrollbar-track{
+  background-color: transparent;
+  /* display: hidden; */
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+*:hover::-webkit-scrollbar-thumb {
+  background-color: #555;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
-    color-scheme: dark;
+    color-scheme: light;
   }
 }
