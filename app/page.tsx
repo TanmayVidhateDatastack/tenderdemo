@@ -5,6 +5,10 @@ export default function Home() {
   return (
     <>
       <Demo></Demo>
+
+    <DemoSummaryCount></DemoSummaryCount>
+    <DemoDeviation></DemoDeviation>
+    <DemoUserProfile></DemoUserProfile>
     </>
 
   );
