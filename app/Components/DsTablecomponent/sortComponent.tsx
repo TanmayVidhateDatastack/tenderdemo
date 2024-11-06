@@ -6,7 +6,7 @@ export interface sortprops {
 
 const SortComponent: React.FC<sortprops> = ({ columnIndex, sortTable }) => {
   return (
-    <div className={`arrow-container column-index-${columnIndex}`}>
+    <div className={`${styles["arrow-container"]} column-index-${columnIndex}`}>
       <span
         className={`${styles["cursor-pointer"]} sort-icon up`}
         onClick={(e) => sortTable(e, "ASC")}

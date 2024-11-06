@@ -1,3 +1,5 @@
+import styles from "./DsTable.module.css";
+
 interface MenuItemProps {
   children?: React.ReactNode;
   id?: string;
@@ -15,7 +17,7 @@ const TabViewMenuItem: React.FC<MenuItemProps> = ({
   return (
     <button
       id={id}
-      className={`btn MenuItem py-1  ${classNames}`}
+      className={`${styles["MenuItem"]} py-1  ${classNames}`}
       onClick={handleOnClick}
     >
       {menu || children}

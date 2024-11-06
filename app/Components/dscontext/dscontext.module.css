@@ -5,7 +5,7 @@
     align-items: center;*/ 
     height: 100%;
     width:100%;
-    background-color:  var(--background);
+    /* background-color:  var(--background); */
     position: relative; 
 }
 .contextMenu {
@@ -20,13 +20,26 @@
     z-index: 10; /* Make sure it's on top */
     box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
     max-width: fit-content; /* Set a maximum width */
-    width: 200px;
-    height:25px; /* Automatically adjust width based on content */
+    width: auto;
+    height:auto; /* Automatically adjust width based on content */
     display: none; /* Start hidden */
-
+    flex-direction: column;
 }
 
-
+.contextMenu::before{
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%) rotate(40deg);
+    bottom: -4px;
+    height: 10px;
+    width: 15px;
+    z-index: -2;
+    border-radius: 0px;
+    background-color: var(--dark);
+    border-bottom-right-radius: 5px;
+    box-shadow: 2px 2px 5px 0px #dcdcdc;
+}
 .arrow {
     position: absolute;
   /* bottom: -5px; */

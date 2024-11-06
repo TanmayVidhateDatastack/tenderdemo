@@ -1,15 +1,15 @@
 "use client";
 import styles from "./dscontext.module.css";
-import React from "react";
+import React, { ReactNode } from "react";
 
 interface PopUpContextProps {
   id?: string;
   containerId?: string;
-  content?: string;
+  content?: string | ReactNode;
 }
 
 export const displaycontext = (
-  event: React.MouseEvent<HTMLButtonElement>,
+  event: React.MouseEvent<HTMLElement>,
   id: string,
   containerId: string
 ) => {
@@ -25,7 +25,7 @@ export const displaycontext = (
   }
 
   // Ensure the contextMenu and button are valid before proceeding
-  const button = event.currentTarget as HTMLButtonElement;
+  const button = event.currentTarget as HTMLElement;
   if (!contextMenu || !button || !container) return;
 
   // If context menu is already displayed, no need to show it again

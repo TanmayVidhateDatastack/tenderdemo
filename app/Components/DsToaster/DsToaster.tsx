@@ -41,8 +41,8 @@ const Toaster: React.FC<ToasterProps> = ({
         setVisible(false);
       }, duration);
 
-    return () => clearTimeout(timer);
-  }
+      return () => clearTimeout(timer);
+    }
   }, [duration, handleClose]);
 
   if (!visible) return null;
@@ -88,7 +88,7 @@ const Toaster: React.FC<ToasterProps> = ({
         <div className={styles.buttonContainer}>
           <DSButton
             id="actionBtn"
-            buttonClass={`${styles.action_btn} `}
+            className={`${styles.action_btn} `}
             handleOnClick={() => handleButtonClick()}
             label="Okay"
           />

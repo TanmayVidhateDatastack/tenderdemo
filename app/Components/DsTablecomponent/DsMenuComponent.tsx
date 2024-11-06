@@ -1,10 +1,11 @@
 import Image from "next/image";
-import { useState } from "react";
+import { MouseEvent, useState } from "react";
 import MenuDivider from "./MenuDivider";
 import TabViewMenuItem from "./TabViewMenuItem";
 import styles from "./DsTable.module.css";
 import addIcon from "../../Icons/smallIcons/add.svg";
 import DSButton from "../dsButton/dsButton";
+import PopUpContext, { displaycontext } from "../dscontext/dscontext";
 
 export interface menuprops {
   columnIndex: number;
@@ -33,7 +34,8 @@ const MenuComponent: React.FC<menuprops> = ({
     sortDataOnlyOnSpecifiedColumn(columnIndex);
     setMenuVisible(false);
   };
-  const handleOnClick = () => {
+
+  const handleOnClick = (e: React.MouseEvent<HTMLElement>) => {
     setColumnKey(columnIndex);
     setMenuVisible(!menuVisible);
   };
@@ -46,53 +48,67 @@ const MenuComponent: React.FC<menuprops> = ({
           type="icon_image"
           buttonSize="btnSmall"
           // buttonClass={btnStyles.btnSmall + " " + btnStyles.icon_image}
-          handleOnClick={handleOnClick}
+          handleOnClick={(e) => {
+            handleOnClick(e); // Call second function
+            displaycontext(
+              e,
+              "menucontext" + columnIndex,
+              "menu" + columnIndex
+            );
+            // Call first function
+          }}
           startIcon={<Image src={addIcon} alt="menu" />}
           tooltip="Menu"
         />
       </div>
 
-      {menuVisible && columnKey === columnIndex && (
-        <div key={columnIndex} className={`${styles["menu-component"]}`}>
-          <TabViewMenuItem
-            menu="Sort By Asc"
-            handleOnClick={() => sortTableAscending(columnIndex)}
-          />
-          <MenuDivider />
-          <TabViewMenuItem
-            menu="Clear Sort"
-            handleOnClick={(e) => {
-              setMenuVisible(false);
-              clearSortOnColumn(e, columnIndex);
-            }}
-          />
-          <MenuDivider />
-          <TabViewMenuItem
-            menu="Filter"
-            handleOnClick={() => {
-              setMenuVisible(false);
-            }}
-          />
-          <MenuDivider />
-          <TabViewMenuItem
-            menu="Hide Column"
-            handleOnClick={() => {
-              hideShowColumn(columnIndex);
-              setMenuVisible(false);
-            }}
-          />
-          <MenuDivider />
-          {manageColumns && (
+      {/* {menuVisible && columnKey === columnIndex && ( */}
+      <PopUpContext
+        containerId={"menu" + columnIndex}
+        id={"menucontext" + columnIndex}
+        content={
+          <>
             <TabViewMenuItem
-              menu="Manage Column"
+              menu="Sort By Asc"
+              handleOnClick={() => sortTableAscending(columnIndex)}
+            />
+            <MenuDivider />
+            <TabViewMenuItem
+              menu="Clear Sort"
+              handleOnClick={(e) => {
+                setMenuVisible(false);
+                clearSortOnColumn(e, columnIndex);
+              }}
+            />
+            <MenuDivider />
+            <TabViewMenuItem
+              menu="Filter"
               handleOnClick={() => {
-                manageColumns();
                 setMenuVisible(false);
               }}
             />
-          )}
-        </div>
-      )}
+            <MenuDivider />
+            <TabViewMenuItem
+              menu="Hide Column"
+              handleOnClick={() => {
+                hideShowColumn(columnIndex);
+                setMenuVisible(false);
+              }}
+            />
+            <MenuDivider />
+            {manageColumns && (
+              <TabViewMenuItem
+                menu="Manage Column"
+                handleOnClick={() => {
+                  manageColumns();
+                  setMenuVisible(false);
+                }}
+              />
+            )}
+          </>
+        }
+      />
+      {/* )} */}
     </>
   );
 };
