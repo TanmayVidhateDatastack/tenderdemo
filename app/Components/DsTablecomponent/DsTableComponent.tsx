@@ -1,6 +1,5 @@
 "use client";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import InputText from "./Input_component";
 import { convertToDate, parseFormattedNumber, tcolumn, trow } from "./types";
 import TheaderComponent from "./DsTheaderComponent";
 import TrComponent from "./DsTrComponent";

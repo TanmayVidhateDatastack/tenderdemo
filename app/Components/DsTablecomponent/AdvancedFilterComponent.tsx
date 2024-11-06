@@ -1,4 +1,4 @@
-import DSButton from "../dsButton/DsButton";
+import DSButton from "../dsButton/dsButton";
 import TextField from "../DsTextField/DsTextField";
 
 interface advancedFilterComponent {
