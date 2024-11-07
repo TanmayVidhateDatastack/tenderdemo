@@ -1,0 +1,11 @@
+.TabContainer{
+    display: flex;
+    flex-direction: column;
+    width:100%;
+
+}
+.TabNav{
+    height: min-content;
+    overflow-x: auto;
+    width:100%;
+}

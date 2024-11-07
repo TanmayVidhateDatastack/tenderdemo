@@ -5,14 +5,14 @@ export class tcolumn {
   columnHeader: string = "";
   isHidden?: boolean = false;
   sort?: string;
-  columnContentType?: string | "string";
+  columnContentType?: string;
 }
 
 export class cellData {
   columnIndex: number = 1;
   className?: string;
-  content: React.ReactNode | string;
-  contentType?: string | number | boolean | Date;
+  content: React.ReactNode | string | number;
+  contentType?: string;
 }
 
 export class trow {
@@ -29,6 +29,10 @@ export const formatDate = (date: Date): string => {
 };
 
 export const convertToDate = (dateStr: string) => {
-  const [day, month, year] = dateStr.split("-").map(Number);
+  const [day, month, year] = dateStr.split("/").map(Number);
   return new Date(year, month - 1, day); // month is 0-indexed
+};
+
+export const parseFormattedNumber = (value: string): number => {
+  return Number(value.replace(/,/g, "")); // Remove commas and convert to number
 };

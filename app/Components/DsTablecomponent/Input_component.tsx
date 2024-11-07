@@ -1,3 +1,4 @@
+import styles from "./DsTable.module.css";
 export class InputTextProps {
   value?: string;
   handleInputChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -26,7 +27,8 @@ const InputText: React.FC<InputTextProps> = ({
       onChange={handleInputChange}
       onKeyUp={handleKeyUp}
       id={id}
-      className={`input-text form-control m-0 ${className || ""}`}
+      className={`${styles["ds-search-input-text"]} ${className}
+      }`}
       placeholder={placeholder}
       // list={list}
     />
