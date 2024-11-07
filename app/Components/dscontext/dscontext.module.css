@@ -3,14 +3,14 @@
     display: flex;
    /* justify-content: center; 
     align-items: center;*/ 
-    height: 100%;
+    height: fit-content;
     width:100%;
     background-color:  var(--background);
     position: relative; 
 }
 .contextMenu {
-    background-color: var(--dark) !important;
-    color: var(--background); /* Changed to black for better visibility */
+    background-color: var(--background) !important;
+    /*color: var(--background);*/ /* Changed to black for better visibility */
     padding: 5px 10px;
     border-radius: 0px;
     font-size: 14px;
@@ -23,7 +23,7 @@
     width: 25px;
     max-width: fit-content; /* Set a maximum width */
     width: 200px;
-    height:25px; /* Automatically adjust width based on content */
+    height:fit-content; /* Automatically adjust width based on content */
     display: none; /* Start hidden */
 
 }
@@ -63,11 +63,11 @@
 }
 .right
 {  
-    left: -6px; /* Positions it just above the popup */
+    left: -4px; /* Positions it just above the popup */
     top: 50%; /* Centers the arrow vertically relative to the popup */
-    border-top: 10px solid transparent; /* Creates the top side of the triangle */
-    border-bottom: 10px solid transparent; /* Creates the bottom side of the triangle */
-    border-right: 10px solid var(--dark);
+    border-top: 5px solid transparent; /* Creates the top side of the triangle */
+    border-bottom: 5px solid transparent; /* Creates the bottom side of the triangle */
+    border-right: 5px solid var(--dark);
     transform: translateY(-50%);
 }
  .left
