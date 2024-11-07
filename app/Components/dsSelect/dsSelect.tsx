@@ -2,11 +2,8 @@
 
 import { useState } from "react";
 import styles from "./dsSelect.module.css";
-// import Image from "next/image";
-import remove from "../../Icons/mediumIcons/remove.svg";
-// import { displaycontext } from "./dsContext";
 import DsOption from "./dsOption";
-import { closecontext, displaycontext } from "../dsContext/dscontext";
+import { closeContext, displayContext } from "../dsContextHolder/dsContextHolder";
 
 /**
  * DsPane component displays pane.
@@ -46,7 +43,7 @@ const DsSelect: React.FC<SelectProps> = ({
   const handleSelect = (option: string) => {
     if (type == "single") {
       setSingleSelectedOption(option);
-      closecontext("test");
+      closeContext("test");
     }
 
     if (type == "multi") {
@@ -69,10 +66,10 @@ const DsSelect: React.FC<SelectProps> = ({
     }
     
   };
-  const removeOption = (select: string) => {
-    const removeItem = selectedOption.filter((option) => option !== select);
-    setSelectedOption(removeItem);
-  };
+  // const removeOption = (select: string) => {
+  //   const removeItem = selectedOption.filter((option) => option !== select);
+  //   setSelectedOption(removeItem);
+  // };
   const [isFocused, setIsFocused] = useState(false);
   const [value, setValue] = useState("");
 
@@ -181,11 +178,11 @@ const DsSelect: React.FC<SelectProps> = ({
             className={styles.mainselection}
             onFocus={(e) => {
               setIsFocused(true);
-              displaycontext(e, "test", "test1", "vertical", "left");
+              displayContext(e, "test", "vertical", "left");
             }}
             onBlur={() => {
               setIsFocused(false);
-              // closecontext("test");
+              // closeContext("test");
             }}
             onChange={(e) => setValue(e.target.value)}
           />
@@ -220,7 +217,7 @@ const DsSelect: React.FC<SelectProps> = ({
                 id="groupSelect"
                 onChange={handleGroupChange}
                 value={selectedGroup}
-                // onClick={(e) => displaycontext(e, contextMenuId, containerId)}
+                // onClick={(e) => displayContext(e, contextMenuId)}
                 className={styles.dropdownSelect}
               >
                 {options.map((group) => (
@@ -228,7 +225,7 @@ const DsSelect: React.FC<SelectProps> = ({
                     key={group.label}
                     value={group.label}
                     onMouseOver={(e) =>
-                      displaycontext(e, contextMenuId, containerId)
+                      displayContext(e, contextMenuId)
                     }
                   >
                     {group.label}

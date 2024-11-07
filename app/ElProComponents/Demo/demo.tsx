@@ -20,8 +20,7 @@ import PopupOpenButton from "../../Components/dsPopup/popupOpenButton";
 // import SaveButton from "./Components/DsButton/Ds_SaveBtn";
 import DsTableComponent from "../../Components/DsTablecomponent/DsTableComponent";
 import DemoSelect from "@/app/Components/dsSelect/dsDemoSelect";
-import DemoContext from "@/app/Components/dscontext/dsDemoContext";
-// import DemoPane from "@/app/Components/dsPane/dsDemoPane";
+import DemoContext from "@/app/Components/dsContextHolder/dsDemoContextHolder";
 import DemoTextField from "@/app/Components/DsTextField/dsDemoTextField";
 import DemoLayout from "./demoLayout";
 import DemoDeviation from "@/app/Components/DsDeviations/demoDeviation";
@@ -36,8 +35,6 @@ import DemoButtons from "@/app/Components/DsButton/dsDemoButtons";
 import DSButton from "@/app/Components/dsButton/dsButton";
 import DsStateChange from "@/app/Components/DsStatusIndicator/dsStatusIndicator";
 import Image from "next/image";
-import { FilterProvider } from "@/app/Components/DsTablecomponent/supportComponents/FilterContext";
-import AdvancedFilterComponent from "@/app/Components/DsTablecomponent/advancedFilterComponent";
 
 // import DsPane from "@/app/Components/dsPane/dsPane";
 
@@ -1236,59 +1233,15 @@ export default function Demo() {
               <TabView tabId="8">
                 <DemoSummaryCount></DemoSummaryCount>
               </TabView>
-              <FilterProvider>
-                <AdvancedFilterComponent
-                  minValue={0}
-                  maxValue={0}
-                  rangeValue={0}
-                  filterTypes={[]}
-                  setRangeFromValue={function (
-                    e: // import DSButton from "./Components/DsButton/DsButton";
-                    // import ButtonLibrary from "./Components/dsButton/DS_ButtonLibrary";
-                    React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-                  ): void {
-                    throw new Error("Function not implemented.");
-                  }}
-                  setRangeToValue={function (
-                    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-                  ): void {
-                    throw new Error("Function not implemented.");
-                  }}
-                  setDateFromValue={function (
-                    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-                  ): void {
-                    throw new Error("Function not implemented.");
-                  }}
-                  setDateToValue={function (
-                    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-                  ): void {
-                    throw new Error("Function not implemented.");
-                  }}
-                  setGrossRangeValue={function (
-                    e: React.ChangeEvent<HTMLInputElement>
-                  ): void {
-                    throw new Error("Function not implemented.");
-                  }}
-                  setCommaValue={function (
-                    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-                  ): void {
-                    throw new Error("Function not implemented.");
-                  }}
-                  applyFilter={function (
-                    e: React.MouseEvent<HTMLElement>
-                  ): void {
-                    throw new Error("Function not implemented.");
-                  }}
-                />
-                <TabView tabId={"9"}>
-                  <DsTableComponent
-                    className={tempTableData.className}
-                    id={tempTableData.id}
-                    columns={tempTableData.columns}
-                    rows={tempTableData.rows}
-                  ></DsTableComponent>
-                </TabView>
-              </FilterProvider>
+
+              <TabView tabId={"9"}>
+                <DsTableComponent
+                  className={tempTableData.className}
+                  id={tempTableData.id}
+                  columns={tempTableData.columns}
+                  rows={tempTableData.rows}
+                ></DsTableComponent>
+              </TabView>
             </TabContainer>
           </div>
         </div>

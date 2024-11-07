@@ -26,7 +26,7 @@ const PopupOpenButton: React.FC<PopupOpenButtonProps> = ({
   return (
     <DSButton
       id={id}
-      buttonClass={buttonClass}
+      className={buttonClass}
       handleOnClick={() => OpenPopup(popupId)}
       handleOnHover={handleOnHover}
       startIcon={beforeIcon}

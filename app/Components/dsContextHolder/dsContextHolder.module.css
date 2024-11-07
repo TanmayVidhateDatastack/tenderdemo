@@ -17,7 +17,7 @@
     font-size: var(--subtitle1);
     text-align: center;
     white-space: nowrap; /* Keeps text in a single line */
-    position: absolute; /* Position relative to the button */
+    position: fixed; /* Position relative to the button */
     z-index: 10; /* Make sure it's on top */
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     max-width: 200px; /* Set a maximum width */
@@ -74,65 +74,7 @@
     border-right: 5px solid transparent; /* Right border for the triangle */
     border-bottom: 5px solid var(--background);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.horizontalDiv{
+    display: flex;
+    overflow: auto;
+}

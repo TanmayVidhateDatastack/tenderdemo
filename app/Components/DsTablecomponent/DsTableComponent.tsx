@@ -12,11 +12,10 @@ import styles from "./DsTable.module.css";
 import RadioCheckButton from "./supportComponents/RadioCheckButton";
 import TextField from "../DsTextField/DsTextField";
 import DSButton from "../dsButton/dsButton";
-import { displaycontext } from "../dscontext/dscontext";
 import Image from "next/image";
 
-import addIcon from "../../Icons/smallIcons/add.svg";
-import AdvancedFilterComponent from "./advancedFilterComponent";
+import threedot from "../../Icons/smallIcons/threedot.svg";
+import AdvancedFilterComponent from "./AdvancedFilterComponent";
 import TbodyComponent from "./bodyComponents/dsTbodyComponent";
 import TdComponent from "./bodyComponents/dsTdComponent";
 import TrComponent from "./bodyComponents/dsTrComponent";
@@ -25,6 +24,7 @@ import ThComponent from "./headerComponents/dsThComponent";
 import TheaderComponent from "./headerComponents/dsTheaderComponent";
 import MenuComponent from "./supportComponents/dsMenuComponent";
 import DemoLayout from "@/app/ElProComponents/Demo/demoLayout";
+import { displayContext } from "../dsContextHolder/dsContextHolder";
 // Define the component props
 interface TableComponentProps {
   className: string;
@@ -669,7 +669,6 @@ const TableComponent: React.FC<TableComponentProps> = ({
               }
             />
           </div>
-
           <DSButton
             label="Filter"
             handleOnClick={() => setFilterVisible(!isFilterVisible)}
@@ -719,14 +718,13 @@ const TableComponent: React.FC<TableComponentProps> = ({
                             buttonSize="btnSmall"
                             // buttonClass={btnStyles.btnSmall + " " + btnStyles.icon_image}
                             handleOnClick={(e) => {
-                              displaycontext(
+                              displayContext(
                                 e,
-                                "menucontext" + column.columnIndex,
-                                "menu" + column.columnIndex
+                                "menucontext" + column.columnIndex
                               );
                               // Call first function
                             }}
-                            startIcon={<Image src={addIcon} alt="menu" />}
+                            startIcon={<Image src={threedot} alt="menu" />}
                             tooltip="Menu"
                           />
                         </div>

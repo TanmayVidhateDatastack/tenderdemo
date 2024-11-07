@@ -9,7 +9,7 @@ const PaneOpenButton: React.FC<PaneOpenButtonProps> = ({
   id,
   paneId,
   label,
-  buttonClass,
+  className,
   buttonSize = "btnMedium",
   iconSize = "iconSmall",
   buttonColor = "btnPrimary",
@@ -24,7 +24,7 @@ const PaneOpenButton: React.FC<PaneOpenButtonProps> = ({
   return (
     <DSButton
         id={id}
-        buttonClass={buttonClass}
+        className={className}
         buttonSize={buttonSize}
         iconSize={iconSize}
         buttonColor={buttonColor}

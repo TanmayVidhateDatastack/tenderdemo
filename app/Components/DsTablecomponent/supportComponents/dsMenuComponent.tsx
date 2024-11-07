@@ -1,9 +1,8 @@
 import { MouseEvent, useState } from "react";
 import styles from "../DsTable.module.css";
-import PopUpContext from "../../dscontext/dscontext";
 import MenuDivider from "./menuDivider";
 import TabViewMenuItem from "./tabViewMenuItem";
-
+import PopupContext from "../../dsContextHolder/dsContextHolder";
 export interface menuprops {
   columnIndex: number;
   className?: string;
@@ -36,8 +35,7 @@ const MenuComponent: React.FC<menuprops> = ({
     <>
       {/* {menuVisible && columnKey === columnIndex && ( */}
       {isManageColumnVisible == false && (
-        <PopUpContext
-          containerId={"menu" + columnIndex}
+        <PopupContext
           id={"menucontext" + columnIndex}
           content={
             <>
@@ -79,8 +77,7 @@ const MenuComponent: React.FC<menuprops> = ({
 
       {isManageColumnVisible && (
         <>
-          <PopUpContext
-            containerId={"menu" + columnIndex}
+          <PopupContext
             id={"menucontext" + columnIndex}
             content={<>{children}</>}
           />
