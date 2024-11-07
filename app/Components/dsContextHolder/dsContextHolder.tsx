@@ -22,7 +22,10 @@ export function displayContext (
   const target = event.target as HTMLElement;
   if (!context || !target) return;
   if (!context || !target) return;
-
+  if (context.style.display=="flex") {
+    context.style.display = "none";
+    return
+  }
   context.style.display = "flex";
 
   const eleRect = target.getBoundingClientRect();
