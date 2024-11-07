@@ -14,37 +14,22 @@
 .ds-tableHeader {
   background-color: var(--grey-100);
   width: 100%;
-  height: 30px; 
+  height: 30px;
   border-radius: 4px 4px 0px 0px;
   opacity: 1;
 }
 .arrow-container{
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   /* height: 100%; */
   /* min-height: 100%; */
   /* background-color: var(--background); */
   box-shadow: rgba(17, 17, 26, 0.05) 0px 4px 16px,
     rgba(17, 17, 26, 0.05) 0px 8px 32px;
-  
-  opacity: 0; /* Initially hidden */
-  min-width:0;
-  width:0;
-  padding:0;
-  transform:translateX(-100%);
-  visibility: hidden; /* Hide from view */
-  transition: opacity 0.5s ease, transform 0.5s ease, width 1.2s ease,min-width 1.2s ease,visibility 0s 1.2s,;
+ 
+ 
 }
-.ds-tableHeader:hover  .arrow-container{
-  opacity: 1; /* Fully visible */
-  min-width: fit-content;
-  width:0;
-  padding: 0 1rem;
-  transform: translateX(0); /* Slide to original position */
-  visibility: visible; /* Visible in the layout */
-  transition: opacity 0.5s ease, transform 0.5s ease,width 1.5s ease,min-width 1.5s ease;
-} 
-
+ 
 .ds-th-component {
   display: flex;
   align-items: center;
@@ -68,7 +53,7 @@
  
 .th-text-content:hover {
   /* Layout Properties */
-
+ 
   /* UI Properties */
   opacity: 1;
 }
@@ -76,7 +61,7 @@
 .ds-tr-component {
   flex:1;
   display: flex;
-
+ 
   /* Layout Properties */
  
   height: 40px;
@@ -110,10 +95,10 @@
   align-items: center;
   justify-content: left;
   /* Layout Properties
-
+ 
   /* UI Properties */
   padding-left: 3px;
-
+ 
   text-align: left;
   font-size: var(--subtitle1);
   letter-spacing: 0px;
@@ -134,17 +119,39 @@
   opacity: 1;
 }
  
-.slide-component {
-  display: none;
-  left: 100%;
-  transition: left 0.7s ease;
-}
  
-.ds-th-component:hover .slide-component {
+ 
+/* .ds-th-component:hover .slide-component {
   left: 10px;
   display: contents;
   margin-left: 20px;
+  transform: translateX(0);
+  transition: opacity 0.5s ease, transform 0.5s ease,width 1.5s ease,min-width 1.5s ease;
 }
+  */
+ 
+  .slide-component {
+    display:flex;
+    /* width:0;
+    min-width: 0; */
+    visibility: hidden;
+    transform:translateX(-10px);
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.8s ease, width 1.2s ease,min-width 1.2s ease,visibility 0.3s 0.3s ease;
+  }
+   
+ 
+  .ds-th-component:hover .slide-component {
+    transform: translateX(0); /* Slide to original position */
+    /* min-width: fit-content;
+    width:auto; */
+    opacity: 1;
+    visibility: visible; /* Visible in the layout */
+    transition: opacity 0.3s ease, transform 0.8s ease,width 1.5s ease,min-width 1.5s ease,visibility 0s 0.3s ease;
+   
+  }
+   
+ 
  
 .cursor-pointer {
   cursor: pointer;
@@ -163,7 +170,7 @@
   /* flex-direction: column; */
   /* transform: translateY(60%); */
 }
-
+ 
 .MenuItem{
   display: flex;
 background-color: var(--background) !important;
@@ -173,9 +180,9 @@ padding: 1px;
 font-size: var(--subtitle2);
 flex: 1;
 flex-direction: column;
-
+ 
 }
-
+ 
 .check{
   margin:1rem;
 }
@@ -185,7 +192,7 @@ flex-direction: column;
 .range-filter,.date-filter{
   display: flex;
 }
-
+ 
 .ds-search-input-text {
   width: 350px;
   height: 36px;
@@ -196,7 +203,7 @@ flex-direction: column;
   border-radius: 4px;
   opacity: 1;
 }
-
+ 
 .ds-search-input-div {
   display: flex;
   align-items: center;

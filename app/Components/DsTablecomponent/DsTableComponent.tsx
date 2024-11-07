@@ -669,14 +669,15 @@ const TableComponent: React.FC<TableComponentProps> = ({
                     columnHeader={column.columnHeader}
                   >
                     <>
+                    <div
+                        className={`${styles["slide-component"]}   ${className}`}
+                      >
                       <SortComponent
                         key={column.columnHeader}
                         columnIndex={column.columnIndex}
                         sortTable={sortTable}
                       />
-                      <div
-                        className={`${styles["slide-component"]}   ${className}`}
-                      >
+                      
                         <DSButton
                           id="chatBtn"
                           type="icon_image"
