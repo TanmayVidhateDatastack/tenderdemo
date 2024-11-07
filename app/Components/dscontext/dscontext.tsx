@@ -14,8 +14,8 @@ export const displaycontext = (
   event: React.MouseEvent<HTMLElement> | React.FocusEvent,
   id: string,
   containerId: string,
-  position: "vertical" | "horizontal" = "vertical",
-  alignment: "right" | "left" | "center"
+  position: "vertical" | "horizontal" | undefined = "vertical",
+  alignment: "right" | "left" | "center" | undefined = "center"
 ) => {
   event.preventDefault();
 

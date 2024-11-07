@@ -13,6 +13,10 @@ import styles from "./DsTable.module.css";
 import AdvancedFilterComponent from "./AdvancedFilterComponent";
 import RadioCheckButton from "./RadioCheckButton";
 import TextField from "../DsTextField/DsTextField";
+import DSButton from "../dsButton/dsButton";
+import { displaycontext } from "../dscontext/dscontext";
+import Image from "next/image";
+import addIcon from "../../Icons/smallIcons/add.svg";
 
 // Define the component props
 interface TableComponentProps {
@@ -670,58 +674,59 @@ const TableComponent: React.FC<TableComponentProps> = ({
                         columnIndex={column.columnIndex}
                         sortTable={sortTable}
                       />
+                      <div
+                        className={`${styles["slide-component"]}   ${className}`}
+                      >
+                        <DSButton
+                          id="chatBtn"
+                          type="icon_image"
+                          buttonSize="btnSmall"
+                          // buttonClass={btnStyles.btnSmall + " " + btnStyles.icon_image}
+                          handleOnClick={(e) => {
+                            displaycontext(
+                              e,
+                              "menucontext" + column.columnIndex,
+                              "menu" + column.columnIndex
+                            );
+                            // Call first function
+                          }}
+                          startIcon={<Image src={addIcon} alt="menu" />}
+                          tooltip="Menu"
+                        />
+                      </div>
+                    </>
+                  </ThComponent>
+                )
+              )}
+            </TrComponent>
+          </TheaderComponent>
 
-                        <MenuComponent
-                          columnIndex={column.columnIndex}
-                          sortDataOnlyOnSpecifiedColumn={sortTableAscending}
-                          clearSortOnColumn={clearSortOnColumn}
-                          hideShowColumn={hideShowColumn}
-                          manageColumns={() => alert("manage columns")}
-                        ></MenuComponent>
-                      </>
-                    </ThComponent>
-                  )
-                )}
-              </TrComponent>
-            </TheaderComponent>
+          <TbodyComponent className={""}>
+            {tableRows.map((newRow) => {
+              const row = rows.find((x) => x.rowIndex === newRow.rowIndex);
 
-            <TbodyComponent className={""}>
-              {tableRows.map((newRow) => {
-                const row = rows.find((x) => x.rowIndex === newRow.rowIndex);
+              return (
+                <TrComponent className={""} key={newRow.rowIndex}>
+                  {columns.map((col) => {
+                    const cell = row?.content?.find(
+                      (data) => data.columnIndex == col.columnIndex
+                    );
 
-                return (
-                  <TrComponent className={""} key={newRow.rowIndex}>
-                    {columns.map((col) => {
-                      const cell = row?.content?.find(
-                        (data) => data.columnIndex == col.columnIndex
+                    if (!col.isHidden && cell) {
+                      return (
+                        <TdComponent
+                          key={col.columnHeader}
+                          className={""}
+                          content={cell.content}
+                        ></TdComponent>
                       );
+                    } else return null;
+                  })}
+                </TrComponent>
+              );
+            })}
+          </TbodyComponent>
 
-                      if (!col.isHidden && cell) {
-                        return (
-                          <TdComponent
-                            key={col.columnHeader}
-                            className={""}
-                            content={cell.content}
-                          ></TdComponent>
-                        );
-                      } else return null;
-                    })}
-                  </TrComponent>
-                );
-              })}
-            </TbodyComponent>
-
-            <TfooterComponent className={""}>
-              <TrComponent>
-                <TdComponent className={""}>
-                  Showing {newRows.length} of {rowsContainer.current.length}{" "}
-                  Rows
-                </TdComponent>
-              </TrComponent>
-            </TfooterComponent>
-          </table>
-        </div>
-      </DemoLayout>
           <TfooterComponent className={""}>
             <TrComponent>
               <TdComponent className={""}>
@@ -730,6 +735,18 @@ const TableComponent: React.FC<TableComponentProps> = ({
             </TrComponent>
           </TfooterComponent>
         </table>
+        {columns.map((column) => {
+          return (
+            <MenuComponent
+              key={column.columnIndex}
+              columnIndex={column.columnIndex}
+              sortDataOnlyOnSpecifiedColumn={sortTableAscending}
+              clearSortOnColumn={clearSortOnColumn}
+              hideShowColumn={hideShowColumn}
+              manageColumns={() => alert("manage columns")}
+            ></MenuComponent>
+          );
+        })}
       </div>
     </>
   );
