@@ -7,6 +7,8 @@ interface ContextMenuProps {
   position?: "vertical" | "horizontal";
   alignment?: "right" | "left" | "center";
   content?: string | React.ReactElement;
+ showArrow:boolean;
+
 }
 
 export function displayContext (
@@ -33,6 +35,7 @@ export function displayContext (
   const xBorder = 4;
   const yBorder = 4;
   const distance = 5;
+  let arrowPosition: "top" | "left" | "right" | "bottom" = "bottom";
 
   const contextW = context.offsetWidth;
   const contextH = context.offsetHeight;
@@ -44,15 +47,22 @@ export function displayContext (
   let contextY = eleY + distance;
 
   if (eleY + contextH + distance > winH - yBorder) {
+    arrowPosition="top";
     contextY = eleRect.top - contextH - distance;
   }
-
+  else{
+    arrowPosition="bottom";
+  }
   if (position === "horizontal") {
     contextY = eleRect.top;
     if (eleRect.right + contextW + distance <= winW - xBorder) {
       contextX = eleRect.right + distance;
+      arrowPosition="right";
+
     } else {
       contextX = eleX - contextW - distance;
+      arrowPosition="left";
+
     }
   } else {
     if (alignment === "center") {
@@ -66,6 +76,7 @@ export function displayContext (
 
   context.style.left = `${contextX}px`;
   context.style.top = `${contextY}px`;
+  context.previousElementSibling?.setAttribute("class",styles.arrow+" "+ styles[arrowPosition])
 };
 export const closeContext = (id: string) => {
   const contextMenu = document.getElementById(id);
@@ -74,10 +85,16 @@ export const closeContext = (id: string) => {
   }
 };
 
-const ContextMenu: React.FC<ContextMenuProps> = ({ id, content }) => {
+const ContextMenu: React.FC<ContextMenuProps> = ({ id, content ,
+  showArrow,
+
+}) => {
   return (
     <div id={id} className={styles.contextMenu}>
       {content}
+      {showArrow && (
+          <div className={`${styles.arrow} `} /> 
+        )}
     </div>
   );
 };
