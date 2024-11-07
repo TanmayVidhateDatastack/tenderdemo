@@ -25,6 +25,16 @@ interface ToasterProps {
     | "bottomright";
   duration?: number;
 }
+
+/**
+ * TextField component displays Normal input textField and textArea.
+ * @param {string} message-The message is used for displaying content or text on the toaster notification
+ * @param {'success'|'bonus'|'info'|"error"} type - "Set the type of the message to be display.
+ * @param {number} duration- Duration in the toaster component determines how long the notification stays visible before it disappears automatically.
+ * @param {React.ChangeEvent} handleClose - helper function that manually closes toaster after specified  duration . 
+
+ */
+
 const Toaster: React.FC<ToasterProps> = ({
   message,
   type = "info",

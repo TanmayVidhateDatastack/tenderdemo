@@ -52,7 +52,6 @@ interface InputTextAreaProps {
  * @param {React.KeyboardEvent} Onmousehover - Fires continuously as the mouse moves within an element.
  * @param {React.MouseEvent} onMouseOver - Fires when the mouse enters an element
  * @param {React,MouseEvent} onMouseOut - event triggers when the mouse pointer leaves the boundary of an element .
- 
  */
 
 const TextField: React.FC<InputTextAreaProps> = ({
@@ -61,7 +60,6 @@ const TextField: React.FC<InputTextAreaProps> = ({
   Onmousehover,
   onMouseOut,
   onMouseOver,
-
   id,
   className,
   disable,

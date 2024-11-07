@@ -1,4 +1,4 @@
-import TextField from "@/app/Components/DsTextField/DsTextField";
+import DataList from "@/app/Components/dsDatalist/dsDatalist";
 import NavBack from "../../ElProComponents/NavigationComponent/navBack";
 import styles from "../order.module.css";
 
@@ -10,7 +10,7 @@ export default function Home() {
         <div className={styles.Customer}>
           <div className={styles.title}>Customer Dtails</div>
           <div className={styles.inputDetails}>
-            
+            <DataList options={[]} inputId={""} dataListId={""} className={""}></DataList>
           </div>
           <div className={styles.details}></div>
         </div>
