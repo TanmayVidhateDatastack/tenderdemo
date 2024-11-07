@@ -4,10 +4,10 @@ import styles from "./dsstatusIndicator.module.css";
 import dsStatus from "../../constant";
 import React from "react";
 import PopUpContext, {
-  displaycontext,
+  displayContext,
   closeContext,
   // handlerblur,
-} from "../dsContext/dsContext";
+} from "../dsContextHolder/dsContextHolder";
 // import PopUpContext from "../dscontext/dscontext";
 
 interface DsStatusIndicatorProps {
@@ -94,14 +94,13 @@ const DsStateChange: React.FC<DsStatusIndicatorProps> = ({
                 className={"icon " + styles.status_icon}
                 onMouseOver={(e) => {
 
-                  displaycontext(e, contextMenuId); // Call first function
+                  displayContext(e, contextMenuId); // Call first function
                 }}
                 onMouseLeave={() => closeContext(contextMenuId)}
               >
                 {status_icon}
                 <PopUpContext
                   id={contextMenuId}
-                  containerId={id}
                   content={comment}
                 />
               </button>

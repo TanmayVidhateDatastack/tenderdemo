@@ -19,7 +19,7 @@ import DemoButtons from "../../Components/dsButton/dsDemoButtons";
 // import SaveButton from "./Components/DsButton/Ds_SaveBtn";
 import DsTableComponent from "../../Components/DsTablecomponent/DsTableComponent";
 import DemoSelect from "@/app/Components/dsSelect/dsDemoSelect";
-import DemoContext from "@/app/Components/dsContext/dsDemoContext";
+import DemoContext from "@/app/Components/dsContextHolder/dsDemoContextHolder";
 import DemoPane from "@/app/Components/dsPane/dsDemoPane";
 import DemoTextField from "@/app/Components/DsTextField/dsDemoTextField";
 import DemoLayout from "./demoLayout";

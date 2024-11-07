@@ -1,8 +1,8 @@
 import DSButton from "../dsButton/dsButton";
 import PopUpContext, {
-  closecontext,
-  displaycontext,
-} from "@/app/Components/dsContext/dsContext";
+  closeContext,
+  displayContext,
+} from "@/app/Components/dsContextHolder/dsContextHolder";
 import styles from "./dsSelect.module.css";
 
 interface Option {
@@ -35,7 +35,7 @@ const DsOption: React.FC<DsOptionProps> = ({
                     <div
                       key={index}
                       onClick={() =>{ handleSelect(option.label);
-                        closecontext(label !== "" ? label + "test" : "test")
+                        closeContext(label !== "" ? label + "test" : "test")
                       }}
                       className={styles.option}
                     >
@@ -46,7 +46,7 @@ const DsOption: React.FC<DsOptionProps> = ({
                           handleOnClick={(e) => {
                             e.stopPropagation();
                             if (typeof option.value !== "string") {
-                              displaycontext(
+                              displayContext(
                                 e,
                                 option.label + "test",
                                 "vertical",

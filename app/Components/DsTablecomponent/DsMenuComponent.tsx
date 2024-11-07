@@ -1,9 +1,7 @@
-import { MouseEvent, useState } from "react";
 import MenuDivider from "./MenuDivider";
 import TabViewMenuItem from "./TabViewMenuItem";
 import styles from "./DsTable.module.css";
-import DSButton from "../dsButton/dsButton";
-import PopUpContext, { displaycontext } from "../dscontext/dscontext";
+import PopUpContext from "../dsContextHolder/dsContextHolder";
 
 export interface menuprops {
   columnIndex: number;
@@ -19,7 +17,6 @@ export interface menuprops {
 
 const MenuComponent: React.FC<menuprops> = ({
   columnIndex,
-  className,
   sortDataOnlyOnSpecifiedColumn,
   clearSortOnColumn,
   manageColumns,
@@ -33,7 +30,6 @@ const MenuComponent: React.FC<menuprops> = ({
     <>
       {/* {menuVisible && columnKey === columnIndex && ( */}
       <PopUpContext
-        containerId={"menu" + columnIndex}
         id={"menucontext" + columnIndex}
         content={
           <>

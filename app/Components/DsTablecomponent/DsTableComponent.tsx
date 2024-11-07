@@ -14,7 +14,7 @@ import AdvancedFilterComponent from "./AdvancedFilterComponent";
 import RadioCheckButton from "./RadioCheckButton";
 import TextField from "../DsTextField/DsTextField";
 import DSButton from "../dsButton/dsButton";
-import { displaycontext } from "../dscontext/dscontext";
+import { displayContext } from "../dsContextHolder/dsContextHolder";
 import Image from "next/image";
 import addIcon from "../../Icons/smallIcons/add.svg";
 
@@ -683,10 +683,9 @@ const TableComponent: React.FC<TableComponentProps> = ({
                           buttonSize="btnSmall"
                           // buttonClass={btnStyles.btnSmall + " " + btnStyles.icon_image}
                           handleOnClick={(e) => {
-                            displaycontext(
+                            displayContext(
                               e,
                               "menucontext" + column.columnIndex,
-                              "menu" + column.columnIndex
                             );
                             // Call first function
                           }}

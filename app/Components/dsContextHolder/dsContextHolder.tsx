@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import styles from "./dscontext.module.css";
+import styles from "./dsContextHolder.module.css";
 
 interface ContextMenuProps {
   id: string;
@@ -9,7 +9,7 @@ interface ContextMenuProps {
   content?: string | React.ReactElement;
 }
 
-export function displaycontext (
+export function displayContext (
   event: React.MouseEvent<HTMLElement> | React.FocusEvent,
   id: string,
   position: "vertical" | "horizontal"|undefined = "vertical",
@@ -64,7 +64,7 @@ export function displaycontext (
   context.style.left = `${contextX}px`;
   context.style.top = `${contextY}px`;
 };
-export const closecontext = (id: string) => {
+export const closeContext = (id: string) => {
   const contextMenu = document.getElementById(id);
   if (contextMenu) {
     contextMenu.style.display = "none";
@@ -80,3 +80,4 @@ const ContextMenu: React.FC<ContextMenuProps> = ({ id, content }) => {
 };
 
 export default ContextMenu;
+
