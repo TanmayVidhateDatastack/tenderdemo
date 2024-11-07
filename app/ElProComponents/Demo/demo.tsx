@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import DSButton from "../../Components/dsButton/dsButton";
+// import DSButton from "../../Components/dsButton/dsButton";
 import styles from "../../page.module.css";
 import buttonStyles from "../../Components/dsButton/dsButton.module.css";
 import PaneStyles from "../../Components/dsPane/dsPane.module.css";
@@ -14,13 +14,13 @@ import Application from "../../ElProComponents/ApplicationComponents/Application
 import DsPopup from "../../Components/dsPopup/dsPopup";
 import PopupOpenButton from "../../Components/dsPopup/popupOpenButton";
 // import ButtonLibrary from "./Components/dsButton/DS_ButtonLibrary";
-import DemoButtons from "../../Components/dsButton/dsDemoButtons";
+// import DemoButtons from "../../Components/dsButton/dsDemoButtons";
 
 // import SaveButton from "./Components/DsButton/Ds_SaveBtn";
 import DsTableComponent from "../../Components/DsTablecomponent/DsTableComponent";
 import DemoSelect from "@/app/Components/dsSelect/dsDemoSelect";
 import DemoContext from "@/app/Components/dsContextHolder/dsDemoContextHolder";
-import DemoPane from "@/app/Components/dsPane/dsDemoPane";
+// import DemoPane from "@/app/Components/dsPane/dsDemoPane";
 import DemoTextField from "@/app/Components/DsTextField/dsDemoTextField";
 import DemoLayout from "./demoLayout";
 import DemoDeviation from "@/app/Components/DsDeviations/demoDeviation";
@@ -29,7 +29,11 @@ import DsDemoStatusIndocator from "@/app/Components/DsStatusIndicator/dsDemoStat
 import TabContainer from "@/app/Components/dsTabs/TabContainer";
 import TabView from "@/app/Components/dsTabs/TabView";
 import DemoSummaryCount from "@/app/Components/DsSummaryCount/demoSummaryCount";
-import DsPane from "@/app/Components/dsPane/dsPane";
+import DSButton from "@/app/Components/dsButton/dsButton";
+import DemoButtons from "@/app/Components/DsButton/dsDemoButtons";
+import DemoPane from "@/app/Components/DsPane/dsDemoPane";
+import DsPane from "@/app/Components/DsPane/DsPane";
+// import DsPane from "@/app/Components/dsPane/dsPane";
 
 export default function Demo() {
   const tempTableData = {
