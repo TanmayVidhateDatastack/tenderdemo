@@ -178,7 +178,7 @@ const DsSelect: React.FC<SelectProps> = ({
             className={styles.mainselection}
             onFocus={(e) => {
               setIsFocused(true);
-              displaycontext(e, "test", "test1", "vertical", "left");
+              displaycontext(e, "test", "vertical", "left");
             }}
             onBlur={() => {
               setIsFocused(false);
@@ -217,7 +217,7 @@ const DsSelect: React.FC<SelectProps> = ({
                 id="groupSelect"
                 onChange={handleGroupChange}
                 value={selectedGroup}
-                // onClick={(e) => displaycontext(e, contextMenuId, containerId)}
+                // onClick={(e) => displaycontext(e, contextMenuId)}
                 className={styles.dropdownSelect}
               >
                 {options.map((group) => (
@@ -225,7 +225,7 @@ const DsSelect: React.FC<SelectProps> = ({
                     key={group.label}
                     value={group.label}
                     onMouseOver={(e) =>
-                      displaycontext(e, contextMenuId, containerId)
+                      displaycontext(e, contextMenuId)
                     }
                   >
                     {group.label}

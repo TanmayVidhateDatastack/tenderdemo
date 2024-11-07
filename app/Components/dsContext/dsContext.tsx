@@ -4,7 +4,6 @@ import styles from "./dscontext.module.css";
 
 interface ContextMenuProps {
   id: string;
-  containerId: string;
   position?: "vertical" | "horizontal";
   alignment?: "right" | "left" | "center";
   content?: string | React.ReactElement;
@@ -13,7 +12,6 @@ interface ContextMenuProps {
 export function displaycontext (
   event: React.MouseEvent<HTMLElement> | React.FocusEvent,
   id: string,
-  containerId: string,
   position: "vertical" | "horizontal"|undefined = "vertical",
   alignment: "right" | "left" | "center"|undefined="center"
 ) {

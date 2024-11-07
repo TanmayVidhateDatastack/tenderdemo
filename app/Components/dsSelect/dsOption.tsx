@@ -27,7 +27,6 @@ const DsOption: React.FC<DsOptionProps> = ({
       {isOpen && (
         <PopUpContext
           id={label !== "" ? label + "test" : "test"}
-          containerId={label !== "" ? label + "test1" : "test1"}
           content={
             <div className={styles.list}>
               {options.map((option, index) => {
@@ -50,7 +49,6 @@ const DsOption: React.FC<DsOptionProps> = ({
                               displaycontext(
                                 e,
                                 option.label + "test",
-                                option.label + "test1",
                                 "vertical",
                                 "left"
                               );

@@ -2,7 +2,7 @@
 import styles from "./dsstatusIndicator.module.css";
 // import btnStyles from "../dsButton/dsButton.module.css";
 import dsStatus from "../../constant";
-import React, { useState } from "react";
+import React from "react";
 import PopUpContext, {
   displaycontext,
   // handlerblur,
@@ -40,36 +40,9 @@ const DsStateChange: React.FC<DsStatusIndicatorProps> = ({
   showArrow = "true",
   comment,
 }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [position, setPosition] = useState<{ x: number; y: number }>({
-    x: 0,
-    y: 0,
-  });
+
   const contextMenuId = "context-display";
-  const containerId = "context-container";
 
-  const handleonmousehover = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const buttonRect = event.currentTarget.getBoundingClientRect();
-    let x = buttonRect.left;
-    let y = buttonRect.top;
-
-    if (positionProp === "top") {
-      y = buttonRect.top - buttonRect.height; // Above the button
-    } else if (positionProp === "bottom") {
-      y = buttonRect.bottom + 3; // Below the button
-    } else if (positionProp === "left") {
-      x = buttonRect.left - 68; // Left of the button
-      y = buttonRect.top + buttonRect.height / 4;
-    } else if (positionProp === "right") {
-      x = buttonRect.right + 5; // Right of the button
-      y = buttonRect.top + buttonRect.height / 4;
-    }
-
-    setPosition({ x, y });
-    // setIsVisible(true);
-    // return isVisible && <PopUpContext id={id} containerId={id} />;
-    setIsVisible(!isVisible);
-  };
   return (
     <>
       {type == "system_default" && (
@@ -125,9 +98,8 @@ const DsStateChange: React.FC<DsStatusIndicatorProps> = ({
                 //   displaycontext(e, contextMenuId, containerId)
                 // }
                 onMouseOver={(e) => {
-                  handleonmousehover(e); // Call second function
 
-                  displaycontext(e, contextMenuId, containerId); // Call first function
+                  displaycontext(e, contextMenuId); // Call first function
                 }}
                 // onMouseLeave={() => handlerblur(contextMenuId)}
               >
@@ -135,18 +107,9 @@ const DsStateChange: React.FC<DsStatusIndicatorProps> = ({
               </button>
             )}
           </div>
-          {isVisible && (
-            <div
-              id={containerId}
-              className={styles.popUp}
-              style={{
-                top: `${position.y}px`,
-                left: `${position.x}px`,
-              }}
-            >
+          
               <PopUpContext
                 id={contextMenuId}
-                containerId={containerId}
                 content={comment}
               />
 
@@ -156,8 +119,6 @@ const DsStateChange: React.FC<DsStatusIndicatorProps> = ({
                   className={`${styles.arrow} ${styles[positionProp]}`}
                 ></div>
               )}
-            </div>
-          )}
         </>
       )}
     </>
