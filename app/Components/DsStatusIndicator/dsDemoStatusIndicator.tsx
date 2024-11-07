@@ -8,8 +8,10 @@ import DemoLayout from "@/app/ElProComponents/Demo/demoLayout";
 const DsDemoStatusIndocator: React.FC = () => {
   return (
     <>
-      <DemoLayout title="Staus indicators (DsStatusIndicator)" className="flex-column">
-
+      <DemoLayout
+        title="Staus indicators (DsStatusIndicator)"
+        className="flex-column"
+      >
         <DsStateChange
           className={styles.statusIndicator}
           type="user_defined"
@@ -96,7 +98,6 @@ const DsDemoStatusIndocator: React.FC = () => {
           label="In Process"
         />
       </DemoLayout>
-      
     </>
   );
 };
