@@ -1,6 +1,6 @@
 import styles from "../dsButton/dsButton.module.css";
 
-interface DSButtonProps {
+export interface DSButtonProps {
   children?: React.ReactNode;
   id?: string;
   label?: string;

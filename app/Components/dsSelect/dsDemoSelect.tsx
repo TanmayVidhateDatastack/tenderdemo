@@ -12,10 +12,10 @@ const DemoSelect: React.FC = () => {
   //   { value: "2", label: "Option 2" },
   //   { value: "3", label: "Option 3" },
   // ];
-  // type Option = {
-  //   label: string;
-  //   value: string | Option[]; // `value` can either be a string or an array of Option objects
-  // };
+  type Option = {
+    label: string;
+    value: string | Option[]; // `value` can either be a string or an array of Option objects
+  };
 
   const options: Option[] = [
     {
