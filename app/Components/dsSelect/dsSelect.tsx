@@ -2,11 +2,8 @@
 
 import { useState } from "react";
 import styles from "./dsSelect.module.css";
-// import Image from "next/image";
-import remove from "../../Icons/mediumIcons/remove.svg";
-// import { displaycontext } from "./dsContext";
 import DsOption from "./dsOption";
-import { closecontext, displaycontext } from "../dsContext/dscontext";
+import { closecontext, displaycontext } from "../dsContext/dsContext";
 
 /**
  * DsPane component displays pane.
@@ -69,10 +66,10 @@ const DsSelect: React.FC<SelectProps> = ({
     }
     
   };
-  const removeOption = (select: string) => {
-    const removeItem = selectedOption.filter((option) => option !== select);
-    setSelectedOption(removeItem);
-  };
+  // const removeOption = (select: string) => {
+  //   const removeItem = selectedOption.filter((option) => option !== select);
+  //   setSelectedOption(removeItem);
+  // };
   const [isFocused, setIsFocused] = useState(false);
   const [value, setValue] = useState("");
 

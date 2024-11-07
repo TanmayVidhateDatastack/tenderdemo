@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import PopUpContext, {
   displaycontext,
   // handlerblur,
-} from "../dscontext/dscontext";
+} from "../dsContext/dsContext";
 // import PopUpContext from "../dscontext/dscontext";
 
 interface DsStatusIndicatorProps {

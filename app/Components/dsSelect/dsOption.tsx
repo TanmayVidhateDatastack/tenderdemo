@@ -2,7 +2,7 @@ import DSButton from "../dsButton/dsButton";
 import PopUpContext, {
   closecontext,
   displaycontext,
-} from "../dsContext/dscontext";
+} from "@/app/Components/dsContext/dsContext";
 import styles from "./dsSelect.module.css";
 
 interface Option {
