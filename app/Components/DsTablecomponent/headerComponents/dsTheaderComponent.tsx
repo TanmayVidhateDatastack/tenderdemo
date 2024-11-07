@@ -1,4 +1,4 @@
-import styles from "./DsTable.module.css";
+import styles from "../DsTable.module.css";
 export interface theaderprops {
   className: string;
   children?: React.ReactNode;

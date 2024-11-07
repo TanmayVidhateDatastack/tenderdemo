@@ -1,9 +1,10 @@
 "use client";
 import { useState } from "react";
-import DSButton from "../../Components/dsButton/dsButton";
 import styles from "../../page.module.css";
 import buttonStyles from "../../Components/dsButton/dsButton.module.css";
 import PaneStyles from "../../Components/dsPane/dsPane.module.css";
+import commentIcon from "../../Icons/smallIcons/commenticon.svg";
+
 // import addIcon from "./Icons/add.svg";
 // import DSButton from "./Components/DsButton/DsButton";
 // import ButtonLibrary from "./Components/dsButton/DS_ButtonLibrary";
@@ -14,7 +15,7 @@ import Application from "../../ElProComponents/ApplicationComponents/Application
 import DsPopup from "../../Components/dsPopup/dsPopup";
 import PopupOpenButton from "../../Components/dsPopup/popupOpenButton";
 // import ButtonLibrary from "./Components/dsButton/DS_ButtonLibrary";
-import DemoButtons from "../../Components/dsButton/dsDemoButtons";
+// import DemoButtons from "../../Components/dsButton/dsDemoButtons";
 
 // import SaveButton from "./Components/DsButton/Ds_SaveBtn";
 import DsTableComponent from "../../Components/DsTablecomponent/DsTableComponent";
@@ -30,7 +31,13 @@ import TabContainer from "@/app/Components/dsTabs/TabContainer";
 import TabView from "@/app/Components/dsTabs/TabView";
 import DemoSummaryCount from "@/app/Components/DsSummaryCount/demoSummaryCount";
 import DemoPane from "@/app/Components/DsPane/dsDemoPane";
-import DsPane from "@/app/Components/dsPane/dsPane";
+import DsPane from "@/app/Components/DsPane/DsPane";
+import DemoButtons from "@/app/Components/DsButton/dsDemoButtons";
+import DSButton from "@/app/Components/dsButton/dsButton";
+import DsStateChange from "@/app/Components/DsStatusIndicator/dsStatusIndicator";
+import Image from "next/image";
+
+// import DsPane from "@/app/Components/dsPane/dsPane";
 
 export default function Demo() {
   const tempTableData = {
@@ -93,6 +100,14 @@ export default function Demo() {
         sort: "ASC",
         columnContentType: "number",
       },
+      {
+        columnIndex: 7,
+        className: "header-column",
+        columnHeader: "STATUS",
+        isHidden: false,
+        sort: "NONE",
+        columnContentType: "reactNode",
+      },
     ],
     rows: [
       {
@@ -140,6 +155,22 @@ export default function Demo() {
             className: "cell",
             content: "12,02,000",
             contentType: "number",
+          },
+          {
+            columnIndex: 7,
+            className: "cell",
+            content: (
+              <DsStateChange
+                className={styles.statusIndicator}
+                type="user_defined"
+                id="state1"
+                status="Approved"
+                label="approved"
+                status_icon={<Image src={commentIcon} alt="icon" />}
+                comment="Justification and Comments"
+              />
+            ),
+            contentType: "reactNode",
           },
         ],
       },
@@ -189,6 +220,21 @@ export default function Demo() {
             content: "13,03,900",
             contentType: "number",
           },
+          {
+            columnIndex: 7,
+            className: "cell",
+            content: (
+              <DsStateChange
+                className={styles.statusIndicator}
+                type="system_default"
+                id="state8"
+                status="Pending"
+                label="Deviation Pending"
+                btn_label="Check Failed"
+              />
+            ),
+            contentType: "reactNode",
+          },
         ],
       },
       {
@@ -236,6 +282,20 @@ export default function Demo() {
             className: "cell",
             content: "12,04,000",
             contentType: "number",
+          },
+          {
+            columnIndex: 7,
+            className: "cell",
+            content: (
+              <DsStateChange
+                className={styles.statusIndicator}
+                type="system_default"
+                id="state2"
+                status="Cancelled"
+                label="cancelled"
+              />
+            ),
+            contentType: "reactNode",
           },
         ],
       },
@@ -285,6 +345,22 @@ export default function Demo() {
             content: "11,03,000",
             contentType: "number",
           },
+          {
+            columnIndex: 7,
+            className: "cell",
+            content: (
+              <DsStateChange
+                className={styles.statusIndicator}
+                type="user_defined"
+                id="state2"
+                status="Cancelled"
+                label="Rejected"
+                status_icon={<Image src={commentIcon} alt="icon" />}
+                comment="Reason of Rejection"
+              />
+            ),
+            contentType: "reactNode",
+          },
         ],
       },
       {
@@ -332,6 +408,21 @@ export default function Demo() {
             className: "cell",
             content: "25,200",
             contentType: "number",
+          },
+
+          {
+            columnIndex: 7,
+            className: "cell",
+            content: (
+              <DsStateChange
+                className={styles.statusIndicator}
+                id="state3"
+                type="system_default"
+                status="Pending"
+                label="pending"
+              />
+            ),
+            contentType: "reactNode",
           },
         ],
       },
@@ -381,6 +472,20 @@ export default function Demo() {
             content: "3,900",
             contentType: "number",
           },
+          {
+            columnIndex: 7,
+            className: "cell",
+            content: (
+              <DsStateChange
+                className={styles.statusIndicator}
+                type="system_default"
+                id="state4"
+                status="Submitted"
+                label="submitted"
+              />
+            ),
+            contentType: "reactNode",
+          },
         ],
       },
       {
@@ -428,6 +533,21 @@ export default function Demo() {
             className: "cell",
             content: "12,04,000",
             contentType: "number",
+          },
+          {
+            columnIndex: 7,
+            className: "cell",
+            content: (
+              <DsStateChange
+                className={styles.statusIndicator}
+                type="system_default"
+                id="state4"
+                status="Submitted"
+                label="Open"
+                btn_label="Partial qty awail"
+              />
+            ),
+            contentType: "reactNode",
           },
         ],
       },
@@ -477,6 +597,21 @@ export default function Demo() {
             content: "11,03,000",
             contentType: "number",
           },
+          {
+            columnIndex: 7,
+            className: "cell",
+            content: (
+              <DsStateChange
+                className={styles.statusIndicator}
+                type="system_default"
+                id="state4"
+                status="Submitted"
+                label="Open"
+                btn_label="Quantity unavailable"
+              />
+            ),
+            contentType: "reactNode",
+          },
         ],
       },
       {
@@ -524,6 +659,20 @@ export default function Demo() {
             className: "cell",
             content: "22,06,000",
             contentType: "number",
+          },
+          {
+            columnIndex: 7,
+            className: "cell",
+            content: (
+              <DsStateChange
+                className={styles.statusIndicator}
+                type="system_default"
+                id="state5"
+                status="underApproval"
+                label="under approvel"
+              />
+            ),
+            contentType: "reactNode",
           },
         ],
       },
@@ -573,6 +722,20 @@ export default function Demo() {
             content: "12,99,900",
             contentType: "number",
           },
+          {
+            columnIndex: 7,
+            className: "cell",
+            content: (
+              <DsStateChange
+                className={styles.statusIndicator}
+                type="system_default"
+                id="state6"
+                status="underReview"
+                label="under review"
+              />
+            ),
+            contentType: "reactNode",
+          },
         ],
       },
       {
@@ -620,6 +783,20 @@ export default function Demo() {
             className: "cell",
             content: "11,11,000",
             contentType: "number",
+          },
+          {
+            columnIndex: 7,
+            className: "cell",
+            content: (
+              <DsStateChange
+                className={styles.statusIndicator}
+                type="system_default"
+                id="state7"
+                status="InProcess"
+                label="In Process"
+              />
+            ),
+            contentType: "reactNode",
           },
         ],
       },
@@ -669,6 +846,22 @@ export default function Demo() {
             content: "10,22,000",
             contentType: "number",
           },
+          {
+            columnIndex: 7,
+            className: "cell",
+            content: (
+              <DsStateChange
+                className={styles.statusIndicator}
+                type="user_defined"
+                id="state1"
+                status="Approved"
+                label="approved"
+                status_icon={<Image src={commentIcon} alt="icon" />}
+                comment="Justification and Comments"
+              />
+            ),
+            contentType: "reactNode",
+          },
         ],
       },
       {
@@ -716,6 +909,22 @@ export default function Demo() {
             className: "cell",
             content: "20,08,000",
             contentType: "number",
+          },
+          {
+            columnIndex: 7,
+            className: "cell",
+            content: (
+              <DsStateChange
+                className={styles.statusIndicator}
+                type="user_defined"
+                id="state1"
+                status="Approved"
+                label="approved"
+                status_icon={<Image src={commentIcon} alt="icon" />}
+                comment="Justification and Comments"
+              />
+            ),
+            contentType: "reactNode",
           },
         ],
       },
@@ -765,6 +974,22 @@ export default function Demo() {
             content: "15,08,000",
             contentType: "number",
           },
+          {
+            columnIndex: 7,
+            className: "cell",
+            content: (
+              <DsStateChange
+                className={styles.statusIndicator}
+                type="user_defined"
+                id="state1"
+                status="Approved"
+                label="approved"
+                status_icon={<Image src={commentIcon} alt="icon" />}
+                comment="Justification and Comments"
+              />
+            ),
+            contentType: "reactNode",
+          },
         ],
       },
       {
@@ -812,6 +1037,22 @@ export default function Demo() {
             className: "cell",
             content: "15,08,000",
             contentType: "number",
+          },
+          {
+            columnIndex: 7,
+            className: "cell",
+            content: (
+              <DsStateChange
+                className={styles.statusIndicator}
+                type="user_defined"
+                id="state1"
+                status="Approved"
+                label="approved"
+                status_icon={<Image src={commentIcon} alt="icon" />}
+                comment="Justification and Comments"
+              />
+            ),
+            contentType: "reactNode",
           },
         ],
       },

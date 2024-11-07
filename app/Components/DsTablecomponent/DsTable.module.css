@@ -1,49 +1,50 @@
-.tableContainer{
+.tableContainer {
   display: flex;
   flex-direction: column;
-  width:100%;
+  width: 100%;
 }
 .ds-table {
   width: 100%;
   /* position: fixed; */
   overflow: auto;
   margin-left: 15px;
- 
 }
- 
+
 .ds-tableHeader {
   background-color: var(--grey-100);
   width: 100%;
-  height: 30px; 
+  height: 30px;
   border-radius: 4px 4px 0px 0px;
   opacity: 1;
 }
-.arrow-container{
+.arrow-container {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   /* height: 100%; */
   /* min-height: 100%; */
   /* background-color: var(--background); */
   box-shadow: rgba(17, 17, 26, 0.05) 0px 4px 16px,
     rgba(17, 17, 26, 0.05) 0px 8px 32px;
-  
+
   opacity: 0; /* Initially hidden */
-  min-width:0;
-  width:0;
-  padding:0;
-  transform:translateX(-100%);
+  min-width: 0;
+  width: 0;
+  padding: 0;
+  transform: translateX(-100%);
   visibility: hidden; /* Hide from view */
-  transition: opacity 0.5s ease, transform 0.5s ease, width 1.2s ease,min-width 1.2s ease,visibility 0s 1.2s,;
+  transition: opacity 0.5s ease, transform 0.5s ease, width 1.2s ease,
+    min-width 1.2s ease, visibility 0s 1.2s;
 }
-.ds-tableHeader:hover  .arrow-container{
+.ds-tableHeader:hover .arrow-container {
   opacity: 1; /* Fully visible */
   min-width: fit-content;
-  width:0;
+  width: 0;
   padding: 0 1rem;
   transform: translateX(0); /* Slide to original position */
   visibility: visible; /* Visible in the layout */
-  transition: opacity 0.5s ease, transform 0.5s ease,width 1.5s ease,min-width 1.5s ease;
-} 
+  transition: opacity 0.5s ease, transform 0.5s ease, width 1.5s ease,
+    min-width 1.5s ease;
+}
 
 .ds-th-component {
   display: flex;
@@ -53,32 +54,32 @@
   background-color: var(--semiviolet);
   opacity: 1;
 }
- 
+
 .th-text-content {
   /* Layout Properties
  
   /* UI Properties */
- font-size: var(--subtitle1);
- font-weight: 600;
- padding-left: 3px;
+  font-size: var(--subtitle1);
+  font-weight: 600;
+  padding-left: 3px;
   text-align: left;
   color: var(--bodytext);
   /* opacity: 0.8; */
 }
- 
+
 .th-text-content:hover {
   /* Layout Properties */
 
   /* UI Properties */
   opacity: 1;
 }
- 
+
 .ds-tr-component {
-  flex:1;
+  flex: 1;
   display: flex;
 
   /* Layout Properties */
- 
+
   height: 40px;
   /* UI Properties */
   /* background: var(--white) 0% 0% no-repeat padding-box; */
@@ -86,20 +87,20 @@
   background-color: var(--background);
   opacity: 0.6;
 }
- 
+
 .ds-tr-component.approved:hover {
   /* Layout Properties */
- 
+
   height: 40px;
   /* UI Properties */
   opacity: 1;
 }
- 
+
 .ds-tr-component.readyToDispatch:hover {
   /* UI Properties */
   opacity: 1;
 }
- 
+
 .ds-tr-component.deviationPending:hover {
   /* UI Properties */
   opacity: 1;
@@ -121,7 +122,7 @@
   border-bottom: 1px solid var(--secondary);
   opacity: 1;
 }
- 
+
 .ds-footer {
   display: flex;
   flex: 1;
@@ -133,23 +134,23 @@
   border-radius: 0px 0px 4px 4px;
   opacity: 1;
 }
- 
+
 .slide-component {
   display: none;
   left: 100%;
   transition: left 0.7s ease;
 }
- 
+
 .ds-th-component:hover .slide-component {
   left: 10px;
   display: contents;
   margin-left: 20px;
 }
- 
+
 .cursor-pointer {
   cursor: pointer;
 }
-.menu-component{
+.menu-component {
   /* display: flex; */
   background-color: var(--background);
   color: var(--dark);
@@ -164,25 +165,25 @@
   /* transform: translateY(60%); */
 }
 
-.MenuItem{
+.MenuItem {
   display: flex;
-background-color: var(--background) !important;
-color: var(--dark) !important;
-border: 0px;
-padding: 1px;
-font-size: var(--subtitle2);
-flex: 1;
-flex-direction: column;
-
+  background-color: var(--background) !important;
+  color: var(--dark) !important;
+  border: 0px;
+  padding: 1px;
+  font-size: var(--subtitle2);
+  flex: 1;
+  flex-direction: column;
 }
 
-.check{
-  margin:1rem;
+.check {
+  margin: 1rem;
 }
-.ms1{
-  margin-left:0.5rem;
+.ms1 {
+  margin-left: 0.5rem;
 }
-.range-filter,.date-filter{
+.range-filter,
+.date-filter {
   display: flex;
 }
 
@@ -201,4 +202,27 @@ flex-direction: column;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.active {
+  background-color: blue;
+}
+
+.relative {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  min-width: 20vw;
+  width: 0;
+  height: 100%;
+  min-height: 100%;
+  background-color: var(--background);
+  box-shadow: rgba(17, 17, 26, 0.05) 0px 4px 16px,
+    rgba(17, 17, 26, 0.05) 0px 8px 32px;
+  padding: 0 1rem;
+  opacity: 1;
+  transform: translateX(0);
+  visibility: visible;
+  transition: opacity 0.5s ease, transform 0.5s ease, width 1.5s ease,
+    min-width 1.5s ease;
 }

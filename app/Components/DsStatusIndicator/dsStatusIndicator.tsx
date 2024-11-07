@@ -5,7 +5,7 @@ import dsStatus from "../../constant";
 import React, { useState } from "react";
 import PopUpContext, {
   displaycontext,
-  closeContext,
+  closecontext,
   // handlerblur,
 } from "../dscontext/dscontext";
 // import PopUpContext from "../dscontext/dscontext";
@@ -123,12 +123,12 @@ const DsStateChange: React.FC<DsStatusIndicatorProps> = ({
                   handleonmousehover(e); // Call second function
                   displaycontext(e, contextMenuId, containerId); // Call first function
                 }}
-                onMouseLeave={() => closeContext(contextMenuId)}
+                onMouseLeave={() => closecontext(contextMenuId)}
               >
                 {status_icon}
                 <PopUpContext
                   id={contextMenuId}
-                  containerId={id}
+                  containerId={id || ""}
                   content={comment}
                 />
               </button>
