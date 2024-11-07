@@ -56,13 +56,15 @@
     border-right: 5px solid transparent;
     border-top: 5px solid #4a5cbe; /* Color of the arrow */
 }
+
+  
 .top
 {
     bottom: -5px; /* Keep it positioned just below the popup */
     left: 50%; /* Center it horizontally */
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
-    border-top: 5px solid  var(--background); /* Color of the arrow */
+    border-top: 5px solid  var(--dark); /* Color of the arrow */
 
 }
 
