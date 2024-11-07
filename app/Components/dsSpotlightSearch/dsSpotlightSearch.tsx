@@ -7,15 +7,10 @@ import styles from "./dsSpotlightSearch.module.css"
 
 interface SpotlightSearchProps {
   data: string[];
-  onClose: () => void
-  handleChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleKeyUp?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-  onkeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   placeholder?: string;
   inputId: string;
-  label?: string;
-  disable?: boolean
-  spotlightId: string;
+
   className: string;
   customAttributes?: Record<string, string>;
 }
@@ -25,7 +20,6 @@ const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
   data,
   customAttributes,
   placeholder = "clt+k",
-  disable,
   inputId,
   className,
 }) =>
@@ -101,7 +95,7 @@ const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
                     className={`${styles["custom-input"]}  ${className || ""}`}
 
                     onKeyUp={handleKeyUp}
-                    disabled={disable}
+                 
                     onFocus={() => {
                       setIsFocused(true);
                     }}
