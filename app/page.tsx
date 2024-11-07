@@ -1,9 +1,10 @@
-import Demo from "./ElProComponents/Demo/demo";
+import NavTo from "./ElProComponents/NavigationComponent/navTo";
+
 
 export default function Home() {
   return (
     <>
-      <Demo></Demo>
+     <NavTo location="Order/New">New</NavTo>
     </>
   );
 }
