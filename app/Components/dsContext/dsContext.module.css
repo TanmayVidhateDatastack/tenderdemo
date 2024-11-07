@@ -5,16 +5,17 @@
     align-items: center;*/ 
     height: fit-content;
     width:100%;
-    background-color:  var(--background);
+    /* background-color:  var(--background); */
     position: relative; 
+    z-index: 9;
 }
 .contextMenu {
     background-color: var(--background) !important;
     /*color: var(--background);*/ /* Changed to black for better visibility */
     padding: 5px 10px;
     border-radius: 0px;
-    font-size: 14px;
-    text-align: center; 
+    font-size: var(--subtitle1);
+    text-align: center;
     white-space: nowrap; /* Keeps text in a single line */
     position: fixed; /* Position relative to the button */
     z-index: 10; /* Make sure it's on top */
@@ -22,10 +23,24 @@
     max-width: 200px; /* Set a maximum width */
     width: 25px;
     max-width: fit-content; /* Set a maximum width */
-    width: 200px;
+    width: fit-content;
     height:fit-content; /* Automatically adjust width based on content */
     display: none; /* Start hidden */
+    flex-direction: column;
+}
 
+.contextMenu::before{
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%) rotate(40deg);
+    top: -4px;
+    height: 10px;
+    width: 15px;
+    z-index: -2;
+    border-radius: 0px;
+    background-color: var(--background);
+    box-shadow: 12px 12px 5px 0px #dcdcdc;
 }
 .arrow {
     position: absolute;

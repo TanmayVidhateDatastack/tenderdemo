@@ -41,8 +41,8 @@ const Toaster: React.FC<ToasterProps> = ({
         setVisible(false);
       }, duration);
 
-    return () => clearTimeout(timer);
-  }
+      return () => clearTimeout(timer);
+    }
   }, [duration, handleClose]);
 
   if (!visible) return null;

@@ -14,10 +14,7 @@ export interface TabNavProps {
   selectedTabId: string;
   tabs: tab[];
 }
-const TabNav: React.FC<TabNavProps> = ({
-  selectedTabId,
-  tabs,
-}) => {
+const TabNav: React.FC<TabNavProps> = ({ selectedTabId, tabs }) => {
   const tabContext = useContext(TabContext);
 
   if (!tabContext) {

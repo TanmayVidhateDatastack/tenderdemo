@@ -5,6 +5,7 @@ import dsStatus from "../../constant";
 import React from "react";
 import PopUpContext, {
   displaycontext,
+  closeContext,
   // handlerblur,
 } from "../dsContext/dsContext";
 // import PopUpContext from "../dscontext/dscontext";
@@ -90,20 +91,19 @@ const DsStateChange: React.FC<DsStatusIndicatorProps> = ({
             {status_icon && (
               <button
                 id={id}
-                // onClick={handleOnClick}
                 className={"icon " + styles.status_icon}
-                // onMouseOver={handleonmousehover}
-                // onClick={(e) => displaycontext(e, contextMenuId, containerId)}
-                // onMouseOver={(e) =>
-                //   displaycontext(e, contextMenuId, containerId)
-                // }
                 onMouseOver={(e) => {
 
                   displaycontext(e, contextMenuId); // Call first function
                 }}
-                // onMouseLeave={() => handlerblur(contextMenuId)}
+                onMouseLeave={() => closeContext(contextMenuId)}
               >
                 {status_icon}
+                <PopUpContext
+                  id={contextMenuId}
+                  containerId={id}
+                  content={comment}
+                />
               </button>
             )}
           </div>

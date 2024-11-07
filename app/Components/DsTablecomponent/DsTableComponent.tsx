@@ -13,6 +13,10 @@ import styles from "./DsTable.module.css";
 import AdvancedFilterComponent from "./AdvancedFilterComponent";
 import RadioCheckButton from "./RadioCheckButton";
 import TextField from "../DsTextField/DsTextField";
+import DSButton from "../dsButton/dsButton";
+import { displaycontext } from "../dscontext/dscontext";
+import Image from "next/image";
+import addIcon from "../../Icons/smallIcons/add.svg";
 
 // Define the component props
 interface TableComponentProps {
@@ -229,9 +233,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
   };
 
   const [inputValue, setInputValue] = useState<string>("");
-  const sortDataUsingInputValue = (
-    event: React.ChangeEvent<HTMLElement>
-  ) => {
+  const sortDataUsingInputValue = (event: React.ChangeEvent<HTMLElement>) => {
     const searchValue = (event.target as HTMLInputElement).value.toLowerCase();
     setInputValue((event.target as HTMLInputElement).value);
     inputValue.trim();
@@ -672,14 +674,26 @@ const TableComponent: React.FC<TableComponentProps> = ({
                         columnIndex={column.columnIndex}
                         sortTable={sortTable}
                       />
-
-                      <MenuComponent
-                        columnIndex={column.columnIndex}
-                        sortDataOnlyOnSpecifiedColumn={sortTableAscending}
-                        clearSortOnColumn={clearSortOnColumn}
-                        hideShowColumn={hideShowColumn}
-                        manageColumns={() => alert("manage columns")}
-                      ></MenuComponent>
+                      <div
+                        className={`${styles["slide-component"]}   ${className}`}
+                      >
+                        <DSButton
+                          id="chatBtn"
+                          type="icon_image"
+                          buttonSize="btnSmall"
+                          // buttonClass={btnStyles.btnSmall + " " + btnStyles.icon_image}
+                          handleOnClick={(e) => {
+                            displaycontext(
+                              e,
+                              "menucontext" + column.columnIndex,
+                              "menu" + column.columnIndex
+                            );
+                            // Call first function
+                          }}
+                          startIcon={<Image src={addIcon} alt="menu" />}
+                          tooltip="Menu"
+                        />
+                      </div>
                     </>
                   </ThComponent>
                 )
@@ -721,6 +735,18 @@ const TableComponent: React.FC<TableComponentProps> = ({
             </TrComponent>
           </TfooterComponent>
         </table>
+        {columns.map((column) => {
+          return (
+            <MenuComponent
+              key={column.columnIndex}
+              columnIndex={column.columnIndex}
+              sortDataOnlyOnSpecifiedColumn={sortTableAscending}
+              clearSortOnColumn={clearSortOnColumn}
+              hideShowColumn={hideShowColumn}
+              manageColumns={() => alert("manage columns")}
+            ></MenuComponent>
+          );
+        })}
       </div>
     </>
   );

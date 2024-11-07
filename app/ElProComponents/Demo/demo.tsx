@@ -9,7 +9,7 @@ import PaneStyles from "../../Components/dsPane/dsPane.module.css";
 // import ButtonLibrary from "./Components/dsButton/DS_ButtonLibrary";
 import Toaster from "../../Components/DsToaster/DsToaster";
 // import SaveButton from "./Components/DsButton/Ds_SaveBtn";
-import DsPane from "../../Components/dsPane/dsPane";
+// import DsPane from "../../Components/dsPane/dsPane";
 import Application from "../../ElProComponents/ApplicationComponents/Application";
 import DsPopup from "../../Components/dsPopup/dsPopup";
 import PopupOpenButton from "../../Components/dsPopup/popupOpenButton";
@@ -29,6 +29,7 @@ import DsDemoStatusIndocator from "@/app/Components/DsStatusIndicator/dsDemoStat
 import TabContainer from "@/app/Components/dsTabs/TabContainer";
 import TabView from "@/app/Components/dsTabs/TabView";
 import DemoSummaryCount from "@/app/Components/DsSummaryCount/demoSummaryCount";
+import DsPane from "@/app/Components/dsPane/dsPane";
 
 export default function Demo() {
   const tempTableData = {

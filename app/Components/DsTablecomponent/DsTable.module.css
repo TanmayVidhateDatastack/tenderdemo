@@ -12,15 +12,39 @@
 }
  
 .ds-tableHeader {
-  background: var(---e9e9e9-grey-100-) 0% 0% no-repeat padding-box;
-  background: #e9e9e9 0% 0% no-repeat padding-box;
+  background-color: var(--grey-100);
   width: 100%;
   height: 30px; 
-  /* background-color: var(--semiviolet); */
   border-radius: 4px 4px 0px 0px;
   opacity: 1;
 }
- 
+.arrow-container{
+  display: flex;
+  flex-direction: column; 
+  /* height: 100%; */
+  /* min-height: 100%; */
+  /* background-color: var(--background); */
+  box-shadow: rgba(17, 17, 26, 0.05) 0px 4px 16px,
+    rgba(17, 17, 26, 0.05) 0px 8px 32px;
+  
+  opacity: 0; /* Initially hidden */
+  min-width:0;
+  width:0;
+  padding:0;
+  transform:translateX(-100%);
+  visibility: hidden; /* Hide from view */
+  transition: opacity 0.5s ease, transform 0.5s ease, width 1.2s ease,min-width 1.2s ease,visibility 0s 1.2s,;
+}
+.ds-tableHeader:hover  .arrow-container{
+  opacity: 1; /* Fully visible */
+  min-width: fit-content;
+  width:0;
+  padding: 0 1rem;
+  transform: translateX(0); /* Slide to original position */
+  visibility: visible; /* Visible in the layout */
+  transition: opacity 0.5s ease, transform 0.5s ease,width 1.5s ease,min-width 1.5s ease;
+} 
+
 .ds-th-component {
   display: flex;
   align-items: center;
@@ -103,7 +127,7 @@
   flex: 1;
   /* UI Properties */
   /* background: var(---e9e9e9-grey-100-) 0% 0% no-repeat padding-box;
-  background: #e9e9e9 0% 0% no-repeat padding-box; */
+  background: var(--grey-100) 0% 0% no-repeat padding-box; */
   background-color: var(--semiviolet);
   mix-blend-mode: multiply;
   border-radius: 0px 0px 4px 4px;
@@ -126,8 +150,32 @@
   cursor: pointer;
 }
 .menu-component{
-  display: flex;
+  /* display: flex; */
+  background-color: var(--background);
+  color: var(--dark);
+  padding: 3px;
+  /* border: 2px solid var(--dark); */
+  flex: 1;
+  width: 100px;
+  max-width: 100px;
+  position: relative;
+  z-index: 100;
+  /* flex-direction: column; */
+  /* transform: translateY(60%); */
 }
+
+.MenuItem{
+  display: flex;
+background-color: var(--background) !important;
+color: var(--dark) !important;
+border: 0px;
+padding: 1px;
+font-size: var(--subtitle2);
+flex: 1;
+flex-direction: column;
+
+}
+
 .check{
   margin:1rem;
 }
@@ -142,10 +190,9 @@
   width: 350px;
   height: 36px;
   /* UI Properties */
-  background: var(--white) 0% 0% no-repeat padding-box;
-  background: #ffffff 0% 0% no-repeat padding-box;
-  box-shadow: 2px 2px 4px #0000000f;
-  border: 1px solid #d9d9d980;
+  background-color: var(--background);
+  box-shadow: 2px 2px 4px var(--dark);
+  border: 1px solid var(--grey-500);
   border-radius: 4px;
   opacity: 1;
 }

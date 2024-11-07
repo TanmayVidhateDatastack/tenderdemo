@@ -21,9 +21,8 @@ const TabContainer: React.FC<TabsProps> = ({
   return (
     <TabProvider>
       <div className={styles.TabContainer}>
-
-      <TabNav selectedTabId={selectedTabId} tabs={tabs}></TabNav>
-      <div className={styles.TabView}>{children}</div>
+        <TabNav selectedTabId={selectedTabId} tabs={tabs}></TabNav>
+        <div className={styles.TabView}>{children}</div>
       </div>
     </TabProvider>
   );
