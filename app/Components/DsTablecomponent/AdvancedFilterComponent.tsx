@@ -2,7 +2,6 @@ import DSButton from "../dsButton/dsButton";
 import DsPane from "../DsPane/DsPane";
 import TextField from "../DsTextField/DsTextField";
 import { filterType } from "./helpers/types";
-// import PopUpContext from "../dscontext/dscontext";
 
 interface advancedFilterComponent {
   minValue: number;
@@ -49,10 +48,6 @@ const AdvancedFilterComponent: React.FC<advancedFilterComponent> = ({
   // const dropdownColumn = filterTypes.find((x) => x.filterType == "DDF");
 
   return (
-    // <PopUpContext
-    //   containerId={"menu"}
-    //   id={"menucontext"}
-    //   content={
     <div>
       <DsPane>
         <div className="apply-filter">
@@ -115,8 +110,6 @@ const AdvancedFilterComponent: React.FC<advancedFilterComponent> = ({
         </div>
       </DsPane>
     </div>
-    //   }
-    // />
   );
 };
 export default AdvancedFilterComponent;

@@ -36,6 +36,8 @@ import DemoButtons from "@/app/Components/DsButton/dsDemoButtons";
 import DSButton from "@/app/Components/dsButton/dsButton";
 import DsStateChange from "@/app/Components/DsStatusIndicator/dsStatusIndicator";
 import Image from "next/image";
+import { FilterProvider } from "@/app/Components/DsTablecomponent/supportComponents/FilterContext";
+import AdvancedFilterComponent from "@/app/Components/DsTablecomponent/advancedFilterComponent";
 
 // import DsPane from "@/app/Components/dsPane/dsPane";
 
@@ -1234,14 +1236,59 @@ export default function Demo() {
               <TabView tabId="8">
                 <DemoSummaryCount></DemoSummaryCount>
               </TabView>
-              <TabView tabId={"9"}>
-                <DsTableComponent
-                  className={tempTableData.className}
-                  id={tempTableData.id}
-                  columns={tempTableData.columns}
-                  rows={tempTableData.rows}
-                ></DsTableComponent>
-              </TabView>
+              <FilterProvider>
+                <AdvancedFilterComponent
+                  minValue={0}
+                  maxValue={0}
+                  rangeValue={0}
+                  filterTypes={[]}
+                  setRangeFromValue={function (
+                    e: // import DSButton from "./Components/DsButton/DsButton";
+                    // import ButtonLibrary from "./Components/dsButton/DS_ButtonLibrary";
+                    React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+                  ): void {
+                    throw new Error("Function not implemented.");
+                  }}
+                  setRangeToValue={function (
+                    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+                  ): void {
+                    throw new Error("Function not implemented.");
+                  }}
+                  setDateFromValue={function (
+                    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+                  ): void {
+                    throw new Error("Function not implemented.");
+                  }}
+                  setDateToValue={function (
+                    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+                  ): void {
+                    throw new Error("Function not implemented.");
+                  }}
+                  setGrossRangeValue={function (
+                    e: React.ChangeEvent<HTMLInputElement>
+                  ): void {
+                    throw new Error("Function not implemented.");
+                  }}
+                  setCommaValue={function (
+                    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+                  ): void {
+                    throw new Error("Function not implemented.");
+                  }}
+                  applyFilter={function (
+                    e: React.MouseEvent<HTMLElement>
+                  ): void {
+                    throw new Error("Function not implemented.");
+                  }}
+                />
+                <TabView tabId={"9"}>
+                  <DsTableComponent
+                    className={tempTableData.className}
+                    id={tempTableData.id}
+                    columns={tempTableData.columns}
+                    rows={tempTableData.rows}
+                  ></DsTableComponent>
+                </TabView>
+              </FilterProvider>
             </TabContainer>
           </div>
         </div>
