@@ -8,10 +8,7 @@ const TfooterComponent: React.FC<tfooterprops> = ({ className, children }) => {
   return (
     <>
       <tfoot className={`${styles["ds-footer"]} ${className}`}>
-       
-
         {children}
-          
       </tfoot>
     </>
   );

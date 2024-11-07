@@ -16,7 +16,7 @@ import TextField from "../DsTextField/DsTextField";
 import DSButton from "../dsButton/dsButton";
 import { displayContext } from "../dsContextHolder/dsContextHolder";
 import Image from "next/image";
-import addIcon from "../../Icons/smallIcons/add.svg";
+import threedot from "../../Icons/smallIcons/threedot.svg";
 
 // Define the component props
 interface TableComponentProps {
@@ -669,27 +669,29 @@ const TableComponent: React.FC<TableComponentProps> = ({
                     columnHeader={column.columnHeader}
                   >
                     <>
-                      <SortComponent
-                        key={column.columnHeader}
-                        columnIndex={column.columnIndex}
-                        sortTable={sortTable}
-                      />
                       <div
                         className={`${styles["slide-component"]}   ${className}`}
                       >
+                        <SortComponent
+                          key={column.columnHeader}
+                          columnIndex={column.columnIndex}
+                          sortTable={sortTable}
+                        />
+
                         <DSButton
                           id="chatBtn"
                           type="icon_image"
                           buttonSize="btnSmall"
                           // buttonClass={btnStyles.btnSmall + " " + btnStyles.icon_image}
+                          className={styles.menu_btn}
                           handleOnClick={(e) => {
                             displayContext(
                               e,
-                              "menucontext" + column.columnIndex,
+                              "menucontext" + column.columnIndex
                             );
                             // Call first function
                           }}
-                          startIcon={<Image src={addIcon} alt="menu" />}
+                          startIcon={<Image src={threedot} alt="menu" />}
                           tooltip="Menu"
                         />
                       </div>

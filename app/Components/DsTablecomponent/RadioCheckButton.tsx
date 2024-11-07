@@ -1,7 +1,6 @@
 import React from "react";
 import styles from "./DsTable.module.css";
 
-
 interface Option {
   customAttribute?: Record<string, string>;
   id: string;
@@ -27,7 +26,7 @@ const RadioCheckButton: React.FC<RadioCheckProps> = ({
 }) => {
   return (
     <>
-    <span>{groupName}</span>
+      <span>{groupName}</span>
       {options.map((option) => (
         <span key={option.id} className={styles.check}>
           <input
@@ -49,7 +48,10 @@ const RadioCheckButton: React.FC<RadioCheckProps> = ({
               }, {} as Record<string, string>),
             })}
           />
-          <label htmlFor={option.code} className={`${styles.ms1} ${option.className}`}>
+          <label
+            htmlFor={option.code}
+            className={`${styles.ms1} ${option.className}`}
+          >
             {option.value}
           </label>
         </span>
