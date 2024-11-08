@@ -1,3 +1,4 @@
+"use client";
 import DataList from "@/app/Components/dsDatalist/dsDatalist";
 // import NavBack from "../../ElProComponents/NavigationComponent/navBack";
 import styles from "../order.module.css";
@@ -9,6 +10,10 @@ import Image from "next/image";
 import BankDetailsSrc from "../../Icons/mediumIcons/bankDetails.svg";
 import Application from "@/app/ElProComponents/ApplicationComponents/Application";
 import TextField from "@/app/Components/DsTextField/DsTextField";
+import ContextMenu, {
+  closeContext,
+  displayContext,
+} from "@/app/Components/dsContextHolder/dsContextHolder";
 
 export default function Home() {
   const panNo = "AABCD9532A";
@@ -25,7 +30,6 @@ export default function Home() {
               <div className={styles.title}>Customer Dtails</div>
               <div className={styles.inputDetails}>
                 <div>
-                  {" "}
                   <DataList
                     options={[]}
                     inputId={""}
@@ -36,12 +40,12 @@ export default function Home() {
                   ></DataList>
                 </div>
                 <div>
-                  {" "}
-                  <TextField placeholder={"Order No"}       label={"Purchase order no(PO)"}                  
+                  <TextField
+                    placeholder={"Order No"}
+                    label={"Purchase order no(PO)"}
                   ></TextField>
                 </div>
                 <div>
-                  {" "}
                   <TextField
                     label="Purchase order date"
                     placeholder="dd/mm/yyyy"
@@ -66,7 +70,15 @@ export default function Home() {
                 <div>
                   <Detail detailOf="Food Lic No">{foodLicNo}</Detail>
                   <Detail detailOf="Bank account details">
-                    <Image src={BankDetailsSrc} alt="Bank details"></Image>
+                    <div
+                      onMouseOver={(e) => displayContext(e, "BankDetails")}
+                      // onMouseOut={() => closeContext("BankDetails")}
+                    >
+                      <Image
+                        src={BankDetailsSrc}
+                        alt="Bank details"
+                      ></Image>
+                    </div>
                   </Detail>
                 </div>
               </div>
@@ -83,6 +95,18 @@ export default function Home() {
           </div>
         </div>
       </Application>
+      <ContextMenu
+        id={"BankDetails"}
+        showArrow={true}
+        position="horizontal"
+        alignment="center"
+        content={
+          <>
+            <Detail detailOf="Food Lic No">{foodLicNo}</Detail>
+            <Detail detailOf="Food Lic No">{foodLicNo}</Detail>
+          </>
+        }
+      ></ContextMenu>
     </>
   );
 }
