@@ -7,15 +7,14 @@ interface ContextMenuProps {
   position?: "vertical" | "horizontal";
   alignment?: "right" | "left" | "center";
   content?: string | React.ReactElement;
- showArrow:boolean;
-
+  showArrow: boolean;
 }
 
-export function displayContext (
+export function displayContext(
   event: React.MouseEvent<HTMLElement> | React.FocusEvent,
   id: string,
-  position: "vertical" | "horizontal"|undefined = "vertical",
-  alignment: "right" | "left" | "center"|undefined="center"
+  position: "vertical" | "horizontal" | undefined = "vertical",
+  alignment: "right" | "left" | "center" | undefined = "center"
 ) {
   event.preventDefault();
 
@@ -24,9 +23,9 @@ export function displayContext (
   const target = event.target as HTMLElement;
   if (!context || !target) return;
   if (!context || !target) return;
-  if (context.style.display=="flex") {
+  if (context.style.display == "flex") {
     context.style.display = "none";
-    return
+    return;
   }
   context.style.display = "flex";
 
@@ -47,22 +46,19 @@ export function displayContext (
   let contextY = eleY + distance;
 
   if (eleY + contextH + distance > winH - yBorder) {
-    arrowPosition="bottom";
+    arrowPosition = "bottom";
     contextY = eleRect.top - contextH - distance;
-  }
-  else{
-    arrowPosition="top";
+  } else {
+    arrowPosition = "top";
   }
   if (position === "horizontal") {
     contextY = eleRect.top;
     if (eleRect.right + contextW + distance <= winW - xBorder) {
       contextX = eleRect.right + distance;
-      arrowPosition="left";
-
+      arrowPosition = "left";
     } else {
       contextX = eleX - contextW - distance;
-      arrowPosition="right";
-
+      arrowPosition = "right";
     }
   } else {
     if (alignment === "center") {
@@ -76,8 +72,7 @@ export function displayContext (
 
   context.style.left = `${contextX}px`;
   context.style.top = `${contextY}px`;
-  context.querySelector(`.${styles.arrow}`)?.setAttribute("class",styles.arrow+" "+ styles[arrowPosition])
-};
+}
 export const closeContext = (id: string) => {
   const contextMenu = document.getElementById(id);
   if (contextMenu) {
@@ -85,19 +80,17 @@ export const closeContext = (id: string) => {
   }
 };
 
-const ContextMenu: React.FC<ContextMenuProps> = ({ id, content ,
+const ContextMenu: React.FC<ContextMenuProps> = ({
+  id,
+  content,
   showArrow,
-
 }) => {
   return (
-    <div id={id} className={styles.contextMenu}>
+    <div id={id} className={styles.contextMenu + " context"}>
       {content}
-      {showArrow && (
-          <div className={`${styles.arrow} `} /> 
-        )}
+      {showArrow && <div className={`${styles.arrow} `} />}
     </div>
   );
 };
 
 export default ContextMenu;
-

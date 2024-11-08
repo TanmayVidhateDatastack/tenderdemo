@@ -123,7 +123,6 @@ const DemoButtons: React.FC = () => {
           id="deleteBtn"
           buttonColor="btnWarning"
           buttonViewStyle="btnContained"
-          // className={btnStyles.btnContained}
           handleOnClick={(e) => clickHandler(e)}
           handleOnHover={(e) => changeImage(e, whitetrashbtn)}
           handleMouseLeave={(e) => changeImage(e, trashbtn)}

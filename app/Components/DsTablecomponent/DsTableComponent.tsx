@@ -45,7 +45,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(setRows(rowsContainer.current));
-  }, []);
+  }, [dispatch]);
   const sliceRows = useAppSelector((state) => state.table["rows"]);
 
   useEffect(() => {
@@ -264,21 +264,20 @@ const TableComponent: React.FC<TableComponentProps> = ({
     setInputValue((event.target as HTMLInputElement).value);
     inputValue.trim();
     let filteredRows: trow[] = [];
-
-    if (searchValue === "") {
-      // If the search input is empty, show all rows
-      filteredRows = rowsContainer.current;
-    } else {
-      // Filter rows based on the search value
-      filteredRows = rows.filter((row) =>
-        row.content?.some(
-          (cell) =>
-            (typeof cell.content === "string" ||
-              typeof cell.content === "number") &&
-            cell.content.toString().toLowerCase().includes(searchValue)
-        )
-      );
-    }
+    // if (searchValue === "") {
+    //   // If the search input is empty, show all rows
+    //   filteredRows = rowsContainer.current;
+    // } else {
+    // Filter rows based on the search value
+    filteredRows = [...sliceRows].filter((row) =>
+      row.content?.some(
+        (cell) =>
+          (typeof cell.content === "string" ||
+            typeof cell.content === "number") &&
+          cell.content.toString().toLowerCase().includes(searchValue)
+      )
+    );
+    // }
 
     // Update the rows with the filtered results
     setNewRows(filteredRows);
@@ -301,7 +300,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
   //     filteredRows = rowsContainer.current;
   //   } else {
   //     // Filter rows based on the search value
-  //     filteredRows = rows.filter((row) =>
+  //     filteredRows = [...sliceRows].filter((row) =>
   //       row.content?.some(
   //         (cell) =>
   //           typeof cell.content === "string" &&
@@ -320,7 +319,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
 
   const maintainSortingOrder = (filteredRows: trow[]) => {
     if (activeColumnIndex !== -1) {
-      const sortedRows = filteredRows.sort((rowA, rowB) => {
+      const sortedRows = [...filteredRows].sort((rowA, rowB) => {
         const cellA = rowA.content?.find(
           (x) => x.columnIndex === activeColumnIndex
         )?.content;
@@ -351,7 +350,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
       setNewRows(sortedRows);
     } else {
       // Default sorting by rowIndex if no column is active
-      const sortedRows = filteredRows.sort(
+      const sortedRows = [...filteredRows].sort(
         (rowA, rowB) => rowA.rowIndex - rowB.rowIndex
       );
       setNewRows(sortedRows);
@@ -375,6 +374,25 @@ const TableComponent: React.FC<TableComponentProps> = ({
     });
   };
 
+  useEffect(() => {
+    const handleOnScroll = () => {
+      document
+        .querySelectorAll(".context")
+        .forEach((x) => ((x as HTMLElement).style.display = "none"));
+    };
+    document
+      .querySelectorAll("*")
+      ?.forEach((x) =>
+        (x as HTMLElement).addEventListener("scroll", handleOnScroll)
+      );
+    return () => {
+      document
+        .querySelectorAll("*")
+        ?.forEach((x) =>
+          (x as HTMLElement).removeEventListener("scroll", handleOnScroll)
+        );
+    };
+  }, []);
   return (
     <>
       <DemoLayout title="Table (DsTable)">

@@ -16,7 +16,6 @@ import PopupOpenButton from "../../Components/dsPopup/popupOpenButton";
 // import ButtonLibrary from "./Components/dsButton/DS_ButtonLibrary";
 import DemoButtons from "../../Components/dsButton/dsDemoButtons";
 import Image from "next/image";
-
 // import SaveButton from "./Components/DsButton/Ds_SaveBtn";
 import DsTableComponent from "../../Components/DsTablecomponent/DsTableComponent";
 import DemoSelect from "@/app/Components/dsSelect/dsDemoSelect";
@@ -37,6 +36,7 @@ import DsStateChange from "@/app/Components/DsStatusIndicator/dsStatusIndicator"
 import commentIcon from "../../Icons/smallIcons/commenticon.svg";
 import AdvancedFilterComponent from "@/app/Components/DsTablecomponent/AdvancedFilterComponent";
 import { determineFilterType } from "@/app/Components/DsTablecomponent/helpers/types";
+import PaneOpenButton from "@/app/Components/DsPane/PaneOpenButton";
 export default function Demo() {
   const tempTableData = {
     className: "sample-table",
@@ -1070,8 +1070,6 @@ export default function Demo() {
   const [notiType, setNotiType] = useState<
     "success" | "bonus" | "info" | "error"
   >("info");
-  const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
-
   const filterTypes = determineFilterType(tempTableData.columns);
 
   return (
@@ -1267,16 +1265,11 @@ export default function Demo() {
               </TabView>
 
               <TabView tabId={"9"}>
-                <DSButton
+                <PaneOpenButton
                   label="Filter"
-                  handleOnClick={() => setIsFilterVisible(!isFilterVisible)}
-                ></DSButton>
-                {isFilterVisible == true && (
-                  <AdvancedFilterComponent
-                    rows={tempTableData.rows}
-                    filterTypes={filterTypes}
-                  ></AdvancedFilterComponent>
-                )}
+                  paneId={"AdvanceFilter"}
+                ></PaneOpenButton>
+
                 <DsTableComponent
                   className={tempTableData.className}
                   id={tempTableData.id}
@@ -1285,9 +1278,16 @@ export default function Demo() {
                 ></DsTableComponent>
               </TabView>
             </TabContainer>
+            <DsPane id="AdvanceFilter">
+              <AdvancedFilterComponent
+                rows={tempTableData.rows}
+                filterTypes={filterTypes}
+              ></AdvancedFilterComponent>
+            </DsPane>
           </div>
         </div>
       </Application>
+
       <DsPopup
         id={"test"}
         /*position="center" type="document"*/ title={"Popup"}
@@ -1315,6 +1315,7 @@ export default function Demo() {
           duration={3000}
         />
       )}
+      {/* <PopUpContext id={contextMenuId} content={comment} containerId={""} /> */}
     </>
   );
 }

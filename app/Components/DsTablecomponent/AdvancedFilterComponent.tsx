@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import DSButton from "../DsButton/DsButton";
-import DsPane from "../DsPane/DsPane";
 import TextField from "../DsTextField/DsTextField";
 import {
   convertToDate,
@@ -187,66 +186,64 @@ const AdvancedFilterComponent: React.FC<advancedFilterComponent> = ({
   };
 
   return (
-    <DsPane>
-      <div className="apply-filter">
-        <div className="range-filter">
-          <TextField
-            placeholder={`${numberColumn?.columnHeader} From`}
-            type={"singleline"}
-            handleInputChange={setRangeFromValue}
-            inputType="number"
-            label={`${numberColumn?.columnHeader} From`}
-            disable={false}
-          ></TextField>
-          <TextField
-            placeholder={`${numberColumn?.columnHeader} To`}
-            type={"singleline"}
-            handleInputChange={setRangeToValue}
-            inputType="number"
-            label={`${numberColumn?.columnHeader} To`}
-            disable={false}
-          ></TextField>
-        </div>
-        <div className="date-filter">
-          <TextField
-            placeholder={`${dateColumn?.columnHeader} From`}
-            type={"singleline"}
-            handleInputChange={setDateFromValue}
-            inputType="date"
-            label={`${dateColumn?.columnHeader} From`}
-            disable={false}
-          ></TextField>
-          <TextField
-            placeholder={`${dateColumn?.columnHeader} To`}
-            type={"singleline"}
-            handleInputChange={setDateToValue}
-            inputType="date"
-            label={`${dateColumn?.columnHeader} To`}
-            disable={false}
-          ></TextField>
-        </div>
-        {rangeColumn?.columnHeader} From
-        <input
-          type="range"
-          min={minValue.current}
-          max={maxValue.current}
-          value={rangeValue}
-          className="range-input"
-          onChange={setGrossRangeValue}
-        ></input>
-        {rangeValue}
-        {`               `} {rangeColumn?.columnHeader} To
+    <div className="apply-filter">
+      <div className="range-filter">
         <TextField
-          placeholder={`Type multiple ${csvColumn?.columnHeader} name and use comma`}
+          placeholder={`${numberColumn?.columnHeader} From`}
           type={"singleline"}
-          handleInputChange={setCommaValue}
-          inputType="text"
-          label={`Customer`}
+          handleInputChange={setRangeFromValue}
+          inputType="number"
+          label={`${numberColumn?.columnHeader} From`}
           disable={false}
         ></TextField>
-        <DSButton label={"Apply"} handleOnClick={applyFilter}></DSButton>
+        <TextField
+          placeholder={`${numberColumn?.columnHeader} To`}
+          type={"singleline"}
+          handleInputChange={setRangeToValue}
+          inputType="number"
+          label={`${numberColumn?.columnHeader} To`}
+          disable={false}
+        ></TextField>
       </div>
-    </DsPane>
+      <div className="date-filter">
+        <TextField
+          placeholder={`${dateColumn?.columnHeader} From`}
+          type={"singleline"}
+          handleInputChange={setDateFromValue}
+          inputType="date"
+          label={`${dateColumn?.columnHeader} From`}
+          disable={false}
+        ></TextField>
+        <TextField
+          placeholder={`${dateColumn?.columnHeader} To`}
+          type={"singleline"}
+          handleInputChange={setDateToValue}
+          inputType="date"
+          label={`${dateColumn?.columnHeader} To`}
+          disable={false}
+        ></TextField>
+      </div>
+      {rangeColumn?.columnHeader} From
+      <input
+        type="range"
+        min={minValue.current}
+        max={maxValue.current}
+        value={rangeValue}
+        className="range-input"
+        onChange={setGrossRangeValue}
+      ></input>
+      {rangeValue}
+      {`               `} {rangeColumn?.columnHeader} To
+      <TextField
+        placeholder={`Type multiple ${csvColumn?.columnHeader} name and use comma`}
+        type={"singleline"}
+        handleInputChange={setCommaValue}
+        inputType="text"
+        label={`Customer`}
+        disable={false}
+      ></TextField>
+      <DSButton label={"Apply"} handleOnClick={applyFilter}></DSButton>
+    </div>
   );
 };
 export default AdvancedFilterComponent;
