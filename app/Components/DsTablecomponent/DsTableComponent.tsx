@@ -25,6 +25,7 @@ import TheaderComponent from "./headerComponents/dsTheaderComponent";
 import MenuComponent from "./supportComponents/dsMenuComponent";
 import DemoLayout from "@/app/ElProComponents/Demo/demoLayout";
 import { displayContext } from "../dsContextHolder/dsContextHolder";
+import rangeFilter from "./TableContext";
 // Define the component props
 interface TableComponentProps {
   className: string;
@@ -379,23 +380,9 @@ const TableComponent: React.FC<TableComponentProps> = ({
     setRangeTo(Number(e.target.value));
   };
 
-  const rangeFilter = () => {
-    const filteredRows = [...rows].filter((row) =>
-      row.content?.some(
-        (cell) =>
-          cell.contentType === "number" &&
-          cell.columnIndex === 0 &&
-          Number(cell.content) >= rangeFrom &&
-          Number(cell.content) <= rangeTo
-      )
-    );
-
-    setNewRows(filteredRows);
-    return filteredRows;
-  };
   const applyFilter = (e: React.MouseEvent<HTMLElement>) => {
     console.log(e);
-    const rows1 = rangeFilter();
+    const rows1 = rangeFilter(rows,rangeFrom,rangeTo,0);
     const rows2 = filterOnDate(1);
     const rows3 = filterRowsOnInputTypeRange(6);
     const rows4 = searchDataOnSpecifiedColumnUsingCSV(3);
