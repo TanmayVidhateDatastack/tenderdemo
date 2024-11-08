@@ -10,10 +10,20 @@ interface SpotlightSearchProps {
   handleKeyUp?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   placeholder?: string;
   inputId: string;
-
+   
   className: string;
   customAttributes?: Record<string, string>;
 }
+
+/**
+ * Datalist component displays <datalist> element  provides a list of predefined options for an <input> element.
+ * @param {array} data - provide suggestions  that appears to user when  interarct with datalist.
+ * @param {'string'} placeholder-the placeholder displayed in datalist component.
+ * @param {string} inputId - id used for uniquely identifies the element.
+ * @param {string} ClassName -"(set name of the class )user defined styles and classes will be applied.
+ * @param { Record<string, string>} customAttributes - enable the addition of custom data attributes to HTML elements.
+ * @param {React.KeyboardEvent} handleKeyUp -event fired after key is released.
+**/
 
 const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
   handleKeyUp,

@@ -19,6 +19,23 @@ interface DataListProps {
   customAttributes?: Record<string, string>;
 }
 
+
+/**
+ * Datalist component displays <datalist> element  provides a list of predefined options for an <input> element.
+ * @param {array} options - provide suggestions  that appears to user when  interarct with datalist.
+ * @param {string} placeholder-the placeholder displayed in datalist component.
+ * @param {string} label - used as a title provides temporary hint.
+ *  @param  {boolean} disable - keep textField for readOnly purpose.
+ * @param {string} inputId - id used for uniquely identifies the element.
+ * @param {string} datalistId-id used for uniquely identifies the datalist element.
+ * @param {string} ClassName -"(set name of the class )user defined styles and classes will be applied.
+ * @param { Record<string, string>} customAttributes - enable the addition of custom data attributes to HTML elements.
+ * @param {React.ChangeEvent} handleChange - event fired on change in the textField value  
+ * @param {React.KeyboardEvent} handleKeyUp -event fired after key is released.
+**/
+
+
+
 const DataList: React.FC<DataListProps> = ({
   handleChange,
   handleKeyUp,

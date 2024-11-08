@@ -873,7 +873,7 @@ export default function Demo() {
       )} */}
 
 
-<dsDataList
+<DataList
               placeholder="Search"
               label="label"
               inputId="userSelect"
@@ -885,7 +885,7 @@ export default function Demo() {
                 { attributes: { 'key': 'key3' }, id: 'emp3', value: 'emp3' },
                 { attributes: { 'key': 'key4' }, id: 'emp4', value: 'emp4' },
                 { attributes: { 'key': 'key5' }, id: 'emp5', value: 'emp5' },
-              ]} className={""} ></dsDataList>
+              ]} className={""} ></DataList>
 
 
             <DemoLayout title={"Toaster (DsToaster)"}>
