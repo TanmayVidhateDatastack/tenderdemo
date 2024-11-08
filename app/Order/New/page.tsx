@@ -8,6 +8,7 @@ import Detail from "@/app/ElProComponents/DetailComponent/Detail";
 import Image from "next/image";
 import BankDetailsSrc from "../../Icons/mediumIcons/bankDetails.svg";
 import Application from "@/app/ElProComponents/ApplicationComponents/Application";
+import TextField from "@/app/Components/DsTextField/DsTextField";
 
 export default function Home() {
   const panNo = "AABCD9532A";
@@ -36,25 +37,15 @@ export default function Home() {
                 </div>
                 <div>
                   {" "}
-                  <DataList
-                    options={[]}
-                    inputId={""}
-                    dataListId={""}
-                    className={""}
-                    label="Customer ID & Name"
-                    placeholder="Search customer"
-                  ></DataList>
+                  <TextField placeholder={"Order No"}       label={"Purchase order no(PO)"}                  
+                  ></TextField>
                 </div>
                 <div>
                   {" "}
-                  <DataList
-                    options={[]}
-                    inputId={""}
-                    dataListId={""}
-                    className={""}
-                    label="Customer ID & Name"
-                    placeholder="Search customer"
-                  ></DataList>
+                  <TextField
+                    label="Purchase order date"
+                    placeholder="dd/mm/yyyy"
+                  ></TextField>
                 </div>
                 <div>
                   <DsSelect

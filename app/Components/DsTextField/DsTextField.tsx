@@ -28,7 +28,7 @@ interface InputTextAreaProps {
   type?: "singleline" | "multiline";
   inputType?: "password" | "text" | "number" | "date";
   icon?: string;
-  iconEnd?: string;
+  iconEnd?: string|React.ReactNode;
   rows?: number;
   cols?: number;
   minRows?: number;

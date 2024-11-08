@@ -47,21 +47,21 @@ export function displayContext (
   let contextY = eleY + distance;
 
   if (eleY + contextH + distance > winH - yBorder) {
-    arrowPosition="top";
+    arrowPosition="bottom";
     contextY = eleRect.top - contextH - distance;
   }
   else{
-    arrowPosition="bottom";
+    arrowPosition="top";
   }
   if (position === "horizontal") {
     contextY = eleRect.top;
     if (eleRect.right + contextW + distance <= winW - xBorder) {
       contextX = eleRect.right + distance;
-      arrowPosition="right";
+      arrowPosition="left";
 
     } else {
       contextX = eleX - contextW - distance;
-      arrowPosition="left";
+      arrowPosition="right";
 
     }
   } else {

@@ -29,19 +29,6 @@
     flex-direction: column;
 }
 
-.contextMenu::before{
-    content: '';
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%) rotate(40deg);
-    top: -4px;
-    height: 10px;
-    width: 15px;
-    z-index: -2;
-    border-radius: 0px;
-    background-color: var(--background);
-    box-shadow: 12px 12px 5px 0px #dcdcdc;
-}
 .arrow {
     position: absolute;
   /* bottom: -10px; */
@@ -49,8 +36,6 @@
     transform: translateX(-50%);
     width: 0;
     height: 0;
-    box-shadow: rgba(252, 9, 9, 0.56) 0px 22px 70px 4px;
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px;
    /* box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
    /* border-left: 10px solid transparent;
     border-right: 10px solid transparent;

@@ -35,7 +35,6 @@ import SpotlightSearch from "@/app/Components/dsSpotlightSearch/dsSpotlightSearc
 import TextField from "@/app/Components/DsTextField/DsTextField";
 
 export default function Demo() {
-
   const tempTableData = {
     className: "sample-table",
     id: "table-1",
@@ -863,9 +862,7 @@ export default function Demo() {
               iconEnd="📋"
             />
 
-
-
-{/* 
+            {/* 
       <button onClick={() => setSearchOpen(true)}>
         Open Search
       </button>
@@ -873,21 +870,21 @@ export default function Demo() {
         <SpotlightSearch data={data} onClose={() => setSearchOpen(false)} />
       )} */}
 
-
-<DataList
+            <DataList
               placeholder="Search"
               label="label"
               inputId="userSelect"
               dataListId="user-list"
               disable={false}
               options={[
-                { attributes: { 'key': 'key1' }, id: 'emp1', value: 'emp1' },
-                { attributes: { 'key': 'key2' }, id: 'emp2', value: 'emp2' },
-                { attributes: { 'key': 'key3' }, id: 'emp3', value: 'emp3' },
-                { attributes: { 'key': 'key4' }, id: 'emp4', value: 'emp4' },
-                { attributes: { 'key': 'key5' }, id: 'emp5', value: 'emp5' },
-              ]} className={""} ></DataList>
-
+                { attributes: { key: "key1" }, id: "emp1", value: "emp1" },
+                { attributes: { key: "key2" }, id: "emp2", value: "emp2" },
+                { attributes: { key: "key3" }, id: "emp3", value: "emp3" },
+                { attributes: { key: "key4" }, id: "emp4", value: "emp4" },
+                { attributes: { key: "key5" }, id: "emp5", value: "emp5" },
+              ]}
+              className={""}
+            ></DataList>
 
             <DemoLayout title={"Toaster (DsToaster)"}>
               <div className={styles.btn}>
@@ -1056,8 +1053,8 @@ export default function Demo() {
       <DsPane id="PaneRight" side={"right"} title="Status">
         <DsDemoStatusIndocator></DsDemoStatusIndocator>
       </DsPane>
-   
-    {showNotification && (
+
+      {showNotification && (
         <Toaster
           handleClose={() => setShowNotification(false)}
           type={notiType}
@@ -1069,12 +1066,3 @@ export default function Demo() {
     </>
   );
 }
-
-
-
-
-
-
-
-
-

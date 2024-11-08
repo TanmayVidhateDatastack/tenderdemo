@@ -1,3 +1,6 @@
+.container{
+  width:100%;
+}
 .Customer > div,.Product > div {
   padding: var(--ds-padding);
 }
