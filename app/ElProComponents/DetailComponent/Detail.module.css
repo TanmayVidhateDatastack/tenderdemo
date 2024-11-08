@@ -1,0 +1,13 @@
+.detail{
+    display:flex;
+    align-items: start;
+    font-size:var(--subtitle1);
+    padding: var(--ds-padding);
+    flex-wrap: wrap;
+}
+.detailOf{
+    margin-right: var(--ds-marginX);
+}
+.data{
+    font-weight: 600;
+}

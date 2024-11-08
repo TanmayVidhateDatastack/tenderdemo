@@ -17,7 +17,7 @@
 .popupContainer.top{
     justify-content: center;
     align-items: flex-start;
-    padding-top: var(--dspadding);
+    padding-top: var(--ds-padding);
 }
 .popup{
     display: flex;
@@ -49,7 +49,7 @@
 .popupTitle{
     font-size: var(--heading2);
     font-weight: bold;
-    padding:var(--dspadding);
+    padding:var(--ds-padding);
 }
 .popupMenus{
     display: flex;
@@ -60,7 +60,7 @@
     align-items: center;
 }
 .popupMenu > div{
-    padding: var(--dspadding);
+    padding: var(--ds-padding);
 
 }
 .popup.document .popupMenu{
@@ -70,7 +70,7 @@
     border: 0;
 }
 .popupContent{
-    padding: var(--dspadding);
+    padding: var(--ds-padding);
 }
 .popup.document .popupContent{
 

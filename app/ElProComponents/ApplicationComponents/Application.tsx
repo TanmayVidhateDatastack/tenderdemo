@@ -6,16 +6,17 @@ import styles from "./Application.module.css";
 import ApplicationHeader from "./ApplicationHeader";
 
 export interface ApplicationProps {
-    children:React.ReactNode
-    appMenu?:React.ReactNode
+    children:React.ReactNode;
+    appMenu?:React.ReactNode;
+    hasPrevious?:boolean;
     appTitle:string;
 }
 
-function Application({children,appTitle,appMenu}:ApplicationProps) {
+function Application({children,appTitle,appMenu,hasPrevious=false}:ApplicationProps) {
   return (
     <>
-            <ApplicationHeader appTitle={appTitle}>{appMenu}</ApplicationHeader>
-            <div className={styles.application}>{children}</div>
+            <ApplicationHeader appTitle={appTitle} hasPrevious={hasPrevious}>{appMenu}</ApplicationHeader>
+            <div className={styles.application }>{children}</div>
     </>
   );
 }

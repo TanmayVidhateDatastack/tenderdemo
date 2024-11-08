@@ -1,10 +1,13 @@
 "use client";
-
+ 
 import { useState } from "react";
 import styles from "./dsSelect.module.css";
 import DsOption from "./dsOption";
-import { closeContext, displayContext } from "../dsContextHolder/dsContextHolder";
-
+import {
+  closeContext,
+  displayContext,
+} from "@/app/Components/dsContextHolder/dsContextHolder";
+ 
 /**
  * DsPane component displays pane.
  *
@@ -14,19 +17,21 @@ import { closeContext, displayContext } from "../dsContextHolder/dsContextHolder
  * @param {string} label - label which is given by user
  * @param {string} handleOnChange - return values which are selected
  */
-
+ 
 interface Option {
   label: string;
   value: string | Option[];
 }
 interface SelectProps {
+  id: string;
   options: Option[];
   type: "single" | "multi" | "twolevel";
   placeholder: string;
   label?: string;
 }
-
+ 
 const DsSelect: React.FC<SelectProps> = ({
+  id = "",
   options,
   type,
   placeholder = "Click to Select",
@@ -36,21 +41,21 @@ const DsSelect: React.FC<SelectProps> = ({
   const [isOpen, setIsopen] = useState(false);
   // setSelectedOption([...selectedOption,opt]);
   const [singleSelectedOption, setSingleSelectedOption] = useState<string>("");
-  const toggleDropdown = () => setIsopen(!isOpen);
   // const [selectedMain, setSelectedMain] = useState<string | null>(null); // For two-level
   // const [selectedSub, setSelectedSub] = useState<string | null>(null);
-
+ 
   const handleSelect = (option: string) => {
     if (type == "single") {
       setSingleSelectedOption(option);
       closeContext("test");
     }
-
+ 
     if (type == "multi") {
       if (selectedOption.includes(option)) {
         setSelectedOption(
           selectedOption.filter((selected) => selected !== option)
         );
+        closeContext("test");
       } else {
         setSelectedOption([...selectedOption, option]);
       }
@@ -60,11 +65,11 @@ const DsSelect: React.FC<SelectProps> = ({
         setSelectedOption(
           selectedOption.filter((selected) => selected !== option)
         );
+        closeContext("test");
       } else {
         setSelectedOption([...selectedOption, option]);
       }
     }
-    
   };
   // const removeOption = (select: string) => {
   //   const removeItem = selectedOption.filter((option) => option !== select);
@@ -72,7 +77,7 @@ const DsSelect: React.FC<SelectProps> = ({
   // };
   const [isFocused, setIsFocused] = useState(false);
   const [value, setValue] = useState("");
-
+ 
   // const handleChange = (value: string) => {
   //   setValue(value);
   //   console.log(value); // Log the new value to the console
@@ -82,21 +87,21 @@ const DsSelect: React.FC<SelectProps> = ({
   // const [isVisible, setIsVisible] = useState(false);
   // const contextMenuId = "itemSelect";
   // const containerId = "groupSelect";
-
+ 
   // const handleGroupChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
   //   setSelectedGroup(e.target.value);
   //   setSelectedItem(""); // Reset the item when group changes
   // };
-
+ 
   // const handleItemChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
   //   setSelectedItem(e.target.value);
   // };
-
+ 
   // // Find the selected group based on the selectedGroup value
   // const selectedGroupData = options.find(
   //   (group) => group.label === selectedGroup
   // );
-
+ 
   return (
     <>
       {/* {type == "multi" && (
@@ -161,7 +166,7 @@ const DsSelect: React.FC<SelectProps> = ({
       ; */}
       {/* {type == "single" && ( */}
       <div>
-        <div className={styles.allselect}>
+        <div className={styles.allselect} id={id}>
           <legend
             className={`${styles["floating-label"]} ${
               isFocused || value !== "" ? styles["shrink"] : ""
@@ -174,23 +179,25 @@ const DsSelect: React.FC<SelectProps> = ({
             value={type == "single" ? singleSelectedOption : ""}
             name="title"
             placeholder={isFocused || value !== "" ? placeholder : ""}
-            onClick={toggleDropdown}
+            onClick={()=>setIsopen(!isOpen)}
             className={styles.mainselection}
             onFocus={(e) => {
               setIsFocused(true);
-              displayContext(e, "test", "vertical", "left");
+              displayContext(e, id + "Options", "vertical", "left");
             }}
             onBlur={() => {
               setIsFocused(false);
-              // closeContext("test");
+              closeContext(id + "Options");
             }}
             onChange={(e) => setValue(e.target.value)}
           />
           <DsOption
+            id={id + "Options"}
             isOpen={true}
             options={options}
             handleSelect={handleSelect}
           ></DsOption>
+ 
           {/* {isOpen && (
             <div className={styles.list}>
               {options.map((option, index) => (
@@ -205,7 +212,7 @@ const DsSelect: React.FC<SelectProps> = ({
             </div>
           )} */}
         </div>
-        {singleSelectedOption}
+        {selectedOption}
       </div>
       {/* )} */}
       {/* ;
@@ -217,7 +224,7 @@ const DsSelect: React.FC<SelectProps> = ({
                 id="groupSelect"
                 onChange={handleGroupChange}
                 value={selectedGroup}
-                // onClick={(e) => displayContext(e, contextMenuId)}
+                // onClick={(e) => displaycontext(e, contextMenuId)}
                 className={styles.dropdownSelect}
               >
                 {options.map((group) => (
@@ -225,7 +232,7 @@ const DsSelect: React.FC<SelectProps> = ({
                     key={group.label}
                     value={group.label}
                     onMouseOver={(e) =>
-                      displayContext(e, contextMenuId)
+                      displaycontext(e, contextMenuId)
                     }
                   >
                     {group.label}
@@ -233,7 +240,7 @@ const DsSelect: React.FC<SelectProps> = ({
                 ))}
               </select>
             </div>
-
+ 
             {selectedGroup && selectedGroupData && (
               <div className={styles.sub_dropdown}>
                 <select
@@ -251,7 +258,7 @@ const DsSelect: React.FC<SelectProps> = ({
               </div>
             )}
           </div>
-
+ 
           {selectedItem && (
             <div className={styles.selectedItem}>
               You selected: {selectedItem}
@@ -282,5 +289,5 @@ const DsSelect: React.FC<SelectProps> = ({
     </>
   );
 };
-
+ 
 export default DsSelect;

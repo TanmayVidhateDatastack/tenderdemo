@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import DSButton from "../../Components/dsButton/dsButton";
 import styles from "../../page.module.css";
 import buttonStyles from "../../Components/dsButton/dsButton.module.css";
@@ -32,6 +32,7 @@ import DemoSummaryCount from "@/app/Components/DsSummaryCount/demoSummaryCount";
 import DsPane from "@/app/Components/DsPane/DsPane";
 import DataList from "@/app/Components/dsDatalist/dsDatalist";
 import SpotlightSearch from "@/app/Components/dsSpotlightSearch/dsSpotlightSearch";
+import TextField from "@/app/Components/DsTextField/DsTextField";
 
 export default function Demo() {
 
@@ -873,7 +874,7 @@ export default function Demo() {
       )} */}
 
 
-<dsDataList
+<DataList
               placeholder="Search"
               label="label"
               inputId="userSelect"
@@ -885,7 +886,7 @@ export default function Demo() {
                 { attributes: { 'key': 'key3' }, id: 'emp3', value: 'emp3' },
                 { attributes: { 'key': 'key4' }, id: 'emp4', value: 'emp4' },
                 { attributes: { 'key': 'key5' }, id: 'emp5', value: 'emp5' },
-              ]} className={""} ></dsDataList>
+              ]} className={""} ></DataList>
 
 
             <DemoLayout title={"Toaster (DsToaster)"}>

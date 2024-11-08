@@ -10,7 +10,6 @@
   align-items:flex-end;
   width: 100%;
   padding: 10px;
-  margin-top: 10px;
   border: 1px solid var(--blue-600);
   border-radius: var(--dsborder-radius);
   /* background-color: transparent; */

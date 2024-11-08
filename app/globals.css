@@ -55,8 +55,10 @@
   --sndSemiviolet:var(--periwinkle);       
   --sndLightviolet:var(--lightviolet); */
 
-  --dspadding:0.5rem !important;
-  --dsmargin:3px 0.6vw !important;
+  --ds-padding:0.5rem !important;
+  --ds-marginX:0.6vw;
+  --ds-marginY:3px;
+  --ds-margin:var(--ds-marginY) var(--ds-marginX) !important;
   --dsmin-width:5rem;
   --dsmin-height:3rem;
   --dswidth:fit-content;

@@ -76,7 +76,7 @@ export function displayContext (
 
   context.style.left = `${contextX}px`;
   context.style.top = `${contextY}px`;
-  context.previousElementSibling?.setAttribute("class",styles.arrow+" "+ styles[arrowPosition])
+  context.querySelector(`.${styles.arrow}`)?.setAttribute("class",styles.arrow+" "+ styles[arrowPosition])
 };
 export const closeContext = (id: string) => {
   const contextMenu = document.getElementById(id);
