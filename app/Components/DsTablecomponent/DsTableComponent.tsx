@@ -704,19 +704,21 @@ const TableComponent: React.FC<TableComponentProps> = ({
                       columnHeader={column.columnHeader}
                     >
                       <>
-                        <SortComponent
-                          key={column.columnHeader}
-                          columnIndex={column.columnIndex}
-                          sortTable={sortTable}
-                        />
                         <div
                           className={`${styles["slide-component"]}   ${className}`}
                         >
+                          <SortComponent
+                            key={column.columnHeader}
+                            columnIndex={column.columnIndex}
+                            sortTable={sortTable}
+                          />
+
                           <DSButton
                             id="chatBtn"
                             type="icon_image"
-                            buttonSize="btnSmall"
-                            // buttonClass={btnStyles.btnSmall + " " + btnStyles.icon_image}
+                            // buttonSize="btnSmall"
+                            className={`${styles["menu_button"]}`}
+                            // className={styles.menu_button}
                             handleOnClick={(e) => {
                               displayContext(
                                 e,
