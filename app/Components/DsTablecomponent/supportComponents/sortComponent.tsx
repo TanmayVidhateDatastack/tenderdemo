@@ -29,17 +29,29 @@ const SortComponent: React.FC<sortprops> = ({ columnIndex, sortTable }) => {
       <DSButton
         type="icon_image"
         buttonSize="btnSmall"
-        className={`${styles["cursor-pointer"]} sort-icon up`}
+        className={`${styles["cursor-pointer"]} ${styles["arrow-container"]} sort-icon up`}
         startIcon={<Image src={verticalArrow} alt="icon" />}
-        handleOnClick={(e) => sortTable(e, columnIndex, "ASC")}
+        handleOnClick={(e) => {
+          const tr = e.target as HTMLElement;
+          if (tr.classList.contains("ASC")) {
+            tr.classList.remove("ASC");
+            tr.classList.add("DESC");
+            sortTable(e, columnIndex, "DESC");
+          } else if (tr.classList.contains("DESC")) {
+            tr.classList.remove("DESC");
+            tr.classList.add("ASC");
+            sortTable(e, columnIndex, "ASC");
+          } else {
+            tr.classList.add("ASC");
+            sortTable(e, columnIndex, "ASC");
+          }
+          if (tr.style.transform == "") {
+            tr.style.transform = "rotateX(180deg)";
+          } else {
+            tr.style.transform = "";
+          }
+        }}
       />
-      {/* <DSButton
-        type="icon_image"
-        buttonSize="btnSmall"
-        className={`${styles["cursor-pointer"]} sort-icon up`}
-        startIcon={<Image src={verticalArrow} alt="icon" />}
-        handleOnClick={(e) => sortTable(e, columnIndex, "ASC")}
-      /> */}
     </div>
   );
 };

@@ -9,11 +9,11 @@ interface ContextMenuProps {
   content?: string | React.ReactElement;
 }
 
-export function displayContext (
+export function displayContext(
   event: React.MouseEvent<HTMLElement> | React.FocusEvent,
   id: string,
-  position: "vertical" | "horizontal"|undefined = "vertical",
-  alignment: "right" | "left" | "center"|undefined="center"
+  position: "vertical" | "horizontal" | undefined = "vertical",
+  alignment: "right" | "left" | "center" | undefined = "center"
 ) {
   event.preventDefault();
 
@@ -22,9 +22,9 @@ export function displayContext (
   const target = event.target as HTMLElement;
   if (!context || !target) return;
   if (!context || !target) return;
-  if (context.style.display=="flex") {
+  if (context.style.display == "flex") {
     context.style.display = "none";
-    return
+    return;
   }
   context.style.display = "flex";
 
@@ -66,7 +66,7 @@ export function displayContext (
 
   context.style.left = `${contextX}px`;
   context.style.top = `${contextY}px`;
-};
+}
 export const closeContext = (id: string) => {
   const contextMenu = document.getElementById(id);
   if (contextMenu) {
@@ -76,11 +76,10 @@ export const closeContext = (id: string) => {
 
 const ContextMenu: React.FC<ContextMenuProps> = ({ id, content }) => {
   return (
-    <div id={id} className={styles.contextMenu}>
+    <div id={id} className={styles.contextMenu + " context"}>
       {content}
     </div>
   );
 };
 
 export default ContextMenu;
-

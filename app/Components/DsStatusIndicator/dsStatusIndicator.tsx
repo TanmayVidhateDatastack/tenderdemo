@@ -94,20 +94,13 @@ const DsStateChange: React.FC<DsStatusIndicatorProps> = ({
                 onMouseOver={(e) => {
                   displayContext(e, contextMenuId); // Call first function
                 }}
-                onMouseLeave={() => closecontext(contextMenuId)}
+                onMouseLeave={() => closeContext(contextMenuId)}
               >
                 {status_icon}
                 <PopUpContext id={contextMenuId} content={comment} />
               </button>
             )}
           </div>
-
-          <PopUpContext id={contextMenuId} content={comment} />
-
-          {/* {comment} */}
-          {showArrow && (
-            <div className={`${styles.arrow} ${styles[positionProp]}`}></div>
-          )}
         </>
       )}
     </>

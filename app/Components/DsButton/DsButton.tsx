@@ -164,9 +164,7 @@ const DSButton: React.FC<DSButtonProps> = ({
               " " +
               styles.icon_image +
               " " +
-              styles[buttonSize] +
-              " " +
-              styles[buttonViewStyle]
+              styles[buttonSize]
             }
             onClick={handleOnClick}
             onMouseOver={handleOnHover}

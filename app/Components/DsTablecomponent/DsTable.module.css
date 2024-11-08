@@ -20,13 +20,10 @@
 .arrow-container {
   display: flex;
   flex-direction: column;
- background-color: var(--background);
-  box-shadow: rgba(17, 17, 26, 0.05) 0px 4px 16px,
-    rgba(17, 17, 26, 0.05) 0px 8px 32px;
-
+  background-color: var(--semiviolet);
   opacity: 0; /* Initially hidden */
-  min-width: 0;
-  width: 0;
+  min-width: fit-content;
+  width: fit-content;
   padding: 0;
   transform: translateX(-20px);
   visibility: hidden; /* Hide from view */
@@ -36,11 +33,10 @@
 .ds-tableHeader:hover .arrow-container {
   opacity: 1; /* Fully visible */
   min-width: fit-content;
-  width: 0;
+  width: fit-content;
   padding: 0 1rem;
   transform: translateX(0); /* Slide to original position */
- background-color: var(--background);
-
+  background-color: var(--semiviolet);
   visibility: visible; /* Visible in the layout */
   transition: opacity 0.5s ease, transform 0.5s ease, width 1.5s ease, 
   min-width 1.5s ease;
@@ -55,7 +51,6 @@
   opacity: 1;
   width: fit-content;
   min-width: fit-content;
-  
   position: relative;
 }
 
@@ -155,6 +150,7 @@
   visibility: hidden;
   position: absolute;
   width: 20px;
+  background-color: var(--semiviolet);
   transform: translateX(0%);
   opacity: 0;
   transition: opacity 0.3s ease, transform 0.8s ease, width 1.2s ease,
@@ -166,7 +162,7 @@
   /* min-width: fit-content;*/
     width:auto; 
   opacity: 1;
-background-color: var(--secondary);
+  background-color: var(--semiviolet);
   z-index: 999;
   visibility: visible; /* Visible in the layout */
   transition: opacity 0.3s ease, transform 0.8s ease, width 1.5s ease,
@@ -195,6 +191,8 @@ background-color: var(--secondary);
   display: flex;
   background-color: var(--background) !important;
   color: var(--dark) !important;
+  margin-top: 2px;
+  margin-bottom: 2px;
   border: 0px;
   padding: 1px;
   font-size: var(--subtitle2);
@@ -210,6 +208,7 @@ background-color: var(--secondary);
 width: fit-content !important;
 height: auto;
 min-width: fit-content !important;
+border: 0px;
 }
 
 .check {
@@ -261,4 +260,8 @@ min-width: fit-content !important;
   visibility: visible;
   transition: opacity 0.5s ease, transform 0.5s ease, width 1.5s ease,
     min-width 1.5s ease;
+}
+.sort-icon{
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
 }
