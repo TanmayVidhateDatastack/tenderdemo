@@ -1,4 +1,4 @@
-import styles from "./DsTable.module.css";
+import styles from "../DsTable.module.css";
 export class InputTextProps {
   value?: string;
   handleInputChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;

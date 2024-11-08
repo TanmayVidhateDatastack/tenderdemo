@@ -34,8 +34,8 @@
 }
 
 .statusIndicator.Pending{
-    background-color: var(--pending);
-    color: var(--pending-text);
+    background-color: var(--deviationpending);
+    color: var(--deviationpending-text);
 }
 
 .statusIndicator.Approved{
