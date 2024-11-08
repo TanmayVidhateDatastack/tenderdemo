@@ -2,7 +2,7 @@
 import Image from "next/image";
 // import { useRef, useState } from "react";
 import { ImgProps } from "next/dist/shared/lib/get-img-props";
-import DSButton from "./dsButton";
+import DSButton from "./DsButton";
 import btnStyles from "./dsButton.module.css";
 import addIcon from "../../Icons/smallIcons/add.svg";
 import filter from "../../Icons/smallIcons/filtericon.svg";

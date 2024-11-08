@@ -72,6 +72,7 @@ const MenuComponent: React.FC<menuprops> = ({
               )}
             </>
           }
+          showArrow={false}
         />
       )}
 

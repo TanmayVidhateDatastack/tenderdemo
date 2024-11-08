@@ -1,6 +1,6 @@
 import styles from "../DsTable.module.css";
 import verticalArrow from "../../../Icons/smallIcons/verticleArrow.svg";
-import DSButton from "../../dsButton/dsButton";
+import DSButton from "../../DsButton/DsButton";
 import Image from "next/image";
 export interface sortprops {
   columnIndex: number;

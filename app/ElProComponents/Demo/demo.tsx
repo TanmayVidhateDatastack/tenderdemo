@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import DSButton from "../../Components/dsButton/dsButton";
+import DSButton from "../../Components/DsButton/DsButton";
 import styles from "../../page.module.css";
 import buttonStyles from "../../Components/dsButton/dsButton.module.css";
 import PaneStyles from "../../Components/dsPane/dsPane.module.css";
@@ -32,10 +32,11 @@ import TabView from "@/app/Components/dsTabs/TabView";
 import DemoSummaryCount from "@/app/Components/DsSummaryCount/demoSummaryCount";
 import DsPane from "@/app/Components/DsPane/DsPane";
 import DataList from "@/app/Components/dsDatalist/dsDatalist";
-import SpotlightSearch from "@/app/Components/dsSpotlightSearch/dsSpotlightSearch";
 import TextField from "@/app/Components/DsTextField/DsTextField";
 import DsStateChange from "@/app/Components/DsStatusIndicator/dsStatusIndicator";
 import commentIcon from "../../Icons/smallIcons/commenticon.svg";
+import AdvancedFilterComponent from "@/app/Components/DsTablecomponent/AdvancedFilterComponent";
+import { determineFilterType } from "@/app/Components/DsTablecomponent/helpers/types";
 export default function Demo() {
   const tempTableData = {
     className: "sample-table",
@@ -1069,6 +1070,10 @@ export default function Demo() {
   const [notiType, setNotiType] = useState<
     "success" | "bonus" | "info" | "error"
   >("info");
+  const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
+
+  const filterTypes = determineFilterType(tempTableData.columns);
+
   return (
     <>
       <Application
@@ -1262,6 +1267,16 @@ export default function Demo() {
               </TabView>
 
               <TabView tabId={"9"}>
+                <DSButton
+                  label="Filter"
+                  handleOnClick={() => setIsFilterVisible(!isFilterVisible)}
+                ></DSButton>
+                {isFilterVisible == true && (
+                  <AdvancedFilterComponent
+                    rows={tempTableData.rows}
+                    filterTypes={filterTypes}
+                  ></AdvancedFilterComponent>
+                )}
                 <DsTableComponent
                   className={tempTableData.className}
                   id={tempTableData.id}

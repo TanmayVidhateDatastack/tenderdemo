@@ -2,7 +2,6 @@
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import {
   convertToDate,
-  determineFilterType,
   parseFormattedNumber,
   tcolumn,
   trow,
@@ -11,11 +10,10 @@ import SortComponent from "./supportComponents/sortComponent";
 import styles from "./DsTable.module.css";
 import RadioCheckButton from "./supportComponents/RadioCheckButton";
 import TextField from "../DsTextField/DsTextField";
-import DSButton from "../dsButton/dsButton";
+import DSButton from "../DsButton/DsButton";
 import Image from "next/image";
 
 import threedot from "../../Icons/smallIcons/threedot.svg";
-import AdvancedFilterComponent from "./AdvancedFilterComponent";
 import TbodyComponent from "./bodyComponents/dsTbodyComponent";
 import TdComponent from "./bodyComponents/dsTdComponent";
 import TrComponent from "./bodyComponents/dsTrComponent";
@@ -25,6 +23,8 @@ import TheaderComponent from "./headerComponents/dsTheaderComponent";
 import MenuComponent from "./supportComponents/dsMenuComponent";
 import DemoLayout from "@/app/ElProComponents/Demo/demoLayout";
 import { displayContext } from "../dsContextHolder/dsContextHolder";
+import { useAppDispatch, useAppSelector } from "@/app/Redux/hook/hook";
+import { setRows } from "@/app/Redux/slice/TableSlice/tableSlice";
 // Define the component props
 interface TableComponentProps {
   className: string;
@@ -42,6 +42,15 @@ const TableComponent: React.FC<TableComponentProps> = ({
   const [newRows, setNewRows] = useState<trow[]>(rows);
   const [tableRows, setTableRows] = useState<trow[]>(rows);
   const rowsContainer = useRef<trow[]>(rows);
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(setRows(rowsContainer.current));
+  }, []);
+  const sliceRows = useAppSelector((state) => state.table["rows"]);
+
+  useEffect(() => {
+    setNewRows(sliceRows);
+  }, [sliceRows]);
 
   useEffect(() => {
     setTableRows(newRows);
@@ -366,299 +375,10 @@ const TableComponent: React.FC<TableComponentProps> = ({
     });
   };
 
-  const [rangeFrom, setRangeFrom] = useState<number>(20200199900001);
-  const [rangeTo, setRangeTo] = useState<number>(20240199900015);
-  const setRangeFromValue = (
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => {
-    setRangeFrom(Number(e.target.value));
-  };
-  const setRangeToValue = (
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => {
-    setRangeTo(Number(e.target.value));
-  };
-
-  const rangeFilter = () => {
-    const filteredRows = [...rows].filter((row) =>
-      row.content?.some(
-        (cell) =>
-          cell.contentType === "number" &&
-          cell.columnIndex === 0 &&
-          Number(cell.content) >= rangeFrom &&
-          Number(cell.content) <= rangeTo
-      )
-    );
-
-    setNewRows(filteredRows);
-    return filteredRows;
-  };
-  const applyFilter = (e: React.MouseEvent<HTMLElement>) => {
-    console.log(e);
-    const rows1 = rangeFilter();
-    const rows2 = filterOnDate(1);
-    const rows3 = filterRowsOnInputTypeRange(6);
-    const rows4 = searchDataOnSpecifiedColumnUsingCSV(3);
-    const rows5: trow[] = [];
-    rows.map((row) => {
-      if (
-        rows1.some((x) => x.rowIndex === row.rowIndex) &&
-        rows2.some((y) => y.rowIndex === row.rowIndex) &&
-        rows3.some((z) => z.rowIndex === row.rowIndex) &&
-        rows4.some((z) => z.rowIndex === row.rowIndex)
-      ) {
-        rows5.push(row);
-      }
-    });
-    setNewRows(rows5);
-    setFilterVisible(!isFilterVisible);
-
-    // console.log("rows1 length = ", rows1.length);
-    // console.log("rows2 length = ", rows2.length);
-    // console.log("rows3 length = ", rows3.length);
-
-    // console.log("rows4 length = ", rows4.length);
-    // searchDataOnSpecifiedColumnUsingCSV(1);
-  };
-
-  const [dateFrom, setDateFrom] = useState<Date>(new Date("2022-09-19"));
-  const [dateTo, setDateTo] = useState<Date>(new Date("2024-12-11"));
-
-  // const [dateTo, setDateTo] = useState<Date>(new Date(Date.now.toString()));
-  const setDateFromValue = (
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => {
-    setDateFrom(new Date(e.target.value));
-    // console.log(dateFrom);
-  };
-  const setDateToValue = (
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => {
-    setDateTo(new Date(e.target.value));
-  };
-
-  const filterOnDate = (columnIndex: number) => {
-    const filteredRows = [...rows].filter((row) =>
-      row.content?.some(
-        (cell) =>
-          typeof cell.content === "string" &&
-          cell.contentType === "date" &&
-          cell.columnIndex === columnIndex &&
-          convertToDate(cell.content) >= dateFrom &&
-          convertToDate(cell.content) <= dateTo
-      )
-    );
-    setNewRows(filteredRows);
-    return filteredRows;
-  };
-
-  // const minValue = useRef<number>(0);
-  // const maxValue = useRef<number>(0);
-
-  // const getLowestBiggestValue = (columnIndex: number) => {
-  //   rows.map((row) =>
-  //     row.content?.forEach((cell) => {
-  //       if (cell.columnIndex == columnIndex) {
-  //         minValue.current = Number(cell.content);
-  //       }
-  //     })
-  //   );
-
-  //   columns.map((col: tcolumn) => {
-  //     rows.map((row) => {
-  //       row.content?.forEach((cell) => {
-  //         if (
-  //           col.columnIndex == columnIndex &&
-  //           col.columnIndex == row.content?.[0].columnIndex &&
-  //           Number(cell.content) < minValue.current
-  //         ) {
-  //           minValue.current = Number(cell.content);
-  //         }
-  //         if (
-  //           col.columnIndex == columnIndex &&
-  //           Number(cell.content) > maxValue.current
-  //         ) {
-  //           maxValue.current = Number(cell.content);
-  //         }
-  //       });
-  //     });
-  //   });
-  //   console.log("minvalue = ", minValue.current);
-  //   console.log("maxvalue = ", maxValue.current);
-  // };
-
-  // getLowestBiggestValue(6);
-
-  // const [rangeValue, setRangeValue] = useState<number>(34);
-  // const setGrossRangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setRangeValue(Number(e.target.value));
-  // };
-  // const filterRowsOnInputTypeRange = (columnIndex: number) => {
-  //   const min = Number(minValue.current); // Ensure minValue is a number
-  //   const max = Number(rangeValue); // Ensure rangeValue is a number
-
-  //   const filteredRows = [...rows].filter((row) =>
-  //     row.content?.some((cell) => {
-  //       const isNumericString =
-  //         typeof cell.content === "string" && !isNaN(Number(cell.content)); // Ensure it's a valid number string
-  //       return (
-  //         isNumericString &&
-  //         cell.contentType === "number" &&
-  //         cell.columnIndex === columnIndex &&
-  //         Number(cell.content) >= min &&
-  //         Number(cell.content) <= max
-  //       );
-  //     })
-  //   );
-
-  //   setNewRows(filteredRows);
-  //   return filteredRows;
-  // };
-
-  const minValue = useRef<number>(Infinity);
-  const maxValue = useRef<number>(-Infinity);
-  const [rangeValue, setRangeValue] = useState<number>(1200200);
-
-  // Function to parse a number from the formatted string
-
-  const getLowestBiggestValue = (columnIndex: number) => {
-    minValue.current = Infinity;
-    maxValue.current = -Infinity;
-
-    rows.forEach((row) => {
-      row.content?.forEach((cell) => {
-        if (
-          cell.columnIndex === columnIndex &&
-          typeof cell.content == "string"
-        ) {
-          const numericValue = parseFormattedNumber(cell.content);
-          if (!isNaN(numericValue)) {
-            minValue.current = Math.min(minValue.current, numericValue);
-            maxValue.current = Math.max(maxValue.current, numericValue);
-          }
-        }
-      });
-    });
-
-    // console.log("minValue =", minValue.current);
-    // console.log("maxValue =", maxValue.current);
-  };
-  getLowestBiggestValue(6);
-  const setGrossRangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRangeValue(parseFormattedNumber(e.target.value));
-  };
-
-  const filterRowsOnInputTypeRange = (columnIndex: number) => {
-    const min = minValue.current;
-    const max = rangeValue;
-
-    const filteredRows = rows.filter((row) =>
-      row.content?.some((cell) => {
-        const isNumericString =
-          typeof cell.content === "string" &&
-          !isNaN(parseFormattedNumber(cell.content));
-        return (
-          isNumericString &&
-          typeof cell.content === "string" &&
-          cell.contentType === "number" &&
-          cell.columnIndex === columnIndex &&
-          parseFormattedNumber(cell.content) >= min &&
-          parseFormattedNumber(cell.content) <= max
-        );
-      })
-    );
-
-    setNewRows(filteredRows);
-    // console.log(filteredRows.length);
-    return filteredRows;
-  };
-
-  const [commaSeparatedValue, setCommaSeparatedValue] = useState<string[]>([
-    "",
-  ]);
-  const setCommaValue = (
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => {
-    const commaValue = e.target.value.split(",");
-    setCommaSeparatedValue(commaValue);
-  };
-  const searchDataOnSpecifiedColumnUsingCSV = (columnIndex: number) => {
-    const filteredRows = [...rows].filter((row) =>
-      row.content?.some(
-        (cell) =>
-          typeof cell.content === "string" &&
-          cell.contentType === "string" &&
-          cell.columnIndex === columnIndex &&
-          commaSeparatedValue.some((item) =>
-            cell.content
-              ?.toString()
-              .toLowerCase()
-              .includes(item.toString().toLowerCase())
-          )
-      )
-    );
-    // setNewRows(filteredRows);
-    return filteredRows;
-  };
-
-  // const [dropDownOptions, setDropDownOptions] = useState<string[]>([]);
-  // const filterOnDropdown = (columnIndex: number) => {
-  //   const filteredRows = rows.filter((row) =>
-  //     row.content?.some(
-  //       (cell) =>
-  //         typeof cell.content === "string" &&
-  //         cell.contentType === "string" &&
-  //         cell.columnIndex === columnIndex &&
-  //         dropDownOptions.some((item) =>
-  //           cell.content
-  //             ?.toString()
-  //             .toLowerCase()
-  //             .includes(item.toString().toLowerCase())
-  //         )
-  //     )
-  //   );
-  //   setNewRows(filteredRows);
-  // };
-
-  // const [statusOptions, setStatusOptions] = useState<string[]>([]);
-  // const filterOnStatus = (columnIndex: number) => {
-  //   const filteredRows = rows.filter((row) =>
-  //     row.content?.some(
-  //       (cell) =>
-  //         typeof cell.content === "string" &&
-  //         cell.contentType === "string" &&
-  //         cell.columnIndex === columnIndex &&
-  //         statusOptions.some((item) =>
-  //           cell.content
-  //             ?.toString()
-  //             .toLowerCase()
-  //             .includes(item.toString().toLowerCase())
-  //         )
-  //     )
-  //   );
-  //   setNewRows(filteredRows);
-  // };
-
-  const [isFilterVisible, setFilterVisible] = useState<boolean>(false);
-  const filterTypes = determineFilterType(columns);
   return (
     <>
       <DemoLayout title="Table (DsTable)">
         <div className={styles.tableContainer}>
-          {/* <div className="column-visibility">
-            <RadioCheckButton
-              groupName="Column visibility"
-              options={columns.map((col) => ({
-                id: col.columnIndex.toString(),
-                type: "checkbox",
-                value: col.columnHeader,
-                code: col.columnIndex.toString(),
-                className: "d-flex",
-              }))}
-              handleOnChange={(e) => hideShowColumn(e.currentTarget.value)}
-              selectedOption={optionsArray}
-            />
-          </div> */}
           <div className={`${styles["ds-search-input-div"]}`}>
             <TextField
               placeholder="Search SO"
@@ -669,25 +389,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
               }
             />
           </div>
-          <DSButton
-            label="Filter"
-            handleOnClick={() => setFilterVisible(!isFilterVisible)}
-          ></DSButton>
-          {isFilterVisible == true && (
-            <AdvancedFilterComponent
-              setRangeFromValue={setRangeFromValue}
-              setRangeToValue={setRangeToValue}
-              setDateFromValue={setDateFromValue}
-              setDateToValue={setDateToValue}
-              setGrossRangeValue={setGrossRangeValue}
-              applyFilter={applyFilter}
-              minValue={minValue.current}
-              maxValue={maxValue.current}
-              rangeValue={rangeValue}
-              filterTypes={filterTypes}
-              setCommaValue={setCommaValue}
-            ></AdvancedFilterComponent>
-          )}
+
           <table
             className={`${className ? className : ""} ${styles["ds-table"]} `}
             id={id}
@@ -766,7 +468,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
             <TfooterComponent className={""}>
               <TrComponent>
                 <TdComponent className={""}>
-                  Showing {newRows.length} of {rowsContainer.current.length}{" "}
+                  Showing {tableRows.length} of {rowsContainer.current.length}{" "}
                   Rows
                 </TdComponent>
               </TrComponent>
