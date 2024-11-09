@@ -42,6 +42,7 @@ export default function Demo() {
   const tempTableData = {
     className: "sample-table",
     id: "table-1",
+    alignment: "left",
     columns: [
       {
         columnIndex: 0,
@@ -240,62 +241,63 @@ export default function Demo() {
         rowIndex: 2,
         className: "row",
         content: [
-          {
-            columnIndex: 0,
-            className: "cell",
-            content: 20240199900003,
-            contentType: "number",
-          },
-          {
-            columnIndex: 1,
-            className: "cell",
-            content: "24/09/2024",
-            contentType: "date",
-          },
-          {
-            columnIndex: 2,
-            className: "cell",
-            content: "HJ65",
-            contentType: "string",
-          },
-          {
-            columnIndex: 3,
-            className: "cell",
-            content: "Hetero Drugs Ltd.",
-            contentType: "string",
-          },
+          // {
+          //   columnIndex: 0,
+          //   className: "cell",
+          //   content: 20240199900003,
+          //   contentType: "number",
+          // },
+          // {
+          //   columnIndex: 1,
+          //   className: "cell",
+          //   content: "24/09/2024",
+          //   contentType: "date",
+          // },
+          // {
+          //   columnIndex: 2,
+          //   className: "cell",
+          //   content: "HJ65",
+          //   contentType: "string",
+          // },
+          // {
+          //   columnIndex: 3,
+          //   className: "cell",
+          //   content: "Hetero Drugs Ltd.",
+          //   contentType: "string",
+          // },
           {
             columnIndex: 4,
             className: "cell",
             content: 8000,
             contentType: "number",
+            colSpan: 8,
           },
-          {
-            columnIndex: 5,
-            className: "cell",
-            content: "12,00,000",
-            contentType: "string",
-          },
-          {
-            columnIndex: 6,
-            className: "cell",
-            content: "12,04,000",
-            contentType: "number",
-          },
-          {
-            columnIndex: 7,
-            className: "cell",
-            content: (
-              <DsStateChange
-                className={styles.statusIndicator}
-                type="system_default"
-                id="state2"
-                status="Cancelled"
-                label="cancelled"
-              />
-            ),
-            contentType: "reactNode",
-          },
+          // {
+          //   columnIndex: 5,
+          //   className: "cell",
+          //   content: "12,00,000",
+          //   contentType: "string",
+          // },
+          // {
+          //   columnIndex: 6,
+          //   className: "cell",
+          //   content: "12,04,000",
+          //   contentType: "number",
+          // },
+          // {
+          //   columnIndex: 7,
+          //   className: "cell",
+          //   content: (
+          //     <DsStateChange
+          //       className={styles.statusIndicator}
+          //       type="system_default"
+          //       id="state2"
+          //       status="Cancelled"
+          //       label="cancelled"
+          //     />
+          //   ),
+          //   contentType: "reactNode",
+          // },
         ],
       },
       {
@@ -1274,6 +1276,7 @@ export default function Demo() {
                 <DsTableComponent
                   className={tempTableData.className}
                   id={tempTableData.id}
+                  alignment={tempTableData.alignment.toString()}
                   columns={tempTableData.columns}
                   rows={tempTableData.rows}
                 ></DsTableComponent>

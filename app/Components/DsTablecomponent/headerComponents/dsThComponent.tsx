@@ -5,6 +5,7 @@ export interface thprops {
   content?: string;
   columnHeader?: string;
   columnIndex: number;
+  alignment?: "left" | "center" | string;
 }
 
 const ThComponent: React.FC<thprops> = ({
@@ -13,11 +14,16 @@ const ThComponent: React.FC<thprops> = ({
   content,
   columnHeader,
   columnIndex,
+  alignment,
 }) => {
+  const thclassName =
+    alignment == "center"
+      ? `${styles["ds-th-component-center"]} ${className}`
+      : `${styles["ds-th-component"]} ${className}`;
   return (
     <>
       <th
-        className={`${styles["ds-th-component"]} ${className}`}
+        className={thclassName}
         data-column-name={columnHeader}
         data-column-index={columnIndex}
       >

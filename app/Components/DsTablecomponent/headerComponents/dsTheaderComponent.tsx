@@ -7,7 +7,7 @@ export interface theaderprops {
 const TheaderComponent: React.FC<theaderprops> = ({ className, children }) => {
   return (
     <>
-      <thead className={`${styles["ds-tableHeader"]}${className}`}>
+      <thead className={`${styles["ds-tableHeader"]} ${className}`}>
         {children}
       </thead>
     </>

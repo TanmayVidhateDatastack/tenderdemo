@@ -30,6 +30,7 @@ import React from "react";
 interface TableComponentProps {
   className: string;
   id: string;
+  alignment: "left" | "center" | string;
   columns: tcolumn[];
   rows: trow[];
 }
@@ -37,6 +38,7 @@ interface TableComponentProps {
 const TableComponent: React.FC<TableComponentProps> = ({
   className,
   id,
+  alignment = "left",
   columns,
   rows,
 }) => {
@@ -409,11 +411,15 @@ const TableComponent: React.FC<TableComponentProps> = ({
           </div>
 
           <table
-            className={`${className ? className : ""} ${styles["ds-table"]} `}
+            className={`${className ? className : ""} ${
+              alignment == "center"
+                ? styles["ds-table-center"]
+                : styles["ds-table"]
+            } `}
             id={id}
           >
-            <TheaderComponent className={""}>
-              <TrComponent className={""}>
+            <TheaderComponent className={"th-tr-component"}>
+              <TrComponent className={`th-tr-component`}>
                 {columns.map((column) =>
                   column.isHidden ? null : (
                     <ThComponent
@@ -422,35 +428,38 @@ const TableComponent: React.FC<TableComponentProps> = ({
                       content={column.columnHeader}
                       columnIndex={column.columnIndex}
                       columnHeader={column.columnHeader}
+                      alignment={alignment}
                     >
-                      <>
-                        <div
-                          className={`${styles["slide-component"]}   ${className}`}
-                        >
-                          <SortComponent
-                            key={column.columnHeader}
-                            columnIndex={column.columnIndex}
-                            sortTable={sortTable}
-                          />
+                      {alignment == "left" && (
+                        <>
+                          <div
+                            className={`${styles["slide-component"]}  ${className}`}
+                          >
+                            <SortComponent
+                              key={column.columnHeader}
+                              columnIndex={column.columnIndex}
+                              sortTable={sortTable}
+                            />
 
-                          <DSButton
-                            id="chatBtn"
-                            type="icon_image"
-                            // buttonSize="btnSmall"
-                            className={`${styles["menu_button"]}`}
-                            // className={styles.menu_button}
-                            handleOnClick={(e) => {
-                              displayContext(
-                                e,
-                                "menucontext" + column.columnIndex
-                              );
-                              // Call first function
-                            }}
-                            startIcon={<Image src={threedot} alt="menu" />}
-                            tooltip="Menu"
-                          />
-                        </div>
-                      </>
+                            <DSButton
+                              id="chatBtn"
+                              type="icon_image"
+                              // buttonSize="btnSmall"
+                              className={`${styles["menu_button"]}`}
+                              // className={styles.menu_button}
+                              handleOnClick={(e) => {
+                                displayContext(
+                                  e,
+                                  "menucontext" + column.columnIndex
+                                );
+                                // Call first function
+                              }}
+                              startIcon={<Image src={threedot} alt="menu" />}
+                              tooltip="Menu"
+                            />
+                          </div>
+                        </>
+                      )}
                     </ThComponent>
                   )
                 )}
@@ -472,8 +481,10 @@ const TableComponent: React.FC<TableComponentProps> = ({
                         return (
                           <TdComponent
                             key={col.columnHeader}
-                            className={""}
+                            className={alignment == "center" ? "colSpan" : ""}
                             content={cell.content}
+                            alignment={alignment}
+                            colSpan={cell.colSpan}
                           ></TdComponent>
                         );
                       } else return null;
@@ -482,10 +493,9 @@ const TableComponent: React.FC<TableComponentProps> = ({
                 );
               })}
             </TbodyComponent>
-
             <TfooterComponent className={""}>
               <TrComponent>
-                <TdComponent className={""}>
+                <TdComponent className={""} alignment={alignment} colSpan={8}>
                   Showing {tableRows.length} of {rowsContainer.current.length}{" "}
                   Rows
                 </TdComponent>

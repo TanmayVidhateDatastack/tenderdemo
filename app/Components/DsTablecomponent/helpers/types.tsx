@@ -11,8 +11,9 @@ export class tcolumn {
 export class cellData {
   columnIndex: number = 1;
   className?: string;
-  content: React.ReactNode | string | number;
+  content?: React.ReactNode | string | number;
   contentType?: string;
+  colSpan?: number;
 }
 
 export class trow {
