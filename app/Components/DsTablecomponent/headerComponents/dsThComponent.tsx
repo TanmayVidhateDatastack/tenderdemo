@@ -18,7 +18,7 @@ const ThComponent: React.FC<thprops> = ({
 }) => {
   const thclassName =
     alignment == "center"
-      ? `${styles["ds-th-component-center"]} ${className}`
+      ? `${styles["ds-th-center"]} ${className}`
       : `${styles["ds-th-component"]} ${className}`;
   return (
     <>

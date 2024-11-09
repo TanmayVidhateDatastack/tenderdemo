@@ -33,7 +33,9 @@
   transition: opacity 0.5s ease, transform 0.5s ease, width 1.2s ease,
     min-width 1.2s ease, visibility 0s 1.2s;
 }
+
 .ds-tableHeader:hover .arrow-container {
+  cursor: pointer;
   opacity: 1; /* Fully visible */
   min-width: fit-content;
   width: fit-content;
@@ -54,13 +56,10 @@
   width: fit-content;
   min-width: fit-content;
   position: relative;
-  background-color: grey;
+  background-color: var(--semiviolet);
 }
 
 .th-text-content {
-  /* Layout Properties
- 
-  /* UI Properties */
   font-size: var(--subtitle1);
   font-weight: 600;
   padding-left: 3px;
@@ -70,9 +69,6 @@
 }
 
 .th-text-content:hover {
-  /* Layout Properties */
-
-  /* UI Properties */
   opacity: 1;
 }
 
@@ -84,13 +80,6 @@
   height: 40px;
 
   /* background-color: var(--background); */
-  opacity: 0.6;
-}
-
-.th-tr-component {
-  display: table-row;
-  height: 40px;
-  background-color: var(--background);
   opacity: 0.6;
 }
 
@@ -108,7 +97,6 @@
 }
 .ds-td-component {
   display: table-cell;
-  flex: 1;
   align-items: left;
   justify-content: left;
   padding-left: 3px;
@@ -119,19 +107,6 @@
   opacity: 1;
 }
 
-.ds-td-component-center {
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  text-align: left;
-  font-size: var(--subtitle1);
-  letter-spacing: 0px;
-  color: var(--bodytext);
-  border-bottom: 1px solid var(--secondary);
-  opacity: 1;
-}
-
 .ds-footer {
   background-color: var(--semiviolet);
   mix-blend-mode: multiply;
@@ -139,11 +114,15 @@
   opacity: 1;
 }
 
+.footer-td {
+  align-items: center;
+}
+
 .slide-component {
   display: flex;
   visibility: hidden;
   position: absolute;
-  width: 20px;
+  width: fit-content;
   background-color: var(--semiviolet);
   transform: translateX(0%);
   opacity: 0;
@@ -152,21 +131,24 @@
 }
 
 .ds-th-component:hover .slide-component {
-  transform: translateX(50%); /* Slide to original position */
-  width: auto;
+  position: absolute;
+  top: 50%; /* Centers the slide component vertically in relation to the th */
+  left: 100%; /* Positions it directly to the right of the th */
+  transform: translateY(-50%); /* Centers it vertically */
+  width: 20px;
   opacity: 1;
   background-color: var(--semiviolet);
   z-index: 999;
-  visibility: visible; /* Visible in the layout */
+  visibility: visible; /* Makes it visible on hover */
   transition: opacity 0.3s ease, transform 0.8s ease, width 1.5s ease,
-    min-width 1.5s ease, visibility 0s 0.3s ease;
+    min-width 1.5s ease;
 }
 
 .cursor-pointer {
   cursor: pointer;
 }
+
 .menu-component {
-  background-color: var(--background);
   color: var(--dark);
   padding: 3px;
   flex: 1;
@@ -189,7 +171,9 @@
   flex-direction: column;
   padding: 2px;
 }
-
+.MenuItem:hover {
+  cursor: pointer;
+}
 .menu_button {
   display: flex;
   align-items: center;
@@ -200,12 +184,16 @@
   border: 0px;
 }
 
+.menu_button:hover {
+  cursor: pointer;
+}
 .check {
   margin: 1rem;
 }
 .ms1 {
   margin-left: 0.5rem;
 }
+
 .range-filter,
 .date-filter {
   display: flex;
@@ -252,4 +240,72 @@
 .sort-icon {
   transition: transform 0.8s;
   transform-style: preserve-3d;
+}
+
+.ds-table-center {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 15px;
+}
+
+.ds-th-center,
+.ds-td-center {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ccc; /* Light gray border for cells */
+  font-size: 14px;
+}
+
+.ds-th-center {
+  background-color: var(--semiviolet);
+  font-weight: bold;
+  position: relative;
+  display: revert;
+  justify-items: center;
+}
+
+.ds-td-center {
+  border-bottom: 1px solid var(--secondary);
+  justify-items: center;
+}
+
+.ds-table-center tr:last-child td {
+  border-bottom: none;
+}
+
+.ds-footer-center {
+  padding: 10px;
+  border-bottom: 1px solid var(--secondary);
+  align-items: center;
+}
+
+.colSpan {
+  font: normal normal bold 13px/19px Open Sans;
+}
+
+.ds-th-center th:hover .slide-component {
+  position: absolute;
+  top: 50%; /* Centers the slide component vertically in relation to the th */
+  left: 100%; /* Positions it directly to the right of the th */
+  transform: translateY(-50%); /* Centers it vertically */
+  width: 20px;
+  opacity: 1;
+  background-color: var(--semiviolet);
+  z-index: 999;
+  visibility: visible; /* Makes it visible on hover */
+  transition: opacity 0.3s ease, transform 0.8s ease, width 1.5s ease,
+    min-width 1.5s ease;
+}
+
+.ds-th-center th:hover .arrow-container {
+  cursor: pointer;
+  opacity: 1; /* Fully visible */
+  min-width: fit-content;
+  width: fit-content;
+  padding: 0 1rem;
+  transform: translateX(0); /* Slide to original position */
+  background-color: var(--semiviolet);
+  visibility: visible; /* Visible in the layout */
+  transition: opacity 0.5s ease, transform 0.5s ease, width 1.5s ease,
+    min-width 1.5s ease;
 }

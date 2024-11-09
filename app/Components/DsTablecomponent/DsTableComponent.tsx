@@ -31,6 +31,7 @@ interface TableComponentProps {
   className: string;
   id: string;
   alignment: "left" | "center" | string;
+  sortable?: boolean;
   columns: tcolumn[];
   rows: trow[];
 }
@@ -39,6 +40,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
   className,
   id,
   alignment = "left",
+  sortable = true,
   columns,
   rows,
 }) => {
@@ -418,8 +420,8 @@ const TableComponent: React.FC<TableComponentProps> = ({
             } `}
             id={id}
           >
-            <TheaderComponent className={"th-tr-component"}>
-              <TrComponent className={`th-tr-component`}>
+            <TheaderComponent className={""} alignment={alignment}>
+              <TrComponent className={``}>
                 {columns.map((column) =>
                   column.isHidden ? null : (
                     <ThComponent
@@ -430,11 +432,9 @@ const TableComponent: React.FC<TableComponentProps> = ({
                       columnHeader={column.columnHeader}
                       alignment={alignment}
                     >
-                      {alignment == "left" && (
+                      {sortable && (
                         <>
-                          <div
-                            className={`${styles["slide-component"]}  ${className}`}
-                          >
+                          <div className={`${styles["slide-component"]}`}>
                             <SortComponent
                               key={column.columnHeader}
                               columnIndex={column.columnIndex}
@@ -481,7 +481,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
                         return (
                           <TdComponent
                             key={col.columnHeader}
-                            className={alignment == "center" ? "colSpan" : ""}
+                            className={cell.colSpan ? "colSpan" : ""}
                             content={cell.content}
                             alignment={alignment}
                             colSpan={cell.colSpan}
@@ -493,7 +493,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
                 );
               })}
             </TbodyComponent>
-            <TfooterComponent className={""}>
+            <TfooterComponent className={""} alignment={alignment}>
               <TrComponent>
                 <TdComponent className={""} alignment={alignment} colSpan={8}>
                   Showing {tableRows.length} of {rowsContainer.current.length}{" "}

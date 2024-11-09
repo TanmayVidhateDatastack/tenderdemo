@@ -16,7 +16,7 @@ const TdComponent: React.FC<tdprops> = ({
 }) => {
   const tdClassNames =
     alignment == "center"
-      ? `${styles["ds-td-component-center"]} ${styles[className]}`
+      ? `${styles["ds-td-center"]} ${styles[className]}`
       : `${styles["ds-td-component"]} ${styles[className]}`;
   return (
     <>

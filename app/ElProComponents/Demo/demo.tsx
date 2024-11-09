@@ -43,6 +43,7 @@ export default function Demo() {
     className: "sample-table",
     id: "table-1",
     alignment: "left",
+    sortable: true,
     columns: [
       {
         columnIndex: 0,
