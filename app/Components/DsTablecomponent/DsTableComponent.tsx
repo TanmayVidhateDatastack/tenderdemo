@@ -25,6 +25,7 @@ import DemoLayout from "@/app/ElProComponents/Demo/demoLayout";
 import { displayContext } from "../dsContextHolder/dsContextHolder";
 import { useAppDispatch, useAppSelector } from "@/app/Redux/hook/hook";
 import { setRows } from "@/app/Redux/slice/TableSlice/tableSlice";
+import React from "react";
 // Define the component props
 interface TableComponentProps {
   className: string;
@@ -286,36 +287,35 @@ const TableComponent: React.FC<TableComponentProps> = ({
     maintainSortingOrder(filteredRows);
   };
 
-  // const sortDataUsingInputValueOnlyOnSpecifiedColumn = (
-  //   event: React.ChangeEvent<HTMLInputElement>,
-  //   columnIndex?: number
-  // ) => {
-  //   const searchValue = event.target.value.toLowerCase();
-  //   setInputValue(event.target.value);
+  const sortDataUsingInputValueOnlyOnSpecifiedColumn = (
+    event: React.ChangeEvent<HTMLElement>,
+    columnIndex?: number
+  ) => {
+    const searchValue = (event.target as HTMLInputElement).value.toLowerCase();
+    setInputValue((event.target as HTMLInputElement).value);
+    console.log(searchValue);
+    let filteredRows: trow[] = [];
+    if (searchValue === "") {
+      // If the search input is empty, show all rows
+      filteredRows = sliceRows;
+    } else {
+      // Filter rows based on the search value
+      filteredRows = [...sliceRows].filter((row) =>
+        row.content?.some(
+          (cell) =>
+            (typeof cell.content === "string" ||
+              React.isValidElement(cell.content) === false) &&
+            cell.columnIndex === columnIndex &&
+            cell.content?.toString().toLowerCase().includes(searchValue)
+        )
+      );
+    }
 
-  //   let filteredRows: trow[] = [];
-
-  //   if (searchValue === "") {
-  //     // If the search input is empty, show all rows
-  //     filteredRows = rowsContainer.current;
-  //   } else {
-  //     // Filter rows based on the search value
-  //     filteredRows = [...sliceRows].filter((row) =>
-  //       row.content?.some(
-  //         (cell) =>
-  //           typeof cell.content === "string" &&
-  //           cell.columnIndex === columnIndex &&
-  //           cell.content.toLowerCase().includes(searchValue)
-  //       )
-  //     );
-  //   }
-
-  //   // Update the rows with the filtered results
-  //   setNewRows(filteredRows);
-
-  //   // Maintain the sorting order
-  //   maintainSortingOrder(filteredRows);
-  // };
+    // Update the rows with the filtered results
+    setNewRows(filteredRows);
+    // Maintain the sorting order
+    maintainSortingOrder(filteredRows);
+  };
 
   const maintainSortingOrder = (filteredRows: trow[]) => {
     if (activeColumnIndex !== -1) {
@@ -496,28 +496,33 @@ const TableComponent: React.FC<TableComponentProps> = ({
             return (
               <MenuComponent
                 key={column.columnIndex}
-                columnIndex={column.columnIndex}
+                column={column}
                 sortDataOnlyOnSpecifiedColumn={sortTableAscending}
                 clearSortOnColumn={clearSortOnColumn}
+                sortDataUsingInputValueOnlyOnSpecifiedColumn={
+                  sortDataUsingInputValueOnlyOnSpecifiedColumn
+                }
                 hideShowColumn={hideShowColumn}
                 manageColumns={() => alert("manage columns")}
               >
-                <div className="column-visibility">
-                  <RadioCheckButton
-                    groupName="Column visibility"
-                    options={columns.map((col) => ({
-                      id: col.columnIndex.toString(),
-                      type: "checkbox",
-                      value: col.columnHeader,
-                      code: col.columnIndex.toString(),
-                      className: "d-flex",
-                    }))}
-                    handleOnChange={(e) =>
-                      hideShowColumn(e.currentTarget.value)
-                    }
-                    selectedOption={optionsArray}
-                  />
-                </div>
+                <>
+                  <div key={"manage"} className="column-visibility">
+                    <RadioCheckButton
+                      groupName="Column visibility"
+                      options={columns.map((col) => ({
+                        id: col.columnIndex.toString(),
+                        type: "checkbox",
+                        value: col.columnHeader,
+                        code: col.columnIndex.toString(),
+                        className: "d-flex",
+                      }))}
+                      handleOnChange={(e) =>
+                        hideShowColumn(e.currentTarget.value)
+                      }
+                      selectedOption={optionsArray}
+                    />
+                  </div>
+                </>
               </MenuComponent>
             );
           })}
