@@ -5,6 +5,7 @@
   height: 100vh;
   overflow: hidden; /* Ensure the parent does not hide overflow */
   position: relative;
+
 }
 .row {
   display: flex;
@@ -58,6 +59,7 @@
 .app{
   display:flex;
   align-items: center;
+  
 }
 .appTitle ,.poweredBy{
   display:none;
@@ -124,6 +126,9 @@
   flex-direction: column;
   height:100%;
   overflow-x: hidden;
+  background-color: var(--application-background);
+  padding: var(--ds-padding);
+
 }
 .left_align{
   justify-content: start;

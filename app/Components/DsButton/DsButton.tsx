@@ -1,11 +1,21 @@
 import styles from "../dsButton/dsButton.module.css";
+import Image from "next/image";
+import upload from "../../Icons/smallIcons/uploadicon.svg";
 
 export interface DSButtonProps {
   children?: React.ReactNode;
   id?: string;
   label?: string;
   tooltip?: string;
-  type?: string;
+  type?:
+    | "standard"
+    | "split"
+    | "toggle"
+    | "icon_image"
+    | "button_icon"
+    | "upload"
+    | "tab"
+    | "count";
   buttonSize?: "btnSmall" | "btnMedium" | "btnLarge";
   iconSize?: "iconSmall" | "iconMedium" | "iconLarge";
   buttonColor?:
@@ -230,14 +240,22 @@ const DSButton: React.FC<DSButtonProps> = ({
           onMouseOver={handleOnHover}
           onMouseLeave={handleMouseLeave}
         >
-          {startIcon !== undefined && (
+          {startIcon && (
             <span
               className={"icon " + styles.startIcon + " " + styles[iconSize]}
-              onClick={displayFileBrowser}
             >
               {startIcon}
             </span>
           )}
+          {startIcon ||
+            (upload && (
+              <span
+                className={"icon " + styles.startIcon + " " + styles[iconSize]}
+              >
+                {<Image src={upload} alt="Upload"></Image>}
+              </span>
+            ))}
+
           {label || children}
 
           {endIcon !== undefined && (

@@ -14,6 +14,7 @@ import ContextMenu, {
   closeContext,
   displayContext,
 } from "@/app/Components/dsContextHolder/dsContextHolder";
+import DSButton from "@/app/Components/dsButton/dsButton";
 
 export default function Home() {
   const panNo = "AABCD9532A";
@@ -71,13 +72,12 @@ export default function Home() {
                   <Detail detailOf="Food Lic No">{foodLicNo}</Detail>
                   <Detail detailOf="Bank account details">
                     <div
-                      onMouseOver={(e) => displayContext(e, "BankDetails","horizontal")}
-                      // onMouseOut={() => closeContext("BankDetails")}
+                      onMouseOver={(e) =>
+                        displayContext(e, "BankDetails", "horizontal")
+                      }
+                      onMouseOut={() => closeContext("BankDetails")}
                     >
-                      <Image
-                        src={BankDetailsSrc}
-                        alt="Bank details"
-                      ></Image>
+                      <Image src={BankDetailsSrc} alt="Bank details"></Image>
                     </div>
                   </Detail>
                 </div>
@@ -86,8 +86,21 @@ export default function Home() {
             <div className={styles.Product}>
               <div className={styles.addProduct}>
                 <div className={styles.title}>Product Details</div>
-                <div className={styles.input}></div>
-                <div className={styles.summary}></div>
+                <div className={styles.input}>
+                  <DataList
+                    options={[]}
+                    inputId={""}
+                    dataListId={""}
+                    className={""}
+                  ></DataList>
+                  <TextField placeholder={undefined}></TextField>
+                  <DSButton buttonSize="btnLarge">Add</DSButton>
+                  <DSButton buttonViewStyle="btnText" id="CSV" type="upload">CSV file</DSButton>
+                </div>
+                <div className={styles.summary}>
+                  <Detail detailOf={"Net Value (₹)"}>12345</Detail>
+                  <Detail detailOf={"Products"}>12345</Detail>
+                </div>
               </div>
               <div className={styles.ProductDetails}></div>
             </div>
