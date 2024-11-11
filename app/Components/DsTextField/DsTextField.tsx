@@ -10,25 +10,25 @@ interface InputTextAreaProps {
     e: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => void;
   Onmousehover?: (
-    e: React.MouseEvent<HTMLTextAreaElement | HTMLInputElement>
+    e: React.MouseEvent<HTMLTextAreaElement | HTMLFieldSetElement>
   ) => void;
   onMouseOver?: (
-    e: React.MouseEvent<HTMLTextAreaElement | HTMLInputElement>
+    e: React.MouseEvent<HTMLTextAreaElement | HTMLFieldSetElement>
   ) => void;
   onMouseOut?: (
-    e: React.MouseEvent<HTMLTextAreaElement | HTMLInputElement>
+    e: React.MouseEvent<HTMLTextAreaElement | HTMLFieldSetElement>
   ) => void;
 
   id?: string;
   className?: string;
-  placeholder: string | undefined;
+  placeholder?: string | undefined;
   label?: string;
   disable?: boolean;
 
   type?: "singleline" | "multiline";
   inputType?: "password" | "text" | "number" | "date";
-  icon?: string;
-  iconEnd?: string|React.ReactNode;
+  starticon?: React.ReactElement;
+  iconEnd?: React.ReactElement;
   rows?: number;
   cols?: number;
   minRows?: number;
@@ -47,7 +47,7 @@ interface InputTextAreaProps {
  * @param {string} iconEnd-displays icon at the End of textfield.
  * @param {number} rows- use to display numbers of rows that have to show on TextArea.
  * @param {number} cols- use to display numbers of columns that have to show on TextArea.
- * @param {React.ChangeEvent} handleInputChange - event fired on change in the textField value  
+ * @param {React.ChangeEvent} handleInputChange - event fired on change in the textField value
  * @param {React.KeyboardEvent} handleKeyUp -event fired after key is released .
  * @param {React.KeyboardEvent} Onmousehover - Fires continuously as the mouse moves within an element.
  * @param {React.MouseEvent} onMouseOver - Fires when the mouse enters an element
@@ -66,11 +66,10 @@ const TextField: React.FC<InputTextAreaProps> = ({
   placeholder,
   label,
   type = "singleline",
-  icon,
+  starticon,
   iconEnd,
   minRows,
   inputType,
-  
 }) => {
   {
     const [value, setValue] = useState("");
@@ -83,18 +82,24 @@ const TextField: React.FC<InputTextAreaProps> = ({
             className={`${styles["custom-fieldset"]} ${
               isFocused || value !== "" ? styles["focused"] : ""
             } ${disable ? styles.disabled : ""}`}
+            onMouseOut={onMouseOut}
+            onMouseMove={Onmousehover}
+            onMouseOver={onMouseOver}
+            onMouseLeave={onMouseOut}
           >
             <legend
               className={`${styles["floating-label"]} ${
                 isFocused || value !== "" ? styles["shrink"] : ""
               }`}
             >
-              {label}
+              {placeholder && !label ? placeholder : label}
             </legend>
 
             {type == "singleline" && (
               <div className={styles["iconwrapper"]}>
-                {icon && <div className={styles.icon_left}>{icon}</div>}
+                {starticon && (
+                  <div className={styles.icon_left}>{starticon}</div>
+                )}
               </div>
             )}
             <div className={styles["input-wrapper"]}>
@@ -108,12 +113,7 @@ const TextField: React.FC<InputTextAreaProps> = ({
                   }}
                   required
                   onKeyUp={handleKeyUp}
-                  onMouseOut={onMouseOut}
-                  onMouseMove={Onmousehover}
-                  onMouseOver={onMouseOver}
-                
-                  onMouseLeave={onMouseOut}
-                  placeholder={isFocused ? placeholder : ""}
+                  placeholder={isFocused ? placeholder || label : ""}
                   disabled={disable}
                   aria-multiline={true}
                   rows={minRows}
@@ -131,11 +131,7 @@ const TextField: React.FC<InputTextAreaProps> = ({
                   }}
                   required
                   onKeyUp={handleKeyUp}
-                  onMouseOut={onMouseOut}
-                  onMouseMove={Onmousehover}
-                  onMouseOver={onMouseOver}
-                  onMouseLeave={onMouseOut}
-                  placeholder={isFocused ? placeholder : ""}
+                  placeholder={isFocused ? placeholder || label : ""}
                   disabled={disable}
                   onBlur={() => setIsFocused(false)}
                   id={id}

@@ -10,11 +10,15 @@ interface Option {
   value: string | Option[];
 }
 interface DsOptionProps {
+  selectId?: string;
+  id?: string;
   id?: string;
   label?: string;
   isOpen: boolean;
   options: Option[];
   handleSelect: (value: string) => void;
+  type: string;
+  selectedOptions: string[];
 }
 
 const DsOption: React.FC<DsOptionProps> = ({
@@ -23,6 +27,8 @@ const DsOption: React.FC<DsOptionProps> = ({
   isOpen,
   options,
   handleSelect,
+  type,
+  selectedOptions,
 }) => {
   return (
     <>
@@ -38,32 +44,47 @@ const DsOption: React.FC<DsOptionProps> = ({
                       key={index}
                       onClick={() => {
                         handleSelect(option.label);
-                        closeContext(
-                          label !== "" ? label + "opt" : id !== "" ? id : "test"
-                        );
+                        if (type !== "multi") {
+                          closeContext(
+                            label !== ""
+                              ? label + "opt"
+                              : id !== ""
+                              ? id
+                              : "test"
+                          );
+                        }
                       }}
                       //onFocus={() => displayContext}
                       className={styles.option}
                     >
-                      {option.label}
-                      {typeof option.value !== "string" && (
-                        <DSButton
-                          className={styles.ShowContext}
-                          handleOnClick={(e) => {
-                            e.stopPropagation();
-                            if (typeof option.value !== "string") {
-                              displayContext(
-                                e,
-                                option.label + "opt",
-                                "vertical",
-                                "left"
-                              );
-                            }
-                          }}
-                        >
-                          d
-                        </DSButton>
+                      {type == "multi" && (
+                        <input
+                          type="checkbox"
+                          checked={selectedOptions.includes(option.label)}
+                          className={styles.checkbox}
+                        ></input>
                       )}
+
+                      {option.label}
+                      {typeof option.value !== "string" &&
+                        type == "twolevel" && (
+                          <DSButton
+                            className={styles.ShowContext}
+                            handleOnClick={(e) => {
+                              e.stopPropagation();
+                              if (typeof option.value !== "string") {
+                                displayContext(
+                                  e,
+                                  option.label + "opt",
+                                  "vertical",
+                                  "left"
+                                );
+                              }
+                            }}
+                          >
+                            d
+                          </DSButton>
+                        )}
                     </div>
                     {typeof option.value !== "string" && (
                       <DsOption
@@ -71,7 +92,21 @@ const DsOption: React.FC<DsOptionProps> = ({
                         label={option.label}
                         isOpen={true}
                         options={option.value}
-                        handleSelect={handleSelect}
+                        // handleSelect={handleSelect}
+                        handleSelect={(subOption) => {
+                          handleSelect(subOption);
+                          if (type !== "multi") {
+                            closeContext(
+                              label !== ""
+                                ? label + "opt"
+                                : id !== ""
+                                ? id
+                                : "test"
+                            );
+                          }
+                        }}
+                        type={type}
+                        selectedOptions={selectedOptions}
                       ></DsOption>
                     )}
                   </>
