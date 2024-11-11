@@ -14,9 +14,11 @@ import ContextMenu, {
   closeContext,
   displayContext,
 } from "@/app/Components/dsContextHolder/dsContextHolder";
-import DSButton from "@/app/Components/dsButton/dsButton";
+import DSButton from "@/app/Components/dsButton/DsButton";
+import TableComponent from "@/app/Components/DsTablecomponent/DsTableComponent";
 
 export default function Home() {
+  
   const panNo = "AABCD9532A";
   const gstinNo = "12436514352356675843";
   const drugLicNo = "1234eydfeedqweWSR";
@@ -102,8 +104,16 @@ export default function Home() {
                   <Detail detailOf={"Products"}>12345</Detail>
                 </div>
               </div>
-              <div className={styles.ProductDetails}></div>
+              <div className={styles.ProductDetails}>
+                <TableComponent className={""} id={""} alignment={""} columns={[]} rows={[]}></TableComponent>
+              </div>
             </div>
+            <div className={styles.shipping}>
+              <div className={styles.shippingDetails}></div>
+              <div className={styles.billingDetails}></div>
+              <div></div>
+            </div>
+
             <div className={styles.footer}></div>
           </div>
         </div>

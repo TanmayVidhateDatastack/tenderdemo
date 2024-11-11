@@ -1,5 +1,5 @@
 "use client";
-import DSButton from "../DsButton/DsButton";
+import DSButton from "../dsButton/DsButton";
 import { OpenPopup } from "./dsPopup";
 
 interface PopupOpenButtonProps {

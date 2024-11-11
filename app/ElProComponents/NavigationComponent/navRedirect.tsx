@@ -1,5 +1,5 @@
 "use client";
-import DSButton from "../../Components/DsButton/DsButton";
+import DSButton from "../../Components/dsButton/DsButton";
 import { useRouter } from "next/navigation";
 import { NavProp } from "../types";
 

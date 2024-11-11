@@ -1,4 +1,4 @@
-import DSButton from "../DsButton/DsButton";
+import DSButton from "../dsButton/DsButton";
 import PopUpContext, {
   closeContext,
   displayContext,

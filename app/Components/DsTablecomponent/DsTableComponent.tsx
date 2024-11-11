@@ -10,7 +10,7 @@ import SortComponent from "./supportComponents/sortComponent";
 import styles from "./DsTable.module.css";
 import RadioCheckButton from "./supportComponents/RadioCheckButton";
 import TextField from "../DsTextField/DsTextField";
-import DSButton from "../DsButton/DsButton";
+import DSButton from "../dsButton/DsButton";
 import Image from "next/image";
 
 import threedot from "../../Icons/smallIcons/threedot.svg";
@@ -31,8 +31,8 @@ interface TableComponentProps {
   className: string;
   id: string;
   alignment: "left" | "center" | string;
-  sortable?: boolean;
-  searchAvailable?: boolean;
+  isSortable?: boolean;
+  hasSearch?: boolean;
   columns: tcolumn[];
   rows: trow[];
 }
@@ -41,8 +41,8 @@ const TableComponent: React.FC<TableComponentProps> = ({
   className,
   id,
   alignment = "left",
-  sortable = true,
-  searchAvailable = true,
+  isSortable = true,
+  hasSearch = false,
   columns,
   rows,
 }) => {
@@ -403,9 +403,8 @@ const TableComponent: React.FC<TableComponentProps> = ({
   }, []);
   return (
     <>
-      <DemoLayout title="Table (DsTable)">
         <div className={styles.tableContainer}>
-          {searchAvailable && (
+          {hasSearch && (
             <div className={`${styles["ds-search-input-div"]}`}>
               <TextField
                 placeholder="Search SO"
@@ -437,7 +436,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
                       columnHeader={column.columnHeader}
                       alignment={alignment}
                     >
-                      {sortable && (
+                      {isSortable && (
                         <>
                           <div className={`${styles["slide-component"]}`}>
                             <SortComponent
@@ -541,7 +540,6 @@ const TableComponent: React.FC<TableComponentProps> = ({
             );
           })}
         </div>
-      </DemoLayout>
     </>
   );
 };

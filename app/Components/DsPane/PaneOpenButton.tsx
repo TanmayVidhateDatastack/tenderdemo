@@ -1,5 +1,5 @@
 "use client";
-import DSButton, { DSButtonProps } from "../DsButton/DsButton";
+import DSButton, { DSButtonProps } from "../dsButton/DsButton";
 import { DisplayPane } from "./DsPane";
 
 interface PaneOpenButtonProps extends DSButtonProps {

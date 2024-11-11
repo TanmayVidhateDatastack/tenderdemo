@@ -9,7 +9,7 @@ import error from "../../Icons/mediumIcons/error.svg";
 import warning from "../../Icons/mediumIcons/info.svg";
 import normal from "../../Icons/mediumIcons/bonus.svg";
 import styles from "./DsToaster.module.css";
-import DSButton from "../DsButton/DsButton";
+import DSButton from "../dsButton/DsButton";
 
 interface ToasterProps {
   message: string;

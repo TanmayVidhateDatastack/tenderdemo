@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import DSButton from "../../Components/DsButton/DsButton";
+import DSButton from "../../Components/dsButton/DsButton";
 import styles from "../../page.module.css";
 import buttonStyles from "../../Components/dsButton/dsButton.module.css";
 import PaneStyles from "../../Components/dsPane/dsPane.module.css";

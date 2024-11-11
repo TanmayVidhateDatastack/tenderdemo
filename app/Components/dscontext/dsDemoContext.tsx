@@ -1,4 +1,4 @@
-import DSButton from "../DsButton/DsButton";
+import DSButton from "../dsButton/DsButton";
 import ContextMenu, { closecontext, displaycontext } from "./dscontext";
 import DemoLayout from "@/app/ElProComponents/Demo/demoLayout";
 export default function DemoContext() {
