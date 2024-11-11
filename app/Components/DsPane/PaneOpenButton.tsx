@@ -1,9 +1,9 @@
 "use client";
-import DSButton, { DSButtonProps } from "../dsButton/dsButton";
-import { DisplayPane } from "./dsPane";
+import DSButton, { DSButtonProps } from "../DsButton/DsButton";
+import { DisplayPane } from "./DsPane";
 
-interface PaneOpenButtonProps extends DSButtonProps{
-  paneId:string;
+interface PaneOpenButtonProps extends DSButtonProps {
+  paneId: string;
 }
 const PaneOpenButton: React.FC<PaneOpenButtonProps> = ({
   id,
@@ -23,20 +23,24 @@ const PaneOpenButton: React.FC<PaneOpenButtonProps> = ({
 }) => {
   return (
     <DSButton
-        id={id}
-        className={className}
-        buttonSize={buttonSize}
-        iconSize={iconSize}
-        buttonColor={buttonColor}
-        type={type}
-        handleOnClick={()=>{DisplayPane(paneId)}}
-        handleOnHover={handleOnHover}
-        handleMouseLeave={handleMouseLeave}
-        tooltip={tooltip}
-        startIcon={startIcon}
-        endIcon={endIcon}
-        label={label}
-        >{children}</DSButton>
+      id={id}
+      className={className}
+      buttonSize={buttonSize}
+      iconSize={iconSize}
+      buttonColor={buttonColor}
+      type={type}
+      handleOnClick={() => {
+        DisplayPane(paneId);
+      }}
+      handleOnHover={handleOnHover}
+      handleMouseLeave={handleMouseLeave}
+      tooltip={tooltip}
+      startIcon={startIcon}
+      endIcon={endIcon}
+      label={label}
+    >
+      {children}
+    </DSButton>
   );
 };
 

@@ -4,7 +4,7 @@ import { TabContext } from "./TabsContextProvider";
 import DSButtonGroup from "../dsButton/dsButtonGroup";
 import styles from "./TabView.module.css";
 import btnStyles from "../dsButton/dsButton.module.css";
-import DSButton from "../dsButton/dsButton";
+import DSButton from "../DsButton/DsButton";
 
 interface tab {
   tabId: string;

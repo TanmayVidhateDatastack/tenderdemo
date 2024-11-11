@@ -144,6 +144,16 @@
     color: var(--text-white);
 }
 
+.btnContained.btnWarning{
+    background-color: var(--warning);
+    color: var(--text-warning);
+}
+
+.btnContained.btnWarning:hover{
+    background-color: var(--danger-hover);
+    color: var(--text-white);
+}
+
 .btnText.btnInfo{
     background-color: var(--info);
     color: var(--text-white);

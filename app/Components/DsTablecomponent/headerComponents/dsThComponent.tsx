@@ -1,10 +1,12 @@
+import React from "react";
 import styles from "../DsTable.module.css";
 export interface thprops {
   className?: string;
   children?: React.ReactNode;
-  content?: string;
-  columnHeader?: string;
+  content?: string | React.ReactNode;
+  columnHeader?: React.ReactNode | string;
   columnIndex: number;
+  alignment?: "left" | "center" | string;
 }
 
 const ThComponent: React.FC<thprops> = ({
@@ -13,11 +15,16 @@ const ThComponent: React.FC<thprops> = ({
   content,
   columnHeader,
   columnIndex,
+  alignment,
 }) => {
+  const thclassName =
+    alignment == "center"
+      ? `${styles["ds-th-center"]} ${className}`
+      : `${styles["ds-th-component"]} ${className}`;
   return (
     <>
       <th
-        className={`${styles["ds-th-component"]} ${className}`}
+        className={thclassName}
         data-column-name={columnHeader}
         data-column-index={columnIndex}
       >
