@@ -4,8 +4,8 @@ import styles from "./dsContextHolder.module.css";
 
 interface ContextMenuProps {
   id: string;
-  position?: "vertical" | "horizontal";
-  alignment?: "right" | "left" | "center";
+  // position?: "vertical" | "horizontal";
+  // alignment?: "right" | "left" | "center";
   content?: string | React.ReactElement;
  showArrow:boolean;
 
@@ -53,7 +53,10 @@ export function displayContext (
   else{
     arrowPosition="top";
   }
+  console.log(position)
+
   if (position === "horizontal") {
+    console.log(position)
     contextY = eleRect.top;
     if (eleRect.right + contextW + distance <= winW - xBorder) {
       contextX = eleRect.right + distance;

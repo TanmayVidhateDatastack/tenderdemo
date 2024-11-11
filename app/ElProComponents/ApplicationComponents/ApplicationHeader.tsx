@@ -14,7 +14,14 @@ export interface ApplicationHeaderProps {
   appTitle: string;
   hasPrevious: boolean;
 }
-
+/**
+ * ApplicationHeader displays the header row of the applicaiton.
+ *
+ * application header is only used in application not need use it again.
+ * @param {string} hasPrevious - decides whether there is back button or not.
+ * @param {string} appTitle - application Title passed to application.
+ * @param {React.ReactNode} children - appMenu passed in application will be placed here.
+ */
 function ApplicationHeader({
   children,
   appTitle,

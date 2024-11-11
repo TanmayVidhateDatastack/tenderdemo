@@ -71,7 +71,7 @@ export default function Home() {
                   <Detail detailOf="Food Lic No">{foodLicNo}</Detail>
                   <Detail detailOf="Bank account details">
                     <div
-                      onMouseOver={(e) => displayContext(e, "BankDetails")}
+                      onMouseOver={(e) => displayContext(e, "BankDetails","horizontal")}
                       // onMouseOut={() => closeContext("BankDetails")}
                     >
                       <Image
@@ -98,8 +98,6 @@ export default function Home() {
       <ContextMenu
         id={"BankDetails"}
         showArrow={true}
-        position="horizontal"
-        alignment="center"
         content={
           <>
             <Detail detailOf="Food Lic No">{foodLicNo}</Detail>

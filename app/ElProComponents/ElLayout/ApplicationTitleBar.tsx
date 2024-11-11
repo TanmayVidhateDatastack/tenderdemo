@@ -11,6 +11,10 @@ import NotiIcon from "../../Icons/mediumIcons/Bell.svg";
 import Ds_Usershort from "@/app/Components/DsUserProfile/DsUsershort";
 import SpotlightSearch from "@/app/Components/dsSpotlightSearch/dsSpotlightSearch";
 
+/**
+ * ApplicationTitleBar  is the title bar of the ERP project .
+ * Current signed in user is needed here.
+ */
 function ApplicationTitleBar() {
   const user = {
     name: 'Abhishek Kumar',

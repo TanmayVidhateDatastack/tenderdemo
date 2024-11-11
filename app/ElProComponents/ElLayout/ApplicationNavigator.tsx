@@ -4,7 +4,9 @@ import styles from "./ElLayout.module.css";
 import prodesk from "../../Icons/mediumIcons/Prodesk.svg";
 import salesNorder from "../../Icons/mediumIcons/SalesNOrder.svg";
 import datastack from "../../Icons/smallIcons/datastack.svg";
-
+/**
+ * ApplicationNavigator links to all application in the ERP will be available here based on user access levels.
+ */
 function ApplicationNavigator() {
   return (
     <div className={styles.appNavigator}>
