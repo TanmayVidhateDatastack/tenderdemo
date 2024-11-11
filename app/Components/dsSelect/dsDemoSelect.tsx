@@ -2,20 +2,13 @@
 
 import DemoLayout from "@/app/ElProComponents/Demo/demoLayout";
 import TextField from "../DsTextField/DsTextField";
-// import PopUpContext from "./dsContext";
-// import { useState } from "react";
+
 import DsSelect from "./dsSelect";
 
 const DemoSelect: React.FC = () => {
-  // const options = ["option1", "option2", "option3", "option4", "option5"];
-  // const options = [
-  //   { value: "1", label: "Option 1" },
-  //   { value: "2", label: "Option 2" },
-  //   { value: "3", label: "Option 3" },
-  // ];
   type Option = {
     label: string;
-    value: string | Option[]; // `value` can either be a string or an array of Option objects
+    value: string | Option[];
   };
 
   const options: Option[] = [
@@ -51,12 +44,6 @@ const DemoSelect: React.FC = () => {
     },
   ];
 
-  // const [value, setValue] = useState<string>("");
-
-  // const handleChange = (value:string) => {
-  //   setValue(value);
-  //   console.log(value);
-  // };
   return (
     <>
       <DemoLayout title="Text Field (DsTextField)">
