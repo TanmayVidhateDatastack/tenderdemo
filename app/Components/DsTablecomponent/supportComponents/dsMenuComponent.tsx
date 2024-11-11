@@ -3,8 +3,10 @@ import styles from "../DsTable.module.css";
 import MenuDivider from "./menuDivider";
 import TabViewMenuItem from "./tabViewMenuItem";
 import PopupContext from "../../dsContextHolder/dsContextHolder";
+import { tcolumn } from "../helpers/types";
+import FilterComponent from "./filterComponent";
 export interface menuprops {
-  columnIndex: number;
+  column: tcolumn;
   className?: string;
   children?: React.ReactNode;
 
@@ -13,16 +15,20 @@ export interface menuprops {
     e: React.MouseEvent,
     columnIndex: string | number
   ) => void;
+  sortDataUsingInputValueOnlyOnSpecifiedColumn: (
+    e: React.ChangeEvent<HTMLElement>,
+    columnIndex?: number
+  ) => void;
   manageColumns?: () => void;
   hideShowColumn: (column: string | number) => void;
 }
-
 const MenuComponent: React.FC<menuprops> = ({
-  columnIndex,
+  column,
   className,
   children,
   sortDataOnlyOnSpecifiedColumn,
   clearSortOnColumn,
+  sortDataUsingInputValueOnlyOnSpecifiedColumn,
   manageColumns,
   hideShowColumn,
 }) => {
@@ -31,35 +37,37 @@ const MenuComponent: React.FC<menuprops> = ({
   };
   const [isManageColumnVisible, setIsManageColumnVisible] =
     useState<boolean>(false);
+  const [isFilterColumnVisible, setIsFilterColumnVisible] =
+    useState<boolean>(false);
   return (
     <>
       {/* {menuVisible && columnKey === columnIndex && ( */}
-      {isManageColumnVisible == false && (
+      {isManageColumnVisible == false && isFilterColumnVisible == false && (
         <PopupContext
-          id={"menucontext" + columnIndex}
+          id={"menucontext" + column.columnIndex}
           content={
             <>
               <TabViewMenuItem
                 menu="Sort By Asc"
-                handleOnClick={() => sortTableAscending(columnIndex)}
+                handleOnClick={() => sortTableAscending(column.columnIndex)}
               />
               <TabViewMenuItem
                 menu="Clear Sort"
                 handleOnClick={(e) => {
-                  clearSortOnColumn(e, columnIndex);
+                  clearSortOnColumn(e, column.columnIndex);
                 }}
               />
               <MenuDivider classNames={`${styles["filtertab"]} ${className}`} />
               <TabViewMenuItem
                 classNames={`${styles["filtertab"]}`}
                 menu="Filter"
-                handleOnClick={() => {}}
+                handleOnClick={() => setIsFilterColumnVisible(true)}
               />
               <MenuDivider />
               <TabViewMenuItem
                 menu="Hide Column"
                 handleOnClick={() => {
-                  hideShowColumn(columnIndex);
+                  hideShowColumn(column.columnIndex);
                 }}
               />
               {manageColumns && (
@@ -72,16 +80,35 @@ const MenuComponent: React.FC<menuprops> = ({
               )}
             </>
           }
+          showArrow={false}
         />
       )}
 
-      {isManageColumnVisible && (
+      {isManageColumnVisible && isFilterColumnVisible == false && (
         <>
           <PopupContext
-            id={"menucontext" + columnIndex}
+            id={"menucontext" + column.columnIndex}
             content={<>{children}</>}
+            showArrow={false}
           />
         </>
+      )}
+
+      {isFilterColumnVisible && isManageColumnVisible == false && (
+        <PopupContext
+          id={"menucontext" + column.columnIndex}
+          content={
+            <>
+              <FilterComponent
+                column={column}
+                sortDataUsingInputValueOnlyOnSpecifiedColumn={
+                  sortDataUsingInputValueOnlyOnSpecifiedColumn
+                }
+              ></FilterComponent>
+            </>
+          }
+          showArrow={false}
+        />
       )}
       {/* )} */}
     </>

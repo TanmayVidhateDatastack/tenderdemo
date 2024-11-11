@@ -2,7 +2,6 @@
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import {
   convertToDate,
-  determineFilterType,
   parseFormattedNumber,
   tcolumn,
   trow,
@@ -11,11 +10,10 @@ import SortComponent from "./supportComponents/sortComponent";
 import styles from "./DsTable.module.css";
 import RadioCheckButton from "./supportComponents/RadioCheckButton";
 import TextField from "../DsTextField/DsTextField";
-import DSButton from "../dsButton/dsButton";
+import DSButton from "../dsButton/DsButton";
 import Image from "next/image";
 
 import threedot from "../../Icons/smallIcons/threedot.svg";
-import AdvancedFilterComponent from "./AdvancedFilterComponent";
 import TbodyComponent from "./bodyComponents/dsTbodyComponent";
 import TdComponent from "./bodyComponents/dsTdComponent";
 import TrComponent from "./bodyComponents/dsTrComponent";
@@ -25,11 +23,16 @@ import TheaderComponent from "./headerComponents/dsTheaderComponent";
 import MenuComponent from "./supportComponents/dsMenuComponent";
 import DemoLayout from "@/app/ElProComponents/Demo/demoLayout";
 import { displayContext } from "../dsContextHolder/dsContextHolder";
-import rangeFilter from "./TableContext";
+import { useAppDispatch, useAppSelector } from "@/app/Redux/hook/hook";
+import { setRows } from "@/app/Redux/slice/TableSlice/tableSlice";
+import React from "react";
 // Define the component props
 interface TableComponentProps {
   className: string;
   id: string;
+  alignment: "left" | "center" | string;
+  isSortable?: boolean;
+  hasSearch?: boolean;
   columns: tcolumn[];
   rows: trow[];
 }
@@ -37,12 +40,24 @@ interface TableComponentProps {
 const TableComponent: React.FC<TableComponentProps> = ({
   className,
   id,
+  alignment = "left",
+  isSortable = true,
+  hasSearch = false,
   columns,
   rows,
 }) => {
   const [newRows, setNewRows] = useState<trow[]>(rows);
   const [tableRows, setTableRows] = useState<trow[]>(rows);
   const rowsContainer = useRef<trow[]>(rows);
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(setRows(rowsContainer.current));
+  }, [dispatch]);
+  const sliceRows = useAppSelector((state) => state.table["rows"]);
+
+  useEffect(() => {
+    setNewRows(sliceRows);
+  }, [sliceRows]);
 
   useEffect(() => {
     setTableRows(newRows);
@@ -229,7 +244,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
 
   const [optionsArray, setOptionArray] = useState<string[]>([]);
   useEffect(() => {
-    setOptionArray(columns.map((x) => x.columnHeader));
+    setOptionArray(columns.map((x) => x.columnHeader?.toString() ?? ""));
   }, [columns]);
 
   const hideShowColumn = (value: string | number) => {
@@ -245,7 +260,9 @@ const TableComponent: React.FC<TableComponentProps> = ({
       });
     }
 
-    const array = columns.filter((x) => !x.isHidden).map((x) => x.columnHeader);
+    const array = columns
+      .filter((x) => !x.isHidden)
+      .map((x) => x.columnHeader?.toString() ?? "");
     setOptionArray(array);
     setColumnSort(columnSort);
   };
@@ -256,21 +273,20 @@ const TableComponent: React.FC<TableComponentProps> = ({
     setInputValue((event.target as HTMLInputElement).value);
     inputValue.trim();
     let filteredRows: trow[] = [];
-
-    if (searchValue === "") {
-      // If the search input is empty, show all rows
-      filteredRows = rowsContainer.current;
-    } else {
-      // Filter rows based on the search value
-      filteredRows = rows.filter((row) =>
-        row.content?.some(
-          (cell) =>
-            (typeof cell.content === "string" ||
-              typeof cell.content === "number") &&
-            cell.content.toString().toLowerCase().includes(searchValue)
-        )
-      );
-    }
+    // if (searchValue === "") {
+    //   // If the search input is empty, show all rows
+    //   filteredRows = rowsContainer.current;
+    // } else {
+    // Filter rows based on the search value
+    filteredRows = [...sliceRows].filter((row) =>
+      row.content?.some(
+        (cell) =>
+          (typeof cell.content === "string" ||
+            typeof cell.content === "number") &&
+          cell.content.toString().toLowerCase().includes(searchValue)
+      )
+    );
+    // }
 
     // Update the rows with the filtered results
     setNewRows(filteredRows);
@@ -279,40 +295,39 @@ const TableComponent: React.FC<TableComponentProps> = ({
     maintainSortingOrder(filteredRows);
   };
 
-  // const sortDataUsingInputValueOnlyOnSpecifiedColumn = (
-  //   event: React.ChangeEvent<HTMLInputElement>,
-  //   columnIndex?: number
-  // ) => {
-  //   const searchValue = event.target.value.toLowerCase();
-  //   setInputValue(event.target.value);
+  const sortDataUsingInputValueOnlyOnSpecifiedColumn = (
+    event: React.ChangeEvent<HTMLElement>,
+    columnIndex?: number
+  ) => {
+    const searchValue = (event.target as HTMLInputElement).value.toLowerCase();
+    setInputValue((event.target as HTMLInputElement).value);
+    console.log(searchValue);
+    let filteredRows: trow[] = [];
+    if (searchValue === "") {
+      // If the search input is empty, show all rows
+      filteredRows = sliceRows;
+    } else {
+      // Filter rows based on the search value
+      filteredRows = [...sliceRows].filter((row) =>
+        row.content?.some(
+          (cell) =>
+            (typeof cell.content === "string" ||
+              React.isValidElement(cell.content) === false) &&
+            cell.columnIndex === columnIndex &&
+            cell.content?.toString().toLowerCase().includes(searchValue)
+        )
+      );
+    }
 
-  //   let filteredRows: trow[] = [];
-
-  //   if (searchValue === "") {
-  //     // If the search input is empty, show all rows
-  //     filteredRows = rowsContainer.current;
-  //   } else {
-  //     // Filter rows based on the search value
-  //     filteredRows = rows.filter((row) =>
-  //       row.content?.some(
-  //         (cell) =>
-  //           typeof cell.content === "string" &&
-  //           cell.columnIndex === columnIndex &&
-  //           cell.content.toLowerCase().includes(searchValue)
-  //       )
-  //     );
-  //   }
-
-  //   // Update the rows with the filtered results
-  //   setNewRows(filteredRows);
-
-  //   // Maintain the sorting order
-  //   maintainSortingOrder(filteredRows);
-  // };
+    // Update the rows with the filtered results
+    setNewRows(filteredRows);
+    // Maintain the sorting order
+    maintainSortingOrder(filteredRows);
+  };
 
   const maintainSortingOrder = (filteredRows: trow[]) => {
     if (activeColumnIndex !== -1) {
-      const sortedRows = filteredRows.sort((rowA, rowB) => {
+      const sortedRows = [...filteredRows].sort((rowA, rowB) => {
         const cellA = rowA.content?.find(
           (x) => x.columnIndex === activeColumnIndex
         )?.content;
@@ -343,7 +358,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
       setNewRows(sortedRows);
     } else {
       // Default sorting by rowIndex if no column is active
-      const sortedRows = filteredRows.sort(
+      const sortedRows = [...filteredRows].sort(
         (rowA, rowB) => rowA.rowIndex - rowB.rowIndex
       );
       setNewRows(sortedRows);
@@ -367,357 +382,86 @@ const TableComponent: React.FC<TableComponentProps> = ({
     });
   };
 
-  const [rangeFrom, setRangeFrom] = useState<number>(20200199900001);
-  const [rangeTo, setRangeTo] = useState<number>(20240199900015);
-  const setRangeFromValue = (
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => {
-    setRangeFrom(Number(e.target.value));
-  };
-  const setRangeToValue = (
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => {
-    setRangeTo(Number(e.target.value));
-  };
-
-  const applyFilter = (e: React.MouseEvent<HTMLElement>) => {
-    console.log(e);
-    const rows1 = rangeFilter(rows,rangeFrom,rangeTo,0);
-    const rows2 = filterOnDate(1);
-    const rows3 = filterRowsOnInputTypeRange(6);
-    const rows4 = searchDataOnSpecifiedColumnUsingCSV(3);
-    const rows5: trow[] = [];
-    rows.map((row) => {
-      if (
-        rows1.some((x) => x.rowIndex === row.rowIndex) &&
-        rows2.some((y) => y.rowIndex === row.rowIndex) &&
-        rows3.some((z) => z.rowIndex === row.rowIndex) &&
-        rows4.some((z) => z.rowIndex === row.rowIndex)
-      ) {
-        rows5.push(row);
-      }
-    });
-    setNewRows(rows5);
-    setFilterVisible(!isFilterVisible);
-
-    // console.log("rows1 length = ", rows1.length);
-    // console.log("rows2 length = ", rows2.length);
-    // console.log("rows3 length = ", rows3.length);
-
-    // console.log("rows4 length = ", rows4.length);
-    // searchDataOnSpecifiedColumnUsingCSV(1);
-  };
-
-  const [dateFrom, setDateFrom] = useState<Date>(new Date("2022-09-19"));
-  const [dateTo, setDateTo] = useState<Date>(new Date("2024-12-11"));
-
-  // const [dateTo, setDateTo] = useState<Date>(new Date(Date.now.toString()));
-  const setDateFromValue = (
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => {
-    setDateFrom(new Date(e.target.value));
-    // console.log(dateFrom);
-  };
-  const setDateToValue = (
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => {
-    setDateTo(new Date(e.target.value));
-  };
-
-  const filterOnDate = (columnIndex: number) => {
-    const filteredRows = [...rows].filter((row) =>
-      row.content?.some(
-        (cell) =>
-          typeof cell.content === "string" &&
-          cell.contentType === "date" &&
-          cell.columnIndex === columnIndex &&
-          convertToDate(cell.content) >= dateFrom &&
-          convertToDate(cell.content) <= dateTo
-      )
-    );
-    setNewRows(filteredRows);
-    return filteredRows;
-  };
-
-  // const minValue = useRef<number>(0);
-  // const maxValue = useRef<number>(0);
-
-  // const getLowestBiggestValue = (columnIndex: number) => {
-  //   rows.map((row) =>
-  //     row.content?.forEach((cell) => {
-  //       if (cell.columnIndex == columnIndex) {
-  //         minValue.current = Number(cell.content);
-  //       }
-  //     })
-  //   );
-
-  //   columns.map((col: tcolumn) => {
-  //     rows.map((row) => {
-  //       row.content?.forEach((cell) => {
-  //         if (
-  //           col.columnIndex == columnIndex &&
-  //           col.columnIndex == row.content?.[0].columnIndex &&
-  //           Number(cell.content) < minValue.current
-  //         ) {
-  //           minValue.current = Number(cell.content);
-  //         }
-  //         if (
-  //           col.columnIndex == columnIndex &&
-  //           Number(cell.content) > maxValue.current
-  //         ) {
-  //           maxValue.current = Number(cell.content);
-  //         }
-  //       });
-  //     });
-  //   });
-  //   console.log("minvalue = ", minValue.current);
-  //   console.log("maxvalue = ", maxValue.current);
-  // };
-
-  // getLowestBiggestValue(6);
-
-  // const [rangeValue, setRangeValue] = useState<number>(34);
-  // const setGrossRangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setRangeValue(Number(e.target.value));
-  // };
-  // const filterRowsOnInputTypeRange = (columnIndex: number) => {
-  //   const min = Number(minValue.current); // Ensure minValue is a number
-  //   const max = Number(rangeValue); // Ensure rangeValue is a number
-
-  //   const filteredRows = [...rows].filter((row) =>
-  //     row.content?.some((cell) => {
-  //       const isNumericString =
-  //         typeof cell.content === "string" && !isNaN(Number(cell.content)); // Ensure it's a valid number string
-  //       return (
-  //         isNumericString &&
-  //         cell.contentType === "number" &&
-  //         cell.columnIndex === columnIndex &&
-  //         Number(cell.content) >= min &&
-  //         Number(cell.content) <= max
-  //       );
-  //     })
-  //   );
-
-  //   setNewRows(filteredRows);
-  //   return filteredRows;
-  // };
-
-  const minValue = useRef<number>(Infinity);
-  const maxValue = useRef<number>(-Infinity);
-  const [rangeValue, setRangeValue] = useState<number>(1200200);
-
-  // Function to parse a number from the formatted string
-
-  const getLowestBiggestValue = (columnIndex: number) => {
-    minValue.current = Infinity;
-    maxValue.current = -Infinity;
-
-    rows.forEach((row) => {
-      row.content?.forEach((cell) => {
-        if (
-          cell.columnIndex === columnIndex &&
-          typeof cell.content == "string"
-        ) {
-          const numericValue = parseFormattedNumber(cell.content);
-          if (!isNaN(numericValue)) {
-            minValue.current = Math.min(minValue.current, numericValue);
-            maxValue.current = Math.max(maxValue.current, numericValue);
-          }
-        }
-      });
-    });
-
-    // console.log("minValue =", minValue.current);
-    // console.log("maxValue =", maxValue.current);
-  };
-  getLowestBiggestValue(6);
-  const setGrossRangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRangeValue(parseFormattedNumber(e.target.value));
-  };
-
-  const filterRowsOnInputTypeRange = (columnIndex: number) => {
-    const min = minValue.current;
-    const max = rangeValue;
-
-    const filteredRows = rows.filter((row) =>
-      row.content?.some((cell) => {
-        const isNumericString =
-          typeof cell.content === "string" &&
-          !isNaN(parseFormattedNumber(cell.content));
-        return (
-          isNumericString &&
-          typeof cell.content === "string" &&
-          cell.contentType === "number" &&
-          cell.columnIndex === columnIndex &&
-          parseFormattedNumber(cell.content) >= min &&
-          parseFormattedNumber(cell.content) <= max
+  useEffect(() => {
+    const handleOnScroll = () => {
+      document
+        .querySelectorAll(".context")
+        .forEach((x) => ((x as HTMLElement).style.display = "none"));
+    };
+    document
+      .querySelectorAll("*")
+      ?.forEach((x) =>
+        (x as HTMLElement).addEventListener("scroll", handleOnScroll)
+      );
+    return () => {
+      document
+        .querySelectorAll("*")
+        ?.forEach((x) =>
+          (x as HTMLElement).removeEventListener("scroll", handleOnScroll)
         );
-      })
-    );
-
-    setNewRows(filteredRows);
-    // console.log(filteredRows.length);
-    return filteredRows;
-  };
-
-  const [commaSeparatedValue, setCommaSeparatedValue] = useState<string[]>([
-    "",
-  ]);
-  const setCommaValue = (
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => {
-    const commaValue = e.target.value.split(",");
-    setCommaSeparatedValue(commaValue);
-  };
-  const searchDataOnSpecifiedColumnUsingCSV = (columnIndex: number) => {
-    const filteredRows = [...rows].filter((row) =>
-      row.content?.some(
-        (cell) =>
-          typeof cell.content === "string" &&
-          cell.contentType === "string" &&
-          cell.columnIndex === columnIndex &&
-          commaSeparatedValue.some((item) =>
-            cell.content
-              ?.toString()
-              .toLowerCase()
-              .includes(item.toString().toLowerCase())
-          )
-      )
-    );
-    // setNewRows(filteredRows);
-    return filteredRows;
-  };
-
-  // const [dropDownOptions, setDropDownOptions] = useState<string[]>([]);
-  // const filterOnDropdown = (columnIndex: number) => {
-  //   const filteredRows = rows.filter((row) =>
-  //     row.content?.some(
-  //       (cell) =>
-  //         typeof cell.content === "string" &&
-  //         cell.contentType === "string" &&
-  //         cell.columnIndex === columnIndex &&
-  //         dropDownOptions.some((item) =>
-  //           cell.content
-  //             ?.toString()
-  //             .toLowerCase()
-  //             .includes(item.toString().toLowerCase())
-  //         )
-  //     )
-  //   );
-  //   setNewRows(filteredRows);
-  // };
-
-  // const [statusOptions, setStatusOptions] = useState<string[]>([]);
-  // const filterOnStatus = (columnIndex: number) => {
-  //   const filteredRows = rows.filter((row) =>
-  //     row.content?.some(
-  //       (cell) =>
-  //         typeof cell.content === "string" &&
-  //         cell.contentType === "string" &&
-  //         cell.columnIndex === columnIndex &&
-  //         statusOptions.some((item) =>
-  //           cell.content
-  //             ?.toString()
-  //             .toLowerCase()
-  //             .includes(item.toString().toLowerCase())
-  //         )
-  //     )
-  //   );
-  //   setNewRows(filteredRows);
-  // };
-
-  const [isFilterVisible, setFilterVisible] = useState<boolean>(false);
-  const filterTypes = determineFilterType(columns);
+    };
+  }, []);
   return (
     <>
-      <DemoLayout title="Table (DsTable)">
         <div className={styles.tableContainer}>
-          {/* <div className="column-visibility">
-            <RadioCheckButton
-              groupName="Column visibility"
-              options={columns.map((col) => ({
-                id: col.columnIndex.toString(),
-                type: "checkbox",
-                value: col.columnHeader,
-                code: col.columnIndex.toString(),
-                className: "d-flex",
-              }))}
-              handleOnChange={(e) => hideShowColumn(e.currentTarget.value)}
-              selectedOption={optionsArray}
-            />
-          </div> */}
-          <div className={`${styles["ds-search-input-div"]}`}>
-            <TextField
-              placeholder="Search SO"
-              id="serach-data"
-              label="Search Names"
-              handleInputChange={(e: ChangeEvent<HTMLElement>) =>
-                sortDataUsingInputValue(e)
-              }
-            />
-          </div>
-          <DSButton
-            label="Filter"
-            handleOnClick={() => setFilterVisible(!isFilterVisible)}
-          ></DSButton>
-          {isFilterVisible == true && (
-            <AdvancedFilterComponent
-              setRangeFromValue={setRangeFromValue}
-              setRangeToValue={setRangeToValue}
-              setDateFromValue={setDateFromValue}
-              setDateToValue={setDateToValue}
-              setGrossRangeValue={setGrossRangeValue}
-              applyFilter={applyFilter}
-              minValue={minValue.current}
-              maxValue={maxValue.current}
-              rangeValue={rangeValue}
-              filterTypes={filterTypes}
-              setCommaValue={setCommaValue}
-            ></AdvancedFilterComponent>
+          {hasSearch && (
+            <div className={`${styles["ds-search-input-div"]}`}>
+              <TextField
+                placeholder="Search SO"
+                id="serach-data"
+                label="Search Names"
+                handleInputChange={(e: ChangeEvent<HTMLElement>) =>
+                  sortDataUsingInputValue(e)
+                }
+              />
+            </div>
           )}
           <table
-            className={`${className ? className : ""} ${styles["ds-table"]} `}
+            className={`${className ? className : ""} ${
+              alignment == "center"
+                ? styles["ds-table-center"]
+                : styles["ds-table"]
+            } `}
             id={id}
           >
-            <TheaderComponent className={""}>
-              <TrComponent className={""}>
+            <TheaderComponent className={""} alignment={alignment}>
+              <TrComponent className={``}>
                 {columns.map((column) =>
                   column.isHidden ? null : (
                     <ThComponent
-                      key={column.columnHeader}
+                      key={column.columnHeader?.toString()}
                       className={""}
                       content={column.columnHeader}
                       columnIndex={column.columnIndex}
                       columnHeader={column.columnHeader}
+                      alignment={alignment}
                     >
-                      <>
-                        <div
-                          className={`${styles["slide-component"]}   ${className}`}
-                        >
-                          <SortComponent
-                            key={column.columnHeader}
-                            columnIndex={column.columnIndex}
-                            sortTable={sortTable}
-                          />
+                      {isSortable && (
+                        <>
+                          <div className={`${styles["slide-component"]}`}>
+                            <SortComponent
+                              key={column.columnHeader?.toString() ?? ""}
+                              columnIndex={column.columnIndex}
+                              sortTable={sortTable}
+                            />
 
-                          <DSButton
-                            id="chatBtn"
-                            type="icon_image"
-                            // buttonSize="btnSmall"
-                            className={`${styles["menu_button"]}`}
-                            // className={styles.menu_button}
-                            handleOnClick={(e) => {
-                              displayContext(
-                                e,
-                                "menucontext" + column.columnIndex
-                              );
-                              // Call first function
-                            }}
-                            startIcon={<Image src={threedot} alt="menu" />}
-                            tooltip="Menu"
-                          />
-                        </div>
-                      </>
+                            <DSButton
+                              id="chatBtn"
+                              type="icon_image"
+                              // buttonSize="btnSmall"
+                              className={`${styles["menu_button"]}`}
+                              handleOnClick={(e) => {
+                                displayContext(
+                                  e,
+                                  "menucontext" + column.columnIndex
+                                );
+                              }}
+                              startIcon={<Image src={threedot} alt="menu" />}
+                              tooltip="Menu"
+                            />
+                          </div>
+                        </>
+                      )}
                     </ThComponent>
                   )
                 )}
@@ -738,9 +482,11 @@ const TableComponent: React.FC<TableComponentProps> = ({
                       if (!col.isHidden && cell) {
                         return (
                           <TdComponent
-                            key={col.columnHeader}
-                            className={""}
+                            key={col.columnHeader?.toString() ?? ""}
+                            className={cell.colSpan ? "colSpan" : ""}
                             content={cell.content}
+                            alignment={alignment}
+                            colSpan={cell.colSpan}
                           ></TdComponent>
                         );
                       } else return null;
@@ -749,12 +495,10 @@ const TableComponent: React.FC<TableComponentProps> = ({
                 );
               })}
             </TbodyComponent>
-
-            <TfooterComponent className={""}>
+            <TfooterComponent className={""} alignment={alignment}>
               <TrComponent>
-                <TdComponent className={""}>
-                  Showing {newRows.length} of {rowsContainer.current.length}{" "}
-                  Rows
+                <TdComponent className={""} alignment={alignment} colSpan={10}>
+                  Showing {tableRows.length} of {rowsContainer.current.length}{" "}
                 </TdComponent>
               </TrComponent>
             </TfooterComponent>
@@ -763,33 +507,39 @@ const TableComponent: React.FC<TableComponentProps> = ({
             return (
               <MenuComponent
                 key={column.columnIndex}
-                columnIndex={column.columnIndex}
+                column={column}
                 sortDataOnlyOnSpecifiedColumn={sortTableAscending}
                 clearSortOnColumn={clearSortOnColumn}
+                sortDataUsingInputValueOnlyOnSpecifiedColumn={
+                  sortDataUsingInputValueOnlyOnSpecifiedColumn
+                }
                 hideShowColumn={hideShowColumn}
                 manageColumns={() => alert("manage columns")}
               >
-                <div className="column-visibility">
-                  <RadioCheckButton
-                    groupName="Column visibility"
-                    options={columns.map((col) => ({
-                      id: col.columnIndex.toString(),
-                      type: "checkbox",
-                      value: col.columnHeader,
-                      code: col.columnIndex.toString(),
-                      className: "d-flex",
-                    }))}
-                    handleOnChange={(e) =>
-                      hideShowColumn(e.currentTarget.value)
-                    }
-                    selectedOption={optionsArray}
-                  />
-                </div>
+                <>
+                  <div key={"manage"} className="column-visibility">
+                    <RadioCheckButton
+                      groupName="Column visibility"
+                      options={columns
+                        .filter((col) => typeof col.columnHeader === "string") // Only include columns with string headers
+                        .map((col) => ({
+                          id: col.columnIndex.toString(),
+                          type: "checkbox",
+                          value: col.columnHeader as string,
+                          code: col.columnIndex.toString(),
+                          className: "d-flex",
+                        }))}
+                      handleOnChange={(e) =>
+                        hideShowColumn(e.currentTarget.value)
+                      }
+                      selectedOption={optionsArray}
+                    />
+                  </div>
+                </>
               </MenuComponent>
             );
           })}
         </div>
-      </DemoLayout>
     </>
   );
 };

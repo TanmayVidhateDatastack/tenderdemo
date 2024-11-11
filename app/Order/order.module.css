@@ -27,6 +27,13 @@
   grid-template-columns: repeat(4, minmax(150px, 1fr));
   /* padding: var(--ds-padding); */
 }
+.addProduct,.input,.summary{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
 
 @media (max-width: 1200px) {
   .details > div {

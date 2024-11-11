@@ -3,7 +3,7 @@
   --foreground: #171717;
   --backgroundt:transparent;
 
-  --application-background:var(var(--background));
+  --application-background:var(--snd-background);
   --snd-background:#FBF9FF;
 
   

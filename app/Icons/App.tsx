@@ -1,5 +1,5 @@
 import "./App.css";
-import Pane from "../Components/dsPane/dsPane";
+import Pane from "../Components/DsPane/DsPane";
 
 function App() {
   return (
