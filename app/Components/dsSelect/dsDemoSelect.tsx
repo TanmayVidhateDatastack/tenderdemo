@@ -54,20 +54,17 @@ const DemoSelect: React.FC = () => {
         options={options}
         type="single"
         placeholder="Click me to select"
-        label="singleselect"
-      ></DsSelect>
+        label="singleselect" id={"single"}      ></DsSelect>
       <DsSelect
         options={options}
         type="multi"
         placeholder="Click me to select"
-        label="multiselect"
-      ></DsSelect>
+        label="multiselect" id={"multi"}      ></DsSelect>
       <DsSelect
         options={options}
         type="twolevel"
         placeholder="Click me to select"
-        label="multiselect"
-      ></DsSelect>
+        label="multiselect" id={"level"}      ></DsSelect>
     </>
   );
 };

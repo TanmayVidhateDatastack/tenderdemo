@@ -4,9 +4,11 @@ import styles from "./dsContextHolder.module.css";
 
 interface ContextMenuProps {
   id: string;
-  position?: "vertical" | "horizontal";
-  alignment?: "right" | "left" | "center";
+  // position?: "vertical" | "horizontal";
+  // alignment?: "right" | "left" | "center";
   content?: string | React.ReactElement;
+ showArrow:boolean;
+
 }
 
 export function displayContext (
@@ -33,6 +35,7 @@ export function displayContext (
   const xBorder = 4;
   const yBorder = 4;
   const distance = 5;
+  let arrowPosition: "top" | "left" | "right" | "bottom" = "bottom";
 
   const contextW = context.offsetWidth;
   const contextH = context.offsetHeight;
@@ -44,15 +47,25 @@ export function displayContext (
   let contextY = eleY + distance;
 
   if (eleY + contextH + distance > winH - yBorder) {
+    arrowPosition="bottom";
     contextY = eleRect.top - contextH - distance;
   }
+  else{
+    arrowPosition="top";
+  }
+  console.log(position)
 
   if (position === "horizontal") {
+    console.log(position)
     contextY = eleRect.top;
     if (eleRect.right + contextW + distance <= winW - xBorder) {
       contextX = eleRect.right + distance;
+      arrowPosition="left";
+
     } else {
       contextX = eleX - contextW - distance;
+      arrowPosition="right";
+
     }
   } else {
     if (alignment === "center") {
@@ -66,6 +79,7 @@ export function displayContext (
 
   context.style.left = `${contextX}px`;
   context.style.top = `${contextY}px`;
+  context.querySelector(`.${styles.arrow}`)?.setAttribute("class",styles.arrow+" "+ styles[arrowPosition])
 };
 export const closeContext = (id: string) => {
   const contextMenu = document.getElementById(id);
@@ -74,10 +88,16 @@ export const closeContext = (id: string) => {
   }
 };
 
-const ContextMenu: React.FC<ContextMenuProps> = ({ id, content }) => {
+const ContextMenu: React.FC<ContextMenuProps> = ({ id, content ,
+  showArrow,
+
+}) => {
   return (
     <div id={id} className={styles.contextMenu}>
       {content}
+      {showArrow && (
+          <div className={`${styles.arrow} `} /> 
+        )}
     </div>
   );
 };

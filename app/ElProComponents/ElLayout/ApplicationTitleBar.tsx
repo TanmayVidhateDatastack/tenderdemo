@@ -1,3 +1,4 @@
+'use client'
 import Image from "next/image";
 import React from "react";
 import styles from "./ElLayout.module.css";
@@ -8,7 +9,12 @@ import IpcaLogo from "../../Icons/mediumIcons/Ipca.svg";
 import ChatIcon from "../../Icons/mediumIcons/chat.svg";
 import NotiIcon from "../../Icons/mediumIcons/Bell.svg";
 import Ds_Usershort from "@/app/Components/DsUserProfile/DsUsershort";
+import SpotlightSearch from "@/app/Components/dsSpotlightSearch/dsSpotlightSearch";
 
+/**
+ * ApplicationTitleBar  is the title bar of the ERP project .
+ * Current signed in user is needed here.
+ */
 function ApplicationTitleBar() {
   const user = {
     name: 'Abhishek Kumar',
@@ -17,22 +23,41 @@ function ApplicationTitleBar() {
     Company: 'IPCA Labs',
     Department: 'Formulation',
     Location: 'Pune'
-    
+
   };
+
+  const data: string[] = [
+    'Document',
+    'Spreadsheet',
+    'Presentation',
+    'Report',
+    'Meeting Notes',
+  ];
+
+
+
+
   return (
     <>
       <div className={styles.appTitleBar + " " + styles.row}>
-        <div
-          className={
-            styles.col + " " + styles.titleBarItem + " " + styles.left_align
-          }
-        >
+
+
+        <div className={styles.col + " " + styles.titleBarItem + " " + styles.left_align}>
           <Image src={IpcaLogo} alt="IPCA" />
         </div>
         <div className={styles.col}>
-          <div
-            className={styles.titleBarItem + " " + pageStyles.left_separator}
-          >
+
+          <div className={styles.titleBarItem + " " + pageStyles.left_separator}>
+
+
+            <SpotlightSearch data={data} inputId={"spotLightSearch"} className={""}
+              placeholder="clt+k" 
+            />
+
+          </div>
+
+
+          <div className={styles.titleBarItem + " " + pageStyles.left_separator}>
             <Image src={ChatIcon} alt="Chat" />
           </div>
           <div
@@ -45,9 +70,10 @@ function ApplicationTitleBar() {
           >
             <Image src={addIcon} alt="Add Icon" />
           </div>
-          <div className={styles.titleBarItem + " " + pageStyles.left_separator +" "+pageStyles["pad-0"]}>
-          <Ds_Usershort  user={user}></Ds_Usershort>
+          <div className={styles.titleBarItem + " " + pageStyles.left_separator + " " + pageStyles["pad-0"]}>
+            <Ds_Usershort user={user}></Ds_Usershort>
           </div>
+
         </div>
       </div>
     </>

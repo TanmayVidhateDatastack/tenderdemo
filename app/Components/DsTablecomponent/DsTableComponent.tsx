@@ -1,23 +1,31 @@
 "use client";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import { convertToDate, parseFormattedNumber, tcolumn, trow } from "./types";
-import TheaderComponent from "./DsTheaderComponent";
-import TrComponent from "./DsTrComponent";
-import ThComponent from "./DsThComponent";
-import TbodyComponent from "./DsTbodyComponent";
-import TfooterComponent from "./DsTfooterComponent";
-import TdComponent from "./DsTdComponent";
-import SortComponent from "./sortComponent";
-import MenuComponent from "./DsMenuComponent";
+import {
+  convertToDate,
+  determineFilterType,
+  parseFormattedNumber,
+  tcolumn,
+  trow,
+} from "./helpers/types";
+import SortComponent from "./supportComponents/sortComponent";
 import styles from "./DsTable.module.css";
-import AdvancedFilterComponent from "./AdvancedFilterComponent";
-import RadioCheckButton from "./RadioCheckButton";
+import RadioCheckButton from "./supportComponents/RadioCheckButton";
 import TextField from "../DsTextField/DsTextField";
 import DSButton from "../dsButton/dsButton";
-import { displayContext } from "../dsContextHolder/dsContextHolder";
 import Image from "next/image";
-import addIcon from "../../Icons/smallIcons/add.svg";
 
+import threedot from "../../Icons/smallIcons/threedot.svg";
+import AdvancedFilterComponent from "./AdvancedFilterComponent";
+import TbodyComponent from "./bodyComponents/dsTbodyComponent";
+import TdComponent from "./bodyComponents/dsTdComponent";
+import TrComponent from "./bodyComponents/dsTrComponent";
+import TfooterComponent from "./footerComponents/dsTfooterComponent";
+import ThComponent from "./headerComponents/dsThComponent";
+import TheaderComponent from "./headerComponents/dsTheaderComponent";
+import MenuComponent from "./supportComponents/dsMenuComponent";
+import DemoLayout from "@/app/ElProComponents/Demo/demoLayout";
+import { displayContext } from "../dsContextHolder/dsContextHolder";
+import rangeFilter from "./TableContext";
 // Define the component props
 interface TableComponentProps {
   className: string;
@@ -52,7 +60,11 @@ const TableComponent: React.FC<TableComponentProps> = ({
     }))
   );
 
-  const sortTable = (e: React.MouseEvent, type: "ASC" | "DESC") => {
+  const sortTable = (
+    e: React.MouseEvent,
+    columnIndex: number,
+    type: "ASC" | "DESC"
+  ) => {
     if (e.ctrlKey) {
       const currentTargetElement = e.currentTarget;
       let columnIndex = 0;
@@ -64,7 +76,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
         );
 
         if (columnIndex === activeColumnIndex && type === sortingOrderType) {
-          currentTargetElement.classList.remove("active");
+          currentTargetElement.classList.remove(`${styles["active"]}`);
           setActiveColumnIndex(-1);
           setSortingOrderType("NONE");
           setSortType(columnIndex, "NONE");
@@ -75,8 +87,8 @@ const TableComponent: React.FC<TableComponentProps> = ({
         const activeElement = currentTargetElement
           .closest("th")
           ?.querySelector(".active");
-        activeElement?.classList.remove("active");
-        currentTargetElement.classList.add("active");
+        activeElement?.classList.remove(`${styles["active"]}`);
+        currentTargetElement.classList.add(`${styles["active"]}`);
 
         if (type === "ASC") {
           setSortType(columnIndex, "ASC");
@@ -88,6 +100,12 @@ const TableComponent: React.FC<TableComponentProps> = ({
 
         setSortingOrderType(type);
         setActiveColumnIndex(columnIndex);
+      }
+    } else {
+      if (type === "ASC") {
+        sortTableAscending(columnIndex);
+      } else if (type === "DESC") {
+        sortTableDescending(columnIndex);
       }
     }
   };
@@ -349,8 +367,8 @@ const TableComponent: React.FC<TableComponentProps> = ({
     });
   };
 
-  const [rangeFrom, setRangeFrom] = useState<number>(20240199900001);
-  const [rangeTo, setRangeTo] = useState<number>(20240199900010);
+  const [rangeFrom, setRangeFrom] = useState<number>(20200199900001);
+  const [rangeTo, setRangeTo] = useState<number>(20240199900015);
   const setRangeFromValue = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
@@ -362,45 +380,35 @@ const TableComponent: React.FC<TableComponentProps> = ({
     setRangeTo(Number(e.target.value));
   };
 
-  const rangeFilter = () => {
-    const filteredRows = [...rows].filter((row) =>
-      row.content?.some(
-        (cell) =>
-          cell.contentType === "number" &&
-          cell.columnIndex === 0 &&
-          Number(cell.content) >= rangeFrom &&
-          Number(cell.content) <= rangeTo
-      )
-    );
-
-    setNewRows(filteredRows);
-    return filteredRows;
-  };
   const applyFilter = (e: React.MouseEvent<HTMLElement>) => {
     console.log(e);
-    const rows1 = rangeFilter();
+    const rows1 = rangeFilter(rows,rangeFrom,rangeTo,0);
     const rows2 = filterOnDate(1);
     const rows3 = filterRowsOnInputTypeRange(6);
-    const rows4: trow[] = [];
+    const rows4 = searchDataOnSpecifiedColumnUsingCSV(3);
+    const rows5: trow[] = [];
     rows.map((row) => {
       if (
         rows1.some((x) => x.rowIndex === row.rowIndex) &&
         rows2.some((y) => y.rowIndex === row.rowIndex) &&
-        rows3.some((z) => z.rowIndex === row.rowIndex)
+        rows3.some((z) => z.rowIndex === row.rowIndex) &&
+        rows4.some((z) => z.rowIndex === row.rowIndex)
       ) {
-        rows4.push(row);
+        rows5.push(row);
       }
     });
-    setNewRows(rows4);
-    console.log("rows1 length = ", rows1.length);
-    console.log("rows2 length = ", rows2.length);
-    console.log("rows3 length = ", rows3.length);
+    setNewRows(rows5);
+    setFilterVisible(!isFilterVisible);
 
-    console.log("rows4 length = ", rows4.length);
-    // searchDataOnSpecifiedColumnUsingCommaSeparatedValues(1);
+    // console.log("rows1 length = ", rows1.length);
+    // console.log("rows2 length = ", rows2.length);
+    // console.log("rows3 length = ", rows3.length);
+
+    // console.log("rows4 length = ", rows4.length);
+    // searchDataOnSpecifiedColumnUsingCSV(1);
   };
 
-  const [dateFrom, setDateFrom] = useState<Date>(new Date("2022-10-19"));
+  const [dateFrom, setDateFrom] = useState<Date>(new Date("2022-09-19"));
   const [dateTo, setDateTo] = useState<Date>(new Date("2024-12-11"));
 
   // const [dateTo, setDateTo] = useState<Date>(new Date(Date.now.toString()));
@@ -519,8 +527,8 @@ const TableComponent: React.FC<TableComponentProps> = ({
       });
     });
 
-    console.log("minValue =", minValue.current);
-    console.log("maxValue =", maxValue.current);
+    // console.log("minValue =", minValue.current);
+    // console.log("maxValue =", maxValue.current);
   };
   getLowestBiggestValue(6);
   const setGrossRangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -548,33 +556,37 @@ const TableComponent: React.FC<TableComponentProps> = ({
     );
 
     setNewRows(filteredRows);
+    // console.log(filteredRows.length);
     return filteredRows;
   };
 
-  // const [commaSeparatedValue, setCommaSeparatedValue] = useState<string[]>([]);
-  // const setCommaValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const commaValue = e.target.value.split(",");
-  //   setCommaSeparatedValue(commaValue);
-  // };
-  // const searchDataOnSpecifiedColumnUsingCommaSeparatedValues = (
-  //   columnIndex: number
-  // ) => {
-  //   const filteredRows = rows.filter((row) =>
-  //     row.content?.some(
-  //       (cell) =>
-  //         typeof cell.content === "string" &&
-  //         cell.contentType === "string" &&
-  //         cell.columnIndex === columnIndex &&
-  //         commaSeparatedValue.some((item) =>
-  //           cell.content
-  //             ?.toString()
-  //             .toLowerCase()
-  //             .includes(item.toString().toLowerCase())
-  //         )
-  //     )
-  //   );
-  //   setNewRows(filteredRows);
-  // };
+  const [commaSeparatedValue, setCommaSeparatedValue] = useState<string[]>([
+    "",
+  ]);
+  const setCommaValue = (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    const commaValue = e.target.value.split(",");
+    setCommaSeparatedValue(commaValue);
+  };
+  const searchDataOnSpecifiedColumnUsingCSV = (columnIndex: number) => {
+    const filteredRows = [...rows].filter((row) =>
+      row.content?.some(
+        (cell) =>
+          typeof cell.content === "string" &&
+          cell.contentType === "string" &&
+          cell.columnIndex === columnIndex &&
+          commaSeparatedValue.some((item) =>
+            cell.content
+              ?.toString()
+              .toLowerCase()
+              .includes(item.toString().toLowerCase())
+          )
+      )
+    );
+    // setNewRows(filteredRows);
+    return filteredRows;
+  };
 
   // const [dropDownOptions, setDropDownOptions] = useState<string[]>([]);
   // const filterOnDropdown = (columnIndex: number) => {
@@ -614,139 +626,170 @@ const TableComponent: React.FC<TableComponentProps> = ({
   //   setNewRows(filteredRows);
   // };
 
+  const [isFilterVisible, setFilterVisible] = useState<boolean>(false);
+  const filterTypes = determineFilterType(columns);
   return (
     <>
-      <div className="data-table">
-        <div className="column-visibility">
-          <RadioCheckButton
-            groupName="Column visibility"
-            options={columns.map((col) => ({
-              id: col.columnIndex.toString(),
-              type: "checkbox",
-              value: col.columnHeader,
-              code: col.columnIndex.toString(),
-              className: "d-flex",
-            }))}
-            handleOnChange={(e) => hideShowColumn(e.currentTarget.value)}
-            selectedOption={optionsArray}
-          />
-        </div>
-        <div className={`${styles["ds-search-input-div"]}`}>
-          <TextField
-            placeholder="Search data"
-            id="serach-data"
-            label="Search Names"
-            handleInputChange={(e: ChangeEvent<HTMLElement>) =>
-              sortDataUsingInputValue(e)
-            }
-          />
-        </div>
+      <DemoLayout title="Table (DsTable)">
+        <div className={styles.tableContainer}>
+          {/* <div className="column-visibility">
+            <RadioCheckButton
+              groupName="Column visibility"
+              options={columns.map((col) => ({
+                id: col.columnIndex.toString(),
+                type: "checkbox",
+                value: col.columnHeader,
+                code: col.columnIndex.toString(),
+                className: "d-flex",
+              }))}
+              handleOnChange={(e) => hideShowColumn(e.currentTarget.value)}
+              selectedOption={optionsArray}
+            />
+          </div> */}
+          <div className={`${styles["ds-search-input-div"]}`}>
+            <TextField
+              placeholder="Search SO"
+              id="serach-data"
+              label="Search Names"
+              handleInputChange={(e: ChangeEvent<HTMLElement>) =>
+                sortDataUsingInputValue(e)
+              }
+            />
+          </div>
+          <DSButton
+            label="Filter"
+            handleOnClick={() => setFilterVisible(!isFilterVisible)}
+          ></DSButton>
+          {isFilterVisible == true && (
+            <AdvancedFilterComponent
+              setRangeFromValue={setRangeFromValue}
+              setRangeToValue={setRangeToValue}
+              setDateFromValue={setDateFromValue}
+              setDateToValue={setDateToValue}
+              setGrossRangeValue={setGrossRangeValue}
+              applyFilter={applyFilter}
+              minValue={minValue.current}
+              maxValue={maxValue.current}
+              rangeValue={rangeValue}
+              filterTypes={filterTypes}
+              setCommaValue={setCommaValue}
+            ></AdvancedFilterComponent>
+          )}
+          <table
+            className={`${className ? className : ""} ${styles["ds-table"]} `}
+            id={id}
+          >
+            <TheaderComponent className={""}>
+              <TrComponent className={""}>
+                {columns.map((column) =>
+                  column.isHidden ? null : (
+                    <ThComponent
+                      key={column.columnHeader}
+                      className={""}
+                      content={column.columnHeader}
+                      columnIndex={column.columnIndex}
+                      columnHeader={column.columnHeader}
+                    >
+                      <>
+                        <div
+                          className={`${styles["slide-component"]}   ${className}`}
+                        >
+                          <SortComponent
+                            key={column.columnHeader}
+                            columnIndex={column.columnIndex}
+                            sortTable={sortTable}
+                          />
 
-        <AdvancedFilterComponent
-          setRangeFromValue={setRangeFromValue}
-          setRangeToValue={setRangeToValue}
-          setDateFromValue={setDateFromValue}
-          setDateToValue={setDateToValue}
-          setGrossRangeValue={setGrossRangeValue}
-          applyFilter={applyFilter}
-          minValue={minValue.current}
-          maxValue={maxValue.current}
-          rangeValue={rangeValue}
-        ></AdvancedFilterComponent>
-        <table
-          className={`${className ? className : ""} ${styles["ds-table"]} `}
-          id={id}
-        >
-          <TheaderComponent className={""}>
-            <TrComponent className={""}>
-              {columns.map((column) =>
-                column.isHidden ? null : (
-                  <ThComponent
-                    key={column.columnHeader}
-                    className={""}
-                    content={column.columnHeader}
-                    columnIndex={column.columnIndex}
-                    columnHeader={column.columnHeader}
-                  >
-                    <>
-                      <SortComponent
-                        key={column.columnHeader}
-                        columnIndex={column.columnIndex}
-                        sortTable={sortTable}
-                      />
-                      <div
-                        className={`${styles["slide-component"]}   ${className}`}
-                      >
-                        <DSButton
-                          id="chatBtn"
-                          type="icon_image"
-                          buttonSize="btnSmall"
-                          // buttonClass={btnStyles.btnSmall + " " + btnStyles.icon_image}
-                          handleOnClick={(e) => {
-                            displayContext(
-                              e,
-                              "menucontext" + column.columnIndex,
-                            );
-                            // Call first function
-                          }}
-                          startIcon={<Image src={addIcon} alt="menu" />}
-                          tooltip="Menu"
-                        />
-                      </div>
-                    </>
-                  </ThComponent>
-                )
-              )}
-            </TrComponent>
-          </TheaderComponent>
+                          <DSButton
+                            id="chatBtn"
+                            type="icon_image"
+                            // buttonSize="btnSmall"
+                            className={`${styles["menu_button"]}`}
+                            // className={styles.menu_button}
+                            handleOnClick={(e) => {
+                              displayContext(
+                                e,
+                                "menucontext" + column.columnIndex
+                              );
+                              // Call first function
+                            }}
+                            startIcon={<Image src={threedot} alt="menu" />}
+                            tooltip="Menu"
+                          />
+                        </div>
+                      </>
+                    </ThComponent>
+                  )
+                )}
+              </TrComponent>
+            </TheaderComponent>
 
-          <TbodyComponent className={""}>
-            {tableRows.map((newRow) => {
-              const row = rows.find((x) => x.rowIndex === newRow.rowIndex);
+            <TbodyComponent className={""}>
+              {tableRows.map((newRow) => {
+                const row = rows.find((x) => x.rowIndex === newRow.rowIndex);
 
-              return (
-                <TrComponent className={""} key={newRow.rowIndex}>
-                  {columns.map((col) => {
-                    const cell = row?.content?.find(
-                      (data) => data.columnIndex == col.columnIndex
-                    );
-
-                    if (!col.isHidden && cell) {
-                      return (
-                        <TdComponent
-                          key={col.columnHeader}
-                          className={""}
-                          content={cell.content}
-                        ></TdComponent>
+                return (
+                  <TrComponent className={""} key={newRow.rowIndex}>
+                    {columns.map((col) => {
+                      const cell = row?.content?.find(
+                        (data) => data.columnIndex == col.columnIndex
                       );
-                    } else return null;
-                  })}
-                </TrComponent>
-              );
-            })}
-          </TbodyComponent>
 
-          <TfooterComponent className={""}>
-            <TrComponent>
-              <TdComponent className={""}>
-                Showing {newRows.length} of {rowsContainer.current.length} Rows
-              </TdComponent>
-            </TrComponent>
-          </TfooterComponent>
-        </table>
-        {columns.map((column) => {
-          return (
-            <MenuComponent
-              key={column.columnIndex}
-              columnIndex={column.columnIndex}
-              sortDataOnlyOnSpecifiedColumn={sortTableAscending}
-              clearSortOnColumn={clearSortOnColumn}
-              hideShowColumn={hideShowColumn}
-              manageColumns={() => alert("manage columns")}
-            ></MenuComponent>
-          );
-        })}
-      </div>
+                      if (!col.isHidden && cell) {
+                        return (
+                          <TdComponent
+                            key={col.columnHeader}
+                            className={""}
+                            content={cell.content}
+                          ></TdComponent>
+                        );
+                      } else return null;
+                    })}
+                  </TrComponent>
+                );
+              })}
+            </TbodyComponent>
+
+            <TfooterComponent className={""}>
+              <TrComponent>
+                <TdComponent className={""}>
+                  Showing {newRows.length} of {rowsContainer.current.length}{" "}
+                  Rows
+                </TdComponent>
+              </TrComponent>
+            </TfooterComponent>
+          </table>
+          {columns.map((column) => {
+            return (
+              <MenuComponent
+                key={column.columnIndex}
+                columnIndex={column.columnIndex}
+                sortDataOnlyOnSpecifiedColumn={sortTableAscending}
+                clearSortOnColumn={clearSortOnColumn}
+                hideShowColumn={hideShowColumn}
+                manageColumns={() => alert("manage columns")}
+              >
+                <div className="column-visibility">
+                  <RadioCheckButton
+                    groupName="Column visibility"
+                    options={columns.map((col) => ({
+                      id: col.columnIndex.toString(),
+                      type: "checkbox",
+                      value: col.columnHeader,
+                      code: col.columnIndex.toString(),
+                      className: "d-flex",
+                    }))}
+                    handleOnChange={(e) =>
+                      hideShowColumn(e.currentTarget.value)
+                    }
+                    selectedOption={optionsArray}
+                  />
+                </div>
+              </MenuComponent>
+            );
+          })}
+        </div>
+      </DemoLayout>
     </>
   );
 };

@@ -73,6 +73,9 @@
 .pad-0{
   padding:0 !important;
 }
+.pad-l{
+  padding-left: var(--ds-padding);
+}
 @media (prefers-color-scheme: dark) {
   .page {
     --gray-rgb: 255, 255, 255;

@@ -1,7 +1,11 @@
 :root {
   --background: #fff;
   --foreground: #171717;
-  --backgroundt:rgb(246, 242, 242);
+  --backgroundt:transparent;
+
+  --application-background:var(var(--background));
+  --snd-background:#FBF9FF;
+
   
   --blue: #41428E;
   --blue-600:#82b1ff;
@@ -55,15 +59,18 @@
   --sndSemiviolet:var(--periwinkle);       
   --sndLightviolet:var(--lightviolet); */
 
-  --dspadding:0.5rem !important;
-  --dsmargin:3px 0.6vw !important;
-  --dsmin-width:5rem;
-  --dsmin-height:3rem;
-  --dswidth:fit-content;
-  --dsheight:fit-content;
-  --dsfont-size:16px;
-  --dsborder:1px solid;
-  --dsborder-radius:4px;
+  --ds-padding:0.5rem !important;
+  --ds-marginX:0.6vw;
+  --ds-marginY:3px;
+  --ds-margin:var(--ds-marginY) var(--ds-marginX) !important;
+  --ds-min-width:5rem;
+  --ds-min-height:3rem;
+  --ds-width:fit-content;
+  --ds-height:fit-content;
+  --ds-font-size:16px;
+  --ds-font-weight:var(--grey-600);
+  --ds-border:1px solid;
+  --ds-border-radius:4px;
 
   --heading1:21px;
   --heading2:18px;
@@ -83,7 +90,8 @@
   --dispatch:#DCA500;
   --approved:#28A745;
   --open:#007BFF;
-  --deviationpending:#6F42C1;
+  --deviationpending-text:#6F42C1;
+  --deviationpending:#e8e0f8;
   --cancelled:#DC3545;
   --rejected:#A50F1D;
   --submitted:#87CEEB;

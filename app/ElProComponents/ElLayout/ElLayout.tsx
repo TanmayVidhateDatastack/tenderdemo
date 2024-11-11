@@ -7,6 +7,12 @@ import ApplicationNavigator from "./ApplicationNavigator";
 export interface ElLayoutProps {
     children:React.ReactNode
 }
+
+/**
+ * ELayout provides the basic layout of ERP project 
+ * All application wiil have this same layout 
+ * All components of the application should be placed inside elayout which will be treated as children here 
+ */
 function ElLayout({children}: ElLayoutProps) {
   return (
     <>
