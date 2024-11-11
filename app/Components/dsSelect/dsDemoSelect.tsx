@@ -1,8 +1,9 @@
 "use client";
 
+import DemoLayout from "@/app/ElProComponents/Demo/demoLayout";
+import TextField from "../DsTextField/DsTextField";
 // import PopUpContext from "./dsContext";
 // import { useState } from "react";
-// import { SetStateAction, useState } from "react";
 import DsSelect from "./dsSelect";
 
 const DemoSelect: React.FC = () => {
@@ -40,6 +41,14 @@ const DemoSelect: React.FC = () => {
         { label: "Tea", value: "tea" },
       ],
     },
+    {
+      label: "Animals",
+      value: [
+        { label: "Dog", value: "dog" },
+        { label: "Cat", value: "cat" },
+        { label: "Cow", value: "cow" },
+      ],
+    },
   ];
 
   // const [value, setValue] = useState<string>("");
@@ -50,24 +59,42 @@ const DemoSelect: React.FC = () => {
   // };
   return (
     <>
-      <DsSelect
-        options={options}
-        type="single"
-        placeholder="Click me to select"
-        label="singleselect"
-      ></DsSelect>
-      <DsSelect
-        options={options}
-        type="multi"
-        placeholder="Click me to select"
-        label="multiselect"
-      ></DsSelect>
-      <DsSelect
-        options={options}
-        type="twolevel"
-        placeholder="Click me to select"
-        label="multiselect"
-      ></DsSelect>
+      <DemoLayout title="Text Field (DsTextField)">
+        <DsSelect
+          id="Level"
+          options={options}
+          type="twolevel"
+          placeholder="Click me to select"
+          label="twolevelselect"
+          disable={false}
+        ></DsSelect>
+
+        <DsSelect
+          id="Single"
+          options={options}
+          type="single"
+          placeholder="Click me to select"
+          label="singleselect"
+          disable={false}
+        ></DsSelect>
+
+        <DsSelect
+          id="Multi"
+          options={options}
+          type="multi"
+          placeholder="Click me to select"
+          label="multiselect"
+          disable={false}
+        ></DsSelect>
+        <TextField
+          placeholder="placeholder"
+          label="label"
+          disable={false}
+          // onClick={false}
+          type="singleline"
+          // iconEnd="📋"
+        />
+      </DemoLayout>
     </>
   );
 };
