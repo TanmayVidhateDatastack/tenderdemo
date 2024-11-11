@@ -2,7 +2,7 @@
 export class tcolumn {
   columnIndex: number = 1;
   className?: string;
-  columnHeader: string = "";
+  columnHeader: React.ReactNode | string = "";
   isHidden?: boolean = false;
   sort?: string;
   columnContentType?: string;
@@ -24,7 +24,7 @@ export class trow {
 
 export class filterType {
   columnIndex?: number;
-  columnHeader?: string;
+  columnHeader?: React.ReactNode | string = "";
   filterType?: string;
 }
 

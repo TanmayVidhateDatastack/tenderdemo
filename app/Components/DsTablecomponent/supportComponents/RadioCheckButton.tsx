@@ -33,10 +33,10 @@ const RadioCheckButton: React.FC<RadioCheckProps> = ({
             type={option.type}
             id={option.code}
             name={groupName}
-            value={option.value}
+            value={option.value?.toString() ?? ""}
             checked={
               option.type === "radio"
-                ? selectedOption.includes(option.value)
+                ? selectedOption.includes(option.value?.toString())
                 : selectedOption.some((value) => value === option.value)
             }
             onChange={handleOnChange}

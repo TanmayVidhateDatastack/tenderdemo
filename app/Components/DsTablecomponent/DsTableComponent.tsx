@@ -32,6 +32,7 @@ interface TableComponentProps {
   id: string;
   alignment: "left" | "center" | string;
   sortable?: boolean;
+  searchAvailable?: boolean;
   columns: tcolumn[];
   rows: trow[];
 }
@@ -41,6 +42,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
   id,
   alignment = "left",
   sortable = true,
+  searchAvailable = true,
   columns,
   rows,
 }) => {
@@ -242,7 +244,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
 
   const [optionsArray, setOptionArray] = useState<string[]>([]);
   useEffect(() => {
-    setOptionArray(columns.map((x) => x.columnHeader));
+    setOptionArray(columns.map((x) => x.columnHeader?.toString() ?? ""));
   }, [columns]);
 
   const hideShowColumn = (value: string | number) => {
@@ -258,7 +260,9 @@ const TableComponent: React.FC<TableComponentProps> = ({
       });
     }
 
-    const array = columns.filter((x) => !x.isHidden).map((x) => x.columnHeader);
+    const array = columns
+      .filter((x) => !x.isHidden)
+      .map((x) => x.columnHeader?.toString() ?? "");
     setOptionArray(array);
     setColumnSort(columnSort);
   };
@@ -401,17 +405,18 @@ const TableComponent: React.FC<TableComponentProps> = ({
     <>
       <DemoLayout title="Table (DsTable)">
         <div className={styles.tableContainer}>
-          <div className={`${styles["ds-search-input-div"]}`}>
-            <TextField
-              placeholder="Search SO"
-              id="serach-data"
-              label="Search Names"
-              handleInputChange={(e: ChangeEvent<HTMLElement>) =>
-                sortDataUsingInputValue(e)
-              }
-            />
-          </div>
-
+          {searchAvailable && (
+            <div className={`${styles["ds-search-input-div"]}`}>
+              <TextField
+                placeholder="Search SO"
+                id="serach-data"
+                label="Search Names"
+                handleInputChange={(e: ChangeEvent<HTMLElement>) =>
+                  sortDataUsingInputValue(e)
+                }
+              />
+            </div>
+          )}
           <table
             className={`${className ? className : ""} ${
               alignment == "center"
@@ -425,7 +430,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
                 {columns.map((column) =>
                   column.isHidden ? null : (
                     <ThComponent
-                      key={column.columnHeader}
+                      key={column.columnHeader?.toString()}
                       className={""}
                       content={column.columnHeader}
                       columnIndex={column.columnIndex}
@@ -436,7 +441,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
                         <>
                           <div className={`${styles["slide-component"]}`}>
                             <SortComponent
-                              key={column.columnHeader}
+                              key={column.columnHeader?.toString() ?? ""}
                               columnIndex={column.columnIndex}
                               sortTable={sortTable}
                             />
@@ -446,13 +451,11 @@ const TableComponent: React.FC<TableComponentProps> = ({
                               type="icon_image"
                               // buttonSize="btnSmall"
                               className={`${styles["menu_button"]}`}
-                              // className={styles.menu_button}
                               handleOnClick={(e) => {
                                 displayContext(
                                   e,
                                   "menucontext" + column.columnIndex
                                 );
-                                // Call first function
                               }}
                               startIcon={<Image src={threedot} alt="menu" />}
                               tooltip="Menu"
@@ -480,7 +483,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
                       if (!col.isHidden && cell) {
                         return (
                           <TdComponent
-                            key={col.columnHeader}
+                            key={col.columnHeader?.toString() ?? ""}
                             className={cell.colSpan ? "colSpan" : ""}
                             content={cell.content}
                             alignment={alignment}
@@ -495,9 +498,8 @@ const TableComponent: React.FC<TableComponentProps> = ({
             </TbodyComponent>
             <TfooterComponent className={""} alignment={alignment}>
               <TrComponent>
-                <TdComponent className={""} alignment={alignment} colSpan={8}>
+                <TdComponent className={""} alignment={alignment} colSpan={10}>
                   Showing {tableRows.length} of {rowsContainer.current.length}{" "}
-                  Rows
                 </TdComponent>
               </TrComponent>
             </TfooterComponent>
@@ -519,13 +521,15 @@ const TableComponent: React.FC<TableComponentProps> = ({
                   <div key={"manage"} className="column-visibility">
                     <RadioCheckButton
                       groupName="Column visibility"
-                      options={columns.map((col) => ({
-                        id: col.columnIndex.toString(),
-                        type: "checkbox",
-                        value: col.columnHeader,
-                        code: col.columnIndex.toString(),
-                        className: "d-flex",
-                      }))}
+                      options={columns
+                        .filter((col) => typeof col.columnHeader === "string") // Only include columns with string headers
+                        .map((col) => ({
+                          id: col.columnIndex.toString(),
+                          type: "checkbox",
+                          value: col.columnHeader as string,
+                          code: col.columnIndex.toString(),
+                          className: "d-flex",
+                        }))}
                       handleOnChange={(e) =>
                         hideShowColumn(e.currentTarget.value)
                       }

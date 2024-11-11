@@ -9,7 +9,7 @@ import {
 } from "./helpers/types";
 import { setRows } from "@/app/Redux/slice/TableSlice/tableSlice";
 import { useAppDispatch } from "@/app/Redux/hook/hook";
-
+import styles from "./DsTable.module.css";
 interface advancedFilterComponent {
   rows: trow[];
   filterTypes: filterType[];
@@ -186,9 +186,10 @@ const AdvancedFilterComponent: React.FC<advancedFilterComponent> = ({
   };
 
   return (
-    <div className="apply-filter">
-      <div className="range-filter">
+    <div className={`${styles["apply-filter"]}`}>
+      <div className={`${styles["range-filter"]}`}>
         <TextField
+          className={"adv-textfield"}
           placeholder={`${numberColumn?.columnHeader} From`}
           type={"singleline"}
           handleInputChange={setRangeFromValue}
@@ -197,6 +198,7 @@ const AdvancedFilterComponent: React.FC<advancedFilterComponent> = ({
           disable={false}
         ></TextField>
         <TextField
+          className={"adv-textfield"}
           placeholder={`${numberColumn?.columnHeader} To`}
           type={"singleline"}
           handleInputChange={setRangeToValue}
@@ -205,7 +207,7 @@ const AdvancedFilterComponent: React.FC<advancedFilterComponent> = ({
           disable={false}
         ></TextField>
       </div>
-      <div className="date-filter">
+      <div className={`${styles["date-filter"]}`}>
         <TextField
           placeholder={`${dateColumn?.columnHeader} From`}
           type={"singleline"}
@@ -223,25 +225,29 @@ const AdvancedFilterComponent: React.FC<advancedFilterComponent> = ({
           disable={false}
         ></TextField>
       </div>
-      {rangeColumn?.columnHeader} From
-      <input
-        type="range"
-        min={minValue.current}
-        max={maxValue.current}
-        value={rangeValue}
-        className="range-input"
-        onChange={setGrossRangeValue}
-      ></input>
+      <div className={`${styles["date-filter"]}`}>
+        {rangeColumn?.columnHeader} From
+        <input
+          type="range"
+          min={minValue.current}
+          max={maxValue.current}
+          value={rangeValue}
+          className="range-input"
+          onChange={setGrossRangeValue}
+        ></input>
+      </div>
       {rangeValue}
       {`               `} {rangeColumn?.columnHeader} To
-      <TextField
-        placeholder={`Type multiple ${csvColumn?.columnHeader} name and use comma`}
-        type={"singleline"}
-        handleInputChange={setCommaValue}
-        inputType="text"
-        label={`Customer`}
-        disable={false}
-      ></TextField>
+      <div className={`${styles["date-filter"]}`}>
+        <TextField
+          placeholder={`Type multiple ${csvColumn?.columnHeader} name and use comma`}
+          type={"singleline"}
+          handleInputChange={setCommaValue}
+          inputType="text"
+          label={`Customer`}
+          disable={false}
+        ></TextField>
+      </div>
       <DSButton label={"Apply"} handleOnClick={applyFilter}></DSButton>
     </div>
   );

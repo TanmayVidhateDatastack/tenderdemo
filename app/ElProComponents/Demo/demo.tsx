@@ -44,6 +44,7 @@ export default function Demo() {
     id: "table-1",
     alignment: "left",
     sortable: true,
+    searchAvailable: false,
     columns: [
       {
         columnIndex: 0,
@@ -105,6 +106,14 @@ export default function Demo() {
         columnIndex: 7,
         className: "header-column",
         columnHeader: "STATUS",
+        isHidden: false,
+        sort: "NONE",
+        columnContentType: "reactNode",
+      },
+      {
+        columnIndex: 8,
+        className: "header-column",
+        columnHeader: <DSButton />,
         isHidden: false,
         sort: "NONE",
         columnContentType: "reactNode",
@@ -1278,6 +1287,7 @@ export default function Demo() {
                   className={tempTableData.className}
                   id={tempTableData.id}
                   alignment={tempTableData.alignment.toString()}
+                  searchAvailable={tempTableData.searchAvailable}
                   columns={tempTableData.columns}
                   rows={tempTableData.rows}
                 ></DsTableComponent>

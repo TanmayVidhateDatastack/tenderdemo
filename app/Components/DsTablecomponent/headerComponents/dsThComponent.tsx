@@ -1,9 +1,10 @@
+import React from "react";
 import styles from "../DsTable.module.css";
 export interface thprops {
   className?: string;
   children?: React.ReactNode;
-  content?: string;
-  columnHeader?: string;
+  content?: string | React.ReactNode;
+  columnHeader?: React.ReactNode | string;
   columnIndex: number;
   alignment?: "left" | "center" | string;
 }
