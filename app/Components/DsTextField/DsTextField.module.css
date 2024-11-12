@@ -1,8 +1,8 @@
 .textFiledContainer{
   margin:10px 10px;
-
-} 
-
+ 
+}
+ 
 .custom-fieldset {
   flex:1;
   position: relative;
@@ -13,12 +13,12 @@
   padding: 10px;
   border: 1px solid var(--black);
   border-radius: 5px;
-  
+ 
   /* background-color: transparent; */
   /* background-color: var(--background); */
 }
-
-
+ 
+ 
 .custom-fieldset:not(.disabled):hover{
   border-color: var(--blue-600);
 }
@@ -31,8 +31,8 @@
 /* Legend as the floating label */
 .floating-label {
   position: absolute;
-  
-
+ 
+ 
   left: 30px;
   top: 50%;
   transform: translateY(-50%);
@@ -42,38 +42,38 @@
   background-color: var(--background);
   padding: 0 5px;
 }
-
+ 
 .shrink {
   top: -10px;
-
+ 
   color: var(--blue-600);
   font-size: 12px;
 }
-
+ 
 .iconwrapper{
   flex:1;
   width:fit-content;
-
+ 
 }
 .icon_left
 {
   margin-right:  0.5rem;
 }
-
+ 
 .input-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
 width:100%  }
-
-
+ 
+ 
 .input-wrapper{
   flex:1;
   height:fit-content;
   width:fit-content;
 }
-
+ 
 .custom-textarea {
   flex:1;
   display:flex;
@@ -89,9 +89,9 @@ width:100%  }
   width:100%;  
   color:black;
 }
-
-
-
+ 
+ 
+ 
 .custom-input {
   flex:1;
   display:flex;
@@ -104,15 +104,15 @@ width:100%  }
   z-index: 1;
   color:black;
   width:fit-content;
-  
-
+ 
+ 
   /* resize:vertical;
   overflow:hidden;
   width:100%; */
-
+ 
 }
-
-
+ 
+ 
 .icon_left,.icon_right {
   flex:1;
   width:fit-content;
@@ -120,12 +120,12 @@ width:100%  }
   display: flex;
   pointer-events: none;    /* Prevent icon from blocking clicks */
 }
-
+ 
 .icon_right
 {
   margin-left:  0.5rem;
 }
-
+ 
 .input::placeholder {
   position: absolute;
   left: 70px;
@@ -139,18 +139,18 @@ width:100%  }
   padding: 0 5px;
   align-content: center;
 }
-
+ 
 .input:focus::placeholder {
   color: transparent;
   align-items: center;
 }
-
-
+ 
+ 
 .custom-input[type="date"] {
   position: relative;
   color: transparent; /* Hide the default date text */
 }
-
+ 
 .custom-input[type="date"]::before {
   content: attr(data-placeholder);
   position: absolute;
@@ -160,7 +160,7 @@ width:100%  }
   transform: translateY(-50%);
   pointer-events: none; /* Make sure the placeholder is not clickable */
 }
-
+ 
 .custom-input[type="date"]:focus {
   color: initial; /* Show the real date when focused */
 }
@@ -170,16 +170,13 @@ width:100%  }
 .custom-input[type="date"]:valid::before {
   content: ""; /* Remove placeholder when a valid date is selected */
 }
-
-
-
-
+ 
+ 
+ 
+ 
 .custom-fieldset.focused .floating-label,
 .custom-input:not(:placeholder-shown) + .floating-label
 .custom-input:valid + .floating-label {
  top: 0px;
 font-size: 12px;
 }
-
-
-
