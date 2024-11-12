@@ -3,6 +3,8 @@
     display: flex;
     flex-direction: row;
     overflow: auto;
+    background-color: var(--background);
+    margin:var(--ds-padding)
 }
 .applicationHeader{
     display: flex;

@@ -1,4 +1,4 @@
-import DSButton from "../dsButton/dsButton";
+import DSButton from "../dsButton/DsButton";
 import ContextMenu, { closecontext, displaycontext } from "./dscontext";
 import DemoLayout from "@/app/ElProComponents/Demo/demoLayout";
 export default function DemoContext() {
@@ -32,10 +32,62 @@ export default function DemoContext() {
         position="horizontal"
         content="horizontal center"
       />
-      <DSButton handleOnHover={(e)=>displaycontext(e,"contextMenuId1","containerId1","vertical","center")} handleMouseLeave={()=>closecontext("contextMenuId1")}>Context1</DSButton>
-      <DSButton handleOnHover={(e)=>displaycontext(e,"contextMenuId2","containerId2","vertical","right")} handleMouseLeave={()=>closecontext("contextMenuId2")}>Context2</DSButton>
-      <DSButton handleOnHover={(e)=>displaycontext(e,"contextMenuId3","containerId3","vertical","left")} handleMouseLeave={()=>closecontext("contextMenuId3")}>Context3</DSButton>
-      <DSButton handleOnHover={(e)=>displaycontext(e,"contextMenuId4","containerId4","horizontal","center")} handleMouseLeave={()=>closecontext("contextMenuId4")}>Context4</DSButton>
+      <DSButton
+        handleOnHover={(e) =>
+          displaycontext(
+            e,
+            "contextMenuId1",
+            "containerId1",
+            "vertical",
+            "center"
+          )
+        }
+        handleMouseLeave={() => closecontext("contextMenuId1")}
+      >
+        Context1
+      </DSButton>
+      <DSButton
+        handleOnHover={(e) =>
+          displaycontext(
+            e,
+            "contextMenuId2",
+            "containerId2",
+            "vertical",
+            "right"
+          )
+        }
+        handleMouseLeave={() => closecontext("contextMenuId2")}
+      >
+        Context2
+      </DSButton>
+      <DSButton
+        handleOnHover={(e) =>
+          displaycontext(
+            e,
+            "contextMenuId3",
+            "containerId3",
+            "vertical",
+            "left"
+          )
+        }
+        handleMouseLeave={() => closecontext("contextMenuId3")}
+      >
+        Context3
+      </DSButton>
+      <DSButton
+        handleOnHover={(e) =>
+          displaycontext(
+            e,
+            "contextMenuId4",
+            "containerId4",
+            "horizontal",
+            "center"
+          )
+        }
+        handleMouseLeave={() => closecontext("contextMenuId4")}
+      >
+        Context4
+      </DSButton>
     </DemoLayout>
   );
 }

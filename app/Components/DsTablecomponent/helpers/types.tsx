@@ -2,7 +2,7 @@
 export class tcolumn {
   columnIndex: number = 1;
   className?: string;
-  columnHeader: string = "";
+  columnHeader: React.ReactNode | string = "";
   isHidden?: boolean = false;
   sort?: string;
   columnContentType?: string;
@@ -11,8 +11,9 @@ export class tcolumn {
 export class cellData {
   columnIndex: number = 1;
   className?: string;
-  content: React.ReactNode | string | number;
+  content?: React.ReactNode | string | number;
   contentType?: string;
+  colSpan?: number;
 }
 
 export class trow {
@@ -23,7 +24,7 @@ export class trow {
 
 export class filterType {
   columnIndex?: number;
-  columnHeader?: string;
+  columnHeader?: React.ReactNode | string = "";
   filterType?: string;
 }
 
@@ -88,3 +89,43 @@ export const determineFilterType = (columns: tcolumn[]) => {
   });
   return filterTypes;
 };
+
+// Function to parse a number from the formatted string
+
+// const [dropDownOptions, setDropDownOptions] = useState<string[]>([]);
+// const filterOnDropdown = (columnIndex: number) => {
+//   const filteredRows = rows.filter((row) =>
+//     row.content?.some(
+//       (cell) =>
+//         typeof cell.content === "string" &&
+//         cell.contentType === "string" &&
+//         cell.columnIndex === columnIndex &&
+//         dropDownOptions.some((item) =>
+//           cell.content
+//             ?.toString()
+//             .toLowerCase()
+//             .includes(item.toString().toLowerCase())
+//         )
+//     )
+//   );
+//   setNewRows(filteredRows);
+// };
+
+// const [statusOptions, setStatusOptions] = useState<string[]>([]);
+// const filterOnStatus = (columnIndex: number) => {
+//   const filteredRows = rows.filter((row) =>
+//     row.content?.some(
+//       (cell) =>
+//         typeof cell.content === "string" &&
+//         cell.contentType === "string" &&
+//         cell.columnIndex === columnIndex &&
+//         statusOptions.some((item) =>
+//           cell.content
+//             ?.toString()
+//             .toLowerCase()
+//             .includes(item.toString().toLowerCase())
+//         )
+//     )
+//   );
+//   setNewRows(filteredRows);
+// };

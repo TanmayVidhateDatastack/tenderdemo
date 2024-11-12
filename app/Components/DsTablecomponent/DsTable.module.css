@@ -4,158 +4,126 @@
   width: 100%;
 }
 .ds-table {
+  flex:1;
   width: 100%;
-  /* position: fixed; */
   overflow: auto;
-  margin-left: 15px;
+  border-collapse: collapse;
+  border-radius: 4px; /* Add border radius for the entire table */
+  overflow: hidden; /* Ensure rounded corners apply to table content */
 }
 
 .ds-tableHeader {
-  background-color: var(--grey-100);
+  background-color: var(--semiviolet);
   width: 100%;
   height: 30px;
-  height: 30px;
-  border-radius: 4px 4px 0px 0px;
+  border-radius: 4px 4px 0 0; /* Round top corners */
   opacity: 1;
 }
+
 .arrow-container {
   display: flex;
   flex-direction: column;
- background-color: var(--background);
-  box-shadow: rgba(17, 17, 26, 0.05) 0px 4px 16px,
-    rgba(17, 17, 26, 0.05) 0px 8px 32px;
-
+  background-color: var(--semiviolet);
   opacity: 0; /* Initially hidden */
-  min-width: 0;
-  width: 0;
+  min-width: fit-content;
+  width: fit-content;
   padding: 0;
   transform: translateX(-20px);
   visibility: hidden; /* Hide from view */
   transition: opacity 0.5s ease, transform 0.5s ease, width 1.2s ease,
-   min-width 1.2s ease, visibility 0s 1.2s;
+    min-width 1.2s ease, visibility 0s 1.2s;
 }
-.ds-tableHeader:hover .arrow-container {
+
+.ds-tableHeader .arrow-container {
+  cursor: pointer;
   opacity: 1; /* Fully visible */
   min-width: fit-content;
-  width: 0;
-  padding: 0 1rem;
+  width: fit-content;
+  padding: 0;
   transform: translateX(0); /* Slide to original position */
- background-color: var(--background);
-
+  background-color: var(--semiviolet);
   visibility: visible; /* Visible in the layout */
-  transition: opacity 0.5s ease, transform 0.5s ease, width 1.5s ease, 
-  min-width 1.5s ease;
+  transition: opacity 0.5s ease, transform 0.5s ease, width 1.5s ease,
+    min-width 1.5s ease;
 }
 
 .ds-th-component {
-  display: flex;
+  display: table-cell;
   align-items: center;
   justify-content: left;
   flex: 1;
-  background-color: var(--semiviolet);
   opacity: 1;
   width: fit-content;
   min-width: fit-content;
-  
   position: relative;
+  background-color: var(--semiviolet);
 }
 
 .th-text-content {
-  /* Layout Properties
- 
-  /* UI Properties */
   font-size: var(--subtitle1);
   font-weight: 600;
   padding-left: 3px;
   text-align: left;
   color: var(--bodytext);
-  /* opacity: 0.8; */
+  opacity: 0.8;
 }
 
 .th-text-content:hover {
-  /* Layout Properties */
- 
-  /* UI Properties */
   opacity: 1;
 }
 
 .ds-tr-component {
-  flex: 1;
-  display: flex;
- 
-  /* Layout Properties */
+  display: table-row;
+  border-bottom: 1px solid var(--secondary);
 
   height: 40px;
-  /* UI Properties */
-  /* background: var(--white) 0% 0% no-repeat padding-box; */
-  /* background: #ffffff 0% 0% no-repeat padding-box; */
-  background-color: var(--background);
+
+  /* background-color: var(--background); */
   opacity: 0.6;
 }
 
 .ds-tr-component.approved:hover {
-  /* Layout Properties */
-
   height: 40px;
-  /* UI Properties */
   opacity: 1;
 }
 
 .ds-tr-component.readyToDispatch:hover {
-  /* UI Properties */
   opacity: 1;
 }
 
 .ds-tr-component.deviationPending:hover {
-  /* UI Properties */
   opacity: 1;
 }
 .ds-td-component {
-  display: flex;
-  flex: 1;
-  align-items: center;
+  display: table-cell;
+  align-items: left;
   justify-content: left;
-  /* Layout Properties
- 
-  /* UI Properties */
   padding-left: 3px;
- 
   text-align: left;
   font-size: var(--subtitle1);
   letter-spacing: 0px;
   color: var(--bodytext);
-  border-bottom: 1px solid var(--secondary);
   opacity: 1;
 }
 
 .ds-footer {
-  display: flex;
-  flex: 1;
-  /* UI Properties */
-  /* background: var(---e9e9e9-grey-100-) 0% 0% no-repeat padding-box;
-  background: var(--grey-100) 0% 0% no-repeat padding-box; */
   background-color: var(--semiviolet);
   mix-blend-mode: multiply;
-  border-radius: 0px 0px 4px 4px;
+  border-radius: 0 0 4px 4px; /* Round bottom corners */
   opacity: 1;
 }
 
-/* .ds-th-component:hover .slide-component {
-  left: 10px;
-  display: contents;
-  margin-left: 20px;
-  transform: translateX(0);
-  transition: opacity 0.5s ease, transform 0.5s ease,width 1.5s ease,min-width 1.5s ease;
+.footer-td {
+  align-items: center;
 }
-  */
 
 .slide-component {
+  top: 0;
   display: flex;
-  /* width:0;
-    min-width: 0; */
   visibility: hidden;
   position: absolute;
-  width: 20px;
+  width: fit-content;
+  background-color: var(--semiviolet);
   transform: translateX(0%);
   opacity: 0;
   transition: opacity 0.3s ease, transform 0.8s ease, width 1.2s ease,
@@ -163,39 +131,38 @@
 }
 
 .ds-th-component:hover .slide-component {
-  transform: translateX(50%); /* Slide to original position */
-  /* min-width: fit-content;*/
-    width:auto; 
+  position: absolute;
+  transform: translateX(100%);
+  margin-left: 45px; /* Centers it vertically */
+  width: 10px;
   opacity: 1;
-background-color: var(--secondary);
+  background-color: var(--semiviolet);
   z-index: 999;
-  visibility: visible; /* Visible in the layout */
+  visibility: visible; /* Makes it visible on hover */
   transition: opacity 0.3s ease, transform 0.8s ease, width 1.5s ease,
-    min-width 1.5s ease, visibility 0s 0.3s ease;
+    min-width 1.5s ease;
 }
 
 .cursor-pointer {
   cursor: pointer;
 }
+
 .menu-component {
-  /* display: flex; */
-  background-color: var(--background);
   color: var(--dark);
   padding: 3px;
-  /* border: 2px solid var(--dark); */
   flex: 1;
   width: 100px;
   max-width: 100px;
   position: relative;
   z-index: 100;
-  /* flex-direction: column; */
-  /* transform: translateY(60%); */
 }
 
 .MenuItem {
   display: flex;
   background-color: var(--background) !important;
   color: var(--dark) !important;
+  margin-top: 2px;
+  margin-bottom: 2px;
   border: 0px;
   padding: 1px;
   font-size: var(--subtitle2);
@@ -203,38 +170,44 @@ background-color: var(--secondary);
   flex-direction: column;
   padding: 2px;
 }
-
-.menu_button{
+.MenuItem:hover {
+  cursor: pointer;
+}
+.menu_button {
   display: flex;
   align-items: center;
   justify-content: center;
-width: fit-content !important;
-height: auto;
-min-width: fit-content !important;
+  width: fit-content !important;
+  height: auto;
+  min-width: fit-content !important;
+  border: 0px;
 }
 
+.menu_button:hover {
+  cursor: pointer;
+}
 .check {
   margin: 1rem;
 }
 .ms1 {
   margin-left: 0.5rem;
 }
+
 .range-filter,
 .date-filter {
   display: flex;
 }
- 
+
 .ds-search-input-text {
   width: 350px;
   height: 36px;
-  /* UI Properties */
   background-color: var(--background);
   box-shadow: 2px 2px 4px var(--dark);
   border: 1px solid var(--grey-500);
   border-radius: 4px;
   opacity: 1;
 }
- 
+
 .ds-search-input-div {
   display: flex;
   align-items: center;
@@ -262,4 +235,101 @@ min-width: fit-content !important;
   visibility: visible;
   transition: opacity 0.5s ease, transform 0.5s ease, width 1.5s ease,
     min-width 1.5s ease;
+}
+.sort-icon {
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+/* Table container styling */
+.ds-table-center {
+  width: 100%;
+  border-collapse: collapse;
+  margin-left: 15px;
+  margin-right: 15px;
+  border: 1px solid #ccc; /* Border around the entire table */
+}
+
+/* Styling for table header and cells */
+.ds-td-center,
+.ds-th-center {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ccc; /* Ensures all cells have a border */
+  font-size: 14px;
+  box-sizing: border-box; /* Ensures padding doesn't affect border */
+}
+
+/* Header cell specific styling */
+.ds-th-center {
+  background-color: var(
+    --semiviolet,
+    #e0e0e0
+  ); /* Fallback to gray if var is undefined */
+  font-weight: bold;
+  position: relative;
+  display: revert;
+  justify-items: center;
+  border: 1px solid #ccc; /* Ensures header cells have a border */
+}
+
+/* Table data cell styling */
+.ds-td-center {
+  border: 1px solid #ccc; /* Border for each data cell */
+  justify-items: center;
+  box-sizing: border-box;
+}
+
+/* Footer styling */
+.ds-footer-center {
+  padding: 10px;
+  border-top: 1px solid #ccc; /* Ensures a border at the top of the footer */
+  align-items: center;
+  justify-items: center;
+  text-align-last: center;
+  background-color: var(--semiviolet);
+}
+
+/* General styling for the colspan */
+.colSpan {
+  font: normal normal bold 13px/19px Open Sans;
+}
+
+/* Hover effect for th slide component */
+.ds-th-center th:hover .slide-component {
+  position: absolute;
+  transform: translateX(100%);
+  width: 20px;
+  opacity: 1;
+  background-color: var(
+    --semiviolet,
+    #e0e0e0
+  ); /* Fallback to gray if var is undefined */
+  z-index: 999;
+  visibility: visible;
+  transition: opacity 0.3s ease, transform 0.8s ease, width 1.5s ease,
+    min-width 1.5s ease;
+}
+
+/* Hover effect for arrow container */
+.ds-th-center th:hover .arrow-container {
+  cursor: pointer;
+  opacity: 1;
+  min-width: fit-content;
+  width: fit-content;
+  padding: 0;
+  margin-left: 0;
+  transform: translateX(0);
+  background-color: var(
+    --semiviolet,
+    #e0e0e0
+  ); /* Fallback to gray if var is undefined */
+  visibility: visible;
+  transition: opacity 0.5s ease, transform 0.5s ease, width 1.5s ease,
+    min-width 1.5s ease;
+}
+
+/* Additional input styling */
+.adv-textfield {
+  width: 130px;
+  height: 36px;
 }

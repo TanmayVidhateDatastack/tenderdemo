@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import DSButton from "../../Components/dsButton/dsButton";
+import DSButton from "../../Components/dsButton/DsButton";
 import styles from "../../page.module.css";
 import buttonStyles from "../../Components/dsButton/dsButton.module.css";
 import PaneStyles from "../../Components/dsPane/dsPane.module.css";
@@ -15,8 +15,8 @@ import DsPopup from "../../Components/dsPopup/dsPopup";
 import PopupOpenButton from "../../Components/dsPopup/popupOpenButton";
 // import ButtonLibrary from "./Components/dsButton/DS_ButtonLibrary";
 import DemoButtons from "../../Components/dsButton/dsDemoButtons";
-import Image from "next/image";
 
+import Image from "next/image";
 // import SaveButton from "./Components/DsButton/Ds_SaveBtn";
 import DsTableComponent from "../../Components/DsTablecomponent/DsTableComponent";
 import DemoSelect from "@/app/Components/dsSelect/dsDemoSelect";
@@ -32,14 +32,19 @@ import TabView from "@/app/Components/dsTabs/TabView";
 import DemoSummaryCount from "@/app/Components/DsSummaryCount/demoSummaryCount";
 import DsPane from "@/app/Components/DsPane/DsPane";
 import DataList from "@/app/Components/dsDatalist/dsDatalist";
-import SpotlightSearch from "@/app/Components/dsSpotlightSearch/dsSpotlightSearch";
 import TextField from "@/app/Components/DsTextField/DsTextField";
 import DsStateChange from "@/app/Components/DsStatusIndicator/dsStatusIndicator";
 import commentIcon from "../../Icons/smallIcons/commenticon.svg";
+import AdvancedFilterComponent from "@/app/Components/DsTablecomponent/AdvancedFilterComponent";
+import { determineFilterType } from "@/app/Components/DsTablecomponent/helpers/types";
+import PaneOpenButton from "@/app/Components/DsPane/PaneOpenButton";
 export default function Demo() {
   const tempTableData = {
     className: "sample-table",
     id: "table-1",
+    alignment: "left",
+    sortable: true,
+    searchAvailable: false,
     columns: [
       {
         columnIndex: 0,
@@ -101,6 +106,14 @@ export default function Demo() {
         columnIndex: 7,
         className: "header-column",
         columnHeader: "STATUS",
+        isHidden: false,
+        sort: "NONE",
+        columnContentType: "reactNode",
+      },
+      {
+        columnIndex: 8,
+        className: "header-column",
+        columnHeader: <DSButton />,
         isHidden: false,
         sort: "NONE",
         columnContentType: "reactNode",
@@ -238,62 +251,63 @@ export default function Demo() {
         rowIndex: 2,
         className: "row",
         content: [
-          {
-            columnIndex: 0,
-            className: "cell",
-            content: 20240199900003,
-            contentType: "number",
-          },
-          {
-            columnIndex: 1,
-            className: "cell",
-            content: "24/09/2024",
-            contentType: "date",
-          },
-          {
-            columnIndex: 2,
-            className: "cell",
-            content: "HJ65",
-            contentType: "string",
-          },
-          {
-            columnIndex: 3,
-            className: "cell",
-            content: "Hetero Drugs Ltd.",
-            contentType: "string",
-          },
+          // {
+          //   columnIndex: 0,
+          //   className: "cell",
+          //   content: 20240199900003,
+          //   contentType: "number",
+          // },
+          // {
+          //   columnIndex: 1,
+          //   className: "cell",
+          //   content: "24/09/2024",
+          //   contentType: "date",
+          // },
+          // {
+          //   columnIndex: 2,
+          //   className: "cell",
+          //   content: "HJ65",
+          //   contentType: "string",
+          // },
+          // {
+          //   columnIndex: 3,
+          //   className: "cell",
+          //   content: "Hetero Drugs Ltd.",
+          //   contentType: "string",
+          // },
           {
             columnIndex: 4,
             className: "cell",
             content: 8000,
             contentType: "number",
+            colSpan: 8,
           },
-          {
-            columnIndex: 5,
-            className: "cell",
-            content: "12,00,000",
-            contentType: "string",
-          },
-          {
-            columnIndex: 6,
-            className: "cell",
-            content: "12,04,000",
-            contentType: "number",
-          },
-          {
-            columnIndex: 7,
-            className: "cell",
-            content: (
-              <DsStateChange
-                className={styles.statusIndicator}
-                type="system_default"
-                id="state2"
-                status="Cancelled"
-                label="cancelled"
-              />
-            ),
-            contentType: "reactNode",
-          },
+          // {
+          //   columnIndex: 5,
+          //   className: "cell",
+          //   content: "12,00,000",
+          //   contentType: "string",
+          // },
+          // {
+          //   columnIndex: 6,
+          //   className: "cell",
+          //   content: "12,04,000",
+          //   contentType: "number",
+          // },
+          // {
+          //   columnIndex: 7,
+          //   className: "cell",
+          //   content: (
+          //     <DsStateChange
+          //       className={styles.statusIndicator}
+          //       type="system_default"
+          //       id="state2"
+          //       status="Cancelled"
+          //       label="cancelled"
+          //     />
+          //   ),
+          //   contentType: "reactNode",
+          // },
         ],
       },
       {
@@ -1069,6 +1083,8 @@ export default function Demo() {
   const [notiType, setNotiType] = useState<
     "success" | "bonus" | "info" | "error"
   >("info");
+  const filterTypes = determineFilterType(tempTableData.columns);
+
   return (
     <>
       <Application
@@ -1262,17 +1278,31 @@ export default function Demo() {
               </TabView>
 
               <TabView tabId={"9"}>
+                <PaneOpenButton
+                  label="Filter"
+                  paneId={"AdvanceFilter"}
+                ></PaneOpenButton>
+
                 <DsTableComponent
                   className={tempTableData.className}
                   id={tempTableData.id}
+                  alignment={tempTableData.alignment.toString()}
+                  searchAvailable={tempTableData.searchAvailable}
                   columns={tempTableData.columns}
                   rows={tempTableData.rows}
                 ></DsTableComponent>
               </TabView>
             </TabContainer>
+            <DsPane id="AdvanceFilter">
+              <AdvancedFilterComponent
+                rows={tempTableData.rows}
+                filterTypes={filterTypes}
+              ></AdvancedFilterComponent>
+            </DsPane>
           </div>
         </div>
       </Application>
+
       <DsPopup
         id={"test"}
         /*position="center" type="document"*/ title={"Popup"}
@@ -1300,6 +1330,7 @@ export default function Demo() {
           duration={3000}
         />
       )}
+      {/* <PopUpContext id={contextMenuId} content={comment} containerId={""} /> */}
     </>
   );
 }

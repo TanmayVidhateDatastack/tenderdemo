@@ -3,7 +3,7 @@
   --foreground: #171717;
   --backgroundt:transparent;
 
-  --application-background:var(var(--background));
+  --application-background:var(--snd-background);
   --snd-background:#FBF9FF;
 
   
@@ -76,9 +76,9 @@
   --heading2:18px;
   --subtitle1:12px;
   --subtitle2:11px;
-  --bodyText1:14px;
+  --bodyText:14px;
   --buttonTextMedium:16px;
-  --buttonTextSmall:14px;
+  --buttonTextSmall:13px;
   --link:12px;
   --custome:50px;
 

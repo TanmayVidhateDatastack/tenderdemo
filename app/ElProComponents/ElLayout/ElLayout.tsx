@@ -1,8 +1,11 @@
 // import Image from "next/image";
+"use client";
 import React from "react";
 import styles from "./ElLayout.module.css";
 import ApplicationTitleBar from "./ApplicationTitleBar";
 import ApplicationNavigator from "./ApplicationNavigator";
+import store from "@/app/Redux/store/store";
+import { Provider } from "react-redux";
 
 export interface ElLayoutProps {
     children:React.ReactNode
@@ -16,6 +19,8 @@ export interface ElLayoutProps {
 function ElLayout({children}: ElLayoutProps) {
   return (
     <>
+          <Provider store={store}>
+
       <div className={styles.layout+" "+styles.container}>
         <ApplicationTitleBar></ApplicationTitleBar>
         
@@ -28,6 +33,8 @@ function ElLayout({children}: ElLayoutProps) {
           </div>
         </div>
       </div>
+      </Provider>
+
     </>
   );
 }
