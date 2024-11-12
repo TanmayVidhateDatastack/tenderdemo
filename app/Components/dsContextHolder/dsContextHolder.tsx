@@ -9,7 +9,7 @@ interface ContextMenuProps {
 }
 // }
 
-export function displayContext (
+export function displayContext(
   event: React.MouseEvent<HTMLElement> | React.FocusEvent,
   id: string,
   position: "vertical" | "horizontal"|undefined = "vertical",
@@ -26,9 +26,9 @@ export function displayContext (
   const target = event.target as HTMLElement;
   if (!context || !target) return;
   if (!context || !target) return;
-  if (context.style.display=="flex") {
+  if (context.style.display == "flex") {
     context.style.display = "none";
-    return
+    return;
   }
   context.style.display = "flex";
 
@@ -116,4 +116,3 @@ const ContextMenu: React.FC<ContextMenuProps> = ({
   );
 };
 export default ContextMenu;
-

@@ -628,6 +628,27 @@ const TableComponent: React.FC<TableComponentProps> = ({
 
   const [isFilterVisible, setFilterVisible] = useState<boolean>(false);
   const filterTypes = determineFilterType(columns);
+
+  useEffect(() => {
+    const handleOnScroll = () => {
+      document
+        .querySelectorAll(".context")
+        .forEach((x) => ((x as HTMLElement).style.display = "none"));
+    };
+    document
+      .querySelectorAll("*")
+      ?.forEach((x) =>
+        (x as HTMLElement).addEventListener("scroll", handleOnScroll)
+      );
+    return () => {
+      document
+        .querySelectorAll("*")
+        ?.forEach((x) =>
+          (x as HTMLElement).removeEventListener("scroll", handleOnScroll)
+        );
+    };
+  }, []);
+
   return (
     <>
       <DemoLayout title="Table (DsTable)">
