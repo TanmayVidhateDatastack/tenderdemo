@@ -34,9 +34,7 @@ const TabNav: React.FC<TabNavProps> = ({ selectedTabId, tabs }) => {
               key={x.tabId}
               id={x.tabId}
               type="tab"
-              className={
-                btnStyles.btngroupcontained + " " + btnStyles.group_btn
-              }
+              buttonViewStyle="btnContained"
               label={x.tabName}
               //   count="00"
               handleOnClick={() => setSelectedTabId(x.tabId)}

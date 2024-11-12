@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import DSButton from "../../Components/dsButton/dsButton";
+import DSButton from "../../Components/dsButton/DsButton";
 import styles from "../../page.module.css";
 import buttonStyles from "../../Components/dsButton/dsButton.module.css";
 import PaneStyles from "../../Components/dsPane/dsPane.module.css";
@@ -1289,6 +1289,8 @@ export default function Demo() {
       </DsPopup>
       <DsPane id="PaneRight" side={"right"} title="Status">
         <DsDemoStatusIndocator></DsDemoStatusIndocator>
+        <DemoSelect></DemoSelect>
+
       </DsPane>
 
       {showNotification && (
