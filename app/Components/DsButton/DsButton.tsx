@@ -15,7 +15,7 @@ import Image from "next/image";
  * @param {'string'|'undefined'} label-the label displayed in DsButton component.
  * @param {"string" | "00"} count - the count displayed in DsButton initially "00".
  * @param {string} tooltip - used as a title provides temporary hint.
- * @param  {boolean} disable - keep textField for readOnly purpose.
+ * @param  {boolean} disable - keep buttons for readOnly purpose.
  * @param {Image} startIcon- displays icon at the Start of button .
  * @param {Image} endIcon-displays icon at the End of button.
  *@param {React.MouseEvent} onClick - Fires when mouse click on element.
