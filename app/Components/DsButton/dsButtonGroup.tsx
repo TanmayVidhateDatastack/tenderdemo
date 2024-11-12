@@ -1,3 +1,4 @@
+// import { types } from "util";
 import styles from "./dsButton.module.css";
 
 import React, { useEffect } from "react";
@@ -59,10 +60,10 @@ const DSButtonGroup: React.FC<DSButtonGroupProps> = ({
       }
     }
   }, []);
-  
+
   return (
     <div
-      className={styles.flex + " " + className}
+      className={styles.flex + " " + className + " " + styles.btngroup}
       id={id}
       onMouseLeave={handleMouseLeave}
       onMouseOver={handleOnHover}

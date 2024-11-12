@@ -10,6 +10,26 @@ import PopUpContext, {
 } from "../dsContextHolder/dsContextHolder";
 // import PopUpContext from "../dscontext/dscontext";
 
+/**
+ * Status Indicator component displays status Indicator
+ * @param {string} id-id used for uniquely identifies the element.
+ * @param {"system_default" | "user_defined"} type - Set the type of status indicator .
+ * @param {dsStatus} status - set status of status indicator/ display color as per status
+ * @param {string} ClassName -(set name of the class )user defined styles and classes will be applied.
+ * @param {'string'} label-the label displayed in dsStatusIndicator component.
+ * @param {'string'} btn_label-the label displayed in button component.
+ * @param {string} tooltip - used as a title provides temporary hint.
+ * @param  {boolean} disable - keep status indicator for readOnly purpose.
+ * @param {Image} startIcon- displays icon at the Start of button .
+ * @param {Image} endIcon-displays icon at the End of button.
+ * @param {"top" | "bottom" | "left" | "right"} positionProp - set position of context menu displayed on hovering effect.
+ * @param {boolean} showArrow - set arrow visibility for context menu.
+ * @param {string} comment - show comment in context menu
+ *@param {React.MouseEvent} onClick - Fires when mouse click on element.
+ * @param {React.MouseEvent} onMouseOver - Fires when the mouse enters an element
+ * @param {React.MouseEvent} onMouseOut - event triggers when the mouse pointer leaves the boundary of an element .
+ */
+
 interface DsStatusIndicatorProps {
   status?: dsStatus;
   className?: string;
@@ -37,8 +57,6 @@ const DsStateChange: React.FC<DsStatusIndicatorProps> = ({
   handleOnHover,
   btn_label,
   tooltip,
-  positionProp = "top",
-  showArrow = "true",
   comment,
 }) => {
   const contextMenuId = "context-display";

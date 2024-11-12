@@ -2,7 +2,7 @@
 import Image from "next/image";
 // import { useRef, useState } from "react";
 import { ImgProps } from "next/dist/shared/lib/get-img-props";
-import DSButton from "./DsButton";
+// import DSButton from "./DsButton";
 import btnStyles from "./dsButton.module.css";
 import addIcon from "../../Icons/smallIcons/add.svg";
 import filter from "../../Icons/smallIcons/filtericon.svg";
@@ -17,13 +17,14 @@ import notificationicon from "../../Icons/mediumIcons/notificationbell.svg";
 import chat from "../../Icons/mediumIcons/chat.svg";
 import leftarrow from "../../Icons/mediumIcons/grayleftarrow.svg";
 import darkleftarrow from "../../Icons/mediumIcons/darkleftarrow.svg";
-import upload from "../../Icons/smallIcons/uploadicon.svg";
-import { useState } from "react";
+// import upload from "../../Icons/smallIcons/uploadicon.svg";
+// import { useState } from "react";
 import DemoLayout from "@/app/ElProComponents/Demo/demoLayout";
 import DSButtonGroup from "./dsButtonGroup";
+import DSButton from "./DsButton";
 
 const DemoButtons: React.FC = () => {
-  const [toggled, setToggled] = useState(false);
+  // const [toggled, setToggled] = useState(false);
   const clickHandler = (e: React.MouseEvent<HTMLElement>) => {
     console.log((e.target as HTMLElement).tagName);
   };
@@ -44,6 +45,7 @@ const DemoButtons: React.FC = () => {
           id="actionBtn"
           buttonColor="btnPrimary"
           buttonViewStyle="btnOutlined"
+          disable={true}
           // className={btnStyles.btnOutlined}
           handleOnHover={(e) => changeImage(e, whiteadd)}
           handleMouseLeave={(e) => changeImage(e, addIcon)}
@@ -56,6 +58,7 @@ const DemoButtons: React.FC = () => {
           id="closeBtn"
           buttonColor="btnDark"
           buttonViewStyle="btnOutlined"
+          disable={true}
           // className={btnStyles.btnOutlined}
           handleOnClick={(e) => clickHandler(e)}
           tooltip="variants : btnDark, btnOutlined, btnMedium"
@@ -123,6 +126,7 @@ const DemoButtons: React.FC = () => {
           id="deleteBtn"
           buttonColor="btnWarning"
           buttonViewStyle="btnContained"
+          // className={btnStyles.btnContained}
           handleOnClick={(e) => clickHandler(e)}
           handleOnHover={(e) => changeImage(e, whitetrashbtn)}
           handleMouseLeave={(e) => changeImage(e, trashbtn)}
@@ -207,10 +211,10 @@ const DemoButtons: React.FC = () => {
         <DSButton
           id="toggleBtn"
           type="toggle"
-          className={`${btnStyles.toggle_btn} ${
-            toggled ? btnStyles.toggled : ""
-          }`}
-          handleOnClick={() => setToggled(!toggled)}
+          // className={`${btnStyles.toggle_btn} ${
+          //   toggled ? btnStyles.toggled : ""
+          // }`}
+          // handleOnClick={() => setToggled(!toggled)}
           tooltip="variants: toggle_btn"
         />
 
@@ -221,7 +225,7 @@ const DemoButtons: React.FC = () => {
           buttonViewStyle="btnText"
           className={btnStyles.btnTextPrimary}
           handleOnClick={(e) => clickHandler(e)}
-          startIcon={<Image src={upload} alt="icon" />}
+          // startIcon={<Image src={upload} alt="icon" />}
           tooltip="variants : btnText, btnSmall, upload_btn"
           label="CSV File"
         />
@@ -256,11 +260,11 @@ const DemoButtons: React.FC = () => {
           tooltip="variants: Back, button_icon"
         />
 
-        <DSButtonGroup id="btngroup1" className={btnStyles.btngroup}>
+        <DSButtonGroup id="btngroup1">
           <DSButton
             id="button1"
             type="count"
-            className={btnStyles.btngroupcontained + " " + btnStyles.group_btn}
+            buttonViewStyle="btnContained"
             label="Button 1"
             count="00"
             // handleOnClick={(e) => handleButtonClick(e, "button1")}
@@ -269,7 +273,7 @@ const DemoButtons: React.FC = () => {
           <DSButton
             id="button2"
             type="count"
-            className={btnStyles.btngroupcontained + " " + btnStyles.group_btn}
+            buttonViewStyle="btnContained"
             label="Button 2"
             count="00"
             // handleOnClick={(e) => handleButtonClick(e, "button2")}
@@ -279,7 +283,7 @@ const DemoButtons: React.FC = () => {
           <DSButton
             id="button3"
             type="count"
-            className={btnStyles.btngroupcontained + " " + btnStyles.group_btn}
+            buttonViewStyle="btnContained"
             label="Button 3"
             count="00"
             // handleOnClick={(e) => handleButtonClick(e, "button3")}
@@ -288,7 +292,7 @@ const DemoButtons: React.FC = () => {
           <DSButton
             id="button4"
             type="count"
-            className={btnStyles.btngroupcontained + " " + btnStyles.group_btn}
+            buttonViewStyle="btnContained"
             label="Button 4"
             count="00"
             // handleOnClick={(e) => handleButtonClick(e, "button4")}
