@@ -34,85 +34,82 @@ const DsOption: React.FC<DsOptionProps> = ({
       {isOpen && (
         <PopUpContext
           id={label !== "" ? label + "opt" : id !== "" ? id : "test"}
-          content={
-            <div className={styles.list}>
-              {options.map((option, index) => {
-                return (
-                  <>
-                    <div
+          content={<div className={styles.list}>
+            {options.map((option, index) => {
+              return (
+                <>
+                  <div
+                    key={index}
+                    onClick={() => {
+                      handleSelect(option.label);
+                      if (type !== "multi") {
+                        closeContext(
+                          label !== ""
+                            ? label + "opt"
+                            : id !== ""
+                              ? id
+                              : "test"
+                        );
+                      }
+                    } }
+                    className={styles.option}
+                  >
+                    {type == "multi" && (
+                      <input
+                        type="checkbox"
+                        checked={selectedOptions.includes(option.label)}
+                        className={styles.checkbox}
+                      ></input>
+                    )}
+
+                    {option.label}
+                    {typeof option.value !== "string" &&
+                      type == "twolevel" && (
+                        <DSButton
+                          className={styles.ShowContext}
+                          handleOnClick={(e) => {
+                            e.stopPropagation();
+                            if (typeof option.value !== "string") {
+                              displayContext(
+                                e,
+                                option.label + "opt",
+                                "vertical",
+                                "left"
+                              );
+                            }
+                          } }
+                        >
+                          d
+                        </DSButton>
+                      )}
+                  </div>
+                  {typeof option.value !== "string" && (
+                    <DsOption
                       key={index}
-                      onClick={() => {
-                        handleSelect(option.label);
+                      label={option.label}
+                      isOpen={true}
+                      options={option.value}
+                      // handleSelect={handleSelect}
+                      handleSelect={(subOption) => {
+                        handleSelect(subOption);
                         if (type !== "multi") {
                           closeContext(
                             label !== ""
                               ? label + "opt"
                               : id !== ""
-                              ? id
-                              : "test"
-                          );
-                        }
-                      }}
-                      className={styles.option}
-                    >
-                      {type == "multi" && (
-                        <input
-                          type="checkbox"
-                          checked={selectedOptions.includes(option.label)}
-                          className={styles.checkbox}
-                        ></input>
-                      )}
-
-                      {option.label}
-                      {typeof option.value !== "string" &&
-                        type == "twolevel" && (
-                          <DSButton
-                            className={styles.ShowContext}
-                            handleOnClick={(e) => {
-                              e.stopPropagation();
-                              if (typeof option.value !== "string") {
-                                displayContext(
-                                  e,
-                                  option.label + "opt",
-                                  "vertical",
-                                  "left"
-                                );
-                              }
-                            }}
-                          >
-                            d
-                          </DSButton>
-                        )}
-                    </div>
-                    {typeof option.value !== "string" && (
-                      <DsOption
-                        key={index}
-                        label={option.label}
-                        isOpen={true}
-                        options={option.value}
-                        // handleSelect={handleSelect}
-                        handleSelect={(subOption) => {
-                          handleSelect(subOption);
-                          if (type !== "multi") {
-                            closeContext(
-                              label !== ""
-                                ? label + "opt"
-                                : id !== ""
                                 ? id
                                 : "test"
-                            );
-                          }
-                        }}
-                        type={type}
-                        selectedOptions={selectedOptions}
-                      ></DsOption>
-                    )}
-                  </>
-                );
-              })}
-            </div>
-          }
-        />
+                          );
+                        }
+                      } }
+                      type={type}
+                      selectedOptions={selectedOptions}
+                    ></DsOption>
+                  )}
+                </>
+              );
+            })}
+          </div>} showArrow={false}        />
       )}
     </>
   );
