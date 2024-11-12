@@ -2,7 +2,7 @@
     display:flex;
     align-items: start;
     font-size:var(--subtitle1);
-    padding: var(--ds-padding);
+    padding: var(--ds-padding) 0;
     flex-wrap: wrap;
 }
 .detailOf{

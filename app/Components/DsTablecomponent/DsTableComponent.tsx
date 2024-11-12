@@ -21,7 +21,6 @@ import TfooterComponent from "./footerComponents/dsTfooterComponent";
 import ThComponent from "./headerComponents/dsThComponent";
 import TheaderComponent from "./headerComponents/dsTheaderComponent";
 import MenuComponent from "./supportComponents/dsMenuComponent";
-import DemoLayout from "@/app/ElProComponents/Demo/demoLayout";
 import { displayContext } from "../dsContextHolder/dsContextHolder";
 import { useAppDispatch, useAppSelector } from "@/app/Redux/hook/hook";
 import { setRows } from "@/app/Redux/slice/TableSlice/tableSlice";
@@ -497,7 +496,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
             </TbodyComponent>
             <TfooterComponent className={""} alignment={alignment}>
               <TrComponent>
-                <TdComponent className={""} alignment={alignment} colSpan={10}>
+                <TdComponent className={""} alignment={alignment} colSpan={columns.length}>
                   Showing {tableRows.length} of {rowsContainer.current.length}{" "}
                 </TdComponent>
               </TrComponent>
