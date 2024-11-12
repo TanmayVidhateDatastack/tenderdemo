@@ -2,20 +2,24 @@
 import React from "react";
 import styles from "./dsContextHolder.module.css";
 
-interface ContextMenuProps {
-  id: string;
-  position?: "vertical" | "horizontal";
-  alignment?: "right" | "left" | "center";
-  content?: string | React.ReactElement;
- showArrow:boolean;
+// interface ContextMenuProps {
+//   id: string;
+//   position?: "vertical" | "horizontal";
+//   alignment?: "right" | "left" | "center";
+//   content?: string | React.ReactElement;
+//  showArrow:boolean;
 
-}
+// }
 
 export function displayContext (
   event: React.MouseEvent<HTMLElement> | React.FocusEvent,
   id: string,
   position: "vertical" | "horizontal"|undefined = "vertical",
-  alignment: "right" | "left" | "center"|undefined="center"
+  alignment: "right" | "left" | "center"|undefined="center",
+  content?: string | React.ReactElement,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  showArrow:boolean=false,
+
 ) {
   event.preventDefault();
 
@@ -85,19 +89,30 @@ export const closeContext = (id: string) => {
   }
 };
 
-const ContextMenu: React.FC<ContextMenuProps> = ({ id, content ,
-  showArrow,
+// const ContextMenu: React.FC<ContextMenuProps> = ({ id, content ,
+//   showArrow,
 
+// }) => {
+//   return (
+//     <div id={id} className={styles.contextMenu}>
+//       {content}
+//       {showArrow && (
+//           <div className={`${styles.arrow} `} /> 
+//         )}
+//     </div>
+//   );
+// };
+const ContextMenu: React.FC<{ id: string; content?: string; showArrow: boolean }> = ({
+  id,
+  content,
+  showArrow,
 }) => {
   return (
     <div id={id} className={styles.contextMenu}>
-      {content}
-      {showArrow && (
-          <div className={`${styles.arrow} `} /> 
-        )}
+      {content && <div>{content}</div>}
+      {showArrow && <div className={`${styles.arrow}`} />}
     </div>
   );
 };
-
 export default ContextMenu;
 

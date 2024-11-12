@@ -223,3 +223,9 @@ a.secondary {
     filter: invert();
   }
 }
+.btnrow
+{
+  display:flex;
+  justify-content:center;
+
+}
