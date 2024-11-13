@@ -129,6 +129,7 @@ const DSButton: React.FC<DSButtonProps> = ({
     // });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function toggleSwitch(e: React.MouseEvent<HTMLButtonElement>) {
     setToggled(!toggled);
     const button = document.querySelector(".togglebtn") as HTMLButtonElement;
