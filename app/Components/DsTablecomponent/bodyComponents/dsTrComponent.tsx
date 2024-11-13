@@ -15,7 +15,7 @@ const TrComponent: React.FC<trprops> = ({
   return (
     <>
       <tr
-        className={`${styles["ds-tr-component"]} ${className}`}
+        className={`${styles["ds-tr-component"]} ${styles[className || ""]}`}
         onClick={onRowClick}
       >
         {children || content}

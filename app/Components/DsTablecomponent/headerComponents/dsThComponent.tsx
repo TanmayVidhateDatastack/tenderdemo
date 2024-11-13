@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "../DsTable.module.css";
 export interface thprops {
-  className?: string;
+  className: string;
   children?: React.ReactNode;
   content?: string | React.ReactNode;
   columnHeader?: React.ReactNode | string;
@@ -12,15 +12,14 @@ export interface thprops {
 const ThComponent: React.FC<thprops> = ({
   className,
   children,
-  content,
   columnHeader,
   columnIndex,
   alignment,
 }) => {
   const thclassName =
     alignment == "center"
-      ? `${styles["ds-th-center"]} ${className}`
-      : `${styles["ds-th-component"]} ${className}`;
+      ? `${styles["ds-th-center"]} ${styles[className]}`
+      : `${styles["ds-th-component"]} ${styles[className]}`;
   return (
     <>
       <th
@@ -28,8 +27,10 @@ const ThComponent: React.FC<thprops> = ({
         data-column-name={columnHeader}
         data-column-index={columnIndex}
       >
-        {content != null && (
-          <span className={`${styles["th-text-content"]}`}>{content}</span>
+        {columnHeader != null && (
+          <span className={`${styles["th-text-content"]}`}>
+            {columnHeader.toString().toUpperCase()}
+          </span>
         )}
         {children}
       </th>

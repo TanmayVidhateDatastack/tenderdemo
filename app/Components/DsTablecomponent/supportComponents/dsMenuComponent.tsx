@@ -7,7 +7,7 @@ import { tcolumn } from "../helpers/types";
 import FilterComponent from "./filterComponent";
 export interface menuprops {
   column: tcolumn;
-  className?: string;
+  className: string;
   children?: React.ReactNode;
 
   sortDataOnlyOnSpecifiedColumn: (column: string | number) => void;
@@ -57,7 +57,9 @@ const MenuComponent: React.FC<menuprops> = ({
                   clearSortOnColumn(e, column.columnIndex);
                 }}
               />
-              <MenuDivider classNames={`${styles["filtertab"]} ${className}`} />
+              <MenuDivider
+                classNames={`${styles["filtertab"]} ${styles[className]}`}
+              />
               <TabViewMenuItem
                 classNames={`${styles["filtertab"]}`}
                 menu="Filter"

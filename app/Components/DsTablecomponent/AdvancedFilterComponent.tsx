@@ -1,5 +1,6 @@
+"use client";
 import { useRef, useState } from "react";
-import DSButton from "../dsButton/DsButton";
+import DSButton from "../DsButton/DsButton";
 import TextField from "../DsTextField/DsTextField";
 import {
   convertToDate,
@@ -10,6 +11,9 @@ import {
 import { setRows } from "@/app/Redux/slice/TableSlice/tableSlice";
 import { useAppDispatch } from "@/app/Redux/hook/hook";
 import styles from "./DsTable.module.css";
+import DsInputTypeRange from "../DsInpputTypeRange/dsInputTypeRange";
+import DsSelect from "../DsSelect/dsSelect";
+
 interface advancedFilterComponent {
   rows: trow[];
   filterTypes: filterType[];
@@ -29,6 +33,44 @@ const AdvancedFilterComponent: React.FC<advancedFilterComponent> = ({
   const dateColumn = filterTypes.find((x) => x.filterType == "DRF");
   const csvColumn = filterTypes.find((x) => x.filterType == "CSV");
   // const dropdownColumn = filterTypes.find((x) => x.filterType == "DDF");
+
+  type Option = {
+    label: string;
+    value: string | Option[];
+  };
+
+  const options: Option[] = [
+    {
+      label: "Fruits",
+      value: [
+        { label: "Apple", value: "apple" },
+        { label: "Banana", value: "banana" },
+      ],
+    },
+    {
+      label: "Vegetables",
+      value: [
+        { label: "Carrot", value: "carrot" },
+        { label: "Lettuce", value: "lettuce" },
+      ],
+    },
+    {
+      label: "Beverages",
+      value: [
+        { label: "Water", value: "water" },
+        { label: "Juice", value: "juice" },
+        { label: "Tea", value: "tea" },
+      ],
+    },
+    {
+      label: "Animals",
+      value: [
+        { label: "Dog", value: "dog" },
+        { label: "Cat", value: "cat" },
+        { label: "Cow", value: "cow" },
+      ],
+    },
+  ];
 
   const [rangeFrom, setRangeFrom] = useState<number>(-Infinity);
   const [rangeTo, setRangeTo] = useState<number>(Infinity);
@@ -145,6 +187,7 @@ const AdvancedFilterComponent: React.FC<advancedFilterComponent> = ({
   ) => {
     const commaValue = e.target.value.split(",");
     setCommaSeparatedValue(commaValue);
+    console.log(commaValue);
   };
   const searchDataOnSpecifiedColumnUsingCSV = (columnIndex: number) => {
     const filteredRows = [...rows].filter((row) =>
@@ -161,6 +204,7 @@ const AdvancedFilterComponent: React.FC<advancedFilterComponent> = ({
           )
       )
     );
+    console.log(filteredRows);
     return filteredRows;
   };
 
@@ -209,6 +253,7 @@ const AdvancedFilterComponent: React.FC<advancedFilterComponent> = ({
       </div>
       <div className={`${styles["date-filter"]}`}>
         <TextField
+          className="adv-textfield"
           placeholder={`${dateColumn?.columnHeader} From`}
           type={"singleline"}
           handleInputChange={setDateFromValue}
@@ -217,6 +262,7 @@ const AdvancedFilterComponent: React.FC<advancedFilterComponent> = ({
           disable={false}
         ></TextField>
         <TextField
+          className="adv-textfield"
           placeholder={`${dateColumn?.columnHeader} To`}
           type={"singleline"}
           handleInputChange={setDateToValue}
@@ -225,22 +271,21 @@ const AdvancedFilterComponent: React.FC<advancedFilterComponent> = ({
           disable={false}
         ></TextField>
       </div>
-      <div className={`${styles["date-filter"]}`}>
-        {rangeColumn?.columnHeader} From
-        <input
-          type="range"
-          min={minValue.current}
-          max={maxValue.current}
-          value={rangeValue}
-          className="range-input"
+      <div className={`${styles["input-type-filter"]}`}>
+        {/* <DsInputTypeRange
+          id={"range-column"}
+          className={""}
+          minValue={minValue.current}
+          maxValue={maxValue.current}
+          leftLabel={`${rangeColumn?.columnHeader}`}
+          rightLabel={`${rangeColumn?.columnHeader}`}
           onChange={setGrossRangeValue}
-        ></input>
+        ></DsInputTypeRange> */}
       </div>
-      {rangeValue}
-      {`               `} {rangeColumn?.columnHeader} To
       <div className={`${styles["date-filter"]}`}>
         <TextField
-          placeholder={`Type multiple ${csvColumn?.columnHeader} name and use comma`}
+          className="adv-fullwidth-textfield"
+          placeholder={`Type multiple ${csvColumn?.columnHeader} and use comma`}
           type={"singleline"}
           handleInputChange={setCommaValue}
           inputType="text"
@@ -248,6 +293,17 @@ const AdvancedFilterComponent: React.FC<advancedFilterComponent> = ({
           disable={false}
         ></TextField>
       </div>
+      <div style={{ display: "flex" }}>
+        <DsSelect
+          id="Multi"
+          options={options}
+          type="multi"
+          placeholder="Click me to select"
+          label="Source"
+          disable={false}
+        ></DsSelect>
+      </div>
+
       <DSButton label={"Apply"} handleOnClick={applyFilter}></DSButton>
     </div>
   );

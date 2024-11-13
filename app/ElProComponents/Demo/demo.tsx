@@ -110,14 +110,14 @@ export default function Demo() {
         sort: "NONE",
         columnContentType: "reactNode",
       },
-      {
-        columnIndex: 8,
-        className: "header-column",
-        columnHeader: <DSButton />,
-        isHidden: false,
-        sort: "NONE",
-        columnContentType: "reactNode",
-      },
+      // {
+      //   columnIndex: 8,
+      //   className: "header-column",
+      //   columnHeader: <DSButton />,
+      //   isHidden: false,
+      //   sort: "NONE",
+      //   columnContentType: "reactNode",
+      // },
     ],
     rows: [
       {

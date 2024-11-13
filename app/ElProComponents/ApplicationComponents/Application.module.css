@@ -22,7 +22,7 @@
 }
 .appMenu{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     overflow-x: auto;
     justify-content: space-around;
     align-items: center;

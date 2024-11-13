@@ -8,9 +8,8 @@ import {
 } from "./helpers/types";
 import SortComponent from "./supportComponents/sortComponent";
 import styles from "./DsTable.module.css";
-import RadioCheckButton from "./supportComponents/RadioCheckButton";
 import TextField from "../DsTextField/DsTextField";
-import DSButton from "../dsButton/DsButton";
+import DSButton from "../DsButton/DsButton";
 import Image from "next/image";
 
 import threedot from "../../Icons/smallIcons/threedot.svg";
@@ -241,10 +240,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
     setNewRows(sortedRows);
   };
 
-  const [optionsArray, setOptionArray] = useState<string[]>([]);
-  useEffect(() => {
-    setOptionArray(columns.map((x) => x.columnHeader?.toString() ?? ""));
-  }, [columns]);
+ 
 
   const hideShowColumn = (value: string | number) => {
     if (typeof value == "string") {
@@ -259,10 +255,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
       });
     }
 
-    const array = columns
-      .filter((x) => !x.isHidden)
-      .map((x) => x.columnHeader?.toString() ?? "");
-    setOptionArray(array);
+   
     setColumnSort(columnSort);
   };
 
@@ -416,7 +409,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
             </div>
           )}
           <table
-            className={`${className ? className : ""} ${
+            className={`${styles[className ? className : ""]} ${
               alignment == "center"
                 ? styles["ds-table-center"]
                 : styles["ds-table"]
@@ -430,7 +423,6 @@ const TableComponent: React.FC<TableComponentProps> = ({
                     <ThComponent
                       key={column.columnHeader?.toString()}
                       className={""}
-                      content={column.columnHeader}
                       columnIndex={column.columnIndex}
                       columnHeader={column.columnHeader}
                       alignment={alignment}
@@ -496,7 +488,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
             </TbodyComponent>
             <TfooterComponent className={""} alignment={alignment}>
               <TrComponent>
-                <TdComponent className={""} alignment={alignment} colSpan={columns.length}>
+                <TdComponent className={""} alignment={alignment} colSpan={9}>
                   Showing {tableRows.length} of {rowsContainer.current.length}{" "}
                 </TdComponent>
               </TrComponent>
@@ -506,6 +498,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
             return (
               <MenuComponent
                 key={column.columnIndex}
+                className={""}
                 column={column}
                 sortDataOnlyOnSpecifiedColumn={sortTableAscending}
                 clearSortOnColumn={clearSortOnColumn}
@@ -516,24 +509,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
                 manageColumns={() => alert("manage columns")}
               >
                 <>
-                  <div key={"manage"} className="column-visibility">
-                    <RadioCheckButton
-                      groupName="Column visibility"
-                      options={columns
-                        .filter((col) => typeof col.columnHeader === "string") // Only include columns with string headers
-                        .map((col) => ({
-                          id: col.columnIndex.toString(),
-                          type: "checkbox",
-                          value: col.columnHeader as string,
-                          code: col.columnIndex.toString(),
-                          className: "d-flex",
-                        }))}
-                      handleOnChange={(e) =>
-                        hideShowColumn(e.currentTarget.value)
-                      }
-                      selectedOption={optionsArray}
-                    />
-                  </div>
+                
                 </>
               </MenuComponent>
             );

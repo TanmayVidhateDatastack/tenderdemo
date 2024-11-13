@@ -7,7 +7,7 @@ export interface tbodyprops {
 const TbodyComponent: React.FC<tbodyprops> = ({ className, children }) => {
   return (
     <>
-      <tbody className={`${styles["ds-tableBody"]} ${className}`}>
+      <tbody className={`${styles["ds-tableBody"]} ${styles[className]}`}>
         {children}
       </tbody>
     </>
