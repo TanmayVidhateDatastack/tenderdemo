@@ -4,7 +4,7 @@ import TabProvider from "./TabsContextProvider";
 import TabNav from "./TabNav";
 import styles from "./TabView.module.css";
 
-interface tab {
+export interface tab {
   tabId: string;
   tabName: string;
 }

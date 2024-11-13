@@ -9,6 +9,7 @@ import DSButton from "../dsButton/DsButton";
 interface tab {
   tabId: string;
   tabName: string;
+  count?:number;
 }
 export interface TabNavProps {
   selectedTabId: string;
@@ -36,7 +37,7 @@ const TabNav: React.FC<TabNavProps> = ({ selectedTabId, tabs }) => {
               type="tab"
               buttonViewStyle="btnContained"
               label={x.tabName}
-              //   count="00"
+              count={x.count?x.count.toString():""}
               handleOnClick={() => setSelectedTabId(x.tabId)}
               tooltip={x.tabName}
             />

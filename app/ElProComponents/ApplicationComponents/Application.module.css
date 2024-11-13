@@ -6,6 +6,9 @@
     background-color: var(--background);
     margin:var(--ds-padding)
 }
+.application.dataTable{
+    background-color: var(--application-background);
+}
 .applicationHeader{
     display: flex;
     flex-direction: row;
