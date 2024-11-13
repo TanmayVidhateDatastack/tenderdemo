@@ -45,10 +45,10 @@ function Application({
       </ApplicationHeader>
       {tabs && selectedTabId && (
         <TabContainer selectedTabId={selectedTabId} tabs={tabs}>
-          <div className={styles.application+ " "+`${!isDataTable?styles.dataTable:" "}`}>{children}</div>
+          <div className={styles.application+ " "+`${isDataTable?styles.dataTable:" "}`}>{children}</div>
         </TabContainer>
       )}
-      {!tabs && <div className={styles.application + " "+`${!isDataTable?styles.dataTable:" "}`}>{children}</div>}
+      {!tabs && <div className={styles.application + " "+`${isDataTable?styles.dataTable:" "}`}>{children}</div>}
     </>
   );
 }

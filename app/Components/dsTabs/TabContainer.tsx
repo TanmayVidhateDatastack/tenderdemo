@@ -22,7 +22,7 @@ const TabContainer: React.FC<TabsProps> = ({
     <TabProvider>
       <div className={styles.TabContainer}>
         <TabNav selectedTabId={selectedTabId} tabs={tabs}></TabNav>
-        <div className={styles.TabView}>{children}</div>
+        {children}
       </div>
     </TabProvider>
   );
