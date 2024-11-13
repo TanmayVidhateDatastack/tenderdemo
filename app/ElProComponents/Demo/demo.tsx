@@ -1319,6 +1319,8 @@ export default function Demo() {
       </DsPopup>
       <DsPane id="PaneRight" side={"right"} title="Status">
         <DsDemoStatusIndocator></DsDemoStatusIndocator>
+        <DemoSelect></DemoSelect>
+
       </DsPane>
 
       {showNotification && (

@@ -31,6 +31,7 @@ function ElLayout({children}: ElLayoutProps) {
           <div className={styles.appViewArea}>
             {children}
           </div>
+          <div className="contexts"></div>
         </div>
       </div>
       </Provider>

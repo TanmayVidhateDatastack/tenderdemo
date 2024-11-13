@@ -144,16 +144,6 @@
     color: var(--text-white);
 }
 
-.btnContained.btnWarning{
-    background-color: var(--warning);
-    color: var(--text-warning);
-}
-
-.btnContained.btnWarning:hover{
-    background-color: var(--danger-hover);
-    color: var(--text-white);
-}
-
 .btnText.btnInfo{
     background-color: var(--info);
     color: var(--text-white);
@@ -241,6 +231,17 @@
 
 .btnContained.btnPrimary:hover{
     background-color: var(--primary-hover);
+    color: var(--text-white);
+}
+
+
+.btnContained.btnWarning{
+    background-color: var(--warning);
+    color: var(--text-warning);
+}
+
+.btnContained.btnWarning:hover{
+    background-color: var(--danger-hover);
     color: var(--text-white);
 }
 
@@ -359,6 +360,25 @@
     background-color: var(--primary-hover);
     color: var(--text-white);
 }
+
+/* .btn:not(.disable):hover{
+    border-color: var(--blue-600) !important;
+
+  } */
+
+  .btn.disable{
+    border: none;
+    background-color: var(--secondary);
+    color: gray !important;
+    opacity: 0.5;
+  }
+
+  .btn.disable:hover{
+    border: none;
+    background-color: var(--secondary);
+    color: gray !important;
+    opacity: 0.5;
+  }
 
 .iconBtn{
     border-radius: 50%;
@@ -488,7 +508,7 @@
     background-color: var(--heather);
 }
 
-.toggle_btn.toggled .thumb{
+.toggled .thumb{
     left: 50%;
 }
 
@@ -506,10 +526,10 @@
     border-radius: 4px;
 }
 
-.btngroupcontained{
+/* .btngroupcontained{
     background-color: var(--btngroup-primary);
     color: var(--btngroup-text-primary);
-}
+} */
 
 .btngroup {
     display: flex;
@@ -522,7 +542,7 @@
 }
 
 
-.btngroupcontained.group_btn{
+.btngroup .btnContained.btn{
     position: relative;
     margin: 0 !important;
     background-color: var(--btngroup-primary) !important;
@@ -531,12 +551,12 @@
     border: 0px;
 }
 
-.btngroupcontained.group_btn:hover{
+.btngroup .btnContained.btn:hover{
     background-color: var(--btngroup-primary-hover) !important;
     color: var(--btngroup-text-primary-hover) !important;
 }
 
-.btngroupcontained.group_btn.active::before{
+.btngroup .btnContained.btn.active::before{
     content: '';
     position: absolute;
     width: 100%;
@@ -548,7 +568,7 @@
     transform: translatex(-50%);
 }
 
- .btngroup .btngroupcontained:last-child {
+ .btngroup .btnContained:last-child {
     border-right: 0;
 } 
 

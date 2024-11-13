@@ -4,7 +4,7 @@ import TabProvider from "./TabsContextProvider";
 import TabNav from "./TabNav";
 import styles from "./TabView.module.css";
 
-interface tab {
+export interface tab {
   tabId: string;
   tabName: string;
 }
@@ -22,7 +22,7 @@ const TabContainer: React.FC<TabsProps> = ({
     <TabProvider>
       <div className={styles.TabContainer}>
         <TabNav selectedTabId={selectedTabId} tabs={tabs}></TabNav>
-        <div className={styles.TabView}>{children}</div>
+        {children}
       </div>
     </TabProvider>
   );
