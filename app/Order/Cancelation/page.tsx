@@ -25,7 +25,7 @@ export default function Home() {
       >
         <TabView tabId="0">
           <div className={pagestyles.container}>
-            <div className={styles.container}>deta</div>
+            <div className={styles.container}>delta</div>
           </div>
         </TabView>
         <TabView tabId="1">
