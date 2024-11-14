@@ -5,7 +5,7 @@ import pagestyles from "../../page.module.css";
 // import Image from "next/image";
 import Application from "@/app/Elements/ElProComponents/ApplicationComponents/Application";
 import TabView from "@/app/Elements/Components/dsTabs/TabView";
-import DSButton from "@/app/Elements/Components/dsButton/dsButton";
+import DSButton from "@/app/Elements/Components/dsButton/DsButton";
 import DsSelect from "@/app/Elements/Components/dsSelect/dsSelect";
 import TextField from "@/app/Elements/Components/DsTextField/DsTextField";
 import Detail from "@/app/Elements/ElProComponents/DetailComponent/Detail";
@@ -48,15 +48,17 @@ export default function Home() {
               <Detail detailOf="Updated By" className={styles.subtitle}>
                 {UpdatedBy}
               </Detail>
-              
             </div>
           </div>
         </TabView>
         <div className={styles.footer}>
-          <DSButton buttonSize="btnLarge" buttonColor="btnDark">Close</DSButton>
-          <DSButton type="split" buttonViewStyle="btnContained">Save</DSButton>
+          <DSButton buttonSize="btnLarge" buttonColor="btnDark">
+            Close
+          </DSButton>
+          <DSButton type="split" buttonViewStyle="btnContained">
+            Save
+          </DSButton>
         </div>
-
       </Application>
     </>
   );
