@@ -34,3 +34,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+#package.json of the other repo
+/Element/package.json
+/Element/package-lock.json
