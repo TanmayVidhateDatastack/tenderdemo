@@ -80,7 +80,11 @@
   font-size: var(--bodyText);
   color: var(--grey-800);
 }
-
+.footer{
+  display: flex;
+  justify-content: flex-end;
+  padding: var(--ds-padding);
+}
 @media (max-width: 1200px) {
   .details > div,.transportDetails {
     grid-template-columns: repeat(

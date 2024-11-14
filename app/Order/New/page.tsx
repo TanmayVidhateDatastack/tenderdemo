@@ -1,21 +1,21 @@
 "use client";
-import DataList from "@/app/Components/dsDatalist/dsDatalist";
+import DataList from "@/app/Elements/Components/dsDatalist/dsDatalist";
 // import NavBack from "../../ElProComponents/NavigationComponent/navBack";
 import styles from "../order.module.css";
 import pagestyles from "../../page.module.css";
-import DsSelect from "@/app/Components/dsSelect/dsSelect";
-import Detail from "@/app/ElProComponents/DetailComponent/Detail";
+import DsSelect from "@/app/Elements/Components/dsSelect/dsSelect";
+import Detail from "@/app/Elements/ElProComponents/DetailComponent/Detail";
 
 import Image from "next/image";
-import BankDetailsSrc from "../../Icons/mediumIcons/bankDetails.svg";
-import Application from "@/app/ElProComponents/ApplicationComponents/Application";
-import TextField from "@/app/Components/DsTextField/DsTextField";
+import BankDetailsSrc from "@/app/Elements/Icons/mediumIcons/bankDetails.svg";
+import Application from "@/app/Elements/ElProComponents/ApplicationComponents/Application";
+import TextField from "@/app/Elements/Components/DsTextField/DsTextField";
 import ContextMenu, {
   closeContext,
   displayContext,
-} from "@/app/Components/dsContextHolder/dsContextHolder";
-import DSButton from "@/app/Components/dsButton/DsButton";
-import TableComponent from "@/app/Components/DsTablecomponent/DsTableComponent";
+} from "@/app/Elements/Components/dsContextHolder/dsContextHolder";
+import DSButton from "@/app/Elements/Components/dsButton/dsButton";
+import TableComponent from "@/app/Elements/Components/DsTablecomponent/DsTableComponent";
 
 export default function Home() {
   const panNo = "AABCD9532A";
@@ -123,7 +123,6 @@ export default function Home() {
         sort: "ASC",
         columnContentType: "number",
       },
-    
     ],
     rows: [
       {
@@ -163,7 +162,7 @@ export default function Home() {
           {
             columnIndex: 5,
             className: "cell",
-            content:60.35,
+            content: 60.35,
             contentType: "string",
           },
           {
@@ -196,10 +195,10 @@ export default function Home() {
             content: "-",
             contentType: "number",
           },
-         
         ],
       },
-    ]}
+    ],
+  };
   return (
     <>
       <Application appTitle={"New Order"} hasPrevious={true}>
@@ -289,6 +288,7 @@ export default function Home() {
                   alignment={tempTableData.alignment.toString()}
                   columns={tempTableData.columns}
                   rows={tempTableData.rows}
+                  isFooterRequired={false}
                 ></TableComponent>
               </div>
             </div>
@@ -337,7 +337,9 @@ export default function Home() {
                 <Detail detailOf="Transportation Date">{TransportDate}</Detail>
                 <Detail detailOf="Vehicle Type">{vehType}</Detail>
                 <Detail detailOf="Vehicle Number">{vehNo}</Detail>
-                <Detail detailOf="Transport Document Number">{TransportDocNo}</Detail>
+                <Detail detailOf="Transport Document Number">
+                  {TransportDocNo}
+                </Detail>
               </div>
             </div>
 
