@@ -5,10 +5,10 @@ import pagestyles from "../../page.module.css";
 // import Image from "next/image";
 import Application from "@/app/Elements/ElProComponents/ApplicationComponents/Application";
 import TabView from "@/app/Elements/Components/dsTabs/TabView";
-import DSButton from "@/app/Elements/Components/dsButton/DsButton";
 import DsSelect from "@/app/Elements/Components/dsSelect/dsSelect";
 import TextField from "@/app/Elements/Components/DsTextField/DsTextField";
 import Detail from "@/app/Elements/ElProComponents/DetailComponent/Detail";
+import DSButton from "@/app/Elements/Components/dsButton/dsButton";
 
 export default function Home() {
   const UpdatedBy = "Tanmay Patil (Emp ID:1311)";
@@ -52,10 +52,18 @@ export default function Home() {
           </div>
         </TabView>
         <div className={styles.footer}>
-          <DSButton buttonSize="btnLarge" buttonColor="btnDark">
+          <DSButton
+            buttonColor="btnDark"
+            // buttonSize="btnLarge"
+            buttonViewStyle="btnOutlined"
+          >
             Close
           </DSButton>
-          <DSButton type="split" buttonViewStyle="btnContained">
+          <DSButton
+            type="split"
+            // buttonSize="btnLarge"
+            buttonViewStyle="btnContained"
+          >
             Save
           </DSButton>
         </div>
