@@ -3,16 +3,16 @@ import localFont from "next/font/local";
 import "./globals.css";
 import ElLayout from "./Elements/ElProComponents/ElLayout/ElLayout";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
+const openSans = localFont({
+  src: "./fonts/Open_Sans/OpenSans-VariableFont_wdth,wght.ttf",
+  variable: "--font-Open-sans",
   weight: "100 900",
 });
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+// const geistMono = localFont({
+//   src: "./fonts/GeistMonoVF.woff",
+//   variable: "--font-geist-mono",
+//   weight: "100 900",
+// });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className={`${openSans.variable}`}>
         <ElLayout>
 
         {children}

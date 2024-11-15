@@ -145,7 +145,8 @@ body {
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Open Sans, Arial, Helvetica, sans-serif;
+
+  font-family: var(--font-Open-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

@@ -16,6 +16,7 @@ import ContextMenu, {
 } from "@/app/Elements/Components/dsContextHolder/dsContextHolder";
 import DSButton from "@/app/Elements/Components/dsButton/dsButton";
 import TableComponent from "@/app/Elements/Components/DsTablecomponent/DsTableComponent";
+import Ds_checkbox from "@/app/Elements/Components/DsCheckbox/dsCheckbox";
 
 export default function Home() {
   const panNo = "AABCD9532A";
@@ -272,6 +273,7 @@ export default function Home() {
                   ></DataList>
                   <TextField placeholder={undefined}></TextField>
                   <DSButton buttonSize="btnLarge">Add</DSButton>
+                  <Ds_checkbox id={"180days"} name={"180days"} value={"1"}  label={"Allow < 180 days"}></Ds_checkbox>
                   <DSButton buttonViewStyle="btnText" id="CSV" type="upload">
                     CSV file
                   </DSButton>
