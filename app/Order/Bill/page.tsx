@@ -1,28 +1,20 @@
 "use client";
-// import NavBack from "../../ElProComponents/NavigationComponent/navBack";
 import styles from "./packing.module.css";
 import buttonStyles from "../../Elements/Components/dsButton/dsButton.module.css";
 import statusStyles from "../../Elements/Components/DsStatusIndicator/dsstatusIndicator.module.css";
-// import pagestyles from "../../page.module.css";
-// import pagestyles from "../../page.module.css";
 import Image from "next/image";
-// import { useState } from "react";
 import mailIcon from "../../Elements/Icons/smallIcons/mailIcon.svg";
 import desktop from "../../Elements/Icons/smallIcons/desktop.svg";
 import print from "../../Elements/Icons/smallIcons/printIcon.svg";
 import whatsappIcon from "../../Elements/Icons/smallIcons/whatsapp.svg";
-
 import PackingList from "./packingList";
 import { useEffect, useState } from "react";
-import DSButton from "@/app/Elements/Components/dsButton/DsButton";
 import DsStateChange from "@/app/Elements/Components/DsStatusIndicator/dsStatusIndicator";
 import Application from "@/app/Elements/ElProComponents/ApplicationComponents/Application";
-// import PackingData from "./packingData";
+import DSButton from "@/app/Elements/Components/dsButton/dsButton";
 
 export default function Home() {
   const orderNo = "202401999900007 (B2B)";
-
-  // const [toggled, setToggled] = useState(false);
 
   const [pageStatus, setPageStatus] = useState<boolean>(false);
 
@@ -105,22 +97,24 @@ export default function Home() {
                 id="mail"
                 type="icon_image"
                 buttonSize="btnSmall"
-                className={styles.icons + " " + buttonStyles.right_separator}
+                className={styles.icons}
                 tooltip="varients: desktop"
                 // startIcon={<Image src={desktop} alt="icon" />}
               >
                 {<Image src={desktop} alt="icon" />}
               </DSButton>
-              <DSButton
-                id="mail"
-                type="icon_image"
-                buttonSize="btnSmall"
-                className={styles.icons + " " + buttonStyles.left_separator}
-                tooltip="varients: print"
-                // startIcon={<Image src={print} alt="icon" />}
-              >
-                {<Image src={print} alt="icon" />}
-              </DSButton>
+              <div className={buttonStyles.left_separator}>
+                <DSButton
+                  id="mail"
+                  type="icon_image"
+                  buttonSize="btnSmall"
+                  className={styles.icons}
+                  tooltip="varients: print"
+                  // startIcon={<Image src={print} alt="icon" />}
+                >
+                  {<Image src={print} alt="icon" />}
+                </DSButton>
+              </div>
             </div>
           </div>
 

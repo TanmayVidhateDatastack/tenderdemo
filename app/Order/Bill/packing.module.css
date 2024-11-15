@@ -104,12 +104,6 @@ margin-left: 600px;
     padding: 20px;
  } 
 
-.signature{
-    display: flex;
-    justify-content: space-evenly !important;
-    padding-left: 30px !important;
-    align-items: center;
-}
  .authSign{
     justify-content: center;
     margin-left: 30px;
