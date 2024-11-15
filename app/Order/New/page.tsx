@@ -19,7 +19,7 @@ import TableComponent from "@/app/Elements/Components/DsTablecomponent/DsTableCo
 
 export default function Home() {
   const panNo = "AABCD9532A";
-  const gstinNo = "12436514352356675843";
+  const gstinNo = "12436514352356675843";z
   const drugLicNo = "1234eydfeedqweWSR";
   const fdaLicNo = "2143078925314344568743324568";
   const foodLicNo = "322463215425461663665343";

@@ -7,6 +7,7 @@ export default function Home() {
     <>
      <NavTo location="Order/New">New</NavTo>
      <NavTo location="Order/Cancelation">Cancelation</NavTo>
+     <NavTo location="Order/EwayBill">EwayBill</NavTo>
      <Demo></Demo>
     </>
   );
