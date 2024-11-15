@@ -1106,6 +1106,7 @@ export default function Home() {
             tooltip="variants : btnPrimary, btnOutlined, btnMedium"
             label="New"
             handleOnClick={(e) => clickHandler(e)}
+            location="/Order/New"
           />
         </>
       }

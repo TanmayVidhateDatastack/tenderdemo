@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import DsStateChange from "@/app/Elements/Components/DsStatusIndicator/dsStatusIndicator";
 import Application from "@/app/Elements/ElProComponents/ApplicationComponents/Application";
 import DSButton from "@/app/Elements/Components/dsButton/dsButton";
+import NavTo from "@/app/Elements/ElProComponents/NavigationComponent/navTo";
 
 export default function Home() {
   const orderNo = "202401999900007 (B2B)";
@@ -45,15 +46,15 @@ export default function Home() {
                 status="Approved"
                 label="Approved"
               />
-              <DSButton
+
+              <NavTo
+                location="/Order/EwayBill"
                 id="ewaybillBtn"
                 buttonColor="btnPrimary"
                 buttonViewStyle="btnContained"
-                // className={btnStyles.btnContained}
-                //   handleOnClick={(e) => clickHandler(e)}
-                tooltip="variants : btnPrimary, btnContained, btnMedium"
-                label="E-Way Bill"
-              />
+              >
+                E-way Bill
+              </NavTo>
             </div>
           </>
         }
