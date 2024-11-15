@@ -129,7 +129,7 @@ export default function Home() {
           {
             columnIndex: 3,
             className: "cell",
-            content: "Medplus Health Services",
+            content: "DR Distributer",
             contentType: "string",
           },
           {
@@ -186,13 +186,13 @@ export default function Home() {
           {
             columnIndex: 2,
             className: "cell",
-            content: "CD34",
+            content: "V097",
             contentType: "string",
           },
           {
             columnIndex: 3,
             className: "cell",
-            content: "Apollo Pharmacy",
+            content: "Vigneya Industries",
             contentType: "string",
           },
           {
@@ -233,63 +233,63 @@ export default function Home() {
         rowIndex: 2,
         className: "row",
         content: [
-          // {
-          //   columnIndex: 0,
-          //   className: "cell",
-          //   content: 20240199900003,
-          //   contentType: "number",
-          // },
-          // {
-          //   columnIndex: 1,
-          //   className: "cell",
-          //   content: "24/09/2024",
-          //   contentType: "date",
-          // },
-          // {
-          //   columnIndex: 2,
-          //   className: "cell",
-          //   content: "HJ65",
-          //   contentType: "string",
-          // },
-          // {
-          //   columnIndex: 3,
-          //   className: "cell",
-          //   content: "Hetero Drugs Ltd.",
-          //   contentType: "string",
-          // },
+          {
+            columnIndex: 0,
+            className: "cell",
+            content: 20240199900003,
+            contentType: "number",
+          },
+          {
+            columnIndex: 1,
+            className: "cell",
+            content: "24/09/2024",
+            contentType: "date",
+          },
+          {
+            columnIndex: 2,
+            className: "cell",
+            content: "V069",
+            contentType: "string",
+          },
+          {
+            columnIndex: 3,
+            className: "cell",
+            content: "Veena Enterprises",
+            contentType: "string",
+          },
           {
             columnIndex: 4,
             className: "cell",
             content: 8000,
             contentType: "number",
-            colSpan: 8,
+            // colSpan: 8,
           },
-          // {
-          //   columnIndex: 5,
-          //   className: "cell",
-          //   content: "12,00,000",
-          //   contentType: "string",
-          // },
-          // {
-          //   columnIndex: 6,
-          //   className: "cell",
-          //   content: "12,04,000",
-          //   contentType: "number",
-          // },
-          // {
-          //
-          //   className: "cell",
-          //   content: (
-          //     <DsStateChange
-          //       className={styles.statusIndicator}
-          //       type="system_default"
-          //       id="state2"
-          //       status="Cancelled"
-          //       label="cancelled"
-          //     />
-          //   ),
-          //   contentType: "reactNode",
-          // },
+          {
+            columnIndex: 5,
+            className: "cell",
+            content: "12,00,000",
+            contentType: "string",
+          },
+          {
+            columnIndex: 6,
+            className: "cell",
+            content: "12,04,000",
+            contentType: "number",
+          },
+          {
+          
+            className: "cell",
+            content: (
+              <DsStateChange
+                className={styles.statusIndicator}
+                type="system_default"
+                id="state2"
+                status="Cancelled"
+                label="cancelled"
+              />
+            ),
+            contentType: "reactNode",
+          },
         ],
       },
       {
@@ -311,13 +311,13 @@ export default function Home() {
           {
             columnIndex: 2,
             className: "cell",
-            content: "OP65",
+            content: "T146",
             contentType: "string",
           },
           {
             columnIndex: 3,
             className: "cell",
-            content: "Mediwell Diagnostics",
+            content: "Tropical Nortec",
             contentType: "string",
           },
           {
@@ -374,13 +374,13 @@ export default function Home() {
           {
             columnIndex: 2,
             className: "cell",
-            content: "HB08",
+            content: "U014",
             contentType: "string",
           },
           {
             columnIndex: 3,
             className: "cell",
-            content: "Vikram Medical Agency",
+            content: "Ukay Industries",
             contentType: "string",
           },
           {
@@ -436,13 +436,13 @@ export default function Home() {
           {
             columnIndex: 2,
             className: "cell",
-            content: "MN04",
+            content: "U017",
             contentType: "string",
           },
           {
             columnIndex: 3,
             className: "cell",
-            content: "Sree Mookambika Agency",
+            content: "Ultra Blinds",
             contentType: "string",
           },
           {
@@ -497,13 +497,13 @@ export default function Home() {
           {
             columnIndex: 2,
             className: "cell",
-            content: "GH67",
+            content: "S436",
             contentType: "string",
           },
           {
             columnIndex: 3,
             className: "cell",
-            content: "Bharat Serums Ltd.",
+            content: "Shreeji IMPEX",
             contentType: "string",
           },
           {
@@ -559,13 +559,13 @@ export default function Home() {
           {
             columnIndex: 2,
             className: "cell",
-            content: "TR65",
+            content: "B249",
             contentType: "string",
           },
           {
             columnIndex: 3,
             className: "cell",
-            content: "Sulekha Healthcare",
+            content: "B.R. Enterprises",
             contentType: "string",
           },
           {
@@ -621,13 +621,13 @@ export default function Home() {
           {
             columnIndex: 2,
             className: "cell",
-            content: "PU78",
+            content: "V069",
             contentType: "string",
           },
           {
             columnIndex: 3,
             className: "cell",
-            content: "Lupin Limited",
+            content: "Veena Enterprises",
             contentType: "string",
           },
           {
@@ -682,13 +682,13 @@ export default function Home() {
           {
             columnIndex: 2,
             className: "cell",
-            content: "UT60",
+            content: "V097",
             contentType: "string",
           },
           {
             columnIndex: 3,
             className: "cell",
-            content: "Lupin Limited",
+            content: "Vigneya Industries",
             contentType: "string",
           },
           {
@@ -743,13 +743,13 @@ export default function Home() {
           {
             columnIndex: 2,
             className: "cell",
-            content: "AB43",
+            content: "V097",
             contentType: "string",
           },
           {
             columnIndex: 3,
             className: "cell",
-            content: "Lupin Limited",
+            content: "Vigneya Industries",
             contentType: "string",
           },
           {
@@ -804,13 +804,13 @@ export default function Home() {
           {
             columnIndex: 2,
             className: "cell",
-            content: "SF45",
+            content: "U017",
             contentType: "string",
           },
           {
             columnIndex: 3,
             className: "cell",
-            content: "Lupin Limited",
+            content: "Ultra Blinds",
             contentType: "string",
           },
           {
@@ -867,13 +867,13 @@ export default function Home() {
           {
             columnIndex: 2,
             className: "cell",
-            content: "GR65",
+            content: "Y003",
             contentType: "string",
           },
           {
             columnIndex: 3,
             className: "cell",
-            content: "Lupin Limited",
+            content: "Yash Traders",
             contentType: "string",
           },
           {
@@ -930,13 +930,13 @@ export default function Home() {
           {
             columnIndex: 2,
             className: "cell",
-            content: "MX09",
+            content: "Y003",
             contentType: "string",
           },
           {
             columnIndex: 3,
             className: "cell",
-            content: "Pharma XYZ",
+            content: "Yash Traders",
             contentType: "string",
           },
           {
@@ -993,13 +993,13 @@ export default function Home() {
           {
             columnIndex: 2,
             className: "cell",
-            content: "MX09",
+            content: "T146",
             contentType: "string",
           },
           {
             columnIndex: 3,
             className: "cell",
-            content: "Medicare Pharma Ltd.",
+            content: "Tropical Nortec",
             contentType: "string",
           },
           {
@@ -1052,7 +1052,7 @@ export default function Home() {
 
   return (
     <Application
-      appTitle="Sales Order"
+      appTitle="Sales Orders"
       appMenu={
         <>
           <DataList
@@ -1111,7 +1111,7 @@ export default function Home() {
         </>
       }
       tabs={[
-        { tabId: "0", tabName: "Total" },
+        { tabId: "0", tabName: "Trade" },
         { tabId: "1", tabName: "Institutional" },
         { tabId: "2", tabName: "Corporate" },
         { tabId: "3", tabName: "New" }
