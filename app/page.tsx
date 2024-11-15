@@ -1,20 +1,35 @@
-
 "use client";
-import DSButton from "./Components/DsButton/DsButton";
-import DSButtonGroup from "./Components/DsButton/dsButtonGroup";
+// import Demo from "@/app/Elements/ElProComponents/Demo/demo";
+// import NavTo from "@/app/Elements/ElProComponents/NavigationComponent/navTo";
+
+// export default function Home() {
+//   return (
+//     <>
+//       <NavTo location="Order/New">New</NavTo>
+//       <NavTo location="Order/Bill">Bill</NavTo>
+//       <NavTo location="Order/Cancelation">Cancelation</NavTo>
+//       <Demo></Demo>
+//     </>
+//   );
+// }
+
+import DSButton from "@/app/Elements/Components/dsButton/dsButton";
+// import DSButtonGroup from "@/app/Elements/Components/dsButton/dsButtonGroup";
 import React, { useState } from "react";
-import DataList from "./Components/dsDatalist/dsDatalist";
-import Application from "./ElProComponents/ApplicationComponents/Application";
-import btnStyles from "./Components/DsButton/dsButton.module.css";
-import addIcon from "./Icons/smallIcons/add.svg";
-import filter from "./Icons/smallIcons/filtericon.svg";
-import whiteadd from "./Icons/smallIcons/whiteadd.svg";
-import commentIcon from "./Icons/smallIcons/commenticon.svg";
+import DataList from "@/app/Elements/Components/dsDatalist/dsDatalist";
+import Application from "@/app/Elements/ElProComponents/ApplicationComponents/Application";
+import btnStyles from "@/app/Elements/Components/DsButton/dsButton.module.css";
+import addIcon from "@/app/Elements/Icons/smallIcons/add.svg";
+import filter from "@/app/Elements/Icons/smallIcons/filtericon.svg";
+import whiteadd from "@/app/Elements/Icons/smallIcons/whiteadd.svg";
+import commentIcon from "@/app/Elements/Icons/smallIcons/commenticon.svg";
 import Image from "next/image";
-import DsStateChange from "./Components/DsStatusIndicator/dsStatusIndicator";
-import DsTableComponent from "./Components/DsTablecomponent/DsTableComponent";
-// import styles from "./Components/DsStatusIndicator/dsstatusIndicator.module.css";
+import DsStateChange from "@/app/Elements/Components/DsStatusIndicator/dsStatusIndicator";
+import DsTableComponent from "@/app/Elements/Components/DsTablecomponent/DsTableComponent";
+// import styles from "@/app/Elements/Components/DsStatusIndicator/dsstatusIndicator.module.css";
 import styles from "./page.module.css";
+import NavTo from "./Elements/ElProComponents/NavigationComponent/navTo";
+import TabView from "./Elements/Components/dsTabs/TabView";
 export default function Home() {
   const [iconSrc, setIconSrc] = useState(addIcon);
   const tempTableData = {
@@ -81,14 +96,12 @@ export default function Home() {
         columnContentType: "number",
       },
       {
-      
         className: "header-column",
         columnHeader: "STATUS",
         isHidden: false,
         sort: "NONE",
         columnContentType: "reactNode",
       },
-      
     ],
     rows: [
       {
@@ -138,7 +151,6 @@ export default function Home() {
             contentType: "number",
           },
           {
-        
             className: "cell",
             content: (
               <DsStateChange
@@ -202,7 +214,6 @@ export default function Home() {
             contentType: "number",
           },
           {
-          
             className: "cell",
             content: (
               <DsStateChange
@@ -266,7 +277,7 @@ export default function Home() {
           //   contentType: "number",
           // },
           // {
-          // 
+          //
           //   className: "cell",
           //   content: (
           //     <DsStateChange
@@ -328,7 +339,6 @@ export default function Home() {
             contentType: "number",
           },
           {
-      
             className: "cell",
             content: (
               <DsStateChange
@@ -393,7 +403,6 @@ export default function Home() {
           },
 
           {
-         
             className: "cell",
             content: (
               <DsStateChange
@@ -455,7 +464,6 @@ export default function Home() {
             contentType: "number",
           },
           {
-          
             className: "cell",
             content: (
               <DsStateChange
@@ -517,7 +525,6 @@ export default function Home() {
             contentType: "number",
           },
           {
-           
             className: "cell",
             content: (
               <DsStateChange
@@ -580,7 +587,6 @@ export default function Home() {
             contentType: "number",
           },
           {
-          
             className: "cell",
             content: (
               <DsStateChange
@@ -643,7 +649,6 @@ export default function Home() {
             contentType: "number",
           },
           {
-         
             className: "cell",
             content: (
               <DsStateChange
@@ -705,7 +710,6 @@ export default function Home() {
             contentType: "number",
           },
           {
-        
             className: "cell",
             content: (
               <DsStateChange
@@ -767,7 +771,6 @@ export default function Home() {
             contentType: "number",
           },
           {
-           
             className: "cell",
             content: (
               <DsStateChange
@@ -829,7 +832,6 @@ export default function Home() {
             contentType: "number",
           },
           {
-        
             className: "cell",
             content: (
               <DsStateChange
@@ -893,7 +895,6 @@ export default function Home() {
             contentType: "number",
           },
           {
-         
             className: "cell",
             content: (
               <DsStateChange
@@ -957,7 +958,6 @@ export default function Home() {
             contentType: "number",
           },
           {
-        
             className: "cell",
             content: (
               <DsStateChange
@@ -1021,7 +1021,6 @@ export default function Home() {
             contentType: "number",
           },
           {
-          
             className: "cell",
             content: (
               <DsStateChange
@@ -1044,14 +1043,208 @@ export default function Home() {
     console.log((e.target as HTMLElement).tagName);
   };
 
-  const changeImage = (e: React.MouseEvent<HTMLElement, MouseEvent>, imgSrc: string) => {
+  const changeImage = (
+    e: React.MouseEvent<HTMLElement, MouseEvent>,
+    imgSrc: string
+  ) => {
     setIconSrc(imgSrc);
   };
 
   return (
-    <>
-        <NavTo location="Order/New">New</NavTo>
-        <Demo></Demo>
-    </>
+    <Application
+      appTitle="Sales Order"
+      appMenu={
+        <>
+          <DataList
+            placeholder="Search"
+            label="label"
+            inputId="userSelect"
+            dataListId="user-list"
+            disable={false}
+            options={[
+              { attributes: { key: "key1" }, id: "emp1", value: "emp1" },
+              { attributes: { key: "key2" }, id: "emp2", value: "emp2" },
+              { attributes: { key: "key3" }, id: "emp3", value: "emp3" },
+              { attributes: { key: "key4" }, id: "emp4", value: "emp4" },
+              { attributes: { key: "key5" }, id: "emp5", value: "emp5" },
+            ]}
+            className={""}
+          />
+          <DSButton
+            id="filterBtn1"
+            type="tab"
+            buttonColor="btnPrimary"
+            className={btnStyles.btnOutlined}
+            tooltip="variants : btnPrimary, btnOutlined, btnMedium"
+            label="Approved"
+          />
+          <DSButton
+            id="filterBtn2"
+            type="tab"
+            buttonColor="btnPrimary"
+            className={btnStyles.btnOutlined}
+            tooltip="variants : btnPrimary, btnOutlined, btnMedium"
+            label="Dispatch"
+          />
+          <DSButton
+            id="iconfilterBtn"
+            buttonColor="btnPrimary"
+            buttonViewStyle="btnText"
+            className={btnStyles.btnTextPrimary}
+            handleOnClick={clickHandler}
+            startIcon={<Image src={filter} alt="Filter icon" />}
+            tooltip="variants : btnPrimary, btnText, btnMedium"
+            label="Filter"
+          />
+          <NavTo
+            id="actionBtn"
+            buttonColor="btnPrimary"
+            className={btnStyles.btnOutlined}
+            handleOnHover={(e) => changeImage(e, whiteadd)}
+            handleMouseLeave={(e) => changeImage(e, addIcon)}
+            startIcon={<Image src={iconSrc} alt="Add icon" />}
+            tooltip="variants : btnPrimary, btnOutlined, btnMedium"
+            label="New"
+            handleOnClick={(e) => clickHandler(e)}
+          />
+        </>
+      }
+      tabs={[
+        { tabId: "0", tabName: "Total" },
+        { tabId: "1", tabName: "Institutional" },
+        { tabId: "2", tabName: "Corporate" },
+        { tabId: "3", tabName: "New" }
+      ]}
+      selectedTabId="0"
+      isDataTable={true}
+    >
+      <div className={styles.container + " " + styles["flex-column"]}>
+ 
+        {/* <div>
+ 
+          <DSButtonGroup id="btngroup1" className={btnStyles.btngroup}>
+            <DSButton
+              id="button1"
+              type="count"
+              buttonViewStyle="btnText"
+              className={`${btnStyles.btngroupcontained} ${btnStyles.group_btn}`}
+              label="Trade"
+              count="25"
+              tooltip="variants: btngroupcontained"
+            />
+            <DSButton
+              id="button2"
+              type="count"
+              buttonViewStyle="btnText"
+              className={`${btnStyles.btngroupcontained} ${btnStyles.group_btn}`}
+              label="Institutional"
+              count="12"
+              tooltip="variants: btngroupcontained"
+            />
+            <DSButton
+              id="button3"
+              type="count"
+              buttonViewStyle="btnText"
+              className={`${btnStyles.btngroupcontained} ${btnStyles.group_btn}`}
+              label="Corporate"
+              count="08"
+              tooltip="variants: btngroupcontained"
+            />
+            <DSButton
+              id="button4"
+              type="count"
+              buttonViewStyle="btnText"
+              className={`${btnStyles.btngroupcontained} ${btnStyles.group_btn}`}
+              label="New"
+              count="00"
+              tooltip="variants: btngroupcontained"
+            />
+          </DSButtonGroup>
+        </div> */}
+        <TabView tabId="0">
+            <div className={styles.container}> <div className={styles.tableContainer}>
+ 
+              <DsTableComponent className={""} id={""} alignment={"lef"} isFooterRequired={false} columns={tempTableData.columns} rows={tempTableData.rows}              
+              ></DsTableComponent>
+            </div></div>
+        </TabView>
+        <TabView tabId="1">
+            <div className={styles.container}> <div className={styles.tableContainer}>
+ 
+              <DsTableComponent className={""} id={""} alignment={"left"} isFooterRequired={false} columns={tempTableData.columns} rows={tempTableData.rows}            
+              ></DsTableComponent>
+            </div></div>
+        </TabView>
+        <TabView tabId="2">
+            <div className={styles.container}> <div className={styles.tableContainer}>
+ 
+              <DsTableComponent className={""} id={""} alignment={"left"} isFooterRequired={false} columns={tempTableData.columns} rows={tempTableData.rows}                
+              ></DsTableComponent>
+            </div></div>
+        </TabView>
+        <TabView tabId="3">
+            <div className={styles.container}> <div className={styles.tableContainer}>
+ 
+              <DsTableComponent className={""} id={""} alignment={"left"} isFooterRequired={false} columns={tempTableData.columns} rows={tempTableData.rows}              
+              ></DsTableComponent>
+            </div></div>
+        </TabView>
+      </div>
+ 
+    
+      {/* <div className={styles.container + " " + styles["flex-column"]}>
+        <div>
+          <DSButtonGroup id="btngroup1" className={btnStyles.btngroup}>
+            <DSButton
+              id="button1"
+              type="count"
+              buttonViewStyle="btnText"
+              className={`${btnStyles.btngroupcontained} ${btnStyles.group_btn}`}
+              label="Trade"
+              count="25"
+              tooltip="variants: btngroupcontained"
+            />
+            <DSButton
+              id="button2"
+              type="count"
+              buttonViewStyle="btnText"
+              className={`${btnStyles.btngroupcontained} ${btnStyles.group_btn}`}
+              label="Institutional"
+              count="12"
+              tooltip="variants: btngroupcontained"
+            />
+            <DSButton
+              id="button3"
+              type="count"
+              buttonViewStyle="btnText"
+              className={`${btnStyles.btngroupcontained} ${btnStyles.group_btn}`}
+              label="Corporate"
+              count="08"
+              tooltip="variants: btngroupcontained"
+            />
+            <DSButton
+              id="button4"
+              type="count"
+              buttonViewStyle="btnText"
+              className={`${btnStyles.btngroupcontained} ${btnStyles.group_btn}`}
+              label="New"
+              count="00"
+              tooltip="variants: btngroupcontained"
+            />
+          </DSButtonGroup>
+        </div>
+        <div className={styles.tableContainer}>
+          <DsTableComponent
+            className={tempTableData.className}
+            id={tempTableData.id}
+            alignment={tempTableData.alignment.toString()}
+            hasSearch={tempTableData.searchAvailable}
+            columns={tempTableData.columns}
+            rows={tempTableData.rows}
+            isFooterRequired={false}
+          ></DsTableComponent>
+        </div>
+      </div> */}
+    </Application>
   );
 }
