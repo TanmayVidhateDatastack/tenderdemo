@@ -222,3 +222,7 @@ a.secondary {
     filter: invert();
   }
 }
+
+.tableContainer{
+  flex:1;
+}

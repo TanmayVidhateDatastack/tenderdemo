@@ -17,6 +17,7 @@ import ContextMenu, {
 import DSButton from "@/app/Elements/Components/dsButton/dsButton";
 import TableComponent from "@/app/Elements/Components/DsTablecomponent/DsTableComponent";
 import Ds_checkbox from "@/app/Elements/Components/DsCheckbox/dsCheckbox";
+import NavTo from "@/app/Elements/ElProComponents/NavigationComponent/navTo";
 
 export default function Home() {
   const panNo = "AABCD9532A";
@@ -202,7 +203,12 @@ export default function Home() {
   };
   return (
     <>
-      <Application appTitle={"New Order"} hasPrevious={true}>
+      <Application appTitle={"New Order"} hasPrevious={true}
+      appMenu={
+        
+        <NavTo location="/Order/Bill">Billing</NavTo>
+      }
+      >
         <div className={pagestyles.container}>
           <div className={styles.container}>
             <div className={styles.Customer}>
