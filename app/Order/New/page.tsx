@@ -203,11 +203,10 @@ export default function Home() {
   };
   return (
     <>
-      <Application appTitle={"New Order"} hasPrevious={true}
-      appMenu={
-        
-        <NavTo location="/Order/Bill">Billing</NavTo>
-      }
+      <Application
+        appTitle={"New Order"}
+        hasPrevious={true}
+        appMenu={<NavTo location="/Order/Bill">Billing</NavTo>}
       >
         <div className={pagestyles.container}>
           <div className={styles.container}>
@@ -279,7 +278,12 @@ export default function Home() {
                   ></DataList>
                   <TextField placeholder={undefined}></TextField>
                   <DSButton buttonSize="btnLarge">Add</DSButton>
-                  <Ds_checkbox id={"180days"} name={"180days"} value={"1"}  label={"Allow < 180 days"}></Ds_checkbox>
+                  <Ds_checkbox
+                    id={"180days"}
+                    name={"180days"}
+                    value={"1"}
+                    label={"Allow < 180 days"}
+                  ></Ds_checkbox>
                   <DSButton buttonViewStyle="btnText" id="CSV" type="upload">
                     CSV file
                   </DSButton>
