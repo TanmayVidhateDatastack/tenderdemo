@@ -7,10 +7,10 @@ import Detail from "@/app/Elements/ElProComponents/DetailComponent/Detail";
 import locationIcon from "@/app/Elements/Icons/smallIcons/Address_location.svg";
 import gmail from "@/app/Elements/Icons/smallIcons/gmail.svg";
 import phoneCallIcon from "@/app/Elements/Icons/smallIcons/phonecall.svg";
-
-// import buttonStyles from "../../Components/DsButton/dsButton.module.css";
 import buttonStyles from "@/app/Elements/Components/dsButton/dsButton.module.css";
 import Invoice_Data from "./invoice_Data";
+import Invoice_Data2 from "./invoice_Data2";
+import Invoice_Data3 from "./invoice_Data3";
 
 const Invoice: React.FC = () => {
   const companyName = "IPCA LABORATORIES LIMITED";
@@ -48,6 +48,32 @@ const Invoice: React.FC = () => {
   const tax_invoice = "100010543";
   const tax_invoice_date = "06/01/2024";
   const due_date = "06/01/2024";
+  const net_amt = "92823.00";
+  const material = "Material Value:";
+  const material_value = "90504.55";
+  const tax = "Tax Amount:";
+  const tax_amt = "11137.06";
+  const gross = "Gross Value:";
+  const gross_val = "107641.61";
+  const adjust = "Less Adjustment:";
+  const adjust_val = "14759.00";
+  const val = "92822.61";
+  const round_off = "Round off:";
+  const round_val = "0.39";
+  const net_amount = "Net Amount:";
+  const net_val = "92823.00";
+  const rupees = "One Lakh Seven Thousand Forty Two Only";
+  const net_invoice = "Net Amount as per Invoice:";
+  const net_invoice_amt = "92823.00";
+  const TDS = "Less TDS@ 0.1% on Rs. 96504.55";
+  const tds_amt = "97";
+  const payable = "Net Amount Payble";
+  const payable_amt = "92823.97";
+  const note = "Note:";
+  const note_val =
+    "Interest will be charged @ 24% p.a if drawee fails to pay by due date.";
+  const rr_val = "RR Value Rs. 107228.65";
+  const ipca_lab = "For IPCA Laboratories Limited";
 
   return (
     <div className={styles.page}>
@@ -59,25 +85,25 @@ const Invoice: React.FC = () => {
             <Detail detailOf="CIN">{cinNumber}</Detail>
             <Detail detailOf="GSTIN">{gstin}</Detail>
           </div>
+          <div className={styles.head_menu}>
+            <Detail
+              startIcon={<Image src={locationIcon} alt="icon" />}
+              style="normal"
+            >
+              {add1}
+            </Detail>
+            <Detail startIcon={<Image src={gmail} alt="icon" />} style="normal">
+              {email}
+            </Detail>
+            <Detail
+              startIcon={<Image src={phoneCallIcon} alt="icon" />}
+              style="normal"
+            >
+              {mobile}
+            </Detail>
+          </div>
         </div>
         <div className={styles.scanner}></div>
-      </div>
-      <div className={styles.head_menu}>
-        <Detail
-          startIcon={<Image src={locationIcon} alt="icon" />}
-          style="normal"
-        >
-          {add1}
-        </Detail>
-        <Detail startIcon={<Image src={gmail} alt="icon" />} style="normal">
-          {email}
-        </Detail>
-        <Detail
-          startIcon={<Image src={phoneCallIcon} alt="icon" />}
-          style="normal"
-        >
-          {mobile}
-        </Detail>
       </div>
       <div className={styles.invoice_details}>
         <Detail detailOf="P No">{Pan}</Detail>
@@ -89,7 +115,6 @@ const Invoice: React.FC = () => {
         </Detail>
         <div className={buttonStyles.right_separator}></div>
         <Detail detailOf="FDA Sch. X Lic No">{FDA}</Detail>
-        {/* <div className={buttonStyles.right_separator}></div> */}
       </div>
       <div className={styles.invoice}>
         <h2>INVOICE -100010103012</h2>
@@ -102,21 +127,21 @@ const Invoice: React.FC = () => {
             <Detail detailOf="GSTIN">{gstin}</Detail>
           </div>
         </div>
-      </div>
-      <div className={styles.head_menu}>
-        {" "}
-        <Detail
-          startIcon={<Image src={locationIcon} alt="icon" />}
-          style="normal"
-        >
-          {add2}
-        </Detail>
-        <Detail
-          startIcon={<Image src={phoneCallIcon} alt="icon" />}
-          style="normal"
-        >
-          {mobile2}
-        </Detail>
+        <div>
+          {" "}
+          <Detail
+            startIcon={<Image src={locationIcon} alt="icon" />}
+            style="normal"
+          >
+            {add2}
+          </Detail>
+          <Detail
+            startIcon={<Image src={phoneCallIcon} alt="icon" />}
+            style="normal"
+          >
+            {mobile2}
+          </Detail>
+        </div>
       </div>
       <div className={styles.invoice_details}>
         <Detail detailOf="PAN" style="normal">
@@ -180,6 +205,98 @@ const Invoice: React.FC = () => {
       </div>
       <div>
         <Invoice_Data />
+      </div>
+      <hr></hr>
+      <div className={styles.last_table}>
+        <div className={styles.tabledata_2}>
+          <div className={styles.size}>
+            <div>
+              <Invoice_Data2 />
+            </div>
+          </div>
+          <div className={styles.half_table}>
+            <div className={styles.whole_box}>
+              <div className={`${styles.last_table} `}>
+                <div>
+                  <Detail detailOf="Adjustment Details" style="normal"></Detail>
+                </div>
+                <div>
+                  <Invoice_Data3 />
+                </div>
+                <div className={styles.net_amt}>
+                  <Detail detailOf="Net Amount">{net_amt}</Detail>
+                </div>
+                <hr />
+              </div>
+              <div className={styles.invoice_container}>
+                <div className={styles.row}>
+                  <span className={styles.label}>{material}</span>
+                  <span className={styles.value}>{material_value}</span>
+                </div>
+                <div className={styles.row}>
+                  <span className={styles.label}>{tax}</span>
+                  <span className={styles.value}>{tax_amt}</span>
+                </div>
+                <div className={styles.row}>
+                  <span className={styles.label}>{gross}</span>
+                  <span className={styles.value}>{gross_val}</span>
+                </div>
+                <div className={styles.row}>
+                  <span className={styles.label}>{adjust}</span>
+                  <span className={styles.value}>{adjust_val}</span>
+                </div>
+                <div className={styles.row}>
+                  <span className={styles.value}>{val}</span>
+                </div>
+                <div className={styles.row}>
+                  <span className={styles.label}>{round_off}</span>
+                  <span className={styles.value}>{round_val}</span>
+                </div>
+                <div className={`${styles.row}`}>
+                  <span className={styles.label}>{net_amount}</span>
+                  <span className={`${styles.value} ${styles.total}`}>
+                    {net_val}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className={styles.rupees}>
+              {/* <p>Rupees: {rupees} </p> */}
+              <Detail detailOf="Rupees">{rupees}</Detail>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr></hr>
+      <div className={styles.invoice_container2}>
+        <div className={`${styles.row1} ${styles.total}`}>
+          <span className={styles.label}>{net_invoice}</span>
+          <span className={`${styles.value}`}>{net_invoice_amt}</span>
+        </div>
+        <div className={`${styles.row1} ${styles.total}`}>
+          <span className={styles.label}>{TDS}</span>
+          <span className={`${styles.value}`}>{tds_amt}</span>
+        </div>
+        <div className={`${styles.row1} ${styles.total}`}>
+          <span className={styles.label}>{payable}</span>
+          <span className={`${styles.value}`}>{payable_amt}</span>
+        </div>
+      </div>
+      <hr></hr>
+      <div className={styles.last_div}>
+        <div className={`${styles.row1} ${styles.total}`}>
+          <span className={styles.label}>{note}</span>
+          <span className={`${styles.value}`}>{note_val}</span>
+        </div>
+        <div>
+          <span className={styles.label}>{rr_val}</span>
+        </div>
+        <div className={`${styles.row1} ${styles.total}`}>
+          <span className={styles.label}>{ipca_lab}</span>
+        </div>
+      </div>
+      <div className={styles.auth}>
+        <p>(Authorised Signatory)</p>
       </div>
       <div className={styles.footer_End}>
         <span>Road off.: {roadOff}</span>
