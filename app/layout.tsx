@@ -240,9 +240,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={` ${openSans_Condensed_Bold.variable} ${openSans_Condensed_BoldItalic.variable} ${openSans_Condensed_ExtraBold.variable} ${openSans_Condensed_ExtraBoldItalic.variable} ${openSans_Condensed_Italic.variable} ${openSans_Condensed_Light.variable} ${openSans_Condensed_LightItalic.variable} ${openSans_Condensed_Medium.variable} ${openSans_Condensed_MediumItalic.variable} ${openSans_Condensed_Regular.variable} ${openSans_Condensed_SemiBold.variable} ${openSans_Condensed_SemiBoldItalic.variable} ${openSans_SemiCondensed_Bold.variable} ${openSans_SemiCondensed_BoldItalic.variable} ${openSans_SemiCondensed_SemiBold.variable} ${openSans_SemiCondensed_ExtraBold.variable} ${openSans_SemiCondensed_Italic.variable} ${openSans_SemiCondensed_Light} ${openSans_SemiCondensed_LightItalic.variable} ${openSans_SemiCondensed_Medium.variable} ${openSans_SemiCondensed_MediumItalic.variable} ${openSans_SemiCondensed_Regular.variable} ${openSans_SemiCondensed_SemiBoldItalic.variable} ${openSans_SemiCondensed_ExtraBoldItalic.variable} ${openSans.variable} ${openSans_MediumItalic.variable} ${openSans_Bold.variable} ${openSans_BoldItalic.variable} ${openSans_ExtraBold.variable} ${openSans_ExtraBoldItalic.variable} ${openSans_Italic.variable} ${openSans_Light.variable} ${openSans_LightItalic.variable} ${openSans_Medium.variable} ${openSans_Regular.variable} ${openSans_SemiBold.variable} ${openSans_SemiBoldItalic.variable}`}
-      >
+      <body className={` ${openSans.variable} ${openSans_Regular.variable}`}>
         <ElLayout>{children}</ElLayout>
       </body>
     </html>

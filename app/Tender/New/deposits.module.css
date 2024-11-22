@@ -1,0 +1,53 @@
+.container{
+  width: 100%;
+  padding: var(--ds-padding);
+  background: inherit;
+}
+
+.containerHead{
+  display: flex;
+  justify-content: space-between;
+  background: inherit;
+}
+
+.applicationDeposits{
+  border-radius: 25px !important;
+  padding: 2px !important;
+  background:inherit;
+}
+.emdContainer{
+  background: inherit;
+  background-color: var(--grey-100);
+  padding: 5px;
+  width: 100%;
+  }
+  
+
+.emdContainerHead{
+  display: flex;
+  justify-content: space-between;
+  background: inherit;
+} 
+ 
+.fields{
+  background-color: var(--background);
+  color: var(--dark);
+  font-size: var(--subtitle2);
+  background: inherit;
+} 
+
+.notes{
+  padding: 3px;
+  padding-top: 20px;
+}
+
+.optionBtn{
+  background-color: transparent !important;
+  color: var(--text-primary) !important;
+  border: 0px !important;
+}
+.optionBtn:hover{
+  background-color: var(--text-primary-hover) !important;
+  color: var(--text-primary) !important;
+  border-radius: 25px !important;
+}
