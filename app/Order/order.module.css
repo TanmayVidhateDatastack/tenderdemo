@@ -6,7 +6,7 @@
 .shipping > div {
   padding: var(--ds-padding);
 }
-.inputDetails {
+/* .inputDetails {
   display: flex;
   align-items: center;
   border-bottom: 0.5px solid var(--secondary);
@@ -16,7 +16,20 @@
 .inputDetails > div {
   flex: 1;
   margin: var(--ds-margin);
+} */
+
+.inputDetails {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 equal columns */
+  gap: var(--ds-margin); /* spacing between items */
+  border-bottom: 0.5px solid var(--secondary);
+  padding: var(--ds-padding);
 }
+
+.inputDetails > div {
+  margin: 0; /* Remove margin if you want exact grid alignment */
+}
+
 .details,
 .Product {
   display: flex;

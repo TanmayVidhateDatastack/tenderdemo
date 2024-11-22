@@ -30,6 +30,9 @@ import DsTableComponent from "@/app/Elements/Components/DsTablecomponent/DsTable
 import styles from "./page.module.css";
 import NavTo from "./Elements/ElProComponents/NavigationComponent/navTo";
 import TabView from "./Elements/Components/dsTabs/TabView";
+import SpotlightSearch from "./Elements/Components/dsSpotlightSearch/dsSpotlightSearch";
+import searchIcon from "../app/Elements/Icons/searchicon.svg";
+import TextField from "./Elements/Components/DsTextField/DsTextField";
 export default function Home() {
   const [iconSrc, setIconSrc] = useState(addIcon);
   const tempTableData = {
@@ -42,15 +45,15 @@ export default function Home() {
       {
         columnIndex: 0,
         className: "header-column",
-        columnHeader: "ORDER ID",
+        columnHeader: " CUSTOMER NAME",
         isHidden: false,
         sort: "ASC",
-        columnContentType: "number",
+        columnContentType: "string",
       },
       {
         columnIndex: 1,
         className: "header-column",
-        columnHeader: "DATE",
+        columnHeader: "SUBMISSION DATE",
         isHidden: false,
         sort: "ASC",
         columnContentType: "date",
@@ -58,7 +61,7 @@ export default function Home() {
       {
         columnIndex: 2,
         className: "header-column",
-        columnHeader: "CUSTOMER ID",
+        columnHeader: "DAYS TO SUBMIT",
         isHidden: false,
         sort: "ASC",
         columnContentType: "string",
@@ -66,7 +69,7 @@ export default function Home() {
       {
         columnIndex: 3,
         className: "header-column",
-        columnHeader: "CUSTOMER",
+        columnHeader: "TENDER ID",
         isHidden: false,
         sort: "ASC",
         columnContentType: "string",
@@ -74,26 +77,50 @@ export default function Home() {
       {
         columnIndex: 4,
         className: "header-column",
-        columnHeader: "QTY",
+        columnHeader: "TENDER TYPE",
         isHidden: false,
         sort: "ASC",
-        columnContentType: "number",
+        columnContentType: "string",
       },
       {
         columnIndex: 5,
         className: "header-column",
-        columnHeader: "NET VALUE (₹)",
+        columnHeader: "DEPOT",
         isHidden: false,
         sort: "ASC",
-        columnContentType: "number",
+        columnContentType: "string",
       },
       {
         columnIndex: 6,
         className: "header-column",
-        columnHeader: "GROSS VALUE (₹)",
+        columnHeader: "APPLIED BY",
         isHidden: false,
         sort: "ASC",
-        columnContentType: "number",
+        columnContentType: "string",
+      },
+      {
+        columnIndex: 7,
+        className: "header-column",
+        columnHeader: "SUPPLIED BY",
+        isHidden: false,
+        sort: "ASC",
+        columnContentType: "string",
+      },
+      {
+        columnIndex: 8,
+        className: "header-column",
+        columnHeader: "PREPARED BY",
+        isHidden: false,
+        sort: "ASC",
+        columnContentType: "string",
+      },
+      {
+        columnIndex: 9,
+        className: "header-column",
+        columnHeader: "VALUE (₹)",
+        isHidden: false,
+        sort: "NONE",
+        columnContentType: "string",
       },
       {
         className: "header-column",
@@ -111,56 +138,73 @@ export default function Home() {
           {
             columnIndex: 0,
             className: "cell",
-            content: 20240199900001,
-            contentType: "number",
+            content: "Directorate of Health Services",
+            contentType: "string",
           },
           {
             columnIndex: 1,
             className: "cell",
-            content: "24/09/2022",
+            content: "28/11/2024",
             contentType: "date",
           },
           {
             columnIndex: 2,
             className: "cell",
-            content: "DF09",
+            content: "16 days left",
             contentType: "string",
+            textColor: "#CC8400",
           },
           {
             columnIndex: 3,
             className: "cell",
-            content: "DR Distributer",
+            content: "...00001",
             contentType: "string",
           },
           {
             columnIndex: 4,
             className: "cell",
-            content: 400,
+            content: "single-delivery",
             contentType: "number",
           },
           {
             columnIndex: 5,
             className: "cell",
-            content: "12,00,000",
+            content: "Pune",
             contentType: "string",
           },
           {
             columnIndex: 6,
             className: "cell",
-            content: "12,02,000",
+            content: "IPCA",
             contentType: "number",
+          },
+          {
+            columnIndex: 7,
+            className: "cell",
+            content: "spare-India",
+            contentType: "string",
+          },
+          {
+            columnIndex: 8,
+            className: "cell",
+            content: "Rajat Sharma",
+            contentType: "string",
+          },
+          {
+            columnIndex: 9,
+            className: "cell",
+            content: "1,30,65,999",
+            contentType: "string",
           },
           {
             className: "cell",
             content: (
               <DsStateChange
                 className={styles.statusIndicator}
-                type="user_defined"
+                type="system_default"
                 id="state1"
-                status="Approved"
-                label="approved"
-                status_icon={<Image src={commentIcon} alt="icon" />}
-                comment="Justification and Comments"
+                status="DRAFT"
+                label="Draft"
               />
             ),
             contentType: "reactNode",
@@ -174,44 +218,63 @@ export default function Home() {
           {
             columnIndex: 0,
             className: "cell",
-            content: 20240199900002,
-            contentType: "number",
+            content: "Joint Director (M...",
+            contentType: "string",
           },
           {
             columnIndex: 1,
             className: "cell",
-            content: "24/09/2024",
+            content: "30/11/2024",
             contentType: "date",
           },
           {
             columnIndex: 2,
             className: "cell",
-            content: "V097",
+            content: "18 days left",
             contentType: "string",
+            textColor: "#CC8400",
           },
           {
             columnIndex: 3,
             className: "cell",
-            content: "Vigneya Industries",
+            content: "...00002",
             contentType: "string",
           },
           {
             columnIndex: 4,
             className: "cell",
-            content: 1200,
+            content: "Multi-delivery",
             contentType: "number",
           },
           {
             columnIndex: 5,
             className: "cell",
-            content: "13,00,900",
+            content: "Ahmedabad",
             contentType: "string",
           },
           {
             columnIndex: 6,
             className: "cell",
-            content: "13,03,900",
+            content: "IPCA",
             contentType: "number",
+          },
+          {
+            columnIndex: 7,
+            className: "cell",
+            content: "VR chemicals",
+            contentType: "string",
+          },
+          {
+            columnIndex: 8,
+            className: "cell",
+            content: "Rajesh Dhan",
+            contentType: "string",
+          },
+          {
+            columnIndex: 9,
+            className: "cell",
+            content: "2,20,65,900",
+            contentType: "string",
           },
           {
             className: "cell",
@@ -219,10 +282,9 @@ export default function Home() {
               <DsStateChange
                 className={styles.statusIndicator}
                 type="system_default"
-                id="state8"
-                status="Pending"
-                label="Deviation Pending"
-                btn_label="Check Failed"
+                id="state1"
+                status="DRAFT"
+                label="Draft"
               />
             ),
             contentType: "reactNode",
@@ -236,232 +298,62 @@ export default function Home() {
           {
             columnIndex: 0,
             className: "cell",
-            content: 20240199900003,
-            contentType: "number",
+            content: "J.K.M.S.C.L",
+            contentType: "string",
           },
           {
             columnIndex: 1,
             className: "cell",
-            content: "24/09/2024",
+            content: "13/10/2024",
             contentType: "date",
           },
           {
             columnIndex: 2,
             className: "cell",
-            content: "V069",
+            content: "0 days left",
             contentType: "string",
           },
           {
             columnIndex: 3,
             className: "cell",
-            content: "Veena Enterprises",
+            content: "...00003",
             contentType: "string",
           },
           {
             columnIndex: 4,
             className: "cell",
-            content: 8000,
-            contentType: "number",
-            // colSpan: 8,
-          },
-          {
-            columnIndex: 5,
-            className: "cell",
-            content: "12,00,000",
-            contentType: "string",
-          },
-          {
-            columnIndex: 6,
-            className: "cell",
-            content: "12,04,000",
-            contentType: "number",
-          },
-          {
-          
-            className: "cell",
-            content: (
-              <DsStateChange
-                className={styles.statusIndicator}
-                type="system_default"
-                id="state2"
-                status="Cancelled"
-                label="cancelled"
-              />
-            ),
-            contentType: "reactNode",
-          },
-        ],
-      },
-      {
-        rowIndex: 3,
-        className: "row",
-        content: [
-          {
-            columnIndex: 0,
-            className: "cell",
-            content: 20240199900004,
-            contentType: "number",
-          },
-          {
-            columnIndex: 1,
-            className: "cell",
-            content: "24/09/2024",
-            contentType: "date",
-          },
-          {
-            columnIndex: 2,
-            className: "cell",
-            content: "T146",
-            contentType: "string",
-          },
-          {
-            columnIndex: 3,
-            className: "cell",
-            content: "Tropical Nortec",
-            contentType: "string",
-          },
-          {
-            columnIndex: 4,
-            className: "cell",
-            content: 3400,
+            content: "Multi-delivery",
             contentType: "number",
           },
           {
             columnIndex: 5,
             className: "cell",
-            content: "11,00,000",
+            content: "Siliguri Depot",
             contentType: "string",
           },
           {
             columnIndex: 6,
             className: "cell",
-            content: "11,03,000",
+            content: "Flarer S.A.",
             contentType: "number",
           },
           {
+            columnIndex: 7,
             className: "cell",
-            content: (
-              <DsStateChange
-                className={styles.statusIndicator}
-                type="user_defined"
-                id="state2"
-                status="Cancelled"
-                label="Rejected"
-                status_icon={<Image src={commentIcon} alt="icon" />}
-                comment="Reason of Rejection"
-              />
-            ),
-            contentType: "reactNode",
-          },
-        ],
-      },
-      {
-        rowIndex: 4,
-        className: "row",
-        content: [
-          {
-            columnIndex: 0,
-            className: "cell",
-            content: 20240199900007,
-            contentType: "number",
-          },
-          {
-            columnIndex: 1,
-            className: "cell",
-            content: "24/09/2024",
-            contentType: "date",
-          },
-          {
-            columnIndex: 2,
-            className: "cell",
-            content: "U014",
+            content: "VR chemicals",
             contentType: "string",
           },
           {
-            columnIndex: 3,
+            columnIndex: 8,
             className: "cell",
-            content: "Ukay Industries",
+            content: "Kapil Kalkar",
             contentType: "string",
           },
           {
-            columnIndex: 4,
+            columnIndex: 9,
             className: "cell",
-            content: 500,
-            contentType: "number",
-          },
-          {
-            columnIndex: 5,
-            className: "cell",
-            content: "10,000",
+            content: "3,40,56,798",
             contentType: "string",
-          },
-          {
-            columnIndex: 6,
-            className: "cell",
-            content: "25,200",
-            contentType: "number",
-          },
-
-          {
-            className: "cell",
-            content: (
-              <DsStateChange
-                className={styles.statusIndicator}
-                id="state3"
-                type="system_default"
-                status="Pending"
-                label="pending"
-              />
-            ),
-            contentType: "reactNode",
-          },
-        ],
-      },
-      {
-        rowIndex: 5,
-        className: "row",
-        content: [
-          {
-            columnIndex: 0,
-            className: "cell",
-            content: 20240199900006,
-            contentType: "number",
-          },
-          {
-            columnIndex: 1,
-            className: "cell",
-            content: "24/09/2024",
-            contentType: "date",
-          },
-          {
-            columnIndex: 2,
-            className: "cell",
-            content: "U017",
-            contentType: "string",
-          },
-          {
-            columnIndex: 3,
-            className: "cell",
-            content: "Ultra Blinds",
-            contentType: "string",
-          },
-          {
-            columnIndex: 4,
-            className: "cell",
-            content: 4000,
-            contentType: "number",
-          },
-          {
-            columnIndex: 5,
-            className: "cell",
-            content: "1,00,900",
-            contentType: "string",
-          },
-          {
-            columnIndex: 6,
-            className: "cell",
-            content: "3,900",
-            contentType: "number",
           },
           {
             className: "cell",
@@ -469,568 +361,11 @@ export default function Home() {
               <DsStateChange
                 className={styles.statusIndicator}
                 type="system_default"
-                id="state4"
-                status="Submitted"
-                label="submitted"
-              />
-            ),
-            contentType: "reactNode",
-          },
-        ],
-      },
-      {
-        rowIndex: 6,
-        className: "row",
-        content: [
-          {
-            columnIndex: 0,
-            className: "cell",
-            content: 20220199900007,
-            contentType: "number",
-          },
-          {
-            columnIndex: 1,
-            className: "cell",
-            content: "24/09/2024",
-            contentType: "date",
-          },
-          {
-            columnIndex: 2,
-            className: "cell",
-            content: "S436",
-            contentType: "string",
-          },
-          {
-            columnIndex: 3,
-            className: "cell",
-            content: "Shreeji IMPEX",
-            contentType: "string",
-          },
-          {
-            columnIndex: 4,
-            className: "cell",
-            content: 8000,
-            contentType: "number",
-          },
-          {
-            columnIndex: 5,
-            className: "cell",
-            content: "12,00,000",
-            contentType: "string",
-          },
-          {
-            columnIndex: 6,
-            className: "cell",
-            content: "12,04,000",
-            contentType: "number",
-          },
-          {
-            className: "cell",
-            content: (
-              <DsStateChange
-                className={styles.statusIndicator}
-                type="system_default"
-                id="state4"
-                status="Submitted"
-                label="Open"
-                btn_label="Partial qty awail"
-              />
-            ),
-            contentType: "reactNode",
-          },
-        ],
-      },
-      {
-        rowIndex: 7,
-        className: "row",
-        content: [
-          {
-            columnIndex: 0,
-            className: "cell",
-            content: 20240199900008,
-            contentType: "number",
-          },
-          {
-            columnIndex: 1,
-            className: "cell",
-            content: "24/09/2024",
-            contentType: "date",
-          },
-          {
-            columnIndex: 2,
-            className: "cell",
-            content: "B249",
-            contentType: "string",
-          },
-          {
-            columnIndex: 3,
-            className: "cell",
-            content: "B.R. Enterprises",
-            contentType: "string",
-          },
-          {
-            columnIndex: 4,
-            className: "cell",
-            content: 3400,
-            contentType: "number",
-          },
-          {
-            columnIndex: 5,
-            className: "cell",
-            content: "11,00,000",
-            contentType: "string",
-          },
-          {
-            columnIndex: 6,
-            className: "cell",
-            content: "11,03,000",
-            contentType: "number",
-          },
-          {
-            className: "cell",
-            content: (
-              <DsStateChange
-                className={styles.statusIndicator}
-                type="system_default"
-                id="state4"
-                status="Submitted"
-                label="Open"
-                btn_label="Quantity unavailable"
-              />
-            ),
-            contentType: "reactNode",
-          },
-        ],
-      },
-      {
-        rowIndex: 8,
-        className: "row",
-        content: [
-          {
-            columnIndex: 0,
-            className: "cell",
-            content: 20240199900009,
-            contentType: "number",
-          },
-          {
-            columnIndex: 1,
-            className: "cell",
-            content: "24/09/2024",
-            contentType: "date",
-          },
-          {
-            columnIndex: 2,
-            className: "cell",
-            content: "V069",
-            contentType: "string",
-          },
-          {
-            columnIndex: 3,
-            className: "cell",
-            content: "Veena Enterprises",
-            contentType: "string",
-          },
-          {
-            columnIndex: 4,
-            className: "cell",
-            content: 2340,
-            contentType: "number",
-          },
-          {
-            columnIndex: 5,
-            className: "cell",
-            content: "22,000",
-            contentType: "string",
-          },
-          {
-            columnIndex: 6,
-            className: "cell",
-            content: "22,06,000",
-            contentType: "number",
-          },
-          {
-            className: "cell",
-            content: (
-              <DsStateChange
-                className={styles.statusIndicator}
-                type="system_default"
-                id="state5"
-                status="underApproval"
-                label="under approvel"
-              />
-            ),
-            contentType: "reactNode",
-          },
-        ],
-      },
-      {
-        rowIndex: 9,
-        className: "row",
-        content: [
-          {
-            columnIndex: 0,
-            className: "cell",
-            content: 20240199900010,
-            contentType: "number",
-          },
-          {
-            columnIndex: 1,
-            className: "cell",
-            content: "24/09/2024",
-            contentType: "date",
-          },
-          {
-            columnIndex: 2,
-            className: "cell",
-            content: "V097",
-            contentType: "string",
-          },
-          {
-            columnIndex: 3,
-            className: "cell",
-            content: "Vigneya Industries",
-            contentType: "string",
-          },
-          {
-            columnIndex: 4,
-            className: "cell",
-            content: 8756,
-            contentType: "number",
-          },
-          {
-            columnIndex: 5,
-            className: "cell",
-            content: "12,90,900",
-            contentType: "string",
-          },
-          {
-            columnIndex: 6,
-            className: "cell",
-            content: "12,99,900",
-            contentType: "number",
-          },
-          {
-            className: "cell",
-            content: (
-              <DsStateChange
-                className={styles.statusIndicator}
-                type="system_default"
-                id="state6"
-                status="underReview"
-                label="under review"
-              />
-            ),
-            contentType: "reactNode",
-          },
-        ],
-      },
-      {
-        rowIndex: 10,
-        className: "row",
-        content: [
-          {
-            columnIndex: 0,
-            className: "cell",
-            content: 20240199900011,
-            contentType: "number",
-          },
-          {
-            columnIndex: 1,
-            className: "cell",
-            content: "24/09/2024",
-            contentType: "date",
-          },
-          {
-            columnIndex: 2,
-            className: "cell",
-            content: "V097",
-            contentType: "string",
-          },
-          {
-            columnIndex: 3,
-            className: "cell",
-            content: "Vigneya Industries",
-            contentType: "string",
-          },
-          {
-            columnIndex: 4,
-            className: "cell",
-            content: 1100,
-            contentType: "number",
-          },
-          {
-            columnIndex: 5,
-            className: "cell",
-            content: "11,09,000",
-            contentType: "string",
-          },
-          {
-            columnIndex: 6,
-            className: "cell",
-            content: "11,11,000",
-            contentType: "number",
-          },
-          {
-            className: "cell",
-            content: (
-              <DsStateChange
-                className={styles.statusIndicator}
-                type="system_default"
-                id="state7"
-                status="InProcess"
-                label="In Process"
-              />
-            ),
-            contentType: "reactNode",
-          },
-        ],
-      },
-      {
-        rowIndex: 11,
-        className: "row",
-        content: [
-          {
-            columnIndex: 0,
-            className: "cell",
-            content: 20240199900012,
-            contentType: "number",
-          },
-          {
-            columnIndex: 1,
-            className: "cell",
-            content: "24/09/2024",
-            contentType: "date",
-          },
-          {
-            columnIndex: 2,
-            className: "cell",
-            content: "U017",
-            contentType: "string",
-          },
-          {
-            columnIndex: 3,
-            className: "cell",
-            content: "Ultra Blinds",
-            contentType: "string",
-          },
-          {
-            columnIndex: 4,
-            className: "cell",
-            content: 12341,
-            contentType: "number",
-          },
-          {
-            columnIndex: 5,
-            className: "cell",
-            content: "10,02,000",
-            contentType: "string",
-          },
-          {
-            columnIndex: 6,
-            className: "cell",
-            content: "10,22,000",
-            contentType: "number",
-          },
-          {
-            className: "cell",
-            content: (
-              <DsStateChange
-                className={styles.statusIndicator}
-                type="user_defined"
                 id="state1"
-                status="Approved"
-                label="approved"
-                status_icon={<Image src={commentIcon} alt="icon" />}
-                comment="Justification and Comments"
-              />
-            ),
-            contentType: "reactNode",
-          },
-        ],
-      },
-      {
-        rowIndex: 12,
-        className: "row",
-        content: [
-          {
-            columnIndex: 0,
-            className: "cell",
-            content: 20240199900013,
-            contentType: "number",
-          },
-          {
-            columnIndex: 1,
-            className: "cell",
-            content: "24/09/2024",
-            contentType: "date",
-          },
-          {
-            columnIndex: 2,
-            className: "cell",
-            content: "Y003",
-            contentType: "string",
-          },
-          {
-            columnIndex: 3,
-            className: "cell",
-            content: "Yash Traders",
-            contentType: "string",
-          },
-          {
-            columnIndex: 4,
-            className: "cell",
-            content: 2000,
-            contentType: "number",
-          },
-          {
-            columnIndex: 5,
-            className: "cell",
-            content: "20,03,000",
-            contentType: "string",
-          },
-          {
-            columnIndex: 6,
-            className: "cell",
-            content: "20,08,000",
-            contentType: "number",
-          },
-          {
-            className: "cell",
-            content: (
-              <DsStateChange
-                className={styles.statusIndicator}
-                type="user_defined"
-                id="state1"
-                status="Approved"
-                label="approved"
-                status_icon={<Image src={commentIcon} alt="icon" />}
-                comment="Justification and Comments"
-              />
-            ),
-            contentType: "reactNode",
-          },
-        ],
-      },
-      {
-        rowIndex: 13,
-        className: "row",
-        content: [
-          {
-            columnIndex: 0,
-            className: "cell",
-            content: 20240199900014,
-            contentType: "number",
-          },
-          {
-            columnIndex: 1,
-            className: "cell",
-            content: "24/09/2024",
-            contentType: "date",
-          },
-          {
-            columnIndex: 2,
-            className: "cell",
-            content: "Y003",
-            contentType: "string",
-          },
-          {
-            columnIndex: 3,
-            className: "cell",
-            content: "Yash Traders",
-            contentType: "string",
-          },
-          {
-            columnIndex: 4,
-            className: "cell",
-            content: 500,
-            contentType: "number",
-          },
-          {
-            columnIndex: 5,
-            className: "cell",
-            content: "15,05,000",
-            contentType: "string",
-          },
-          {
-            columnIndex: 6,
-            className: "cell",
-            content: "15,08,000",
-            contentType: "number",
-          },
-          {
-            className: "cell",
-            content: (
-              <DsStateChange
-                className={styles.statusIndicator}
-                type="user_defined"
-                id="state1"
-                status="Approved"
-                label="approved"
-                status_icon={<Image src={commentIcon} alt="icon" />}
-                comment="Justification and Comments"
-              />
-            ),
-            contentType: "reactNode",
-          },
-        ],
-      },
-      {
-        rowIndex: 14,
-        className: "row",
-        content: [
-          {
-            columnIndex: 0,
-            className: "cell",
-            content: 20240199900015,
-            contentType: "number",
-          },
-          {
-            columnIndex: 1,
-            className: "cell",
-            content: "24/09/2024",
-            contentType: "date",
-          },
-          {
-            columnIndex: 2,
-            className: "cell",
-            content: "T146",
-            contentType: "string",
-          },
-          {
-            columnIndex: 3,
-            className: "cell",
-            content: "Tropical Nortec",
-            contentType: "string",
-          },
-          {
-            columnIndex: 4,
-            className: "cell",
-            content: 500,
-            contentType: "number",
-          },
-          {
-            columnIndex: 5,
-            className: "cell",
-            content: "15,05,000",
-            contentType: "string",
-          },
-          {
-            columnIndex: 6,
-            className: "cell",
-            content: "15,08,000",
-            contentType: "number",
-          },
-          {
-            className: "cell",
-            content: (
-              <DsStateChange
-                className={styles.statusIndicator}
-                type="user_defined"
-                id="state1"
-                status="Approved"
-                label="approved"
-                status_icon={<Image src={commentIcon} alt="icon" />}
-                comment="Justification and Comments"
+                status="Awarded"
+                label="Awarded"
+                // status_icon={<Image src={commentIcon} alt="icon" />}
+                // comment="Justification and Comments"
               />
             ),
             contentType: "reactNode",
@@ -1050,17 +385,29 @@ export default function Home() {
     setIconSrc(imgSrc);
   };
 
+  const data: string[] = [
+    "Document",
+    "Spreadsheet",
+    "Presentation",
+    "Report",
+    "Meeting Notes",
+  ];
+
+  const totalTenders = "13";
+  const totalValues = "40,63,71,58";
   return (
     <Application
-      appTitle="Sales Orders"
+      appTitle="Tender"
       appMenu={
         <>
-          <DataList
-            placeholder="Search"
-            label="label"
-            inputId="userSelect"
+          <TextField
+            placeholder="Search Tender by Id, Name and Value"
+            id="userSelect"
             dataListId="user-list"
+            showshadow="shadow"
             disable={false}
+            className={styles.datalist}
+            iconEnd={<Image src={searchIcon} alt="search icon" />}
             options={[
               { attributes: { key: "key1" }, id: "emp1", value: "emp1" },
               { attributes: { key: "key2" }, id: "emp2", value: "emp2" },
@@ -1068,7 +415,14 @@ export default function Home() {
               { attributes: { key: "key4" }, id: "emp4", value: "emp4" },
               { attributes: { key: "key5" }, id: "emp5", value: "emp5" },
             ]}
-            className={""}
+          ></TextField>
+          <DSButton
+            id="filterBtn1"
+            type="round"
+            buttonColor="btnPrimary"
+            className={btnStyles.btnOutlined}
+            tooltip="variants : btnPrimary, btnOutlined, btnMedium"
+            label="Near Submission"
           />
           <DSButton
             id="filterBtn1"
@@ -1076,7 +430,7 @@ export default function Home() {
             buttonColor="btnPrimary"
             className={btnStyles.btnOutlined}
             tooltip="variants : btnPrimary, btnOutlined, btnMedium"
-            label="Approved"
+            label="Fees Pending"
           />
           <DSButton
             id="filterBtn2"
@@ -1084,7 +438,7 @@ export default function Home() {
             buttonColor="btnPrimary"
             className={btnStyles.btnOutlined}
             tooltip="variants : btnPrimary, btnOutlined, btnMedium"
-            label="Dispatch"
+            label="Approval"
           />
           <DSButton
             id="iconfilterBtn"
@@ -1108,91 +462,40 @@ export default function Home() {
             handleOnClick={(e) => clickHandler(e)}
             location="/Order/New"
           />
+          <NavTo
+            id="actionBtn"
+            buttonColor="btnPrimary"
+            className={btnStyles.btnOutlined}
+            handleOnHover={(e) => changeImage(e, whiteadd)}
+            handleMouseLeave={(e) => changeImage(e, addIcon)}
+            startIcon={<Image src={iconSrc} alt="Add icon" />}
+            tooltip="variants : btnPrimary, btnOutlined, btnMedium"
+            label="Tender New"
+            handleOnClick={(e) => clickHandler(e)}
+            location="/Tender/New"
+          />
         </>
       }
-      tabs={[
-        { tabId: "0", tabName: "Trade" },
-        { tabId: "1", tabName: "Institutional" },
-        { tabId: "2", tabName: "Corporate" },
-        { tabId: "3", tabName: "New" }
-      ]}
-      selectedTabId="0"
-      isDataTable={true}
     >
       <div className={styles.container + " " + styles["flex-column"]}>
- 
-        {/* <div>
- 
-          <DSButtonGroup id="btngroup1" className={btnStyles.btngroup}>
-            <DSButton
-              id="button1"
-              type="count"
-              buttonViewStyle="btnText"
-              className={`${btnStyles.btngroupcontained} ${btnStyles.group_btn}`}
-              label="Trade"
-              count="25"
-              tooltip="variants: btngroupcontained"
-            />
-            <DSButton
-              id="button2"
-              type="count"
-              buttonViewStyle="btnText"
-              className={`${btnStyles.btngroupcontained} ${btnStyles.group_btn}`}
-              label="Institutional"
-              count="12"
-              tooltip="variants: btngroupcontained"
-            />
-            <DSButton
-              id="button3"
-              type="count"
-              buttonViewStyle="btnText"
-              className={`${btnStyles.btngroupcontained} ${btnStyles.group_btn}`}
-              label="Corporate"
-              count="08"
-              tooltip="variants: btngroupcontained"
-            />
-            <DSButton
-              id="button4"
-              type="count"
-              buttonViewStyle="btnText"
-              className={`${btnStyles.btngroupcontained} ${btnStyles.group_btn}`}
-              label="New"
-              count="00"
-              tooltip="variants: btngroupcontained"
-            />
-          </DSButtonGroup>
-        </div> */}
-        <TabView tabId="0">
-            <div className={styles.container}> <div className={styles.tableContainer}>
- 
-              <DsTableComponent className={""} id={""} alignment={"lef"} isFooterRequired={false} columns={tempTableData.columns} rows={tempTableData.rows}              
-              ></DsTableComponent>
-            </div></div>
-        </TabView>
-        <TabView tabId="1">
-            <div className={styles.container}> <div className={styles.tableContainer}>
- 
-              <DsTableComponent className={""} id={""} alignment={"left"} isFooterRequired={false} columns={tempTableData.columns} rows={tempTableData.rows}            
-              ></DsTableComponent>
-            </div></div>
-        </TabView>
-        <TabView tabId="2">
-            <div className={styles.container}> <div className={styles.tableContainer}>
- 
-              <DsTableComponent className={""} id={""} alignment={"left"} isFooterRequired={false} columns={tempTableData.columns} rows={tempTableData.rows}                
-              ></DsTableComponent>
-            </div></div>
-        </TabView>
-        <TabView tabId="3">
-            <div className={styles.container}> <div className={styles.tableContainer}>
- 
-              <DsTableComponent className={""} id={""} alignment={"left"} isFooterRequired={false} columns={tempTableData.columns} rows={tempTableData.rows}              
-              ></DsTableComponent>
-            </div></div>
-        </TabView>
+        <div className={styles.tenderHeader}>
+          Total Tenders : {totalTenders} Total Values: {totalValues}
+        </div>
+        <div className={styles.container}>
+          {" "}
+          <div className={styles.tableContainer}>
+            <DsTableComponent
+              className={styles.table}
+              id={""}
+              alignment={"left"}
+              isFooterRequired={true}
+              columns={tempTableData.columns}
+              rows={tempTableData.rows}
+            ></DsTableComponent>
+          </div>
+        </div>
       </div>
- 
-    
+
       {/* <div className={styles.container + " " + styles["flex-column"]}>
         <div>
           <DSButtonGroup id="btngroup1" className={btnStyles.btngroup}>

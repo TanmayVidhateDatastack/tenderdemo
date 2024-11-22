@@ -240,9 +240,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={` ${openSans.variable}`}
-      >
+      <body className={` ${openSans.variable} ${openSans_Regular.variable}`}>
         <ElLayout>{children}</ElLayout>
       </body>
     </html>

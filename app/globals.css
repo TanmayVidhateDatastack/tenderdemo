@@ -3,10 +3,11 @@
   --foreground: #171717;
   --backgroundt: transparent;
 
-  --application-background: var(--snd-background);
-  --snd-background: #fbf9ff;
+  --application-background: var(--tnd-background);
+  --tnd-background: #F8FFFF;
 
-  --blue: #41428e;
+  --green: #008080;
+  --green-hover:#E1F1F2;
   --blue-600: #82b1ff;
   --semiblue: #4f54a4;
   --red: #c50606;
@@ -23,39 +24,40 @@
   --semiblack: #383838;
   --heather: #a4a9d1;
 
-  --text-primary: var(--blue);
+  --text-primary: var(--green);
+  --text-primary-hover: var(--green-hover);
   --text-white: var(--background);
   --text-dark: var(--black);
   --text-warning: var(--red);
 
-  --primary: var(--semiblue);
-  --primary-hover: var(--blue);
-  --secondary: var(--grey);
-  --secondary-hover: var(--grey);
-  --danger: var(--red);
-  --danger-hover: var(--orange);
-  --warning: var(--lightred);
-  --warning-hover: var(--brick);
-  --dark: var(--black);
-  --info: var(--darkskyblue);
-  --info-hover: var(--skyblue);
-  --midviolet: var(--blush);
-  --semiviolet: var(--periwinkle);
-  /* --lightviolet:var(--lightviolet); */
+  --primary: var(--tndPrimary);
+  --primary-hover: var(--tndPrimary-hover);
+  --secondary: var(--tndSecondary);
+  --secondary-hover: var(--tndSecondary);
+  --danger: var(--tndDanger);
+  --danger-hover: var(--tndDanger-hover);
+  --warning: var(--tndWarning);
+  --warning-hover: var(--tndWarning-hover);
+  --dark: var(--tndDark);
+  --info: var(--tndInfo);
+  --info-hover: var(--tndInfo-hover);
+  --midviolet: var(--tndMidviolet);
+  --semiviolet: var(--tndSemiviolet);
+  --lightviolet:var(--tndLightviolet);
 
-  /* --sndPrimary:var(--semiblue);
-  --sndPrimary-hover:var(--blue);
-  --sndSecondary:var(--gray);
-  --sndDanger:var(--red);
-  --sndDanger-hover:var(--orange);
-  --sndWarning:var(--lightred);
-  --sndWarning-hover:var(--brick);
-  --sndDark:var(--black);
-  --sndInfo:var(--darkskyblue);
-  --sndInfo-hover:var(--skyblue);
-  --sndMidviolet:var(--blush);  
-  --sndSemiviolet:var(--periwinkle);       
-  --sndLightviolet:var(--lightviolet); */
+  --tndPrimary:var(--semiblue);
+  --tndPrimary-hover:var(--green);
+  --tndSecondary:var(--grey);
+  --tndDanger:var(--red);
+  --tndDanger-hover:var(--orange);
+  --tndWarning:var(--lightred);
+  --tndWarning-hover:var(--brick);
+  --tndDark:var(--black);
+  --tndInfo:var(--darkskyblue);
+  --tndInfo-hover:var(--skyblue);
+  --tndMidviolet:var(--blush);  
+  --tndSemiviolet:var(--periwinkle);       
+  --tndLightviolet:var(--lightviolet);
 
   --ds-padding: 0.5rem !important;
   --ds-marginX: 0.6vw;
@@ -80,11 +82,13 @@
   --link: 12px;
   --custome: 50px;
 
+  --under-emd-pending: #CC8400;
+  --awarded:#DCA500;
   --disable: #cccccc;
   --placeholder: #c4c4c4;
   --bodytext: #434343;
   --hold: #cc8400;
-  --draft: #b0b0b0;
+  --draft: #B0B0B0;
   --dispatch: #dca500;
   --approved: #28a745;
   --open: #007bff;
@@ -127,6 +131,13 @@
   --inProcess-text: #6f42c1;
   --cancelled: #dc35451a;
   --cancelled-text: #dc3545;
+
+  /*Tender status colors*/
+  --draft-text:#b0b0b0;
+  --draft:#b0b0b01a;
+  --awarded:#dca5001a;
+  --awarded-text:#DCA500;
+  
 }
 /* 
 /* @media (prefers-color-scheme: dark) {
