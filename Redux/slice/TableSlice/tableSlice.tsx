@@ -1,8 +1,5 @@
-import { trow } from "@/app/Elements/Components/DsTablecomponent/helpers/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-type InitState = {
-  rows: trow[];
-};
+import { InitState, DsTableRow } from "@/helpers/types";
 
 export const initialState: InitState = {
   rows: [],
@@ -12,10 +9,11 @@ export const activeObjectSlice = createSlice({
   name: "active",
   initialState,
   reducers: {
-    setRows: (state, action: PayloadAction<trow[]>) => {
+    setRows: (state, action: PayloadAction<DsTableRow[]>) => {
       state.rows = action.payload;
       return state;
     },
+    
   },
 });
 
