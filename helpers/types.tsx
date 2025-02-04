@@ -658,12 +658,12 @@ export type InitState = {
 };
 
 // types
-export type bankDetail = {
-  name: string;
-  accountNumber: string;
-  ifscCode: string;
-  branchName: string;
-};
+// export type bankDetail = {
+//   name: string;
+//   accountNumber: string;
+//   ifscCode: string;
+//   branchName: string;
+// };
 export type location = {
   id: number;
   address1: string;
@@ -690,93 +690,74 @@ export type customer = {
   address: location;
   bank: bankDetail;
 };
-export type tieUpProduct = {
-  productId: number;
-  productCode: string;
-  productName: string;
-  batchId: number;
-  batchNumber: string;
-  expiryDate: string;
-  quantity?: number;
-};
+// export type tieUpProduct = {
+//   productId: number;
+//   productCode: string;
+//   productName: string;
+//   batchId: number;
+//   batchNumber: string;
+//   expiryDate: string;
+//   quantity?: number;
+// };
 export type product = {
   id: number;
   name?: string;
-  code?: string;
-  discountPercent?: number;
-  dispatchQuantity?: number;
-  mrpRate?: string | undefined;
-  cartonSize?: number;
-  quantity?: number;
-  batchId?: number;
-  batchNumber?: string;
-  expiryDate?: string;
-  requestedExpiryDays: number;
-  basicValue?: number;
-  specialRate?: string;
-  salesQuantity?: number;
-  mrp?: number;
-  netAmount?: number;
-  esvAmount?: number;
-  bonusQuantity?: number;
-  igstValue?: number;
-  cgstValue?: number;
-  sgstValue?: number;
-  hsnCode?: string;
-  isSampleProduct?: string;
-  tieUpProduct?: tieUpProduct;
+  packSize?:string
+  mrpRate?: string | number;
+  ptr?:string|number;
+  directCost?:string|number;
 };
-export type addressToFrom = {
-  to: location;
-  from: location;
-};
-export type orderStatus = {
-  orderStatus: string;
-  messageType: string;
-  message: string;
-  statusValue: dsStatus;
-};
-export type transport = {
-  transporterId: number;
-  transporterName: string;
-  mode: string;
-  vehicleType: string;
-  vehicleNumber: string;
-  transporterDocumentNumber: string;
-  transportationDate: string;
-};
-export type licenseExpiry = {
-  customerId: number;
-  licenseNumber: string;
-  expiryDate: string;
-  displayMessage: string;
-  isExpired: boolean;
-};
-export type validations = {
-  basic: {
-    drugLicenseExpiry: licenseExpiry;
-    fdaLicenseExpiry: licenseExpiry;
-    foodLicenseExpiry: licenseExpiry;
-    flag: boolean;
-  };
-  credit: {
-    overDue: {
-      message: string;
-      flag: boolean;
-    };
-    creditLimit: {
-      value: number;
-      limit: number;
-      flag: boolean;
-    };
-  };
-};
-export type combinedOrder = {
-  orderId: number;
-  purchaseOrderNumber: string;
-  purchaseOrderDate: string;
-  orderItemCount:number;
-};
+// export type addressToFrom = {
+//   to: location;
+//   from: location;
+// };
+// export type orderStatus = {
+//   orderStatus: string;
+//   messageType: string;
+//   message: string;
+//   statusValue: dsStatus;
+// };
+// export type transport = {
+//   transporterId: number;
+//   transporterName: string;
+//   mode: string;
+//   vehicleType: string;
+//   vehicleNumber: string;
+//   transporterDocumentNumber: string;
+//   transportationDate: string;
+// };
+// export type licenseExpiry = {
+//   customerId: number;
+//   licenseNumber: string;
+//   expiryDate: string;
+//   displayMessage: string;
+//   isExpired: boolean;
+// };
+// export type validations = {
+//   basic: {
+//     drugLicenseExpiry: licenseExpiry;
+//     fdaLicenseExpiry: licenseExpiry;
+//     foodLicenseExpiry: licenseExpiry;
+//     flag: boolean;
+//   };
+//   credit: {
+//     overDue: {
+//       message: string;
+//       flag: boolean;
+//     };
+//     creditLimit: {
+//       value: number;
+//       limit: number;
+//       flag: boolean;
+//     };
+//   };
+// };
+// export type combinedOrder = {
+//   orderId: number;
+//   purchaseOrderNumber: string;
+//   purchaseOrderDate: string;
+//   orderItemCount:number;
+// };
 // export type order = {
 //   orderId: number;
 //   orderType: string;
@@ -793,91 +774,91 @@ export type combinedOrder = {
 //   status?: orderStatus;
 //   combinedOrders?: combinedOrder[];
 // };
-export type order = {
-  id: number;
-  type: "Trade" | "Institutional" | "Corporate";
-  orderDate: string;
-  purchaseOrderNumber: string;
-  purchaseOrderDate: string;
-  status: orderStatus;
-  // invoiceStatus: dsStatus;
+// export type order = {
+//   id: number;
+//   type: "Trade" | "Institutional" | "Corporate";
+//   orderDate: string;
+//   purchaseOrderNumber: string;
+//   purchaseOrderDate: string;
+//   status: orderStatus;
+//   // invoiceStatus: dsStatus;
 
-  customer?: customer;
-  orderItems?: orderItems[];
-  shipping?: addressToFrom;
-  billing?: addressToFrom;
-  transport?: transport;
-  combineOrders?: combinedOrder[];
+//   customer?: customer;
+//   orderItems?: orderItems[];
+//   shipping?: addressToFrom;
+//   billing?: addressToFrom;
+//   transport?: transport;
+//   combineOrders?: combinedOrder[];
 
-  netValue?: number; //order log
-  grossValue?: number; //order log
-  invoiceId?: string; //order log
-};
-export type orderItems = {
-  transactionType?: "CREATE" | "UPDATE";
-  orderItemId?: number;
-  productId: number;
-  productCode?: string;
-  productName?: string;
-  cartonSize?: number;
-  quantity?: number;
-  batchId?: number;
-  batchNumber?: string;
-  expiryDate?: string;
-  basicValue?: number;
-  specialRate?: string;
-  salesQuantity?: number;
-  dispatchQuantity?: number;
-  mrp?: number;
-  netAmount?: number;
-  esvAmount?: number;
-  bonusQuantity?: number;
-  igstValue?: number;
-  cgstValue?: number;
-  sgstValue?: number;
-  hsnCode?: string;
-  isSampleProduct?: string;
-  tieUpProduct?: tieUpProduct;
-  requestedExpiryDays: number;
-  requestedQuantity: number;
-};
-export type saveOrder = {
-  transaction_type: "CREATE" | "UPDATE";
-  orderId?: number;
-  orderType: "TRADE" | "INSTITUTIONAL";
-  customerId: number;
-  // createdBy: number;
-  purchaseOrderNumber: string;
-  purchaseOrderDate: string;
-  status?: string;
-  billingAddress: {
-    toLocationId: number;
-    fromLocationId: number;
-  };
-  shippingAddress: {
-    toLocationId: number;
-    fromLocationId: number;
-  };
-  transportDetails?: {
-    transporterId?: number | null;
-    mode?: string | null;
-    transportDate?: string | null;
-    vehicleType?: string | null;
-    vehicleNumber?: string | null;
-    transporterDocumentNumber?: string | null;
-  };
-  orderItems: saveOrderItem[];
-  deleteOrderItemIds?: number[];
-};
-export type saveOrderItem = {
-  productId?: number;
-  batchId?: number;
-  quantity?: number;
-  salesQuantity?: number;
-  dispatchQuantity?: number;
-  expiryDate?: string;
-  requestedExpiryDays?: number;
-};
+//   netValue?: number; //order log
+//   grossValue?: number; //order log
+//   invoiceId?: string; //order log
+// };
+// export type orderItems = {
+//   transactionType?: "CREATE" | "UPDATE";
+//   orderItemId?: number;
+//   productId: number;
+//   productCode?: string;
+//   productName?: string;
+//   cartonSize?: number;
+//   quantity?: number;
+//   batchId?: number;
+//   batchNumber?: string;
+//   expiryDate?: string;
+//   basicValue?: number;
+//   specialRate?: string;
+//   salesQuantity?: number;
+//   dispatchQuantity?: number;
+//   mrp?: number;
+//   netAmount?: number;
+//   esvAmount?: number;
+//   bonusQuantity?: number;
+//   igstValue?: number;
+//   cgstValue?: number;
+//   sgstValue?: number;
+//   hsnCode?: string;
+//   isSampleProduct?: string;
+//   tieUpProduct?: tieUpProduct;
+//   requestedExpiryDays: number;
+//   requestedQuantity: number;
+// };
+// export type saveOrder = {
+//   transaction_type: "CREATE" | "UPDATE";
+//   orderId?: number;
+//   orderType: "TRADE" | "INSTITUTIONAL";
+//   customerId: number;
+//   // createdBy: number;
+//   purchaseOrderNumber: string;
+//   purchaseOrderDate: string;
+//   status?: string;
+//   billingAddress: {
+//     toLocationId: number;
+//     fromLocationId: number;
+//   };
+//   shippingAddress: {
+//     toLocationId: number;
+//     fromLocationId: number;
+//   };
+//   transportDetails?: {
+//     transporterId?: number | null;
+//     mode?: string | null;
+//     transportDate?: string | null;
+//     vehicleType?: string | null;
+//     vehicleNumber?: string | null;
+//     transporterDocumentNumber?: string | null;
+//   };
+//   orderItems: saveOrderItem[];
+//   deleteOrderItemIds?: number[];
+// };
+// export type saveOrderItem = {
+//   productId?: number;
+//   batchId?: number;
+//   quantity?: number;
+//   salesQuantity?: number;
+//   dispatchQuantity?: number;
+//   expiryDate?: string;
+//   requestedExpiryDays?: number;
+// };
 export interface CurrencyProps {
   format: "IND" | "UK";
   id: string;
@@ -901,22 +882,22 @@ export interface FetchDataProps {
   dataObject?: unknown;
 }
 
-export interface correctSignProps {
-  handleOnClick?: (e: React.MouseEvent<HTMLElement>) => void;
-}
-export interface DsSummaryViewProps {
-  data: order; // Accept data as a prop
-}
-export interface DsStockistViewProps {
-  data: order; // Accept data as a prop
-}
-export interface CplProps {
-  ids: number[];
-}
+// export interface correctSignProps {
+//   handleOnClick?: (e: React.MouseEvent<HTMLElement>) => void;
+// }
+// export interface DsSummaryViewProps {
+//   data: order; // Accept data as a prop
+// }
+// export interface DsStockistViewProps {
+//   data: order; // Accept data as a prop
+// }
+// export interface CplProps {
+//   ids: number[];
+// }
 
-export interface DsCorrectSignProps {
-  handleOnClick?: (e: React.MouseEvent<HTMLElement>) => void;
-}
+// export interface DsCorrectSignProps {
+//   handleOnClick?: (e: React.MouseEvent<HTMLElement>) => void;
+// }
 // export interface DsCplHeaderProps{
 
 // }
@@ -932,3 +913,5 @@ export interface TotalValuesProps {
 export interface TotalOrdersProps {
   data: Array<order>;
 }
+
+

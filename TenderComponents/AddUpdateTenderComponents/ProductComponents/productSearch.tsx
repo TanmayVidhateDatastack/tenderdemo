@@ -1,7 +1,7 @@
 import DsInfoDisplay from "@/Elements/ERPComponents/DsInfoDisplay/DsInfoDisplay";
 import { DsStatus, searchProductsURL } from "@/helpers/constant";
 import { product, datalistOptions } from "@/helpers/types";
-import DsSearchComponent from "../../../Elements/ERPComponents/DsSearchComponent/searchComponent";
+import DsSearchComponent from "@/Elements/ERPComponents/DsSearchComponent/searchComponent";
 import { Dispatch, SetStateAction, useState } from "react";
 export interface ProductSearchProps {
   // initialValue?:string;
@@ -16,16 +16,12 @@ export function isSearchProduct(value: unknown): value is product {
     value !== null &&
     "id" in value &&
     "name" in value &&
-    "code" in value &&
-    "batchId" in value &&
-    "batchNumber" in value &&
-    "quantity" in value &&
+    "packSize" in value &&
+
     typeof (value as unknown as product).id === "number" &&
     typeof (value as unknown as product).name === "string" &&
-    typeof (value as unknown as product).code === "string" &&
-    typeof (value as unknown as product).batchId === "number" &&
-    typeof (value as unknown as product).batchNumber === "string" &&
-    typeof (value as unknown as product).quantity === "number"
+    typeof (value as unknown as product).packSize === "string"
+   
   );
 }
 export function areSearchProduct(value: unknown): value is product[] {
@@ -42,26 +38,19 @@ const ProductSearch: React.FC<ProductSearchProps> = ({
     if (areSearchProduct(values)) {
       const products: datalistOptions[] = values.map(
         (x: {
-          batchId?: number;
-          batchNumber?: string;
           id: number;
-          code?: string;
           name?: string;
-          quantity?: number;
+          packSize?: string;
         }) => {
           return {
             id: x.id.toString(),
-            value: x.code + " - " + x.name,
+            value: x.name,
             attributes: {
-              "batch-id": x.batchId?.toString() || "",
               "product-id": x.id.toString(),
             },
             secondaryValue: (
               <>
-                <DsInfoDisplay detailOf="Batch No">
-                  {x.batchNumber}
-                </DsInfoDisplay>
-                <DsInfoDisplay detailOf="Qty">{x.quantity || 0}</DsInfoDisplay>
+                <DsInfoDisplay detailOf="Pack Size">{x.packSize || 0}</DsInfoDisplay>
               </>
             ),
           };

@@ -64,7 +64,7 @@ export const getFooterAddress = apiHostUrl + "/footerAddress";
 export const searchCustomerURL = apiHostUrl + "/customers/filter?name=";
 export const getCustomerURL = apiHostUrl + "/customers/";
 export const searchProductsURL = apiHostUrl + "/products/filter?";
-export const getProductURL = apiHostUrl + "/products/";
+export const getProductURL = apiHostUrl + "/tender/product/";
 export const getOrderListURL = apiHostUrl + "/orders/consolidatedOrders?ids=";
 export const getInvoiceById = apiHostUrl + "/invoice/1";
 export const getAllCustomerLocationsURL = apiHostUrl + "/customers/address/";

@@ -32,8 +32,6 @@ const DsAddProduct: React.FC<addProductProps> = ({
         url:
           getProductURL +
           selectedProductId +
-          "/batches/" +
-          selectedProductBatchId +
           "?requestedQuantity=" +
           quantity,
       });
@@ -77,7 +75,7 @@ const DsAddProduct: React.FC<addProductProps> = ({
       ></DsTextField>
       <DsButton
         buttonSize="btnLarge"
-        handleOnClick={selectProduct}
+        onClick={selectProduct}
         disable={orderStatus === DsStatus.APRV ? true : false}
       >
         Add
