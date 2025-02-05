@@ -39,7 +39,8 @@
 export const demoHostUrl = "http://172.203.226.112:3000";
 export const apiLocalUrl = "http://localhost:7002";
 export const apiServerUrl = "http://172.145.1.102:7002";
-export const apiHostUrl = apiLocalUrl;
+// export const apiHostUrl = apiLocalUrl;
+export const apiHostUrl = apiServerUrl;
 export const devHostUrl = "http://localhost:3000";
 
 ///Urls application Level
@@ -49,14 +50,14 @@ export const salesOUrl = hostUrl + "/";
 
 ///universal Apis
 
-export const getUserRoles = apiHostUrl+"/depousers/2";
+export const getUserRoles = apiHostUrl + "/depousers/2";
 // export const getUserRoles = apiHostUrl+"/depomanager/2";
 // export const getUserRoles =apiHostUrl+"/homanager/3";
 // export const getUserRoles = "http://localhost:5155/homanager/1";
 
 ///Apis
-export const getAllTenders = apiHostUrl + "/tenders";
-export const getTendersById = apiHostUrl + "/tender/1";
+export const getAllInstitutionalOrders = apiHostUrl + "/institutional";
+export const getInstitutionalOrderById = apiHostUrl + "/institutional/1";
 export const getAllDepot = apiHostUrl + "/depot";
 export const getInstitutionalAddress = apiHostUrl + "/institutional/address/1";
 export const getpackingListbyId = apiHostUrl + "/packingList/1";
@@ -64,19 +65,21 @@ export const getFooterAddress = apiHostUrl + "/footerAddress";
 export const searchCustomerURL = apiHostUrl + "/customers/filter?name=";
 export const getCustomerURL = apiHostUrl + "/customers/";
 export const searchProductsURL = apiHostUrl + "/products/filter?";
-export const getProductURL = apiHostUrl + "/tender/product/";
+export const getProductURL = apiHostUrl + "/products/";
 export const getOrderListURL = apiHostUrl + "/orders/consolidatedOrders?ids=";
 export const getInvoiceById = apiHostUrl + "/invoice/1";
 export const getAllCustomerLocationsURL = apiHostUrl + "/customers/address/";
 export const getOrderById = apiHostUrl + "/orders/cmpl/5775F";
 // export const SearchCoustomers="";
-export const getConsolidatedOrder = apiHostUrl + "/orders/consolidatedOrders?ids=";
+export const getConsolidatedOrder =
+  apiHostUrl + "/orders/consolidatedOrders?ids=";
 export const createOrder = apiHostUrl + "/order";
 export const getAllOrdersURL = apiHostUrl + "/orders";
 export const searchTransporterURL = apiHostUrl + "/customers/filter?name=";
 export const getTransporterURL = apiHostUrl + "/customers/";
-export const getAllStatusLogURL = apiHostUrl + "/status"
-
+export const getAllStatusLogURL = apiHostUrl + "/status";
+export const getAllTenders = apiHostUrl + "/tenders";
+export const getAllMetaData = apiHostUrl + "/tenderMetadata";
 
 export const DsStatus: Record<string, dsStatus> = {
   DRFT: "Draft",
@@ -88,7 +91,7 @@ export const DsStatus: Record<string, dsStatus> = {
   RJCT: "Rejected",
   DSPT: "Ready To Dispatch",
   PFMA: "Proforma",
-  CMPL: "Completed",
+  CMPL: "Completed"
 };
 export type dsStatus =
   | "Draft"
@@ -100,7 +103,9 @@ export type dsStatus =
   | "Rejected"
   | "Ready To Dispatch"
   | "Proforma"
-  | "Completed";
+  | "Completed"
+  | "Under Review"
+  | "Awarded";
 // export type bankDetail = {
 //   bankName: string;
 //   accountNumber: string;

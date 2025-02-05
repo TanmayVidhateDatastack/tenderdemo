@@ -1,0 +1,13 @@
+.filterContainer{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.submissionBtn.feesBtn.approvalBtn{
+    border: 1px solid var(--primary) !important;
+    color: var(--primary) !important;
+}
+.filterBtn{
+    color: var(--primary) !important;
+}
