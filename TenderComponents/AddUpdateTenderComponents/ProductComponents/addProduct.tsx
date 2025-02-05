@@ -17,8 +17,7 @@ const DsAddProduct: React.FC<addProductProps> = ({
   setProductList,
 }) => {
   const [selectedProductId, setSelectedProductId] = useState<number>();
-  const [selectedProductBatchId, setSelectedProductBatchId] =
-    useState<number>();
+
 
   const [qtyInputVal, setQtyInputVal] = useState<string>("");
 
@@ -27,7 +26,7 @@ const DsAddProduct: React.FC<addProductProps> = ({
       ?.value;
     console.log("selected product id = ", quantity);
 
-    if (selectedProductId && selectedProductBatchId && quantity) {
+    if (selectedProductId ) {
       const product = await fetchData({
         url:
           getProductURL +
@@ -37,7 +36,6 @@ const DsAddProduct: React.FC<addProductProps> = ({
       });
       if (product.statusCode === 200) {
         setProductList((prev) => [...prev, product.result]);
-        setSelectedProductBatchId(0);
         setSelectedProductId(0);
         setQtyInputVal("");
       }
@@ -50,7 +48,6 @@ const DsAddProduct: React.FC<addProductProps> = ({
       <ProductSearch
         orderStatus={orderStatus}
         setSelectedProductId={setSelectedProductId}
-        setSelectedProductBatchId={setSelectedProductBatchId}
       ></ProductSearch>
       {/* <TextField
           options={searchProducts}

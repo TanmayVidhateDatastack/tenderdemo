@@ -7,7 +7,6 @@ export interface ProductSearchProps {
   // initialValue?:string;
   orderStatus?: string;
   setSelectedProductId: Dispatch<SetStateAction<number | undefined>>;
-  setSelectedProductBatchId: Dispatch<SetStateAction<number | undefined>>;
 }
  
 export function isSearchProduct(value: unknown): value is product {
@@ -30,7 +29,6 @@ export function areSearchProduct(value: unknown): value is product[] {
 const ProductSearch: React.FC<ProductSearchProps> = ({
   orderStatus,
   setSelectedProductId,
-  setSelectedProductBatchId,
 }) => {
   const [products, setProducts] = useState<datalistOptions[]>();
 
@@ -64,15 +62,12 @@ const ProductSearch: React.FC<ProductSearchProps> = ({
 
   const setSelectedOption = (option: datalistOptions) => {
     {
-      const selectedProductId = option.attributes["batch-id"];
-      const selectedProductBatchId = option.attributes["product-id"];
+      const selectedProductId = option.attributes["product-id"];
 
       if (selectedProductId) {
         setSelectedProductId(parseInt(selectedProductId));
       }
-      if (selectedProductBatchId) {
-        setSelectedProductBatchId(parseInt(selectedProductBatchId));
-      }
+     
     }
   };
   return (
