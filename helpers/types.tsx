@@ -908,10 +908,63 @@ export interface cplmenu {
 }
 
 export interface TotalValuesProps {
-  data: Array<order>;
+  data: Array<Tender>;
 }
 export interface TotalOrdersProps {
-  data: Array<order>;
+  data: Array<Tender>;
 }
 
+export type tenderDocument={
+  name:string;
+  document:File;
+}
 
+export type tenderFee={
+  type:string;
+  amount:number;
+  currency:string;
+  paidBy:string;
+  paymentMode:string;
+  paymentDueDate:string;
+  notes:string;
+  documents:tenderDocument[];
+}
+export type applicableSupplyConditions={
+  type:string;
+  notes:string;
+  documents:tenderDocument[];
+  status:dsStatus;
+}
+export type tenderSupplyCondition={
+  supplyPoint:string;
+  consigneesCount:number;
+  testReportRequirement:string;
+  eligibility:string[];
+  applicableConditions:applicableSupplyConditions[];
+}
+export type TenderData={
+  customerId:number;
+  customerLocationId:number;
+  tenderNumber:string;
+  tenderType:string;
+  issueDate:string;
+  lastPurchaseDate:string;
+  submissionDate:string;
+  rateContractValidity:string;
+  submissionMode:string;
+  deliveryPeriod:number;
+  extendedDeliveryPeriod:number;
+  lateDeliveryPenalty:number;
+  tenderURL:string;
+  shippingLocations:number[];
+  appliedBy:string;
+  applierBy:number|null;
+  suppliedBy:string;
+  suppliedId:number|null;
+  supplierDiscount:number;
+  preparedBy:number;
+  lastUpdatedBy: number;
+  comments: string;
+  fees:tenderFee[];
+  supplyConditions:tenderSupplyCondition;
+}
