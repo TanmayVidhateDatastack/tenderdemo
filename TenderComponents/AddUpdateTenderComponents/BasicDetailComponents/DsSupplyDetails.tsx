@@ -13,6 +13,7 @@ import { CheckboxProp } from "@/helpers/types";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import DsCsvUpload from "@/Elements/DsComponents/DsButtons/dsCsvUpload";
+import TextArea from "@/Elements/DsComponents/DsInputs/dsTextArea";
 
 const DsSupplyDetails: React.FC = () => {
   const contextMenuId = "context-display-11";
@@ -172,11 +173,11 @@ const DsSupplyDetails: React.FC = () => {
           </div>
           <div className={styles.notes}>
             <h4>Notes</h4>
-            <DsTextField
+            <TextArea
               placeholder="Please type here"
               // label="label"
               disable={false}
-              // type="multiline"
+              //   type="multiline"
               // minRows={5}
             />
           </div>
@@ -199,7 +200,7 @@ const DsSupplyDetails: React.FC = () => {
 
           <div className={styles.notes}>
             <h4>Notes</h4>
-            <DsTextField
+            <TextArea
               placeholder="Please type here"
               // label="label"
               disable={false}
@@ -226,7 +227,7 @@ const DsSupplyDetails: React.FC = () => {
 
           <div className={styles.notes}>
             <h4>Notes</h4>
-            <DsTextField
+            <TextArea
               placeholder="Please type here"
               // label="label"
               disable={false}
@@ -253,7 +254,7 @@ const DsSupplyDetails: React.FC = () => {
 
           <div className={styles.notes}>
             <h4>Notes</h4>
-            <DsTextField
+            <TextArea
               placeholder="Please type here"
               // label="label"
               disable={false}

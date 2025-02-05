@@ -6,6 +6,8 @@ import DsNavTo from "@/Elements/ERPComponents/DsNavigationComponent/DsNavTo";
 import styles from "./page.module.css";
 import DsFilterActions from "@/TenderComponents/TenderLogComponents/DsFilterActions";
 import DsPane from "@/Elements/DsComponents/DsPane/DsPane";
+import DsAdvancedFilterPane from "@/TenderComponents/TenderLogComponents/DsAdvancedFilterPane";
+import DsTenderTable from "@/TenderComponents/TenderLogComponents/DsTenderTable";
 
 export default function Home() {
   return (
@@ -19,14 +21,8 @@ export default function Home() {
           </div>
         }
       >
-        <TableComponent
-          className={""}
-          id={""}
-          columns={[]}
-          rows={[]}
-        ></TableComponent>
+        <DsTenderTable />
       </DsApplication>
-      <DsPane id="y"></DsPane>
     </>
   );
 }

@@ -3,9 +3,10 @@ import React, {
   Dispatch,
   SetStateAction,
   ReactNode,
-  ChangeEvent,
+  ChangeEvent
 } from "react";
 import { dsStatus } from "./constant";
+import { DSButtonProps } from "@/Elements/DsComponents/DsButtons/dsButton";
 
 // import dsStatus from "./constant";
 
@@ -29,54 +30,16 @@ export interface advancedFilterComponent {
   rows: DsTableRow[];
   filterTypes: filterType[];
   customAttributes?: Record<string, string | number | boolean>;
-  handleApplyFilter?: (e: React.MouseEvent<HTMLElement>, rows: DsTableRow[]) => void;
+  handleApplyFilter?: (
+    e: React.MouseEvent<HTMLElement>,
+    rows: DsTableRow[]
+  ) => void;
 }
 
 export interface AccordionProps {
   id: string;
   title: string; // The title of the accordion
   children: string | React.ReactElement; // The content inside the accordion, can be a string or a React element
-}
-
-export interface DSButtonProps {
-  children?: React.ReactNode;
-  id?: string;
-  label?: string;
-  tooltip?: string;
-
-  type?:
-  | "standard"
-  | "split"
-  | "toggle"
-  | "icon_image"
-  | "button_icon"
-  | "upload"
-  | "tab"
-  | "count"
-  | "round";
-  buttonSize?: "btnSmall" | "btnMedium" | "btnLarge";
-  iconSize?: "iconSmall" | "iconMedium" | "iconLarge";
-  buttonColor?:
-  | "btnPrimary"
-  | "btnSecondary"
-  | "btnDanger"
-  | "btnWarning"
-  | "btnDark"
-  | "btnInfo";
-  buttonViewStyle?: "btnText" | "btnContained" | "btnOutlined";
-  disable?: boolean;
-  className?: string;
-  count?: string | "00";
-  position?: "top" | "left" | "bottom" | "right";
-  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
-  img?: string;
-  startIcon?: React.ReactElement;
-  endIcon?: React.ReactElement;
-  spliticon?: React.ReactElement;
-  onHover?: (e: React.MouseEvent<HTMLElement>) => void;
-  handleMouseLeave?: (e: React.MouseEvent<HTMLElement>) => void;
-  onBlur?: (e: React.MouseEvent<HTMLElement>) => void;
-  handelSplitClick?: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 export interface DSButtonGroupProps {
@@ -88,12 +51,12 @@ export interface DSButtonGroupProps {
   buttonSize?: "btnSmall" | "btnMedium" | "btnLarge";
   iconSize?: "iconSmall" | "iconMedium" | "iconLarge";
   buttonColor?:
-  | "btnPrimary"
-  | "btnSecondary"
-  | "btnDanger"
-  | "btnWarning"
-  | "btnDark"
-  | "btnInfo";
+    | "btnPrimary"
+    | "btnSecondary"
+    | "btnDanger"
+    | "btnWarning"
+    | "btnDark"
+    | "btnInfo";
   className?: string;
   img?: string;
   startIcon?: React.ReactElement;
@@ -379,13 +342,13 @@ export interface ToasterProps {
   type: "success" | "bonus" | "info" | "error";
   handleClose: () => void;
   position:
-  | "top"
-  | "topleft"
-  | "topright"
-  | "middle"
-  | "bottom"
-  | "bottomleft"
-  | "bottomright";
+    | "top"
+    | "topleft"
+    | "topright"
+    | "middle"
+    | "bottom"
+    | "bottomleft"
+    | "bottomright";
   duration?: number;
 }
 
@@ -702,10 +665,10 @@ export type customer = {
 export type product = {
   id: number;
   name?: string;
-  packSize?:string
+  packSize?: string;
   mrpRate?: string | number;
-  ptr?:string|number;
-  directCost?:string|number;
+  ptr?: string | number;
+  directCost?: string | number;
 };
 // export type addressToFrom = {
 //   to: location;
@@ -914,57 +877,78 @@ export interface TotalOrdersProps {
   data: Array<Tender>;
 }
 
-export type tenderDocument={
-  name:string;
-  document:File;
-}
+export type tenderDocument = {
+  name: string;
+  document: File;
+};
 
-export type tenderFee={
-  type:string;
-  amount:number;
-  currency:string;
-  paidBy:string;
-  paymentMode:string;
-  paymentDueDate:string;
-  notes:string;
-  documents:tenderDocument[];
-}
-export type applicableSupplyConditions={
-  type:string;
-  notes:string;
-  documents:tenderDocument[];
-  status:dsStatus;
-}
-export type tenderSupplyCondition={
-  supplyPoint:string;
-  consigneesCount:number;
-  testReportRequirement:string;
-  eligibility:string[];
-  applicableConditions:applicableSupplyConditions[];
-}
-export type TenderData={
-  customerId:number;
-  customerLocationId:number;
-  tenderNumber:string;
-  tenderType:string;
-  issueDate:string;
-  lastPurchaseDate:string;
-  submissionDate:string;
-  rateContractValidity:string;
-  submissionMode:string;
-  deliveryPeriod:number;
-  extendedDeliveryPeriod:number;
-  lateDeliveryPenalty:number;
-  tenderURL:string;
-  shippingLocations:number[];
-  appliedBy:string;
-  applierBy:number|null;
-  suppliedBy:string;
-  suppliedId:number|null;
-  supplierDiscount:number;
-  preparedBy:number;
+export type tenderFee = {
+  type: string;
+  amount: number;
+  currency: string;
+  paidBy: string;
+  paymentMode: string;
+  paymentDueDate: string;
+  notes: string;
+  documents: tenderDocument[];
+};
+export type applicableSupplyConditions = {
+  type: string;
+  notes: string;
+  documents: tenderDocument[];
+  status: dsStatus;
+};
+export type tenderSupplyCondition = {
+  supplyPoint: string;
+  consigneesCount: number;
+  testReportRequirement: string;
+  eligibility: string[];
+  applicableConditions: applicableSupplyConditions[];
+};
+export type TenderData = {
+  customerId: number;
+  customerLocationId: number;
+  tenderNumber: string;
+  tenderType: string;
+  issueDate: string;
+  lastPurchaseDate: string;
+  submissionDate: string;
+  rateContractValidity: string;
+  submissionMode: string;
+  deliveryPeriod: number;
+  extendedDeliveryPeriod: number;
+  lateDeliveryPenalty: number;
+  tenderURL: string;
+  shippingLocations: number[];
+  appliedBy: string;
+  applierBy: number | null;
+  suppliedBy: string;
+  suppliedId: number | null;
+  supplierDiscount: number;
+  preparedBy: number;
   lastUpdatedBy: number;
   comments: string;
-  fees:tenderFee[];
-  supplyConditions:tenderSupplyCondition;
-}
+  fees: tenderFee[];
+  supplyConditions: tenderSupplyCondition;
+};
+
+export type Tender = {
+  customerName: string;
+  submittionDate: string;
+  daystosubmit: string;
+  tenderId: string;
+  tenderType: string;
+  depot: string;
+  appliedBy: string;
+  suppliedBy: string;
+  preparedBy: string;
+  value: string;
+  status: string;
+};
+
+export type TenderDetails = {
+  code: number;
+  error: string | null;
+  message: string;
+  result: Tender[];
+};
