@@ -1,0 +1,98 @@
+.container{
+    width: 100%;
+    padding: var(--ds-padding);
+    background: inherit;
+  }
+  
+  .containerHead{
+    display: flex;
+    justify-content: space-between;
+    background: inherit;
+  }
+  .fieldColors{
+    background-color: white;
+  }
+  
+  .applicationDeposits{
+    border-radius: 25px !important;
+    padding: 2px !important;
+    background:inherit;
+  }
+  .emdContainer2{
+    margin-top: 10px;
+    border: 1px solid var(--secondary);
+    background: inherit;
+    background-color: var(--grey-100);
+    padding: 5px;
+    width: 100%;
+    }
+  
+  .emdContainer{
+    background: inherit;
+    background-color: var(--grey-100);
+    padding: 5px;
+    width: 100%;
+    }
+    
+    .attachFileBtn{
+      display: flex;
+      /* justify-content: start !important; */
+      align-items: center;
+    }
+  
+  .emdContainerHead{
+    display: flex;
+    justify-content: space-between;
+    /* justify-content: end; */
+    background: inherit;
+  } 
+  .emdContainerHead2{
+    display: flex;
+    /* justify-content: space-between; */
+    justify-content: end;
+    background: inherit;
+  } 
+   
+  .fields{
+    background-color: var(--background);
+    color: var(--dark);
+    font-size: var(--subtitle2);
+    background: inherit;
+  } 
+  
+  .notes{
+    padding: 3px;
+    padding-top: 20px;
+  }
+  
+  .optionBtn{
+    background-color: transparent !important;
+    color: var(--text-primary) !important;
+    border: 0px !important;
+  }
+  .optionBtn:hover{
+    background-color: var(--text-primary-hover) !important;
+    color: var(--text-white) !important;
+    border-radius: 25px !important;
+  }
+  .copyBtn{
+    background-color: transparent !important;
+    color: var(--text-primary) !important;
+    border: 0px !important;
+  }
+  .copyBtn:hover{
+    background-color: var(--text-primary-hover) !important;
+    color: var(--text-white) !important;
+    /* border-radius: 25px !important; */
+  }
+  
+  .addBtn{
+    min-width: 80% !important;
+    max-width: fit-content !important;
+    background-color: var(--primary) !important;
+    color: var(--background) !important;
+  }
+  .addBtn:hover{
+    background-color: var(--primary);
+    color: var(--background);
+  }

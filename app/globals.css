@@ -30,7 +30,7 @@
   --text-dark: var(--black);
   --text-warning: var(--red);
 
-  --primary: var(--tndPrimary);
+  --primary: var(--green);
   --primary-hover: var(--tndPrimary-hover);
   --secondary: var(--tndSecondary);
   --secondary-hover: var(--tndSecondary);
