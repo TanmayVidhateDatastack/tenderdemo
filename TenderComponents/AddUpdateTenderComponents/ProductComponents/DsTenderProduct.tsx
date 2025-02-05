@@ -7,7 +7,7 @@ const DsTenderProduct: React.FC = ({ productList, setProductlist }) => {
     <>
       <div>
         <DsAddProduct setProductList={setProductlist}></DsAddProduct>
-        <DsProductKpis productData={productList}></DsProductKpis>
+        {/* <DsProductKpis productData={productList}></DsProductKpis> */}
       </div>
       <DsProductTable></DsProductTable>
     </>

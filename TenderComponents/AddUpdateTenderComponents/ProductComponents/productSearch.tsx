@@ -6,7 +6,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 export interface ProductSearchProps {
   // initialValue?:string;
   orderStatus?: string;
-  setSelectedProductId: Dispatch<SetStateAction<number | undefined>>;
+  setSelectedProductId: (id:number | undefined)=>void;
 }
  
 export function isSearchProduct(value: unknown): value is TenderProduct {

@@ -44,7 +44,7 @@ const DsAddProduct: React.FC<addProductProps> = ({
     <div className={styles.input}>
       <ProductSearch
         orderStatus={orderStatus}
-        setSelectedProductId={setSelectedProductId}
+        setSelectedProductId={(id)=>setSelectedProductId(id)}
       ></ProductSearch>
       {/* <TextField
           options={searchProducts}

@@ -612,6 +612,14 @@ export class cellData {
   alignment?: "left" | "right" | "center";
   customAttributes?: Record<string, string | number | boolean>;
 }
+
+export class DsTableRow {
+  rowIcon?: React.ReactNode;
+  rowIndex: number = 1;
+  className?: string;
+  content?: cellData[];
+  customAttributes?: Record<string, string | number | boolean>;
+}
 export class tableData {
   className: string = "";
   id: string = "";
@@ -622,13 +630,6 @@ export class tableData {
   rows: DsTableRow[] = [];
 }
 
-export class DsTableRow {
-  rowIcon?: React.ReactNode;
-  rowIndex: number = 1;
-  className?: string;
-  content?: cellData[];
-  customAttributes?: Record<string, string | number | boolean>;
-}
 
 export class filterType {
   columnIndex: number = 0;
