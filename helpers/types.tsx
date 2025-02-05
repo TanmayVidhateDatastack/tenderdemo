@@ -699,14 +699,7 @@ export type customer = {
 //   expiryDate: string;
 //   quantity?: number;
 // };
-export type product = {
-  id: number;
-  name?: string;
-  packSize?:string
-  mrpRate?: string | number;
-  ptr?:string|number;
-  directCost?:string|number;
-};
+
 // export type addressToFrom = {
 //   to: location;
 //   from: location;
@@ -914,7 +907,7 @@ export interface TotalOrdersProps {
   data: Array<Tender>;
 }
 
-export type tenderDocument={
+export type Document={
   name:string;
   document:File;
 }
@@ -927,12 +920,12 @@ export type tenderFee={
   paymentMode:string;
   paymentDueDate:string;
   notes:string;
-  documents:tenderDocument[];
+  documents:Document[];
 }
 export type applicableSupplyConditions={
   type:string;
   notes:string;
-  documents:tenderDocument[];
+  documents:Document[];
   status:dsStatus;
 }
 export type tenderSupplyCondition={
@@ -967,4 +960,21 @@ export type TenderData={
   comments: string;
   fees:tenderFee[];
   supplyConditions:tenderSupplyCondition;
+};
+export type TenderProduct = {
+  id: number;
+  name?: string;
+  packSize?:string
+  mrpRate?: string | number;
+  ptr?:string|number;
+  directCost?:string|number;
+};
+export type TenderDocument={
+  type:string;
+  documents:Document[];
+}
+export type CreateUpdateTender={
+  tender:TenderData;
+  products:TenderProduct[];
+  documentList:TenderDocument[];
 }

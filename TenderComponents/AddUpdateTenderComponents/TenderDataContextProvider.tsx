@@ -1,14 +1,16 @@
 import {
   applicableSupplyConditions,
   TenderData,
-  tenderDocument,
+  Document,
   tenderFee,
   tenderSupplyCondition,
+  CreateUpdateTender,
+  TenderProduct,
 } from "@/helpers/types";
 import React, { createContext, useContext, useState } from "react";
 
 interface TenderDataContextType {
-  tenderData: TenderData;
+  tenderData: CreateUpdateTender;
   updateTenderData: (
     key: keyof TenderData,
     value: string | number | tenderFee[] | tenderSupplyCondition
@@ -16,18 +18,26 @@ interface TenderDataContextType {
   updateTenderFee: (
     feeType: string,
     key: keyof tenderFee,
-    value: tenderDocument[] | string | number
+    value: Document[] | string | number
   ) => void;
   addTenderFee: (type: string) => void;
   removeTenderFeeByType: (feeType: string) => void;
   updateApplicableCondition: (
     conditionType: string,
     key: keyof applicableSupplyConditions,
-    value: string | number | tenderDocument[]
+    value: string | number | Document[]
   ) => void;
   updateSupplyCondition: (
     key: keyof tenderSupplyCondition,
-    value: string | number | tenderDocument[]
+    value: string | number | Document[]
+  ) => void;
+  addNewTenderDocument: (docType: string, document: Document[]) => void;
+  addDocumentToExistingType:(docType:string,document:Document)=>void;
+  addTenderProduct: (product: TenderProduct) => void;
+  updateTenderProduct: (
+    id: number,
+    key: keyof TenderProduct,
+    value: string | number
   ) => void;
 }
 
@@ -38,130 +48,192 @@ const TenderDataContext = createContext<TenderDataContextType | undefined>(
 export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [tenderData, setTenderData] = useState<TenderData>({
-    customerId: 0,
-    customerLocationId: 0,
-    tenderNumber: "",
-    tenderType: "",
-    issueDate: "",
-    lastPurchaseDate: "",
-    submissionDate: "",
-    rateContractValidity: "",
-    submissionMode: "",
-    deliveryPeriod: 0,
-    extendedDeliveryPeriod: 0,
-    lateDeliveryPenalty: 0,
-    tenderURL: "",
-    shippingLocations: [],
-    appliedBy: "",
-    applierBy: null,
-    suppliedBy: "",
-    suppliedId: null,
-    supplierDiscount: 0,
-    preparedBy: 0,
-    lastUpdatedBy: 0,
-    comments: "",
-    fees: [],
-    supplyConditions: {
-      supplyPoint: "",
-      consigneesCount: 0,
-      testReportRequirement: "",
-      eligibility: [],
-      applicableConditions: [],
+  const [tenderData, setTenderData] = useState<CreateUpdateTender>({
+    tender: {
+      customerId: 0,
+      customerLocationId: 0,
+      tenderNumber: "",
+      tenderType: "",
+      issueDate: "",
+      lastPurchaseDate: "",
+      submissionDate: "",
+      rateContractValidity: "",
+      submissionMode: "",
+      deliveryPeriod: 0,
+      extendedDeliveryPeriod: 0,
+      lateDeliveryPenalty: 0,
+      tenderURL: "",
+      shippingLocations: [],
+      appliedBy: "",
+      applierBy: null,
+      suppliedBy: "",
+      suppliedId: null,
+      supplierDiscount: 0,
+      preparedBy: 0,
+      lastUpdatedBy: 0,
+      comments: "",
+      fees: [],
+      supplyConditions: {
+        supplyPoint: "",
+        consigneesCount: 0,
+        testReportRequirement: "",
+        eligibility: [],
+        applicableConditions: [],
+      },
     },
+    products: [],
+    documentList: [],
   });
 
-  // ✅ Update top-level fields
+  // ✅ Update top-level tender fields
   const updateTenderData = (
     key: keyof TenderData,
     value: string | number | tenderFee[] | tenderSupplyCondition
   ) => {
     setTenderData((prev) => ({
       ...prev,
-      [key]: value,
-    }));
-  };
-
-  // ✅ Update a specific tender fee field
-  const updateTenderFee = (
-    feeType: string,
-    key: keyof tenderFee,
-    value: tenderDocument[] | string | number
-  ) => {
-    setTenderData((prev) => {
-      const feeExists = prev.fees.some((fee) => fee.type === feeType);
-
-      if (!feeExists) {
-        console.warn(`Fee type "${feeType}" not found!`);
-        return prev; // No changes if feeType is not found
-      }
-
-      return {
-        ...prev,
-        fees: prev.fees.map((fee) =>
-          fee.type === feeType ? { ...fee, [key]: value } : fee
-        ),
-      };
-    });
-  };
-
-  // ✅ Add a new empty fee
-  const addTenderFee = (type: string) => {
-    setTenderData((prev) => ({
-      ...prev,
-      fees: [
-        ...prev.fees,
-        {
-          type: type,
-          amount: 0,
-          currency: "",
-          paidBy: "",
-          paymentMode: "",
-          paymentDueDate: "",
-          notes: "",
-          documents: [],
-        },
-      ],
-    }));
-  };
-
-  // ✅ Remove a fee by index
-  const removeTenderFeeByType = (feeType: string) => {
-    setTenderData((prev) => ({
-      ...prev,
-      fees: prev.fees.filter((fee) => fee.type !== feeType),
-    }));
-  };
-
-  const updateSupplyCondition = (
-    key: keyof tenderSupplyCondition,
-    value: string | number | tenderDocument[]
-  ) => {
-    setTenderData((prev) => ({
-      ...prev,
-      supplyConditions: {
-        ...prev.supplyConditions,
+      tender: {
+        ...prev.tender,
         [key]: value,
       },
     }));
   };
 
-  const updateApplicableCondition = (
-    conditionType: string,
-    key: keyof applicableSupplyConditions,
-    value: string | number | tenderDocument[]
+  // ✅ Update a specific tender fee field (Only if fee type exists)
+  const updateTenderFee = (
+    feeType: string,
+    key: keyof tenderFee,
+    value: Document[] | string | number
   ) => {
     setTenderData((prev) => ({
       ...prev,
-      supplyConditions: {
-        ...prev.supplyConditions,
-        applicableConditions: prev.supplyConditions.applicableConditions.map(
-          (condition) =>
-            condition.type === conditionType
-              ? { ...condition, [key]: value }
-              : condition
+      tender: {
+        ...prev.tender,
+        fees: prev.tender.fees.map((fee) =>
+          fee.type === feeType ? { ...fee, [key]: value } : fee
         ),
       },
+    }));
+  };
+
+  // ✅ Add a new tender fee
+  const addTenderFee = (type: string) => {
+    setTenderData((prev) => ({
+      ...prev,
+      tender: {
+        ...prev.tender,
+        fees: [
+          ...prev.tender.fees,
+          {
+            type,
+            amount: 0,
+            currency: "",
+            paidBy: "",
+            paymentMode: "",
+            paymentDueDate: "",
+            notes: "",
+            documents: [],
+          },
+        ],
+      },
+    }));
+  };
+
+  // ✅ Remove tender fee by type
+  const removeTenderFeeByType = (feeType: string) => {
+    setTenderData((prev) => ({
+      ...prev,
+      tender: {
+        ...prev.tender,
+        fees: prev.tender.fees.filter((fee) => fee.type !== feeType),
+      },
+    }));
+  };
+
+  // ✅ Update supply condition fields
+  const updateSupplyCondition = (
+    key: keyof tenderSupplyCondition,
+    value: string | number | Document[]
+  ) => {
+    setTenderData((prev) => ({
+      ...prev,
+      tender: {
+        ...prev.tender,
+        supplyConditions: {
+          ...prev.tender.supplyConditions,
+          [key]: value,
+        },
+      },
+    }));
+  };
+
+  // ✅ Update applicable condition fields
+  const updateApplicableCondition = (
+    conditionType: string,
+    key: keyof applicableSupplyConditions,
+    value: string | number | Document[]
+  ) => {
+    setTenderData((prev) => ({
+      ...prev,
+      tender: {
+        ...prev.tender,
+        supplyConditions: {
+          ...prev.tender.supplyConditions,
+          applicableConditions:
+            prev.tender.supplyConditions.applicableConditions.map((condition) =>
+              condition.type === conditionType
+                ? { ...condition, [key]: value }
+                : condition
+            ),
+        },
+      },
+    }));
+  };
+
+  // ✅ Add a document to the tender-level document list
+  const addNewTenderDocument = (docType: string, documentList: Document[]) => {
+    setTenderData((prev) => ({
+      ...prev,
+      documentList: [
+        ...prev.documentList,
+        {
+          type: docType,
+          documents: documentList,  
+        },
+      ],
+    }));
+  };
+  const addDocumentToExistingType = (docType: string, document: Document) => {
+    setTenderData((prev) => ({
+      ...prev,
+      documentList: prev.documentList.map((doc) =>
+        doc.type === docType
+          ? { ...doc, documents: [...doc.documents, document] }
+          : doc
+      ),
+    }));
+  };
+  
+
+  // ✅ Add a new tender product
+  const addTenderProduct = (product: TenderProduct) => {
+    setTenderData((prev) => ({
+      ...prev,
+      products: [...prev.products, product],
+    }));
+  };
+
+  // ✅ Update a tender product field
+  const updateTenderProduct = (
+    id: number,
+    key: keyof TenderProduct,
+    value: string | number
+  ) => {
+    setTenderData((prev) => ({
+      ...prev,
+      products: prev.products.map((product) =>
+        product.id === id ? { ...product, [key]: value } : product
+      ),
     }));
   };
 
@@ -175,6 +247,10 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         removeTenderFeeByType,
         updateSupplyCondition,
         updateApplicableCondition,
+        addNewTenderDocument,
+        addDocumentToExistingType,
+        addTenderProduct,
+        updateTenderProduct,
       }}
     >
       {children}
@@ -182,7 +258,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-// Custom hook to use context
+// ✅ Custom hook to access context
 export const useTenderData = () => {
   const context = useContext(TenderDataContext);
   if (!context) {

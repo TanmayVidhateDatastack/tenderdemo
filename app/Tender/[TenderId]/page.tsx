@@ -21,7 +21,7 @@ export default function Home() {
         >
           <TabView tabId={"0"}>
             <></>
-            {/* <DsBasicDetails></DsBasicDetails> */}
+            <DsBasicDetails></DsBasicDetails>
             {/* <DsApplierSupplierDetails></DsApplierSupplierDetails>
         <DsDepositeDocuments></DsDepositeDocuments>
         <DsSupplyDetails></DsSupplyDetails> */}

@@ -1,6 +1,6 @@
 import DsInfoDisplay from "@/Elements/ERPComponents/DsInfoDisplay/DsInfoDisplay";
 import { DsStatus, searchProductsURL } from "@/helpers/constant";
-import { product, datalistOptions } from "@/helpers/types";
+import { TenderProduct, datalistOptions } from "@/helpers/types";
 import DsSearchComponent from "@/Elements/ERPComponents/DsSearchComponent/searchComponent";
 import { Dispatch, SetStateAction, useState } from "react";
 export interface ProductSearchProps {
@@ -9,7 +9,7 @@ export interface ProductSearchProps {
   setSelectedProductId: Dispatch<SetStateAction<number | undefined>>;
 }
  
-export function isSearchProduct(value: unknown): value is product {
+export function isSearchProduct(value: unknown): value is TenderProduct {
   return (
     typeof value === "object" &&
     value !== null &&
@@ -17,13 +17,13 @@ export function isSearchProduct(value: unknown): value is product {
     "name" in value &&
     "packSize" in value &&
 
-    typeof (value as unknown as product).id === "number" &&
-    typeof (value as unknown as product).name === "string" &&
-    typeof (value as unknown as product).packSize === "string"
+    typeof (value as unknown as TenderProduct).id === "number" &&
+    typeof (value as unknown as TenderProduct).name === "string" &&
+    typeof (value as unknown as TenderProduct).packSize === "string"
    
   );
 }
-export function areSearchProduct(value: unknown): value is product[] {
+export function areSearchProduct(value: unknown): value is TenderProduct[] {
   return Array.isArray(value) && value.every(isSearchProduct);
 }
 const ProductSearch: React.FC<ProductSearchProps> = ({
@@ -32,7 +32,7 @@ const ProductSearch: React.FC<ProductSearchProps> = ({
 }) => {
   const [products, setProducts] = useState<datalistOptions[]>();
 
-  const setOptions = (values: product[]) => {
+  const setOptions = (values: TenderProduct[]) => {
     if (areSearchProduct(values)) {
       const products: datalistOptions[] = values.map(
         (x: {

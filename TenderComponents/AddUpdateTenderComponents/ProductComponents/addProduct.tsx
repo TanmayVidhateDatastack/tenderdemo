@@ -3,13 +3,13 @@ import styles from "@/app/Order/order.module.css";
 import { Dispatch, SetStateAction, useState } from "react";
 import { getProductURL, DsStatus } from "../../../helpers/constant";
 import fetchData from "../../../helpers/Method/fetchData";
-import { product } from "../../../helpers/types";
+import { TenderProduct } from "../../../helpers/types";
 import DsButton from "../../../Elements/DsComponents/DsButtons/dsButton";
 import DsTextField from "../../../Elements/DsComponents/DsInputs/dsTextField";
  
 export interface addProductProps {
   orderStatus?: string;
-  setProductList: Dispatch<SetStateAction<product[]>>;
+  setProductList: Dispatch<SetStateAction<TenderProduct[]>>;
 }
  
 const DsAddProduct: React.FC<addProductProps> = ({

@@ -1,4 +1,4 @@
-import { product } from "@/helpers/types";
+import { TenderProduct } from "@/helpers/types";
 import { SetStateAction } from "react";
 import DsAddProduct from "./addProduct";
 
