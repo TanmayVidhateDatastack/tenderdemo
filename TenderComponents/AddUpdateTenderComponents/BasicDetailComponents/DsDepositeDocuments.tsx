@@ -13,6 +13,7 @@ import {
 import { CheckboxProp, DsSelectOption } from "@/helpers/types";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import DsFeesDocument from "./DsFeesDocument";
+import { useTenderData } from "../TenderDataContextProvider";
 
 export interface DepositDocument {
   modes: DsSelectOption[];
@@ -30,12 +31,13 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   depositeDocument
 }) => {
   const contextMenuId = "context-display-10";
+  const { addTenderFee, removeTenderFeeByType } = useTenderData();
   const [context, setContext] = useState(false);
-  const [evsVisible, setEvsVisible] = useState(false);
   const [psecurityVisible, setPsecurityVisible] = useState(false);
   const [tenderFeesVisible, setTenderFeesVisible] = useState(false);
   const [mode, setMode] = useState<DsSelectOption[]>([]);
   const [paidBy, setPaidBy] = useState<DsSelectOption[]>([]);
+  const feeVisibility: Record<string, boolean> = {};
 
   const checkboxOptions: CheckboxProp[] = [
     {
@@ -71,10 +73,6 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
     }
   }, [depositeDocument]);
 
-  useEffect(() => {
-    console.log("mode : ", mode + " " + "paid by : ", paidBy);
-  }, [mode, paidBy]);
-
   function handleonclick(e) {
     // setContext(true);
     displayContext(e, contextMenuId, "vertical", "center");
@@ -85,21 +83,27 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   const handleAdd = (e) => {
     checkboxOptions.forEach((opt) => {
       if ((document.getElementById(opt.id) as HTMLInputElement)?.checked) {
-        if (opt.id == "evs") {
-          setEvsVisible(true);
-        } else if (opt.id == "tenderFees") {
-          setTenderFeesVisible(true);
-        } else if (opt.id == "psecurity") {
-          setPsecurityVisible(true);
-        }
+        // if (opt.id == "evs") {
+        //   setEvsVisible(true);
+        // } else if (opt.id == "tenderFees") {
+        //   setTenderFeesVisible(true);
+        // } else if (opt.id == "psecurity") {
+        //   setPsecurityVisible(true);
+        // }
+
+        feeVisibility[opt.id] = true;
+        addTenderFee(opt.id);
       } else {
-        if (opt.id == "evs") {
-          setEvsVisible(false);
-        } else if (opt.id == "tenderFees") {
-          setTenderFeesVisible(false);
-        } else if (opt.id == "psecurity") {
-          setPsecurityVisible(false);
-        }
+        // if (opt.id == "evs") {
+        //   setEvsVisible(false);
+        // } else if (opt.id == "tenderFees") {
+        //   setTenderFeesVisible(false);
+        // } else if (opt.id == "psecurity") {
+        //   setPsecurityVisible(false);
+        // }
+        feeVisibility[opt.id] = true;
+
+        removeTenderFeeByType(opt.id);
       }
     });
   };
@@ -191,17 +195,17 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
           />
         </div>
       </div>
-      {evsVisible && (
+      {/* {feeVisibility[value] && (
         <div className={styles.emdContainer2}>
           <DsFeesDocument
-            title={"ESV"}
-            id={"esv"}
+            title={label}
+            id={value}
             mode={mode}
             paidBy={paidBy}
             downloadVisible={true}
           />
         </div>
-      )}
+      )} */}
       {tenderFeesVisible && (
         <div className={styles.emdContainer2}>
           <DsFeesDocument

@@ -9,6 +9,7 @@ import styles from "./deposite.module.css";
 import calender from "@/Icons/smallIcons/calender.svg";
 import eleStyles from "./tender.module.css";
 import { DsSelectOption } from "@/helpers/types";
+import { useTenderData } from "../TenderDataContextProvider";
 
 export type tenderDocument = {
   name: string;
@@ -41,6 +42,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
   paidBy,
   downloadVisible = false
 }) => {
+  const { updateTenderFee } = useTenderData();
   return (
     <>
       <div>
@@ -62,6 +64,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 name={"Payment Completed"}
                 value={"Payment Completed"}
                 label={"Payment Completed"}
+                // onChange={}
               />
             </div>
           </div>
@@ -71,6 +74,9 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             className={styles.fieldColors}
             label={"Amount"}
             placeholder="Please type here"
+            onChange={(e) => {
+              updateTenderFee();
+            }}
           ></DsTextField>
           <DsSingleSelect
             className={styles.fieldColors}
