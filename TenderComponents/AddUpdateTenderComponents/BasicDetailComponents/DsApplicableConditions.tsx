@@ -11,11 +11,10 @@ import {
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import { CheckboxProp } from "@/helpers/types";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
-import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import DsCsvUpload from "@/Elements/DsComponents/DsButtons/dsCsvUpload";
 import TextArea from "@/Elements/DsComponents/DsInputs/dsTextArea";
 
-const DsSupplyDetails: React.FC = () => {
+const DsApplicableConditions: React.FC = () => {
   const contextMenuId = "context-display-11";
   const [context, setContext] = useState(false);
   const [embossmentTableVisible, setEmbossmentTebleVisible] = useState(false);
@@ -27,7 +26,7 @@ const DsSupplyDetails: React.FC = () => {
   const checkboxOptions: CheckboxProp[] = [
     {
       label: "Embossment on Tablet",
-      id: "embossmentTable",
+      id: "embossmentTablet",
       name: "Embossment on Tablet",
       value: "Embossment on Tablet"
     },
@@ -276,4 +275,4 @@ const DsSupplyDetails: React.FC = () => {
     </div>
   );
 };
-export default DsSupplyDetails;
+export default DsApplicableConditions;

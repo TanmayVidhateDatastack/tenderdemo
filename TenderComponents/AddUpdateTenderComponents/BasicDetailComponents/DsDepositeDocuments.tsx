@@ -1,6 +1,5 @@
 import styles from "./deposite.module.css";
 import Image from "next/image";
-// import downarrow from "@/Icons/smallIcons/downarrow.svg";
 import downarrow from "@/Icons/smallIcons/verticleArrow.svg";
 import { useEffect, useState } from "react";
 import { createContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
@@ -18,13 +17,12 @@ import { useTenderData } from "../TenderDataContextProvider";
 export interface DepositDocument {
   modes: DsSelectOption[];
   paidBy: DsSelectOption[];
-
-  // Add other properties if needed
+  applicableDeposits: DsSelectOption[];
 }
 
 export interface DepositeDocumentsProps {
   setDepositeDocuments: (depositeDocuments: DepositDocument[]) => void;
-  depositeDocument: DepositDocument[] | null; // Pass this as well
+  depositeDocument: DepositDocument[] | null;
 }
 
 const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
@@ -42,7 +40,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   const checkboxOptions: CheckboxProp[] = [
     {
       label: "EMD",
-      id: "evs",
+      id: "emd",
       name: "EMD",
       value: "EMD"
     },
@@ -62,47 +60,24 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
 
   useEffect(() => {
     if (depositeDocument) {
-      // Extract modes and paidBy from depositeDocument and update states
       const modesData = depositeDocument[0]?.modes || [];
       const paidByData = depositeDocument[0]?.paidBy || [];
-
       setMode(modesData);
       setPaidBy(paidByData);
-
-      console.log("modedata : ", modesData);
     }
   }, [depositeDocument]);
 
   function handleonclick(e) {
-    // setContext(true);
     displayContext(e, contextMenuId, "vertical", "center");
-    console.log("Button Clicked : ", contextMenuId);
-    console.log("context state : ", context);
   }
 
   const handleAdd = (e) => {
     checkboxOptions.forEach((opt) => {
       if ((document.getElementById(opt.id) as HTMLInputElement)?.checked) {
-        // if (opt.id == "evs") {
-        //   setEvsVisible(true);
-        // } else if (opt.id == "tenderFees") {
-        //   setTenderFeesVisible(true);
-        // } else if (opt.id == "psecurity") {
-        //   setPsecurityVisible(true);
-        // }
-
         feeVisibility[opt.id] = true;
         addTenderFee(opt.id);
       } else {
-        // if (opt.id == "evs") {
-        //   setEvsVisible(false);
-        // } else if (opt.id == "tenderFees") {
-        //   setTenderFeesVisible(false);
-        // } else if (opt.id == "psecurity") {
-        //   setPsecurityVisible(false);
-        // }
         feeVisibility[opt.id] = true;
-
         removeTenderFeeByType(opt.id);
       }
     });
@@ -152,7 +127,6 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
           `.${styles["depositsBtn"]}`
         );
         const target2 = (e.target as HTMLElement).closest(`#${contextMenuId}`);
-
         if (!target && !target2) {
           closeContext(contextMenuId);
           return;
@@ -164,18 +138,12 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   useEffect(() => {
     const handleScroll = (event) => {
       const excludedElement = document.getElementById("optionBtn");
-
       if (excludedElement && excludedElement.contains(event.target)) {
         closeContext(contextMenuId);
-        console.log("Scroll ignored (inside #element1)");
         return;
       }
-
-      console.log("Scroll event detected outside #element1");
     };
-
     window.addEventListener("scroll", handleScroll, true);
-
     return () => {
       window.removeEventListener("scroll", handleScroll, true);
     };
@@ -195,7 +163,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
           />
         </div>
       </div>
-      {/* {feeVisibility[value] && (
+      {feeVisibility[value] && (
         <div className={styles.emdContainer2}>
           <DsFeesDocument
             title={label}
@@ -205,7 +173,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
             downloadVisible={true}
           />
         </div>
-      )} */}
+      )}
       {tenderFeesVisible && (
         <div className={styles.emdContainer2}>
           <DsFeesDocument

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import DsDepositeDocuments, { DepositDocument } from "./DsDepositeDocuments";
 import fetchData from "@/helpers/Method/fetchData";
 import { getAllMetaData } from "@/helpers/constant";
-import DsSupplyDetails from "./DsSupplyDetails";
+import DsApplicableConditions from "./DsApplicableConditions";
 
 // interface DepositeDocument {
 //   value: string;
@@ -57,7 +57,7 @@ const DsBasicDetails: React.FC = () => {
         />
       </div>
       <div>
-        <DsSupplyDetails />
+        <DsApplicableConditions />
       </div>
     </>
   );
