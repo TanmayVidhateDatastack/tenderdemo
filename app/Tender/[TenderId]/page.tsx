@@ -21,7 +21,11 @@ export default function Home() {
           ]}
         >
           <TabView tabId={"0"}>
+            <></>
             <DsBasicDetails></DsBasicDetails>
+            {/* <DsApplierSupplierDetails></DsApplierSupplierDetails>
+        <DsDepositeDocuments></DsDepositeDocuments>
+        <DsSupplyDetails></DsSupplyDetails> */}
           </TabView>
           <TabView tabId={"1"}>
             <DsTenderProduct></DsTenderProduct>

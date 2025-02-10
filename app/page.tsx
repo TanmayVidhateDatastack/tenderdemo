@@ -1,15 +1,14 @@
 "use client";
 
-import TableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableComponent";
 import DsApplication from "@/Elements/ERPComponents/DsApplicationComponents/DsApplication";
 import DsNavTo from "@/Elements/ERPComponents/DsNavigationComponent/DsNavTo";
 import styles from "./page.module.css";
-import DsFilterActions from "@/TenderComponents/TenderLogComponents/DsFilterActions";
-import DsPane from "@/Elements/DsComponents/DsPane/DsPane";
-import DsAdvancedFilterPane from "@/TenderComponents/TenderLogComponents/DsAdvancedFilterPane";
+// import DsFilterActions from "@/TenderComponents/TenderLogComponents/DsFilterActions";
 import DsTenderTable from "@/TenderComponents/TenderLogComponents/DsTenderTable";
+import DsFilterActions from "@/TenderComponents/TenderLogComponents/DsFilterActions";
 
 export default function Home() {
+  // const [data, setData];
   return (
     <>
       <DsApplication
@@ -17,6 +16,10 @@ export default function Home() {
         appMenu={
           <div className={styles.filterNavBar}>
             <DsFilterActions />
+            {/* <DsFilterActions
+              data={data}
+              setFilteredData={setPrevData}
+            ></DsFilterActions> */}
             <DsNavTo label="New" location="Tender/New" />
           </div>
         }

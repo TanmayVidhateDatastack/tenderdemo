@@ -105,7 +105,7 @@ const DsFilterActions: React.FC = () => {
             label="Under Review"
             id="underReview"
             buttonSize="btnLarge"
-            buttonViewStyle="btnContained"
+            buttonViewStyle="btnOutlined"
           />
         )}
         {filterButtonVisible && (

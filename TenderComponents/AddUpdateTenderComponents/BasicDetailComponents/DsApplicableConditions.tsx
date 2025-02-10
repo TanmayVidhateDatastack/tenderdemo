@@ -9,46 +9,30 @@ import {
   displayContext,
   closeContext
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
-import { CheckboxProp } from "@/helpers/types";
+import { DsSelectOption } from "@/helpers/types";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import DsCsvUpload from "@/Elements/DsComponents/DsButtons/dsCsvUpload";
 import TextArea from "@/Elements/DsComponents/DsInputs/dsTextArea";
+import { useTenderData } from "../TenderDataContextProvider";
 
-const DsApplicableConditions: React.FC = () => {
+export interface ApplicableConditionsProps {
+  applicableConditions: DsSelectOption[] | [];
+}
+
+const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
+  applicableConditions
+}) => {
+  const { updateTenderFee } = useTenderData();
+
   const contextMenuId = "context-display-11";
   const [context, setContext] = useState(false);
   const [embossmentTableVisible, setEmbossmentTebleVisible] = useState(false);
   const [logogramVisible, setLogogramVisible] = useState(false);
   const [barcodingVisible, setBarCodingVisible] = useState(false);
   const [printingVisible, setPrintingVisible] = useState(false);
-  const [checkedCheckboxes, setCheckedCheckboxes] = useState<string[]>([]);
-
-  const checkboxOptions: CheckboxProp[] = [
-    {
-      label: "Embossment on Tablet",
-      id: "embossmentTablet",
-      name: "Embossment on Tablet",
-      value: "Embossment on Tablet"
-    },
-    {
-      label: "Logogram",
-      id: "logogram",
-      name: "Logogram",
-      value: "Logogram"
-    },
-    {
-      label: "Bar Coding",
-      id: "barcoding",
-      name: "Bar Coding",
-      value: "Bar Coding"
-    },
-    {
-      label: "Printing",
-      id: "printing",
-      name: "Printing",
-      value: "Printing"
-    }
-  ];
+  const [applicableCheckboxes, setApplicableCheckboxes] = useState<
+    DsSelectOption[]
+  >([]);
 
   function handleonclick(e) {
     setContext(true);
@@ -56,41 +40,40 @@ const DsApplicableConditions: React.FC = () => {
     displayContext(e, contextMenuId);
   }
 
-  const handleCheckboxClick = (e) => {
-    const { id, checked } = e.target as HTMLInputElement;
-    // console.log("checked id : ", id);
+  useEffect(() => {
+    if (applicableConditions && applicableConditions.length > 0) {
+      console.log("000 : ", applicableConditions);
+      const mappedConditions = applicableConditions.map((conditions) => ({
+        label: conditions.label,
+        value: conditions.value
+      }));
+      console.log("mapped Conditions:", mappedConditions);
 
-    // if (checked) {
-    //   setCheckedCheckboxes((prevState) => [...prevState, id]);
-
-    // } else {
-    //   setCheckedCheckboxes((prevState) =>
-    //     prevState.filter((checkbox) => checkbox !== id)
-    //   );
-    // }
-  };
+      setApplicableCheckboxes(mappedConditions);
+    }
+  }, [applicableConditions]);
 
   const handleAdd = (e) => {
-    checkboxOptions.forEach((opt) => {
-      if ((document.getElementById(opt.id) as HTMLInputElement)?.checked) {
-        if (opt.id == "embossmentTable") {
+    applicableCheckboxes.forEach((opt) => {
+      const id = opt.value.toString();
+      if ((document.getElementById(id) as HTMLInputElement)?.checked) {
+        if (id == "embossmentTablet") {
           setEmbossmentTebleVisible(true);
-        } else if (opt.id == "logogram") {
+        } else if (id == "logogram") {
           setLogogramVisible(true);
-        } else if (opt.id == "barcoding") {
+        } else if (id == "barCoding") {
           setBarCodingVisible(true);
-        } else if (opt.id == "printing") {
+        } else if (id == "printing") {
           setPrintingVisible(true);
         }
       } else {
-        console.log("no checkbox is checked");
-        if (opt.id == "embossmentTable") {
+        if (id == "embossmentTablet") {
           setEmbossmentTebleVisible(false);
-        } else if (opt.id == "logogram") {
+        } else if (id == "logogram") {
           setLogogramVisible(false);
-        } else if (opt.id == "barcoding") {
+        } else if (id == "barCoding") {
           setBarCodingVisible(false);
-        } else if (opt.id == "printing") {
+        } else if (id == "printing") {
           setPrintingVisible(false);
         }
       }
@@ -98,21 +81,17 @@ const DsApplicableConditions: React.FC = () => {
   };
 
   useEffect(() => {
-    console.log("context1 : ", context);
-
     createContext(
       contextMenuId,
       <>
         <div>
-          {checkboxOptions.map((checkbox, index) => (
+          {applicableCheckboxes.map((checkbox, index) => (
             <Ds_checkbox
-              key={index}
-              id={checkbox.id}
-              name={checkbox.name}
-              value={checkbox.value}
+              key={index} // Unique key
+              id={checkbox.value.toString()}
+              name={checkbox.label}
+              value={checkbox.value.toString()}
               label={checkbox.label}
-              isChecked={checkedCheckboxes.includes(checkbox.id)}
-              onClick={handleCheckboxClick}
             />
           ))}
         </div>
@@ -152,11 +131,10 @@ const DsApplicableConditions: React.FC = () => {
         }
       });
     };
-  }, []);
+  }, [applicableCheckboxes]);
   return (
     <div className={styles.container}>
       <div className={styles.emdContainerHead2}>
-        {/* <div>{checkedName}</div> */}
         <DsButton
           buttonViewStyle="btnText"
           className={styles.optionBtn + " " + styles.depositsBtn}
@@ -172,19 +150,12 @@ const DsApplicableConditions: React.FC = () => {
           </div>
           <div className={styles.notes}>
             <h4>Notes</h4>
-            <TextArea
-              placeholder="Please type here"
-              // label="label"
-              disable={false}
-              //   type="multiline"
-              // minRows={5}
-            />
+            <TextArea placeholder="Please type here" disable={false} />
           </div>
           <div className={styles.attachFileBtn}>
             <DsCsvUpload
               id="upload1"
               label="Attach File"
-              // type="upload"
               buttonViewStyle="btnText"
               buttonSize="btnSmall"
             ></DsCsvUpload>
@@ -194,24 +165,17 @@ const DsApplicableConditions: React.FC = () => {
       {logogramVisible && (
         <div className={styles.emdContainer}>
           <div className={styles.emdContainerHead}>
-            <div>Leogram</div>
+            <div>Logogram</div>
           </div>
 
           <div className={styles.notes}>
             <h4>Notes</h4>
-            <TextArea
-              placeholder="Please type here"
-              // label="label"
-              disable={false}
-              // type="multiline"
-              // minRows={5}
-            />
+            <TextArea placeholder="Please type here" disable={false} />
           </div>
           <div>
             <DsCsvUpload
               id="upload2"
               label="Attach File"
-              // type="upload"
               buttonViewStyle="btnText"
               buttonSize="btnSmall"
             ></DsCsvUpload>
@@ -226,19 +190,12 @@ const DsApplicableConditions: React.FC = () => {
 
           <div className={styles.notes}>
             <h4>Notes</h4>
-            <TextArea
-              placeholder="Please type here"
-              // label="label"
-              disable={false}
-              // type="multiline"
-              // minRows={5}
-            />
+            <TextArea placeholder="Please type here" disable={false} />
           </div>
           <div>
             <DsCsvUpload
               id="upload3"
               label="Attach File"
-              // type="upload"
               buttonViewStyle="btnText"
               buttonSize="btnSmall"
             ></DsCsvUpload>
@@ -253,19 +210,12 @@ const DsApplicableConditions: React.FC = () => {
 
           <div className={styles.notes}>
             <h4>Notes</h4>
-            <TextArea
-              placeholder="Please type here"
-              // label="label"
-              disable={false}
-              // type="multiline"
-              // minRows={5}
-            />
+            <TextArea placeholder="Please type here" disable={false} />
           </div>
           <div>
             <DsCsvUpload
               id="upload4"
               label="Attach File"
-              // type="upload"
               buttonViewStyle="btnText"
               buttonSize="btnSmall"
             ></DsCsvUpload>

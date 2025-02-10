@@ -10,6 +10,7 @@ import calender from "@/Icons/smallIcons/calender.svg";
 import eleStyles from "./tender.module.css";
 import { DsSelectOption } from "@/helpers/types";
 import { useTenderData } from "../TenderDataContextProvider";
+import TextArea from "@/Elements/DsComponents/DsInputs/dsTextArea";
 
 export type tenderDocument = {
   name: string;
@@ -75,7 +76,11 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             label={"Amount"}
             placeholder="Please type here"
             onChange={(e) => {
-              updateTenderFee();
+              updateTenderFee(
+                id.replace("DocumentView", ""),
+                "amount",
+                e.target.value
+              );
             }}
           ></DsTextField>
           <DsSingleSelect
@@ -84,6 +89,13 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             options={paidBy}
             label="Paid by"
             placeholder={"Please select here"}
+            setSelectOption={(e) => {
+              updateTenderFee(
+                id.replace("DocumentView", ""),
+                "paidBy",
+                e.value
+              );
+            }}
           ></DsSingleSelect>
           <DsSingleSelect
             className={styles.fieldColors}
@@ -91,21 +103,42 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             options={mode}
             label="Modes"
             placeholder={"Please search and select here"}
+            setSelectOption={(e) => {
+              updateTenderFee(
+                id.replace("DocumentView", ""),
+                "paymentMode",
+                e.value
+              );
+            }}
           ></DsSingleSelect>
           <DsTextField
             className={styles.fieldColors}
             label="Due Date"
             placeholder="DD/MM/YYYY"
             iconEnd={<Image src={calender} alt="icon" />}
+            onChange={(e) => {
+              updateTenderFee(
+                id.replace("DocumentView", ""),
+                "paymentDueDate",
+                e.target.value
+              );
+            }}
           ></DsTextField>
         </div>
 
         <div className={styles.notes}>
           <h4>Notes</h4>
-          <DsTextField
+          <TextArea
             className={styles.fieldColors}
             placeholder="Please type here"
             disable={false}
+            onChange={(e) => {
+              updateTenderFee(
+                id.replace("DocumentView", ""),
+                "type",
+                e.target.value
+              );
+            }}
           />
         </div>
         <div>
@@ -114,6 +147,13 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             label="Attach File"
             buttonViewStyle="btnText"
             buttonSize="btnSmall"
+            // onChange={(e) => {
+            //   updateTenderFee(
+            //     id.replace("DocumentView", ""),
+            //     "amount",
+            //     e.target.value
+            //   );
+            // }}
           ></DsCsvUpload>
         </div>
       </div>

@@ -9,7 +9,7 @@ import institutional from "@/Icons/institutional.svg";
 import test from "@/Icons/searchicon.svg";
 import Image from "next/image";
 import AdvancedFilterComponent from "@/Elements/DsComponents/AdvancedFilterComponent/AdvancedFilterComponent";
-import DsPane from "@/Elements/DsComponents/DsPane/DsPane";
+import DsPane, { ClosePane } from "@/Elements/DsComponents/DsPane/DsPane";
 
 const DsTenderTable = () => {
   const [data, setData] = useState<Tender[]>([]);
@@ -153,7 +153,7 @@ const DsTenderTable = () => {
     {
       columnIndex: 9,
       columnHeader: "Value",
-      filterType: "RANGE"
+      filterType: "INPUTTYPERANGE"
     }
   ];
   const handleFetch = async () => {
@@ -255,7 +255,7 @@ const DsTenderTable = () => {
           columnIndex: 9,
           className: "cell",
           content: t.value,
-          filterValue: t.value,
+          filterValue: Number(t.value ?? 0),
           contentType: "string"
         },
         {
@@ -287,6 +287,15 @@ const DsTenderTable = () => {
     }
   }, [data]);
 
+  const applyFilter = (
+    e: React.MouseEvent<HTMLElement>,
+    filteredRows: DsTableRow[]
+  ) => {
+    console.log("wsedfghjk;", filteredRows);
+    setTempTableData((data) => ({ ...data, rows: filteredRows }));
+    ClosePane(e);
+  };
+
   return (
     <>
       <DsApplication appTitle="">
@@ -303,8 +312,10 @@ const DsTenderTable = () => {
       </DsApplication>
       <DsPane id="y" side="right" title="Filter">
         <AdvancedFilterComponent
+          id="a"
           rows={tempTableData.rows}
           filterTypes={flterTypes}
+          handleApplyFilter={applyFilter}
         />
       </DsPane>
     </>

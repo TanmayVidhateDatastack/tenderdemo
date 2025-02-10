@@ -575,6 +575,14 @@ export class cellData {
   alignment?: "left" | "right" | "center";
   customAttributes?: Record<string, string | number | boolean>;
 }
+
+export class DsTableRow {
+  rowIcon?: React.ReactNode;
+  rowIndex: number = 1;
+  className?: string;
+  content?: cellData[];
+  customAttributes?: Record<string, string | number | boolean>;
+}
 export class tableData {
   className: string = "";
   id: string = "";
@@ -583,14 +591,6 @@ export class tableData {
   hasSearch: boolean = false;
   columns: tcolumn[] = [];
   rows: DsTableRow[] = [];
-}
-
-export class DsTableRow {
-  rowIcon?: React.ReactNode;
-  rowIndex: number = 1;
-  className?: string;
-  content?: cellData[];
-  customAttributes?: Record<string, string | number | boolean>;
 }
 
 export class filterType {
@@ -602,7 +602,8 @@ export class filterType {
 export class DsFilterValues {
   columnIndex: number = 0;
   columnHeader: string = "";
-  values: unknown[] = [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  values: any[] = [];
 }
 
 export class columnSort {
@@ -930,25 +931,4 @@ export type TenderData = {
   comments: string;
   fees: tenderFee[];
   supplyConditions: tenderSupplyCondition;
-};
-
-export type Tender = {
-  customerName: string;
-  submittionDate: string;
-  daystosubmit: string;
-  tenderId: string;
-  tenderType: string;
-  depot: string;
-  appliedBy: string;
-  suppliedBy: string;
-  preparedBy: string;
-  value: string;
-  status: string;
-};
-
-export type TenderDetails = {
-  code: number;
-  error: string | null;
-  message: string;
-  result: Tender[];
 };
