@@ -230,8 +230,23 @@ export interface SpotlightSearchProps {
   className: string;
   customAttributes?: Record<string, string>;
 }
+
+// export type tenderStatus = {
+//   tenderStatus: string;
+//   messageType: string;
+//   message: string;
+//   statusValue: dsStatus;
+// };
+
+export type tenderStatus = {
+  tenderStatus?: string;
+  statusDescription?: string;
+  messageType?: string;
+  message?: string;
+};
+
 export interface DsStatusIndicatorProps {
-  status?: orderStatus;
+  status?: tenderStatus;
   className?: string;
   id?: string;
   label?: string;
@@ -931,4 +946,23 @@ export type TenderData = {
   comments: string;
   fees: tenderFee[];
   supplyConditions: tenderSupplyCondition;
+};
+
+export type Tender = {
+  customerName: string;
+  submittionDate: string;
+  daystosubmit: string;
+  tenderId: string;
+  tenderType: string;
+  depot: string;
+  appliedBy: string;
+  suppliedBy: string;
+  preparedBy: string;
+  value: string;
+  status: tenderStatus;
+};
+
+export type Document = {
+  name: string;
+  document: File;
 };

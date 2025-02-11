@@ -37,8 +37,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   applicableDeposits
 }) => {
   const contextMenuId = "context-display-10";
-  const { addTenderFee, removeTenderFeeByType, updateTenderFee } =
-    useTenderData();
+  const { addTenderFee, removeTenderFeeByType } = useTenderData();
   const [mode, setMode] = useState<DsSelectOption[]>([]);
   const [paidBy, setPaidBy] = useState<DsSelectOption[]>([]);
   const [applicablefees, SetApplicablefees] = useState<DsSelectOption[]>([]);
@@ -87,20 +86,6 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   function handleonclick(e) {
     displayContext(e, contextMenuId, "vertical", "center");
   }
-
-  // const handleAdd = (e) => {
-  //   applicablefees.forEach((opt) => {
-  //     const id = opt.value.toString();
-  //     if ((document.getElementById(id) as HTMLInputElement)?.checked) {
-  //       feeVisibility[id] = true;
-  //       addTenderFee(id);
-  //       updateTenderFee(id, "amount", id);
-  //     } else {
-  //       feeVisibility[id] = false;
-  //       removeTenderFeeByType(id);
-  //     }
-  //   });
-  // };
 
   const selectedFees = new Set(); // 🔥 Store selected checkboxes globally
 

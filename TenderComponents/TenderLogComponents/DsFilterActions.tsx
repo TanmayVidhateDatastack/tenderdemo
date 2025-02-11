@@ -7,12 +7,25 @@ import PaneOpenButton from "@/Elements/DsComponents/DsPane/PaneOpenButton";
 import { useAppDispatch, useAppSelector } from "@/Redux/hook/hook";
 import { AppDispatch, RootState } from "@/Redux/store/store";
 import fetchData from "@/helpers/Method/fetchData";
-import { useEffect } from "react";
-import { getTenderUserRoles } from "@/helpers/constant";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { DsStatus, getTenderUserRoles } from "@/helpers/constant";
 import { setUserRole } from "@/Redux/slice/UserSlice/userSlice";
 import { setVisibilityByRole } from "@/Redux/slice/PermissionSlice/permissionSlice";
+import { Tender } from "@/helpers/types";
 
-const DsFilterActions: React.FC = () => {
+export interface DsFilterActionProps {
+  data: Tender[];
+  setFilteredData: Dispatch<SetStateAction<Tender[]>>;
+}
+const DsFilterActions: React.FC<DsFilterActionProps> = ({
+  data,
+  setFilteredData
+}) => {
+  const [isFiltered, setIsFiltered] = useState<Record<string, boolean>>({
+    [DsStatus.UREV]: false,
+    [DsStatus.UAPR]: false,
+    [DsStatus.APRL]: false
+  });
   const dispatch = useAppDispatch<AppDispatch>();
   const role = useAppSelector((state: RootState) => state.user.role);
   const permissions = useAppSelector((state: RootState) => state.permissions);
@@ -42,6 +55,32 @@ const DsFilterActions: React.FC = () => {
     } catch (error) {
       console.error("Fetch error: ", error);
     }
+  };
+
+  const handleFilter = (value: string) => {
+    setIsFiltered((prev) => {
+      const newFilterState = Object.fromEntries(
+        Object.keys(prev).map((key) => [
+          key,
+          key === value ? !prev[key] : false
+        ])
+      );
+
+      // If the selected filter is being turned off, reset the data
+      if (!newFilterState[value]) {
+        setFilteredData(data);
+      } else {
+        // Convert both the filter value and status to lowercase before comparison
+        const lowerCaseValue = value.toLowerCase();
+        const filteredRows = data.filter(
+          (tender) =>
+            tender.status?.tenderStatus?.toLowerCase() === lowerCaseValue
+        );
+        setFilteredData(filteredRows);
+      }
+
+      return newFilterState;
+    });
   };
 
   useEffect(() => {
@@ -106,6 +145,7 @@ const DsFilterActions: React.FC = () => {
             id="underReview"
             buttonSize="btnLarge"
             buttonViewStyle="btnOutlined"
+            onClick={() => handleFilter(DsStatus.UREV)}
           />
         )}
         {filterButtonVisible && (

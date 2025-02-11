@@ -4,15 +4,18 @@ import downarrow from "@/Icons/smallIcons/verticleArrow.svg";
 import { useState, useEffect } from "react";
 import React from "react";
 import Ds_checkbox from "@/Elements/DsComponents/DsCheckbox/dsCheckbox";
-import { createContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
+import {
+  closeAllContext,
+  createContext
+} from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import {
   displayContext,
   closeContext
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import { DsSelectOption } from "@/helpers/types";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
-import DsCsvUpload from "@/Elements/DsComponents/DsButtons/dsCsvUpload";
-import TextArea from "@/Elements/DsComponents/DsInputs/dsTextArea";
+
+import DsSupplyConditions from "./DsSupplyConditions";
 import { useTenderData } from "../TenderDataContextProvider";
 
 export interface ApplicableConditionsProps {
@@ -22,17 +25,16 @@ export interface ApplicableConditionsProps {
 const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
   applicableConditions
 }) => {
-  const { updateTenderFee } = useTenderData();
-
   const contextMenuId = "context-display-11";
   const [context, setContext] = useState(false);
-  const [embossmentTableVisible, setEmbossmentTebleVisible] = useState(false);
-  const [logogramVisible, setLogogramVisible] = useState(false);
-  const [barcodingVisible, setBarCodingVisible] = useState(false);
-  const [printingVisible, setPrintingVisible] = useState(false);
   const [applicableCheckboxes, setApplicableCheckboxes] = useState<
     DsSelectOption[]
   >([]);
+  const { addApplicableCondition, removeApplicableCondition } = useTenderData();
+
+  const [conditionsVisibility, setConditionsVisibility] = useState<
+    Record<string, boolean>
+  >({});
 
   function handleonclick(e) {
     setContext(true);
@@ -50,34 +52,50 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
       console.log("mapped Conditions:", mappedConditions);
 
       setApplicableCheckboxes(mappedConditions);
+
+      const options: Record<string, boolean> = mappedConditions.reduce<
+        Record<string, boolean>
+      >((acc, opt) => {
+        const val = opt.value;
+
+        if (typeof val === "string") {
+          acc[val] = false; // Add string keys directly to the object
+        }
+
+        return acc;
+      }, {});
+
+      setConditionsVisibility(options);
     }
   }, [applicableConditions]);
+
+  useEffect(() => {
+    console.log(
+      "feevisibility in applicable condition : ",
+      conditionsVisibility
+    );
+  }, [conditionsVisibility]);
+
+  const selectedConditions = new Set(); // 🔥 Store selected checkboxes globally
 
   const handleAdd = (e) => {
     applicableCheckboxes.forEach((opt) => {
       const id = opt.value.toString();
-      if ((document.getElementById(id) as HTMLInputElement)?.checked) {
-        if (id == "embossmentTablet") {
-          setEmbossmentTebleVisible(true);
-        } else if (id == "logogram") {
-          setLogogramVisible(true);
-        } else if (id == "barCoding") {
-          setBarCodingVisible(true);
-        } else if (id == "printing") {
-          setPrintingVisible(true);
-        }
+      const checkbox = document.getElementById(id) as HTMLInputElement;
+
+      if (checkbox?.checked) {
+        selectedConditions.add(id); // 🔥 Add to Set (prevents duplicates)
+        conditionsVisibility[id] = true;
+
+        addApplicableCondition(id);
       } else {
-        if (id == "embossmentTablet") {
-          setEmbossmentTebleVisible(false);
-        } else if (id == "logogram") {
-          setLogogramVisible(false);
-        } else if (id == "barCoding") {
-          setBarCodingVisible(false);
-        } else if (id == "printing") {
-          setPrintingVisible(false);
-        }
+        selectedConditions.delete(id); // 🔥 Remove if unchecked
+        conditionsVisibility[id] = false;
+        removeApplicableCondition(id);
       }
     });
+    closeAllContext();
+    console.log("Currently Selected:", Array.from(selectedConditions)); // Debugging output
   };
 
   useEffect(() => {
@@ -143,85 +161,19 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
           onClick={(e) => handleonclick(e)}
         />
       </div>
-      {embossmentTableVisible && (
-        <div className={styles.emdContainer}>
-          <div className={styles.emdContainerHead}>
-            <div>Embossment on Table</div>
-          </div>
-          <div className={styles.notes}>
-            <h4>Notes</h4>
-            <TextArea placeholder="Please type here" disable={false} />
-          </div>
-          <div className={styles.attachFileBtn}>
-            <DsCsvUpload
-              id="upload1"
-              label="Attach File"
-              buttonViewStyle="btnText"
-              buttonSize="btnSmall"
-            ></DsCsvUpload>
-          </div>
-        </div>
-      )}
-      {logogramVisible && (
-        <div className={styles.emdContainer}>
-          <div className={styles.emdContainerHead}>
-            <div>Logogram</div>
-          </div>
-
-          <div className={styles.notes}>
-            <h4>Notes</h4>
-            <TextArea placeholder="Please type here" disable={false} />
-          </div>
-          <div>
-            <DsCsvUpload
-              id="upload2"
-              label="Attach File"
-              buttonViewStyle="btnText"
-              buttonSize="btnSmall"
-            ></DsCsvUpload>
-          </div>
-        </div>
-      )}
-      {barcodingVisible && (
-        <div className={styles.emdContainer}>
-          <div className={styles.emdContainerHead}>
-            <div>Bar Coding</div>
-          </div>
-
-          <div className={styles.notes}>
-            <h4>Notes</h4>
-            <TextArea placeholder="Please type here" disable={false} />
-          </div>
-          <div>
-            <DsCsvUpload
-              id="upload3"
-              label="Attach File"
-              buttonViewStyle="btnText"
-              buttonSize="btnSmall"
-            ></DsCsvUpload>
-          </div>
-        </div>
-      )}
-      {printingVisible && (
-        <div className={styles.emdContainer}>
-          <div className={styles.emdContainerHead}>
-            <div>Printing</div>
-          </div>
-
-          <div className={styles.notes}>
-            <h4>Notes</h4>
-            <TextArea placeholder="Please type here" disable={false} />
-          </div>
-          <div>
-            <DsCsvUpload
-              id="upload4"
-              label="Attach File"
-              buttonViewStyle="btnText"
-              buttonSize="btnSmall"
-            ></DsCsvUpload>
-          </div>
-        </div>
-      )}
+      {applicableConditions.map((conditions) => {
+        if (typeof conditions.value == "string")
+          return (
+            conditionsVisibility[conditions.value] && (
+              <div className={styles.emdContainer2}>
+                <DsSupplyConditions
+                  title={conditions.label}
+                  id={conditions.value + "conditionsView"}
+                />
+              </div>
+            )
+          );
+      })}
     </div>
   );
 };

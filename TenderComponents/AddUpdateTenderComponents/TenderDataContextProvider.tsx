@@ -5,7 +5,7 @@ import {
   tenderFee,
   tenderSupplyCondition,
   CreateUpdateTender,
-  TenderProduct,
+  TenderProduct
 } from "@/helpers/types";
 import React, { createContext, useContext, useState } from "react";
 
@@ -32,13 +32,15 @@ interface TenderDataContextType {
     value: string | number | Document[]
   ) => void;
   addNewTenderDocument: (docType: string, document: Document[]) => void;
-  addDocumentToExistingType:(docType:string,document:Document)=>void;
+  addDocumentToExistingType: (docType: string, document: Document) => void;
   addTenderProduct: (product: TenderProduct) => void;
   updateTenderProduct: (
     id: number,
     key: keyof TenderProduct,
     value: string | number
   ) => void;
+  addApplicableCondition: (type: string) => void;
+  removeApplicableCondition: (conditionType: string) => void;
 }
 
 const TenderDataContext = createContext<TenderDataContextType | undefined>(
@@ -46,7 +48,7 @@ const TenderDataContext = createContext<TenderDataContextType | undefined>(
 );
 
 export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
+  children
 }) => {
   const [tenderData, setTenderData] = useState<CreateUpdateTender>({
     tender: {
@@ -78,11 +80,11 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         consigneesCount: 0,
         testReportRequirement: "",
         eligibility: [],
-        applicableConditions: [],
-      },
+        applicableConditions: []
+      }
     },
     products: [],
-    documentList: [],
+    documentList: []
   });
 
   // ✅ Update top-level tender fields
@@ -94,8 +96,8 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       ...prev,
       tender: {
         ...prev.tender,
-        [key]: value,
-      },
+        [key]: value
+      }
     }));
   };
 
@@ -111,8 +113,8 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         ...prev.tender,
         fees: prev.tender.fees.map((fee) =>
           fee.type === feeType ? { ...fee, [key]: value } : fee
-        ),
-      },
+        )
+      }
     }));
   };
 
@@ -132,10 +134,10 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             paymentMode: "",
             paymentDueDate: "",
             notes: "",
-            documents: [],
-          },
-        ],
-      },
+            documents: []
+          }
+        ]
+      }
     }));
   };
 
@@ -145,8 +147,8 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       ...prev,
       tender: {
         ...prev.tender,
-        fees: prev.tender.fees.filter((fee) => fee.type !== feeType),
-      },
+        fees: prev.tender.fees.filter((fee) => fee.type !== feeType)
+      }
     }));
   };
 
@@ -161,9 +163,9 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         ...prev.tender,
         supplyConditions: {
           ...prev.tender.supplyConditions,
-          [key]: value,
-        },
-      },
+          [key]: value
+        }
+      }
     }));
   };
 
@@ -184,9 +186,9 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               condition.type === conditionType
                 ? { ...condition, [key]: value }
                 : condition
-            ),
-        },
-      },
+            )
+        }
+      }
     }));
   };
 
@@ -198,9 +200,9 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         ...prev.documentList,
         {
           type: docType,
-          documents: documentList,  
-        },
-      ],
+          documents: documentList
+        }
+      ]
     }));
   };
   const addDocumentToExistingType = (docType: string, document: Document) => {
@@ -210,16 +212,15 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         doc.type === docType
           ? { ...doc, documents: [...doc.documents, document] }
           : doc
-      ),
+      )
     }));
   };
-  
 
   // ✅ Add a new tender product
   const addTenderProduct = (product: TenderProduct) => {
     setTenderData((prev) => ({
       ...prev,
-      products: [...prev.products, product],
+      products: [...prev.products, product]
     }));
   };
 
@@ -233,10 +234,46 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       ...prev,
       products: prev.products.map((product) =>
         product.id === id ? { ...product, [key]: value } : product
-      ),
+      )
+    }));
+  };
+  // ✅ Add a new applicable condition
+  const addApplicableCondition = (type: string) => {
+    setTenderData((prev) => ({
+      ...prev,
+      tender: {
+        ...prev.tender,
+        supplyConditions: {
+          ...prev.tender.supplyConditions,
+          applicableConditions: [
+            {
+              type,
+              notes: "",
+              status: "",
+              documents: []
+            }
+          ]
+        }
+      }
     }));
   };
 
+  // ✅ Remove an applicable condition by type
+  const removeApplicableCondition = (conditionType: string) => {
+    setTenderData((prev) => ({
+      ...prev,
+      tender: {
+        ...prev.tender,
+        supplyConditions: {
+          ...prev.tender.supplyConditions,
+          applicableConditions:
+            prev.tender.supplyConditions.applicableConditions.filter(
+              (condition) => condition.type !== conditionType
+            )
+        }
+      }
+    }));
+  };
   return (
     <TenderDataContext.Provider
       value={{
@@ -251,6 +288,8 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         addDocumentToExistingType,
         addTenderProduct,
         updateTenderProduct,
+        addApplicableCondition,
+        removeApplicableCondition
       }}
     >
       {children}

@@ -99,7 +99,10 @@ export const DsStatus: Record<string, dsStatus> = {
   RJCT: "Rejected",
   DSPT: "Ready To Dispatch",
   PFMA: "Proforma",
-  CMPL: "Completed"
+  CMPL: "Completed",
+  UREV: "Under Review",
+  UAPR: "Under Approval",
+  APRL: "Approval"
 };
 export type dsStatus =
   | "Draft"
@@ -113,7 +116,9 @@ export type dsStatus =
   | "Proforma"
   | "Completed"
   | "Under Review"
-  | "Awarded";
+  | "Awarded"
+  | "Under Approval"
+  | "Approval";
 // export type bankDetail = {
 //   bankName: string;
 //   accountNumber: string;

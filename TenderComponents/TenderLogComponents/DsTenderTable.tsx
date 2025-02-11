@@ -2,8 +2,8 @@
 import { useEffect, useState } from "react";
 import DsApplication from "@/Elements/ERPComponents/DsApplicationComponents/DsApplication";
 import fetchData from "@/helpers/Method/fetchData";
-import { DsTableRow, tableData } from "@/helpers/types";
-import { getAllTenders, Tender } from "@/helpers/constant";
+import { DsTableRow, tableData, Tender } from "@/helpers/types";
+import { getAllTenders } from "@/helpers/constant";
 import DsTableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableComponent";
 import institutional from "@/Icons/institutional.svg";
 import test from "@/Icons/searchicon.svg";
@@ -11,8 +11,18 @@ import Image from "next/image";
 import AdvancedFilterComponent from "@/Elements/DsComponents/AdvancedFilterComponent/AdvancedFilterComponent";
 import DsPane, { ClosePane } from "@/Elements/DsComponents/DsPane/DsPane";
 
-const DsTenderTable = () => {
-  const [data, setData] = useState<Tender[]>([]);
+interface DsTenderTableProps {
+  data: Tender[];
+  filteredData: Tender[];
+  setData: React.Dispatch<React.SetStateAction<Tender[]>>;
+}
+
+const DsTenderTable: React.FC<DsTenderTableProps> = ({
+  data,
+  filteredData,
+  setData
+}) => {
+  // const [data, setData] = useState<Tender[]>([]);
   const [tempTableData, setTempTableData] = useState<tableData>({
     className: "sample-table",
     type: "InterActive",
@@ -111,6 +121,112 @@ const DsTenderTable = () => {
     ],
     rows: []
   });
+
+  useEffect(() => {
+    if (filteredData && filteredData.length >= 0) {
+      console.log("filter data in tabel : ", filteredData);
+      const transformedRows: DsTableRow[] = filteredData.map((item, index) => ({
+        rowIndex: index,
+        rowIcon:
+          item?.type === "institutional" ? (
+            <Image
+              src={institutional}
+              alt="institutional"
+              width={50}
+              height={50}
+            />
+          ) : (
+            <Image src={test} alt="test" width={50} height={50} />
+          ),
+        customAttributes: { iconValue: item?.type?.toString() ?? "" },
+        content: [
+          {
+            columnIndex: 0,
+            className: "cell",
+            content: item.customerName || "-",
+            filterValue: item.customerName || "-",
+            contentType: "string"
+          },
+          {
+            columnIndex: 1,
+            className: "cell",
+            content: item.submittionDate || "-",
+            filterValue: item.submittionDate || "-",
+            contentType: "string"
+          },
+          {
+            columnIndex: 2,
+            className: "cell",
+            content: item.daystosubmit || "-",
+            filterValue: item.daystosubmit || "-",
+            contentType: "string"
+          },
+          {
+            columnIndex: 3,
+            className: "cell",
+            content: item.tenderId || "-",
+            filterValue: item.tenderId || "-",
+            contentType: "string"
+          },
+          {
+            columnIndex: 4,
+            className: "cell",
+            content: item.tenderType || "-",
+            filterValue: item.tenderType || "-",
+            contentType: "string"
+          },
+          {
+            columnIndex: 5,
+            className: "cell",
+            content: item.depot || "-",
+            filterValue: item.depot || "-",
+            contentType: "string"
+          },
+          {
+            columnIndex: 6,
+            className: "cell",
+            content: item.appliedBy || "-",
+            filterValue: item.appliedBy || "-",
+            contentType: "string"
+          },
+          {
+            columnIndex: 7,
+            className: "cell",
+            content: item.suppliedBy || "-",
+            filterValue: item.suppliedBy || "-",
+            contentType: "string"
+          },
+          {
+            columnIndex: 8,
+            className: "cell",
+            content: item.preparedBy || "-",
+            filterValue: item.preparedBy || "-",
+            contentType: "string"
+          },
+          {
+            columnIndex: 9,
+            className: "cell",
+            content: item.value || "-",
+            filterValue: Number(item.value ?? 0),
+            contentType: "string"
+          },
+          {
+            columnIndex: 10,
+            className: "cell",
+            content: item.status.tenderStatus || "-",
+            filterValue: item.status.tenderStatus || "-",
+            contentType: "reactNode"
+          }
+        ]
+      }));
+
+      console.log("Final Transformed Rows:", transformedRows);
+
+      setTimeout(() => {
+        setTempTableData((data) => ({ ...data, rows: transformedRows }));
+      }, 1);
+    }
+  }, [filteredData]);
 
   const flterTypes = [
     {
@@ -261,8 +377,8 @@ const DsTenderTable = () => {
         {
           columnIndex: 10,
           className: "cell",
-          content: t.status,
-          filterValue: t.status,
+          content: t.status.tenderStatus,
+          filterValue: t.status.tenderStatus,
           contentType: "reactNode"
         }
       ]

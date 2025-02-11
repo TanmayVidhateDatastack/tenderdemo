@@ -1,5 +1,8 @@
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
-import DsCsvUpload from "@/Elements/DsComponents/DsButtons/dsCsvUpload";
+import DsCsvUpload, {
+  getFileFromLocalStorage,
+  getFilesFromLocalStorage
+} from "@/Elements/DsComponents/DsButtons/dsCsvUpload";
 import Ds_checkbox from "@/Elements/DsComponents/DsCheckbox/dsCheckbox";
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import DsSingleSelect from "@/Elements/DsComponents/dsSelect/dsSingleSelect";
@@ -89,12 +92,14 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             options={paidBy}
             label="Paid by"
             placeholder={"Please select here"}
-            setSelectOption={(e) => {
-              updateTenderFee(
-                id.replace("DocumentView", ""),
-                "paidBy",
-                e.value
-              );
+            setSelectOption={(option) => {
+              if (typeof option.value == "string") {
+                updateTenderFee(
+                  id.replace("DocumentView", ""),
+                  "paidBy",
+                  option.value
+                );
+              }
             }}
           ></DsSingleSelect>
           <DsSingleSelect
@@ -103,12 +108,14 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             options={mode}
             label="Modes"
             placeholder={"Please search and select here"}
-            setSelectOption={(e) => {
-              updateTenderFee(
-                id.replace("DocumentView", ""),
-                "paymentMode",
-                e.value
-              );
+            setSelectOption={(option) => {
+              if (typeof option.value == "string") {
+                updateTenderFee(
+                  id.replace("DocumentView", ""),
+                  "paymentMode",
+                  option.value
+                );
+              }
             }}
           ></DsSingleSelect>
           <DsTextField
@@ -143,17 +150,38 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
         </div>
         <div>
           <DsCsvUpload
-            id="upload"
+            id={id + "UploadedDocuments"}
             label="Attach File"
             buttonViewStyle="btnText"
             buttonSize="btnSmall"
-            // onChange={(e) => {
-            //   updateTenderFee(
-            //     id.replace("DocumentView", ""),
-            //     "amount",
-            //     e.target.value
-            //   );
+            // onSetFiles={(id) => {
+            //   getFileFromLocalStorage(id).then((file) => {
+            //     if (file) {
+            //       updateTenderFee(
+            //         id.replace("DocumentView", ""),
+            //         "documents",
+            //         file
+            //       );
+            //     }
+            //   });
             // }}
+            onSetFiles={(id) => {
+              getFilesFromLocalStorage(id).then((files) => {
+                if (files && files.length > 0) {
+                  // Convert each file into the Document type
+                  const documentArray = files.map((file) => ({
+                    name: file.attributes.name, // Extract the name from attributes
+                    document: file.file // The File object
+                  }));
+
+                  updateTenderFee(
+                    id.replace("DocumentView", ""),
+                    "documents",
+                    documentArray // Pass the array of documents
+                  );
+                }
+              });
+            }}
           ></DsCsvUpload>
         </div>
       </div>
