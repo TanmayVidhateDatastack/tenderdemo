@@ -78,8 +78,14 @@ export const getAllOrdersURL = apiHostUrl + "/orders";
 export const searchTransporterURL = apiHostUrl + "/customers/filter?name=";
 export const getTransporterURL = apiHostUrl + "/customers/";
 export const getAllStatusLogURL = apiHostUrl + "/status";
+
+
+
 export const getAllTenders = apiHostUrl + "/tenders";
 export const getAllMetaData = apiHostUrl + "/tenderMetadata";
+
+export const getTenderSearchProducts=apiHostUrl+"/tenderproducts/filter?name="
+
 
 export const DsStatus: Record<string, dsStatus> = {
   DRFT: "Draft",
@@ -94,7 +100,7 @@ export const DsStatus: Record<string, dsStatus> = {
   CMPL: "Completed"
 };
 export type dsStatus =
-  | "Draft"
+   "Draft"
   | "Submitted"
   | "Deviation Pending"
   | "Open"
@@ -106,6 +112,12 @@ export type dsStatus =
   | "Completed"
   | "Under Review"
   | "Awarded";
+
+  export const DsTenderProductStatus:Record<string,dsTenderProductStatus>={
+    CRET:"Create",
+    UPDT:"Update"
+  }
+export type dsTenderProductStatus="Create"|"Update";
 // export type bankDetail = {
 //   bankName: string;
 //   accountNumber: string;

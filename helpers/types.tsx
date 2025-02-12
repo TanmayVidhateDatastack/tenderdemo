@@ -5,7 +5,7 @@ import React, {
   ReactNode,
   ChangeEvent,
 } from "react";
-import { dsStatus } from "./constant";
+import { dsStatus, dsTenderProductStatus } from "./constant";
 
 // import dsStatus from "./constant";
 
@@ -908,74 +908,93 @@ export interface TotalOrdersProps {
   data: Array<Tender>;
 }
 
-export type Document={
-  name:string;
-  document:File;
+export type Document = {
+  name: string;
+  document: File;
 }
 
-export type tenderFee={
-  type:string;
-  amount:number;
-  currency:string;
-  paidBy:string;
-  paymentMode:string;
-  paymentDueDate:string;
-  notes:string;
-  documents:Document[];
+export type tenderFee = {
+  type: string;
+  amount: number;
+  currency: string;
+  paidBy: string;
+  paymentMode: string;
+  paymentDueDate: string;
+  notes: string;
+  documents: Document[];
 }
-export type applicableSupplyConditions={
-  type:string;
-  notes:string;
-  documents:Document[];
-  status:dsStatus;
+export type applicableSupplyConditions = {
+  type: string;
+  notes: string;
+  documents: Document[];
+  status: dsStatus;
 }
-export type tenderSupplyCondition={
-  supplyPoint:string;
-  consigneesCount:number;
-  testReportRequirement:string;
-  eligibility:string[];
-  applicableConditions:applicableSupplyConditions[];
+export type tenderSupplyCondition = {
+  supplyPoint: string;
+  consigneesCount: number;
+  testReportRequirement: string;
+  eligibility: string[];
+  applicableConditions: applicableSupplyConditions[];
 }
-export type TenderData={
-  customerId:number;
-  customerLocationId:number;
-  tenderNumber:string;
-  tenderType:string;
-  issueDate:string;
-  lastPurchaseDate:string;
-  submissionDate:string;
-  rateContractValidity:string;
-  submissionMode:string;
-  deliveryPeriod:number;
-  extendedDeliveryPeriod:number;
-  lateDeliveryPenalty:number;
-  tenderURL:string;
-  shippingLocations:number[];
-  appliedBy:string;
-  applierBy:number|null;
-  suppliedBy:string;
-  suppliedId:number|null;
-  supplierDiscount:number;
-  preparedBy:number;
-  lastUpdatedBy: number;
-  comments: string;
-  fees:tenderFee[];
-  supplyConditions:tenderSupplyCondition;
+export type searchProduct = {
+  id: number;
+  name: string;
+  packSize: string
+  mrpRate?: string | number;
+  ptr?: string | number;
+  directCost?: string | number;
 };
 export type TenderProduct = {
-  id: number;
+  genericName?: string;
+  quantity?: number;
+  packingSize?: string;
+  id?: number;
   name?: string;
-  packSize?:string
+  packSize?: string
   mrpRate?: string | number;
-  ptr?:string|number;
-  directCost?:string|number;
+  ptr?: string | number;
+  directCost?: string | number;
+  LQR?: number;
+  customerLprValue?: number;
+  customerLprTo?: number;
+  proposedRate?: number;
+  PTRpercent?: number;
+  stockistDiscount?: number;
+  totalCost?: number;
+  marginValue?: number;
+  marginPercent?: number;
+  netValue?: number;
+  dataSource?: "fetch" | "csv" | "saved";
 };
-export type TenderDocument={
-  type:string;
-  documents:Document[];
+export type TenderDocument = {
+  type: string;
+  documents: Document[];
 }
-export type CreateUpdateTender={
-  tender:TenderData;
-  products:TenderProduct[];
-  documentList:TenderDocument[];
-}
+export type TenderData = {
+  customerId: number;
+  customerLocationId: number;
+  tenderNumber: string;
+  tenderType: string;
+  issueDate: string;
+  lastPurchaseDate: string;
+  submissionDate: string;
+  rateContractValidity: string;
+  submissionMode: string;
+  deliveryPeriod: number;
+  extendedDeliveryPeriod: number;
+  lateDeliveryPenalty: number;
+  tenderURL: string;
+  shippingLocations: number[];
+  appliedBy: string;
+  applierId: number | null;
+  suppliedBy: string;
+  suppliedId: number | null;
+  supplierDiscount: number;
+  preparedBy: number;
+  lastUpdatedBy: number;
+  comments: string;
+  fees: tenderFee[];
+  supplyConditions: tenderSupplyCondition;
+  products: TenderProduct[];
+  documentList: TenderDocument[];
+}; 
