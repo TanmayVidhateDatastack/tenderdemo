@@ -38,6 +38,8 @@ interface TenderDataContextType {
     key: keyof TenderProduct,
     value: string | number
   ) => void;
+  addApplicableCondition: (type: string) => void;
+  removeApplicableCondition: (conditionType: string) => void;
 }
 
 const TenderDataContext = createContext<TenderDataContextType | undefined>(
@@ -206,6 +208,40 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       ),
     }));
   };
+  // ✅ Add a new applicable condition
+  const addApplicableCondition = (type: string) => {
+    setTenderData((prev) => ({
+      ...prev,
+
+      supplyConditions: {
+        ...prev.supplyConditions,
+        applicableConditions: [
+          {
+            type,
+            notes: "",
+            documents: []
+          },
+        ]
+      }
+    }));
+  };
+
+  // ✅ Remove an applicable condition by type
+  const removeApplicableCondition = (conditionType: string) => {
+    setTenderData((prev) => ({
+      ...prev,
+
+      supplyConditions: {
+        ...prev.supplyConditions,
+        applicableConditions:
+          prev.supplyConditions.applicableConditions.filter(
+            (condition) => condition.type !== conditionType
+          )
+      }
+
+    }));
+  };
+
   return (
     <TenderDataContext.Provider
       value={{
@@ -220,6 +256,8 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         addDocumentToExistingType,
         addTenderProduct,
         updateTenderProduct,
+        addApplicableCondition,
+        removeApplicableCondition
       }}
     >
       {children}

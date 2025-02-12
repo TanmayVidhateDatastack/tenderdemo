@@ -921,13 +921,14 @@ export type tenderFee = {
   paymentMode: string;
   paymentDueDate: string;
   notes: string;
+  status?:dsStatus;
   documents: Document[];
 }
 export type applicableSupplyConditions = {
   type: string;
   notes: string;
   documents: Document[];
-  status: dsStatus;
+  status?: dsStatus;
 }
 export type tenderSupplyCondition = {
   supplyPoint: string;
