@@ -20,3 +20,40 @@
 .filterBtn:hover{
     background-color: var(--text-primary-hover) !important;
 }
+
+.deviation_pending {
+    background-color: var(--deviationpending-o) !important;
+    color: var(--deviationpending-text) !important;
+  }
+   
+  .approved {
+    background-color: var(--approved-o) !important;
+    color: var(--approved-text) !important;
+  }
+   
+  .cancelled {
+    background-color: var(--cancelled-o) !important;
+    color: var(--cancelled-text) !important;
+  }
+   
+  .ready_to_dispatch {
+    background-color: var(--readytodispatch-o) !important;
+    color: var(--readytodispatch-text) !important;
+  }
+   
+  .rejected {
+    background-color: var(--rejected-o) !important;
+    color: var(--rejected-text) !important;
+  }
+   
+  .open {
+    background-color: var(--open-o) !important;
+    color: var(--open-text) !important;
+  }
+   
+  .draft {
+    background-color: var(--draft-o);
+    color: var(--draft-text);
+  }
+   
+   

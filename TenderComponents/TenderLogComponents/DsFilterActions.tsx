@@ -24,8 +24,11 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
   const [isFiltered, setIsFiltered] = useState<Record<string, boolean>>({
     [DsStatus.UREV]: false,
     [DsStatus.UAPR]: false,
-    [DsStatus.APRL]: false
+    [DsStatus.APRL]: false,
+    [DsStatus.APRV]: false,
+    nearSubmission: false
   });
+
   const dispatch = useAppDispatch<AppDispatch>();
   const role = useAppSelector((state: RootState) => state.user.role);
   const permissions = useAppSelector((state: RootState) => state.permissions);
@@ -56,7 +59,6 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
       console.error("Fetch error: ", error);
     }
   };
-
   const handleFilter = (value: string) => {
     setIsFiltered((prev) => {
       const newFilterState = Object.fromEntries(
@@ -66,16 +68,35 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
         ])
       );
 
-      // If the selected filter is being turned off, reset the data
       if (!newFilterState[value]) {
         setFilteredData(data);
       } else {
-        // Convert both the filter value and status to lowercase before comparison
-        const lowerCaseValue = value.toLowerCase();
-        const filteredRows = data.filter(
-          (tender) =>
-            tender.status?.tenderStatus?.toLowerCase() === lowerCaseValue
-        );
+        let filteredRows = [...data];
+
+        if (value === "nearSubmission") {
+          filteredRows = filteredRows.filter((tender) => {
+            if (!tender.daystosubmit) return false; // If no data, ignore
+
+            const daysLeft = parseInt(
+              tender.daystosubmit.match(/\d+/)?.[0] || "0"
+            ); // Extract number
+            return daysLeft <= 15;
+          });
+        } else {
+          const lowerCaseValue = value.toLowerCase();
+          filteredRows = filteredRows.filter(
+            (tender) =>
+              tender.status?.tenderStatus?.toLowerCase() === lowerCaseValue
+          );
+
+          if (value === DsStatus.APRV) {
+            filteredRows = filteredRows.filter(
+              (tender) =>
+                tender.status?.message?.toLowerCase() === "fees pending"
+            );
+          }
+        }
+
         setFilteredData(filteredRows);
       }
 
@@ -86,6 +107,10 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
   useEffect(() => {
     handleFetch();
   }, []);
+
+  useEffect(() => {
+    console.log("deta : ", data);
+  }, [data]);
 
   useEffect(() => {
     if (role && role !== "") {
@@ -111,6 +136,10 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
             id="nearSubmission"
             buttonSize="btnLarge"
             buttonViewStyle="btnOutlined"
+            onClick={() => {
+              console.log("Near Submission button clicked!");
+              handleFilter("nearSubmission");
+            }}
           />
         )}
         {feesPendingButtonVisible && (
@@ -120,6 +149,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
             id="fees"
             buttonSize="btnLarge"
             buttonViewStyle="btnOutlined"
+            onClick={() => handleFilter(DsStatus.APRV)}
           />
         )}
         {approvalButtonVisible && (
@@ -129,6 +159,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
             id="approval"
             buttonSize="btnLarge"
             buttonViewStyle="btnOutlined"
+            onClick={() => handleFilter(DsStatus.APRL)}
           />
         )}
         {underApprovalButtonVisible && (
@@ -137,6 +168,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
             id="underApproval"
             buttonSize="btnLarge"
             buttonViewStyle="btnOutlined"
+            onClick={() => handleFilter(DsStatus.UAPR)}
           />
         )}
         {underReviewButtonVisible && (

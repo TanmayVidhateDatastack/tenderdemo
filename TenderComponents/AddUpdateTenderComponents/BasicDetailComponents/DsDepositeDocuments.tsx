@@ -67,7 +67,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
         const val = opt.value;
 
         if (typeof val === "string") {
-          acc[val] = false; // Add string keys directly to the object
+          acc[val] = false;
         }
 
         return acc;
@@ -107,29 +107,6 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
     closeAllContext();
     console.log("Currently Selected:", Array.from(selectedFees)); // Debugging output
   };
-
-  // const handleAdd = (e) => {
-  //   const selectedFees = { ...feeVisibility }; // 🔥 Preserve existing selections
-
-  //   applicablefees.forEach((opt) => {
-  //     const id = opt.value.toString();
-  //     const checkbox = document.getElementById(id) as HTMLInputElement;
-
-  //     if (checkbox?.checked) {
-  //       selectedFees[id] = true;
-  //       addTenderFee(id);
-
-  //       // 🔥 Send existing + new selections
-  //       updateTenderFee(id, "amount", Object.keys(selectedFees));
-  //     } else {
-  //       selectedFees[id] = false;
-  //       removeTenderFeeByType(id);
-  //     }
-  //   });
-
-  //   // 🔥 Update feeVisibility globally
-  //   Object.assign(feeVisibility, selectedFees);
-  // };
 
   useEffect(() => {
     console.log("feevisibility : ", feeVisibility);

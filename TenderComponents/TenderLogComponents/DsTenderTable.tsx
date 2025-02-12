@@ -3,13 +3,15 @@ import { useEffect, useState } from "react";
 import DsApplication from "@/Elements/ERPComponents/DsApplicationComponents/DsApplication";
 import fetchData from "@/helpers/Method/fetchData";
 import { DsTableRow, tableData, Tender } from "@/helpers/types";
-import { getAllTenders } from "@/helpers/constant";
+import { DsStatus, getAllTenders } from "@/helpers/constant";
 import DsTableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableComponent";
 import institutional from "@/Icons/institutional.svg";
 import test from "@/Icons/searchicon.svg";
 import Image from "next/image";
 import AdvancedFilterComponent from "@/Elements/DsComponents/AdvancedFilterComponent/AdvancedFilterComponent";
 import DsPane, { ClosePane } from "@/Elements/DsComponents/DsPane/DsPane";
+import DsStatusIndicator from "@/Elements/DsComponents/dsStatus/dsStatusIndicator";
+import styles from "./filteractions.module.css";
 
 interface DsTenderTableProps {
   data: Tender[];
@@ -22,7 +24,6 @@ const DsTenderTable: React.FC<DsTenderTableProps> = ({
   filteredData,
   setData
 }) => {
-  // const [data, setData] = useState<Tender[]>([]);
   const [tempTableData, setTempTableData] = useState<tableData>({
     className: "sample-table",
     type: "InterActive",
@@ -207,14 +208,36 @@ const DsTenderTable: React.FC<DsTenderTableProps> = ({
             columnIndex: 9,
             className: "cell",
             content: item.value || "-",
-            filterValue: Number(item.value ?? 0),
-            contentType: "string"
+            filterValue: parseFloat(item.value ?? ""),
+            contentType: "number"
           },
           {
             columnIndex: 10,
             className: "cell",
-            content: item.status.tenderStatus || "-",
-            filterValue: item.status.tenderStatus || "-",
+            // content: item.status.tenderStatus || "-",
+            content: (
+              <DsStatusIndicator
+                type="user_defined"
+                label={item.status.tenderStatus + " "}
+                className={`${
+                  item?.status?.tenderStatus
+                    ? styles[
+                        item?.status?.tenderStatus
+                          ?.replace(" ", "_")
+                          .toLowerCase()
+                      ]
+                    : ""
+                }`}
+                comment={
+                  item.status?.message
+                    ? typeof item.status.message === "object"
+                      ? JSON.stringify(item.status.message)
+                      : item.status.message.toString()
+                    : ""
+                }
+              />
+            ),
+            filterValue: item.status.tenderStatus,
             contentType: "reactNode"
           }
         ]
@@ -268,7 +291,7 @@ const DsTenderTable: React.FC<DsTenderTableProps> = ({
 
     {
       columnIndex: 9,
-      columnHeader: "Value",
+      columnHeader: "VALUE",
       filterType: "INPUTTYPERANGE"
     }
   ];
@@ -371,14 +394,36 @@ const DsTenderTable: React.FC<DsTenderTableProps> = ({
           columnIndex: 9,
           className: "cell",
           content: t.value,
-          filterValue: Number(t.value ?? 0),
-          contentType: "string"
+          filterValue: parseFloat(t.value ?? 0),
+          contentType: "number"
         },
         {
           columnIndex: 10,
           className: "cell",
-          content: t.status.tenderStatus,
-          filterValue: t.status.tenderStatus,
+
+          content: t.status ? (
+            <DsStatusIndicator
+              type="user_defined"
+              className={`${
+                t?.status?.tenderStatus
+                  ? styles[
+                      t?.status?.tenderStatus?.replace(" ", "_").toLowerCase()
+                    ]
+                  : ""
+              }`}
+              label={t.status.tenderStatus + " "}
+              comment={
+                t.status?.message
+                  ? typeof t.status.message === "object"
+                    ? JSON.stringify(t.status.message)
+                    : t.status.message.toString()
+                  : ""
+              }
+            />
+          ) : (
+            "No Status"
+          ),
+          filterValue: t.status?.tenderStatus ?? "Unknown",
           contentType: "reactNode"
         }
       ]
@@ -396,6 +441,8 @@ const DsTenderTable: React.FC<DsTenderTableProps> = ({
     handleFetch();
   }, []);
 
+  useEffect(() => {});
+
   useEffect(() => {
     console.log("Data updated:", data);
     if (data.length > 0) {
@@ -407,7 +454,6 @@ const DsTenderTable: React.FC<DsTenderTableProps> = ({
     e: React.MouseEvent<HTMLElement>,
     filteredRows: DsTableRow[]
   ) => {
-    console.log("wsedfghjk;", filteredRows);
     setTempTableData((data) => ({ ...data, rows: filteredRows }));
     ClosePane(e);
   };

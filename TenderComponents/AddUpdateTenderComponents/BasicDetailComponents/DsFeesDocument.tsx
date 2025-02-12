@@ -68,7 +68,6 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 name={"Payment Completed"}
                 value={"Payment Completed"}
                 label={"Payment Completed"}
-                // onChange={}
               />
             </div>
           </div>
@@ -154,30 +153,18 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             label="Attach File"
             buttonViewStyle="btnText"
             buttonSize="btnSmall"
-            // onSetFiles={(id) => {
-            //   getFileFromLocalStorage(id).then((file) => {
-            //     if (file) {
-            //       updateTenderFee(
-            //         id.replace("DocumentView", ""),
-            //         "documents",
-            //         file
-            //       );
-            //     }
-            //   });
-            // }}
             onSetFiles={(id) => {
               getFilesFromLocalStorage(id).then((files) => {
                 if (files && files.length > 0) {
-                  // Convert each file into the Document type
                   const documentArray = files.map((file) => ({
-                    name: file.attributes.name, // Extract the name from attributes
-                    document: file.file // The File object
+                    name: file.attributes.name,
+                    document: file.file
                   }));
 
                   updateTenderFee(
                     id.replace("DocumentView", ""),
                     "documents",
-                    documentArray // Pass the array of documents
+                    documentArray
                   );
                 }
               });

@@ -45,16 +45,15 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
             onSetFiles={(id) => {
               getFilesFromLocalStorage(id).then((files) => {
                 if (files && files.length > 0) {
-                  // Convert each file into the Document type
                   const documentArray = files.map((file) => ({
-                    name: file.attributes.name, // Extract the name from attributes
-                    document: file.file // The File object
+                    name: file.attributes.name,
+                    document: file.file
                   }));
 
                   updateApplicableCondition(
                     id.replace("conditionsView", ""),
                     "documents",
-                    documentArray // Pass the array of documents
+                    documentArray
                   );
                 }
               });
