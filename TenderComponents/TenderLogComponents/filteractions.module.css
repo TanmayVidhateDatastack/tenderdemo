@@ -52,8 +52,23 @@
   }
    
   .draft {
-    background-color: var(--draft-o);
-    color: var(--draft-text);
+    background-color: var(--draft-o) !important;
+    color: var(--draft-text) !important;
+  }
+
+  .approval {
+    background-color: var(--approval-o) !important;
+    color: var(--approval-text) !important;
+  }
+
+  .under_review {
+    background-color: var(--under-review-o) !important;
+    color: var(--under-review-text) !important;
+  }
+
+  .under_approval {
+    background-color: var(--under-approval-o) !important;
+    color: var(--under-approval-text) !important;
   }
    
    

@@ -195,7 +195,7 @@ export const getSelectOptions = (columnIndex: number, rows: DsTableRow[]) => {
       }
     });
   });
-  console.log("optionssss", options);
+  // console.log("optionssss", options);
   return options;
 };
 

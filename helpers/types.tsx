@@ -5,8 +5,7 @@ import React, {
   ReactNode,
   ChangeEvent
 } from "react";
-import { dsStatus } from "./constant";
-import { DSButtonProps } from "@/Elements/DsComponents/DsButtons/dsButton";
+import { dsStatus, dsTenderProductStatus } from "./constant";
 
 // import dsStatus from "./constant";
 
@@ -40,6 +39,47 @@ export interface AccordionProps {
   id: string;
   title: string; // The title of the accordion
   children: string | React.ReactElement; // The content inside the accordion, can be a string or a React element
+}
+
+export interface DSButtonProps {
+  children?: React.ReactNode;
+  id?: string;
+  label?: string;
+  tooltip?: string;
+
+  type?:
+    | "standard"
+    | "split"
+    | "toggle"
+    | "icon_image"
+    | "button_icon"
+    | "upload"
+    | "tab"
+    | "count"
+    | "round";
+  buttonSize?: "btnSmall" | "btnMedium" | "btnLarge";
+  iconSize?: "iconSmall" | "iconMedium" | "iconLarge";
+  buttonColor?:
+    | "btnPrimary"
+    | "btnSecondary"
+    | "btnDanger"
+    | "btnWarning"
+    | "btnDark"
+    | "btnInfo";
+  buttonViewStyle?: "btnText" | "btnContained" | "btnOutlined";
+  disable?: boolean;
+  className?: string;
+  count?: string | "00";
+  position?: "top" | "left" | "bottom" | "right";
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
+  img?: string;
+  startIcon?: React.ReactElement;
+  endIcon?: React.ReactElement;
+  spliticon?: React.ReactElement;
+  onHover?: (e: React.MouseEvent<HTMLElement>) => void;
+  handleMouseLeave?: (e: React.MouseEvent<HTMLElement>) => void;
+  onBlur?: (e: React.MouseEvent<HTMLElement>) => void;
+  handelSplitClick?: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 export interface DSButtonGroupProps {
@@ -230,23 +270,8 @@ export interface SpotlightSearchProps {
   className: string;
   customAttributes?: Record<string, string>;
 }
-
-// export type tenderStatus = {
-//   tenderStatus: string;
-//   messageType: string;
-//   message: string;
-//   statusValue: dsStatus;
-// };
-
-export type tenderStatus = {
-  tenderStatus?: string;
-  statusDescription?: string;
-  messageType?: string;
-  message?: string;
-};
-
 export interface DsStatusIndicatorProps {
-  status?: tenderStatus;
+  status?: orderStatus;
   className?: string;
   id?: string;
   label?: string;
@@ -617,8 +642,7 @@ export class filterType {
 export class DsFilterValues {
   columnIndex: number = 0;
   columnHeader: string = "";
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  values: any[] = [];
+  values: unknown[] = [];
 }
 
 export class columnSort {
@@ -678,14 +702,7 @@ export type customer = {
 //   expiryDate: string;
 //   quantity?: number;
 // };
-export type product = {
-  id: number;
-  name?: string;
-  packSize?: string;
-  mrpRate?: string | number;
-  ptr?: string | number;
-  directCost?: string | number;
-};
+
 // export type addressToFrom = {
 //   to: location;
 //   from: location;
@@ -893,11 +910,10 @@ export interface TotalOrdersProps {
   data: Array<Tender>;
 }
 
-export type tenderDocument = {
+export type Document = {
   name: string;
   document: File;
 };
-
 export type tenderFee = {
   type: string;
   amount: number;
@@ -906,13 +922,14 @@ export type tenderFee = {
   paymentMode: string;
   paymentDueDate: string;
   notes: string;
-  documents: tenderDocument[];
+  status?: dsStatus;
+  documents: Document[];
 };
 export type applicableSupplyConditions = {
   type: string;
   notes: string;
-  documents: tenderDocument[];
-  status: dsStatus;
+  documents: Document[];
+  status?: dsStatus;
 };
 export type tenderSupplyCondition = {
   supplyPoint: string;
@@ -920,6 +937,40 @@ export type tenderSupplyCondition = {
   testReportRequirement: string;
   eligibility: string[];
   applicableConditions: applicableSupplyConditions[];
+};
+export type searchProduct = {
+  id: number;
+  name: string;
+  packSize: string;
+  mrpRate?: string | number;
+  ptr?: string | number;
+  directCost?: string | number;
+};
+export type TenderProduct = {
+  genericName?: string;
+  quantity?: number;
+  packingSize?: string;
+  id?: number;
+  name?: string;
+  packSize?: string;
+  mrpRate?: string | number;
+  ptr?: string | number;
+  directCost?: string | number;
+  LQR?: number;
+  customerLprValue?: number;
+  customerLprTo?: number;
+  proposedRate?: number;
+  PTRpercent?: number;
+  stockistDiscount?: number;
+  totalCost?: number;
+  marginValue?: number;
+  marginPercent?: number;
+  netValue?: number;
+  dataSource?: "fetch" | "csv" | "saved";
+};
+export type TenderDocument = {
+  type: string;
+  documents: Document[];
 };
 export type TenderData = {
   customerId: number;
@@ -937,7 +988,7 @@ export type TenderData = {
   tenderURL: string;
   shippingLocations: number[];
   appliedBy: string;
-  applierBy: number | null;
+  applierId: number | null;
   suppliedBy: string;
   suppliedId: number | null;
   supplierDiscount: number;
@@ -946,23 +997,6 @@ export type TenderData = {
   comments: string;
   fees: tenderFee[];
   supplyConditions: tenderSupplyCondition;
-};
-
-export type Tender = {
-  customerName: string;
-  submittionDate: string;
-  daystosubmit: string;
-  tenderId: string;
-  tenderType: string;
-  depot: string;
-  appliedBy: string;
-  suppliedBy: string;
-  preparedBy: string;
-  value: string;
-  status: tenderStatus;
-};
-
-export type Document = {
-  name: string;
-  document: File;
+  products: TenderProduct[];
+  documentList: TenderDocument[];
 };

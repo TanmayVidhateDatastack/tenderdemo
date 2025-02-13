@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import DsApplication from "@/Elements/ERPComponents/DsApplicationComponents/DsApplication";
 import fetchData from "@/helpers/Method/fetchData";
 import { DsTableRow, tableData, Tender } from "@/helpers/types";
-import { DsStatus, getAllTenders } from "@/helpers/constant";
+import { getAllTenders } from "@/helpers/constant";
 import DsTableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableComponent";
 import institutional from "@/Icons/institutional.svg";
 import test from "@/Icons/searchicon.svg";
@@ -208,7 +208,7 @@ const DsTenderTable: React.FC<DsTenderTableProps> = ({
             columnIndex: 9,
             className: "cell",
             content: item.value || "-",
-            filterValue: parseFloat(item.value ?? ""),
+            filterValue: parseFloat(item.value.replaceAll(",", "") ?? ""),
             contentType: "number"
           },
           {
@@ -219,15 +219,14 @@ const DsTenderTable: React.FC<DsTenderTableProps> = ({
               <DsStatusIndicator
                 type="user_defined"
                 label={item.status.tenderStatus + " "}
-                className={`${
+                className={`${item?.status?.tenderStatus
+                  ? styles[
                   item?.status?.tenderStatus
-                    ? styles[
-                        item?.status?.tenderStatus
-                          ?.replace(" ", "_")
-                          .toLowerCase()
-                      ]
-                    : ""
-                }`}
+                    ?.replace(" ", "_")
+                    .toLowerCase()
+                  ]
+                  : ""
+                  }`}
                 comment={
                   item.status?.message
                     ? typeof item.status.message === "object"
@@ -293,6 +292,11 @@ const DsTenderTable: React.FC<DsTenderTableProps> = ({
       columnIndex: 9,
       columnHeader: "VALUE",
       filterType: "INPUTTYPERANGE"
+    },
+    {
+      columnIndex: 10,
+      columnHeader: "STATUS",
+      filterType: "MULTISELECT"
     }
   ];
   const handleFetch = async () => {
@@ -394,7 +398,7 @@ const DsTenderTable: React.FC<DsTenderTableProps> = ({
           columnIndex: 9,
           className: "cell",
           content: t.value,
-          filterValue: parseFloat(t.value ?? 0),
+          filterValue: parseFloat(t.value.replaceAll(",", "") ?? 0),
           contentType: "number"
         },
         {
@@ -404,13 +408,12 @@ const DsTenderTable: React.FC<DsTenderTableProps> = ({
           content: t.status ? (
             <DsStatusIndicator
               type="user_defined"
-              className={`${
-                t?.status?.tenderStatus
-                  ? styles[
-                      t?.status?.tenderStatus?.replace(" ", "_").toLowerCase()
-                    ]
-                  : ""
-              }`}
+              className={`${t?.status?.tenderStatus
+                ? styles[
+                t?.status?.tenderStatus?.replaceAll(" ", "_").toLowerCase()
+                ]
+                : ""
+                }`}
               label={t.status.tenderStatus + " "}
               comment={
                 t.status?.message
@@ -441,7 +444,7 @@ const DsTenderTable: React.FC<DsTenderTableProps> = ({
     handleFetch();
   }, []);
 
-  useEffect(() => {});
+  useEffect(() => { });
 
   useEffect(() => {
     console.log("Data updated:", data);

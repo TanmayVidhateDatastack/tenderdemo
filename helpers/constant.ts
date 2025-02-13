@@ -79,7 +79,6 @@ export const searchTransporterURL = apiHostUrl + "/customers/filter?name=";
 export const getTransporterURL = apiHostUrl + "/customers/";
 export const getAllStatusLogURL = apiHostUrl + "/status";
 
-//Tender Order Jsons
 export const getAllTenders = apiHostUrl + "/tenders";
 export const getAllMetaData = apiHostUrl + "/tenderMetadata";
 
@@ -88,6 +87,9 @@ export const getTenderUserRoles = apiHostUrl + "/maker";
 // export const getTenderUserRoles = apiHostUrl + "/checker";
 // export const getTenderUserRoles = apiHostUrl + "/homanager";
 // export const getTenderUserRoles = apiHostUrl + "/accountance";
+
+export const getTenderSearchProducts =
+  apiHostUrl + "/tenderproducts/filter?name=";
 
 export const DsStatus: Record<string, dsStatus> = {
   DRFT: "Draft",
@@ -119,6 +121,12 @@ export type dsStatus =
   | "Awarded"
   | "Under Approval"
   | "Approval";
+
+export const DsTenderProductStatus: Record<string, dsTenderProductStatus> = {
+  CRET: "Create",
+  UPDT: "Update"
+};
+export type dsTenderProductStatus = "Create" | "Update";
 // export type bankDetail = {
 //   bankName: string;
 //   accountNumber: string;

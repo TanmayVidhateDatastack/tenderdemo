@@ -117,25 +117,27 @@
   --btngroup-text-primary-hover: #4f54a4;
 
   /*status indicator colors*/
-  --under-approval: #e2bb1f1a;
+  --under-approval-o: #e2bb1f1a;
   --under-approval-text: #e2bb1f;
-  --pending: #cc84001a;
+  --pending-o: #cc84001a;
   --pending-text: #cc8400;
-  --under-review: #6ec4e81a;
+  --under-review-o: #6ec4e81a;
   --under-review-text: #6ec4e8;
-  --approved: #28a7451a;
+  --approved-o: #28a7451a;
   --approved-text: #28a745;
-  --submitted: #007bff1a;
+  --approval-o: #28a7451a;
+  --approval-text: #28a745;
+  --submitted-o: #007bff1a;
   --submitted-text: #007bff;
-  --inProcess: #6f42c11a;
+  --inProcess-o: #6f42c11a;
   --inProcess-text: #6f42c1;
-  --cancelled: #dc35451a;
+  --cancelled-o: #dc35451a;
   --cancelled-text: #dc3545;
 
   /*Tender status colors*/
   --draft-text:#b0b0b0;
-  --draft:#b0b0b01a;
-  --awarded:#dca5001a;
+  --draft-o:#b0b0b01a;
+  --awarded-o:#dca5001a;
   --awarded-text:#DCA500;
   
 }

@@ -21,13 +21,24 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
   data,
   setFilteredData
 }) => {
-  const [isFiltered, setIsFiltered] = useState<Record<string, boolean>>({
-    [DsStatus.UREV]: false,
-    [DsStatus.UAPR]: false,
-    [DsStatus.APRL]: false,
-    [DsStatus.APRV]: false,
-    nearSubmission: false
-  });
+  // const [isFiltered, setIsFiltered] = useState<Record<string, boolean>>({
+  //   [DsStatus.UREV]: false,
+  //   [DsStatus.UAPR]: false,
+  //   [DsStatus.APRL]: false,
+  //   [DsStatus.APRV]: false,
+  //   [(DsStatus.APRL, DsStatus.APRV, DsStatus.UAPR)]: false,
+  //   nearSubmission: false
+  // });
+
+  const initialFilterState = Object.fromEntries(
+    [...Object.values(DsStatus), "nearSubmission"].map((status) => [
+      status,
+      false
+    ])
+  );
+
+  const [isFiltered, setIsFiltered] =
+    useState<Record<string, boolean>>(initialFilterState);
 
   const dispatch = useAppDispatch<AppDispatch>();
   const role = useAppSelector((state: RootState) => state.user.role);
@@ -59,45 +70,82 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
       console.error("Fetch error: ", error);
     }
   };
-  const handleFilter = (value: string) => {
+
+  const handleFilter = (value: string | string[], message?: string) => {
     setIsFiltered((prev) => {
       const newFilterState = Object.fromEntries(
         Object.keys(prev).map((key) => [
           key,
-          key === value ? !prev[key] : false
+          Array.isArray(value)
+            ? value.includes(key)
+            : key === value
+              ? !prev[key]
+              : false
         ])
       );
 
-      if (!newFilterState[value]) {
-        setFilteredData(data);
-      } else {
-        let filteredRows = [...data];
-
-        if (value === "nearSubmission") {
-          filteredRows = filteredRows.filter((tender) => {
-            if (!tender.daystosubmit) return false; // If no data, ignore
-
-            const daysLeft = parseInt(
-              tender.daystosubmit.match(/\d+/)?.[0] || "0"
-            ); // Extract number
-            return daysLeft <= 15;
-          });
+      if (!Array.isArray(value)) {
+        if (!newFilterState[value]) {
+          setFilteredData(data);
         } else {
-          const lowerCaseValue = value.toLowerCase();
-          filteredRows = filteredRows.filter(
-            (tender) =>
-              tender.status?.tenderStatus?.toLowerCase() === lowerCaseValue
-          );
+          let filteredRows = [...data];
 
-          if (value === DsStatus.APRV) {
-            filteredRows = filteredRows.filter(
-              (tender) =>
-                tender.status?.message?.toLowerCase() === "fees pending"
+          if (value === "nearSubmission") {
+            filteredRows = filteredRows.filter((tender) => {
+              if (!tender.daystosubmit) return false; // If no data, ignore
+              const daysLeft = parseInt(
+                tender.daystosubmit.match(/\d+/)?.[0] || "0"
+              ); // Extract number
+              return daysLeft <= 20;
+            });
+          } else {
+            const lowerCaseValue = value.toLowerCase();
+            filteredRows = filteredRows.filter((tender) =>
+              message
+                ? tender.status?.tenderStatus?.toLowerCase() ===
+                lowerCaseValue &&
+                tender.status.message.toLowerCase() == message.toLowerCase()
+                : tender.status?.tenderStatus?.toLowerCase() === lowerCaseValue
             );
           }
+
+          setFilteredData(filteredRows);
+        }
+      } else {
+        // Toggle filter state for array values
+        const newFilterState = Object.fromEntries(
+          Object.keys(prev).map((key) => [
+            key,
+            value.includes(key) ? !prev[key] : prev[key]
+          ])
+        );
+
+        // Get active filters (only those which are true)
+        const activeFilters = Object.entries(newFilterState)
+          .filter(([_, isActive]) => isActive)
+          .map(([key]) => key);
+
+        // If no filters are active, reset data
+        if (activeFilters.length === 0) {
+          setFilteredData(data);
+        } else {
+          let filteredRows = [...data];
+
+          filteredRows = filteredRows.filter((tender) =>
+            activeFilters.some((status) =>
+              tender.status?.tenderStatus?.toLowerCase() ===
+              status.toLowerCase() &&
+              ((tender.status.message &&
+                message)
+                ? tender.status.message.toLowerCase() == message.toLowerCase()
+                : true)
+            )
+          );
+
+          setFilteredData(filteredRows);
         }
 
-        setFilteredData(filteredRows);
+        return newFilterState;
       }
 
       return newFilterState;
@@ -149,7 +197,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
             id="fees"
             buttonSize="btnLarge"
             buttonViewStyle="btnOutlined"
-            onClick={() => handleFilter(DsStatus.APRV)}
+            onClick={() => handleFilter(DsStatus.APRV, "fees pending")}
           />
         )}
         {approvalButtonVisible && (
@@ -159,7 +207,9 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
             id="approval"
             buttonSize="btnLarge"
             buttonViewStyle="btnOutlined"
-            onClick={() => handleFilter(DsStatus.APRL)}
+            onClick={() =>
+              handleFilter([DsStatus.UREV, DsStatus.APRV, DsStatus.UAPR], "fees paid")
+            }
           />
         )}
         {underApprovalButtonVisible && (
