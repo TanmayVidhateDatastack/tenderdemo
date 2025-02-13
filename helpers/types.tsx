@@ -3,7 +3,7 @@ import React, {
   Dispatch,
   SetStateAction,
   ReactNode,
-  ChangeEvent,
+  ChangeEvent
 } from "react";
 import { dsStatus, dsTenderProductStatus } from "./constant";
 
@@ -29,7 +29,10 @@ export interface advancedFilterComponent {
   rows: DsTableRow[];
   filterTypes: filterType[];
   customAttributes?: Record<string, string | number | boolean>;
-  handleApplyFilter?: (e: React.MouseEvent<HTMLElement>, rows: DsTableRow[]) => void;
+  handleApplyFilter?: (
+    e: React.MouseEvent<HTMLElement>,
+    rows: DsTableRow[]
+  ) => void;
 }
 
 export interface AccordionProps {
@@ -45,24 +48,24 @@ export interface DSButtonProps {
   tooltip?: string;
 
   type?:
-  | "standard"
-  | "split"
-  | "toggle"
-  | "icon_image"
-  | "button_icon"
-  | "upload"
-  | "tab"
-  | "count"
-  | "round";
+    | "standard"
+    | "split"
+    | "toggle"
+    | "icon_image"
+    | "button_icon"
+    | "upload"
+    | "tab"
+    | "count"
+    | "round";
   buttonSize?: "btnSmall" | "btnMedium" | "btnLarge";
   iconSize?: "iconSmall" | "iconMedium" | "iconLarge";
   buttonColor?:
-  | "btnPrimary"
-  | "btnSecondary"
-  | "btnDanger"
-  | "btnWarning"
-  | "btnDark"
-  | "btnInfo";
+    | "btnPrimary"
+    | "btnSecondary"
+    | "btnDanger"
+    | "btnWarning"
+    | "btnDark"
+    | "btnInfo";
   buttonViewStyle?: "btnText" | "btnContained" | "btnOutlined";
   disable?: boolean;
   className?: string;
@@ -88,12 +91,12 @@ export interface DSButtonGroupProps {
   buttonSize?: "btnSmall" | "btnMedium" | "btnLarge";
   iconSize?: "iconSmall" | "iconMedium" | "iconLarge";
   buttonColor?:
-  | "btnPrimary"
-  | "btnSecondary"
-  | "btnDanger"
-  | "btnWarning"
-  | "btnDark"
-  | "btnInfo";
+    | "btnPrimary"
+    | "btnSecondary"
+    | "btnDanger"
+    | "btnWarning"
+    | "btnDark"
+    | "btnInfo";
   className?: string;
   img?: string;
   startIcon?: React.ReactElement;
@@ -379,13 +382,13 @@ export interface ToasterProps {
   type: "success" | "bonus" | "info" | "error";
   handleClose: () => void;
   position:
-  | "top"
-  | "topleft"
-  | "topright"
-  | "middle"
-  | "bottom"
-  | "bottomleft"
-  | "bottomright";
+    | "top"
+    | "topleft"
+    | "topright"
+    | "middle"
+    | "bottom"
+    | "bottomleft"
+    | "bottomright";
   duration?: number;
 }
 
@@ -629,7 +632,6 @@ export class tableData {
   columns: tcolumn[] = [];
   rows: DsTableRow[] = [];
 }
-
 
 export class filterType {
   columnIndex: number = 0;
@@ -920,26 +922,26 @@ export type tenderFee = {
   paymentMode: string;
   paymentDueDate: string;
   notes: string;
-  status?:dsStatus;
+  status?: dsStatus;
   documents: Document[];
-}
+};
 export type applicableSupplyConditions = {
   type: string;
   notes: string;
   documents: Document[];
   status?: dsStatus;
-}
+};
 export type tenderSupplyCondition = {
   supplyPoint: string;
   consigneesCount: number;
   testReportRequirement: string;
   eligibility: string[];
   applicableConditions: applicableSupplyConditions[];
-}
+};
 export type searchProduct = {
   id: number;
   name: string;
-  packSize: string
+  packSize: string;
   mrpRate?: string | number;
   ptr?: string | number;
   directCost?: string | number;
@@ -950,7 +952,7 @@ export type TenderProduct = {
   packingSize?: string;
   id?: number;
   name?: string;
-  packSize?: string
+  packSize?: string;
   mrpRate?: string | number;
   ptr?: string | number;
   directCost?: string | number;
@@ -969,7 +971,7 @@ export type TenderProduct = {
 export type TenderDocument = {
   type: string;
   documents: Document[];
-}
+};
 export type TenderData = {
   customerId: number;
   customerLocationId: number;

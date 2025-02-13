@@ -48,7 +48,7 @@ const TenderDataContext = createContext<TenderDataContextType | undefined>(
 );
 
 export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
+  children
 }) => {
   const [tenderData, setTenderData] = useState<TenderData>({
     customerId: 0,
@@ -79,10 +79,10 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       consigneesCount: 0,
       testReportRequirement: "",
       eligibility: [],
-      applicableConditions: [],
+      applicableConditions: []
     },
     products: [],
-    documentList: [],
+    documentList: []
   });
 
   // ✅ Update top-level tender fields
@@ -92,7 +92,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   ) => {
     setTenderData((prev) => ({
       ...prev,
-      [key]: value,
+      [key]: value
     }));
   };
   // ✅ Update a specific tender fee field (Only if fee type exists)
@@ -105,7 +105,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       ...prev,
       fees: prev.fees.map((fee) =>
         fee.type === feeType ? { ...fee, [key]: value } : fee
-      ),
+      )
     }));
   };
   // ✅ Add a new tender fee
@@ -122,16 +122,16 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           paymentMode: "",
           paymentDueDate: "",
           notes: "",
-          documents: [],
-        },
-      ],
+          documents: []
+        }
+      ]
     }));
   };
   // ✅ Remove tender fee by type
   const removeTenderFeeByType = (feeType: string) => {
     setTenderData((prev) => ({
       ...prev,
-      fees: prev.fees.filter((fee) => fee.type !== feeType),
+      fees: prev.fees.filter((fee) => fee.type !== feeType)
     }));
   };
   // ✅ Update supply condition fields
@@ -143,8 +143,8 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       ...prev,
       supplyConditions: {
         ...prev.supplyConditions,
-        [key]: value,
-      },
+        [key]: value
+      }
     }));
   };
   // ✅ Update applicable condition fields
@@ -157,13 +157,13 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       ...prev,
       supplyConditions: {
         ...prev.supplyConditions,
-        applicableConditions:
-          prev.supplyConditions.applicableConditions.map((condition) =>
+        applicableConditions: prev.supplyConditions.applicableConditions.map(
+          (condition) =>
             condition.type === conditionType
               ? { ...condition, [key]: value }
               : condition
-          ),
-      },
+        )
+      }
     }));
   };
   // ✅ Add a document to the tender-level document list
@@ -174,9 +174,9 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         ...prev.documentList,
         {
           type: docType,
-          documents: documentList,
-        },
-      ],
+          documents: documentList
+        }
+      ]
     }));
   };
   const addDocumentToExistingType = (docType: string, document: Document) => {
@@ -186,14 +186,14 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         doc.type === docType
           ? { ...doc, documents: [...doc.documents, document] }
           : doc
-      ),
+      )
     }));
   };
   // ✅ Add a new tender product
   const addTenderProduct = (product: TenderProduct) => {
     setTenderData((prev) => ({
       ...prev,
-      products: [...prev.products, product],
+      products: [...prev.products, product]
     }));
   };
   // ✅ Update a tender product field
@@ -206,7 +206,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       ...prev,
       products: prev.products.map((product) =>
         product.id === id ? { ...product, [key]: value } : product
-      ),
+      )
     }));
   };
   // ✅ Add a new applicable condition
@@ -221,7 +221,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             type,
             notes: "",
             documents: []
-          },
+          }
         ]
       }
     }));
@@ -234,12 +234,10 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
 
       supplyConditions: {
         ...prev.supplyConditions,
-        applicableConditions:
-          prev.supplyConditions.applicableConditions.filter(
-            (condition) => condition.type !== conditionType
-          )
+        applicableConditions: prev.supplyConditions.applicableConditions.filter(
+          (condition) => condition.type !== conditionType
+        )
       }
-
     }));
   };
 

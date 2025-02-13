@@ -1,5 +1,7 @@
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
-import DsCsvUpload from "@/Elements/DsComponents/DsButtons/dsCsvUpload";
+import DsCsvUpload, {
+  getFilesFromLocalStorage
+} from "@/Elements/DsComponents/DsButtons/dsCsvUpload";
 import Ds_checkbox from "@/Elements/DsComponents/DsCheckbox/dsCheckbox";
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import DsSingleSelect from "@/Elements/DsComponents/dsSelect/dsSingleSelect";
@@ -9,6 +11,8 @@ import styles from "./deposite.module.css";
 import calender from "@/Icons/smallIcons/calender.svg";
 import eleStyles from "./tender.module.css";
 import { DsSelectOption } from "@/helpers/types";
+import { useTenderData } from "../TenderDataContextProvider";
+import TextArea from "@/Elements/DsComponents/DsInputs/dsTextArea";
 
 export type tenderDocument = {
   name: string;
@@ -41,6 +45,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
   paidBy,
   downloadVisible = false
 }) => {
+  const { updateTenderFee } = useTenderData();
   return (
     <>
       <div>
@@ -71,6 +76,13 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             className={styles.fieldColors}
             label={"Amount"}
             placeholder="Please type here"
+            onChange={(e) => {
+              updateTenderFee(
+                id.replace("DocumentView", ""),
+                "amount",
+                e.target.value
+              );
+            }}
           ></DsTextField>
           <DsSingleSelect
             className={styles.fieldColors}
@@ -78,6 +90,15 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             options={paidBy}
             label="Paid by"
             placeholder={"Please select here"}
+            setSelectOption={(option) => {
+              if (typeof option.value == "string") {
+                updateTenderFee(
+                  id.replace("DocumentView", ""),
+                  "paidBy",
+                  option.value
+                );
+              }
+            }}
           ></DsSingleSelect>
           <DsSingleSelect
             className={styles.fieldColors}
@@ -85,29 +106,68 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             options={mode}
             label="Modes"
             placeholder={"Please search and select here"}
+            setSelectOption={(option) => {
+              if (typeof option.value == "string") {
+                updateTenderFee(
+                  id.replace("DocumentView", ""),
+                  "paymentMode",
+                  option.value
+                );
+              }
+            }}
           ></DsSingleSelect>
           <DsTextField
             className={styles.fieldColors}
             label="Due Date"
             placeholder="DD/MM/YYYY"
             iconEnd={<Image src={calender} alt="icon" />}
+            onChange={(e) => {
+              updateTenderFee(
+                id.replace("DocumentView", ""),
+                "paymentDueDate",
+                e.target.value
+              );
+            }}
           ></DsTextField>
         </div>
 
         <div className={styles.notes}>
           <h4>Notes</h4>
-          <DsTextField
+          <TextArea
             className={styles.fieldColors}
             placeholder="Please type here"
             disable={false}
+            onChange={(e) => {
+              updateTenderFee(
+                id.replace("DocumentView", ""),
+                "type",
+                e.target.value
+              );
+            }}
           />
         </div>
         <div>
           <DsCsvUpload
-            id="upload"
+            id={id + "UploadedDocuments"}
             label="Attach File"
             buttonViewStyle="btnText"
             buttonSize="btnSmall"
+            onSetFiles={(id) => {
+              getFilesFromLocalStorage(id).then((files) => {
+                if (files && files.length > 0) {
+                  const documentArray = files.map((file) => ({
+                    name: file.attributes.name,
+                    document: file.file
+                  }));
+
+                  updateTenderFee(
+                    id.replace("DocumentView", ""),
+                    "documents",
+                    documentArray
+                  );
+                }
+              });
+            }}
           ></DsCsvUpload>
         </div>
       </div>

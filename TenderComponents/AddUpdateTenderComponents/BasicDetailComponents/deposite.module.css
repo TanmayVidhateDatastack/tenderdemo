@@ -72,7 +72,7 @@
   }
   .optionBtn:hover{
     background-color: var(--text-primary-hover) !important;
-    color: var(--text-white) !important;
+    color: var(--text-primary) !important;
     border-radius: 25px !important;
   }
   .copyBtn{

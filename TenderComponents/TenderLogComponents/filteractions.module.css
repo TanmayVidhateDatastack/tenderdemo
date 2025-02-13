@@ -4,10 +4,71 @@
     align-items: center;
 }
 
-.submissionBtn.feesBtn.approvalBtn{
+.submissionBtn .feesBtn .approvalBtn{
     border: 1px solid var(--primary) !important;
     color: var(--primary) !important;
 }
+.submissionBtn:hover .feesBtn:hover .approvalBtn:hover{
+    border: 1px solid var(--primary) !important;
+    color: var(--primary) !important;
+    background-color: var(--backgroundt);
+}
 .filterBtn{
     color: var(--primary) !important;
+    border: 0px !important;
 }
+.filterBtn:hover{
+    background-color: var(--text-primary-hover) !important;
+}
+
+.deviation_pending {
+    background-color: var(--deviationpending-o) !important;
+    color: var(--deviationpending-text) !important;
+  }
+   
+  .approved {
+    background-color: var(--approved-o) !important;
+    color: var(--approved-text) !important;
+  }
+   
+  .cancelled {
+    background-color: var(--cancelled-o) !important;
+    color: var(--cancelled-text) !important;
+  }
+   
+  .ready_to_dispatch {
+    background-color: var(--readytodispatch-o) !important;
+    color: var(--readytodispatch-text) !important;
+  }
+   
+  .rejected {
+    background-color: var(--rejected-o) !important;
+    color: var(--rejected-text) !important;
+  }
+   
+  .open {
+    background-color: var(--open-o) !important;
+    color: var(--open-text) !important;
+  }
+   
+  .draft {
+    background-color: var(--draft-o) !important;
+    color: var(--draft-text) !important;
+  }
+
+  .approval {
+    background-color: var(--approval-o) !important;
+    color: var(--approval-text) !important;
+  }
+
+  .under_review {
+    background-color: var(--under-review-o) !important;
+    color: var(--under-review-text) !important;
+  }
+
+  .under_approval {
+    background-color: var(--under-approval-o) !important;
+    color: var(--under-approval-text) !important;
+  }
+   
+   

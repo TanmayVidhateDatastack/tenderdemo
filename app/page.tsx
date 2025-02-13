@@ -1,16 +1,25 @@
 "use client";
 
-import TableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableComponent";
 import DsApplication from "@/Elements/ERPComponents/DsApplicationComponents/DsApplication";
 import DsNavTo from "@/Elements/ERPComponents/DsNavigationComponent/DsNavTo";
 import styles from "./page.module.css";
+import DsTenderTable from "@/TenderComponents/TenderLogComponents/DsTenderTable";
 import DsFilterActions from "@/TenderComponents/TenderLogComponents/DsFilterActions";
-import DsPane from "@/Elements/DsComponents/DsPane/DsPane";
+import add from "@/Icons/smallIcons/add.svg";
+import Image from "next/image";
+import { useState } from "react";
 import { generatePatchDocument } from "@/helpers/Method/UpdatePatchObjectCreation";
 
 export default function Home() {
-  
+  const [data, setData] = useState<Tender[]>([]); //for table data
+  const [filteredData, setFilteredData] = useState<Tender[]>([]); //for filtered table data
 
+  // useEffect(() => {
+  //   if (data || filteredData) {
+  //     console.log("data fetched from table : ", data);
+  //     console.log("filtereddata fetched from table : ", filteredData);
+  //   }
+  // }, [data, filteredData]);
 
   const originalObject = {
     id: 4211,
@@ -27,15 +36,15 @@ export default function Home() {
         city: "New York",
         state: "1",
         pinCode: "10001",
-        isPrimary: "Y",
-      },
+        isPrimary: "Y"
+      }
     },
     orderItems: [
       { id: 4212, productId: 2, requestedQuantity: 25 },
-      { id: 4213, productId: 6, requestedQuantity: 19 },
-    ],
+      { id: 4213, productId: 6, requestedQuantity: 19 }
+    ]
   };
-  
+
   const updatedObject = {
     id: 4211,
     purchaseOrderNumber: "",
@@ -51,17 +60,16 @@ export default function Home() {
         city: "New York",
         state: "1",
         pinCode: "10001",
-        isPrimary: "Y",
-      },
+        isPrimary: "Y"
+      }
     },
     orderItems: [
       { id: 4212, productId: 2, requestedQuantity: 35 },
       { productId: 7, requestedQuantity: 20 },
-      { productId: 8, requestedQuantity: 200 },
-    ],
+      { productId: 8, requestedQuantity: 200 }
+    ]
   };
 
-  
   const result = generatePatchDocument(originalObject, updatedObject);
   console.log(result);
   return (
@@ -70,19 +78,21 @@ export default function Home() {
         appTitle="Tender"
         appMenu={
           <div className={styles.filterNavBar}>
-            <DsFilterActions />
-            <DsNavTo label="New" location="Tender/New" />
+            <DsFilterActions data={data} setFilteredData={setFilteredData} />
+            <DsNavTo
+              startIcon={<Image src={add} alt="new" />}
+              label="New"
+              location="Tender/New"
+            />
           </div>
         }
       >
-        <TableComponent
-          className={""}
-          id={""}
-          columns={[]}
-          rows={[]}
-        ></TableComponent>
+        <DsTenderTable
+          setData={setData}
+          data={data}
+          filteredData={filteredData}
+        />
       </DsApplication>
-      <DsPane id="y"></DsPane>
     </>
   );
 }

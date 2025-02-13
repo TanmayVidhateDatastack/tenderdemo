@@ -79,13 +79,17 @@ export const searchTransporterURL = apiHostUrl + "/customers/filter?name=";
 export const getTransporterURL = apiHostUrl + "/customers/";
 export const getAllStatusLogURL = apiHostUrl + "/status";
 
-
-
 export const getAllTenders = apiHostUrl + "/tenders";
 export const getAllMetaData = apiHostUrl + "/tenderMetadata";
 
-export const getTenderSearchProducts=apiHostUrl+"/tenderproducts/filter?name="
+//Tender User Roles
+export const getTenderUserRoles = apiHostUrl + "/maker";
+// export const getTenderUserRoles = apiHostUrl + "/checker";
+// export const getTenderUserRoles = apiHostUrl + "/homanager";
+// export const getTenderUserRoles = apiHostUrl + "/accountance";
 
+export const getTenderSearchProducts =
+  apiHostUrl + "/tenderproducts/filter?name=";
 
 export const DsStatus: Record<string, dsStatus> = {
   DRFT: "Draft",
@@ -97,10 +101,13 @@ export const DsStatus: Record<string, dsStatus> = {
   RJCT: "Rejected",
   DSPT: "Ready To Dispatch",
   PFMA: "Proforma",
-  CMPL: "Completed"
+  CMPL: "Completed",
+  UREV: "Under Review",
+  UAPR: "Under Approval",
+  APRL: "Approval"
 };
 export type dsStatus =
-   "Draft"
+  | "Draft"
   | "Submitted"
   | "Deviation Pending"
   | "Open"
@@ -111,13 +118,15 @@ export type dsStatus =
   | "Proforma"
   | "Completed"
   | "Under Review"
-  | "Awarded";
+  | "Awarded"
+  | "Under Approval"
+  | "Approval";
 
-  export const DsTenderProductStatus:Record<string,dsTenderProductStatus>={
-    CRET:"Create",
-    UPDT:"Update"
-  }
-export type dsTenderProductStatus="Create"|"Update";
+export const DsTenderProductStatus: Record<string, dsTenderProductStatus> = {
+  CRET: "Create",
+  UPDT: "Update"
+};
+export type dsTenderProductStatus = "Create" | "Update";
 // export type bankDetail = {
 //   bankName: string;
 //   accountNumber: string;
