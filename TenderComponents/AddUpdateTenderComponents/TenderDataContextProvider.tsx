@@ -5,6 +5,7 @@ import {
   tenderFee,
   tenderSupplyCondition,
   TenderProduct,
+  Company,
 } from "@/helpers/types";
 import React, { createContext, useContext, useState } from "react";
 
@@ -36,7 +37,7 @@ interface TenderDataContextType {
   updateTenderProduct: (
     id: number,
     key: keyof TenderProduct,
-    value: string | number
+    value: string | number|Company
   ) => void;
   addApplicableCondition: (type: string) => void;
   removeApplicableCondition: (conditionType: string) => void;
@@ -199,7 +200,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   const updateTenderProduct = (
     id: number,
     key: keyof TenderProduct,
-    value: string | number
+    value: string | number|Company
   ) => {
     setTenderData((prev) => ({
       ...prev,

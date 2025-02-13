@@ -1,4 +1,4 @@
-import ProductSearch from "@/TenderComponents/AddUpdateTenderComponents/ProductComponents/productSearch";
+import ProductSearch from "@/TenderComponents/AddUpdateTenderComponents/ProductComponents/companySearch";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import { Dispatch, SetStateAction, useState } from "react";
 import { getProductURL, DsStatus } from "../../../helpers/constant";

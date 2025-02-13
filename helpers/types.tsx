@@ -912,7 +912,6 @@ export type Document = {
   name: string;
   document: File;
 }
-
 export type tenderFee = {
   type: string;
   amount: number;
@@ -957,7 +956,7 @@ export type TenderProduct = {
   directCost?: string | number;
   LQR?: number;
   customerLprValue?: number;
-  customerLprTo?: number;
+  customerLprTo?: Company;
   proposedRate?: number;
   PTRpercent?: number;
   stockistDiscount?: number;
@@ -998,4 +997,8 @@ export type TenderData = {
   supplyConditions: tenderSupplyCondition;
   products: TenderProduct[];
   documentList: TenderDocument[];
-}; 
+};
+export type Company={
+  id:number;
+  name:string;
+}

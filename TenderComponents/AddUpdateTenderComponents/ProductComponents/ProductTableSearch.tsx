@@ -3,7 +3,7 @@ import DsSearchComponent from "@/Elements/ERPComponents/DsSearchComponent/search
 import { getTenderSearchProducts } from "@/helpers/constant";
 import {  TenderProduct } from "@/helpers/types";
 import { useState } from "react";
-import { areSearchProduct } from "./productSearch";
+import { areSearchProduct } from "./companySearch";
 
 interface TableSearchProps {
   tableRowIndex: number;

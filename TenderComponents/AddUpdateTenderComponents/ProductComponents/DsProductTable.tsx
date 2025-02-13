@@ -2,12 +2,9 @@ import React, { useEffect, useMemo, useState } from "react";
 import TableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableComponent";
 import { tableData, tcolumn, DsTableRow, TenderProduct } from "@/helpers/types";
 import { useTenderData } from "../TenderDataContextProvider";
-import DsDataList from "@/Elements/DsComponents/DsInputs/dsDatalist";
-import DsInfoDisplay from "@/Elements/ERPComponents/DsInfoDisplay/DsInfoDisplay";
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
-import fetchData from "@/helpers/Method/fetchData";
 import ProductTableSearch from "./ProductTableSearch";
-import { DsTenderProductStatus } from "@/helpers/constant";
+import DsCustomerLPR from "./CustomerLpr";
 
 const DsProductTable: React.FC = () => {
   const { tenderData, updateTenderProduct } = useTenderData();
@@ -111,7 +108,7 @@ const DsProductTable: React.FC = () => {
       { columnIndex: 8, content: product?.dataSource == "saved" ? product.LQR?.toString() || "-" : "-" },
       {
         columnIndex: 9, content: product?.dataSource == "saved" ?
-          <CustomerLPR index={index + 1} lprValue={product.customerLprValue} lprTo={product.customerLprTo} onValueChange={(e)=>handleFieldChange(index,"customerLprValue",e.target.value)} onCompanyChange={(company)=>handleFieldChange(index,"customerLprTo",company.id)} /> : "-"
+          <DsCustomerLPR index={index + 1} lprValue={product.customerLprValue} lprTo={product.customerLprTo} onValueChange={(value) => handleFieldChange(index, "customerLprValue", Number(value))} onCompanyChange={(company) => handleFieldChange(index, "customerLprTo", company.id)} /> : "-"
       },
       {
         columnIndex: 10, content: product?.dataSource == "saved" ?
