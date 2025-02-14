@@ -3,14 +3,17 @@ import { SetStateAction } from "react";
 import DsAddProduct from "./addProduct";
 import DsProductTable from "./DsProductTable";
 
-const DsTenderProduct: React.FC = ({ productList, setProductlist }) => {
+const DsTenderProduct: React.FC<{
+  productList: TenderProduct[];
+  setProductList: (product: TenderProduct) => void;
+}> = ({ productList, setProductlist }) => {
   return (
     <>
       <div>
-        <DsAddProduct></DsAddProduct>
+        <DsAddProduct setProductList={setProductlist}></DsAddProduct>
         {/* <DsProductKpis productData={productList}></DsProductKpis> */}
       </div>
-      <DsProductTable/>
+      <DsProductTable />
     </>
   );
 };

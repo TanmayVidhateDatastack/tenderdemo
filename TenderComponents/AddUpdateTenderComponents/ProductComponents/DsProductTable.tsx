@@ -5,6 +5,7 @@ import { useTenderData } from "../TenderDataContextProvider";
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import ProductTableSearch from "./ProductTableSearch";
 import DsCustomerLPR from "./CustomerLpr";
+import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 
 const DsProductTable: React.FC = () => {
   const { tenderData, updateTenderProduct } = useTenderData();
@@ -137,7 +138,7 @@ const DsProductTable: React.FC = () => {
     <div className="tender-product-container">
       {tenderProductTable && <TableComponent className={tenderProductTable.className} id={tenderProductTable.id} columns={tenderProductTable.columns} rows={tenderProductTable.rows} />}
       <div className="table-actions">
-        <button onClick={handleSave} disabled={!hasChanges} className="save-button">Save Changes</button>
+        <DsButton onClick={handleSave} disable={!hasChanges} className="save-button">Save Changes</DsButton>
       </div>
     </div>
   );

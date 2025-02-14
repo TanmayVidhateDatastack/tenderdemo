@@ -86,6 +86,7 @@ export default function Home() {
             />
           </div>
         }
+        pageName="LogPage"
       >
         <DsTenderTable
           setData={setData}

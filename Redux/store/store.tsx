@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import tableSlice from "../slice/TableSlice/tableSlice";
+import tabSlice from "../slice/TabSlice/TabSlice";
 import userSlice from "../slice/UserSlice/userSlice";
 import permissionSlice from "../slice/PermissionSlice/permissionSlice";
  
@@ -7,7 +8,8 @@ export const store = configureStore({
   reducer: {
     table: tableSlice,
     user: userSlice,
-    permissions: permissionSlice
+    permissions: permissionSlice,
+    tab:tabSlice,
   }
 });
  

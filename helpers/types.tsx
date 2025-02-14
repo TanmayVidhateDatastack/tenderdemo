@@ -304,6 +304,7 @@ export interface TabsProps {
   selectedTabId: string;
   tabs: tab[];
   children: React.ReactNode;
+  pageName: string; // Add this line
 }
 
 export interface tab {
@@ -314,7 +315,9 @@ export interface tab {
 export interface TabNavProps {
   selectedTabId: string;
   tabs: tab[];
+  pageName: string; // Add this line
 }
+
 
 export interface TabContextType {
   selectedTabId: string;
@@ -328,7 +331,9 @@ export interface TabsProviderProps {
 export interface TabProps {
   tabId: string;
   children: React.ReactNode;
+  pageName: string; // Add this line
 }
+
 
 export interface datalistOptions {
   //datalist attributes
@@ -573,6 +578,7 @@ export interface ApplicationProps {
   tabs?: tab[];
   selectedTabId?: string;
   isDataTable?: boolean;
+  pageName:string;
 }
 export interface ApplicationHeaderProps {
   children: React.ReactNode;

@@ -1,4 +1,4 @@
-import ProductSearch from "@/TenderComponents/AddUpdateTenderComponents/ProductComponents/companySearch";
+import ProductSearch from "@/TenderComponents/AddUpdateTenderComponents/ProductComponents/productSearch";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import { Dispatch, SetStateAction, useState } from "react";
 import { getProductURL, DsStatus } from "../../../helpers/constant";
@@ -9,15 +9,14 @@ import DsTextField from "../../../Elements/DsComponents/DsInputs/dsTextField";
 
 export interface addProductProps {
   orderStatus?: string;
-  setProductList: Dispatch<SetStateAction<TenderProduct[]>>;
+  setProductList: (product: TenderProduct) => void;
 }
 
 const DsAddProduct: React.FC<addProductProps> = ({
   orderStatus,
-  setProductList
+  setProductList,
 }) => {
   const [selectedProductId, setSelectedProductId] = useState<number>();
-
 
   const [qtyInputVal, setQtyInputVal] = useState<string>("");
 
@@ -26,13 +25,13 @@ const DsAddProduct: React.FC<addProductProps> = ({
       ?.value;
     console.log("selected product id = ", quantity);
 
-    if (selectedProductId ) {
+    if (selectedProductId) {
       const product = await fetchData({
         url:
-          getProductURL + selectedProductId + "?requestedQuantity=" + quantity
+          getProductURL + selectedProductId + "?requestedQuantity=" + quantity,
       });
       if (product.statusCode === 200) {
-        setProductList((prev) => [...prev, product.result]);
+        setProductList(product.result);
         setSelectedProductId(0);
         setQtyInputVal("");
       }
@@ -44,7 +43,7 @@ const DsAddProduct: React.FC<addProductProps> = ({
     <div className={styles.input}>
       <ProductSearch
         orderStatus={orderStatus}
-        setSelectedProductId={(id)=>setSelectedProductId(id)}
+        setSelectedProductId={(id) => setSelectedProductId(id)}
       ></ProductSearch>
       {/* <TextField
           options={searchProducts}
