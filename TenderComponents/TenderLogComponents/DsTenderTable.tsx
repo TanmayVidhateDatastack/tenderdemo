@@ -6,7 +6,7 @@ import { DsTableRow, tableData, Tender } from "@/helpers/types";
 import { getAllTenders } from "@/helpers/constant";
 import DsTableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableComponent";
 import institutional from "@/Icons/institutional.svg";
-import test from "@/Icons/searchicon.svg";
+import corporate from "@/Icons/corporate.svg";
 import Image from "next/image";
 import AdvancedFilterComponent from "@/Elements/DsComponents/AdvancedFilterComponent/AdvancedFilterComponent";
 import DsPane, { ClosePane } from "@/Elements/DsComponents/DsPane/DsPane";
@@ -137,7 +137,7 @@ const DsTenderTable: React.FC<DsTenderTableProps> = ({
               height={50}
             />
           ) : (
-            <Image src={test} alt="test" width={50} height={50} />
+            <Image src={corporate} alt="corporate" width={50} height={50} />
           ),
         customAttributes: { iconValue: item?.type?.toString() ?? "" },
         content: [
@@ -327,7 +327,7 @@ const DsTenderTable: React.FC<DsTenderTableProps> = ({
             height={50}
           />
         ) : (
-          <Image src={test} alt={"test"} width={50} height={50} />
+          <Image src={corporate} alt={"corporate"} width={50} height={50} />
         ),
       customAttributes: { iconValue: t?.type?.toString() ?? "" },
       content: [
@@ -463,7 +463,7 @@ const DsTenderTable: React.FC<DsTenderTableProps> = ({
 
   return (
     <>
-      <DsApplication appTitle="">
+      <DsApplication appTitle=" " pageName={""}>
         <DsTableComponent
           className={tempTableData.className}
           id={tempTableData.id}

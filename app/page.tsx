@@ -9,6 +9,9 @@ import add from "@/Icons/smallIcons/add.svg";
 import Image from "next/image";
 import { useState } from "react";
 import { generatePatchDocument } from "@/helpers/Method/UpdatePatchObjectCreation";
+import { Tender } from "@/helpers/types";
+import DsTotalTenders from "@/TenderComponents/TenderLogComponents/DsTotalTender";
+import DsTotalValues from "@/TenderComponents/TenderLogComponents/DsTotalValues";
 
 export default function Home() {
   const [data, setData] = useState<Tender[]>([]); //for table data
@@ -85,9 +88,15 @@ export default function Home() {
               location="Tender/New"
             />
           </div>
+         
         }
         pageName="LogPage"
+     
       >
+         <div className={styles.totalCal}>
+        <DsTotalTenders data={data}/>
+        <DsTotalValues data={data}/>
+        </div>
         <DsTenderTable
           setData={setData}
           data={data}

@@ -252,3 +252,9 @@ a.secondary {
 .tableContainer{
   flex:1;
 }
+.totalCal {
+  display: flex!important;
+  flex-direction: flex-end!important;
+  justify-content: flex-end!important;
+  margin-top: 0px !important;
+}

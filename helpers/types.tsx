@@ -288,12 +288,13 @@ export interface DsStatusIndicatorProps {
 export interface countProps {
   Title: string; // The title of the summary
   Value: string; // The overall value for the summary
-  statusValues: Array<{ status?: string; value?: string }>; // An array of objects containing status and its respective value
+  statusValues: Array<{ status?: string; value?: string,addimage?:React.ReactElement; }>;
+  // An array of objects containing status and its respective value
 }
 export interface countVariationProps {
   Title: string; // The title of the summary
   Value: string; // The overall value for the summary
-  statusValues: Array<{ status: string; value: string }>; // An array of objects containing status and its respective value
+  statusValues: Array<{ status: string; value: string ,addimage?:React.ReactElement;}>; // An array of objects containing status and its respective value
 }
 export interface Ds_Tablemenu_Props {
   type?: string;
@@ -1010,3 +1011,35 @@ export type Company={
   id:number;
   name:string;
 }
+
+
+
+
+export type Tender = {
+  customerName: string;
+  submittionDate: string;
+  daystosubmit: string;
+  tenderId: string;
+  type:string;
+  tenderType: string;
+  depot: string;
+  appliedBy: string;
+  suppliedBy: string;
+  preparedBy: string;
+  value: string;
+  status: tenderStatus;
+  customAttributes?: { iconValue: string }; // ✅ Added
+};
+
+ export type TenderDetails = {
+  code: number;
+  error: string | null;
+  message: string;
+  result: Tender[];
+};
+export type tenderStatus = {
+  tenderStatus?: string;
+  statusDescription?: string;
+  messageType?: string;
+  message?: string;
+};
