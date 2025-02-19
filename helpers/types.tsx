@@ -153,6 +153,22 @@ export interface addressProps {
   address: string; // User's location
 }
 
+
+export interface menuprops {
+  column: tcolumn;
+  className: string;
+  children?: React.ReactNode;
+  sortDataOnlyOnSpecifiedColumn: (columnIndex: number) => void;
+  clearSortOnColumn: (e: React.MouseEvent, columnIndex: number) => void;
+  sortDataUsingInputValueOnlyOnSpecifiedColumn: (
+    e: React.ChangeEvent<HTMLElement>,
+    columnIndex?: number
+  ) => void;
+  manageColumns?: () => void;
+  hideShowColumn: (columnIndex: string | number) => void;
+  sortTableOnNumber?: (columnIndex: number, sortType: "ASC" | "DESC") => void;
+}
+ 
 export interface InfoCardProps {
   title: string; // The title of the info card
   quantity: string; // The quantity value displayed in the info card
@@ -580,11 +596,13 @@ export interface ApplicationProps {
   selectedTabId?: string;
   isDataTable?: boolean;
   pageName:string;
+  className?:string;
 }
 export interface ApplicationHeaderProps {
   children: React.ReactNode;
   appTitle: string;
   hasPrevious: boolean;
+  className?:string;
 }
 export interface demoProps {
   title: string;
@@ -1029,6 +1047,7 @@ export type Tender = {
   value: string;
   status: tenderStatus;
   customAttributes?: { iconValue: string }; // ✅ Added
+  [key: string]: any; // Allows indexing with a string
 };
 
  export type TenderDetails = {

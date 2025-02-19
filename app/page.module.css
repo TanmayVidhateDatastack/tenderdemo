@@ -258,3 +258,15 @@ a.secondary {
   justify-content: flex-end!important;
   margin-top: 0px !important;
 }
+.MenuBtn
+{
+  color:var( --green) !important;
+  font-weight:bold!important;
+}
+.MenuBtn:hover
+{
+  background-color:var(--green-hover)!important;
+}
+.newbutton:hover  {
+ background-color: white; /* Makes the image white */
+}

@@ -22,7 +22,7 @@ interface DsTenderTableProps {
 const DsTenderTable: React.FC<DsTenderTableProps> = ({
   data,
   filteredData,
-  setData
+  setData,
 }) => {
   const [tempTableData, setTempTableData] = useState<tableData>({
     className: "sample-table",
@@ -33,200 +33,242 @@ const DsTenderTable: React.FC<DsTenderTableProps> = ({
     columns: [
       {
         columnIndex: 0,
-        className: "header-column",
+        className: "  cell-customer cellfontsize text-dark-2 ",
         columnHeader: "CUSTOMER NAME",
         isHidden: false,
         sort: "ASC",
-        columnContentType: "string"
+        columnContentType: "string",
       },
       {
         columnIndex: 1,
-        className: "header-column",
+        className: "  cell-submissiondate cellfontsize text-dark-2 ",
         columnHeader: "SUBMISSION DATE",
         isHidden: false,
         sort: "ASC",
-        columnContentType: "DATE"
+        columnContentType: "DATE",
       },
       {
         columnIndex: 2,
-        className: "header-column",
+        className: "cell-days-to-submit cellfontsize text-dark-2 ",
         columnHeader: "DAYS TO SUBMIT",
         isHidden: false,
         sort: "ASC",
-        columnContentType: "string"
+        columnContentType: "string",
       },
       {
         columnIndex: 3,
-        className: "header-column",
+        className: "header-column cell-tenderid cellfontsize text-dark-2 ",
         columnHeader: "TENDER ID",
         isHidden: false,
         sort: "ASC",
-        columnContentType: "number"
+        columnContentType: "number",
       },
       {
         columnIndex: 4,
-        className: "header-column",
+        className: " cell-tendertype cellfontsize  text-dark-2 ",
         columnHeader: "TENDER TYPE",
         isHidden: false,
         sort: "ASC",
-        columnContentType: "string"
+        columnContentType: "string",
       },
       {
         columnIndex: 5,
-        className: "header-column",
+        className: " cell-depot cellfontsize  text-dark-2 ",
         columnHeader: "DEPOT",
         isHidden: false,
         sort: "ASC",
-        columnContentType: "string"
+        columnContentType: "string",
       },
       {
         columnIndex: 6,
-        className: "header-column",
+        className: "cell-appliedby cellfontsize text-dark-2 ",
         columnHeader: "APPLIED BY",
         isHidden: false,
         sort: "ASC",
-        columnContentType: "string"
+        columnContentType: "string",
       },
       {
         columnIndex: 7,
-        className: "header-column",
+        className: " cell-suppliedby cellfontsize text-dark-2 ",
         columnHeader: "SUPPLIED BY",
         isHidden: false,
         sort: "ASC",
-        columnContentType: "string"
+        columnContentType: "string",
       },
       {
         columnIndex: 8,
-        className: "header-column",
+        className: "cell-preparedby cellfontsize text-dark-2 ",
         columnHeader: "PREPARED BY",
         isHidden: false,
         sort: "ASC",
-        columnContentType: "string"
+        columnContentType: "string",
       },
       {
         columnIndex: 9,
-        className: "header-column",
+        className: " cell-value cellfontsize  text-dark-2 ",
         columnHeader: "VALUE",
         isHidden: false,
         sort: "ASC",
-        columnContentType: "number"
+        columnContentType: "number",
       },
       {
         columnIndex: 10,
-        className: "header-column",
+        className: " cell-status cellfontsize text-dark-2 ",
         columnHeader: "STATUS",
         isHidden: false,
         sort: "NONE",
-        columnContentType: "reactNode"
-      }
+        columnContentType: "reactNode",
+      },
     ],
-    rows: []
+    rows: [],
   });
 
+  const calculateDueStatus = (submissionDate: string) => {
+    if (!submissionDate) return "-"; // Handle empty values
+  
+    const dateParts = submissionDate.split("/");
+    if (dateParts.length !== 3) return "-"; // Invalid format
+  
+    const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+    const subDate = new Date(formattedDate);
+    const currentDate = new Date();
+  
+    if (isNaN(subDate.getTime())) return "-"; // Invalid date
+  
+    const diffTime = subDate.getTime() - currentDate.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  
+    const result = diffDays < 0 ? `Overdue by ${Math.abs(diffDays)} days` : ` ${diffDays} Days to Left`;
+    console.log(`Submission Date: ${submissionDate}, Status: ${result}`);
+  
+    return result;
+  };
+  
+  
   useEffect(() => {
     if (filteredData && filteredData.length >= 0) {
       console.log("filter data in tabel : ", filteredData);
       const transformedRows: DsTableRow[] = filteredData.map((item, index) => ({
         rowIndex: index,
+        className: "cellRow logRow",
         rowIcon:
           item?.type === "institutional" ? (
-            <Image
-              src={institutional}
-              alt="institutional"
-              width={50}
-              height={50}
-            />
+            <div
+              style={{
+                width: "1.4rem",
+                height: "1.4rem",
+                position: "relative",
+              }}
+            >
+              <Image
+                src={institutional}
+                alt="institutional"
+                layout="fill"
+              objectFit="cover"
+              />
+            </div>
           ) : (
-            <Image src={corporate} alt="corporate" width={50} height={50} />
+            <div
+              style={{
+                width: "1.4rem",
+                height: "1.4rem",
+                position: "relative",
+              }}
+            >
+              <Image src={corporate} alt="corporate"
+              layout="fill"
+              objectFit="cover" />
+            </div>
           ),
         customAttributes: { iconValue: item?.type?.toString() ?? "" },
         content: [
           {
             columnIndex: 0,
-            className: "cell",
+            className: "cell-customer cellfontsize  text-dark-2 ",
             content: item.customerName || "-",
             filterValue: item.customerName || "-",
-            contentType: "string"
+            contentType: "string",
           },
           {
             columnIndex: 1,
-            className: "cell",
+            className: "cell-submissiondate cellfontsize",
             content: item.submittionDate || "-",
             filterValue: item.submittionDate || "-",
-            contentType: "string"
+            contentType: "string",
           },
           {
             columnIndex: 2,
-            className: "cell",
+            className: "cell-days-to-submit cellfontsize",
             content: item.daystosubmit || "-",
             filterValue: item.daystosubmit || "-",
-            contentType: "string"
+            contentType: "string",
           },
           {
             columnIndex: 3,
-            className: "cell",
+            className: "cell-tenderid cellfontsize",
             content: item.tenderId || "-",
             filterValue: item.tenderId || "-",
-            contentType: "string"
+            contentType: "string",
           },
           {
             columnIndex: 4,
-            className: "cell",
+            className: "cell-tendertype cellfontsize  text-dark-2 ",
             content: item.tenderType || "-",
             filterValue: item.tenderType || "-",
-            contentType: "string"
+            contentType: "string",
           },
           {
             columnIndex: 5,
-            className: "cell",
+            className: "cell-depot cellfontsize  text-dark-2 ",
             content: item.depot || "-",
             filterValue: item.depot || "-",
-            contentType: "string"
+            contentType: "string",
           },
           {
             columnIndex: 6,
-            className: "cell",
+            className: "cell-appliedby cellfontsize",
             content: item.appliedBy || "-",
             filterValue: item.appliedBy || "-",
-            contentType: "string"
+            contentType: "string",
           },
           {
             columnIndex: 7,
-            className: "cell",
+            className: "cell-suppliedby cellfontsize",
             content: item.suppliedBy || "-",
             filterValue: item.suppliedBy || "-",
-            contentType: "string"
+            contentType: "string",
           },
           {
             columnIndex: 8,
-            className: "cell",
+            className: "cell-preparedby cellfontsize",
             content: item.preparedBy || "-",
             filterValue: item.preparedBy || "-",
-            contentType: "string"
+            contentType: "string",
           },
           {
             columnIndex: 9,
-            className: "cell",
+            className: "cell-value cellfontsize  text-dark-2 ",
             content: item.value || "-",
             filterValue: parseFloat(item.value.replaceAll(",", "") ?? ""),
-            contentType: "number"
+            contentType: "number",
           },
           {
             columnIndex: 10,
-            className: "cell",
+            className: "cell-status cellfontsize",
             // content: item.status.tenderStatus || "-",
             content: (
               <DsStatusIndicator
                 type="user_defined"
                 label={item.status.tenderStatus + " "}
-                className={`${item?.status?.tenderStatus
-                  ? styles[
+                className={`${
                   item?.status?.tenderStatus
-                    ?.replace(" ", "_")
-                    .toLowerCase()
-                  ]
-                  : ""
-                  }`}
+                    ? styles[
+                        item?.status?.tenderStatus
+                          ?.replace(" ", "_")
+                          .toLowerCase()
+                      ]
+                    : ""
+                }`}
                 comment={
                   item.status?.message
                     ? typeof item.status.message === "object"
@@ -237,9 +279,9 @@ const DsTenderTable: React.FC<DsTenderTableProps> = ({
               />
             ),
             filterValue: item.status.tenderStatus,
-            contentType: "reactNode"
-          }
-        ]
+            contentType: "reactNode",
+          },
+        ],
       }));
 
       console.log("Final Transformed Rows:", transformedRows);
@@ -254,50 +296,50 @@ const DsTenderTable: React.FC<DsTenderTableProps> = ({
     {
       columnIndex: 0,
       columnHeader: "Customer name",
-      filterType: "CSV"
+      filterType: "CSV",
     },
     {
       columnIndex: 1,
       columnHeader: "Date ",
-      filterType: "DATE"
+      filterType: "DATE",
     },
     {
       columnIndex: 4,
       columnHeader: "Supply type",
-      filterType: "MULTISELECT"
+      filterType: "MULTISELECT",
     },
     {
       columnIndex: -1,
       columnHeader: "TYPE",
-      filterType: "ICONVALUE"
+      filterType: "ICONVALUE",
     },
     {
       columnIndex: 5,
       columnHeader: "Depot",
-      filterType: "MULTISELECT"
+      filterType: "MULTISELECT",
     },
 
     {
       columnIndex: 6,
       columnHeader: "Applied type",
-      filterType: "MULTISELECT"
+      filterType: "MULTISELECT",
     },
     {
       columnIndex: 7,
       columnHeader: "Supplied type",
-      filterType: "MULTISELECT"
+      filterType: "MULTISELECT",
     },
 
     {
       columnIndex: 9,
       columnHeader: "VALUE",
-      filterType: "INPUTTYPERANGE"
+      filterType: "INPUTTYPERANGE",
     },
     {
       columnIndex: 10,
       columnHeader: "STATUS",
-      filterType: "MULTISELECT"
-    }
+      filterType: "MULTISELECT",
+    },
   ];
   const handleFetch = async () => {
     await fetchData({ url: getAllTenders })
@@ -318,6 +360,7 @@ const DsTenderTable: React.FC<DsTenderTableProps> = ({
     console.log("Adding table data:", tender);
     const newRows: DsTableRow[] = tender.map((t, index) => ({
       rowIndex: index,
+      className: "cellRow ",
       rowIcon:
         t?.type === "institutional" ? (
           <Image
@@ -333,87 +376,90 @@ const DsTenderTable: React.FC<DsTenderTableProps> = ({
       content: [
         {
           columnIndex: 0,
-          className: "cell",
+          className: "cell-customer cellfontsize  text-dark-2 ",
           content: t.customerName,
           filterValue: t.customerName,
-          contentType: "string"
+          contentType: "string",
         },
         {
           columnIndex: 1,
-          className: "cell",
+          className: "cell-submissiondate cellfontsize",
           content: t.submittionDate,
           filterValue: t.submittionDate,
-          contentType: "string"
+          contentType: "string",
         },
         {
           columnIndex: 2,
-          className: "cell",
-          content: t.daystosubmit,
-          filterValue: t.daystosubmit,
-          contentType: "string"
+          className: "cell-days-to-submit cellfontsize",
+          content: t.submittionDate ? calculateDueStatus(t.submittionDate) : "-",
+          filterValue: t.submittionDate ? calculateDueStatus(t.submittionDate) : "-",
+          contentType: "string",
         },
         {
           columnIndex: 3,
-          className: "cell",
+          className: "cell-tenderid cellfontsize",
           content: t.tenderId,
           filterValue: t.tenderId,
-          contentType: "string"
+          contentType: "string",
         },
         {
           columnIndex: 4,
-          className: "cell",
+          className: "cell-tendertype cellfontsize text-dark-2 ",
           content: t.tenderType,
           filterValue: t.tenderType,
-          contentType: "string"
+          contentType: "string",
         },
         {
           columnIndex: 5,
-          className: "cell",
+          className: "cell-depot cellfontsize text-dark-2 ",
           content: t.depot,
           filterValue: t.depot,
-          contentType: "string"
+          contentType: "string",
         },
         {
           columnIndex: 6,
-          className: "cell",
+          className: "cell-appliedby cellfontsize",
           content: t.appliedBy,
           filterValue: t.appliedBy,
-          contentType: "string"
+          contentType: "string",
         },
         {
           columnIndex: 7,
-          className: "cell",
+          className: "cell-suppliedby cellfontsize",
           content: t.suppliedBy,
           filterValue: t.suppliedBy,
-          contentType: "string"
+          contentType: "string",
         },
         {
           columnIndex: 8,
-          className: "cell",
+          className: "cell-preparedby cellfontsize",
           content: t.preparedBy,
           filterValue: t.preparedBy,
-          contentType: "string"
+          contentType: "string",
         },
         {
           columnIndex: 9,
-          className: "cell",
+          className: "cell-value cellfontsize text-dark-2 ",
           content: t.value,
           filterValue: parseFloat(t.value.replaceAll(",", "") ?? 0),
-          contentType: "number"
+          contentType: "number",
         },
         {
           columnIndex: 10,
-          className: "cell",
+          className: "cell-status cellfontsize",
 
           content: t.status ? (
             <DsStatusIndicator
               type="user_defined"
-              className={`${t?.status?.tenderStatus
-                ? styles[
-                t?.status?.tenderStatus?.replaceAll(" ", "_").toLowerCase()
-                ]
-                : ""
-                }`}
+              className={`${
+                t?.status?.tenderStatus
+                  ? styles[
+                      t?.status?.tenderStatus
+                        ?.replaceAll(" ", "_")
+                        .toLowerCase()
+                    ]
+                  : ""
+              }`}
               label={t.status.tenderStatus + " "}
               comment={
                 t.status?.message
@@ -427,16 +473,16 @@ const DsTenderTable: React.FC<DsTenderTableProps> = ({
             "No Status"
           ),
           filterValue: t.status?.tenderStatus ?? "Unknown",
-          contentType: "reactNode"
-        }
-      ]
+          contentType: "reactNode",
+        },
+      ],
     }));
 
     console.log("New Rows:", newRows);
 
     setTempTableData((prevData) => ({
       ...prevData,
-      rows: newRows
+      rows: newRows,
     }));
   };
 
@@ -444,7 +490,7 @@ const DsTenderTable: React.FC<DsTenderTableProps> = ({
     handleFetch();
   }, []);
 
-  useEffect(() => { });
+  useEffect(() => {});
 
   useEffect(() => {
     console.log("Data updated:", data);
@@ -470,9 +516,11 @@ const DsTenderTable: React.FC<DsTenderTableProps> = ({
           hasSearch={tempTableData.hasSearch}
           columns={tempTableData.columns}
           hasIcons={true}
-          isSelectAble={true}
+          isSelectAble={false}
           rows={tempTableData.rows}
-          isFooterRequired={false}
+          isFooterRequired={true}
+          isSortable={true}
+      
         />
       </DsApplication>
       <DsPane id="y" side="right" title="Filter">
