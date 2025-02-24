@@ -92,7 +92,7 @@ export default function Home() {
              </div>
             <DsButton
             label="New"
-            icon={<div style={{ width: "1.05rem", height: "1.4rem", position: "relative"}}>
+            icon={<div className={styles.newbutton} style={{ width: "1.05rem", height: "1.4rem", position: "relative"}}>
             <Image
               src={add}
               layout="intrinsic"
