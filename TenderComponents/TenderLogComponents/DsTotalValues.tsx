@@ -47,10 +47,10 @@ const DsTotalValues: React.FC<TotalValuesProps> = React.memo(({ data }) => {
       createContext(
         "TotalValues",
         <Ds_SummaryCount
-          Title="Total Values"
-          Value={`₹${total}`} 
-          statusValues={formattedValues}
-        />,
+        Title="Total Values"
+        Value={`₹${Number(total).toFixed(0)}`}
+        statusValues={formattedValues.map(item => ({ ...item, value: Number(item.value).toFixed(0) }))}
+      />,
         true
       );
     }
@@ -68,7 +68,7 @@ const DsTotalValues: React.FC<TotalValuesProps> = React.memo(({ data }) => {
         closeContext("TotalValues");
       }}
     >
-      <DsInfoDisplay detailOf="Total Values (₹)" value={totalValue} />
+      <DsInfoDisplay detailOf="Total Values (₹)" value={Number(totalValue).toFixed(0)} />
     </div>
   );
 });
