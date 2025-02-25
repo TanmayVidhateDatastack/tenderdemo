@@ -270,3 +270,16 @@ a.secondary {
 .newbutton:hover  {
  background-color: white; /* Makes the image white */
 }
+.blackText {
+  color: var(--grey-700) ;
+}
+
+.orangeText {
+  color:var( --under-emd-pending);
+}
+
+.zeroText {
+  color: var(--grey-400);
+}
+
+

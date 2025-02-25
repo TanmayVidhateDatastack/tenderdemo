@@ -46,7 +46,7 @@ export default function Home() {
         },
         {
           columnIndex: 1,
-          className: "  cell-submissiondate  ",
+          className: "  cell-submissiondate text-dark-0   ",
           columnHeader: "SUBMISSION DATE",
           isHidden: false,
           sort: "ASC",
@@ -54,7 +54,7 @@ export default function Home() {
         },
         {
           columnIndex: 2,
-          className: "cell-days-to-submit ",
+          className: "cell-days-to-submit  ",
           columnHeader: "DAYS TO SUBMIT",
           isHidden: false,
           sort: "ASC",
@@ -62,7 +62,7 @@ export default function Home() {
         },
         {
           columnIndex: 3,
-          className: " cell-tenderid  ",
+          className: " cell-tenderid text-dark-0  ",
           columnHeader: "TENDER ID",
           isHidden: false,
           sort: "ASC",
@@ -86,7 +86,7 @@ export default function Home() {
         },
         {
           columnIndex: 6,
-          className: "cell-appliedby ",
+          className: "cell-appliedby text-dark-0 ",
           columnHeader: "APPLIED BY",
           isHidden: false,
           sort: "ASC",
@@ -94,7 +94,7 @@ export default function Home() {
         },
         {
           columnIndex: 7,
-          className: " cell-suppliedby",
+          className: " cell-suppliedby text-dark-0 ",
           columnHeader: "SUPPLIED BY",
           isHidden: false,
           sort: "ASC",
@@ -102,7 +102,7 @@ export default function Home() {
         },
         {
           columnIndex: 8,
-          className: "cell-preparedby   ",
+          className: "cell-preparedby text-dark-0   ",
           columnHeader: "PREPARED BY",
           isHidden: false,
           sort: "ASC",
@@ -110,8 +110,8 @@ export default function Home() {
         },
         {
           columnIndex: 9,
-          className: " cell-value ",
-          columnHeader: "VALUE",
+          className: " cell-value text-dark-1 ",
+          columnHeader: "VALUE (₹)",
           isHidden: false,
           sort: "ASC",
           columnContentType: "number",
@@ -145,7 +145,7 @@ export default function Home() {
         },
         {
           columnIndex: 1,
-          className: "  cell  cell-submissiondate ",
+          className: "  cell  cell-submissiondate text-dark-0  ",
           columnHeader: "SUBMISSION DATE",
           isHidden: false,
           sort: "ASC",
@@ -161,7 +161,7 @@ export default function Home() {
         },
         {
           columnIndex: 3,
-          className: " cell  cell-tenderid  ",
+          className: " cell  cell-tenderid  text-dark-0 ",
           columnHeader: "TENDER ID",
           isHidden: false,
           sort: "ASC",
@@ -185,7 +185,7 @@ export default function Home() {
         },
         {
           columnIndex: 6,
-          className: " cell cell-appliedby ",
+          className: " cell cell-appliedby text-dark-0 ",
           columnHeader: "APPLIED BY",
           isHidden: false,
           sort: "ASC",
@@ -193,7 +193,7 @@ export default function Home() {
         },
         {
           columnIndex: 7,
-          className: "   cell cell-suppliedby  ",
+          className: "   cell cell-suppliedby text-dark-0  ",
           columnHeader: "SUPPLIED BY",
           isHidden: false,
           sort: "ASC",
@@ -201,7 +201,7 @@ export default function Home() {
         },
         {
           columnIndex: 8,
-          className: " cell cell-preparedby  ",
+          className: " cell cell-preparedby text-dark-0  ",
           columnHeader: "PREPARED BY",
           isHidden: false,
           sort: "ASC",
@@ -209,8 +209,8 @@ export default function Home() {
         },
         {
           columnIndex: 9,
-          className: "  cell cell-value ",
-          columnHeader: "VALUE",
+          className: "  cell cell-value text-dark-1",
+          columnHeader: "VALUE(₹)",
           isHidden: false,
           sort: "ASC",
           columnContentType: "number",
@@ -227,28 +227,43 @@ export default function Home() {
       rows: [],
     });
 
+
     const calculateDueStatus = (submissionDate: string) => {
       if (!submissionDate) return "-"; // Handle empty values
     
       const dateParts = submissionDate.split("/");
       if (dateParts.length !== 3) return "-"; // Invalid format
     
-      const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
-      const subDate = new Date(formattedDate);
+      const day = parseInt(dateParts[0], 10);
+      const month = parseInt(dateParts[1], 10) - 1; // JavaScript months are 0-based
+      const year = parseInt(dateParts[2], 10);
+    
+      // Create submission date in UTC
+      const subDate = new Date(Date.UTC(year, month, day));
+      
+      // Get today's date in UTC (ignoring time)
       const currentDate = new Date();
+      const todayUTC = new Date(Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()));
     
-      if (isNaN(subDate.getTime())) return "-"; // Invalid date
+      if (isNaN(subDate.getTime())) return "-"; // Handle invalid date
     
-      const diffTime = subDate.getTime() - currentDate.getTime();
+      const diffTime = subDate.getTime() - todayUTC.getTime();
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     
-      const result = diffDays < 0 ? `Overdue by ${Math.abs(diffDays)} days` : ` ${diffDays} Days to Left`;
+      // Corrected logic: If diffDays <= 0, show "0 Days Left"
+      const result = diffDays <= 0 ? "0 Days Left" : `${diffDays} Days Left`;
+    
       console.log(`Submission Date: ${submissionDate}, Status: ${result}`);
+      let className = styles.blackText; // Default (greater than 20 days)
+      if (result === "0 Days Left") className = styles.zeroText;
+      else if (diffDays <= 20) className = styles.orangeText;
+      console.log(className);
     
-      return result;
+    
+      // return result;
+      return <span className={className}>{result}</span>; 
     };
-    
-    
+   
     useEffect(() => {
       if (filteredData && filteredData.length >= 0) {
         console.log("filter data in tabel : ", filteredData);
@@ -295,7 +310,7 @@ export default function Home() {
             },
             {
               columnIndex: 1,
-              className: " cell  cell-submissiondate ",
+              className: " cell  cell-submissiondate text-dark-0 ",
               content: item.submittionDate || "-",
               filterValue: item.submittionDate || "-",
               contentType: "string",
@@ -303,20 +318,20 @@ export default function Home() {
             {
               columnIndex: 2,
               className: " cell  cell-days-to-submit ",
-              content: item.daystosubmit || "-",
-              filterValue: item.daystosubmit || "-",
+              content: item.submittionDate ? calculateDueStatus(item.submittionDate) : "-",
+              filterValue: item.submittionDate ? calculateDueStatus(item.submittionDate) : "-",
               contentType: "string",
             },
             {
               columnIndex: 3,
-              className: " cell  cell-tenderid",
+              className: " cell  cell-tenderid text-dark-0 ",
               content: item.tenderId || "-",
               filterValue: item.tenderId || "-",
               contentType: "string",
             },
             {
               columnIndex: 4,
-              className: " cell cell-tendertype text-dark-1 ",
+              className: " cell cell-tendertype text-dark-1  ",
               content: item.tenderType || "-",
               filterValue: item.tenderType || "-",
               contentType: "string",
@@ -330,29 +345,29 @@ export default function Home() {
             },
             {
               columnIndex: 6,
-              className: " cell cell-appliedby ",
+              className: " cell cell-appliedby text-dark-0 ",
               content: item.appliedBy || "-",
               filterValue: item.appliedBy || "-",
               contentType: "string",
             },
             {
               columnIndex: 7,
-              className: " cell cell-suppliedby ",
+              className: " cell cell-suppliedby text-dark-0 ",
               content: item.suppliedBy || "-",
               filterValue: item.suppliedBy || "-",
               contentType: "string",
             },
             {
               columnIndex: 8,
-              className: " cell cell-preparedby ",
+              className: " cell cell-preparedby text-dark-0 ",
               content: item.preparedBy || "-",
               filterValue: item.preparedBy || "-",
               contentType: "string",
             },
             {
               columnIndex: 9,
-              className: " cell cell-value  ",
-              // content: item.value || "-",
+              className: " cell cell-value text-dark-1 ",
+            
               content: <DsCurrency format={"IND"} id={"value"} amount={parseInt(item.value)} type={"short"}/>,
               filterValue:<DsCurrency format={"IND"} id={"value"} amount={parseInt(item.value)} type={"short"}/>,
               contentType: "number",
@@ -360,20 +375,21 @@ export default function Home() {
             {
               columnIndex: 10,
               className: " cell cell-status ",
-              // content: item.status.tenderStatus || "-",
-              content: (
+       
+              content: item.status ? (
                 <DsStatusIndicator
                   type="user_defined"
-                  label={item.status.tenderStatus + " "}
                   className={`${
                     item?.status?.tenderStatus
                       ? styles[
-                          item?.status?.tenderStatus
-                            ?.replace(" ", "_")
+                        item?.status?.tenderStatus
+                            ?.replaceAll(" ", "_")
                             .toLowerCase()
                         ]
                       : ""
                   }`}
+                status={item.status.tenderStatus }
+                label={item.status.tenderStatus }
                   comment={
                     item.status?.message
                       ? typeof item.status.message === "object"
@@ -382,6 +398,9 @@ export default function Home() {
                       : ""
                   }
                 />
+              ) : 
+              (
+                "No Status"
               ),
               filterValue: item.status.tenderStatus,
               contentType: "reactNode",
@@ -392,7 +411,7 @@ export default function Home() {
         console.log("Final Transformed Rows:", transformedRows);
   
         setTimeout(() => {
-          setTempTableData((data) => ({ ...data, rows: transformedRows }));
+          setoriginalTableData((data) => ({ ...data, rows: transformedRows }));
         }, 1);
       }
     }, [filteredData]);
@@ -488,7 +507,7 @@ export default function Home() {
           },
           {
             columnIndex: 1,
-            className: " cell cell-submissiondate",
+            className: " cell cell-submissiondate text-dark-0 ",
             content: t.submittionDate,
             filterValue: t.submittionDate,
             contentType: "string",
@@ -502,7 +521,7 @@ export default function Home() {
           },
           {
             columnIndex: 3,
-            className: " cell cell-tenderid ",
+            className: " cell cell-tenderid text-dark-0 ",
             content: t.tenderId,
             filterValue: t.tenderId,
             contentType: "string",
@@ -523,28 +542,28 @@ export default function Home() {
           },
           {
             columnIndex: 6,
-            className: " cell cell-appliedby ",
+            className: " cell cell-appliedby text-dark-0 ",
             content: t.appliedBy,
             filterValue: t.appliedBy,
             contentType: "string",
           },
           {
             columnIndex: 7,
-            className: " cell cell-suppliedby ",
+            className: " cell cell-suppliedby text-dark-0 ",
             content: t.suppliedBy,
             filterValue: t.suppliedBy,
             contentType: "string",
           },
           {
             columnIndex: 8,
-            className: " cell cell-preparedby ",
+            className: " cell cell-preparedby text-dark-0 ",
             content: t.preparedBy,
             filterValue: t.preparedBy,
             contentType: "string",
           },
           {
             columnIndex: 9,
-            className: " cell cell-value   ",
+            className: " cell cell-value  text-dark-1 ",
             content: <DsCurrency format={"IND"} id={"value"} amount={parseInt(t.value)} type={"short"}/>,
             filterValue: <DsCurrency format={"IND"} id={"value"} amount={parseInt(t.value)} type={"short"}/>,
             contentType: "number",
@@ -565,7 +584,8 @@ export default function Home() {
                       ]
                     : ""
                 }`}
-                label={t.status.tenderStatus + " "}
+              status={t.status.tenderStatus }
+              label={t.status.tenderStatus }
                 comment={
                   t.status?.message
                     ? typeof t.status.message === "object"
@@ -574,7 +594,8 @@ export default function Home() {
                     : ""
                 }
               />
-            ) : (
+            ) : 
+            (
               "No Status"
             ),
             filterValue: t.status?.tenderStatus ?? "Unknown",
@@ -611,11 +632,11 @@ export default function Home() {
         e: React.MouseEvent<HTMLElement>,
         filteredRows: DsTableRow[]
       ) => {
-        setTempTableData((data) => ({ ...data, rows: filteredRows }));
+        setoriginalTableData((data) => ({ ...data, rows: filteredRows }));
         ClosePane(e);
       };
     
-  
+     
   
   return (
     <>
@@ -675,7 +696,7 @@ export default function Home() {
               buttonColor="btnPrimary"
               buttonViewStyle="btnText"
               className={styles.MenuBtn}
-              location="/Tender/New"
+              location="Tender"
               label="Institutional"
             />
             <DsNavTo
@@ -693,12 +714,12 @@ export default function Home() {
       <DsPane id="y" side="right" title="Filter">
         <AdvancedFilterComponent
           id="a"
-          rows={tempTableData.rows}
+          rows={originalTabledata.rows}
           filterTypes={flterTypes}
           handleApplyFilter={applyFilter}
         />
       </DsPane>
- 
+     
     </>
   );
 }

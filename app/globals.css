@@ -230,6 +230,8 @@ body {
 .cell-customer{
   max-width: 10.3rem !important;
   min-width: 10.3rem !important;
+  white-space:nowrap;
+  text-overflow: ellipsis;
 
  }
 
@@ -304,7 +306,7 @@ min-width: 4.4rem !important;
   display: flex;
  
   height: fit-content;
-  min-width: 112.4rem !important;
+  /* min-width: 112.4rem !important; */
   cursor: pointer !important;
 }
 .cellRow .cell {
@@ -668,8 +670,8 @@ input[type="checkbox"]:not(:checked) {
     .cell-tendertype
     {
     
-        max-width: 6rem !important;
-        min-width: 6rem !important;
+        max-width: 6.6rem !important;
+        min-width: 6.6rem !important;
        }
        .cell-depot
        {
@@ -695,8 +697,8 @@ input[type="checkbox"]:not(:checked) {
   }
   .cell-value
   {
-  max-width: 4.7rem !important;
-  min-width: 4.7rem !important;
+  max-width: 5.1rem !important;
+  min-width: 5.1rem !important;
   }
   .cell-status
   {
@@ -810,8 +812,8 @@ input[type="checkbox"]:not(:checked) {
     .cell-tendertype
     {
     
-        max-width: 6.2rem !important;
-        min-width: 6.2rem !important;
+        max-width: 6.8rem !important;
+        min-width: 6.8rem !important;
        }
   
   
@@ -838,8 +840,8 @@ input[type="checkbox"]:not(:checked) {
   }
   .cell-value
   {
-  max-width: 4.8rem !important;
-  min-width: 4.8rem !important;
+  max-width: 5.2rem !important;
+  min-width: 5.2rem !important;
   }
   .cell-status
   {
@@ -953,8 +955,8 @@ input[type="checkbox"]:not(:checked) {
     .cell-tendertype
     {
     
-        max-width: 6.6rem !important;
-        min-width: 6.6rem !important;
+        max-width: 7.2rem !important;
+        min-width: 7.2rem !important;
        }
   
        .cell-depot
@@ -981,8 +983,8 @@ input[type="checkbox"]:not(:checked) {
   }
   .cell-value
   {
-  max-width: 4.9rem !important;
-  min-width: 4.9rem !important;
+  max-width: 5.3rem !important;
+  min-width: 5.3rem !important;
   }
   .cell-status
   {
@@ -1100,8 +1102,8 @@ input[type="checkbox"]:not(:checked) {
      .cell-tendertype
     {
     
-        max-width: 7.4rem !important;
-        min-width: 7.4rem !important;
+        max-width: 8rem !important;
+        min-width: 8rem !important;
        }
   
   .cell-depot
@@ -1128,8 +1130,8 @@ input[type="checkbox"]:not(:checked) {
   }
   .cell-value
   {
-  max-width: 5rem !important;
-  min-width: 5rem !important;
+  max-width: 5.4rem !important;
+  min-width: 5.4rem !important;
   }
   .cell-status
   {
