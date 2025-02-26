@@ -369,7 +369,7 @@ export default function Home() {
               className: " cell cell-value text-dark-1 ",
             
               content: <DsCurrency format={"IND"} id={"value"} amount={parseInt(item.value)} type={"short"}/>,
-              filterValue:<DsCurrency format={"IND"} id={"value"} amount={parseInt(item.value)} type={"short"}/>,
+              filterValue:item.value,
               contentType: "number",
             },
             {
@@ -411,7 +411,7 @@ export default function Home() {
         console.log("Final Transformed Rows:", transformedRows);
   
         setTimeout(() => {
-          setoriginalTableData((data) => ({ ...data, rows: transformedRows }));
+          setTempTableData((data) => ({ ...data, rows: transformedRows }));
         }, 1);
       }
     }, [filteredData]);
@@ -565,7 +565,7 @@ export default function Home() {
             columnIndex: 9,
             className: " cell cell-value  text-dark-1 ",
             content: <DsCurrency format={"IND"} id={"value"} amount={parseInt(t.value)} type={"short"}/>,
-            filterValue: <DsCurrency format={"IND"} id={"value"} amount={parseInt(t.value)} type={"short"}/>,
+            filterValue: t.value,
             contentType: "number",
           },
           {

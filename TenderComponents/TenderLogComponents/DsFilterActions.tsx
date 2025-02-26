@@ -172,7 +172,8 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
 
 
  
-  const handleSearch = () => {
+  const handleSearch = (e) => {
+    if (e.key === "Enter") {
     const searchQuery = normalizeText(searchText);
     
     // Define the columns to search in
@@ -202,7 +203,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
   
     setFilteredData(filteredRows);
   };
-  
+}
   
   // Normalize text for case-insensitive search
   const normalizeText = (text: any): string => {
@@ -232,7 +233,6 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
       <div className={styles.innerfilterContainer}>
         {tenderDatalistVisible && (
           <DsTextField
-          placeholder="Search Tenders by Id,Name & value"
           label="Search Tenders by Id,Name & value"
           id="tenderList"
           disable={false}
@@ -240,7 +240,8 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
           iconEnd={<Image src={searchicon} alt={"searchicon"} />}
           containerClasses={styles.datalist}
           onChange={(e) => setSearchText(e.target.value)}
-          onBlur={() => handleSearch()}
+          // onBlur={() => handleSearch()}
+          onKeyUp={(e) => handleSearch(e)}
         />
  
         )}

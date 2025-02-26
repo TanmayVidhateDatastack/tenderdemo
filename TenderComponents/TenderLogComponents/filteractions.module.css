@@ -110,4 +110,6 @@ display: flex;
 justify-content: space-between;
 gap:0px;
 } */
-
+.totalorder {
+  padding: 0px !important;
+}
