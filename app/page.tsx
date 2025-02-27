@@ -25,10 +25,13 @@ import DsTableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableCo
 import DsPane, { ClosePane } from "@/Elements/DsComponents/DsPane/DsPane";
 import AdvancedFilterComponent from "@/Elements/DsComponents/AdvancedFilterComponent/AdvancedFilterComponent";
 import DsCurrency from "@/Elements/DsComponents/dsCurrency/dsCurrency";
+import btnStyles from "../Elements/DsComponents/DsButtons/dsButton.module.css";
+import addIcon from "../Icons/smallIcons/add.svg";
  
 export default function Home() { 
   const [data, setData] = useState<Tender[]>([]); //for table data
   const [filteredData, setFilteredData] = useState<Tender[]>([]); //for filtered table data
+  const [iconSrc, setIconSrc] = useState(addIcon);
     const [tempTableData, setTempTableData] = useState<tableData>({
       className: "sample-table",
       type: "InterActive",
@@ -638,41 +641,149 @@ export default function Home() {
     
      
   
-  return (
-    <>
-      <DsApplication
-        appTitle="Tenders"
-        //className={styles.appmenuTitle}
-        appMenu={
-      <>
-          <div className={styles.filterNavBar}>
+//   return (
+//     <>
+//       <DsApplication
+//         appTitle="Tenders"
+//         //className={styles.appmenuTitle}
+//         appMenu={
+//       <>
+//           <div className={styles.filterNavBar}>
 
-            <DsFilterActions data={data} setFilteredData={setFilteredData}/>
-             </div>
-            <DsButton
-            label="New"
-            icon={<div className={styles.newbutton} style={{ width: "1.05rem", height: "1.4rem", position: "relative"}}>
-            <Image
-              src={add}
-              layout="intrinsic"
-              objectFit="cover"
-              alt="Image"
-            />
-          </div>
- }          onHover={(e)=>{changeImage(e,addIconWhite)}}
-            onClick={(e) => displayContext(e, "CreateNewActions", "vertical", "center")}
-             />
+//             <DsFilterActions data={data} setFilteredData={setFilteredData}/>
+//              </div>
+//             <DsButton
+//             label="New"
+//             icon={<div className={styles.newbutton} style={{ width: "1.05rem", height: "1.4rem", position: "relative"}}>
+//             <Image
+//               src={add}
+//               layout="intrinsic"
+//               objectFit="cover"
+//               alt="Image"
+//             />
+//           </div>
+//  }          onHover={(e)=>{changeImage(e,addIconWhite)}}
+//             onClick={(e) => displayContext(e, "CreateNewActions", "vertical", "center")}
+//              />
 
          
+//           </>
+//         }
+//         pageName="LogPage"  
+//       >
+//         <div className={styles.totalCal}>
+//         <DsTotalTenders data={data}/>
+//         <DsTotalValues data={data}/>
+//         </div>
+//         <div className={styles.container}>
+//         <DsTableComponent
+//           className={tempTableData.className}
+//           id={tempTableData.id}
+//           hasSearch={tempTableData.hasSearch}
+//           columns={tempTableData.columns}
+//           hasIcons={true}
+//           isSelectAble={false}
+//           rows={tempTableData.rows}
+//           isFooterRequired={true}
+//           isSortable={true}
+      
+//         />
+//         </div>
+
+//       </DsApplication>
+//       <ContextMenu
+//         id={"CreateNewActions"}
+//         showArrow={true}
+//         content={
+//           <div className={styles.ContextCreateNew}>
+//             <DsNavTo
+//               id="institutional"
+//               buttonColor="btnPrimary"
+//               buttonViewStyle="btnText"
+//               className={styles.MenuBtn}
+//               location="Tender"
+//               label="Institutional"
+//             />
+//             <DsNavTo
+//               id="corporate"
+//               buttonColor="btnPrimary"
+//               buttonViewStyle="btnText"
+//               className={styles.MenuBtn}
+//               location="/Tender/New"
+//               label="Corporate"
+//             />
+           
+//           </div>
+//         }
+//       ></ContextMenu>
+//       <DsPane id="y" side="right" title="Filter">
+//         <AdvancedFilterComponent
+//           id="a"
+//           rows={originalTabledata.rows}
+//           filterTypes={flterTypes}
+//           handleApplyFilter={applyFilter}
+//         />
+//       </DsPane>
+     
+//     </>
+//   );
+// }
+return (
+  <>
+    <DsApplication
+      appTitle="Tenders"
+      appMenu={
+        <>
+         <DsFilterActions data={data} setFilteredData={setFilteredData}/>
+       
+         <DsButton
+                id="actionBtn"
+                buttonColor="btnPrimary"
+                className={btnStyles.btnOutlined}
+                startIcon={
+                  <div
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      position: "relative",
+                    }}
+                  >
+                    <Image
+                      src={iconSrc}
+                      alt="Add Icon"
+                      layout="fill"
+                      objectFit="cover"
+                    />
+                  </div>
+                }
+                onClick={(e) =>
+                  displayContext(e, "CreateNewActions", "vertical", "right")
+                }
+                onHover={(e) => {
+                  changeImage(e, addIconWhite);
+                }}
+                onMouseLeave={(e) => {
+                  changeImage(e, addIcon);
+                }}
+                tooltip="variants : btnPrimary, btnOutlined, btnMedium"
+                label="New"
+                iconSize="iconMedium"
+              />
+            
           </>
-        }
-        pageName="LogPage"  
-      >
-        <div className={styles.totalCal}>
-        <DsTotalTenders data={data}/>
-        <DsTotalValues data={data}/>
+      }
+     
+      pageName="LogPage"    
+     
+    >
+       <div className={styles.totalCal}>
+          <DsTotalTenders data={data} />
+          <DsTotalValues data={data} />
         </div>
-        <DsTableComponent
+          <div className={styles.container}>
+            {" "}
+            <div className={tempTableData.className}>
+            <DsTableComponent
           className={tempTableData.className}
           id={tempTableData.id}
           hasSearch={tempTableData.hasSearch}
@@ -684,14 +795,28 @@ export default function Home() {
           isSortable={true}
       
         />
+            </div>
+          </div>
+     
+  
 
-      </DsApplication>
-      <ContextMenu
-        id={"CreateNewActions"}
-        showArrow={true}
-        content={
-          <div className={styles.ContextCreateNew}>
-            <DsNavTo
+      
+    </DsApplication>
+    <DsPane id="y" side="right" title="Filter">
+      <AdvancedFilterComponent
+          id="a"
+          rows={originalTabledata.rows}
+          filterTypes={flterTypes}
+          handleApplyFilter={applyFilter}
+        />
+      </DsPane>
+
+    <ContextMenu
+      id={"CreateNewActions"}
+      showArrow={true}
+      content={
+        <div className={styles.ContextCreateNew}>
+          <DsNavTo
               id="institutional"
               buttonColor="btnPrimary"
               buttonViewStyle="btnText"
@@ -707,22 +832,11 @@ export default function Home() {
               location="/Tender/New"
               label="Corporate"
             />
-           
-          </div>
-        }
-      ></ContextMenu>
-      <DsPane id="y" side="right" title="Filter">
-        <AdvancedFilterComponent
-          id="a"
-          rows={originalTabledata.rows}
-          filterTypes={flterTypes}
-          handleApplyFilter={applyFilter}
-        />
-      </DsPane>
-     
-    </>
-  );
+        </div>
+      }
+    ></ContextMenu>
+  </>
+);
 }
- 
  
  

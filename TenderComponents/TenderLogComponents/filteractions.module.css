@@ -86,8 +86,9 @@ width : 35.0rem !important;
  
 .contentsubmissionBtn
 {
-  width:14.5rem!important;
+ min-width: fit-content!important;
   margin:0rem!important;
+   white-space:nowrap;
 }
 
 
@@ -113,3 +114,57 @@ gap:0px;
 .totalorder {
   padding: 0px !important;
 }
+.datalist {
+  width: 35rem!important;
+  margin-right: 1rem;
+  background-color: inherit !important;
+  box-shadow: #0000000F 0.2rem 0.2rem 0.4rem  !important;
+}
+
+
+
+/* @media screen  and (max-width: 1450px) {
+  .contentsubmissionBtn
+{
+  width:19rem!important;
+  margin:0rem!important;
+}
+ 
+}
+
+
+@media screen and (min-width: 1450px) and (max-width: 1600px) {
+  .contentsubmissionBtn
+  {
+    width:19rem!important;
+    margin:0rem!important;
+  }
+}
+
+
+@media screen and (min-width: 1600px) and (max-width: 1750px) {
+  .contentsubmissionBtn
+  {
+    width:19rem!important;
+    margin:0rem!important;
+  }
+}
+
+
+@media screen and (min-width: 1750px) and (max-width: 1900px) {
+  .contentsubmissionBtn
+  {
+    width:19rem!important;
+    margin:0rem!important;
+  }
+}
+
+
+@media screen and (min-width: 1900px) and (max-width: 2100px) {
+  .contentsubmissionBtn
+{
+  width:23rem!important;
+  margin:0rem!important;
+}
+ 
+} */
