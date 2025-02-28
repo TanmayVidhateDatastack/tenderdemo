@@ -72,7 +72,7 @@
   }
   .optionBtn:hover{
     background-color: var(--text-primary-hover) !important;
-    color: var(--text-primary) !important;
+    color: var(--text-white) !important;
     border-radius: 25px !important;
   }
   .copyBtn{
@@ -96,3 +96,21 @@
     background-color: var(--primary);
     color: var(--background);
   }
+
+  .SaveBtn{
+    display: flex;
+    justify-content: center;
+  }
+  .savebtn{
+    width: 100%;
+    height: auto;
+    margin-top: 120px;
+    background-color: var(--primary-hover);
+    color: var(--text-white) !important;
+  }
+  .documents{
+    font-size: 13px;
+    font-family: sans-serif;
+  }
+ 
+ 

@@ -25,7 +25,7 @@ const DsTenderIdPage: React.FC = () => {
         tabs={tabs}
         pageName="tenderPage" // Add this prop
       >
-        <TabView tabId="0" pageName="tenderPage">
+        <TabView tabId="0" pageName="tenderPage"> 
           <DsBasicDetails />
         </TabView>
         <TabView tabId="1" pageName="tenderPage">

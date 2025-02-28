@@ -81,6 +81,7 @@ export const getAllStatusLogURL = apiHostUrl + "/status";
 
 export const getAllTenders = apiHostUrl + "/tenders";
 export const getAllMetaData = apiHostUrl + "/tenderMetadata";
+export const getAllDocuments = apiLocalUrl + "/tender/docs";
 
 //Tender User Roles
 export const getTenderUserRoles = apiHostUrl + "/maker";

@@ -1,33 +1,40 @@
 import { useEffect, useState } from "react";
-import DsDepositeDocuments, { DepositDocument } from "./DsDepositeDocuments";
+import DsTenderDetails from "./DsTenderDetails";
+import { getAllMetaData, searchCustomerURL } from "@/helpers/constant";
 import fetchData from "@/helpers/Method/fetchData";
-import { getAllMetaData } from "@/helpers/constant";
-import DsApplicableConditions from "./DsApplicableConditions";
-import { DsSelectOption } from "@/helpers/types";
-
-interface MetadataItem {
-  depositeDocument: DepositDocument[];
-  applicableDeposits: DsSelectOption[];
-  applicableSupplyConditions: DsSelectOption[];
-}
+import {
+  tenderDetails,
+  applierSupplierDetails,
+  supplyDetails,
+} from "../../../helpers/types";
+import DsApplierSupplierDetails from "./DsApplierSupplierDetails";
+import DsSupplyDetails from "./DsSupplyDetails";
+import PaneOpenButton from "@/Elements/DsComponents/DsPane/PaneOpenButton";
 
 const DsBasicDetails: React.FC = () => {
-  const [depositeDocument, setDepositeDocuments] = useState<DepositDocument[]>(
-    []
-  );
-  const [applicableDocuments, setApplicableDocuments] = useState<
-    DsSelectOption[]
-  >([]);
-  const [applicableSupplyConditions, setApplicableSupplyConditions] = useState<
-    DsSelectOption[]
-  >([]);
-  const [metadata, setMetadata] = useState<MetadataItem[]>([]);
+  const [tenderDetails, setTenderDetails] = useState<tenderDetails>({
+    tenderType: [],
+    submissionMode: [],
+  });
+  const [applierSupplierDetails, setApplierSupplierDetails] =
+    useState<applierSupplierDetails>({
+      appliedBy: [],
+      suppliedBy: [],
+      depot: [],
+    });
+  const [supplyDetails, setSupplyDetails] = useState<supplyDetails>({
+    supplyPoints: [],
+    reportRequirements: [],
+    eligibility: [],
+  });
 
   const handleFetch = async () => {
     try {
       await fetchData({ url: getAllMetaData }).then((res) => {
         if ((res.code = 200)) {
-          setMetadata(res.result);
+          setTenderDetails(res.result[0].tenderDetails[0]);
+          setApplierSupplierDetails(res.result[0].applierSupplierDetails[0]);
+          setSupplyDetails(res.result[0].supplyConditions[0]);
         } else {
           console.error(
             "Error fetching data: ",
@@ -39,35 +46,20 @@ const DsBasicDetails: React.FC = () => {
       console.error("Fetch error: ", error);
     }
   };
-
   useEffect(() => {
     handleFetch();
   }, []);
 
-  useEffect(() => {
-    // console.log("metadata : ", metadata);
-    if (metadata.length > 0 && metadata[0]?.depositeDocument) {
-      setDepositeDocuments(metadata[0].depositeDocument);
-      setApplicableDocuments(metadata[0].applicableDeposits);
-      setApplicableSupplyConditions(metadata[0].applicableSupplyConditions);
-    }
-  }, [metadata]);
-
   return (
     <>
+      <DsTenderDetails tenderDetails={tenderDetails} />
       <div>
-        <DsDepositeDocuments
-          setDepositeDocuments={(docs) => {
-            setDepositeDocuments(docs);
-          }}
-          depositeDocument={depositeDocument}
-          applicableDeposits={applicableDocuments}
+        <DsApplierSupplierDetails
+          applierSupplierDetails={applierSupplierDetails}    
         />
       </div>
       <div>
-        <DsApplicableConditions
-          applicableConditions={applicableSupplyConditions}
-        />
+        <DsSupplyDetails supplyDetails={supplyDetails} />
       </div>
     </>
   );

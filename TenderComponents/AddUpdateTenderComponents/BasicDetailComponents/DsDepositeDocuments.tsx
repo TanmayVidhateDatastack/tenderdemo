@@ -1,218 +1,231 @@
-import styles from "./deposite.module.css";
-import Image from "next/image";
-import downarrow from "@/Icons/smallIcons/verticleArrow.svg";
-import { useEffect, useState } from "react";
-import {
-  closeAllContext,
-  createContext
-} from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
-import React from "react";
-import Ds_checkbox from "@/Elements/DsComponents/DsCheckbox/dsCheckbox";
-import {
-  displayContext,
-  closeContext
-} from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
-import { DsSelectOption } from "@/helpers/types";
-import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
-import DsFeesDocument from "./DsFeesDocument";
-import { useTenderData } from "../TenderDataContextProvider";
+// import styles from "./deposite.module.css";
+// import Image from "next/image";
+// // import downarrow from "@/Icons/smallIcons/downarrow.svg";
+// import downarrow from "@/Icons/smallIcons/verticleArrow.svg";
+// import { useEffect, useState } from "react";
+// import { createContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
+// import React from "react";
+// import Ds_checkbox from "@/Elements/DsComponents/DsCheckbox/dsCheckbox";
+// import {
+//   displayContext,
+//   closeContext
+// } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
+// import { CheckboxProp, DsSelectOption } from "@/helpers/types";
+// import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
+// import DsFeesDocument from "./DsFeesDocument";
 
-export interface DepositDocument {
-  modes: DsSelectOption[];
-  paidBy: DsSelectOption[];
-}
+// export interface DepositDocument {
+//   modes: DsSelectOption[];
+//   paidBy: DsSelectOption[];
 
-export interface FeesDocument {
-  applicableDeposits: DsSelectOption[];
-}
+//   // Add other properties if needed
+// }
 
-export interface DepositeDocumentsProps {
-  setDepositeDocuments: (depositeDocuments: DepositDocument[]) => void;
-  depositeDocument: DepositDocument[] | null;
-  applicableDeposits: DsSelectOption[] | [];
-}
+// export interface DepositeDocumentsProps {
+//   setDepositeDocuments: (depositeDocuments: DepositDocument[]) => void;
+//   depositeDocument: DepositDocument[] | null; // Pass this as well
+// }
 
-const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
-  depositeDocument,
-  applicableDeposits
-}) => {
-  const contextMenuId = "context-display-10";
-  const { addTenderFee, removeTenderFeeByType } = useTenderData();
-  const [mode, setMode] = useState<DsSelectOption[]>([]);
-  const [paidBy, setPaidBy] = useState<DsSelectOption[]>([]);
-  const [applicablefees, SetApplicablefees] = useState<DsSelectOption[]>([]);
-  const [feeVisibility, setFeeVisibility] = useState<Record<string, boolean>>(
-    {}
-  );
+// const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
+//   depositeDocument
+// }) => {
+//   const contextMenuId = "context-display-10";
+//   const [context, setContext] = useState(false);
+//   const [evsVisible, setEvsVisible] = useState(false);
+//   const [psecurityVisible, setPsecurityVisible] = useState(false);
+//   const [tenderFeesVisible, setTenderFeesVisible] = useState(false);
+//   const [mode, setMode] = useState<DsSelectOption[]>([]);
+//   const [paidBy, setPaidBy] = useState<DsSelectOption[]>([]);
 
-  useEffect(() => {
-    if (depositeDocument) {
-      const modesData = depositeDocument[0]?.modes || [];
-      const paidByData = depositeDocument[0]?.paidBy || [];
+//   const checkboxOptions: CheckboxProp[] = [
+//     {
+//       label: "EMD",
+//       id: "evs",
+//       name: "EMD",
+//       value: "EMD"
+//     },
+//     {
+//       label: "Tender Fees",
+//       id: "tenderFees",
+//       name: "Tender Fees",
+//       value: "Tender Fees"
+//     },
+//     {
+//       label: "Performance Security",
+//       id: "psecurity",
+//       name: "Performance Security",
+//       value: "Performance Security"
+//     }
+//   ];
 
-      setMode(modesData);
-      setPaidBy(paidByData);
-    }
-    if (applicableDeposits && applicableDeposits.length > 0) {
-      console.log("000 : ", applicableDeposits);
-      const mappedDeposits = applicableDeposits.map((deposit) => ({
-        label: deposit.label,
-        value: deposit.value
-      }));
+//   useEffect(() => {
+//     if (depositeDocument) {
+//       // Extract modes and paidBy from depositeDocument and update states
+//       const modesData = depositeDocument[0]?.modes || [];
+//       const paidByData = depositeDocument[0]?.paidBy || [];
 
-      SetApplicablefees(mappedDeposits);
-      const options: Record<string, boolean> = mappedDeposits.reduce<
-        Record<string, boolean>
-      >((acc, opt) => {
-        const val = opt.value;
+//       setMode(modesData);
+//       setPaidBy(paidByData);
 
-        if (typeof val === "string") {
-          acc[val] = false;
-        }
+//       console.log("modedata : ", modesData);
+//     }
+//   }, [depositeDocument]);
 
-        return acc;
-      }, {});
+//   useEffect(() => {
+//     console.log("mode : ", mode + " " + "paid by : ", paidBy);
+//   }, [mode, paidBy]);
 
-      setFeeVisibility(options);
-    }
-  }, [depositeDocument, applicableDeposits]);
+//   function handleonclick(e) {
+//     // setContext(true);
+//     displayContext(e, contextMenuId, "vertical", "center");
+//     console.log("Button Clicked : ", contextMenuId);
+//     console.log("context state : ", context);
+//   }
 
-  useEffect(() => {
-    if (applicablefees) {
-      console.log("applicable fees : ", applicablefees);
-    }
-  }, [applicablefees]);
+//   const handleAdd = (e) => {
+//     checkboxOptions.forEach((opt) => {
+//       if ((document.getElementById(opt.id) as HTMLInputElement)?.checked) {
+//         if (opt.id == "evs") {
+//           setEvsVisible(true);
+//         } else if (opt.id == "tenderFees") {
+//           setTenderFeesVisible(true);
+//         } else if (opt.id == "psecurity") {
+//           setPsecurityVisible(true);
+//         }
+//       } else {
+//         if (opt.id == "evs") {
+//           setEvsVisible(false);
+//         } else if (opt.id == "tenderFees") {
+//           setTenderFeesVisible(false);
+//         } else if (opt.id == "psecurity") {
+//           setPsecurityVisible(false);
+//         }
+//       }
+//     });
+//   };
 
-  function handleonclick(e) {
-    displayContext(e, contextMenuId, "vertical", "center");
-  }
+//   useEffect(() => {
+//     createContext(
+//       contextMenuId,
+//       <>
+//         <div>
+//           {checkboxOptions.map((checkbox, index) => (
+//             <Ds_checkbox
+//               key={index}
+//               id={checkbox.id}
+//               name={checkbox.name}
+//               value={checkbox.value}
+//               label={checkbox.label}
+//             />
+//           ))}
+//         </div>
+//         <DsButton
+//           label="Add"
+//           buttonViewStyle="btnContained"
+//           buttonSize="btnLarge"
+//           className={styles.addBtn}
+//           onClick={handleAdd}
+//         />
+//       </>,
+//       true
+//     );
+//     window.addEventListener("click", (e) => {
+//       const target = (e.target as HTMLElement).closest(
+//         `.${styles["depositsBtn"]}`
+//       );
 
-  const selectedFees = new Set(); // 🔥 Store selected checkboxes globally
+//       const target2 = (e.target as HTMLElement).closest(`#${contextMenuId}`);
 
-  const handleAdd = (e) => {
-    applicablefees.forEach((opt) => {
-      const id = opt.value.toString();
-      const checkbox = document.getElementById(id) as HTMLInputElement;
+//       if (!target && !target2) {
+//         closeContext(contextMenuId);
+//         return;
+//       }
+//     });
 
-      if (checkbox?.checked) {
-        selectedFees.add(id); // 🔥 Add to Set (prevents duplicates)
-        feeVisibility[id] = true;
-        addTenderFee(id);
-      } else {
-        selectedFees.delete(id); // 🔥 Remove if unchecked
-        feeVisibility[id] = false;
-        removeTenderFeeByType(id);
-      }
-    });
-    closeAllContext();
-    console.log("Currently Selected:", Array.from(selectedFees)); // Debugging output
-  };
+//     return () => {
+//       window.removeEventListener("click", (e) => {
+//         const target = (e.target as HTMLElement).closest(
+//           `.${styles["depositsBtn"]}`
+//         );
+//         const target2 = (e.target as HTMLElement).closest(`#${contextMenuId}`);
 
-  useEffect(() => {
-    console.log("feevisibility : ", feeVisibility);
-  }, [feeVisibility]);
+//         if (!target && !target2) {
+//           closeContext(contextMenuId);
+//           return;
+//         }
+//       });
+//     };
+//   }, []);
 
-  useEffect(() => {
-    createContext(
-      contextMenuId,
-      <>
-        <div>
-          {applicablefees.map((checkbox, index) => (
-            <Ds_checkbox
-              key={index}
-              id={checkbox.value.toString()}
-              name={checkbox.label}
-              value={checkbox.value.toString()}
-              label={checkbox.label}
-            />
-          ))}
-        </div>
-        <DsButton
-          label="Add"
-          buttonViewStyle="btnContained"
-          buttonSize="btnLarge"
-          className={styles.addBtn}
-          onClick={handleAdd}
-        />
-      </>,
-      true
-    );
-    window.addEventListener("click", (e) => {
-      const target = (e.target as HTMLElement).closest(
-        `.${styles["depositsBtn"]}`
-      );
+//   useEffect(() => {
+//     const handleScroll = (event) => {
+//       const excludedElement = document.getElementById("optionBtn");
 
-      const target2 = (e.target as HTMLElement).closest(`#${contextMenuId}`);
+//       if (excludedElement && excludedElement.contains(event.target)) {
+//         closeContext(contextMenuId);
+//         console.log("Scroll ignored (inside #element1)");
+//         return;
+//       }
 
-      if (!target && !target2) {
-        closeContext(contextMenuId);
-        return;
-      }
-    });
+//       console.log("Scroll event detected outside #element1");
+//     };
 
-    return () => {
-      window.removeEventListener("click", (e) => {
-        const target = (e.target as HTMLElement).closest(
-          `.${styles["depositsBtn"]}`
-        );
-        const target2 = (e.target as HTMLElement).closest(`#${contextMenuId}`);
-        if (!target && !target2) {
-          closeContext(contextMenuId);
-          return;
-        }
-      });
-    };
-  }, [applicablefees]);
+//     window.addEventListener("scroll", handleScroll, true);
 
-  useEffect(() => {
-    const handleScroll = (event) => {
-      const excludedElement = document.getElementById("optionBtn");
-      if (excludedElement && excludedElement.contains(event.target)) {
-        closeContext(contextMenuId);
-        return;
-      }
-    };
-    window.addEventListener("scroll", handleScroll, true);
-    return () => {
-      window.removeEventListener("scroll", handleScroll, true);
-    };
-  }, []);
+//     return () => {
+//       window.removeEventListener("scroll", handleScroll, true);
+//     };
+//   }, []);
 
-  return (
-    <div className={styles.container}>
-      <div className={styles.containerHead}>
-        <div>Deposits</div>
-        <div className={styles.applicationDeposits}>
-          <DsButton
-            id="optionBtn"
-            label="Application Deposits"
-            className={styles.optionBtn + " " + styles.depositsBtn}
-            endIcon={<Image src={downarrow} alt="downarrow" />}
-            onClick={(e) => handleonclick(e)}
-          />
-        </div>
-      </div>
-      {/* {/*  */}
-      {applicableDeposits.map((deposit) => {
-        if (typeof deposit.value == "string")
-          return (
-            feeVisibility[deposit.value] && (
-              <div className={styles.emdContainer2}>
-                <DsFeesDocument
-                  title={deposit.label}
-                  id={deposit.value + "DocumentView"}
-                  mode={mode}
-                  paidBy={paidBy}
-                  downloadVisible={true}
-                />
-              </div>
-            )
-          );
-      })}
+//   return (
+//     <div className={styles.container}>
+//       <div className={styles.containerHead}>
+//         <div>Deposits</div>
+//         <div className={styles.applicationDeposits}>
+//           <DsButton
+//             id="optionBtn"
+//             label="Application Deposits"
+//             className={styles.optionBtn + " " + styles.depositsBtn}
+//             endIcon={<Image src={downarrow} alt="downarrow" />}
+//             onClick={(e) => handleonclick(e)}
+//           />
+//         </div>
+//       </div>
+//       {evsVisible && (
+//         <div className={styles.emdContainer2}>
+//           <DsFeesDocument
+//             title={"ESV"}
+//             id={"esv"}
+//             mode={mode}
+//             paidBy={paidBy}
+//             downloadVisible={true}
+//           />
+//         </div>
+//       )}
+//       {tenderFeesVisible && (
+//         <div className={styles.emdContainer2}>
+//           <DsFeesDocument
+//             title={"Tender Fees"}
+//             id={"tenderFees"}
+//             mode={mode}
+//             paidBy={paidBy}
+//             downloadVisible={false}
+//           />
+//         </div>
+//       )}
+//       {psecurityVisible && (
+//         <div className={styles.emdContainer2}>
+//           <DsFeesDocument
+//             title={"Performance Security"}
+//             id={"performanceSecurity"}
+//             mode={mode}
+//             paidBy={paidBy}
+//             downloadVisible={false}
+//           />
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
 
-      {/* // */}
-    </div>
-  );
-};
-
-export default DsDepositeDocuments;
+// export default DsDepositeDocuments;

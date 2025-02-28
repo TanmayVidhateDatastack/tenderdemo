@@ -37,8 +37,10 @@ export interface advancedFilterComponent {
 
 export interface AccordionProps {
   id: string;
-  title: string; // The title of the accordion
-  children: string | React.ReactElement; // The content inside the accordion, can be a string or a React element
+  title: string;
+  children: string | React.ReactNode;
+  isOpen?: boolean;
+  onToggle: (id: string) => void;
 }
 
 export interface DSButtonProps {
@@ -252,8 +254,9 @@ export interface DsOptionProps {
 
 export interface DsSelectOption {
   label: string;
-  value: string | DsSelectOption[];
+  value: string | DsSelectOption[] | number ;
 }
+
 export interface RadioCheckOption {
   customAttribute?: Record<string, string>;
   id: string;
@@ -1050,6 +1053,7 @@ export type Tender = {
   [key: string]: any; // Allows indexing with a string
 };
 
+
  export type TenderDetails = {
   code: number;
   error: string | null;
@@ -1062,3 +1066,53 @@ export type tenderStatus = {
   messageType?: string;
   message?: string;
 };
+
+export interface tenderDetailsProps{
+  tenderDetails:tenderDetails 
+}
+export interface applierSupplierDetailsProps{
+  applierSupplierDetails :applierSupplierDetails;
+}
+export interface supplyDetailsProps{
+  supplyDetails:supplyDetails;
+}
+
+export interface tenderDetails{
+  tenderType:DsSelectOption[];
+  submissionMode:DsSelectOption[];
+}
+export interface searchCustomers{
+  id:number;
+  code:string;
+  name:string;
+}
+export interface applierSupplierDetails {
+  appliedBy:DsSelectOption[];
+  suppliedBy:DsSelectOption[];
+  depot:DsSelectOption[];
+}
+export interface supplyDetails{
+  supplyPoints:DsSelectOption[];
+  reportRequirements:DsSelectOption[];
+  eligibility:DsSelectOption[];
+}
+
+ export interface documents {
+  category: string;
+  type: string;
+  id: number;
+  documentName: string;
+}
+
+export interface DocumentResult { 
+  Documents: documents[];
+}
+
+// export type tenderResult =  tenderMetadata[];
+
+// export interface tenderMetadata {
+//   tenderDetails:Array<tenderData>;
+//   applierSupplierDetails :Array<applierSupplierDetails>;
+//   depositeDocument:any;
+//   supplyConditions:any;
+// }

@@ -3,7 +3,6 @@
 import DsApplication from "@/Elements/ERPComponents/DsApplicationComponents/DsApplication";
 import DsNavTo from "@/Elements/ERPComponents/DsNavigationComponent/DsNavTo";
 import styles from "./page.module.css";
-import DsTenderTable from "@/TenderComponents/TenderLogComponents/DsTenderTable";
 import DsFilterActions from "@/TenderComponents/TenderLogComponents/DsFilterActions";
 import add from "@/Icons/smallIcons/add.svg";
 import addIconWhite from "@/Icons/smallIcons/whiteadd.svg";
@@ -651,7 +650,7 @@ export default function Home() {
              </div>
             <DsButton
             label="New"
-            icon={<div className={styles.newbutton} style={{ width: "1.05rem", height: "1.4rem", position: "relative"}}>
+            startIcon={<div className={styles.newbutton} style={{ width: "1.05rem", height: "1.4rem", position: "relative"}}>
             <Image
               src={add}
               layout="intrinsic"
