@@ -747,6 +747,7 @@ input[type="checkbox"]:not(:checked) {
     flex: 1;
     /* max-width: 10% !important; */
     min-width: 7% !important;
+    font-size: var(--font-13);
   }
   .cell-1 {
     flex: 1;

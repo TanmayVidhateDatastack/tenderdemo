@@ -8,6 +8,7 @@ import {
   displayContext,
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import DsInfoDisplay from "@/Elements/ERPComponents/DsInfoDisplay/DsInfoDisplay";
+import styles from "./filteractions.module.css"
 
 interface TotalValuesProps {
   data: Tender[]; 
@@ -48,7 +49,7 @@ const DsTotalValues: React.FC<TotalValuesProps> = React.memo(({ data }) => {
         "TotalValues",
         <Ds_SummaryCount
         Title="Total Values"
-        Value={`₹${Number(total).toFixed(0)}`}
+        Value={`${Number(total).toFixed(0)}`}
         statusValues={formattedValues.map(item => ({ ...item, value: Number(item.value).toFixed(0) }))}
       />,
         true
@@ -68,7 +69,10 @@ const DsTotalValues: React.FC<TotalValuesProps> = React.memo(({ data }) => {
         closeContext("TotalValues");
       }}
     >
-      <DsInfoDisplay detailOf="Total Values (₹)" value={Number(totalValue).toFixed(0)} />
+      {/* <DsInfoDisplay detailOf="Total Values (₹)" value={Number(totalValue).toFixed(0)} /> */}
+      <DsInfoDisplay detailOf="Total Values (₹)" className={styles.totalorder}>
+        {Number(totalValue).toFixed(0)}
+      </DsInfoDisplay>
     </div>
   );
 });

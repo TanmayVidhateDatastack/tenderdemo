@@ -4,9 +4,9 @@ export const changeImage = (
   e: React.MouseEvent<HTMLElement>,
   imgSrc: ImgProps
 ) => {
-  console.log(imgSrc);
+  //console.log(imgSrc);
   const icon = (e.target as HTMLElement).querySelector(
-    ".icon > img"
+    ".icon > div > img"
   ) as HTMLImageElement;
   if (icon) {
     icon.src = imgSrc.src;
@@ -28,6 +28,10 @@ export const parseCsv = async (file: File): Promise<string[][]> => {
     reader.readAsText(file);
   });
 };
+export const convertDateFormat = (date: string) => {
+  const [day, month, year] = date.split('/'); // Split the input string by "/"
+  return `${year}-${month}-${day}`; // Return in "yyyy-mm-dd" format
+}
 export function formatDate(dateString: string) {
   const date = new Date(dateString);
   // Get the day, month, and year

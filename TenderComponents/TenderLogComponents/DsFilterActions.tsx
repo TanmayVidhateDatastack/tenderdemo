@@ -233,17 +233,30 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
       <div className={styles.innerfilterContainer}>
         {tenderDatalistVisible && (
           <DsTextField
-          label="Search Tenders by Id,Name & value"
-          id="tenderList"
-          disable={false}
-          initialValue=""
-          iconEnd={<Image src={searchicon} alt={"searchicon"} />}
-          containerClasses={styles.datalist}
-          onChange={(e) => setSearchText(e.target.value)}
-          // onBlur={() => handleSearch()}
-          onKeyUp={(e) => handleSearch(e)}
-        />
- 
+            label="Search Tenders by ID,Name & Value"
+            id="userSelect"
+            disable={false}
+            initialValue=""
+            iconEnd={
+              <div
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  position: "relative",
+                }}
+              >
+                <Image
+                  src={searchicon}
+                  layout="fill"
+                  objectFit="cover"
+                  alt="searchicon"
+                />
+              </div>
+            }
+            containerClasses={styles.datalist}
+            onChange={(e) => setSearchText(e.target.value)}
+            onKeyUp={(e) => handleSearch(e)}
+          />
         )}
    
         {nearSubmissionButtonVisible && (
