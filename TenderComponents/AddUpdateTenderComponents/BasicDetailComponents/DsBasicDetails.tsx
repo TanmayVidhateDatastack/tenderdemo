@@ -2,11 +2,7 @@ import { useEffect, useState } from "react";
 import DsTenderDetails from "./DsTenderDetails";
 import { getAllMetaData, searchCustomerURL } from "@/helpers/constant";
 import fetchData from "@/helpers/Method/fetchData";
-import {
-  tenderDetails,
-  applierSupplierDetails,
-  supplyDetails,
-} from "../../../helpers/types";
+import { tenderDetails,applierSupplierDetails,supplyDetails} from "../../../helpers/types";
 import DsApplierSupplierDetails from "./DsApplierSupplierDetails";
 import DsSupplyDetails from "./DsSupplyDetails";
 import PaneOpenButton from "@/Elements/DsComponents/DsPane/PaneOpenButton";
@@ -49,7 +45,7 @@ const DsBasicDetails: React.FC = () => {
   useEffect(() => {
     handleFetch();
   }, []);
-
+ 
   return (
     <>
       <DsTenderDetails tenderDetails={tenderDetails} />

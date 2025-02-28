@@ -13,7 +13,7 @@ interface TenderDataContextType {
   tenderData: TenderData;
   updateTenderData: (
     key: keyof TenderData,
-    value: string | number | tenderFee[] | tenderSupplyCondition
+    value: string | number |number[]| tenderFee[] | tenderSupplyCondition
   ) => void;
   updateTenderFee: (
     feeType: string,
@@ -29,7 +29,7 @@ interface TenderDataContextType {
   ) => void;
   updateSupplyCondition: (
     key: keyof tenderSupplyCondition,
-    value: string | number | Document[]
+    value: string | number | string[] | Document[] 
   ) => void;
   addNewTenderDocument: (docType: string, document: Document[]) => void;
   addDocumentToExistingType: (docType: string, document: Document) => void;
@@ -88,7 +88,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   // ✅ Update top-level tender fields
   const updateTenderData = (
     key: keyof TenderData,
-    value: string | number | tenderFee[] | tenderSupplyCondition
+    value: string | number|number[] | tenderFee[] | tenderSupplyCondition
   ) => {
     setTenderData((prev) => ({
       ...prev,
@@ -137,7 +137,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   // ✅ Update supply condition fields
   const updateSupplyCondition = (
     key: keyof tenderSupplyCondition,
-    value: string | number | Document[]
+    value: string | number | string[]| Document[]
   ) => {
     setTenderData((prev) => ({
       ...prev,

@@ -10,7 +10,7 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
   return (
     <>
       <div className={styles.inputDetails}>
-        <DsSingleSelect
+        <DsSingleSelect 
           options={supplyDetails.supplyPoints}
           label="Supply points"
           placeholder={"Please select here"}
@@ -20,7 +20,7 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
               updateSupplyCondition("supplyPoint", option.value);
           }}
         ></DsSingleSelect>
-        <DsTextField
+        <DsTextField 
           label="Provide no. of consignees"
           placeholder="Please type here"
           onChange={(e) => updateSupplyCondition("consigneesCount", e.target.value)}
@@ -41,18 +41,18 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
           label="Eligibility"
           placeholder={"Please search and select here"}
           id={"eligibility"}
-          // setSelectOptions={(options) => {
-          //   updateSupplyCondition(
-          //     "eligibility",
-          //     options.reduce<string[]>((acc, option) => {
-          //       if (typeof option.value === "string") {
-          //         acc.push(option.value);
-          //       }
-          //       return acc;
-          //     }, [])
-          //   );
-          // }}
-        ></DsMultiSelect>
+          setSelectOptions={(options) => {
+            updateSupplyCondition(
+              "eligibility",
+              options.reduce<string[]>((acc, option) => {
+                if (typeof option.value === "string") {
+                  acc.push(option.value);
+                }
+                return acc;
+              }, []) 
+            );
+          }}
+        ></DsMultiSelect> 
     </div>
     </>
   );

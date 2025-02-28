@@ -6,11 +6,11 @@ import {
   tenderDetailsProps,
 } from "@/helpers/types";
 import { useTenderData } from "../TenderDataContextProvider";
-import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css"
+import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css" 
 const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
   applierSupplierDetails,
-}) => {
-  const { updateTenderData } = useTenderData();
+}) => { 
+  const { updateTenderData } = useTenderData(); 
   return (
     <>
       <div className={styles.inputDetails}>
@@ -38,10 +38,9 @@ const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
         ></DsSelectMultiLevel>
         <DsSelectMultiLevel
           isSearchable
-          options={applierSupplierDetails.suppliedBy}
-          // type={"twolevel"}
-          label="Supplied By"
-          placeholder={"Please search or select here"}
+          options={applierSupplierDetails.suppliedBy} 
+          label="Supplied By" 
+          placeholder={"Please search or select here"}  
           id={"suppliedBy"}
           setSelectOption={(option) => {
             if (typeof option.value == "string") {
@@ -65,17 +64,17 @@ const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
           label="Depot"
           placeholder={"Please search or select here"}
           id={"depot"}
-          // setSelectOptions={(options) => {
-          //   updateTenderData(
-          //     "shippingLocations",
-          //     options.reduce<number[]>((acc, option) => {
-          //       if (typeof option.value === "string") {
-          //         acc.push(parseInt(option.value));
-          //       }
-          //       return acc;
-          //     }, [])
-          //   );
-          // }}
+          setSelectOptions={(options) => {
+            updateTenderData(
+              "shippingLocations",
+              options.reduce<number[]>((acc, option) => {
+                if (typeof option.value === "string") {
+                  acc.push(parseInt(option.value));
+                } 
+                return acc;
+              }, [])
+            );                                
+          }}
 
           // handleOnChange={function (
           //   e: React.ChangeEvent<HTMLElement>
@@ -86,16 +85,17 @@ const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
         <DsTextField
           label="Stockist / Liasioner name"
           placeholder="Please type here"
-          // onChange={(e) => updateTenderData(" ", e.target.value)}
+          // onChange={(e) => updateTenderData("", e.target.value)}
         ></DsTextField>
+
         <DsTextField
           label="Stockist / Liasioner discount %"
           placeholder="Please type here"
           onChange={(e) => updateTenderData("supplierDiscount", e.target.value)}
         ></DsTextField>
+
       </div>
     </>
   );
 };
-
 export default DsApplierSupplierDetails;

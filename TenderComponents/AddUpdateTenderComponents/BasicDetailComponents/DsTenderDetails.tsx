@@ -10,21 +10,21 @@ import { useTenderData } from "../TenderDataContextProvider";
 import { debounce } from "@/helpers/Method/optimization";
 import DsDatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker";
 
-const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
+const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => { 
 
-  const [customers, setCustomers] = useState<searchCustomers[]>([]);
-  const [dataListOption, setDataListOption] = useState<datalistOptions[]>();
+  const [customers, setCustomers] = useState<searchCustomers[]>([]); 
+  const [dataListOption, setDataListOption] = useState<datalistOptions[]>(); 
   const { updateTenderData } = useTenderData();
-
+ 
   const handleFetch = async (searchTerm: string) => {
     try {
-      await fetchData({ url: searchCustomerURL + searchTerm }).then((res) => {
+      await fetchData({ url: searchCustomerURL + searchTerm }).then((res) => { 
         if ((res.code = 200)) {
           setCustomers(res.result); 
-        } else {
+        } else { 
           console.error(
-            "Error fetching data: ",
-            res.message || "Unknown error"
+            "Error fetching data: ", 
+            res.message || "Unknown error" 
           );
         }
       });
@@ -77,26 +77,26 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
               updateTenderData("customerLocationId", e.target.value)
             }
           ></DsTextField>
+
           <DsTextField
             label="Tender Number"
             placeholder="Please Type Here"
             onChange={(e) => updateTenderData("tenderNumber", e.target.value)}
-          ></DsTextField>
+          ></DsTextField>  
 
           <DsSingleSelect
             options={tenderDetails.tenderType}
-            // type={"single"}
             // label="Tender Type"
             placeholder={"Tender Type"} 
             id={"tenderType"}
             setSelectOption={(option) => {
-              if (typeof option.value == "string") {
+              if (typeof option.value == "string") { 
                 updateTenderData("tenderType", option.value);
-              }
+              } 
             }}
           ></DsSingleSelect>
            <DsDatePicker
-              id={"issueDate"}
+              id={"issueDate"} 
               initialDate={""} 
               className={""}
               // setDateValue={(date) => { 
@@ -104,12 +104,12 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
               // }}
               // disable={true}
               placeholder="DD/MM/YYYY"
-              label="Tender issue date"
+              label="Tender issue date" 
               onChange={(e) =>
                 updateTenderData("issueDate", e.target.value)
               }
             />  
-            <DsDatePicker
+            <DsDatePicker    
               id={"lastPurchaseDate"}
               initialDate={""} 
               className={""}
@@ -148,9 +148,9 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
               placeholder="DD/MM/YYYY"
               label="Rate contract validity"
               onChange={(e) => 
-                updateTenderData("rateContractValidity", e.target.value) 
+                updateTenderData("rateContractValidity", e.target.value)  
               }
-            /> 
+            />  
           <DsSingleSelect
             options={tenderDetails.submissionMode}
             // type={"single"}
@@ -197,4 +197,4 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
   );
 };               
      
-export default DsTenderDetails; 
+export default DsTenderDetails;  
