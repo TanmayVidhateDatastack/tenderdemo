@@ -113,10 +113,10 @@ return (
       displayContext(e, "TotalTenders", "vertical", "center");
     }}
 
-    // onMouseOut={(e) => {
-    //   closeContext("TotalTenders")
+    onMouseOut={(e) => {
+      closeContext("TotalTenders")
 
-    // }}
+    }}
  
   >
     <DsInfoDisplay
