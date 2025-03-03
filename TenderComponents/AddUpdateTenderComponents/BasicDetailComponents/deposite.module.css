@@ -10,7 +10,7 @@
     background: inherit;
   }
   .fieldColors{
-    background-color: white;
+    /* background-color: white; */
   }
   
   .applicationDeposits{
@@ -97,20 +97,6 @@
     color: var(--background);
   }
 
-  .SaveBtn{
-    display: flex;
-    justify-content: center;
-  }
-  .savebtn{
-    width: 100%;
-    height: auto;
-    margin-top: 120px;
-    background-color: var(--primary-hover);
-    color: var(--text-white) !important;
-  }
-  .documents{
-    font-size: 13px;
-    font-family: sans-serif;
-  }
+  
  
  

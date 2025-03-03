@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Accordion from "@/Elements/DsComponents/dsAccordion/accordion";
 import Ds_checkbox from "@/Elements/DsComponents/DsCheckbox/dsCheckbox";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
-import styles from "./deposite.module.css";
+import styles from "./document.module.css";
 import fetchData from "@/helpers/Method/fetchData";
 import { datalistOptions, DocumentResult, documents } from "@/helpers/types";
 import { getAllDocuments } from "@/helpers/constant";
@@ -58,6 +58,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
      iconEnd={<Image src={searchicon} alt="icon" />}
       >
     </DsSearchComponent>   */}
+    hufufy
 
       {Object.entries(groupedDocuments).map(([type, docs]) => (  
         <Accordion

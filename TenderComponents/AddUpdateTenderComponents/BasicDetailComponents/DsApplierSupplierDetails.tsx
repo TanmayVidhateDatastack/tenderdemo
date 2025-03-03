@@ -84,13 +84,13 @@ const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
         ></DsMultiSelect>
         <DsTextField
           label="Stockist / Liasioner name"
-          placeholder="Please type here"
+          // placeholder="Please type here"
           // onChange={(e) => updateTenderData("", e.target.value)}
         ></DsTextField>
 
         <DsTextField
           label="Stockist / Liasioner discount %"
-          placeholder="Please type here"
+          // placeholder="Please type here"
           onChange={(e) => updateTenderData("supplierDiscount", e.target.value)}
         ></DsTextField>
 

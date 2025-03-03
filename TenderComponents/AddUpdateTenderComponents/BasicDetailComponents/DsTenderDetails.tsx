@@ -47,31 +47,32 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
 
   return ( 
     <> 
+    
       <div className={styles.inputDetails}>
           <DsDataList
-            placeholder="Please search and select here"
+            // placeholder="Please search and select here" 
             label="Select Customer"  
             id="customerSelect"
             dataListId="customer-list"
             disable={false}
             className={styles.datalist}
             onOptionSelect={(option) => {
-              if (typeof option.value == "number") {
+              if (typeof option.value == "number") {  
                 updateTenderData("customerId", option.value);
               }
-            }}
+            }} 
             onKeyUp={debounce(async (e: React.KeyboardEvent<HTMLElement>) => {
               const input = e.target as HTMLInputElement;
               const searchTerm = input.value;
               if (searchTerm.trim().length > 3) {
                 handleFetch(searchTerm);
               }
-            }, 500)}
-            options={dataListOption}
+            }, 500)} 
+            options={dataListOption} 
           ></DsDataList>
 
           <DsTextField
-            placeholder={"Please Type Here"}
+            // placeholder={"Please Type Here"}
             label={"Customer Location"}
             onChange={(e) =>
               updateTenderData("customerLocationId", e.target.value)
@@ -80,7 +81,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
 
           <DsTextField
             label="Tender Number"
-            placeholder="Please Type Here"
+            // placeholder="Please Type Here"
             onChange={(e) => updateTenderData("tenderNumber", e.target.value)}
           ></DsTextField>  
 
@@ -155,7 +156,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
             options={tenderDetails.submissionMode}
             // type={"single"}
             label="Submission Mode"
-            placeholder={"Please Select Here"}
+            // placeholder={"Please Select Here"}
             id={"submissionMode"}
             setSelectOption={(option) => {
               if (typeof option.value == "string") {
@@ -165,13 +166,13 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
           ></DsSingleSelect>
           <DsTextField
             label={"Delivery Period"}
-            placeholder={"Please type or select"}
+            // placeholder={"Please type or select"}
             onChange={(e) => updateTenderData("deliveryPeriod", e.target.value)}
           ></DsTextField>
 
           <DsTextField
             label={"Extended Delivery Period"}
-            placeholder={"Please type or select"}
+            // placeholder={"Please type or select"}
             inputType={"number"}
             onChange={(e) =>
               updateTenderData("extendedDeliveryPeriod", e.target.value)
@@ -180,7 +181,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
 
           <DsTextField
             label="Penalty for last delivery purchase %"
-            placeholder="Please type here"
+            // placeholder="Please type here"
             onChange={(e) =>
               updateTenderData("lateDeliveryPenalty", e.target.value)
             }
@@ -188,7 +189,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
 
           <DsTextField
             label="Tender site/url"
-            placeholder="Please type here"
+            // placeholder="Please type here"
             onChange={(e) => updateTenderData("tenderURL", e.target.value)}
           ></DsTextField>
           

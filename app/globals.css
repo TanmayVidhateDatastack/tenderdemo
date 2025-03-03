@@ -6,8 +6,9 @@
   --application-background: var(--tnd-background);
   --tnd-background: #F8FFFF;
  
+  --seperator:#D9D9D9 !important;
   --green: #008080;
-  --green-hover:#E1F1F2;
+  --green-hover:#E1F1F2;  
   --blue-600: #82b1ff;
   --semiblue: #4f54a4;
   --red: #c50606;

@@ -5,7 +5,7 @@
     display: grid;
     gap: 2%;
     align-items: center;
-    border-bottom: 0.5px solid var(--separator);
+    /* border-bottom: 10px solid var(--black); */
     padding: var(--ds-padding);
     flex-wrap: wrap;
     grid-template-columns: repeat(4, minmax(150px, 1fr));
@@ -15,5 +15,12 @@
     flex: 1;
     margin: var(--ds-margin);
   } */
-   
-  
+
+.Seperator{
+  border-bottom: 1px solid var(--grey-200) !important; 
+  padding: 10px;
+}
+.pane{
+  width: 30px;
+  height: 30px;
+}

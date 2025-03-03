@@ -9,6 +9,7 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
   const { updateSupplyCondition } = useTenderData();
   return (
     <>
+    <div>Supply Conditions </div> 
       <div className={styles.inputDetails}>
         <DsSingleSelect 
           options={supplyDetails.supplyPoints}
