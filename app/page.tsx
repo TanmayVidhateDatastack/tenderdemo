@@ -634,7 +634,9 @@ export default function Home() {
         e: React.MouseEvent<HTMLElement>,
         filteredRows: DsTableRow[]
       ) => {
-        setoriginalTableData((data) => ({ ...data, rows: filteredRows }));
+        setTempTableData((data) => ({ ...data, rows: filteredRows }));
+
+        // setoriginalTableData((data) => ({ ...data, rows: filteredRows }));
         ClosePane(e);
       };
     

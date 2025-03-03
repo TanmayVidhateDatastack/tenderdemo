@@ -673,7 +673,8 @@ export class filterType {
 export class DsFilterValues {
   columnIndex: number = 0;
   columnHeader: string = "";
-  values: unknown[] = [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  values: any[] = [];
 }
 
 export class columnSort {

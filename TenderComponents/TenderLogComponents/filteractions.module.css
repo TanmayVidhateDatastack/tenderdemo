@@ -116,9 +116,10 @@ gap:0px;
   padding: 0px !important;
 }
 .datalist {
-  width: 35rem!important;
+  width: 30%!important;
   margin-right: 1rem;
-  background-color: inherit !important;
+  /* background-color: inherit !important; */
+  background-color: var(--background)!important;
   box-shadow: #0000000F 0.2rem 0.2rem 0.4rem  !important;
 }
 /* .dis{

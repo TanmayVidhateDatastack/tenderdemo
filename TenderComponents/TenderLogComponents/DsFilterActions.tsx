@@ -414,7 +414,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
         // />
         <DsButton
           id="iconfilterBtn"
-          buttonColor="btnPrimary"
+           buttonColor="btnPrimary"
           buttonViewStyle="btnText"
           className={btnStyles.btnTextPrimary + " text-dark-2"}
           startIcon={
