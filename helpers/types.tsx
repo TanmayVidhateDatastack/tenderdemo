@@ -201,6 +201,12 @@ export interface locationProps {
   id: string; // User's location
   location: location;
 }
+ export interface nameProps
+ {
+id :string;
+name:string;
+
+ }
 export interface DsPaneProps {
   id?: string;
   type?: "inset" | "overlay";

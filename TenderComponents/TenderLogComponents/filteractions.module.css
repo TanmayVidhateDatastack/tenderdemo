@@ -121,7 +121,17 @@ gap:0px;
   background-color: inherit !important;
   box-shadow: #0000000F 0.2rem 0.2rem 0.4rem  !important;
 }
-
+/* .dis{
+  margin: 0.3rem 0.2vw !important;
+} */
+.dis:hover
+{
+ background-color: transparent !important;
+}
+.nav {
+  display: flex;
+  gap: 0px;
+}
 
 
 /* @media screen  and (max-width: 1450px) {

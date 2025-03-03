@@ -303,9 +303,9 @@ a.secondary {
 .zeroText {
   color: var(--grey-400);
 }
-.newbutton1{
+/* .newbutton1{
   border: 0.2rem solid var(--primary) !important;
    padding: 0rem !important;
-}
+} */
 
 

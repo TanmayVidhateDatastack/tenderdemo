@@ -23,6 +23,7 @@ import DsPane, { ClosePane } from "@/Elements/DsComponents/DsPane/DsPane";
 import AdvancedFilterComponent from "@/Elements/DsComponents/AdvancedFilterComponent/AdvancedFilterComponent";
 import DsCurrency from "@/Elements/DsComponents/dsCurrency/dsCurrency";
 import addIcon from "../Icons/smallIcons/add.svg";
+import DsName from "@/Elements/DsComponents/DsName/dsName";
  
 export default function Home() { 
   const [data, setData] = useState<Tender[]>([]); //for table data
@@ -236,8 +237,10 @@ export default function Home() {
       const day = parseInt(dateParts[0], 10);
       const month = parseInt(dateParts[1], 10) - 1; // JavaScript months are 0-based
       const year = parseInt(dateParts[2], 10);
-    
-      // Create submission date in UTC
+      // const day = parseInt(dateParts[2], 10);
+      // const month = parseInt(dateParts[1], 10) - 1; // JavaScript months are 0-based
+      // const year = parseInt(dateParts[0], 10);
+      // // Create submission date in UTC
       const subDate = new Date(Date.UTC(year, month, day));
       
       // Get today's date in UTC (ignoring time)
@@ -302,8 +305,8 @@ export default function Home() {
           content: [
             {
               columnIndex: 0,
-              className: "  cell cell-customer text-dark-1 ",
-              content: item.customerName || "-",
+              className: "cell cell-customer text-dark-1",
+              content: <DsName id={item.tenderId} name={item.customerName || "-"} />,
               filterValue: item.customerName || "-",
               contentType: "string",
             },
@@ -500,7 +503,7 @@ export default function Home() {
           {
             columnIndex: 0,
             className: " cell cell-customer text-dark-1 " ,
-            content: t.customerName,
+            content: <DsName id={t.tenderId} name={t.customerName || "-"} />,
             filterValue: t.customerName,
             contentType: "string",
           },
@@ -710,7 +713,7 @@ return (
 
       
     </DsApplication>
-    <DsPane id="y" side="right" title="Filter">
+    <DsPane id="tenderFilter" side="right" title="Filter">
       <AdvancedFilterComponent
           id="a"
           rows={originalTabledata.rows}
