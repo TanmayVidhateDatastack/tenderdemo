@@ -8,6 +8,7 @@ import { datalistOptions, DocumentResult, documents } from "@/helpers/types";
 import { getAllDocuments } from "@/helpers/constant";
 import Image from "next/image";
 import searchicon from "@/Icons/smallIcons/searchicon.svg"
+import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 
 const DsAddTenderDocumentPane: React.FC = () => {
   const [openAccordion, setOpenAccordion] = useState<string | null>(null);
@@ -52,39 +53,65 @@ const DsAddTenderDocumentPane: React.FC = () => {
   }, []);
 
   return (
-    <>
+   <>
     {/* <DsSearchComponent
      placeholder="Search documents here" 
      iconEnd={<Image src={searchicon} alt="icon" />}
       >
     </DsSearchComponent>   */}
-    hufufy
+    <div className={styles.padd}>
+      <DsTextField
+            label="Search document here"
+            id="userSelect"
+            disable={false}
+            initialValue=""
+            iconEnd={
+              <div
+              style={{
+                width: "100%",
+                  height: "100%",
+                  position: "relative",
+                }}
+                >
+                <Image
+                  src={searchicon}
+                  layout="fill"
+                  objectFit="cover"
+                  alt="searchicon"
+                />
+              </div>
+            }
+            containerClasses={styles.datalist}
+            // onChange={ }
+            // onKeyUp={}
+            />
 
-      {Object.entries(groupedDocuments).map(([type, docs]) => (  
-        <Accordion
+        {Object.entries(groupedDocuments).map(([type, docs]) => (  
+          <Accordion
           key={type} 
           id={type}
           title={type}
           isOpen={openAccordion === type}
           onToggle={() => handleAccordionToggle(type)}
-        >
-          <div className={styles.documents}>
-            {docs.map((doc) => (
-              <Ds_checkbox
+          >
+            <div className={styles.documents}>
+              {docs.map((doc) => (
+                <Ds_checkbox
                 key={doc.id}
-                id={doc.id.toString()}
-                name={doc.documentName}
-                value={doc.id.toString()}
-                label={doc.documentName}
-              />
-            ))}
-          </div> 
-        </Accordion>
-      ))}
-      <div className={styles.SaveBtn}>
-        <DsButton className={styles.savebtn} label="Save" />
-      </div>
-    </>
+                  id={doc.id.toString()}
+                  name={doc.documentName}
+                  value={doc.id.toString()}
+                  label={doc.documentName}
+                />
+              ))}
+            </div> 
+          </Accordion>
+        ))}
+        <div className={styles.SaveBtn}>
+          <DsButton className={styles.savebtn} label="Save" />
+        </div>
+    </div>
+  </> 
   );
 };  
 

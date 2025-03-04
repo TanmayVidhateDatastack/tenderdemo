@@ -3,8 +3,8 @@
     justify-content: center;
   }
   .savebtn{
-    width: 100%;
-    height: auto;
+    width: 98%;
+    height: 40px;
     margin-top: 120px;
     background-color: var(--primary-hover);
     color: var(--text-white) !important;
@@ -12,4 +12,7 @@
   .documents{
     font-size: 13px;
     font-family: sans-serif;
+  }
+  .padd{
+    padding: 20px;
   }

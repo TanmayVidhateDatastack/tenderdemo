@@ -21,6 +21,6 @@
   padding: 10px;
 }
 .pane{
-  width: 30px;
+  width:fit-content;
   height: 30px;
 }
