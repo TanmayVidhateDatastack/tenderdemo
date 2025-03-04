@@ -11,6 +11,7 @@ const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
   applierSupplierDetails,
 }) => { 
   const { updateTenderData } = useTenderData(); 
+  console.log("djhdjd",applierSupplierDetails.appliedBy);
   return (
     <>
       <div className={styles.inputDetails}>
@@ -21,7 +22,7 @@ const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
           placeholder={"Please search or select here"}
           id={"appliedBy"}
           setSelectOption={(option) => {
-            if (typeof option.value == "string") {
+            if (typeof option.value == "string") { 
               updateTenderData(
                 "appliedBy",
                 option.label == "IPCA" ? option.label : "Stockist"

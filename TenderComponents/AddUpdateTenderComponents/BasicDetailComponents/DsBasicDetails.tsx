@@ -62,7 +62,7 @@ const DsBasicDetails =() => {
     } catch (error) {
       console.error("Fetch error: ", error);
     }
-  };
+  }; 
   useEffect(() => {
     handleFetch();
   }, []);
@@ -89,20 +89,20 @@ const DsBasicDetails =() => {
         </div>
         <span className={styles.Seperator}>
         </span>
-        <div>
+        {/* <div>
           <DsDepositeDocuments
             setDepositeDocuments={(docs) => {
               setDepositeDocuments(docs);
             }}
             depositeDocument={depositeDocument}
             applicableDeposits={applicableDocuments}/>
-        </div> 
+        </div>  */}
         <span className={styles.Seperator}>
         </span>
-        <div>
+        <div>  
           <DsSupplyDetails supplyDetails={supplyDetails} />
-        </div>
-        <span className={styles.Seperator}>
+        </div> 
+        <span className={styles.Seperator}> 
         </span>
         <div >
           <DsApplicableConditions
@@ -112,4 +112,4 @@ const DsBasicDetails =() => {
     </>
   );
 };
-export default DsBasicDetails;
+export default DsBasicDetails; 

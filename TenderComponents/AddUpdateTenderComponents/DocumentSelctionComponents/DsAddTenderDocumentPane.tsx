@@ -74,11 +74,11 @@ const DsAddTenderDocumentPane: React.FC = () => {
                 }}
                 >
                 <Image
-                  src={searchicon}
-                  layout="fill"
-                  objectFit="cover"
+                  src={searchicon}  
+                  layout="fill" 
+                  objectFit="cover" 
                   alt="searchicon"
-                />
+                /> 
               </div>
             }
             containerClasses={styles.datalist}
@@ -88,8 +88,8 @@ const DsAddTenderDocumentPane: React.FC = () => {
 
         {Object.entries(groupedDocuments).map(([type, docs]) => (  
           <Accordion
-          key={type} 
-          id={type}
+          key={type}  
+          id={type} 
           title={type}
           isOpen={openAccordion === type}
           onToggle={() => handleAccordionToggle(type)}
@@ -97,19 +97,20 @@ const DsAddTenderDocumentPane: React.FC = () => {
             <div className={styles.documents}>
               {docs.map((doc) => (
                 <Ds_checkbox
+                className={styles.checkbox}
                 key={doc.id}
-                  id={doc.id.toString()}
-                  name={doc.documentName}
-                  value={doc.id.toString()}
-                  label={doc.documentName}
+                id={doc.id.toString()}
+                name={doc.documentName}
+                value={doc.id.toString()}
+                label={doc.documentName}
                 />
               ))}
             </div> 
           </Accordion>
         ))}
         <div className={styles.SaveBtn}>
-          <DsButton className={styles.savebtn} label="Save" />
-        </div>
+          <DsButton className={styles.savebtn} label="Save"/> 
+        </div> 
     </div>
   </> 
   );

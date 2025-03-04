@@ -20,7 +20,3 @@
   border-bottom: 1px solid var(--grey-200) !important; 
   padding: 10px;
 }
-.pane{
-  width:fit-content;
-  height: 30px;
-}

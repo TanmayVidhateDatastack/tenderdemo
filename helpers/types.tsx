@@ -150,7 +150,8 @@ export interface DocumentSelectorProps {
   headerTitle: string;
   headerNumber: string;
   initialDocuments: string[];
-}
+  handleOnRemoveClick ?: (string) => void; 
+} 
 export interface addressProps {
   address: string; // User's location
 }

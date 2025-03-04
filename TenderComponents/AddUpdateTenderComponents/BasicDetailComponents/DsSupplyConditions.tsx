@@ -22,7 +22,7 @@ import DsCsvUpload, {
             <div>{title}</div>
           </div>
           <div className={styles.notes}>
-            <h4>Notes</h4>
+            <h4>Notes</h4>  
             <TextArea
               id="embossmentNotes"
               placeholder="Please type here"
