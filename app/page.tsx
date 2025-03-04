@@ -306,8 +306,9 @@ export default function Home() {
             {
               columnIndex: 0,
               className: "cell cell-customer text-dark-1",
-              content: <DsName id={item.tenderId} name={item.customerName || "-"} />,
+              content: <DsName id={item.tenderId+"customerName "} name={item.customerName || "-"} />,
               filterValue: item.customerName || "-",
+              // content:item.customerName || "-",
               contentType: "string",
             },
             {
@@ -341,28 +342,32 @@ export default function Home() {
             {
               columnIndex: 5,
               className: " cell cell-depot text-dark-1",
-              content: item.depot || "-",
+              // content: item.depot || "-",
+              content: <DsName id={item.tenderId+"depot"} name={item.depot|| "-"} />,
               filterValue: item.depot || "-",
               contentType: "string",
             },
             {
               columnIndex: 6,
               className: " cell cell-appliedby text-dark-0 ",
-              content: item.appliedBy || "-",
+              // content: item.appliedBy || "-",
+              content: <DsName id={item.tenderId+"appliedBy"} name={item.appliedBy|| "-"} />,
               filterValue: item.appliedBy || "-",
               contentType: "string",
             },
             {
               columnIndex: 7,
               className: " cell cell-suppliedby text-dark-0 ",
-              content: item.suppliedBy || "-",
+              // content: item.suppliedBy || "-",
+              content: <DsName id={item.tenderId+"suppliedBy"} name={item.suppliedBy|| "-"} />,
               filterValue: item.suppliedBy || "-",
               contentType: "string",
             },
             {
               columnIndex: 8,
               className: " cell cell-preparedby text-dark-0 ",
-              content: item.preparedBy || "-",
+              // content: item.preparedBy || "-",
+              content: <DsName id={item.tenderId+"preparedBy"} name={item.preparedBy || "-"} />,
               filterValue: item.preparedBy || "-",
               contentType: "string",
             },
@@ -503,7 +508,7 @@ export default function Home() {
           {
             columnIndex: 0,
             className: " cell cell-customer text-dark-1 " ,
-            content: <DsName id={t.tenderId} name={t.customerName || "-"} />,
+            content: <DsName id={t.tenderId+"customerName"} name={t.customerName || "-"} />,
             filterValue: t.customerName,
             contentType: "string",
           },
@@ -538,28 +543,32 @@ export default function Home() {
           {
             columnIndex: 5,
             className: " cell cell-depot text-dark-1 ",
-            content: t.depot,
+            // content: t.depot,
+            content: <DsName id={t.tenderId+"depot"} name={t.depot || "-"} />,
             filterValue: t.depot,
             contentType: "string",
           },
           {
             columnIndex: 6,
             className: " cell cell-appliedby text-dark-0 ",
-            content: t.appliedBy,
+            // content: t.appliedBy,
+            content: <DsName id={t.tenderId+"appliedBy"} name={t.appliedBy || "-"} />,
             filterValue: t.appliedBy,
             contentType: "string",
           },
           {
             columnIndex: 7,
             className: " cell cell-suppliedby text-dark-0 ",
-            content: t.suppliedBy,
+            // content: t.suppliedBy,
+            content: <DsName id={t.tenderId+"suppliedBy"} name={t.suppliedBy || "-"} />,
             filterValue: t.suppliedBy,
             contentType: "string",
           },
           {
             columnIndex: 8,
             className: " cell cell-preparedby text-dark-0 ",
-            content: t.preparedBy,
+            // content: t.preparedBy,
+            content: <DsName id={t.tenderId+"preparedBy"} name={t.preparedBy || "-"} />,
             filterValue: t.preparedBy,
             contentType: "string",
           },
@@ -634,9 +643,7 @@ export default function Home() {
         e: React.MouseEvent<HTMLElement>,
         filteredRows: DsTableRow[]
       ) => {
-        setTempTableData((data) => ({ ...data, rows: filteredRows }));
-
-        // setoriginalTableData((data) => ({ ...data, rows: filteredRows }));
+   setTempTableData((data) => ({ ...data, rows: filteredRows }));
         ClosePane(e);
       };
     
@@ -718,7 +725,7 @@ return (
     <DsPane id="tenderFilter" side="right" title="Filter">
       <AdvancedFilterComponent
           id="a"
-          rows={originalTabledata.rows}
+          rows={tempTableData.rows}
           filterTypes={flterTypes}
           handleApplyFilter={applyFilter}
         />
