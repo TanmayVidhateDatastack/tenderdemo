@@ -261,11 +261,28 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
           id="userSelect"
           disable={false}
           initialValue=""
+          // iconEnd={
+          //   <div
+          //     style={{
+          //       width: "100%",
+          //       height: "100%",
+          //       position: "relative",
+          //     }}
+          //   >
+          //     <Image
+          //       src=
+          //       {searchicon}
+          //       layout="fill"
+          //       objectFit="cover"
+          //       alt="searchicon"
+          //     />
+          //   </div>
+          // }
           iconEnd={
             <div
               style={{
-                width: "100%",
-                height: "100%",
+                width: "1.125em",
+                height: "1.125em",
                 position: "relative",
               }}
             >
@@ -277,6 +294,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
               />
             </div>
           }
+
           containerClasses={styles.datalist}
           onChange={(e) => setSearchText(e.target.value)}
           onKeyUp={(e) => handleSearch(e)}

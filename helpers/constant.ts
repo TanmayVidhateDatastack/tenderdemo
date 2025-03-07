@@ -83,9 +83,9 @@ export const getAllTenders = apiHostUrl + "/tenders";
 export const getAllMetaData = apiHostUrl + "/tenderMetadata";
 
 //Tender User Roles
-export const getTenderUserRoles = apiHostUrl + "/maker";
+// export const getTenderUserRoles = apiHostUrl + "/maker";
 // export const getTenderUserRoles = apiHostUrl + "/checker";
-// export const getTenderUserRoles = apiHostUrl + "/homanager";
+export const getTenderUserRoles = apiHostUrl + "/homanager";
 // export const getTenderUserRoles = apiHostUrl + "/accountance";
 
 export const getTenderSearchProducts =
@@ -127,6 +127,9 @@ export const DsTenderProductStatus: Record<string, dsTenderProductStatus> = {
   UPDT: "Update"
 };
 export type dsTenderProductStatus = "Create" | "Update";
+export const closeTimeForTender = 3000;
+ export const saveTenderurl="http://172.145.1.102:7005/api/tender";
+ 
 // export type bankDetail = {
 //   bankName: string;
 //   accountNumber: string;

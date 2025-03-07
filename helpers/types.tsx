@@ -406,20 +406,21 @@ export interface InputTextAreaProps {
   minRows?: number;
 }
 export interface ToasterProps {
+  id?: string;
   message: string;
-  type: "success" | "bonus" | "info" | "error";
+  isOkayButton?: boolean;
+  type: "success" | "bonus" | "info" | "error" | "cross";
   handleClose: () => void;
   position:
-    | "top"
-    | "topleft"
-    | "topright"
-    | "middle"
-    | "bottom"
-    | "bottomleft"
-    | "bottomright";
+  | "top"
+  | "topleft"
+  | "topright"
+  | "middle"
+  | "bottom"
+  | "bottomleft"
+  | "bottomright";
   duration?: number;
 }
-
 export interface tbodyprops {
   className: string;
   children?: React.ReactNode;

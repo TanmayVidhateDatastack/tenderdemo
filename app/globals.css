@@ -396,7 +396,9 @@ width: 6%!important;
   max-width:100% ;
 min-width: 13%!important;
 width: 13%!important;
-white-space: nowrap;
+white-space:nowrap;
+text-overflow: ellipsis; 
+
 }
 
 thead,

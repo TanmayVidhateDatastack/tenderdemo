@@ -302,6 +302,7 @@ export default function Home() {
               </div>
             ),
           customAttributes: { iconValue: item?.type?.toString() ?? "" },
+        
           content: [
             {
               columnIndex: 0,
@@ -741,7 +742,7 @@ return (
               buttonColor="btnPrimary"
               buttonViewStyle="btnText"
               className={styles.MenuBtn}
-              location="Tender"
+              location="Tender/TenderId"
               label="Institutional"
             />
             <DsNavTo

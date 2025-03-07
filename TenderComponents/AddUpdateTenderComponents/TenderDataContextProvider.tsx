@@ -1,3 +1,6 @@
+import { showToaster } from "@/Elements/DsComponents/DsToaster/DsToaster";
+import { closeTimeForTender, dsStatus,saveTenderurl } from "@/helpers/constant";
+import fetchData from "@/helpers/Method/fetchData";
 import {
   applicableSupplyConditions,
   TenderData,
@@ -7,10 +10,18 @@ import {
   TenderProduct,
   Company,
 } from "@/helpers/types";
-import React, { createContext, useContext, useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
+class ActionStatus {
+  notiType: "success" | "bonus" | "info" | "error" | "cross" = "success";
+  notiMsg: string = "";
+  showNotification: boolean = false;
+}
 
 interface TenderDataContextType {
   tenderData: TenderData;
+  actionStatus: ActionStatus;
+  setActionStatusValues: (actionStatus: ActionStatus) => void;
   updateTenderData: (
     key: keyof TenderData,
     value: string | number | tenderFee[] | tenderSupplyCondition
@@ -41,6 +52,7 @@ interface TenderDataContextType {
   ) => void;
   addApplicableCondition: (type: string) => void;
   removeApplicableCondition: (conditionType: string) => void;
+  saveTender: (status: dsStatus) => Promise<void>;
 }
 
 const TenderDataContext = createContext<TenderDataContextType | undefined>(
@@ -50,6 +62,7 @@ const TenderDataContext = createContext<TenderDataContextType | undefined>(
 export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   children
 }) => {
+
   const [tenderData, setTenderData] = useState<TenderData>({
     customerId: 0,
     customerLocationId: 0,
@@ -83,6 +96,15 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     },
     products: [],
     documentList: []
+  });
+
+
+
+
+  const [actionStatus, setActionStatus] = useState<ActionStatus>({
+    notiMsg: "",
+    notiType: "success",
+    showNotification: false,
   });
 
   // ✅ Update top-level tender fields
@@ -240,11 +262,104 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       }
     }));
   };
+  
+  const setActionStatusValues = useCallback((actionStatus: ActionStatus) => {
+    setActionStatus(actionStatus);
+  }, [tenderData]
+  );
+
+  const tenderDataCopyRef = useRef(tenderData);
+
+  const router = useRouter();
+  const goBack = () => {
+    router.back();
+  };
+
+  // Update the ref whenever orderDataCopy changes
+  useEffect(() => {
+    tenderDataCopyRef .current = tenderData;
+  }, [tenderData]);
+
+  const stripReadOnlyProperties = (obj: any): any => {
+    if (Array.isArray(obj)) {
+      return obj.map((item) => stripReadOnlyProperties(item));
+    }
+
+    if (typeof obj !== "object" || obj === null) {
+      return obj;
+    }
+
+    const newObj: any = {};
+    for (const key in obj) {
+      if (obj[key] && typeof obj[key] === "object") {
+        if (obj[key].type?.toLowerCase() !== "read-only") {
+          newObj[key] = stripReadOnlyProperties(obj[key]);
+        }
+      } else {
+        newObj[key] = obj[key];
+      }
+    }
+    return newObj;
+  };
+  // Save Order API Call
+  const saveTender = useCallback(
+    async (status: dsStatus) => {
+      if (!tenderData) return;
+      // console.log("sAVEEEE", orderDataCopy);
+
+      const dataToSend = stripReadOnlyProperties({
+        ...tenderData,
+        status: status.toUpperCase(),
+        createdBy: 3,
+      });
+
+      
+
+      console.log("sAVEEEE", dataToSend);
+      try {
+        await fetchData({
+          url: saveTenderurl,
+          method: "POST",
+          dataObject: dataToSend,
+        }).then((res) => {
+          // console.log("res = ",res);
+          if (res.code === 200) {
+            setActionStatus({
+              notiMsg: "Order Created Successfully",
+              notiType: "success",
+              showNotification: true,
+            });
+            showToaster("create-order-toaster");
+            setTimeout(() => {
+              goBack();
+
+            }, closeTimeForTender)
+          } else {
+            setActionStatus({
+              notiMsg: "Order could not be saved",
+              notiType: "error",
+              showNotification: true,
+            });
+            showToaster("create-order-toaster");
+          }
+        });
+
+        // console.log("result  = ", result);
+        //console.log("Order saved successfully");
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (error) {
+        // console.error("Error saving order:", error);
+      }
+    },
+    [tenderData, fetchData]
+  );
+
 
   return (
     <TenderDataContext.Provider
       value={{
         tenderData,
+        actionStatus,
         updateTenderData,
         updateTenderFee,
         addTenderFee,
@@ -256,7 +371,8 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         addTenderProduct,
         updateTenderProduct,
         addApplicableCondition,
-        removeApplicableCondition
+        removeApplicableCondition,
+        saveTender
       }}
     >
       {children}
