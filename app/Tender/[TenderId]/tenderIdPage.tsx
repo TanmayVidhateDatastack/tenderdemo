@@ -13,18 +13,17 @@ import DsAddTenderDocumentPane from "@/TenderComponents/AddUpdateTenderComponent
 const DsTenderIdPage: React.FC = () => {
   const { tenderData, addTenderProduct } = useTenderData();
   const [selectedTabId, setSelectedTabId] = useTabState("tenderPage"); // Use the custom hook
-
+ 
   const tabs = [
     { tabId: "0", tabName: "Basic Details" },
     { tabId: "1", tabName: "Products ₹ (V1)" },
     { tabId: "2", tabName: "Documents" },
-  ];
-
+  ];    
   return (
     <>
       <DsApplication
         selectedTabId={selectedTabId}
-        appTitle="Tender"
+        appTitle="Tender"  
         tabs={tabs}
         pageName="tenderPage" // Add this prop
       >
@@ -33,10 +32,10 @@ const DsTenderIdPage: React.FC = () => {
               <TabView tabId="0" pageName="tenderPage"> 
                 <DsBasicDetails />
               </TabView>
-              <TabView tabId="2" pageName="tenderPage"> 
-                <DsDocumentSelection/>
+              <TabView tabId="2" pageName="tenderPage">  
+                <DsDocumentSelection/> 
               </TabView>
-            
+             
               <DsPane id="h" side="right" title="Documents">
                 <DsAddTenderDocumentPane/>
               </DsPane> 

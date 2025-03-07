@@ -33,10 +33,10 @@ export interface DepositeDocumentsProps {
 }
  
 const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
-  depositeDocument,
+  depositeDocument, 
   applicableDeposits
 }) => {
-  const contextMenuId = "context-display-10";
+  const contextMenuId = "context-display-10"; 
   const { addTenderFee, removeTenderFeeByType } = useTenderData();
   const [mode, setMode] = useState<DsSelectOption[]>([]);
   const [paidBy, setPaidBy] = useState<DsSelectOption[]>([]);

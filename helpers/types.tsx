@@ -38,9 +38,9 @@ export interface advancedFilterComponent {
 export interface AccordionProps {
   id: string;
   title: string;
-  children: string | React.ReactNode;
+  children?: string | React.ReactNode;
   isOpen?: boolean;
-  onToggle: (id: string) => void;
+  onToggle?: (id: string) => void;
 }
 
 export interface DSButtonProps {
@@ -150,7 +150,7 @@ export interface DocumentSelectorProps {
   headerTitle: string;
   headerNumber: string;
   initialDocuments: string[];
-  handleOnRemoveClick ?: (string) => void; 
+  handleOnRemoveClick: (doc: string) => void;
 } 
 export interface addressProps {
   address: string; // User's location
@@ -204,6 +204,12 @@ export interface locationProps {
   id: string; // User's location
   location: location;
 }
+ export interface nameProps
+ {
+id :string; 
+name:string;
+
+ }
 export interface DsPaneProps {
   id?: string;
   type?: "inset" | "overlay";
@@ -671,7 +677,8 @@ export class filterType {
 export class DsFilterValues {
   columnIndex: number = 0;
   columnHeader: string = "";
-  values: unknown[] = [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  values: any[] = [];
 }
 
 export class columnSort {
@@ -725,7 +732,7 @@ export type customer = {
 // export type tieUpProduct = {
 //   productId: number;
 //   productCode: string;
-//   productName: string;
+//   productName: string;  
 //   batchId: number;
 //   batchNumber: string;
 //   expiryDate: string;
@@ -1118,3 +1125,4 @@ export interface DocumentResult {
 //   depositeDocument:any;
 //   supplyConditions:any;
 // }
+ 

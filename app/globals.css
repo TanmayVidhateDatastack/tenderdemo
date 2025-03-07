@@ -189,111 +189,6 @@ body {
   font-family: var(--font-Open-sans) !important;
   letter-spacing: 0.02px !important;
 }
-.cellRow {
-  /* Add your styles here */
-  min-width: 100%;
- 
-}
-.cellRow .cell {
-  margin-right: 0.8rem;
-}
- 
- 
-.logRow:hover {
-  background-color: var(--background-hover);
-}
-.cell-0 {
-  flex: 0;
-  max-width: 1.8rem !important;
-  min-width: 1.8rem !important;
-}
-.cell-0-5 {
-  flex: 1;
-  max-width: 8% !important;
-  min-width: 8% !important;
-}
-.cell {
-  flex: 1;
-  max-width: 10% !important;
-  min-width: 10% !important;
-}
-.cell-1 {
-  flex: 1;
-  max-width: 12% !important;
-  min-width: 12% !important;
-}
-.cell-2 {
-  flex: 1;
- 
-  max-width: 15% !important;
-  min-width: 15% !important;
-}
-.cell-customer{
-  max-width: 10.3rem !important;
-  min-width: 10.3rem !important;
-  white-space:nowrap;
-  text-overflow: ellipsis;
- 
- }
- 
-.cell-submissiondate
-{
-  max-width: 10.7rem !important;
-  min-width: 10.7rem !important;
-}
-.cell-days-to-submit
-{
- 
-    max-width: 9.8rem !important;
-    min-width: 9.8rem !important;
-  }
-  .cell-tenderid
-{
- 
-    max-width: 6.2rem !important;
-    min-width: 6.2rem !important;
-  }
-   .cell-tendertype
-  {
- 
-      max-width: 7.7rem !important;
-      min-width: 7.7rem !important;
-     }
- 
-     .cell-depot
-     {
-       min-width:max-content !important;
-       flex:1;
-       max-width: 6% !important;
-     }
- 
-.cell-appliedby
-{
-max-width: 6.6rem !important;
-min-width: 6.6rem !important;
-}
-.cell-suppliedby
-{
-max-width: 7.4rem !important;
-min-width: 7.4rem !important;
-}
-.cell-preparedby
-{
-max-width: 7.8rem !important;
-min-width: 7.8rem !important;
-}
-.cell-value
-{
-max-width: 5.5rem !important;
-min-width: 5.5rem !important;
-}
-.cell-status
-{
-max-width: 4.4rem !important;
-min-width: 4.4rem !important;
-}
- 
- 
 /*
 /* @media (prefers-color-scheme: dark) {
   :root {
@@ -301,99 +196,210 @@ min-width: 4.4rem !important;
     --foreground: #ededed;
   }
 } */
- 
+.m-0 {
+  margin: 0 !important;
+}
+.p-0 {
+  padding: 0 !important;
+}
+.py-1 {
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+}
+.mx-0 {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
 .cellRow {
   flex: 1;
   display: flex;
  
   height: fit-content;
-  /* min-width: 112.4rem !important; */
+  max-width: 100%;
   cursor: pointer !important;
 }
 .cellRow .cell {
-  margin-right: 1.6rem;
+  /* margin-right: 1.4rem; */
 }
 .logRow:hover {
   background-color: var(--background-hover);
 }
 .cell-0 {
   flex: 0;
-  max-width: 1.8rem !important;
-  min-width: 1.8rem !important;
+  max-width: 3% !important;
+  width: 3%;
+  min-width: 3% !important;
 }
 .cell-0-5 {
   flex: 1;
-  max-width: 8% !important;
+  max-width: 100%;
+  width: 8%;
   min-width: 8% !important;
 }
 .cell {
   flex: 1;
+  max-width: 100% !important;
   /* max-width: 10% !important; */
-  min-width: 10% !important;
+  /* min-width: 10% !important; */
 }
 .cell-1 {
   flex: 1;
   min-width: 12% !important;
+  width: 12%;
+  max-width: 100%;
 }
 .cell-2 {
   flex: 1;
   margin-right: 0;
  
   /* max-width: 80% !important; */
-  min-width: 15% !important;
-  max-width: 20rem !important;
+  min-width: 18% !important;
+  width: 18%;
+  max-width: 100%;
 }
 .cell-date {
-  max-width: 6rem !important;
+  max-width: 100%;
+  width: 9%;
  
-  min-width: 6rem !important;
+  min-width: 9% !important;
 }
 .cell-order-id {
-  max-width: 8rem !important;
- 
-  min-width: 8rem !important;
+  min-width: 9% !important;
+  width: 9%;
+  max-width: 100%;
 }
 .cell-location {
   flex: 1;
   /* max-width: 80% !important; */
   margin-right: 0;
  
-  min-width: 16.1rem !important;
-  max-width: 20rem !important;
+  min-width: 18% !important;
+  width: 18%;
+  max-width: 100%;
 }
  
 .text-dark-0 {
   color: var(--grey-400) !important;
 }
 .text-dark-1 {
-  font-weight: 500;
+  /* font-weight: 500; */
  
   color: var(--grey-600) !important;
 }
 .text-dark-2 {
   font-weight: bold;
-  color: var(--grey-700) !important;
+  color: var(--grey-700);
 }
 .number-cell {
   margin-right: 0;
- 
+  padding-right: 1rem;
   display: flex;
   flex: 1;
+  justify-content: left !important;
+ 
   /* max-width: 80% !important; */
-  justify-content: flex-end !important;
   /* justify-items: end; */
-  min-width: 11rem !important;
-  width: fit-content;
-  max-width: 100% !important;
+  min-width: 10% !important;
+  width: 10%;
+  /* width: fit-content; */
+  max-width: 100%;
+}
+.number-cell:not(.header-column) {
+  justify-content: flex-end !important;
 }
 .status-cell {
   margin-right: 0;
  
   flex: 1;
   /* max-width: 80% !important; */
-  min-width: 20rem !important;
-  max-width: 20rem !important;
+  min-width: 20% !important;
+  width: 20%;
+  max-width: 100%;
 }
+
+.cell-customer{
+
+  max-width:100% ;
+  min-width: 11% !important;
+  width: 11% !important;
+  white-space:nowrap;
+  text-overflow: ellipsis; 
+ }
+
+.cell-submissiondate
+{
+  max-width:100% ;
+  min-width: 11% !important;
+  width: 11% !important;
+}
+.cell-days-to-submit
+{
+
+  max-width:100% ;
+    min-width: 10% !important;
+    width: 10% !important;
+  }
+  .cell-tenderid
+{
+
+  max-width:100% ;
+    min-width: 6%!important;
+  width: 6%!important;
+
+  }
+  .cell-tendertype
+  {
+
+    max-width:100% ;
+      min-width: 8% !important;
+      width: 8%!important;
+     }
+      .cell-depot
+      {
+    
+        width: 8%!important;
+        min-width:8% !important;
+        flex:1;
+        max-width:100% ;
+   }
+
+.cell-appliedby
+{
+
+  max-width:100% ;
+min-width: 7%!important;
+width: 7%!important;
+}
+.cell-suppliedby
+{
+
+  max-width:100% ;
+min-width:9% !important;
+width: 9%!important;
+}
+.cell-preparedby
+{
+
+  max-width:100% ;
+min-width: 8% !important;
+width: 8%!important;
+}
+.cell-value
+{
+
+  max-width:100% ;
+min-width: 6%!important;
+width: 6%!important;
+}
+.cell-status
+{ 
+
+  max-width:100% ;
+min-width: 13%!important;
+width: 13%!important;
+white-space: nowrap;
+}
+
 thead,
 tbody {
   min-width: max-content;
@@ -518,7 +524,7 @@ input[type="range"]::-webkit-slider-thumb {
   width: 18px;
   height: 18px;
   background: #fff;
-  border: 4px solid #4f54a4;
+  border: 4px solid var(--primary);
   border-radius: 50%;
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -527,7 +533,7 @@ input[type="range"]::-moz-range-thumb {
   width: 18px;
   height: 18px;
   background: #fff;
-  border: 4px solid #4f54a4;
+  border: 4px solid var(--primary);
   border-radius: 50%;
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -536,7 +542,7 @@ input[type="range"]::-ms-thumb {
   width: 18px;
   height: 18px;
   background: #fff;
-  border: 4px solid #4f54a4;
+  border: 4px solid var(--primary);
   border-radius: 50%;
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -554,6 +560,8 @@ input[type="checkbox"]:not(:checked) {
   appearance: none;
   border: 1px solid gray;
   border-radius: 2px;
+  width: 100%;
+  height: 100%;
   background-color: inherit;
   cursor: pointer;
 }
@@ -562,15 +570,22 @@ input[type="checkbox"]:not(:checked) {
   font-size: 1rem !important;
   padding-left: 0 !important;
 }
+ 
 .optionLabel,
 .optionValue {
   text-wrap: auto;
   text-align: left;
 }
  
+input[type="checkbox"]:checked {
+  background-color: #4f54a4;
+}
+ 
+ 
+ 
 /* For screen widths 1300px to 1450px */
 /* and (min-width: 1300px) */
-@media screen  and (max-width: 1450px) {
+@media screen and (max-width: 1450px) {
   :root {
     --font-7: 7px !important;
     --font-8: 8px !important;
@@ -581,7 +596,10 @@ input[type="checkbox"]:not(:checked) {
     --font-13: 13px !important;
     --font-14: 14px !important;
     --font-16: 16px !important;
+    --font-17: 17px !important;
     --font-18: 18px !important;
+    --font-19: 19px !important;
+    --font-20: 20px !important;
     --font-22: 22px !important;
     --font-24: 24px !important;
     --font-32: 32px !important;
@@ -590,122 +608,9 @@ input[type="checkbox"]:not(:checked) {
     --font-48: 48px !important;
     --font-54: 54px !important;
     --font-60: 60px !important;
-  }
-  .cellRow {
-    /* Add your styles here */
-    min-width: 100%;
- 
-  }
-  .cellRow .cell {
-    margin-right: 1px;
+    --font-178: 178px !important;
   }
  
-  .cell-0-5 {
-    flex: 1;
-    max-width: 6% !important;
-    min-width: 6% !important;
-  }
-  .cell {
-    flex: 1;
-    /* max-width: 10% !important; */
-    min-width: 7% !important;
-  }
-  .cell-1 {
-    flex: 1;
-    min-width: 8% !important;
-  }
-  .cell-2 {
-    flex: 1;
- 
-    /* max-width: 80% !important; */
-    min-width: 9% !important;
-    max-width: 12rem !important;
-  }
- 
-  .cell-order-id {
-    max-width: 5rem !important;
- 
-    min-width: 5rem !important;
-  }
-  .cell-location {
-    flex: 1;
- 
-    min-width: 8rem !important;
-    max-width: 11rem !important;
-  }
-  .number-cell {
- 
-    flex: 1;
-    min-width: 5rem !important;
-    max-width: 8rem !important;
-  }
-  .status-cell {
- 
-    flex: 1;
-    min-width: 8rem !important;
-    max-width: 8rem !important;
-  }
-  .cell-customer{
-    max-width: 7.8rem !important;
-    min-width: 7.8rem !important;
- 
-   }
- 
-  .cell-submissiondate
-  {
-    max-width: 8rem !important;
-    min-width: 8rem !important;
-  }
-  .cell-days-to-submit
-  {
- 
-      max-width: 7.2rem !important;
-      min-width: 7.2rem !important;
-    }
-    .cell-tenderid
-  {
- 
-      max-width: 5.4rem !important;
-      min-width: 5.4rem !important;
-    }
-    .cell-tendertype
-    {
-   
-        max-width: 6.6rem !important;
-        min-width: 6.6rem !important;
-       }
-       .cell-depot
-       {
-         min-width:max-content !important;
-         flex:1;
-         max-width: 6% !important;
-       }
- 
-  .cell-appliedby
-  {
-  max-width: 5.8rem !important;
-  min-width: 5.8rem !important;
-  }
-  .cell-suppliedby
-  {
-  max-width: 6.6rem !important;
-  min-width: 6.6rem !important;
-  }
-  .cell-preparedby
-  {
-  max-width: 7rem !important;
-  min-width: 7rem !important;
-  }
-  .cell-value
-  {
-  max-width: 5.1rem !important;
-  min-width: 5.1rem !important;
-  }
-  .cell-status
-  {
-  max-width: 3.6rem !important;
-  min-width: 3.6rem !important;
-  }
 }
  
 /* For screen widths 1450px to 1600px */
@@ -720,7 +625,10 @@ input[type="checkbox"]:not(:checked) {
     --font-13: 14px !important;
     --font-14: 15px !important;
     --font-16: 17px !important;
+    --font-17: 18px !important;
     --font-18: 19px !important;
+    --font-19: 20px !important;
+    --font-20: 21px !important;
     --font-22: 23px !important;
     --font-24: 26px !important;
     --font-32: 34px !important;
@@ -729,127 +637,9 @@ input[type="checkbox"]:not(:checked) {
     --font-48: 50px !important;
     --font-54: 56px !important;
     --font-60: 63px !important;
-  }
-  .cellRow {
-    /* Add your styles here */
-    min-width: 100%;
- 
-  }
-  .cellRow .cell {
-    margin-right: 3px;
+    --font-178: 180px !important;
   }
  
-  .cell-0-5 {
-    flex: 1;
-    max-width: 6% !important;
-    min-width: 6% !important;
-  }
-  .cell {
-    flex: 1;
-    /* max-width: 10% !important; */
-    min-width: 7% !important;
-    font-size: var(--font-13);
-  }
-  .cell-1 {
-    flex: 1;
-    min-width: 8% !important;
-  }
-  .cell-2 {
-    flex: 1;
- 
-    /* max-width: 80% !important; */
-    min-width: 9% !important;
-    max-width: 14rem !important;
-  }
- 
-  .cell-order-id {
-    max-width: 5rem !important;
- 
-    min-width: 5rem !important;
-  }
-  .cell-location {
-    flex: 1;
-    /* max-width: 80% !important; */
-    margin-right: 0;
- 
-    min-width: 10rem !important;
-    max-width: 13rem !important;
-  }
-  .number-cell {
- 
-    flex: 1;
-    min-width: 6rem !important;
-    max-width: 8rem !important;
- 
-  }
-  .status-cell {
- 
-    flex: 1;
-    min-width: 10rem !important;
-    max-width: 10rem !important;
-  }
-  .cell-customer{
-    max-width: 8rem !important;
-    min-width: 8rem !important;
- 
-   }
- 
-  .cell-submissiondate
-  {
-    max-width: 8.2rem !important;
-    min-width: 8.2rem !important;
-  }
-  .cell-days-to-submit
-  {
- 
-      max-width: 7.4rem !important;
-      min-width: 7.4rem !important;
-    }
-    .cell-tenderid
-  {
- 
-      max-width: 5.5rem !important;
-      min-width: 5.5rem !important;
-    }
-    .cell-tendertype
-    {
-   
-        max-width: 6.8rem !important;
-        min-width: 6.8rem !important;
-       }
- 
- 
-       .cell-depot
-       {
-         min-width:max-content !important;
-         flex:1;
-         max-width: 6% !important;
-       }
-  .cell-appliedby
-  {
-  max-width: 5.9rem !important;
-  min-width: 5.9rem !important;
-  }
-  .cell-suppliedby
-  {
-  max-width: 6.7rem !important;
-  min-width: 6.7rem !important;
-  }
-  .cell-preparedby
-  {
-  max-width: 7.1rem !important;
-  min-width: 7.1rem !important;
-  }
-  .cell-value
-  {
-  max-width: 5.2rem !important;
-  min-width: 5.2rem !important;
-  }
-  .cell-status
-  {
-  max-width: 3.7rem !important;
-  min-width: 3.7rem !important;
-  }
 }
  
 /* For screen widths 1600px to 1750px */
@@ -864,7 +654,10 @@ input[type="checkbox"]:not(:checked) {
     --font-13: 17px !important;
     --font-14: 19px !important;
     --font-16: 21px !important;
+    --font-17: 22px !important;
     --font-18: 23px !important;
+    --font-19: 24px !important;
+    --font-20: 25px !important;
     --font-22: 27px !important;
     --font-24: 29px !important;
     --font-32: 37px !important;
@@ -873,125 +666,7 @@ input[type="checkbox"]:not(:checked) {
     --font-48: 53px !important;
     --font-54: 59px !important;
     --font-60: 65px !important;
-  }
-  .cellRow {
-    /* Add your styles here */
-    min-width: 100%;
- 
-  }
-  .cellRow .cell {
-    margin-right: 5px;;
-  }
- 
-  .cell-0-5 {
-    flex: 1;
-    max-width: 6.5% !important;
-    min-width: 6.5% !important;
-  }
-  .cell {
-    flex: 1;
-    /* max-width: 10% !important; */
-    min-width: 7.5% !important;
-  }
-  .cell-1 {
-    flex: 1;
-    min-width: 9% !important;
-  }
-  .cell-2 {
-    flex: 1;
- 
-    /* max-width: 80% !important; */
-    min-width: 11% !important;
-    max-width: 16rem !important;
-  }
- 
-  .cell-order-id {
-    max-width: 7rem !important;
- 
-    min-width: 7rem !important;
-  }
-  .cell-location {
-    flex: 1;
-    /* max-width: 80% !important; */
-    margin-right: 0;
- 
-    min-width: 13rem !important;
-    max-width: 16rem !important;
-  }
-  .number-cell {
- 
-    flex: 1;
-    min-width: 9rem !important;
-    max-width: 9rem !important;
- 
-  }
-  .status-cell {
- 
-    flex: 1;
-    min-width: 8rem !important;
-    /* max-width: 12rem !important; */
-  }
-  .cell-customer{
-    max-width: 8.6rem !important;
-    min-width: 8.6rem !important;
- 
-   }
- 
-  .cell-submissiondate
-  {
-    max-width: 9.2rem !important;
-    min-width: 9.2rem !important;
-  }
-  .cell-days-to-submit
-  {
- 
-      max-width: 8.4rem !important;
-      min-width: 8.4rem !important;
-    }
-    .cell-tenderid
-  {
- 
-      max-width: 5.6rem !important;
-      min-width: 5.6rem !important;
-    }
-    .cell-tendertype
-    {
-   
-        max-width: 7.2rem !important;
-        min-width: 7.2rem !important;
-       }
- 
-       .cell-depot
-       {
-         min-width:max-content !important;
-         flex:1;
-         max-width: 6% !important;
-       }
- 
-  .cell-appliedby
-  {
-  max-width: 6rem !important;
-  min-width: 6rem !important;
-  }
-  .cell-suppliedby
-  {
-  max-width: 6.8rem !important;
-  min-width: 6.8rem !important;
-  }
-  .cell-preparedby
-  {
-  max-width: 7.2rem !important;
-  min-width: 7.2rem !important;
-  }
-  .cell-value
-  {
-  max-width: 5.3rem !important;
-  min-width: 5.3rem !important;
-  }
-  .cell-status
-  {
-  max-width: 3.8rem !important;
-  min-width: 3.8rem !important;
+    --font-178: 183px !important;
   }
  
 }
@@ -1008,7 +683,10 @@ input[type="checkbox"]:not(:checked) {
     --font-13: 19px !important;
     --font-14: 21px !important;
     --font-16: 23px !important;
+    --font-17: 25px !important;
     --font-18: 27px !important;
+    --font-19: 29px !important;
+    --font-20: 30px !important;
     --font-22: 31px !important;
     --font-24: 35px !important;
     --font-32: 47px !important;
@@ -1017,137 +695,18 @@ input[type="checkbox"]:not(:checked) {
     --font-42: 59px !important;
     --font-48: 67px !important;
     --font-60: 87px !important;
-  }
-  .cellRow {
-    /* Add your styles here */
-    min-width: 100%;
-  }
-  .cellRow .cell {
-    margin-right: 7px;
-  }
- 
-  .cell-0-5 {
-    flex: 1;
-    max-width: 6% !important;
-    min-width: 6% !important;
-  }
-  .cell {
-    flex: 1;
-    /* max-width: 10% !important; */
-    min-width: 8% !important;
-  }
-  .cell-1 {
-    flex: 1;
-    min-width: 9% !important;
-  }
-  .cell-2 {
-    flex: 1;
- 
-    /* max-width: 80% !important; */
-    min-width: 12% !important;
-    max-width: 17rem !important;
-  }
-  .cell-date {
-    max-width: 5.5rem !important;
- 
-    min-width: 5.5rem !important;
-  }
-  .cell-order-id {
-    max-width: 7.4rem !important;
- 
-    min-width: 7.4rem !important;
-  }
-  .cell-location {
-    flex: 1;
-    /* max-width: 80% !important; */
-    margin-right: 0;
- 
-    min-width: 14rem !important;
-    max-width: 17rem !important;
-  }
-  .number-cell {
- 
-    flex: 1;
-    min-width: 10rem !important;
-    max-width: 10rem !important;
- 
-  }
-  .status-cell {
- 
-    flex: 1;
-    min-width: 16rem !important;
-    max-width: 16rem !important;
-  }
-  .cell-customer{
-    max-width:9.6rem !important;
-    min-width: 9.6rem !important;
- 
-   }
- 
-  .cell-submissiondate
-  {
-    max-width: 10.2rem !important;
-    min-width:10.2rem !important;
-  }
-  .cell-days-to-submit
-  {
- 
-      max-width: 9.4rem !important;
-      min-width: 9.4rem !important;
-    }
-    .cell-tenderid
-  {
- 
-      max-width: 6rem !important;
-      min-width: 6rem !important;
-    }
-     .cell-tendertype
-    {
-   
-        max-width: 8rem !important;
-        min-width: 8rem !important;
-       }
- 
-  .cell-depot
-  {
-    min-width:max-content !important;
-    flex:1;
-    max-width: 6% !important;
-  }
- 
-  .cell-appliedby
-  {
-  max-width: 6.5rem !important;
-  min-width: 6.5rem !important;
-  }
-  .cell-suppliedby
-  {
-  max-width: 7.3rem !important;
-  min-width: 7.3rem !important;
-  }
-  .cell-preparedby
-  {
-  max-width: 7.7rem !important;
-  min-width: 7.7rem !important;
-  }
-  .cell-value
-  {
-  max-width: 5.4rem !important;
-  min-width: 5.4rem !important;
-  }
-  .cell-status
-  {
-  max-width: 3.9rem !important;
-  min-width: 3.9rem !important;
+    --font-178: 185px !important;
   }
  
 }
  
  
- 
- 
- 
- 
-
+/* For screen widths 1900px to 2100px */
+/* @media screen and (min-width: 1901px) and (max-width: 2100px) {
+  .class5 {
+    font-size: 22px;
+    background-color: lightpink;
+  }
+} */
  
  

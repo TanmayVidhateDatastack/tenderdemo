@@ -11,10 +11,10 @@ const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
   applierSupplierDetails,
 }) => { 
   const { updateTenderData } = useTenderData(); 
-  console.log("djhdjd",applierSupplierDetails.appliedBy);
+  console.log("djhdjd",applierSupplierDetails.appliedBy); 
   return (
     <>
-      <div className={styles.inputDetails}>
+      <div className={styles.inputDetails}> 
         <DsSelectMultiLevel
           isSearchable
           options={applierSupplierDetails.appliedBy}
@@ -58,16 +58,16 @@ const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
           //   throw new Error("Function not implemented.");
           // }}
           // isSearchable={true}
-        ></DsSelectMultiLevel>
-        <DsMultiSelect
-          options={applierSupplierDetails.depot}
-          // type="multi"
-          label="Depot"
+        ></DsSelectMultiLevel>    
+        <DsMultiSelect 
+          options={applierSupplierDetails.depot} 
+          // type="multi"  
+          label="Depot"  
           placeholder={"Please search or select here"}
           id={"depot"}
           setSelectOptions={(options) => {
             updateTenderData(
-              "shippingLocations",
+              "shippingLocations", 
               options.reduce<number[]>((acc, option) => {
                 if (typeof option.value === "string") {
                   acc.push(parseInt(option.value));
