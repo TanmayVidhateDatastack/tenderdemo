@@ -7,7 +7,7 @@ import DsFilterActions from "@/TenderComponents/TenderLogComponents/DsFilterActi
 import addIconWhite from "@/Icons/smallIcons/whiteadd.svg";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { DsTableRow, tableData, Tender } from "@/helpers/types";
+import { DsTableRow, filterType, tableData, Tender } from "@/helpers/types";
 import DsTotalTenders from "@/TenderComponents/TenderLogComponents/DsTotalTender";
 import DsTotalValues from "@/TenderComponents/TenderLogComponents/DsTotalValues";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
@@ -199,6 +199,7 @@ export default function Home() {
           isHidden: false,
           sort: "ASC",
           columnContentType: "string",
+         
         },
         {
           columnIndex: 8,
@@ -277,8 +278,8 @@ export default function Home() {
             item?.type === "institutional" ? (
               <div
                 style={{
-                  width: "1.4rem",
-                  height: "1.4rem",
+                  width: "0.875em",
+                  height: "0.875em",
                   position: "relative",
                 }}
               >
@@ -292,8 +293,8 @@ export default function Home() {
             ) : (
               <div
                 style={{
-                  width: "1.4rem",
-                  height: "1.4rem",
+                  width: "0.875em",
+                  height: "0.875em",
                   position: "relative",
                 }}
               >
@@ -309,8 +310,9 @@ export default function Home() {
               columnIndex: 0,
               className: "cell cell-customer text-dark-1",
               content: <DsName id={item.tenderId+"customerName "} name={item.customerName || "-"} />,
-              filterValue: item.customerName || "-",
-              // content:item.customerName || "-",
+              // filterValue: item.customerName || "-",
+              filterValue:<DsName id={item.tenderId+"customerName "} name={item.customerName || "-"} />,
+      
               contentType: "string",
             },
             {
@@ -344,9 +346,10 @@ export default function Home() {
             {
               columnIndex: 5,
               className: " cell cell-depot text-dark-1",
-              // content: item.depot || "-",
+      
               content: <DsName id={item.tenderId+"depot"} name={item.depot|| "-"} />,
-              filterValue: item.depot || "-",
+              filterValue:<DsName id={item.tenderId+"depot"} name={item.depot|| "-"} />,
+              // filterValue: item.depot || "-",
               contentType: "string",
             },
             {
@@ -354,7 +357,8 @@ export default function Home() {
               className: " cell cell-appliedby text-dark-0 ",
               // content: item.appliedBy || "-",
               content: <DsName id={item.tenderId+"appliedBy"} name={item.appliedBy|| "-"} />,
-              filterValue: item.appliedBy || "-",
+              filterValue: <DsName id={item.tenderId+"appliedBy"} name={item.appliedBy|| "-"} />,
+              // filterValue: item.appliedBy || "-",
               contentType: "string",
             },
             {
@@ -362,7 +366,8 @@ export default function Home() {
               className: " cell cell-suppliedby text-dark-0 ",
               // content: item.suppliedBy || "-",
               content: <DsName id={item.tenderId+"suppliedBy"} name={item.suppliedBy|| "-"} />,
-              filterValue: item.suppliedBy || "-",
+              filterValue: <DsName id={item.tenderId+"suppliedBy"} name={item.suppliedBy|| "-"} />,
+              // filterValue: item.suppliedBy || "-",
               contentType: "string",
             },
             {
@@ -370,7 +375,8 @@ export default function Home() {
               className: " cell cell-preparedby text-dark-0 ",
               // content: item.preparedBy || "-",
               content: <DsName id={item.tenderId+"preparedBy"} name={item.preparedBy || "-"} />,
-              filterValue: item.preparedBy || "-",
+              filterValue: <DsName id={item.tenderId+"preparedBy"} name={item.preparedBy || "-"} />,
+              // filterValue: item.preparedBy || "-",
               contentType: "string",
             },
             {
@@ -474,20 +480,56 @@ export default function Home() {
         filterType: "MULTISELECT",
       },
     ];
+    // const handleFetch = async () => {
+    //   await fetchData({ url: getAllTenders })
+    //     .then((res) => {
+    //       console.log("Fetched Response:", res); // Log the fetched response
+    //       if (res?.code === 200 && Array.isArray(res?.result)) {
+    //         setData(res.result); // Update the state
+    //       } else {
+    //         console.error("Error: Invalid data format or empty result");
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       console.error("Error fetching data:", err);
+    //     });
+    // };
+  
     const handleFetch = async () => {
-      await fetchData({ url: getAllTenders })
-        .then((res) => {
-          console.log("Fetched Response:", res); // Log the fetched response
+      try {
+          const res = await fetchData({ url: getAllTenders });
+  
+          console.log("Fetched Response:", res); // Debugging log
+  
+          // Validate response structure before updating state
           if (res?.code === 200 && Array.isArray(res?.result)) {
-            setData(res.result); // Update the state
+              const mappedData: Tender[] = res.result.map((item: any) => ({
+                  customerName: item.customerName,
+                  submittionDate: item.submissionDate,
+                  daystosubmit: item.daysToSubmit ?? "N/A",
+                  tenderId: item.tenderId.toString(),
+                  type: item.tenderType,
+                  tenderType: item.tenderType,
+                  depot: item.shippingLocations.map((loc: any) => loc.name).join(", "), // Combine locations
+                  appliedBy: item.applierName,
+                  suppliedBy: item.supplierName,
+                  preparedBy: item.preparedBy,
+                  value: item.value,
+                  status: {
+                      tenderStatus: item.status?.tenderStatus ?? "UNKNOWN",
+                      message: item.status?.message ?? "No message",
+                  },
+                  customAttributes: { iconValue: "defaultIcon" }, // Example default
+              }));
+  
+              setData(mappedData); // Update state with mapped objects
           } else {
-            console.error("Error: Invalid data format or empty result");
+              console.error("Error: Invalid response format or empty result", res);
           }
-        })
-        .catch((err) => {
-          console.error("Error fetching data:", err);
-        });
-    };
+      } catch (error) {
+          console.error("Error fetching data:", error);
+      }
+  };
   
     const addTableData = (tender: Tender[]) => {
       console.log("Adding table data:", tender);
@@ -496,14 +538,32 @@ export default function Home() {
         className: "cellRow ",
         rowIcon:
           t?.type === "institutional" ? (
+            <div
+            style={{
+              width: "0.875em",
+              height: "0.875em",
+              position: "relative",
+            }}
+          >
             <Image
               src={institutional}
-              alt={"institutional"}
-              width={50}
-              height={50}
+              alt="institutional"
+              layout="fill"
+            objectFit="cover"
             />
-          ) : (
-            <Image src={corporate} alt={"corporate"} width={50} height={50} />
+          </div>
+        ) : (
+          <div
+            style={{
+              width: "0.875em",
+              height: "0.875em",
+              position: "relative",
+            }}
+          >
+            <Image src={corporate} alt="corporate"
+            layout="fill"
+            objectFit="cover" />
+          </div>
           ),
         customAttributes: { iconValue: t?.type?.toString() ?? "" },
         content: [
@@ -511,7 +571,8 @@ export default function Home() {
             columnIndex: 0,
             className: " cell cell-customer text-dark-1 " ,
             content: <DsName id={t.tenderId+"customerName"} name={t.customerName || "-"} />,
-            filterValue: t.customerName,
+            filterValue:<DsName id={t.tenderId+"customerName"} name={t.customerName || "-"} />,
+            // filterValue: t.customerName,
             contentType: "string",
           },
           {
@@ -547,7 +608,8 @@ export default function Home() {
             className: " cell cell-depot text-dark-1 ",
             // content: t.depot,
             content: <DsName id={t.tenderId+"depot"} name={t.depot || "-"} />,
-            filterValue: t.depot,
+            filterValue: <DsName id={t.tenderId+"depot"} name={t.depot || "-"} />,
+            // filterValue: t.depot,
             contentType: "string",
           },
           {
@@ -555,15 +617,17 @@ export default function Home() {
             className: " cell cell-appliedby text-dark-0 ",
             // content: t.appliedBy,
             content: <DsName id={t.tenderId+"appliedBy"} name={t.appliedBy || "-"} />,
-            filterValue: t.appliedBy,
+            filterValue: <DsName id={t.tenderId+"appliedBy"} name={t.appliedBy || "-"} />,
+            // filterValue: t.appliedBy,
             contentType: "string",
           },
           {
             columnIndex: 7,
             className: " cell cell-suppliedby text-dark-0 ",
-            // content: t.suppliedBy,
+  
             content: <DsName id={t.tenderId+"suppliedBy"} name={t.suppliedBy || "-"} />,
-            filterValue: t.suppliedBy,
+            filterValue: <DsName id={t.tenderId+"suppliedBy"} name={t.suppliedBy || "-"} />,
+            // filterValue: t.suppliedBy,
             contentType: "string",
           },
           {
@@ -571,7 +635,8 @@ export default function Home() {
             className: " cell cell-preparedby text-dark-0 ",
             // content: t.preparedBy,
             content: <DsName id={t.tenderId+"preparedBy"} name={t.preparedBy || "-"} />,
-            filterValue: t.preparedBy,
+            filterValue: <DsName id={t.tenderId+"preparedBy"} name={t.preparedBy || "-"} />,
+            // filterValue: t.preparedBy,
             contentType: "string",
           },
           {

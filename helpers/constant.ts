@@ -79,7 +79,8 @@ export const searchTransporterURL = apiHostUrl + "/customers/filter?name=";
 export const getTransporterURL = apiHostUrl + "/customers/";
 export const getAllStatusLogURL = apiHostUrl + "/status";
 
-export const getAllTenders = apiHostUrl + "/tenders";
+// export const getAllTenders = apiHostUrl + "/tenders";
+export const getAllTenders="http://172.145.1.102:7005/api/tenders";
 
 export const getAllMetaData = apiHostUrl + "/tenderMetadata";
 

@@ -330,6 +330,8 @@ body {
   max-width:100% ;
   min-width: 11% !important;
   width: 11% !important;
+  white-space:nowrap;
+  text-overflow: ellipsis; 
 }
 .cell-days-to-submit
 {
@@ -337,6 +339,8 @@ body {
   max-width:100% ;
     min-width: 10% !important;
     width: 10% !important;
+    white-space:nowrap;
+    text-overflow: ellipsis; 
   }
   .cell-tenderid
 {
@@ -344,6 +348,8 @@ body {
   max-width:100% ;
     min-width: 6%!important;
   width: 6%!important;
+  white-space:nowrap;
+  text-overflow: ellipsis; 
 
   }
   .cell-tendertype
@@ -352,6 +358,8 @@ body {
     max-width:100% ;
       min-width: 8% !important;
       width: 8%!important;
+      white-space:nowrap;
+      text-overflow: ellipsis; 
      }
       .cell-depot
       {
@@ -360,6 +368,8 @@ body {
         min-width:8% !important;
         flex:1;
         max-width:100% ;
+        white-space:nowrap;
+        text-overflow: ellipsis; 
    }
 
 .cell-appliedby
@@ -368,6 +378,8 @@ body {
   max-width:100% ;
 min-width: 7%!important;
 width: 7%!important;
+white-space:nowrap;
+text-overflow: ellipsis; 
 }
 .cell-suppliedby
 {
@@ -375,6 +387,8 @@ width: 7%!important;
   max-width:100% ;
 min-width:9% !important;
 width: 9%!important;
+white-space:nowrap;
+text-overflow: ellipsis; 
 }
 .cell-preparedby
 {
@@ -382,6 +396,8 @@ width: 9%!important;
   max-width:100% ;
 min-width: 8% !important;
 width: 8%!important;
+white-space:nowrap;
+text-overflow: ellipsis; 
 }
 .cell-value
 {
@@ -389,6 +405,8 @@ width: 8%!important;
   max-width:100% ;
 min-width: 6%!important;
 width: 6%!important;
+white-space:nowrap;
+text-overflow: ellipsis; 
 }
 .cell-status
 { 

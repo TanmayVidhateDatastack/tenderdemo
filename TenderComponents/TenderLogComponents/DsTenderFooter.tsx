@@ -1,15 +1,14 @@
 "use client";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import spliticon from "@/Icons/smallIcons/add.svg";
+
 import btnStyles from "@/Elements/DsComponents/DsButtons/dsButton.module.css";
 import {
-  closeContext,
+
   createContext,
   displayContext,
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
-import DsToaster, {
+import  {
   showToaster,
 } from "@/Elements/DsComponents/DsToaster/DsToaster";
 import PopupOpenButton from "@/Elements/DsComponents/dsPopup/popupOpenButton";
@@ -23,7 +22,7 @@ import DsNavTo from "@/Elements/ERPComponents/DsNavigationComponent/DsNavTo";
 import DsSplitButton from "@/Elements/DsComponents/DsButtons/dsSplitButton";
 import DsApprovalPopup from "@/Elements/ERPComponents/DsApprovalPopups/DsApprovalPopups";
 import Toaster from "@/Elements/DsComponents/DsToaster/DsToaster";
-import { useSelector } from "react-redux";
+
 
 class ActionStatus {
   notiType: "success" | "bonus" | "info" | "error" | "cross" = "success";
@@ -41,11 +40,9 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
 }) => {
   const dispatch = useAppDispatch<AppDispatch>();
   const role = useAppSelector((state: RootState) => state.user.role);
-  //   const [notificationMessage, setNotificationMessage] = useState<string | null>(null);
   const [toasterVisible, setToasterVisible] = useState<boolean>(false);
-  // const saveButtonVisible = useSelector(
-  //   (state: any) => state.permissions["saveButtonVisible"]
-  // );
+
+
 
   const handleFetch = async () => {
     try {
@@ -157,24 +154,6 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
         disable={false}
       />
 
-      {/* <DsSplitButton
-        id="splitBtn"
-        buttonColor="btnPrimary"
-        buttonViewStyle="btnContained"
-        onSplitClick={(e) =>
-          displayContext(e, "contextMenuId4", "top", "center")
-        }
-        label="Save"
-        splitItemPosition="bottom"
-        spliticon={<Image src={spliticon} alt="icon" />}
-        onClick={() => {
-         
-            if (saveTender) saveTender("Draft");
-          }
-        }
-      
-       
-      /> */}
 
             <DsSplitButton
               buttonViewStyle="btnContained"

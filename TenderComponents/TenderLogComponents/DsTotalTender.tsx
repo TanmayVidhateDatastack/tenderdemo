@@ -69,7 +69,7 @@ const DsTotalTenders: React.FC<TotalTendersProps> = React.memo(({ data }) => {
           {
             addimage: (
           
-              <div style={{ width: "1.5rem", height: "1.5rem", position: "relative" }}>
+              <div style={{ width: "0.875em", height: "0.875em", position: "relative" }}>
               <Image
                 src={institutionalimg}
                 alt={"Institutional"}
@@ -85,7 +85,7 @@ const DsTotalTenders: React.FC<TotalTendersProps> = React.memo(({ data }) => {
           {
             addimage: (
 
-          <div style={{ width: "1.5rem", height: "1.5rem", position: "relative" }}>
+          <div style={{ width: "0.875em", height: "0.875em", position: "relative" }}>
             <Image
              src={corporateimag}
               layout="fill"

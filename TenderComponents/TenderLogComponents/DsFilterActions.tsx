@@ -54,8 +54,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
     feesPendingButtonVisible,
     filterButtonVisible,
     approvalButtonVisible,
-    underApprovalButtonVisible,
-    underReviewButtonVisible,
+
   } = permissions;
 
   const handleFetch = async () => {
@@ -107,16 +106,16 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
 
               const today = new Date();
               const futureDate = new Date(today);
-              futureDate.setDate(today.getDate() + 20); // Adding 20 days to today's date
+              futureDate.setDate(today.getDate() + 20); 
 
-              // Check if the date is within the next 20 days or has already passed
+    
               return (
                 (dateToCheck < today || dateToCheck <= futureDate) &&
                 tender.status.tenderStatus?.toLowerCase() !== DsStatus.SMBT
               );
             });
           } else if (value == "feesPending") {
-            const lowerCaseValue = DsStatus.APRV.toLowerCase();
+            const lowerCaseValue = DsStatus.DRFT.toLowerCase();
             message = "fees pending";
             filteredRows = filteredRows.filter((tender) =>
               message
@@ -126,7 +125,9 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
                     message.toLowerCase()
                 : tender.status?.tenderStatus?.toLowerCase() === lowerCaseValue
             );
-          } else {
+          } 
+          
+          else {
             const lowerCaseValue = value.toLowerCase();
             filteredRows = filteredRows.filter((tender) =>
               message
@@ -137,6 +138,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
                 : tender.status?.tenderStatus?.toLowerCase() === lowerCaseValue
             );
           }
+          
 
           setFilteredData(filteredRows);
         }
@@ -297,8 +299,8 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
             label="Near Submission"
           />
         )}
-      </div>
 
+  </div>
       {feesPendingButtonVisible && (
      
         <DsFilterButton
