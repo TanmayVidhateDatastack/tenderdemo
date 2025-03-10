@@ -326,23 +326,31 @@ export interface Ds_Tablemenu_Props {
   type?: string;
   position?: "top" | "center" | "bottom";
 }
-
+export interface TabProps {
+  tabId: string;
+  children: React.ReactNode;
+}
+ 
 export interface TabsProps {
   selectedTabId: string;
   tabs: tab[];
   children: React.ReactNode;
-  pageName: string; // Add this line
+  menus?:React.ReactNode;
 }
 
 export interface tab {
   tabId: string;
   tabName: string;
-  count?: number;
+  count?: number | "00";
+  disable?: boolean;
+  customAttributes?: Record<string, string | number | boolean>;
+  onClick?: (tab: tab) => void;
 }
+ 
 export interface TabNavProps {
   selectedTabId: string;
   tabs: tab[];
-  pageName: string; // Add this line
+  menus?:React.ReactNode;
 }
 
 
@@ -355,12 +363,6 @@ export interface TabContextType {
 export interface TabsProviderProps {
   children: ReactNode;
 }
-export interface TabProps {
-  tabId: string;
-  children: React.ReactNode;
-  pageName: string; // Add this line
-}
-
 
 export interface datalistOptions {
   //datalist attributes
