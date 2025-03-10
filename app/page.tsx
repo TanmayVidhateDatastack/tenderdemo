@@ -43,6 +43,7 @@ export default function Home() {
           isHidden: false,
           sort: "ASC",
           columnContentType: "string",
+      
         },
         {
           columnIndex: 1,
@@ -712,8 +713,8 @@ return (
           hasIcons={true}
           isSelectAble={false}
           rows={tempTableData.rows}
-          isFooterRequired={true}
-          isSortable={true}
+           isFooterRequired={true}
+
       
         />
             </div>

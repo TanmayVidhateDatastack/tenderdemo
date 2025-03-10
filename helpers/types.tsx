@@ -39,7 +39,34 @@ export interface AccordionProps {
   id: string;
   title: string; // The title of the accordion
   children: string | React.ReactElement; // The content inside the accordion, can be a string or a React element
+} 
+export interface tenderDetailsProps{
+  tenderDetails:tenderDetails
 }
+export interface applierSupplierDetailsProps{
+  applierSupplierDetails :applierSupplierDetails;
+}
+export interface supplyDetailsProps{
+  supplyDetails:supplyDetails;
+}
+
+export interface applierSupplierDetails {
+  appliedBy:DsSelectOption[];
+  suppliedBy:DsSelectOption[];
+  depot:DsSelectOption[];
+}
+export interface supplyDetails{
+  supplyPoints:DsSelectOption[];
+  reportRequirements:DsSelectOption[];
+  eligibility:DsSelectOption[];
+}
+ 
+ 
+export interface tenderDetails{
+  tenderType:DsSelectOption[];
+  submissionMode:DsSelectOption[];
+}
+ 
 
 export interface DSButtonProps {
   children?: React.ReactNode;
@@ -153,7 +180,12 @@ export interface addressProps {
   address: string; // User's location
 }
 
-
+export interface searchCustomers{
+  id:number;
+  code:string;
+  name:string;
+}
+ 
 export interface menuprops {
   column: tcolumn;
   className: string;
@@ -646,6 +678,7 @@ export class cellData {
   isDataListRequired?: boolean = false;
   alignment?: "left" | "right" | "center";
   customAttributes?: Record<string, string | number | boolean>;
+  editableContent?: string | undefined;
 }
 
 export class DsTableRow {

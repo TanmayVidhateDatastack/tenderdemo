@@ -325,7 +325,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           // console.log("res = ",res);
           if (res.code === 200) {
             setActionStatus({
-              notiMsg: "Order Created Successfully",
+              notiMsg: "Tender Created Successfully",
               notiType: "success",
               showNotification: true,
             });
@@ -336,7 +336,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             }, closeTimeForTender)
           } else {
             setActionStatus({
-              notiMsg: "Order could not be saved",
+              notiMsg: "Tender could not be saved",
               notiType: "error",
               showNotification: true,
             });

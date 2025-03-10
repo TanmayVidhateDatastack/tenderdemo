@@ -227,3 +227,24 @@
     display: flex;
     flex-direction: row;
   }
+  .inputDetails {
+    display: grid;
+    gap: 2%;
+    align-items: center;
+    /* border-bottom: 10px solid var(--black); */
+    padding: var(--ds-padding);
+    flex-wrap: wrap;
+    grid-template-columns: repeat(4, minmax(150px, 1fr));
+    background-color: var(--background);
+  }
+  /* .inputDetails > div {
+    flex: 1;
+    margin: var(--ds-margin);
+  } */
+ 
+.Seperator{
+  border-bottom: 1px solid var(--grey-200) !important;
+  padding: 10px;
+}
+ 
+ 

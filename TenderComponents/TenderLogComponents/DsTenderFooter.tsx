@@ -157,7 +157,7 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
         disable={false}
       />
 
-      <DsSplitButton
+      {/* <DsSplitButton
         id="splitBtn"
         buttonColor="btnPrimary"
         buttonViewStyle="btnContained"
@@ -174,7 +174,22 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
         }
       
        
-      />
+      /> */}
+
+            <DsSplitButton
+              buttonViewStyle="btnContained"
+              onClick={() => {
+                if (saveTender) saveTender("Draft");
+              }}
+              onSplitClick={(e) =>
+                displayContext(e, "contextMenuId4", "top", "center")
+              }
+              
+          
+            >
+              Save
+            </DsSplitButton>
+ 
 
 
       <DsApprovalPopup

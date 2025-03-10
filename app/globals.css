@@ -577,13 +577,13 @@ input[type="checkbox"]:not(:checked) {
   text-wrap: auto;
   text-align: left;
 }
- 
+
 input[type="checkbox"]:checked {
   background-color: #4f54a4;
 }
- 
- 
- 
+
+
+
 /* For screen widths 1300px to 1450px */
 /* and (min-width: 1300px) */
 @media screen and (max-width: 1450px) {
@@ -609,11 +609,13 @@ input[type="checkbox"]:checked {
     --font-48: 48px !important;
     --font-54: 54px !important;
     --font-60: 60px !important;
+    --font-128: 128px !important;
+
     --font-178: 178px !important;
   }
  
 }
- 
+
 /* For screen widths 1450px to 1600px */
 @media screen and (min-width: 1451px) and (max-width: 1600px) {
   :root {
@@ -638,11 +640,13 @@ input[type="checkbox"]:checked {
     --font-48: 50px !important;
     --font-54: 56px !important;
     --font-60: 63px !important;
+    --font-128: 132px !important;
+
     --font-178: 180px !important;
   }
- 
+  
 }
- 
+
 /* For screen widths 1600px to 1750px */
 @media screen and (min-width: 1601px) and (max-width: 1750px) {
   :root {
@@ -667,11 +671,13 @@ input[type="checkbox"]:checked {
     --font-48: 53px !important;
     --font-54: 59px !important;
     --font-60: 65px !important;
+    --font-128: 135px !important;
+
     --font-178: 183px !important;
   }
  
 }
- 
+
 /* For screen widths 1750px to 1900px */
 @media screen and (min-width: 1751px) and (max-width: 1900px) {
   :root {
@@ -696,12 +702,14 @@ input[type="checkbox"]:checked {
     --font-42: 59px !important;
     --font-48: 67px !important;
     --font-60: 87px !important;
+    --font-128: 157px !important;
+
     --font-178: 185px !important;
   }
- 
+
 }
- 
- 
+
+
 /* For screen widths 1900px to 2100px */
 /* @media screen and (min-width: 1901px) and (max-width: 2100px) {
   .class5 {
@@ -709,5 +717,3 @@ input[type="checkbox"]:checked {
     background-color: lightpink;
   }
 } */
- 
- 

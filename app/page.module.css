@@ -309,3 +309,17 @@ a.secondary {
 } */
 
 
+.ContextCreateNew {
+  border-radius: var(--ds-border-radius);
+}
+
+.ContextCreateNew .MenuBtn:first-child {
+  border-radius: var(--ds-border-radius) var(--ds-border-radius) 0 0;
+  margin:0px;
+}
+
+.ContextCreateNew .MenuBtn:last-child {
+  border-radius: 0 0 var(--ds-border-radius) var(--ds-border-radius);
+  margin:0px;
+
+}

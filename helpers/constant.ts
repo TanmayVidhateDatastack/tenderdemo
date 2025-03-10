@@ -80,6 +80,7 @@ export const getTransporterURL = apiHostUrl + "/customers/";
 export const getAllStatusLogURL = apiHostUrl + "/status";
 
 export const getAllTenders = apiHostUrl + "/tenders";
+
 export const getAllMetaData = apiHostUrl + "/tenderMetadata";
 
 //Tender User Roles
@@ -129,6 +130,7 @@ export const DsTenderProductStatus: Record<string, dsTenderProductStatus> = {
 export type dsTenderProductStatus = "Create" | "Update";
 export const closeTimeForTender = 3000;
  export const saveTenderurl="http://172.145.1.102:7005/api/tender";
+//  export const searchCustomerURL = apiHostUrl + "/customers/filter?name=";
  
 // export type bankDetail = {
 //   bankName: string;

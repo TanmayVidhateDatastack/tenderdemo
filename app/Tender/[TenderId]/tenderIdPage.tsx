@@ -9,11 +9,11 @@ import DSTendrFooter from "@/TenderComponents/TenderLogComponents/DsTenderFooter
 import style from "./tenderOrder.module.css";
 import Toaster from "@/Elements/DsComponents/DsToaster/DsToaster";
 import { closeTimeForTender } from "@/helpers/constant";
-
+import pagestyles from "@/app/page.module.css"
+import { closeAllContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 const DsTenderIdPage: React.FC = () => {
   const { tenderData, addTenderProduct,setActionStatusValues , actionStatus,saveTender} = useTenderData();
   const [selectedTabId, setSelectedTabId] = useTabState("tenderPage"); // Use the custom hook
-
 
 
   const tabs = [
@@ -24,13 +24,15 @@ const DsTenderIdPage: React.FC = () => {
   ];
 
   return (
-    <>
+    <> 
       <DsApplication
         selectedTabId={selectedTabId}
         appTitle="Tender"
         tabs={tabs}
         pageName="tenderPage" // Add this prop
       >
+        <div className={pagestyles.container}
+        onScroll={() => closeAllContext()}>
         <TabView tabId="0" pageName="tenderPage">
           <DsBasicDetails />
         </TabView>
@@ -38,15 +40,9 @@ const DsTenderIdPage: React.FC = () => {
           <DsTenderProduct productList={tenderData.products} setProductList={addTenderProduct} />
           new prod
         </TabView>
- 
-        <div className={style. footerContainer}>
-    <DSTendrFooter setActionStatus={setActionStatusValues}
-    
-    saveTender={saveTender}
-    ></DSTendrFooter>
-    </div>
+       </div>
       </DsApplication>
-      <Toaster
+      <Toaster 
         handleClose={() => {
         }}
         id={"create-order-toaster"}
@@ -55,6 +51,13 @@ const DsTenderIdPage: React.FC = () => {
         position={"top"}
         duration={closeTimeForTender}
       />
+      
+      <div className={style. footerContainer}>
+    <DSTendrFooter setActionStatus={setActionStatusValues}
+    
+    saveTender={saveTender}
+    ></DSTendrFooter>
+    </div>
     </> 
     
   );
