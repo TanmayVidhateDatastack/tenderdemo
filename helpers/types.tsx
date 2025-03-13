@@ -145,6 +145,7 @@ export interface CheckboxProp {
   value: string;
   label: string;
   defaultChecked?: boolean;
+  ariaChecked?:boolean|string, 
   isChecked?: boolean;
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   onChange?: (
@@ -663,13 +664,14 @@ export class tcolumn {
   columnContentType?: string;
   customAttributes?: Record<string, string | number | boolean>;
   alignment?: "center" | "right" | "left";
+  hasSort?:boolean;
 }
 
 export class cellData {
   columnIndex?: number = 1;
   className?: string;
-  content?: React.ReactNode | string | number;
-  filterValue?: string | number;
+  content?: React.ReactNode | string | number|JSX.Element;
+  filterValue?: string | number|undefined|JSX.Element;
   contentType?: string;
   colSpan?: number = 1;
   rowSpan?: number = 1;
@@ -687,6 +689,7 @@ export class DsTableRow {
   className?: string;
   content?: cellData[];
   customAttributes?: Record<string, string | number | boolean>;
+
 }
 export class tableData {
   className: string = "";
@@ -695,7 +698,7 @@ export class tableData {
   isSortable: boolean = false;
   hasSearch: boolean = false;
   columns: tcolumn[] = [];
-  rows: DsTableRow[] = [];
+  rows: DsTableRow[] = []
 }
 
 export class filterType {

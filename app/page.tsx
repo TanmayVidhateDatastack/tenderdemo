@@ -43,6 +43,8 @@ export default function Home() {
           isHidden: false,
           sort: "ASC",
           columnContentType: "string",
+          hasSort:true,
+
       
         },
         {
@@ -52,6 +54,7 @@ export default function Home() {
           isHidden: false,
           sort: "ASC",
           columnContentType: "DATE",
+          hasSort:true,
         },
         {
           columnIndex: 2,
@@ -60,6 +63,7 @@ export default function Home() {
           isHidden: false,
           sort: "ASC",
           columnContentType: "string",
+          hasSort:true,
         },
         {
           columnIndex: 3,
@@ -68,6 +72,7 @@ export default function Home() {
           isHidden: false,
           sort: "ASC",
           columnContentType: "number",
+               hasSort:true,
         },
         {
           columnIndex: 4,
@@ -76,6 +81,7 @@ export default function Home() {
           isHidden: false,
           sort: "ASC",
           columnContentType: "string",
+          hasSort:true,
         },
         {
           columnIndex: 5,
@@ -84,6 +90,7 @@ export default function Home() {
           isHidden: false,
           sort: "ASC",
           columnContentType: "string",
+          hasSort:true,
         },
         {
           columnIndex: 6,
@@ -92,6 +99,7 @@ export default function Home() {
           isHidden: false,
           sort: "ASC",
           columnContentType: "string",
+          hasSort:true,
         },
         {
           columnIndex: 7,
@@ -100,6 +108,7 @@ export default function Home() {
           isHidden: false,
           sort: "ASC",
           columnContentType: "string",
+          hasSort:true,
         },
         {
           columnIndex: 8,
@@ -108,6 +117,7 @@ export default function Home() {
           isHidden: false,
           sort: "ASC",
           columnContentType: "string",
+          hasSort:true,
         },
         {
           columnIndex: 9,
@@ -116,6 +126,7 @@ export default function Home() {
           isHidden: false,
           sort: "ASC",
           columnContentType: "number",
+          hasSort:true,
         },
         {
           columnIndex: 10,
@@ -124,149 +135,67 @@ export default function Home() {
           isHidden: false,
           sort: "NONE",
           columnContentType: "reactNode",
+          hasSort:true,
         },
       ],
       rows: [],
     });
   
-    const [originalTabledata, setoriginalTableData] = useState<tableData>({
-      className: "sample-table",
-      type: "InterActive",
-      id: "table-1",
-      isSortable: true,
-      hasSearch: false,
-      columns: [
-        {
-          columnIndex: 0,
-          className:" cell cell-customer text-dark-1",
-          columnHeader: "CUSTOMER NAME",
-          isHidden: false,
-          sort: "ASC",
-          columnContentType: "string",
-        },
-        {
-          columnIndex: 1,
-          className: "  cell  cell-submissiondate text-dark-0  ",
-          columnHeader: "SUBMISSION DATE",
-          isHidden: false,
-          sort: "ASC",
-          columnContentType: "DATE",
-        },
-        {
-          columnIndex: 2,
-          className: " cell  cell-days-to-submit  ",
-          columnHeader: "DAYS TO SUBMIT",
-          isHidden: false,
-          sort: "ASC",
-          columnContentType: "string",
-        },
-        {
-          columnIndex: 3,
-          className: " cell  cell-tenderid  text-dark-0 ",
-          columnHeader: "TENDER ID",
-          isHidden: false,
-          sort: "ASC",
-          columnContentType: "number",
-        },
-        {
-          columnIndex: 4,
-          className: " cell  cell-tendertype text-dark-1 ",
-          columnHeader: "TENDER TYPE",
-          isHidden: false,
-          sort: "ASC",
-          columnContentType: "string",
-        },
-        {
-          columnIndex: 5,
-          className: " cell  cell-depot text-dark-1",
-          columnHeader: "DEPOT",
-          isHidden: false,
-          sort: "ASC",
-          columnContentType: "string",
-        },
-        {
-          columnIndex: 6,
-          className: " cell cell-appliedby text-dark-0 ",
-          columnHeader: "APPLIED BY",
-          isHidden: false,
-          sort: "ASC",
-          columnContentType: "string",
-        },
-        {
-          columnIndex: 7,
-          className: "   cell cell-suppliedby text-dark-0  ",
-          columnHeader: "SUPPLIED BY",
-          isHidden: false,
-          sort: "ASC",
-          columnContentType: "string",
-         
-        },
-        {
-          columnIndex: 8,
-          className: " cell cell-preparedby text-dark-0  ",
-          columnHeader: "PREPARED BY",
-          isHidden: false,
-          sort: "ASC",
-          columnContentType: "string",
-        },
-        {
-          columnIndex: 9,
-          className: "  cell cell-value text-dark-1",
-          columnHeader: "VALUE(₹)",
-          isHidden: false,
-          sort: "ASC",
-          columnContentType: "number",
-        },
-        {
-          columnIndex: 10,
-          className: " cell  cell-status  ",
-          columnHeader: "STATUS",
-          isHidden: false,
-          sort: "NONE",
-          columnContentType: "reactNode",
-        },
-      ],
-      rows: [],
-    });
-
+    setIconSrc(addIcon);
 
     const calculateDueStatus = (submissionDate: string) => {
       if (!submissionDate) return "-"; // Handle empty values
-    
-      const dateParts = submissionDate.split("/");
-      if (dateParts.length !== 3) return "-"; // Invalid format
-    
-      const day = parseInt(dateParts[0], 10);
-      const month = parseInt(dateParts[1], 10) - 1; // JavaScript months are 0-based
-      const year = parseInt(dateParts[2], 10);
-      // const day = parseInt(dateParts[2], 10);
-      // const month = parseInt(dateParts[1], 10) - 1; // JavaScript months are 0-based
-      // const year = parseInt(dateParts[0], 10);
-      // // Create submission date in UTC
-      const subDate = new Date(Date.UTC(year, month, day));
-      
+  
+      let subDate = new Date(submissionDate);
+  
+      // If parsing fails, try manual parsing
+      if (isNaN(subDate.getTime())) {
+          // Handle formats like "DD/MM/YYYY"
+          const dateParts = submissionDate.split(/[\/\-\.]/); 
+          if (dateParts.length === 3) {
+              let day, month, year;
+  
+              if (submissionDate.includes("/")) {
+                  // Assuming "DD/MM/YYYY" format
+                  day = parseInt(dateParts[0], 10);
+                  month = parseInt(dateParts[1], 10) - 1;
+                  year = parseInt(dateParts[2], 10);
+              } else {
+                  // Assuming "YYYY-MM-DD" format
+                  year = parseInt(dateParts[0], 10);
+                  month = parseInt(dateParts[1], 10) - 1;
+                  day = parseInt(dateParts[2], 10);
+              }
+  
+              subDate = new Date(year, month, day);
+          }
+      }
+  
+      // Validate parsed date
+      if (isNaN(subDate.getTime())) return "-";
+  
       // Get today's date in UTC (ignoring time)
       const currentDate = new Date();
       const todayUTC = new Date(Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()));
-    
-      if (isNaN(subDate.getTime())) return "-"; // Handle invalid date
-    
+  
+      // Calculate difference in days
       const diffTime = subDate.getTime() - todayUTC.getTime();
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
-      // Corrected logic: If diffDays <= 0, show "0 Days Left"
+  
+      // Determine result
       const result = diffDays <= 0 ? "0 Days Left" : `${diffDays} Days Left`;
-    
-      console.log(`Submission Date: ${submissionDate}, Status: ${result}`);
-      let className = styles.blackText; // Default (greater than 20 days)
-      if (result === "0 Days Left") className = styles.zeroText;
+  
+      console.log(`Submission Date: ${submissionDate}, Parsed: ${subDate.toISOString()}, Status: ${result}`);
+  
+      // Apply color coding
+      let className = styles.blackText;
+      if (diffDays <= 0) className = styles.zeroText;
       else if (diffDays <= 20) className = styles.orangeText;
-      console.log(className);
-    
-    
-      // return result;
-      return <span className={className}>{result}</span>; 
-    };
+  
+      return <span className={className}>{result}</span>;
+  };
+  
+  
    
     useEffect(() => {
       if (filteredData && filteredData.length >= 0) {
@@ -310,10 +239,10 @@ export default function Home() {
               columnIndex: 0,
               className: "cell cell-customer text-dark-1",
               content: <DsName id={item.tenderId+"customerName "} name={item.customerName || "-"} />,
-              // filterValue: item.customerName || "-",
               filterValue:<DsName id={item.tenderId+"customerName "} name={item.customerName || "-"} />,
       
               contentType: "string",
+  
             },
             {
               columnIndex: 1,
@@ -321,6 +250,7 @@ export default function Home() {
               content: item.submittionDate || "-",
               filterValue: item.submittionDate || "-",
               contentType: "string",
+
             },
             {
               columnIndex: 2,
@@ -328,6 +258,7 @@ export default function Home() {
               content: item.submittionDate ? calculateDueStatus(item.submittionDate) : "-",
               filterValue: item.submittionDate ? calculateDueStatus(item.submittionDate) : "-",
               contentType: "string",
+       
             },
             {
               columnIndex: 3,
@@ -349,34 +280,27 @@ export default function Home() {
       
               content: <DsName id={item.tenderId+"depot"} name={item.depot|| "-"} />,
               filterValue:<DsName id={item.tenderId+"depot"} name={item.depot|| "-"} />,
-              // filterValue: item.depot || "-",
               contentType: "string",
             },
             {
               columnIndex: 6,
               className: " cell cell-appliedby text-dark-0 ",
-              // content: item.appliedBy || "-",
               content: <DsName id={item.tenderId+"appliedBy"} name={item.appliedBy|| "-"} />,
               filterValue: <DsName id={item.tenderId+"appliedBy"} name={item.appliedBy|| "-"} />,
-              // filterValue: item.appliedBy || "-",
               contentType: "string",
             },
             {
               columnIndex: 7,
               className: " cell cell-suppliedby text-dark-0 ",
-              // content: item.suppliedBy || "-",
               content: <DsName id={item.tenderId+"suppliedBy"} name={item.suppliedBy|| "-"} />,
               filterValue: <DsName id={item.tenderId+"suppliedBy"} name={item.suppliedBy|| "-"} />,
-              // filterValue: item.suppliedBy || "-",
               contentType: "string",
             },
             {
               columnIndex: 8,
               className: " cell cell-preparedby text-dark-0 ",
-              // content: item.preparedBy || "-",
               content: <DsName id={item.tenderId+"preparedBy"} name={item.preparedBy || "-"} />,
               filterValue: <DsName id={item.tenderId+"preparedBy"} name={item.preparedBy || "-"} />,
-              // filterValue: item.preparedBy || "-",
               contentType: "string",
             },
             {
@@ -439,13 +363,8 @@ export default function Home() {
       },
       {
         columnIndex: 1,
-        columnHeader: "Date ",
+        columnHeader: "Sub Date ",
         filterType: "DATE",
-      },
-      {
-        columnIndex: 4,
-        columnHeader: "Supply type",
-        filterType: "MULTISELECT",
       },
       {
         columnIndex: -1,
@@ -453,19 +372,24 @@ export default function Home() {
         filterType: "ICONVALUE",
       },
       {
-        columnIndex: 5,
-        columnHeader: "Depot",
+        columnIndex: 4,
+        columnHeader: "Supply type",
         filterType: "MULTISELECT",
       },
-  
+    
       {
         columnIndex: 6,
-        columnHeader: "Applied type",
+        columnHeader: "Applied by",
         filterType: "MULTISELECT",
       },
       {
         columnIndex: 7,
-        columnHeader: "Supplied type",
+        columnHeader: "Supplied by",
+        filterType: "MULTISELECT",
+      },
+      {
+        columnIndex: 5,
+        columnHeader: "Depot",
         filterType: "MULTISELECT",
       },
   
@@ -480,56 +404,57 @@ export default function Home() {
         filterType: "MULTISELECT",
       },
     ];
-    // const handleFetch = async () => {
-    //   await fetchData({ url: getAllTenders })
-    //     .then((res) => {
-    //       console.log("Fetched Response:", res); // Log the fetched response
-    //       if (res?.code === 200 && Array.isArray(res?.result)) {
-    //         setData(res.result); // Update the state
-    //       } else {
-    //         console.error("Error: Invalid data format or empty result");
-    //       }
-    //     })
-    //     .catch((err) => {
-    //       console.error("Error fetching data:", err);
-    //     });
-    // };
+    console.log(filterType);
   
-    const handleFetch = async () => {
-      try {
-          const res = await fetchData({ url: getAllTenders });
-  
-          console.log("Fetched Response:", res); // Debugging log
-  
-          // Validate response structure before updating state
+     const handleFetch = async () => {
+      await fetchData({ url: getAllTenders })
+        .then((res) => {
+          console.log("Fetched Response:", res); // Log the fetched response
           if (res?.code === 200 && Array.isArray(res?.result)) {
-              const mappedData: Tender[] = res.result.map((item: any) => ({
-                  customerName: item.customerName,
-                  submittionDate: item.submissionDate,
-                  daystosubmit: item.daysToSubmit ?? "N/A",
-                  tenderId: item.tenderId.toString(),
-                  type: item.tenderType,
-                  tenderType: item.tenderType,
-                  depot: item.shippingLocations.map((loc: any) => loc.name).join(", "), // Combine locations
-                  appliedBy: item.applierName,
-                  suppliedBy: item.supplierName,
-                  preparedBy: item.preparedBy,
-                  value: item.value,
-                  status: {
-                      tenderStatus: item.status?.tenderStatus ?? "UNKNOWN",
-                      message: item.status?.message ?? "No message",
-                  },
-                  customAttributes: { iconValue: "defaultIcon" }, // Example default
-              }));
-  
-              setData(mappedData); // Update state with mapped objects
+            setData(res.result); // Update the state
           } else {
-              console.error("Error: Invalid response format or empty result", res);
+            console.error("Error: Invalid data format or empty result");
           }
-      } catch (error) {
-          console.error("Error fetching data:", error);
-      }
-  };
+        })
+        .catch((err) => {
+          console.error("Error fetching data:", err);
+        });
+    };
+  //   const handleFetch = async () => {
+  //     try {
+  //         const res = await fetchData({ url: getAllTenders });
+  
+  //         console.log("Fetched Response:", res); 
+  
+
+  //         if (res?.code === 200 && Array.isArray(res?.result)) {
+  //             const mappedData: Tender[] = res.result.map((item: any) => ({
+  //                 customerName: item.customerName,
+  //                 submittionDate: item.submissionDate,
+  //                 daystosubmit: item.daysToSubmit ?? "N/A",
+  //                 tenderId: item.tenderId.toString(),
+  //                 type: item.tenderType,
+  //                 tenderType: item.tenderType,
+  //                 depot: item.shippingLocations.map((loc: any) => loc.name).join(", "), 
+  //                 appliedBy: item.applierName,
+  //                 suppliedBy: item.supplierName,
+  //                 preparedBy: item.preparedBy,
+  //                 value: item.value.toString(),
+  //                 status: {
+  //                     tenderStatus: item.status?.tenderStatus ?? "null",
+  //                     message: item.status?.message ?? "No message",
+  //                 },
+  //                 customAttributes: { iconValue: "defaultIcon" }, 
+  //             }));
+  
+  //             setData(mappedData);
+  //         } else {
+  //             console.error("Error: Invalid response format or empty result", res);
+  //         }
+  //     } catch (error) {
+  //         console.error("Error fetching data:", error);
+  //     }
+  // };
   
     const addTableData = (tender: Tender[]) => {
       console.log("Adding table data:", tender);
@@ -560,7 +485,8 @@ export default function Home() {
               position: "relative",
             }}
           >
-            <Image src={corporate} alt="corporate"
+            <Image src={corporate} 
+            alt="corporate"
             layout="fill"
             objectFit="cover" />
           </div>
@@ -572,7 +498,6 @@ export default function Home() {
             className: " cell cell-customer text-dark-1 " ,
             content: <DsName id={t.tenderId+"customerName"} name={t.customerName || "-"} />,
             filterValue:<DsName id={t.tenderId+"customerName"} name={t.customerName || "-"} />,
-            // filterValue: t.customerName,
             contentType: "string",
           },
           {
@@ -606,19 +531,19 @@ export default function Home() {
           {
             columnIndex: 5,
             className: " cell cell-depot text-dark-1 ",
-            // content: t.depot,
+   
             content: <DsName id={t.tenderId+"depot"} name={t.depot || "-"} />,
             filterValue: <DsName id={t.tenderId+"depot"} name={t.depot || "-"} />,
-            // filterValue: t.depot,
+           
             contentType: "string",
           },
           {
             columnIndex: 6,
             className: " cell cell-appliedby text-dark-0 ",
-            // content: t.appliedBy,
+        
             content: <DsName id={t.tenderId+"appliedBy"} name={t.appliedBy || "-"} />,
             filterValue: <DsName id={t.tenderId+"appliedBy"} name={t.appliedBy || "-"} />,
-            // filterValue: t.appliedBy,
+         
             contentType: "string",
           },
           {
@@ -627,16 +552,16 @@ export default function Home() {
   
             content: <DsName id={t.tenderId+"suppliedBy"} name={t.suppliedBy || "-"} />,
             filterValue: <DsName id={t.tenderId+"suppliedBy"} name={t.suppliedBy || "-"} />,
-            // filterValue: t.suppliedBy,
+        
             contentType: "string",
           },
           {
             columnIndex: 8,
             className: " cell cell-preparedby text-dark-0 ",
-            // content: t.preparedBy,
+        
             content: <DsName id={t.tenderId+"preparedBy"} name={t.preparedBy || "-"} />,
             filterValue: <DsName id={t.tenderId+"preparedBy"} name={t.preparedBy || "-"} />,
-            // filterValue: t.preparedBy,
+
             contentType: "string",
           },
           {
@@ -688,17 +613,13 @@ export default function Home() {
         ...prevData,
         rows: newRows,
       }));
-      setoriginalTableData((prevData) => ({
-        ...prevData,
-        rows: newRows,
-      }))
+  
     };
   
     useEffect(() => {
       handleFetch();
     }, []);
   
-    useEffect(() => {});
   
     useEffect(() => {
       console.log("Data updated:", data);
@@ -755,13 +676,10 @@ return (
                 tooltip="variants : btnPrimary, btnOutlined, btnMedium"
                 label="New"
                 iconSize="iconMedium"
-              />
-            
+              />   
           </>
       }
-     
       pageName="LogPage"    
-     
     >
        <div className={styles.totalCal}>
           <DsTotalTenders data={data} />
@@ -779,10 +697,9 @@ return (
           isSelectAble={false}
           rows={tempTableData.rows}
            isFooterRequired={true}
-
-      
+           isSortable={true}
         />
-            </div>
+          </div>
           </div>
      
   

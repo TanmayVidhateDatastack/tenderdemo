@@ -30,12 +30,7 @@ const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
               updateTenderData("applierId", option.value);
             }
           }}
-          // handleOnChange={function (
-          //   e: React.ChangeEvent<HTMLElement>
-          // ): void {
-          //   throw new Error("Function not implemented.");
-          // }}
-          // isSearchable={true}
+       
         ></DsSelectMultiLevel>
         <DsSelectMultiLevel
           isSearchable
@@ -52,16 +47,11 @@ const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
               updateTenderData("suppliedId", option.value);
             }
           }}
-          // handleOnChange={function (
-          //   e: React.ChangeEvent<HTMLElement>
-          // ): void {
-          //   throw new Error("Function not implemented.");
-          // }}
-          // isSearchable={true}
+       
         ></DsSelectMultiLevel>    
         <DsMultiSelect 
           options={applierSupplierDetails.depot} 
-          // type="multi"  
+        
           label="Depot"  
           placeholder={"Please search or select here"}
           id={"depot"}

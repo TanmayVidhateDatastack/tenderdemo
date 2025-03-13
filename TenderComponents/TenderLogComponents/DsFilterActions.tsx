@@ -1,5 +1,4 @@
 import styles from "./filteractions.module.css";
-import DsTabButton from "@/Elements/DsComponents/DsButtons/DsTabButton";
 import Image from "next/image";
 import filter from "@/Icons/smallIcons/filtericon.svg";
 import PaneOpenButton from "@/Elements/DsComponents/DsPane/PaneOpenButton";
@@ -26,14 +25,6 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
   data,
   setFilteredData,
 }) => {
-  // const [isFiltered, setIsFiltered] = useState<Record<string, boolean>>({
-  //   [DsStatus.UREV]: false,
-  //   [DsStatus.UAPR]: false,
-  //   [DsStatus.APRL]: false,
-  //   [DsStatus.APRV]: false,
-  //   [(DsStatus.APRL, DsStatus.APRV, DsStatus.UAPR)]: false,
-  //   nearSubmission: false
-  // });
 
   const initialFilterState = Object.fromEntries(
     [...Object.values(DsStatus), "nearSubmission", "feesPending"].map(
@@ -54,6 +45,9 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
     feesPendingButtonVisible,
     filterButtonVisible,
     approvalButtonVisible,
+    underApprovalButtonVisible,
+    underReviewButtonVisible
+
 
   } = permissions;
 
@@ -95,18 +89,17 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
 
           if (value === "nearSubmission") {
             filteredRows = filteredRows.filter((tender) => {
-              // Convert the input date string (yyyy/mm/dd) to a Date object
+     
               const [day, month, year] = tender.submittionDate.split("/");
-              // const [year, month, day] = tender.submittionDate.split("/");
               const dateToCheck = new Date(
                 parseInt(year),
                 parseInt(month) - 1,
                 parseInt(day)
-              ); // Months are 0-based in JavaScript
+              );
 
               const today = new Date();
               const futureDate = new Date(today);
-              futureDate.setDate(today.getDate() + 20); 
+              futureDate.setDate(today.getDate() + 20); //near submission change 20 days 
 
     
               return (
@@ -126,7 +119,18 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
                 : tender.status?.tenderStatus?.toLowerCase() === lowerCaseValue
             );
           } 
-          
+          // else if (value == "feesPaid") {
+          //   const lowerCaseValue = DsStatus.UREV|| DsStatus.APRV||DsStatus.UAPR.toLowerCase();
+          //   message = "fees paid";
+          //   filteredRows = filteredRows.filter((tender) =>
+          //     message
+          //       ? tender.status?.tenderStatus?.toLowerCase() ===
+          //           lowerCaseValue &&
+          //         tender?.status?.message?.toLowerCase() ==
+          //           message.toLowerCase()
+          //       : tender.status?.tenderStatus?.toLowerCase() === lowerCaseValue
+          //   );
+          // } 
           else {
             const lowerCaseValue = value.toLowerCase();
             filteredRows = filteredRows.filter((tender) =>
@@ -138,17 +142,12 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
                 : tender.status?.tenderStatus?.toLowerCase() === lowerCaseValue
             );
           }
-          
-
           setFilteredData(filteredRows);
         }
       } else {
-        // Get active filters (only those which are true)
-        const activeFilters = Object.entries(newFilterState)
+          const activeFilters = Object.entries(newFilterState)
           .filter(([_, isActive]) => isActive)
           .map(([key]) => key);
-
-        // If no filters are active, reset data
         if (activeFilters.length === 0) {
           setFilteredData(data);
         } else {
@@ -164,13 +163,11 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
                   : true)
             )
           );
-
           setFilteredData(filteredRows);
         }
 
         return newFilterState;
       }
-
       return newFilterState;
     });
   };
@@ -189,68 +186,128 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
     }
   }, [role]);
 
+  // const [searchText, setSearchText] = useState("");
+
+  // const handleSearch = (e) => {
+  //   if (e.key === "Enter") {
+  //     const searchQuery = normalizeText(searchText);
+
+     
+  //     const searchableColumns: (keyof Tender)[] = [
+  //       "customerName",
+  //       "tenderId",
+  //       "value",
+  //     ];
+
+  //     const filteredRows = data.filter((originalData) => {
+  //       return searchableColumns.some((column) => {
+  //         const value = originalData[column]; 
+
+  //         if (typeof value === "string" || typeof value === "number") {
+  //           return normalizeText(value).includes(searchQuery);
+  //         }
+
+  //         if (Array.isArray(value)) {
+  //           return value.some(
+  //             (item: any) =>
+  //               typeof item === "string" &&
+  //               normalizeText(item).includes(searchQuery)
+  //           );
+  //         }
+
+  //         if (typeof value === "object" && value !== null) {
+  //           return searchInObject(value, searchQuery);
+  //         }
+
+  //         return false;
+  //       });
+  //     });
+
+  //     setFilteredData(filteredRows);
+  //   }
+  // };
+
+
+  // const normalizeText = (text: any): string => {
+  //   return typeof text === "string"
+  //     ? text.toLowerCase()
+  //     : text.toString().toLowerCase();
+  // };
+
+
+  // const searchInObject = (obj: any, query: string): boolean => {
+  //   return Object.values(obj).some((val) => {
+  //     if (typeof val === "string" || typeof val === "number") {
+  //       return normalizeText(val).includes(query);
+  //     }
+
+  //     if (typeof val === "object" && val !== null) {
+  //       return searchInObject(val, query);
+  //     }
+
+  //     return false;
+  //   });
+  // };
+
   const [searchText, setSearchText] = useState("");
 
   const handleSearch = (e) => {
-    if (e.key === "Enter") {
-      const searchQuery = normalizeText(searchText);
-
-      // Define the columns to search in
-      const searchableColumns: (keyof Tender)[] = [
-        "customerName",
-        "tenderId",
-        "value",
-      ];
-
-      const filteredRows = data.filter((originalData) => {
-        return searchableColumns.some((column) => {
-          const value = originalData[column]; // Use column as keyof Tender
-
-          if (typeof value === "string" || typeof value === "number") {
-            return normalizeText(value).includes(searchQuery);
-          }
-
-          if (Array.isArray(value)) {
-            return value.some(
-              (item: any) =>
-                typeof item === "string" &&
-                normalizeText(item).includes(searchQuery)
-            );
-          }
-
-          if (typeof value === "object" && value !== null) {
-            return searchInObject(value, searchQuery);
-          }
-
-          return false;
-        });
-      });
-
-      setFilteredData(filteredRows);
+    const inputText = e.target.value;
+    const searchQuery = normalizeText(inputText.trim()); // Trim whitespace
+  
+    setSearchText(inputText); // Maintain original input state
+  
+    if (searchQuery.length < 3) {
+      setFilteredData(data); // Reset data if less than 3 meaningful characters
+      return;
     }
+  
+    const searchableColumns: (keyof Tender)[] = ["customerName", "tenderId", "value"];
+  
+    const filteredRows = data.filter((originalData) => {
+      return searchableColumns.some((column) => {
+        const value = originalData[column];
+  
+        if (typeof value === "string" || typeof value === "number") {
+          return normalizeText(value).includes(searchQuery);
+        }
+  
+        if (Array.isArray(value)) {
+          return value.some(
+            (item: any) =>
+              typeof item === "string" && normalizeText(item).includes(searchQuery)
+          );
+        }
+  
+        if (typeof value === "object" && value !== null) {
+          return searchInObject(value, searchQuery);
+        }
+  
+        return false;
+      });
+    });
+  
+    setFilteredData(filteredRows);
   };
-
-  // Normalize text for case-insensitive search
+  
   const normalizeText = (text: any): string => {
-    return typeof text === "string"
-      ? text.toLowerCase()
-      : text.toString().toLowerCase();
+    return typeof text === "string" ? text.toLowerCase().trim() : text.toString().toLowerCase();
   };
-
-  // Helper function to search inside nested objects
+  
   const searchInObject = (obj: any, query: string): boolean => {
     return Object.values(obj).some((val) => {
       if (typeof val === "string" || typeof val === "number") {
         return normalizeText(val).includes(query);
       }
-
+  
       if (typeof val === "object" && val !== null) {
         return searchInObject(val, query);
       }
-
+  
       return false;
     });
   };
+  
 
   return (
     <>
@@ -286,7 +343,8 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
       )}
       <div className={styles.nav}>
         {nearSubmissionButtonVisible && (
-         
+
+      
           <DsFilterButton
             id="approved"
             buttonColor="btnPrimary"
@@ -310,7 +368,6 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
           buttonViewStyle={
             isFiltered["feesPending"] ? "btnContained" : "btnOutlined"
           }
-  
           onClick={() => handleFilter("feesPending")}
           label="Fees Pending"
         />
@@ -336,7 +393,24 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
           label="Approval"
         />
       )}
-
+ {underApprovalButtonVisible && (
+          <DsFilterButton
+            label="Under Approval"
+            className={styles.dis}
+            id="underApproval"
+            buttonViewStyle="btnOutlined"
+            onClick={() => handleFilter(DsStatus.UAPR)}
+          />
+        )}
+        {underReviewButtonVisible && (
+          <DsFilterButton
+            label="Under Review"
+            className={styles.dis}
+            id="underReview"
+            buttonViewStyle="btnOutlined"
+            onClick={() => handleFilter(DsStatus.UREV)}
+          />
+        )}
       {filterButtonVisible && (
     
         <DsButton
