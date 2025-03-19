@@ -1,7 +1,5 @@
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
-import DsCsvUpload, {
-  getFilesFromLocalStorage
-} from "@/Elements/DsComponents/DsButtons/dsCsvUpload";
+import DsCsvUpload from "@/Elements/DsComponents/DsButtons/dsCsvUpload";
 import Ds_checkbox from "@/Elements/DsComponents/DsCheckbox/dsCheckbox";
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import DsSingleSelect from "@/Elements/DsComponents/dsSelect/dsSingleSelect";
@@ -152,22 +150,22 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             label="Attach File"
             buttonViewStyle="btnText"
             buttonSize="btnSmall"
-            onSetFiles={(id) => {
-              getFilesFromLocalStorage(id).then((files) => {
-                if (files && files.length > 0) {
-                  const documentArray = files.map((file) => ({
-                    name: file.attributes.name,
-                    document: file.file
-                  }));
+            // onSetFiles={(id) => {
+            //   getFilesFromLocalStorage(id).then((files) => {
+            //     if (files && files.length > 0) {
+            //       const documentArray = files.map((file) => ({
+            //         name: file.attributes.name,
+            //         document: file.file
+            //       }));
 
-                  updateTenderFee(
-                    id.replace("DocumentView", ""),
-                    "documents",
-                    documentArray
-                  );
-                }
-              });
-            }}
+            //       updateTenderFee(
+            //         id.replace("DocumentView", ""),
+            //         "documents",
+            //         documentArray
+            //       );
+            //     }
+            //   });
+            // }}
           ></DsCsvUpload>
         </div>
       </div>

@@ -29,7 +29,7 @@ const DsTenderIdPage: React.FC = () => {
     
         appTitle="Tender"
         tabs={tabs}
-        pageName="tenderPage" // Add this prop
+       
       >
         <div className={pagestyles.container}
         onScroll={() => closeAllContext()}>

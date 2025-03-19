@@ -38,22 +38,30 @@
 ///Host urls Universal
 export const demoHostUrl = "http://172.203.226.112:3000";
 export const apiLocalUrl = "http://localhost:7002";
-export const apiServerUrl = "http://172.145.1.102:7002";
+export const apiServerJsonUrl="http://172.145.1.102:7002";
+export const apiServerUrl = "http://172.145.1.102:7005/api";
+
 // export const apiHostUrl = apiLocalUrl;
-export const apiHostUrl = apiServerUrl;
+export const apiHostUrl = apiServerJsonUrl;
 export const devHostUrl = "http://localhost:3000";
 
 ///Urls application Level
 export const hostUrl = devHostUrl;
 export const Component_Library = hostUrl + "/ComponentsLibrary";
+
+///Urls application Level
+
 export const salesOUrl = hostUrl + "/";
 
+export const proDeskUrl=hostUrl+"/";
 ///universal Apis
 
-export const getUserRoles = apiHostUrl + "/depousers/2";
+// export const getUserRoles = apiHostUrl + "/depousers/2";
 // export const getUserRoles = apiHostUrl+"/depomanager/2";
-// export const getUserRoles =apiHostUrl+"/homanager/3";
+export const getUserRoles =apiHostUrl+"/homanager/3";
 // export const getUserRoles = "http://localhost:5155/homanager/1";
+export const getAllMetaData=apiServerUrl+"/metadata/tender";
+// export const getAllMetaData="http://172.145.1.102:7005/api/metadata/tender";
 
 ///Apis
 export const getAllInstitutionalOrders = apiHostUrl + "/institutional";
@@ -79,10 +87,10 @@ export const searchTransporterURL = apiHostUrl + "/customers/filter?name=";
 export const getTransporterURL = apiHostUrl + "/customers/";
 export const getAllStatusLogURL = apiHostUrl + "/status";
 
-export const getAllTenders = apiHostUrl + "/tenders";
-// export const getAllTenders="http://172.145.1.102:7005/api/tenders";
+export const getAllTenders = apiServerUrl + "/tenders" ;
 
-export const getAllMetaData = apiHostUrl + "/tenderMetadata";
+
+// export const getAllMetaData = apiHostUrl + "/tenderMetadata";
 
 //Tender User Roles
 // export const getTenderUserRoles = apiHostUrl + "/maker";
@@ -92,6 +100,8 @@ export const getTenderUserRoles = apiHostUrl + "/homanager";
 
 export const getTenderSearchProducts =
   apiHostUrl + "/tenderproducts/filter?name=";
+  export const updateApprovalTypes =
+  "http://172.145.1.102:7001/api/order/approval/5175";
 
 export const DsStatus: Record<string, dsStatus> = {
   DRFT: "Draft",

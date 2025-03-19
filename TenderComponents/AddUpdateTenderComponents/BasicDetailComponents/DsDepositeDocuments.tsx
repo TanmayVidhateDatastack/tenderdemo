@@ -83,13 +83,13 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
     }
   }, [applicablefees]);
 
-  function handleonclick(e) {
-    displayContext(e, contextMenuId, "vertical", "center");
+  function handleonclick(e: React.MouseEvent<HTMLElement, MouseEvent> | React.FocusEvent<HTMLElement, Element> | FocusEvent) {
+    displayContext(e ,contextMenuId, "vertical", "center");
   }
 
   const selectedFees = new Set(); // 🔥 Store selected checkboxes globally
 
-  const handleAdd = (e) => {
+  const handleAdd = () => {
     applicablefees.forEach((opt) => {
       const id = opt.value.toString();
       const checkbox = document.getElementById(id) as HTMLInputElement;
@@ -165,7 +165,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   }, [applicablefees]);
 
   useEffect(() => {
-    const handleScroll = (event) => {
+    const handleScroll = (event:any) => {
       const excludedElement = document.getElementById("optionBtn");
       if (excludedElement && excludedElement.contains(event.target)) {
         closeContext(contextMenuId);

@@ -36,7 +36,7 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
     Record<string, boolean>
   >({});
 
-  function handleonclick(e) {
+  function handleonclick(e: React.MouseEvent<HTMLElement, MouseEvent> | React.FocusEvent<HTMLElement, Element> | FocusEvent) {
     setContext(true);
     console.log("context : ", context);
     displayContext(e, contextMenuId);
@@ -78,7 +78,7 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
 
   const selectedConditions = new Set(); // 🔥 Store selected checkboxes globally
 
-  const handleAdd = (e) => {
+  const handleAdd = () => {
     applicableCheckboxes.forEach((opt) => {
       const id = opt.value.toString();
       const checkbox = document.getElementById(id) as HTMLInputElement;
@@ -118,7 +118,7 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
           buttonViewStyle="btnContained"
           className={styles.addBtn}
           buttonSize="btnLarge"
-          onClick={(e) => handleAdd(e)}
+          onClick={() => handleAdd()}
         />{" "}
       </>,
       true

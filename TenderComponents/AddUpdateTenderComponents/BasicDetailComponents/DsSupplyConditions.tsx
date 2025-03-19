@@ -1,6 +1,4 @@
-import DsCsvUpload, {
-  getFilesFromLocalStorage
-} from "@/Elements/DsComponents/DsButtons/dsCsvUpload";
+import DsCsvUpload from "@/Elements/DsComponents/DsButtons/dsCsvUpload";
 import TextArea from "@/Elements/DsComponents/DsInputs/dsTextArea";
 import styles from "./deposite.module.css";
 import { useTenderData } from "../TenderDataContextProvider";
@@ -42,22 +40,22 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
             label="Attach File"
             buttonViewStyle="btnText"
             buttonSize="btnSmall"
-            onSetFiles={(id) => {
-              getFilesFromLocalStorage(id).then((files) => {
-                if (files && files.length > 0) {
-                  const documentArray = files.map((file) => ({
-                    name: file.attributes.name,
-                    document: file.file
-                  }));
+            // onSetFiles={(id) => {
+            //   getFilesFromLocalStorage(id).then((files) => {
+            //     if (files && files.length > 0) {
+            //       const documentArray = files.map((file) => ({
+            //         name: file.attributes.name,
+            //         document: file.file
+            //       }));
 
-                  updateApplicableCondition(
-                    id.replace("conditionsView", ""),
-                    "documents",
-                    documentArray
-                  );
-                }
-              });
-            }}
+            //       updateApplicableCondition(
+            //         id.replace("conditionsView", ""),
+            //         "documents",
+            //         documentArray
+            //       );
+            //     }
+            //   });
+            // }}
           ></DsCsvUpload>
         </div>
       </div>

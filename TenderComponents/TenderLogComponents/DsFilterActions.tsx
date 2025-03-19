@@ -56,6 +56,8 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
       await fetchData({ url: getTenderUserRoles }).then((res) => {
         if ((res.code = 200)) {
           dispatch(setUserRole(res.result.roleName));
+          console.log("userrole=",res);
+          console.log("role",role);
         } else {
           console.error(
             "Error fetching data: ",
@@ -249,13 +251,13 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
   //   });
   // };
 
-  const [searchText, setSearchText] = useState("");
+  // const [searchText, setSearchText] = useState("");
 
-  const handleSearch = (e) => {
-    const inputText = e.target.value;
+  const handleSearch = (e:React.KeyboardEvent<HTMLInputElement|HTMLTextAreaElement>) => {
+    const inputText = (e.target as HTMLInputElement).value;
     const searchQuery = normalizeText(inputText.trim()); // Trim whitespace
   
-    setSearchText(inputText); // Maintain original input state
+    // setSearchText(inputText); // Maintain original input state
   
     if (searchQuery.length < 3) {
       setFilteredData(data); // Reset data if less than 3 meaningful characters
@@ -337,7 +339,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
           }
 
           containerClasses={styles.datalist}
-          onChange={(e) => setSearchText(e.target.value)}
+          // onChange={(e) => setSearchText(e.target.value)}
           onKeyUp={(e) => handleSearch(e)}
         />
       )}

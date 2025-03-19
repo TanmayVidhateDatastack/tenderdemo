@@ -42,9 +42,9 @@ const DsTotalTenders: React.FC<TotalTendersProps> = React.memo(({ data }) => {
         return;
       }
 
-      if (tender.type === "institutional") {
+      if (tender.type === "Institution") {
         institutional++;
-      } else if (tender.type === "corporate") {
+      } else if (tender.type === "Corporate") {
         corporate++;
       }
     });

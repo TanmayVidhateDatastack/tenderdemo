@@ -173,6 +173,7 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
 
       <DsApprovalPopup
         id="popup1"
+        types={[]}
         popupType="Approve"
         buttonColor="btnPrimary"
         position="center"
@@ -188,6 +189,8 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
 
       <DsApprovalPopup
         id="popup2"
+        types={[]}
+
         popupType="Revise"
         buttonColor="btnPrimary"
         position="center"
@@ -196,6 +199,8 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
       />
       <DsApprovalPopup
         id="popup3"
+        types={[]}
+
         popupType="Reject"
         buttonColor="btnDanger"
         position="center"

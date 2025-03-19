@@ -38,8 +38,11 @@ export interface advancedFilterComponent {
 export interface AccordionProps {
   id: string;
   title: string; // The title of the accordion
-  children: string | React.ReactElement; // The content inside the accordion, can be a string or a React element
-} 
+  children: string | React.ReactElement;
+  isOpen?:boolean; 
+  onToggle?:(id:number|string)=>void;// The content inside the accordion, can be a string or a React element
+}
+ 
 export interface tenderDetailsProps{
   tenderDetails:tenderDetails
 }
@@ -176,6 +179,7 @@ export interface DocumentSelectorProps {
   headerTitle: string;
   headerNumber: string;
   initialDocuments: string[];
+  handleOnRemoveClick?:(doc:string)=>void;
 }
 export interface addressProps {
   address: string; // User's location
@@ -237,7 +241,7 @@ export interface locationProps {
  export interface nameProps
  {
 id :string;
-name:string;
+name:string|React.ReactNode;
 
  }
 export interface DsPaneProps {
@@ -271,13 +275,12 @@ export interface PopupOpenButtonProps extends DSButtonProps {
   id?: string;
   popupId: string;
   buttonText?: string;
-  buttonClass?: string;
+  className?: string;
   img?: string;
   beforeIcon?: React.ReactElement;
   afterIcon?: React.ReactElement;
   onHover?: (e: React.MouseEvent<HTMLElement>) => void;
 }
-
 export interface DsOptionProps {
   selectId?: string;
   id?: string;
@@ -288,6 +291,7 @@ export interface DsOptionProps {
   selectedOption?: DsSelectOption;
   isSearchable: boolean;
 }
+
 
 export interface DsSelectOption {
   label: string;
@@ -326,7 +330,7 @@ export interface SpotlightSearchProps {
   customAttributes?: Record<string, string>;
 }
 export interface DsStatusIndicatorProps {
-  status?: orderStatus;
+  status?:tenderStatus;
   className?: string;
   id?: string;
   label?: string;
@@ -356,22 +360,26 @@ export interface Ds_Tablemenu_Props {
   position?: "top" | "center" | "bottom";
 }
 
+
 export interface TabsProps {
   selectedTabId: string;
   tabs: tab[];
   children: React.ReactNode;
-  pageName: string; // Add this line
+  menus?: React.ReactNode;
 }
 
 export interface tab {
   tabId: string;
   tabName: string;
-  count?: number;
+  count?: number | "00";
+  disable?: boolean;
+  customAttributes?: Record<string, string | number | boolean>;
+  onClick?: (tab: tab) => void;
 }
 export interface TabNavProps {
   selectedTabId: string;
   tabs: tab[];
-  pageName: string; // Add this line
+  menus?: React.ReactNode;
 }
 
 
@@ -431,7 +439,7 @@ export interface InputTextAreaProps {
   customAttributes?: Record<string, string>;
   type?: "singleline" | "multiline";
   showshadow?: "shadow" | " ";
-  inputType?: "password" | "text" | "number" | "date";
+  inputType?: "text" | "number";
   starticon?: React.ReactElement;
   iconEnd?: React.ReactElement;
   rows?: number;
@@ -462,12 +470,12 @@ export interface tdprops {
   className: string;
   children?: React.ReactNode;
   content?: string | React.ReactNode;
-  filterValue?: string | number;
+  filterValue?: string | number|React.ReactNode|undefined;
   type: string;
   colSpan?: number;
   rowSpan?: number;
-  rowIndex?: number;
-  columnIndex?: number;
+  rowIndex: number;
+  columnIndex: number;
   isEditable?: boolean;
   hasComponent?: boolean;
   componentType?: string;
@@ -487,10 +495,11 @@ export interface tdprops {
 }
 
 export interface trprops {
+  type?: "InterActive" | "NonInterActive";
   className?: string;
   children?: React.ReactNode;
   content?: string;
-  rowIndex?: number;
+  rowIndex: number;
   onRowClick?: (e: React.MouseEvent<HTMLElement>, rowIndex: number) => void;
   handleRowDoubleClick?: (
     e: React.MouseEvent<HTMLElement>,
@@ -500,9 +509,14 @@ export interface trprops {
     e: React.MouseEvent<HTMLElement>,
     rowIndex: number
   ) => void;
-
+  handleRowHover?: (e: React.MouseEvent<HTMLElement>, rowIndex: number) => void;
+  handleRowHoverOut?: (
+    e: React.MouseEvent<HTMLElement>,
+    rowIndex: number
+  ) => void;
   customAttributes?: Record<string, string | number | boolean>;
 }
+
 export interface tfooterprops {
   className: string;
   children?: React.ReactNode;
@@ -531,6 +545,7 @@ export interface TableComponentProps {
   type?: "InterActive" | "NonInterActive";
   isSelectAble?: boolean; //second column checkbox
   hasIcons?: boolean; //first column
+  isCheckBoxVisible?: boolean;
   isSortable?: boolean;
   hasSearch?: boolean;
   isEditable?: boolean;
@@ -559,10 +574,14 @@ export interface TableComponentProps {
     e: React.MouseEvent<HTMLElement>,
     rowIndex: number
   ) => void;
+  handleRowHover?: (e: React.MouseEvent<HTMLElement>, rowIndex: number) => void;
+  handleRowHoverOut?: (
+    e: React.MouseEvent<HTMLElement>,
+    rowIndex: number
+  ) => void;
   handleCellClick?: (rowIndex: number, columnIndex: number) => void;
   customAttributes?: Record<string, string | number | boolean>;
 }
-
 export interface tablemenuprops {
   column: tcolumn;
   className: string;
@@ -635,8 +654,7 @@ export interface ApplicationProps {
   tabs?: tab[];
   selectedTabId?: string;
   isDataTable?: boolean;
-  pageName:string;
-  className?:string;
+  tabLevelMenu?: React.ReactNode;
 }
 export interface ApplicationHeaderProps {
   children: React.ReactNode;
@@ -670,8 +688,8 @@ export class tcolumn {
 export class cellData {
   columnIndex?: number = 1;
   className?: string;
-  content?: React.ReactNode | string | number|JSX.Element;
-  filterValue?: string | number|undefined|JSX.Element;
+  content?: React.ReactNode | string | number;
+  filterValue?: string | number|React.ReactNode|undefined;
   contentType?: string;
   colSpan?: number = 1;
   rowSpan?: number = 1;
@@ -707,6 +725,7 @@ export class filterType {
   filterType: string = "";
 }
 
+
 export class DsFilterValues {
   columnIndex: number = 0;
   columnHeader: string = "";
@@ -730,12 +749,12 @@ export type InitState = {
 };
 
 // types
-// export type bankDetail = {
-//   name: string;
-//   accountNumber: string;
-//   ifscCode: string;
-//   branchName: string;
-// };
+export type bankDetail = {
+  name: string;
+  accountNumber: string;
+  ifscCode: string;
+  branchName: string;
+};
 export type location = {
   id: number;
   address1: string;
@@ -984,7 +1003,7 @@ export type Document = {
   document: File;
 }
 export type tenderFee = {
-  type: string;
+  type: string|number;
   amount: number;
   currency: string;
   paidBy: string;
@@ -995,7 +1014,7 @@ export type tenderFee = {
   documents: Document[];
 };
 export type applicableSupplyConditions = {
-  type: string;
+  type: string|number;
   notes: string;
   documents: Document[];
   status?: dsStatus;
@@ -1106,5 +1125,49 @@ export type tenderStatus = {
   messageType?: string;
   message?: string;
 };
+export interface CplProps {
+  ids: number[];
+}
+export interface DsStockistViewProps {
+  data: any; // Accept data as a prop
+}
+
+export interface correctSignProps {
+  handleOnClick?: (e: React.MouseEvent<HTMLElement>) => void;
+}
+export interface DsSummaryViewProps {
+  data: any; // Accept data as a prop
+}
+
+export interface NavProp extends DSButtonProps {
+  location?: string;
+  children?: React.ReactNode;
+}
+export interface applierSupplierDetailsProps{
+  applierSupplierDetails :applierSupplierDetails;
+}
 
 
+
+ export type CodeItem = {
+  codeValue: string;
+  codeDescription: string;
+};
+
+ export type TenderMetaData = {
+  code: number;
+  message: string;
+  result: {
+    tenderType: CodeItem[];
+    paymentMode: CodeItem[];
+    supplyPoint: CodeItem[];
+    testReportRequirement: CodeItem[];
+    eligibility: CodeItem[];
+    feesType: CodeItem[];
+    tenderSupplyCondition: CodeItem[];
+    documentType: CodeItem[];
+    submissionMode: CodeItem[];
+  };
+  error: null|string;
+  exception: null|string;
+};

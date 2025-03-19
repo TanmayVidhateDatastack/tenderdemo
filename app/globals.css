@@ -223,6 +223,24 @@ body {
 .logRow:hover {
   background-color: var(--background-hover);
 }
+/* .cell.overflow:hover::after {
+  content: attr(data-fulltext); 
+  position: absolute;
+  left: 0;
+  top: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  white-space: nowrap;
+  z-index: 100;
+} */
+/* Hide tooltip if no overflow */
+/* .cell:not(.overflow)::after {
+  display: none;
+} */
+
+
 .cell-0 {
   flex: 0;
   max-width: 3% !important;
@@ -238,9 +256,9 @@ body {
 .cell {
   flex: 1;
   max-width: 100% !important;
-  /* max-width: 10% !important; */
-  /* min-width: 10% !important; */
+
 }
+
 .cell-1 {
   flex: 1;
   min-width: 12% !important;
@@ -321,17 +339,19 @@ body {
   max-width:100% ;
   min-width: 11% !important;
   width: 11% !important;
-  white-space:nowrap;
-  text-overflow: ellipsis; 
- }
+white-space:nowrap !important;
+text-overflow: ellipsis !important; 
+overflow: hidden !important;
+}
 
 .cell-submissiondate
 {
   max-width:100% ;
   min-width: 11% !important;
   width: 11% !important;
-  white-space:nowrap;
-  text-overflow: ellipsis; 
+  white-space:nowrap !important;
+  text-overflow: ellipsis !important; 
+  overflow: hidden !important;
 }
 .cell-days-to-submit
 {
@@ -339,8 +359,9 @@ body {
   max-width:100% ;
     min-width: 10% !important;
     width: 10% !important;
-    white-space:nowrap;
-    text-overflow: ellipsis; 
+    white-space:nowrap !important;
+    text-overflow: ellipsis !important; 
+    overflow: hidden !important;
   }
   .cell-tenderid
 {
@@ -348,9 +369,9 @@ body {
   max-width:100% ;
     min-width: 6%!important;
   width: 6%!important;
-  white-space:nowrap;
-  text-overflow: ellipsis; 
-
+  white-space:nowrap !important;
+  text-overflow: ellipsis !important; 
+  overflow: hidden !important;
   }
   .cell-tendertype
   {
@@ -358,8 +379,9 @@ body {
     max-width:100% ;
       min-width: 8% !important;
       width: 8%!important;
-      white-space:nowrap;
-      text-overflow: ellipsis; 
+      white-space:nowrap !important;
+      text-overflow: ellipsis !important; 
+      overflow: hidden !important;
      }
       .cell-depot
       {
@@ -368,8 +390,9 @@ body {
         min-width:8% !important;
         flex:1;
         max-width:100% ;
-        white-space:nowrap;
-        text-overflow: ellipsis; 
+        white-space:nowrap !important;
+        text-overflow: ellipsis !important; 
+        overflow: hidden !important;;
    }
 
 .cell-appliedby
@@ -378,8 +401,9 @@ body {
   max-width:100% ;
 min-width: 7%!important;
 width: 7%!important;
-white-space:nowrap;
-text-overflow: ellipsis; 
+white-space:nowrap !important;
+text-overflow: ellipsis !important; 
+overflow: hidden !important;
 }
 .cell-suppliedby
 {
@@ -387,8 +411,9 @@ text-overflow: ellipsis;
   max-width:100% ;
 min-width:9% !important;
 width: 9%!important;
-white-space:nowrap;
-text-overflow: ellipsis; 
+white-space:nowrap !important;
+text-overflow: ellipsis !important; 
+overflow: hidden !important;
 }
 .cell-preparedby
 {
@@ -396,8 +421,9 @@ text-overflow: ellipsis;
   max-width:100% ;
 min-width: 8% !important;
 width: 8%!important;
-white-space:nowrap;
-text-overflow: ellipsis; 
+white-space:nowrap !important;
+text-overflow: ellipsis !important; 
+overflow: hidden !important;
 }
 .cell-value
 {
@@ -405,8 +431,9 @@ text-overflow: ellipsis;
   max-width:100% ;
 min-width: 6%!important;
 width: 6%!important;
-white-space:nowrap;
-text-overflow: ellipsis; 
+white-space:nowrap !important;
+text-overflow: ellipsis !important; 
+overflow: hidden !important;
 }
 .cell-status
 { 
@@ -414,9 +441,9 @@ text-overflow: ellipsis;
   max-width:100% ;
 min-width: 13%!important;
 width: 13%!important;
-white-space:nowrap;
-text-overflow: ellipsis; 
-
+white-space:nowrap !important;
+text-overflow: ellipsis !important; 
+overflow: hidden !important;
 }
 
 thead,

@@ -20,7 +20,8 @@ const initialState: PermissionState = {
   newButtonVisible: false,
   filterButtonVisible: false,
   underReviewButtonVisible: false,
-  underApprovalButtonVisible: false
+  underApprovalButtonVisible: false,
+
 };
 
 const permissionsSlice = createSlice({
@@ -53,7 +54,7 @@ const permissionsSlice = createSlice({
           state.tenderDatalistVisible = true;
           state.underReviewButtonVisible = true;
           state.filterButtonVisible = true;
-          state.newButtonVisible = true;
+          // state.newButtonVisible = true;
           break;
 
         case "HOMANAGER":
@@ -74,33 +75,7 @@ const permissionsSlice = createSlice({
       }
       return state;
     }
-    // setVisibilityByStatus: (
-    //   state,
-    //   action: PayloadAction<{ role: string; orderStatus: string }>
-    // ) => {
-    //   const { role, orderStatus } = action.payload;
-    //   state.signOrderVisible = false;
-    //   state.signInvoiceVisible = false;
-    //   state.saveButtonVisible = false;
-    //   state.viewInvoiceVisible = false;
-
-    //   if (role === "DEPOMANAGER" && orderStatus === DsStatus.APRV) {
-    //     state.signOrderVisible = true;
-    //     state.signInvoiceVisible = true;
-    //   } else if (
-    //     orderStatus === DsStatus.OPEN ||
-    //     orderStatus === DsStatus.DRFT ||
-    //     orderStatus === DsStatus.DVPN ||
-    //     orderStatus === DsStatus.CNCL
-    //   ) {
-    //     state.saveButtonVisible = true;
-    //   } else if (
-    //     (role === "DEPOUSER" || role === "HOUSER") &&
-    //     (orderStatus === DsStatus.APRV || orderStatus === DsStatus.DSPT)
-    //   ) {
-    //     state.viewInvoiceVisible = true;
-    //   }
-    // }
+   
   }
 });
 

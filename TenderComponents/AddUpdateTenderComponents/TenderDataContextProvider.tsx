@@ -40,7 +40,7 @@ interface TenderDataContextType {
   ) => void;
   updateSupplyCondition: (
     key: keyof tenderSupplyCondition,
-    value: string | number | Document[]
+    value: string | number | Document[]|string[]
   ) => void;
   addNewTenderDocument: (docType: string, document: Document[]) => void;
   addDocumentToExistingType: (docType: string, document: Document) => void;
@@ -159,7 +159,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   // ✅ Update supply condition fields
   const updateSupplyCondition = (
     key: keyof tenderSupplyCondition,
-    value: string | number | Document[]
+    value: string | number | Document[]|string[]
   ) => {
     setTenderData((prev) => ({
       ...prev,
@@ -372,7 +372,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         updateTenderProduct,
         addApplicableCondition,
         removeApplicableCondition,
-        saveTender
+        saveTender,setActionStatusValues
       }}
     >
       {children}

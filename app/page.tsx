@@ -7,7 +7,7 @@ import DsFilterActions from "@/TenderComponents/TenderLogComponents/DsFilterActi
 import addIconWhite from "@/Icons/smallIcons/whiteadd.svg";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { DsTableRow, filterType, tableData, Tender } from "@/helpers/types";
+import { CodeItem, DsTableRow,  tableData, Tender } from "@/helpers/types";
 import DsTotalTenders from "@/TenderComponents/TenderLogComponents/DsTotalTender";
 import DsTotalValues from "@/TenderComponents/TenderLogComponents/DsTotalValues";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
@@ -16,19 +16,32 @@ import { changeImage } from "@/helpers/Method/conversion";
 import institutional from "@/Icons/institutional.svg";
  import corporate from  "@/Icons/corporate.svg";
 import DsStatusIndicator from "@/Elements/DsComponents/dsStatus/dsStatusIndicator";
-import { getAllTenders } from "@/helpers/constant";
+import { getAllMetaData, getAllTenders } from "@/helpers/constant";
 import fetchData from "@/helpers/Method/fetchData";
 import DsTableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableComponent";
-import DsPane, { ClosePane } from "@/Elements/DsComponents/DsPane/DsPane";
-import AdvancedFilterComponent from "@/Elements/DsComponents/AdvancedFilterComponent/AdvancedFilterComponent";
+import DsPane from "@/Elements/DsComponents/DsPane/DsPane";
+import AdvancedFilterComponent, { filterTypes } from "@/Elements/DsComponents/AdvancedFilterComponent/AdvancedFilterComponent";
 import DsCurrency from "@/Elements/DsComponents/dsCurrency/dsCurrency";
 import addIcon from "../Icons/smallIcons/add.svg";
+import { RootState } from "@/Redux/store/store";
+import { useAppSelector } from "@/Redux/hook/hook";
 import DsName from "@/Elements/DsComponents/DsName/dsName";
+
+
  
 export default function Home() { 
   const [data, setData] = useState<Tender[]>([]); //for table data
+  const [metaData, setMetaData] = useState<CodeItem[]>([]);
+  // const [enrichedTenders, setEnrichedTenders] = useState<Tender[]>([]);
   const [filteredData, setFilteredData] = useState<Tender[]>([]); //for filtered table data
-  const [iconSrc, setIconSrc] = useState(addIcon);
+  const [iconSrc] = useState(addIcon);
+   const permissions = useAppSelector((state: RootState) => state.permissions);
+ 
+   const {
+     newButtonVisible
+
+   } = permissions;
+
     const [tempTableData, setTempTableData] = useState<tableData>({
       className: "sample-table",
       type: "InterActive",
@@ -141,8 +154,6 @@ export default function Home() {
       rows: [],
     });
   
-    setIconSrc(addIcon);
-
     const calculateDueStatus = (submissionDate: string) => {
       if (!submissionDate) return "-"; // Handle empty values
   
@@ -185,7 +196,7 @@ export default function Home() {
       // Determine result
       const result = diffDays <= 0 ? "0 Days Left" : `${diffDays} Days Left`;
   
-      console.log(`Submission Date: ${submissionDate}, Parsed: ${subDate.toISOString()}, Status: ${result}`);
+      // console.log(`Submission Date: ${submissionDate}, Parsed: ${subDate.toISOString()}, Status: ${result}`);
   
       // Apply color coding
       let className = styles.blackText;
@@ -194,9 +205,11 @@ export default function Home() {
   
       return <span className={className}>{result}</span>;
   };
-  
-  
-   
+
+
+
+
+    
     useEffect(() => {
       if (filteredData && filteredData.length >= 0) {
         console.log("filter data in tabel : ", filteredData);
@@ -239,74 +252,74 @@ export default function Home() {
               columnIndex: 0,
               className: "cell cell-customer text-dark-1",
               content: <DsName id={item.tenderId+"customerName "} name={item.customerName || "-"} />,
-              filterValue:<DsName id={item.tenderId+"customerName "} name={item.customerName || "-"} />,
-      
+              filterValue: item.customerName || "-",
+              // content:item.customerName || "-",
               contentType: "string",
-  
             },
             {
               columnIndex: 1,
               className: " cell  cell-submissiondate text-dark-0 ",
-              content: item.submittionDate || "-",
+              content: <DsName id ={item.tenderId+"submittionDate"} name={item.submittionDate || "-"}/>,
               filterValue: item.submittionDate || "-",
               contentType: "string",
-
             },
             {
               columnIndex: 2,
               className: " cell  cell-days-to-submit ",
-              content: item.submittionDate ? calculateDueStatus(item.submittionDate) : "-",
+              content: <DsName id ={item.tenderId+"daystosubmit"} name ={item.submittionDate ? calculateDueStatus(item.submittionDate) : "-"}/>,
               filterValue: item.submittionDate ? calculateDueStatus(item.submittionDate) : "-",
               contentType: "string",
-       
             },
             {
               columnIndex: 3,
               className: " cell  cell-tenderid text-dark-0 ",
-              content: item.tenderId || "-",
+              content:  <DsName id ={item.tenderId+"tenderId"} name={item.tenderId || "-"}/>,
               filterValue: item.tenderId || "-",
               contentType: "string",
             },
             {
               columnIndex: 4,
               className: " cell cell-tendertype text-dark-1  ",
-              content: item.tenderType || "-",
-              filterValue: item.tenderType || "-",
+              content:  <DsName id ={item.tenderId+"tenderType"}  name={getTenderTypeDescription(item.tenderType)}/>,
+              filterValue:  getTenderTypeDescription(item.tenderType), 
               contentType: "string",
             },
             {
               columnIndex: 5,
               className: " cell cell-depot text-dark-1",
-      
+              // content: item.depot || "-",
               content: <DsName id={item.tenderId+"depot"} name={item.depot|| "-"} />,
-              filterValue:<DsName id={item.tenderId+"depot"} name={item.depot|| "-"} />,
+              filterValue: item.depot || "-",
               contentType: "string",
             },
             {
               columnIndex: 6,
               className: " cell cell-appliedby text-dark-0 ",
+              // content: item.appliedBy || "-",
               content: <DsName id={item.tenderId+"appliedBy"} name={item.appliedBy|| "-"} />,
-              filterValue: <DsName id={item.tenderId+"appliedBy"} name={item.appliedBy|| "-"} />,
+              filterValue: item.appliedBy || "-",
               contentType: "string",
             },
             {
               columnIndex: 7,
               className: " cell cell-suppliedby text-dark-0 ",
+              // content: item.suppliedBy || "-",
               content: <DsName id={item.tenderId+"suppliedBy"} name={item.suppliedBy|| "-"} />,
-              filterValue: <DsName id={item.tenderId+"suppliedBy"} name={item.suppliedBy|| "-"} />,
+              filterValue: item.suppliedBy || "-",
               contentType: "string",
             },
             {
               columnIndex: 8,
               className: " cell cell-preparedby text-dark-0 ",
+              // content: item.preparedBy || "-",
               content: <DsName id={item.tenderId+"preparedBy"} name={item.preparedBy || "-"} />,
-              filterValue: <DsName id={item.tenderId+"preparedBy"} name={item.preparedBy || "-"} />,
+              filterValue: item.preparedBy || "-",
               contentType: "string",
             },
             {
               columnIndex: 9,
               className: " cell cell-value text-dark-1 ",
-            
+           
               content: <DsCurrency format={"IND"} id={"value"} amount={parseInt(item.value)} type={"short"}/>,
               filterValue:item.value,
               contentType: "number",
@@ -337,7 +350,7 @@ export default function Home() {
                       : ""
                   }
                 />
-              ) : 
+              ) :
               (
                 "No Status"
               ),
@@ -345,6 +358,7 @@ export default function Home() {
               contentType: "reactNode",
             },
           ],
+ 
         }));
   
         console.log("Final Transformed Rows:", transformedRows);
@@ -355,213 +369,432 @@ export default function Home() {
       }
     }, [filteredData]);
   
-    const flterTypes = [
-      {
-        columnIndex: 0,
-        columnHeader: "Customer name",
-        filterType: "CSV",
-      },
-      {
-        columnIndex: 1,
-        columnHeader: "Sub Date ",
-        filterType: "DATE",
-      },
-      {
-        columnIndex: -1,
-        columnHeader: "TYPE",
-        filterType: "ICONVALUE",
-      },
-      {
-        columnIndex: 4,
-        columnHeader: "Supply type",
-        filterType: "MULTISELECT",
-      },
-    
-      {
-        columnIndex: 6,
-        columnHeader: "Applied by",
-        filterType: "MULTISELECT",
-      },
-      {
-        columnIndex: 7,
-        columnHeader: "Supplied by",
-        filterType: "MULTISELECT",
-      },
-      {
-        columnIndex: 5,
-        columnHeader: "Depot",
-        filterType: "MULTISELECT",
-      },
+
+    const handleFetch = async () => {
+      try {
+          const res = await fetchData({ url: getAllTenders });
+        
   
-      {
-        columnIndex: 9,
-        columnHeader: "VALUE",
-        filterType: "INPUTTYPERANGE",
-      },
-      {
-        columnIndex: 10,
-        columnHeader: "STATUS",
-        filterType: "MULTISELECT",
-      },
-    ];
-    console.log(filterType);
-  
-     const handleFetch = async () => {
-      await fetchData({ url: getAllTenders })
-        .then((res) => {
-          console.log("Fetched Response:", res); // Log the fetched response
-          if (res?.code === 200 && Array.isArray(res?.result)) {
-            setData(res.result); // Update the state
-          } else {
-            console.error("Error: Invalid data format or empty result");
-          }
-        })
-        .catch((err) => {
-          console.error("Error fetching data:", err);
-        });
-    };
-  //   const handleFetch = async () => {
-  //     try {
-  //         const res = await fetchData({ url: getAllTenders });
-  
-  //         console.log("Fetched Response:", res); 
+          console.log("Fetched Response:", res); 
   
 
-  //         if (res?.code === 200 && Array.isArray(res?.result)) {
-  //             const mappedData: Tender[] = res.result.map((item: any) => ({
-  //                 customerName: item.customerName,
-  //                 submittionDate: item.submissionDate,
-  //                 daystosubmit: item.daysToSubmit ?? "N/A",
-  //                 tenderId: item.tenderId.toString(),
-  //                 type: item.tenderType,
-  //                 tenderType: item.tenderType,
-  //                 depot: item.shippingLocations.map((loc: any) => loc.name).join(", "), 
-  //                 appliedBy: item.applierName,
-  //                 suppliedBy: item.supplierName,
-  //                 preparedBy: item.preparedBy,
-  //                 value: item.value.toString(),
-  //                 status: {
-  //                     tenderStatus: item.status?.tenderStatus ?? "null",
-  //                     message: item.status?.message ?? "No message",
-  //                 },
-  //                 customAttributes: { iconValue: "defaultIcon" }, 
-  //             }));
+          if (res?.code === 200 && Array.isArray(res?.result)) {
+              const mappedData: Tender[] = res.result.map((item:Tender) => ({
+                  customerName: item.customerName,
+                  submittionDate: item.submissionDate,
+                  daystosubmit: item.daysToSubmit ?? "N/A",
+                  tenderId: item.tenderId.toString(),
+                  type: item.customerType,
+                  tenderType: item.tenderType,
+                  depot: item.shippingLocations.map((loc: Tender) => loc.name).join(", "), 
+                  appliedBy: item.applierName,
+                  suppliedBy: item.supplierName,
+                  preparedBy: item.preparedBy,
+                  value: item.value.toString(),
+                  status: {
+                      tenderStatus: item.status?.tenderStatus ?? "null",
+                      message: item.status?.message ?? "No message",
+                  },
+                  customAttributes: { iconValue: "defaultIcon" }, 
+              }));
   
-  //             setData(mappedData);
-  //         } else {
-  //             console.error("Error: Invalid response format or empty result", res);
-  //         }
-  //     } catch (error) {
-  //         console.error("Error fetching data:", error);
+              setData(mappedData);
+          } else {
+              console.error("Error: Invalid response format or empty result", res);
+          }
+      } catch (error) {
+          console.error("Error fetching data:", error);
+      }
+  };
+  // const fetchMetaData = async () => {
+  //   try {
+  //     const result = await fetchData({ url: getAllMetaData });
+  //     console.log("Fetched Metadata Response:", result);
+  
+  //     if (!result || typeof result !== "object") {
+  //       console.error(" API returned unexpected format:", result);
+  //       return;
   //     }
-  // };
   
+  //     // Extract the `tenderType` array from the metadata response
+  //     const metadataArray = result.result?.tenderType ?? [];
+  
+  //     if (!Array.isArray(metadataArray)) {
+  //       console.error("tenderType metadata is not an array:", metadataArray);
+  //       return;
+  //     }
+  
+  //     setMetaData(metadataArray);
+  //     console.log("Metadata successfully set:", metadataArray);
+  //   } catch (err) {
+  //     console.error(" Error fetching metadata:", err);
+  //   }
+  // };
+  // useEffect(() => {
+  //   if (metaData.length > 0 && data.length > 0) {
+  //     const metadataMap = new Map(metaData.map((item) => [item.codeValue, item.codeDescription]));
+  
+  //     const enriched = data.map((tender) => ({
+  //       ...tender,
+  //       tenderType: metadataMap.get(tender.tenderType) || "Unknown Type",
+  //     }));
+  
+  //     setEnrichedTenders(enriched);
+  // console.log("data of tender type ",enriched);
+
+     
+
+  //   }
+  // }, [metaData, data]); // Runs when metadata or tenders change
+  
+  const handleFetchMetaData = async () => {
+    await fetchData({ url: getAllMetaData })
+      .then((res) => {
+        console.log("Meta Fetched Response:", res); // Log the fetched response
+  
+        if (res?.code === 200 && res?.result?.tenderType && Array.isArray(res.result.tenderType)) {
+          setMetaData(res.result.tenderType); // Store only tenderType
+          console.log("Stored Tender Type:", res.result.tenderType);
+        } else {
+          console.error("Error: Invalid data format or empty tenderType");
+        }
+      })
+      .catch((err) => {
+        console.error("Error fetching data:", err);
+      });
+  };
+  
+ 
+  
+  
+    
+  useEffect(() => {
+    handleFetch();
+    handleFetchMetaData();
+
+
+  }, []);
+  useEffect(() => {
+    console.log("Updated MetaData:", metaData);
+  }, [metaData]);
+
+
+  const getTenderTypeDescription = (tenderType?: string) => {
+    if (!tenderType || !metaData || metaData.length === 0) return "no found"; 
+  
+    // console.log("Meta Data:", metaData); 
+  
+    const matchedItem = metaData.find((item) => item?.codeValue === tenderType);
+  
+    if (matchedItem) {
+      // console.log("Selected Tender Type:", matchedItem.codeDescription);
+      return matchedItem.codeDescription; 
+    } else {
+      console.log("No matching tender type found.");
+
+    }
+  };
+  
+
+  
+  
+  
+    // const addTableData = (tender: Tender[]) => {
+    //   console.log("Adding table data:", tender);
+    //   const newRows: DsTableRow[] = tender.map((t, index) => ({
+    //     rowIndex: index,
+    //     className: "cellRow ",
+    //     rowIcon:
+    //       t?.type === "institutional" ? (
+    //         <div
+    //         style={{
+    //           width: "0.875em",
+    //           height: "0.875em",
+    //           position: "relative",
+    //         }}
+    //       >
+    //         <Image
+    //           src={institutional}
+    //           alt="institutional"
+    //           layout="fill"
+    //         objectFit="cover"
+    //         />
+    //       </div>
+    //     ) : (
+    //       <div
+    //         style={{
+    //           width: "0.875em",
+    //           height: "0.875em",
+    //           position: "relative",
+    //         }}
+    //       >
+    //         <Image src={corporate} 
+    //         alt="corporate"
+    //         layout="fill"
+    //         objectFit="cover" />
+    //       </div>
+    //       ),
+    //     customAttributes: { iconValue: t?.type?.toString() ?? "" },
+    //     content: [
+    //       {
+    //         columnIndex: 0,
+    //         className: " cell cell-customer text-dark-1 " ,
+    //         content:t.customerName || "-",
+    //         filterValue:t.customerName || "-",
+    //         contentType: "string",
+    //       },
+    //       {
+    //         columnIndex: 1,
+    //         className: " cell cell-submissiondate text-dark-0 ",
+    //         content: t.submittionDate,
+    //         filterValue: t.submittionDate,
+    //         contentType: "string",
+    //       },
+    //       {
+    //         columnIndex: 2,
+    //         className: " cell cell-days-to-submit ",
+    //         content: t.submittionDate ? calculateDueStatus(t.submittionDate) : "-",
+    //         filterValue: t.submittionDate ? calculateDueStatus(t.submittionDate) : "-",
+    //         contentType: "string",
+    //       },
+    //       {
+    //         columnIndex: 3,
+    //         className: " cell cell-tenderid text-dark-0 ",
+    //         content: t.tenderId,
+    //         filterValue: t.tenderId,
+    //         contentType: "string",
+    //       },
+    //       {
+    //         columnIndex: 4,
+    //         className: "cell cell-tendertype text-dark-1",
+    //         content: formatTenderType(t.tenderType), // Apply formatting
+    //         filterValue: formatTenderType(t.tenderType), // Apply formatting
+    //         contentType: "string",
+    //       },
+          
+    //       {
+    //         columnIndex: 5,
+    //         className: " cell cell-depot text-dark-1 ",
+   
+    //         content:t.depot || "-",
+    //         filterValue: t.depot || "-",
+           
+    //         contentType: "string",
+    //       },
+    //       {
+    //         columnIndex: 6,
+    //         className: " cell cell-appliedby text-dark-0 ",
+        
+    //         content:t.appliedBy || "-",
+    //         filterValue: t.appliedBy || "-",
+         
+    //         contentType: "string",
+    //       },
+    //       {
+    //         columnIndex: 7,
+    //         className: " cell cell-suppliedby text-dark-0 ",
+  
+    //         content: t.suppliedBy || "-",
+    //         filterValue: t.suppliedBy || "-",
+        
+    //         contentType: "string",
+    //       },
+    //       {
+    //         columnIndex: 8,
+    //         className: " cell cell-preparedby text-dark-0 ",
+        
+    //         content: t.preparedBy || "-",
+    //         filterValue: t.preparedBy || "-",
+    //         contentType: "string",
+    //       },
+    //       {
+    //         columnIndex: 9,
+    //         className: " cell cell-value  text-dark-1 ",
+    //         content: <DsCurrency format={"IND"} id={"value"} amount={parseInt(t.value)} type={"short"}/>,
+    //         filterValue: t.value,
+    //         contentType: "number",
+    //       },
+    //       {
+    //         columnIndex: 10,
+    //         className: " cell cell-status ",
+  
+    //         content: t.status ? (
+    //           <DsStatusIndicator
+    //             type="user_defined"
+    //             className={`${
+    //               t?.status?.tenderStatus
+    //                 ? styles[
+    //                     t?.status?.tenderStatus
+    //                       ?.replaceAll(" ", "_")
+    //                       .toLowerCase()
+    //                   ]
+    //                 : ""
+    //             }`}
+    //           status={t.status.tenderStatus }
+    //           label={t.status.tenderStatus }
+    //             comment={
+    //               t.status?.message
+    //                 ? typeof t.status.message === "object"
+    //                   ? JSON.stringify(t.status.message)
+    //                   : t.status.message.toString()
+    //                 : ""
+    //             }
+    //           />
+    //         ) : 
+    //         (
+    //           "No Status"
+    //         ),
+    //         filterValue: t.status?.tenderStatus ?? "Unknown",
+    //         contentType: "reactNode",
+    //       },
+    //     ],
+    //   }));
+  
+    //   console.log("New Rows:", newRows);
+  
+    //   setTempTableData((prevData) => ({
+    //     ...prevData,
+    //     rows: newRows,
+    //   }));
+  
+    // };
+   
+
+    // useEffect(() => {
+    //   createContext(
+    //     "overflowContents",
+
+      
+    //   );
+    // }, []);
+
+
+
+
+
+
+
+
+
+
+
+    // const enrichTendersWithMetadata = () => {
+    //   if (data.length === 0 || metaData.length === 0) {
+    //     console.error("Tenders or metadata not available yet!");
+    //     return;
+    //   }
+    
+    //   // Find the tenderType metadata
+    //   const tenderTypeMeta = metaData.find((category:TenderMetaData) => category.result.tenderType);
+    //   if (!tenderTypeMeta || !Array.isArray(tenderTypeMeta.result.tenderType)) {
+    //     console.error("Tender type metadata not found!");
+    //     return;
+    //   }
+    
+    //   // Create a lookup map for tender types
+    //   const metadataMap = new Map<string, string>();
+    //   tenderTypeMeta.result.tenderType.forEach((item) => {
+    //     metadataMap.set(item.codeValue, item.codeDescription);
+    //   });
+    
+    //   // Update tenders with metadata descriptions
+    //   const updatedTenders = data.map((tender) => ({
+    //     ...tender,
+    //     tenderType: metadataMap.get(tender.tenderType) || tender.tenderType, // Replace code with description
+    //   }));
+    
+    //   setData(updatedTenders); 
+    //   console.log("updatedTenders",updatedTenders)// Update state with enriched tenders
+    // };
+    
+
+
+
     const addTableData = (tender: Tender[]) => {
       console.log("Adding table data:", tender);
       const newRows: DsTableRow[] = tender.map((t, index) => ({
         rowIndex: index,
-        className: "cellRow ",
+        className: "cellRow",
         rowIcon:
           t?.type === "institutional" ? (
-            <div
-            style={{
-              width: "0.875em",
-              height: "0.875em",
-              position: "relative",
-            }}
-          >
-            <Image
-              src={institutional}
-              alt="institutional"
-              layout="fill"
-            objectFit="cover"
-            />
-          </div>
-        ) : (
-          <div
-            style={{
-              width: "0.875em",
-              height: "0.875em",
-              position: "relative",
-            }}
-          >
-            <Image src={corporate} 
-            alt="corporate"
-            layout="fill"
-            objectFit="cover" />
-          </div>
+            <div style={{ width: "0.875em", height: "0.875em", position: "relative" }}>
+              <Image src={institutional} alt="institutional" layout="fill" objectFit="cover" />
+            </div>
+          ) : (
+            <div style={{ width: "0.875em", height: "0.875em", position: "relative" }}>
+              <Image src={corporate} alt="corporate" layout="fill" objectFit="cover" />
+            </div>
           ),
         customAttributes: { iconValue: t?.type?.toString() ?? "" },
-        content: [
+       content: [
           {
             columnIndex: 0,
             className: " cell cell-customer text-dark-1 " ,
             content: <DsName id={t.tenderId+"customerName"} name={t.customerName || "-"} />,
-            filterValue:<DsName id={t.tenderId+"customerName"} name={t.customerName || "-"} />,
+            filterValue: t.customerName,
             contentType: "string",
           },
           {
             columnIndex: 1,
             className: " cell cell-submissiondate text-dark-0 ",
-            content: t.submittionDate,
+            content:  <DsName id ={t.tenderId+"submittionDate"} name={t.submittionDate || "-"}/>,
             filterValue: t.submittionDate,
             contentType: "string",
           },
           {
             columnIndex: 2,
             className: " cell cell-days-to-submit ",
-            content: t.submittionDate ? calculateDueStatus(t.submittionDate) : "-",
+            content: <DsName id ={t.tenderId+"daystosubmit"} name ={t.submittionDate ? calculateDueStatus(t.submittionDate) : "-"}/>,
             filterValue: t.submittionDate ? calculateDueStatus(t.submittionDate) : "-",
             contentType: "string",
           },
           {
             columnIndex: 3,
             className: " cell cell-tenderid text-dark-0 ",
-            content: t.tenderId,
+            content:<DsName id ={t.tenderId+"tenderId"} name={t.tenderId || "-"}/>,
             filterValue: t.tenderId,
             contentType: "string",
           },
-          {
-            columnIndex: 4,
-            className: " cell cell-tendertype text-dark-1 ",
-            content: t.tenderType,
-            filterValue: t.tenderType,
-            contentType: "string",
-          },
+      
+       
+              {
+                columnIndex: 4,
+                className: "cell cell-tendertype text-dark-1",
+                content: <DsName id={t.tenderId + "tenderType"} name={getTenderTypeDescription(t.tenderType)}  />,
+                filterValue: getTenderTypeDescription(t.tenderType), 
+                contentType: "string",
+              },
+       
           {
             columnIndex: 5,
             className: " cell cell-depot text-dark-1 ",
-   
+            // content: t.depot,
             content: <DsName id={t.tenderId+"depot"} name={t.depot || "-"} />,
-            filterValue: <DsName id={t.tenderId+"depot"} name={t.depot || "-"} />,
-           
+            filterValue: t.depot,
             contentType: "string",
           },
           {
             columnIndex: 6,
             className: " cell cell-appliedby text-dark-0 ",
-        
+            // content: t.appliedBy,
             content: <DsName id={t.tenderId+"appliedBy"} name={t.appliedBy || "-"} />,
-            filterValue: <DsName id={t.tenderId+"appliedBy"} name={t.appliedBy || "-"} />,
-         
+            filterValue: t.appliedBy,
             contentType: "string",
           },
           {
             columnIndex: 7,
             className: " cell cell-suppliedby text-dark-0 ",
-  
+            // content: t.suppliedBy,
             content: <DsName id={t.tenderId+"suppliedBy"} name={t.suppliedBy || "-"} />,
-            filterValue: <DsName id={t.tenderId+"suppliedBy"} name={t.suppliedBy || "-"} />,
-        
+            filterValue: t.suppliedBy,
             contentType: "string",
           },
           {
             columnIndex: 8,
             className: " cell cell-preparedby text-dark-0 ",
-        
+            // content: t.preparedBy,
             content: <DsName id={t.tenderId+"preparedBy"} name={t.preparedBy || "-"} />,
-            filterValue: <DsName id={t.tenderId+"preparedBy"} name={t.preparedBy || "-"} />,
-
+            filterValue: t.preparedBy,
             contentType: "string",
           },
           {
@@ -574,7 +807,7 @@ export default function Home() {
           {
             columnIndex: 10,
             className: " cell cell-status ",
-  
+ 
             content: t.status ? (
               <DsStatusIndicator
                 type="user_defined"
@@ -597,7 +830,7 @@ export default function Home() {
                     : ""
                 }
               />
-            ) : 
+            ) :
             (
               "No Status"
             ),
@@ -605,21 +838,20 @@ export default function Home() {
             contentType: "reactNode",
           },
         ],
+ 
       }));
-  
+    
       console.log("New Rows:", newRows);
-  
+    
       setTempTableData((prevData) => ({
         ...prevData,
         rows: newRows,
       }));
-  
     };
+
+
   
-    useEffect(() => {
-      handleFetch();
-    }, []);
-  
+
   
     useEffect(() => {
       console.log("Data updated:", data);
@@ -627,13 +859,8 @@ export default function Home() {
         addTableData(data);
       }
     }, [data]);
-      const applyFilter = (
-        e: React.MouseEvent<HTMLElement>,
-        filteredRows: DsTableRow[]
-      ) => {
-   setTempTableData((data) => ({ ...data, rows: filteredRows }));
-        ClosePane(e);
-      };
+ 
+      
     
 return (
   <>
@@ -642,44 +869,45 @@ return (
       appMenu={
         <>
          <DsFilterActions data={data} setFilteredData={setFilteredData}/>
-       
-         <DsButton
-                id="actionBtn"
-                buttonColor="btnPrimary"
-                className={styles.newbutton1}
-                 buttonViewStyle="btnOutlined"
-                startIcon={
-                  <div
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      position: "relative",
-                    }}
-                  >
-                    <Image
-                      src={iconSrc}
-                      alt="Add Icon"
-                      layout="fill"
-                      objectFit="cover"
-                    />
-                  </div>
-                }
-                onClick={(e) =>
-                  displayContext(e, "CreateNewActions", "vertical", "right")
-                }
-                onHover={(e) => {
-                  changeImage(e, addIconWhite);
-                }}
-                onMouseLeave={(e) => {
-                  changeImage(e, addIcon);
-                }}
-                tooltip="variants : btnPrimary, btnOutlined, btnMedium"
-                label="New"
-                iconSize="iconMedium"
-              />   
+       {newButtonVisible && 
+        <DsButton
+        id="actionBtn"
+        buttonColor="btnPrimary"
+        className={styles.newbutton1}
+         buttonViewStyle="btnOutlined"
+        startIcon={
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              position: "relative",
+            }}
+          >
+            <Image
+              src={iconSrc}
+              alt="Add Icon"
+              layout="fill"
+              objectFit="cover"
+            />
+          </div>
+        }
+        onClick={(e) =>
+          displayContext(e, "CreateNewActions", "vertical", "right")
+        }
+        onHover={(e) => {
+          changeImage(e, addIconWhite);
+        }}
+        onMouseLeave={(e) => {
+          changeImage(e, addIcon);
+        }}
+        tooltip="variants : btnPrimary, btnOutlined, btnMedium"
+        label="New"
+        iconSize="iconMedium"
+      />  }
+         
           </>
       }
-      pageName="LogPage"    
+    
     >
        <div className={styles.totalCal}>
           <DsTotalTenders data={data} />
@@ -701,17 +929,100 @@ return (
         />
           </div>
           </div>
-     
-  
-
       
     </DsApplication>
     <DsPane id="tenderFilter" side="right" title="Filter">
       <AdvancedFilterComponent
-          id="a"
-          rows={tempTableData.rows}
-          filterTypes={flterTypes}
-          handleApplyFilter={applyFilter}
+          filters={[
+            {
+              filterId: "0",
+              filterFor: "Customer name",
+              filterType:"SearchAndMultiSelect",
+             
+            },
+            {
+              filterId: "1",
+              filterFor: " Sub Date",
+              filterType: "DateRange",
+             
+            },
+            {
+              filterId: "2",
+              filterFor: "Type",
+              filterType:"MultiSelection",
+              multiSelectOptions: [
+                { label: "Electronics", value: "electronics" },
+                { label: "Clothing", value: "clothing" },
+              ],
+ 
+            },
+            {
+              filterId: "3",
+              filterFor: "Supply type",
+              filterType: "MultiSelection",
+              multiSelectOptions: [
+                { label: "Electronics", value: "electronics" },
+                { label: "Clothing", value: "clothing" },
+              ],
+ 
+            
+            },
+            {
+              filterId: "4",
+              filterFor: "Applied by",
+              filterType: "MultiSelection",
+              multiSelectOptions: [
+                { label: "Electronics", value: "electronics" },
+                { label: "Clothing", value: "clothing" },
+              ],
+ 
+             
+            },
+            {
+              filterId: "5",
+              filterFor: "Depot",
+              filterType: "MultiSelection",
+              multiSelectOptions: [
+                { label: "Electronics", value: "electronics" },
+                { label: "Clothing", value: "clothing" },
+              ],
+ 
+           
+            },
+            {
+              filterId: "6",
+              filterFor: "Value",
+              filterType: "RangeSlider",
+              maxValue: 3125342513,
+              minValue: 0,
+            },
+            {
+              filterId: "7",
+              filterFor: "Status",
+              filterType: "MultiSelection",
+              multiSelectOptions: [
+                { label: "Electronics", value: "electronics" },
+                { label: "Clothing", value: "clothing" },
+              ],
+ 
+             
+            }
+          ]}
+          applyFilters={function (
+            filterValues: filterTypes[],
+            filterCount: number
+          ): 0 | 1 {
+            console.log(
+              "filterValues:",
+              filterValues,
+              "filterConsole: ",
+              filterCount
+            );
+            return 0;
+          }}
+          clearFilters={function (): void {
+            console.log("clearFilters");
+          }}
         />
       </DsPane>
 
@@ -737,6 +1048,8 @@ return (
               label="Corporate"
             />
         </div>
+      
+        
       }
     ></ContextMenu>
   </>
