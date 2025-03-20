@@ -58,7 +58,7 @@ export const proDeskUrl=hostUrl+"/";
 
 // export const getUserRoles = apiHostUrl + "/depousers/2";
 // export const getUserRoles = apiHostUrl+"/depomanager/2";
-export const getUserRoles =apiHostUrl+"/homanager/3";
+// export const getUserRoles =apiHostUrl+"/homanager/3";
 // export const getUserRoles = "http://localhost:5155/homanager/1";
 export const getAllMetaData=apiServerUrl+"/metadata/tender";
 // export const getAllMetaData="http://172.145.1.102:7005/api/metadata/tender";
@@ -93,9 +93,9 @@ export const getAllTenders = apiServerUrl + "/tenders" ;
 // export const getAllMetaData = apiHostUrl + "/tenderMetadata";
 
 //Tender User Roles
-// export const getTenderUserRoles = apiHostUrl + "/maker";
+export const getTenderUserRoles = apiHostUrl + "/maker";
 // export const getTenderUserRoles = apiHostUrl + "/checker";
-export const getTenderUserRoles = apiHostUrl + "/homanager";
+// export const getTenderUserRoles = apiHostUrl + "/homanager";
 // export const getTenderUserRoles = apiHostUrl + "/accountance";
 
 export const getTenderSearchProducts =
