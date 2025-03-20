@@ -83,7 +83,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     suppliedBy: "",
     suppliedId: null,
     supplierDiscount: 0,
-    preparedBy: 0,
+    createdBy: 0,
     lastUpdatedBy: 0,
     comments: "",
     fees: [],

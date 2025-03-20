@@ -1081,7 +1081,7 @@ export type TenderData = {
   suppliedBy: string;
   suppliedId: number | null;
   supplierDiscount: number;
-  cretedBy: number;
+  createdBy: number;
   lastUpdatedBy: number;
   comments: string;
   fees: tenderFee[];
