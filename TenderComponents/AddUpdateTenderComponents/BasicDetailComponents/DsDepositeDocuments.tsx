@@ -45,7 +45,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   const [applicablefees, SetApplicablefees] = useState<DsSelectOption[]>([]);
   const [paymentCheckVisible, setPaymentCheckVisible] = useState<boolean>(false)
   const [feeVisibility, setFeeVisibility] = useState<Record<string, boolean>>(
-    {}
+    { "": true }
   );
 
   useEffect(() => {
@@ -54,7 +54,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
     } else {
       setPaymentCheckVisible(true);
     }
-  })
+  }, [role])
 
   useEffect(() => {
     if (depositeDocument) {
@@ -109,6 +109,10 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
         selectedFees.add(id);
         feeVisibility[id] = true;
         addTenderFee(id);
+      } else if (checkbox) {
+        selectedFees.add(id);
+        feeVisibility[id] = true;
+        addTenderFee(id);
       } else {
         selectedFees.delete(id);
         feeVisibility[id] = false;
@@ -119,6 +123,29 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
     // console.log("Currently Selected:", Array.from(selectedFees));
   };
 
+  useEffect(() => {
+    applicablefees.forEach((opt) => {
+      const id = opt.value.toString();
+      const checkbox = document.getElementById(id) as HTMLInputElement;
+      selectedFees.add(id);
+      feeVisibility[id] = true;
+      addTenderFee(id);
+      if (checkbox?.checked) {
+        selectedFees.add(id);
+        feeVisibility[id] = true;
+        addTenderFee(id);
+      } else if (checkbox) {
+        selectedFees.add(id);
+        feeVisibility[id] = true;
+        addTenderFee(id);
+      } else {
+        selectedFees.delete(id);
+        feeVisibility[id] = false;
+        removeTenderFeeByType(id);
+      }
+    })
+  }, [applicablefees])
+
   // useEffect(() => {
   //   console.log("feevisibility : ", feeVisibility);
   // }, [feeVisibility]);
@@ -127,7 +154,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
     createContext(
       contextMenuId,
       <>
-        <div>
+        <div className={styles.feesCheckboxes}>
           {applicablefees.map((checkbox, index) => (
             <Ds_checkbox
               key={index}
@@ -135,6 +162,8 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
               name={checkbox.label}
               value={checkbox.value.toString()}
               label={checkbox.label}
+              isChecked={true}
+              defaultChecked={true}
             />
           ))}
         </div>

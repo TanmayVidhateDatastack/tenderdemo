@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAllMetaData, getTenderUserRoles, getUserRoles } from "@/helpers/constant";
+import { getAllMetaData, getTenderUserRoles } from "@/helpers/constant";
 import fetchData from "@/helpers/Method/fetchData";
 import { tenderDetails, applierSupplierDetails, supplyDetails, DsSelectOption } from "../../../helpers/types";
 import DsDepositeDocuments, { DepositDocument } from "./DsDepositeDocuments";
