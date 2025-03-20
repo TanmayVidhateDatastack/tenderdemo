@@ -54,7 +54,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
       setPaidBy(paidByData);
     }
     if (applicableDeposits && applicableDeposits.length > 0) {
-      console.log("000 : ", applicableDeposits);
+      // console.log("000 : ", applicableDeposits);
       const mappedDeposits = applicableDeposits.map((deposit) => ({
         label: deposit.label,
         value: deposit.value
@@ -84,10 +84,10 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   }, [applicablefees]);
 
   function handleonclick(e: React.MouseEvent<HTMLElement, MouseEvent> | React.FocusEvent<HTMLElement, Element> | FocusEvent) {
-    displayContext(e ,contextMenuId, "vertical", "center");
+    displayContext(e, contextMenuId, "vertical", "center");
   }
 
-  const selectedFees = new Set(); // 🔥 Store selected checkboxes globally
+  const selectedFees = new Set();
 
   const handleAdd = () => {
     applicablefees.forEach((opt) => {
@@ -95,22 +95,22 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
       const checkbox = document.getElementById(id) as HTMLInputElement;
 
       if (checkbox?.checked) {
-        selectedFees.add(id); // 🔥 Add to Set (prevents duplicates)
+        selectedFees.add(id);
         feeVisibility[id] = true;
         addTenderFee(id);
       } else {
-        selectedFees.delete(id); // 🔥 Remove if unchecked
+        selectedFees.delete(id);
         feeVisibility[id] = false;
         removeTenderFeeByType(id);
       }
     });
     closeAllContext();
-    console.log("Currently Selected:", Array.from(selectedFees)); // Debugging output
+    // console.log("Currently Selected:", Array.from(selectedFees));
   };
 
-  useEffect(() => {
-    console.log("feevisibility : ", feeVisibility);
-  }, [feeVisibility]);
+  // useEffect(() => {
+  //   console.log("feevisibility : ", feeVisibility);
+  // }, [feeVisibility]);
 
   useEffect(() => {
     createContext(
@@ -165,7 +165,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   }, [applicablefees]);
 
   useEffect(() => {
-    const handleScroll = (event:any) => {
+    const handleScroll = (event: any) => {
       const excludedElement = document.getElementById("optionBtn");
       if (excludedElement && excludedElement.contains(event.target)) {
         closeContext(contextMenuId);

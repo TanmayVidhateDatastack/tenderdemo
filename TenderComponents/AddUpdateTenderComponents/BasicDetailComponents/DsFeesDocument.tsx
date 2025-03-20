@@ -11,6 +11,7 @@ import eleStyles from "./tender.module.css";
 import { DsSelectOption } from "@/helpers/types";
 import { useTenderData } from "../TenderDataContextProvider";
 import TextArea from "@/Elements/DsComponents/DsInputs/dsTextArea";
+import DatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker";
 
 export type tenderDocument = {
   name: string;
@@ -114,7 +115,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               }
             }}
           ></DsSingleSelect>
-          <DsTextField
+          {/* <DsTextField
             className={styles.fieldColors}
             label="Due Date"
             placeholder="DD/MM/YYYY"
@@ -126,7 +127,21 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 e.target.value
               );
             }}
-          ></DsTextField>
+          ></DsTextField> */}
+          <DatePicker
+            id={"dueDate"}
+            initialDate={""}
+            className={""}
+            // setDateValue={(date) => {
+            //   updateOrderDataField("transportationDate", convertDateFormat(date));
+            // }}
+            // disable={true}
+            placeholder="DD/MM/YYYY"
+            label="Due Date"
+          // onChange={(e) =>
+          //   updateTenderFee("tenderFee", e.target.value)
+          // } 
+          />
         </div>
 
         <div className={styles.notes}>
@@ -150,22 +165,22 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             label="Attach File"
             buttonViewStyle="btnText"
             buttonSize="btnSmall"
-            // onSetFiles={(id) => {
-            //   getFilesFromLocalStorage(id).then((files) => {
-            //     if (files && files.length > 0) {
-            //       const documentArray = files.map((file) => ({
-            //         name: file.attributes.name,
-            //         document: file.file
-            //       }));
+          // onSetFiles={(id) => {
+          //   getFilesFromLocalStorage(id).then((files) => {
+          //     if (files && files.length > 0) {
+          //       const documentArray = files.map((file) => ({
+          //         name: file.attributes.name,
+          //         document: file.file
+          //       }));
 
-            //       updateTenderFee(
-            //         id.replace("DocumentView", ""),
-            //         "documents",
-            //         documentArray
-            //       );
-            //     }
-            //   });
-            // }}
+          //       updateTenderFee(
+          //         id.replace("DocumentView", ""),
+          //         "documents",
+          //         documentArray
+          //       );
+          //     }
+          //   });
+          // }}
           ></DsCsvUpload>
         </div>
       </div>
