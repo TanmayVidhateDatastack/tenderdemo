@@ -109,10 +109,6 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
         selectedFees.add(id);
         feeVisibility[id] = true;
         addTenderFee(id);
-      } else if (checkbox) {
-        selectedFees.add(id);
-        feeVisibility[id] = true;
-        addTenderFee(id);
       } else {
         selectedFees.delete(id);
         feeVisibility[id] = false;
@@ -162,8 +158,8 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
               name={checkbox.label}
               value={checkbox.value.toString()}
               label={checkbox.label}
-              isChecked={true}
               defaultChecked={true}
+            // defaultChecked={true}
             />
           ))}
         </div>
@@ -225,7 +221,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
         <div className={styles.applicationDeposits}>
           <DsButton
             id="optionBtn"
-            label="Application Deposits"
+            label="Applicable Deposits"
             className={styles.optionBtn + " " + styles.depositsBtn}
             endIcon={<Image src={downarrow} alt="downarrow" />}
             onClick={(e) => handleonclick(e)}
