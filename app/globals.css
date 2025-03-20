@@ -24,6 +24,7 @@
   --lightgrey:#e9e9e9;
   --semiblack: #383838;
   --heather: #a4a9d1;
+  --primary-hover-text: #0080801a;
  
   --text-primary: var(--green);
   --text-primary-hover: var(--green-hover);
@@ -209,10 +210,12 @@ body {
   margin-left: 0 !important;
   margin-right: 0 !important;
 }
+
+
 .cellRow {
   flex: 1;
   display: flex;
- 
+
   height: fit-content;
   max-width: 100%;
   cursor: pointer !important;
@@ -223,29 +226,11 @@ body {
 .logRow:hover {
   background-color: var(--background-hover);
 }
-/* .cell.overflow:hover::after {
-  content: attr(data-fulltext); 
-  position: absolute;
-  left: 0;
-  top: 100%;
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 5px;
-  border-radius: 5px;
-  white-space: nowrap;
-  z-index: 100;
-} */
-/* Hide tooltip if no overflow */
-/* .cell:not(.overflow)::after {
-  display: none;
-} */
-
-
 .cell-0 {
   flex: 0;
-  max-width: 3% !important;
+  /* max-width: 3% !important;
   width: 3%;
-  min-width: 3% !important;
+  min-width: 3% !important; */
 }
 .cell-0-5 {
   flex: 1;
@@ -256,7 +241,8 @@ body {
 .cell {
   flex: 1;
   max-width: 100% !important;
-
+  /* max-width: 10% !important; */
+  /* min-width: 10% !important; */
 }
 
 .cell-1 {
@@ -274,26 +260,7 @@ body {
   width: 18%;
   max-width: 100%;
 }
-.cell-date {
-  max-width: 100%;
-  width: 9%;
- 
-  min-width: 9% !important;
-}
-.cell-order-id {
-  min-width: 9% !important;
-  width: 9%;
-  max-width: 100%;
-}
-.cell-location {
-  flex: 1;
-  /* max-width: 80% !important; */
-  margin-right: 0;
- 
-  min-width: 18% !important;
-  width: 18%;
-  max-width: 100%;
-}
+
  
 .text-dark-0 {
   color: var(--grey-400) !important;
@@ -347,8 +314,8 @@ overflow: hidden !important;
 .cell-submissiondate
 {
   max-width:100% ;
-  min-width: 11% !important;
-  width: 11% !important;
+  min-width:10% !important;
+  width: 10% !important;
   white-space:nowrap !important;
   text-overflow: ellipsis !important; 
   overflow: hidden !important;
@@ -357,8 +324,8 @@ overflow: hidden !important;
 {
 
   max-width:100% ;
-    min-width: 10% !important;
-    width: 10% !important;
+    min-width: 9% !important;
+    width: 9% !important;
     white-space:nowrap !important;
     text-overflow: ellipsis !important; 
     overflow: hidden !important;
@@ -386,8 +353,8 @@ overflow: hidden !important;
       .cell-depot
       {
     
-        width: 8%!important;
-        min-width:8% !important;
+        width: 9%!important;
+        min-width:9% !important;
         flex:1;
         max-width:100% ;
         white-space:nowrap !important;
@@ -399,8 +366,8 @@ overflow: hidden !important;
 {
 
   max-width:100% ;
-min-width: 7%!important;
-width: 7%!important;
+min-width: 8%!important;
+width: 8%!important;
 white-space:nowrap !important;
 text-overflow: ellipsis !important; 
 overflow: hidden !important;

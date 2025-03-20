@@ -5,7 +5,7 @@ import React, {
   ReactNode,
   ChangeEvent
 } from "react";
-import { dsStatus, dsTenderProductStatus } from "./constant";
+import { dsStatus } from "./constant";
 
 // import dsStatus from "./constant";
 
@@ -39,37 +39,37 @@ export interface AccordionProps {
   id: string;
   title: string; // The title of the accordion
   children: string | React.ReactElement;
-  isOpen?:boolean; 
-  onToggle?:(id:number|string)=>void;// The content inside the accordion, can be a string or a React element
+  isOpen?: boolean;
+  onToggle?: (id: number | string) => void;// The content inside the accordion, can be a string or a React element
 }
- 
-export interface tenderDetailsProps{
-  tenderDetails:tenderDetails
+
+export interface tenderDetailsProps {
+  tenderDetails: tenderDetails
 }
-export interface applierSupplierDetailsProps{
-  applierSupplierDetails :applierSupplierDetails;
+export interface applierSupplierDetailsProps {
+  applierSupplierDetails: applierSupplierDetails;
 }
-export interface supplyDetailsProps{
-  supplyDetails:supplyDetails;
+export interface supplyDetailsProps {
+  supplyDetails: supplyDetails;
 }
 
 export interface applierSupplierDetails {
-  appliedBy:DsSelectOption[];
-  suppliedBy:DsSelectOption[];
-  depot:DsSelectOption[];
+  appliedBy: DsSelectOption[];
+  suppliedBy: DsSelectOption[];
+  depot: DsSelectOption[];
 }
-export interface supplyDetails{
-  supplyPoints:DsSelectOption[];
-  reportRequirements:DsSelectOption[];
-  eligibility:DsSelectOption[];
+export interface supplyDetails {
+  supplyPoints: DsSelectOption[];
+  reportRequirements: DsSelectOption[];
+  eligibility: DsSelectOption[];
 }
- 
- 
-export interface tenderDetails{
-  tenderType:DsSelectOption[];
-  submissionMode:DsSelectOption[];
+
+
+export interface tenderDetails {
+  tenderType: DsSelectOption[];
+  submissionMode: DsSelectOption[];
 }
- 
+
 
 export interface DSButtonProps {
   children?: React.ReactNode;
@@ -78,24 +78,24 @@ export interface DSButtonProps {
   tooltip?: string;
 
   type?:
-    | "standard"
-    | "split"
-    | "toggle"
-    | "icon_image"
-    | "button_icon"
-    | "upload"
-    | "tab"
-    | "count"
-    | "round";
+  | "standard"
+  | "split"
+  | "toggle"
+  | "icon_image"
+  | "button_icon"
+  | "upload"
+  | "tab"
+  | "count"
+  | "round";
   buttonSize?: "btnSmall" | "btnMedium" | "btnLarge";
   iconSize?: "iconSmall" | "iconMedium" | "iconLarge";
   buttonColor?:
-    | "btnPrimary"
-    | "btnSecondary"
-    | "btnDanger"
-    | "btnWarning"
-    | "btnDark"
-    | "btnInfo";
+  | "btnPrimary"
+  | "btnSecondary"
+  | "btnDanger"
+  | "btnWarning"
+  | "btnDark"
+  | "btnInfo";
   buttonViewStyle?: "btnText" | "btnContained" | "btnOutlined";
   disable?: boolean;
   className?: string;
@@ -107,7 +107,7 @@ export interface DSButtonProps {
   endIcon?: React.ReactElement;
   spliticon?: React.ReactElement;
   onHover?: (e: React.MouseEvent<HTMLElement>) => void;
-  handleMouseLeave?: (e: React.MouseEvent<HTMLElement>) => void;
+  onMouseLeave?: (e: React.MouseEvent<HTMLElement>) => void;
   onBlur?: (e: React.MouseEvent<HTMLElement>) => void;
   handelSplitClick?: (e: React.MouseEvent<HTMLElement>) => void;
 }
@@ -121,12 +121,12 @@ export interface DSButtonGroupProps {
   buttonSize?: "btnSmall" | "btnMedium" | "btnLarge";
   iconSize?: "iconSmall" | "iconMedium" | "iconLarge";
   buttonColor?:
-    | "btnPrimary"
-    | "btnSecondary"
-    | "btnDanger"
-    | "btnWarning"
-    | "btnDark"
-    | "btnInfo";
+  | "btnPrimary"
+  | "btnSecondary"
+  | "btnDanger"
+  | "btnWarning"
+  | "btnDark"
+  | "btnInfo";
   className?: string;
   img?: string;
   startIcon?: React.ReactElement;
@@ -148,7 +148,7 @@ export interface CheckboxProp {
   value: string;
   label: string;
   defaultChecked?: boolean;
-  ariaChecked?:boolean|string, 
+  ariaChecked?: boolean | string,
   isChecked?: boolean;
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   onChange?: (
@@ -179,18 +179,18 @@ export interface DocumentSelectorProps {
   headerTitle: string;
   headerNumber: string;
   initialDocuments: string[];
-  handleOnRemoveClick?:(doc:string)=>void;
+  handleOnRemoveClick?: (doc: string) => void;
 }
 export interface addressProps {
   address: string; // User's location
 }
 
-export interface searchCustomers{
-  id:number;
-  code:string;
-  name:string;
+export interface searchCustomers {
+  id: number;
+  code: string;
+  name: string;
 }
- 
+
 export interface menuprops {
   column: tcolumn;
   className: string;
@@ -205,7 +205,7 @@ export interface menuprops {
   hideShowColumn: (columnIndex: string | number) => void;
   sortTableOnNumber?: (columnIndex: number, sortType: "ASC" | "DESC") => void;
 }
- 
+
 export interface InfoCardProps {
   title: string; // The title of the info card
   quantity: string; // The quantity value displayed in the info card
@@ -238,12 +238,11 @@ export interface locationProps {
   id: string; // User's location
   location: location;
 }
- export interface nameProps
- {
-id :string;
-name:string|React.ReactNode;
+export interface nameProps {
+  id: string;
+  name: string | React.ReactNode;
 
- }
+}
 export interface DsPaneProps {
   id?: string;
   type?: "inset" | "overlay";
@@ -330,7 +329,7 @@ export interface SpotlightSearchProps {
   customAttributes?: Record<string, string>;
 }
 export interface DsStatusIndicatorProps {
-  status?:tenderStatus;
+  status?: tenderStatus;
   className?: string;
   id?: string;
   label?: string;
@@ -347,13 +346,13 @@ export interface DsStatusIndicatorProps {
 export interface countProps {
   Title: string; // The title of the summary
   Value: string; // The overall value for the summary
-  statusValues: Array<{ status?: string; value?: string,addimage?:React.ReactElement; }>;
+  statusValues: Array<{ status?: string; value?: string, addimage?: React.ReactElement; }>;
   // An array of objects containing status and its respective value
 }
 export interface countVariationProps {
   Title: string; // The title of the summary
   Value: string; // The overall value for the summary
-  statusValues: Array<{ status: string; value: string ,addimage?:React.ReactElement;}>; // An array of objects containing status and its respective value
+  statusValues: Array<{ status: string; value: string, addimage?: React.ReactElement; }>; // An array of objects containing status and its respective value
 }
 export interface Ds_Tablemenu_Props {
   type?: string;
@@ -470,7 +469,7 @@ export interface tdprops {
   className: string;
   children?: React.ReactNode;
   content?: string | React.ReactNode;
-  filterValue?: string | number|React.ReactNode|undefined;
+  filterValue?: string | number | React.ReactNode | undefined;
   type: string;
   colSpan?: number;
   rowSpan?: number;
@@ -660,7 +659,7 @@ export interface ApplicationHeaderProps {
   children: React.ReactNode;
   appTitle: string;
   hasPrevious: boolean;
-  className?:string;
+  className?: string;
 }
 export interface demoProps {
   title: string;
@@ -682,14 +681,14 @@ export class tcolumn {
   columnContentType?: string;
   customAttributes?: Record<string, string | number | boolean>;
   alignment?: "center" | "right" | "left";
-  hasSort?:boolean;
+  hasSort?: boolean;
 }
 
 export class cellData {
   columnIndex?: number = 1;
   className?: string;
   content?: React.ReactNode | string | number;
-  filterValue?: string | number|React.ReactNode|undefined;
+  filterValue?: string | number | React.ReactNode | undefined;
   contentType?: string;
   colSpan?: number = 1;
   rowSpan?: number = 1;
@@ -706,8 +705,8 @@ export class DsTableRow {
   rowIndex: number = 1;
   className?: string;
   content?: cellData[];
+  tag?: React.ReactNode;
   customAttributes?: Record<string, string | number | boolean>;
-
 }
 export class tableData {
   className: string = "";
@@ -723,6 +722,7 @@ export class filterType {
   columnIndex: number = 0;
   columnHeader: React.ReactNode | string = "";
   filterType: string = "";
+  filterFor: string = "";
 }
 
 
@@ -964,6 +964,7 @@ export interface FetchDataProps {
   url: string;
   method?: "GET" | "POST" | "DELETE" | "PUT" | "PATCH";
   dataObject?: unknown;
+  headers?: Record<string, string>;
 }
 
 // export interface correctSignProps {
@@ -1003,7 +1004,7 @@ export type Document = {
   document: File;
 }
 export type tenderFee = {
-  type: string|number;
+  type: string | number;
   amount: number;
   currency: string;
   paidBy: string;
@@ -1014,7 +1015,7 @@ export type tenderFee = {
   documents: Document[];
 };
 export type applicableSupplyConditions = {
-  type: string|number;
+  type: string | number;
   notes: string;
   documents: Document[];
   status?: dsStatus;
@@ -1080,7 +1081,7 @@ export type TenderData = {
   suppliedBy: string;
   suppliedId: number | null;
   supplierDiscount: number;
-  preparedBy: number;
+  cretedBy: number;
   lastUpdatedBy: number;
   comments: string;
   fees: tenderFee[];
@@ -1088,9 +1089,9 @@ export type TenderData = {
   products: TenderProduct[];
   documentList: TenderDocument[];
 };
-export type Company={
-  id:number;
-  name:string;
+export type Company = {
+  id: number;
+  name: string;
 }
 
 
@@ -1101,7 +1102,7 @@ export type Tender = {
   submittionDate: string;
   daystosubmit: string;
   tenderId: string;
-  type:string;
+  type: string;
   tenderType: string;
   depot: string;
   appliedBy: string;
@@ -1113,7 +1114,7 @@ export type Tender = {
   [key: string]: any; // Allows indexing with a string
 };
 
- export type TenderDetails = {
+export type TenderDetails = {
   code: number;
   error: string | null;
   message: string;
@@ -1143,18 +1144,18 @@ export interface NavProp extends DSButtonProps {
   location?: string;
   children?: React.ReactNode;
 }
-export interface applierSupplierDetailsProps{
-  applierSupplierDetails :applierSupplierDetails;
+export interface applierSupplierDetailsProps {
+  applierSupplierDetails: applierSupplierDetails;
 }
 
 
 
- export type CodeItem = {
+export type CodeItem = {
   codeValue: string;
   codeDescription: string;
 };
 
- export type TenderMetaData = {
+export type TenderMetaData = {
   code: number;
   message: string;
   result: {
@@ -1168,6 +1169,7 @@ export interface applierSupplierDetailsProps{
     documentType: CodeItem[];
     submissionMode: CodeItem[];
   };
-  error: null|string;
-  exception: null|string;
+  error: null | string;
+  exception: null | string;
 };
+

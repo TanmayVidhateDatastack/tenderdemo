@@ -42,6 +42,8 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
     displayContext(e, contextMenuId);
   }
 
+
+
   useEffect(() => {
     if (applicableConditions && applicableConditions.length > 0) {
       console.log("000 : ", applicableConditions);
@@ -69,12 +71,12 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
     }
   }, [applicableConditions]);
 
-  useEffect(() => {
-    console.log(
-      "feevisibility in applicable condition : ",
-      conditionsVisibility
-    );
-  }, [conditionsVisibility]);
+  // useEffect(() => {
+  //   console.log(
+  //     "feevisibility in applicable condition : ",
+  //     conditionsVisibility
+  //   );
+  // }, [conditionsVisibility]);
 
   const selectedConditions = new Set(); // 🔥 Store selected checkboxes globally
 
@@ -95,7 +97,7 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
       }
     });
     closeAllContext();
-    console.log("Currently Selected:", Array.from(selectedConditions)); // Debugging output
+    // console.log("Currently Selected:", Array.from(selectedConditions)); // Debugging output
   };
 
   useEffect(() => {

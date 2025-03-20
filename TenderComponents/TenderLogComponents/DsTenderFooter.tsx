@@ -8,7 +8,7 @@ import {
   createContext,
   displayContext,
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
-import  {
+import {
   showToaster,
 } from "@/Elements/DsComponents/DsToaster/DsToaster";
 import PopupOpenButton from "@/Elements/DsComponents/dsPopup/popupOpenButton";
@@ -66,7 +66,7 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
       dispatch(setVisibilityByRole(role));
       console.log("Role=", role);
 
-      let contextContent = null;
+      let contextContent: React.ReactElement | null = null;
 
       if (role === "ACCOUNTANCE") {
         contextContent = (
@@ -75,7 +75,7 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
             buttonSize="btnSmall"
             buttonViewStyle="btnText"
             className={btnStyles.btnTextPrimary}
-            onClick={()=>showToaster("toaster1")}
+            onClick={() => showToaster("toaster1")}
           />
         );
       } else if (role === "HOMANAGER") {
@@ -130,8 +130,8 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
             buttonSize="btnSmall"
             buttonViewStyle="btnText"
             className={btnStyles.btnTextPrimary}
-            onClick={()=>showToaster("toaster1")}
-            
+            onClick={() => showToaster("toaster1")}
+
           />
         );
       }
@@ -155,20 +155,20 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
       />
 
 
-            <DsSplitButton
-              buttonViewStyle="btnContained"
-              onClick={() => {
-                if (saveTender) saveTender("Draft");
-              }}
-              onSplitClick={(e) =>
-                displayContext(e, "contextMenuId4", "top", "center")
-              }
-              
-          
-            >
-              Save
-            </DsSplitButton>
- 
+      <DsSplitButton
+        buttonViewStyle="btnContained"
+        onClick={() => {
+          if (saveTender) saveTender("Draft");
+        }}
+        onSplitClick={(e) =>
+          displayContext(e, "contextMenuId4", "top", "center")
+        }
+
+
+      >
+        Save
+      </DsSplitButton>
+
 
 
       <DsApprovalPopup
@@ -181,8 +181,8 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
           role === "HOMANAGER"
             ? "The Tender has been Approved"
             : role === "CHECKER"
-            ? "The Tender has been successfully moved to under approval state"
-            : "The action was successful!"
+              ? "The Tender has been successfully moved to under approval state"
+              : "The action was successful!"
         }
         setActionStatus={setActionStatus}
       />
@@ -207,8 +207,8 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
         toasterMessage={"The Tender has been Rejected & also note has sent "}
         setActionStatus={setActionStatus}
       />
-       <Toaster
-       id={"toaster1"}
+      <Toaster
+        id={"toaster1"}
         message={role === "ACCOUNTANCE"
           ? "The Data has been Submitted by Review "
           : role === "MAKER"
@@ -216,9 +216,9 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
             : "The action was successful!"}
         type={"success"}
         position={"top"}
-        duration={4000} 
+        duration={4000}
         handleClose={() => setToasterVisible(false)}
-                />
+      />
     </>
   );
 };

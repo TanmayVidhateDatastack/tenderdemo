@@ -109,6 +109,11 @@
     justify-content: flex-end;
     padding: var(--ds-padding);
   }
+  .tenderDetails {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+   
+  }
   @media (max-width: 1200px) {
     .details > div,
     .transportDetails {

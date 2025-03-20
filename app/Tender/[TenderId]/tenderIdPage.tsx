@@ -11,38 +11,41 @@ import { closeTimeForTender } from "@/helpers/constant";
 import pagestyles from "@/app/page.module.css"
 import { closeAllContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 const DsTenderIdPage: React.FC = () => {
-  const { tenderData,setActionStatusValues , actionStatus,saveTender} = useTenderData();
+  const { setActionStatusValues, actionStatus, saveTender } = useTenderData();
   const [selectedTabId] = useTabState("tenderPage"); // Use the custom hook
 
-   console.log(tenderData);
+  //  console.log(tenderData);
   const tabs = [
     { tabId: "0", tabName: "Basic Details" },
     { tabId: "1", tabName: "Products ₹ (V1)" },
-    // { tabId: "2", tabName: "Documents" },
+    { tabId: "2", tabName: "Documents" },
     // { tabId: "3", tabName: "New" },
   ];
 
   return (
-    <> 
+    <>
       <DsApplication
         selectedTabId={selectedTabId}
-    
+
         appTitle="Tender"
         tabs={tabs}
-       
+
       >
         <div className={pagestyles.container}
-        onScroll={() => closeAllContext()}>
-        <TabView tabId="0" pageName="tenderPage">
-          <DsBasicDetails />
-        </TabView>
-        {/* <TabView tabId="1" pageName="tenderPage" >
+          onScroll={() => closeAllContext()}>
+          <TabView tabId="0" pageName="tenderPage">
+            <div className={style.tenderDetails}>
+
+              <DsBasicDetails />
+            </div>
+          </TabView>
+          {/* <TabView tabId="1" pageName="tenderPage" >
           <DsTenderProduct productList={tenderData.products} setProductList={addTenderProduct} />
           new prod
         </TabView> */}
-       </div>
+        </div>
       </DsApplication>
-      <Toaster 
+      <Toaster
         handleClose={() => {
         }}
         id={"create-order-toaster"}
@@ -51,15 +54,15 @@ const DsTenderIdPage: React.FC = () => {
         position={"top"}
         duration={closeTimeForTender}
       />
-      
-      <div className={style. footerContainer}>
-    <DSTendrFooter setActionStatus={setActionStatusValues}
-    
-    saveTender={saveTender}
-    ></DSTendrFooter>
-    </div>
-    </> 
-    
+
+      <div className={style.footerContainer}>
+        <DSTendrFooter setActionStatus={setActionStatusValues}
+
+          saveTender={saveTender}
+        ></DSTendrFooter>
+      </div>
+    </>
+
   );
 };
 
