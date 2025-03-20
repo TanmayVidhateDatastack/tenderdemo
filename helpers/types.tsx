@@ -296,6 +296,7 @@ export interface DsSelectOption {
   label: string;
   value: string | DsSelectOption[] |number;
 }
+
 export interface RadioCheckOption {
   customAttribute?: Record<string, string>;
   id: string;
@@ -374,7 +375,12 @@ export interface tab {
   disable?: boolean;
   customAttributes?: Record<string, string | number | boolean>;
   onClick?: (tab: tab) => void;
+  count?: number | "00";
+  disable?: boolean;
+  customAttributes?: Record<string, string | number | boolean>;
+  onClick?: (tab: tab) => void;
 }
+ 
 export interface TabNavProps {
   selectedTabId: string;
   tabs: tab[];
@@ -391,12 +397,6 @@ export interface TabContextType {
 export interface TabsProviderProps {
   children: ReactNode;
 }
-export interface TabProps {
-  tabId: string;
-  children: React.ReactNode;
-  pageName: string; // Add this line
-}
-
 
 export interface datalistOptions {
   //datalist attributes
@@ -784,7 +784,7 @@ export type customer = {
 // export type tieUpProduct = {
 //   productId: number;
 //   productCode: string;
-//   productName: string;
+//   productName: string;  
 //   batchId: number;
 //   batchNumber: string;
 //   expiryDate: string;
@@ -1112,6 +1112,7 @@ export type Tender = {
   customAttributes?: { iconValue: string }; // ✅ Added
   [key: string]: any; // Allows indexing with a string
 };
+
 
 export type TenderDetails = {
   code: number;

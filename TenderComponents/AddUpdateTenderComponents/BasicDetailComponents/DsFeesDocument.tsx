@@ -17,7 +17,7 @@ export type tenderDocument = {
   name: string;
   document: File;
 };
-
+ 
 export type tenderFee = {
   type: string;
   amount: number;
@@ -28,7 +28,7 @@ export type tenderFee = {
   notes: string;
   documents: tenderDocument[];
 };
-
+ 
 export interface DsFeesProps {
   title: string;
   id: string;
@@ -36,7 +36,7 @@ export interface DsFeesProps {
   paidBy: DsSelectOption[];
   downloadVisible: boolean;
 }
-
+ 
 const DsFeesDocument: React.FC<DsFeesProps> = ({
   title,
   id,
@@ -143,7 +143,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           // } 
           />
         </div>
-
+ 
         <div className={styles.notes}>
           <h4>Notes</h4>
           <TextArea
@@ -187,5 +187,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     </>
   );
 };
-
+ 
 export default DsFeesDocument;
+ 
+ 

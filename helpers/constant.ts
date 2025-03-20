@@ -44,7 +44,7 @@ export const apiServerUrl = "http://172.145.1.102:7005/api";
 // export const apiHostUrl = apiLocalUrl;
 export const apiHostUrl = apiServerJsonUrl;
 export const devHostUrl = "http://localhost:3000";
-
+ 
 ///Urls application Level
 export const hostUrl = devHostUrl;
 export const Component_Library = hostUrl + "/ComponentsLibrary";

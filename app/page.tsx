@@ -4,8 +4,8 @@ import DsApplication from "@/Elements/ERPComponents/DsApplicationComponents/DsAp
 import DsNavTo from "@/Elements/ERPComponents/DsNavigationComponent/DsNavTo";
 import styles from "./page.module.css";
 import DsFilterActions from "@/TenderComponents/TenderLogComponents/DsFilterActions";
-import addIconWhite from "@/Icons/smallIcons/whiteadd.svg";
-import Image from "next/image";
+import addIconWhite from "@/Icons/smallIcons/whiteadd.svg";  
+import Image from "next/image"; 
 import { useEffect, useState } from "react";
 import { CodeItem, DsTableRow, tableData, Tender } from "@/helpers/types";
 import DsTotalTenders from "@/TenderComponents/TenderLogComponents/DsTotalTender";

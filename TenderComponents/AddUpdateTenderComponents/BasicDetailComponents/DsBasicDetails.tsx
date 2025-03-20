@@ -121,8 +121,7 @@ const DsBasicDetails = () => {
     } catch (error) {
       console.error("Fetch error: ", error);
     }
-  };
-
+  }; 
   useEffect(() => {
     handleFetch();
   }, []);
@@ -137,7 +136,7 @@ const DsBasicDetails = () => {
       setApplicableSupplyConditions(metadata[0].applicableSupplyConditions);
     }
   }, [metadata]);
-
+ 
   return (
     <>
       <div >

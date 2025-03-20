@@ -65,5 +65,4 @@ const DsTenderIdPage: React.FC = () => {
 
   );
 };
-
 export default DsTenderIdPage;
