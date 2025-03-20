@@ -294,7 +294,7 @@ export interface DsOptionProps {
 
 export interface DsSelectOption {
   label: string;
-  value: string | DsSelectOption[];
+  value: string | DsSelectOption[] |number;
 }
 export interface RadioCheckOption {
   customAttribute?: Record<string, string>;
@@ -1080,7 +1080,7 @@ export type TenderData = {
   suppliedBy: string;
   suppliedId: number | null;
   supplierDiscount: number;
-  preparedBy: number;
+  createdBy: number;
   lastUpdatedBy: number;
   comments: string;
   fees: tenderFee[];

@@ -16,12 +16,12 @@ class ActionStatus {
   notiType: "success" | "bonus" | "info" | "error" | "cross" = "success";
   notiMsg: string = "";
   showNotification: boolean = false;
-}
+} 
 
 interface TenderDataContextType {
   tenderData: TenderData;
-  actionStatus: ActionStatus;
-  setActionStatusValues: (actionStatus: ActionStatus) => void;
+  actionStatus: ActionStatus; 
+  setActionStatusValues: (actionStatus: ActionStatus) => void; 
   updateTenderData: (
     key: keyof TenderData,
     value: string | number | tenderFee[] | tenderSupplyCondition
@@ -77,14 +77,14 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     extendedDeliveryPeriod: 0,
     lateDeliveryPenalty: 0,
     tenderURL: "",
-    shippingLocations: [],
-    appliedBy: "",
+    shippingLocations: [1,2],
+    appliedBy: "IPCA",
     applierId: null,
-    suppliedBy: "",
+    suppliedBy: "STOCKIST",
     suppliedId: null,
     supplierDiscount: 0,
-    preparedBy: 0,
-    lastUpdatedBy: 0,
+    createdBy: 0,
+    lastUpdatedBy: 0, 
     comments: "",
     fees: [],
     supplyConditions: {
@@ -305,15 +305,13 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   const saveTender = useCallback(
     async (status: dsStatus) => {
       if (!tenderData) return;
-      // console.log("sAVEEEE", orderDataCopy);
+      console.log("sAVEEEE", tenderData);
 
       const dataToSend = stripReadOnlyProperties({
         ...tenderData,
         status: status.toUpperCase(),
         createdBy: 3,
       });
-
-      
 
       console.log("sAVEEEE", dataToSend);
       try {
@@ -322,7 +320,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           method: "POST",
           dataObject: dataToSend,
         }).then((res) => {
-          // console.log("res = ",res);
+          console.log("res = ",res);
           if (res.code === 200) {
             setActionStatus({
               notiMsg: "Tender Created Successfully",

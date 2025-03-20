@@ -101,9 +101,9 @@ const DsBasicDetails = () => {
           paidBy: [
             {
               value: "PAID_BY_IPCA",
-              label: "Paid By Ipca"
-            },
-            {
+              label: "Paid By Ipca" 
+            }, 
+            {  
               value: "PAID_BY_STOCKIEST",
               label: "Paid By Stockiest"
             }
