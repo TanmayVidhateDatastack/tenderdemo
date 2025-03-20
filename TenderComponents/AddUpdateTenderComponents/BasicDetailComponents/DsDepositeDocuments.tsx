@@ -30,20 +30,31 @@ export interface DepositeDocumentsProps {
   setDepositeDocuments: (depositeDocuments: DepositDocument[]) => void;
   depositeDocument: DepositDocument[] | null;
   applicableDeposits: DsSelectOption[] | [];
+  role: string;
 }
 
 const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   depositeDocument,
-  applicableDeposits
+  applicableDeposits,
+  role
 }) => {
   const contextMenuId = "context-display-10";
   const { addTenderFee, removeTenderFeeByType } = useTenderData();
   const [mode, setMode] = useState<DsSelectOption[]>([]);
   const [paidBy, setPaidBy] = useState<DsSelectOption[]>([]);
   const [applicablefees, SetApplicablefees] = useState<DsSelectOption[]>([]);
+  const [paymentCheckVisible, setPaymentCheckVisible] = useState<boolean>(false)
   const [feeVisibility, setFeeVisibility] = useState<Record<string, boolean>>(
     {}
   );
+
+  useEffect(() => {
+    if (role == "MAKER" || role == "CHECKER") {
+      setPaymentCheckVisible(false);
+    } else {
+      setPaymentCheckVisible(true);
+    }
+  })
 
   useEffect(() => {
     if (depositeDocument) {
@@ -204,7 +215,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
                   mode={mode}
                   paidBy={paidBy}
                   downloadVisible={true}
-                />
+                  paymentCompletedVisible={paymentCheckVisible} />
               </div>
             )
           );

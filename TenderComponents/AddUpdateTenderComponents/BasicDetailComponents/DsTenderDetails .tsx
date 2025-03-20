@@ -41,6 +41,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
       await fetchData({ url: searchCustomerURL + searchTerm }).then((res) => {
         if ((res.code = 200)) {
           setCustomers(res.result);
+          console.log("search customer term result : ", res.result)
         } else {
           console.error(
             "Error fetching data: ",
@@ -114,11 +115,12 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
             onKeyUp={debounce(async (e: React.KeyboardEvent<HTMLElement>) => {
               const input = e.target as HTMLInputElement;
               const searchTerm = input.value;
-              if (searchTerm.trim().length > 3) {
+              if (searchTerm.trim().length >= 3) {
                 handleFetch(searchTerm);
               }
             }, 500)}
             options={dataListOption}
+
           ></DsDataList>
         </div>
 
@@ -158,6 +160,8 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
             label="Tender Number"
             // placeholder="Please Type Here"
             onChange={(e) => updateTenderData("tenderNumber", e.target.value)}
+            inputType="number"
+
           ></DsTextField>
         </div>
         <div className={deptStyle.fields}>
