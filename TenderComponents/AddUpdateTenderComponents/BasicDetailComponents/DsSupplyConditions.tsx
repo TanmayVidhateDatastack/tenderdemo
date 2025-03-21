@@ -21,18 +21,21 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
         </div>
         <div className={styles.notes}>
           <h4>Notes</h4>
-          <TextArea
-            id="embossmentNotes"
-            placeholder="Please type here"
-            disable={false}
-            onChange={(e) => {
-              updateApplicableCondition(
-                id.replace("conditionsView", ""),
-                "type",
-                e.target.value
-              );
-            }}
-          />
+          <div className={styles.fieldColors}>
+
+            <TextArea
+              id="embossmentNotes"
+              placeholder="Please type here"
+              disable={false}
+              onChange={(e) => {
+                updateApplicableCondition(
+                  id.replace("conditionsView", ""),
+                  "type",
+                  e.target.value
+                );
+              }}
+            />
+          </div>
         </div>
         <div className={styles.attachFileBtn}>
           <DsCsvUpload
@@ -40,22 +43,22 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
             label="Attach File"
             buttonViewStyle="btnText"
             buttonSize="btnSmall"
-            // onSetFiles={(id) => {
-            //   getFilesFromLocalStorage(id).then((files) => {
-            //     if (files && files.length > 0) {
-            //       const documentArray = files.map((file) => ({
-            //         name: file.attributes.name,
-            //         document: file.file
-            //       }));
+          // onSetFiles={(id) => {
+          //   getFilesFromLocalStorage(id).then((files) => {
+          //     if (files && files.length > 0) {
+          //       const documentArray = files.map((file) => ({
+          //         name: file.attributes.name,
+          //         document: file.file
+          //       }));
 
-            //       updateApplicableCondition(
-            //         id.replace("conditionsView", ""),
-            //         "documents",
-            //         documentArray
-            //       );
-            //     }
-            //   });
-            // }}
+          //       updateApplicableCondition(
+          //         id.replace("conditionsView", ""),
+          //         "documents",
+          //         documentArray
+          //       );
+          //     }
+          //   });
+          // }}
           ></DsCsvUpload>
         </div>
       </div>
