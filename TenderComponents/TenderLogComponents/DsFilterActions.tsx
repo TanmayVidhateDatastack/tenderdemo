@@ -121,18 +121,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
                 : tender.status?.tenderStatus?.toLowerCase() === lowerCaseValue
             );
           } 
-          // else if (value == "feesPaid") {
-          //   const lowerCaseValue = DsStatus.UREV|| DsStatus.APRV||DsStatus.UAPR.toLowerCase();
-          //   message = "fees paid";
-          //   filteredRows = filteredRows.filter((tender) =>
-          //     message
-          //       ? tender.status?.tenderStatus?.toLowerCase() ===
-          //           lowerCaseValue &&
-          //         tender?.status?.message?.toLowerCase() ==
-          //           message.toLowerCase()
-          //       : tender.status?.tenderStatus?.toLowerCase() === lowerCaseValue
-          //   );
-          // } 
+     
           else {
             const lowerCaseValue = value.toLowerCase();
             filteredRows = filteredRows.filter((tender) =>
@@ -188,127 +177,69 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
     }
   }, [role]);
 
-  // const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState("");
 
-  // const handleSearch = (e) => {
-  //   if (e.key === "Enter") {
-  //     const searchQuery = normalizeText(searchText);
+  const handleSearch = (e) => {
+    if (e.key === "Enter") {
+      const searchQuery = normalizeText(searchText);
 
      
-  //     const searchableColumns: (keyof Tender)[] = [
-  //       "customerName",
-  //       "tenderId",
-  //       "value",
-  //     ];
+      const searchableColumns: (keyof Tender)[] = [
+        "customerName",
+        "tenderId",
+        "value",
+      ];
 
-  //     const filteredRows = data.filter((originalData) => {
-  //       return searchableColumns.some((column) => {
-  //         const value = originalData[column]; 
+      const filteredRows = data.filter((originalData) => {
+        return searchableColumns.some((column) => {
+          const value = originalData[column]; 
 
-  //         if (typeof value === "string" || typeof value === "number") {
-  //           return normalizeText(value).includes(searchQuery);
-  //         }
+          if (typeof value === "string" || typeof value === "number") {
+            return normalizeText(value).includes(searchQuery);
+          }
 
-  //         if (Array.isArray(value)) {
-  //           return value.some(
-  //             (item: any) =>
-  //               typeof item === "string" &&
-  //               normalizeText(item).includes(searchQuery)
-  //           );
-  //         }
+          if (Array.isArray(value)) {
+            return value.some(
+              (item: any) =>
+                typeof item === "string" &&
+                normalizeText(item).includes(searchQuery)
+            );
+          }
 
-  //         if (typeof value === "object" && value !== null) {
-  //           return searchInObject(value, searchQuery);
-  //         }
+          if (typeof value === "object" && value !== null) {
+            return searchInObject(value, searchQuery);
+          }
 
-  //         return false;
-  //       });
-  //     });
-
-  //     setFilteredData(filteredRows);
-  //   }
-  // };
-
-
-  // const normalizeText = (text: any): string => {
-  //   return typeof text === "string"
-  //     ? text.toLowerCase()
-  //     : text.toString().toLowerCase();
-  // };
-
-
-  // const searchInObject = (obj: any, query: string): boolean => {
-  //   return Object.values(obj).some((val) => {
-  //     if (typeof val === "string" || typeof val === "number") {
-  //       return normalizeText(val).includes(query);
-  //     }
-
-  //     if (typeof val === "object" && val !== null) {
-  //       return searchInObject(val, query);
-  //     }
-
-  //     return false;
-  //   });
-  // };
-
-  // const [searchText, setSearchText] = useState("");
-
-  const handleSearch = (e:React.KeyboardEvent<HTMLInputElement|HTMLTextAreaElement>) => {
-    const inputText = (e.target as HTMLInputElement).value;
-    const searchQuery = normalizeText(inputText.trim()); // Trim whitespace
-  
-    // setSearchText(inputText); // Maintain original input state
-  
-    if (searchQuery.length < 3) {
-      setFilteredData(data); // Reset data if less than 3 meaningful characters
-      return;
-    }
-  
-    const searchableColumns: (keyof Tender)[] = ["customerName", "tenderId", "value"];
-  
-    const filteredRows = data.filter((originalData) => {
-      return searchableColumns.some((column) => {
-        const value = originalData[column];
-  
-        if (typeof value === "string" || typeof value === "number") {
-          return normalizeText(value).includes(searchQuery);
-        }
-  
-        if (Array.isArray(value)) {
-          return value.some(
-            (item: any) =>
-              typeof item === "string" && normalizeText(item).includes(searchQuery)
-          );
-        }
-  
-        if (typeof value === "object" && value !== null) {
-          return searchInObject(value, searchQuery);
-        }
-  
-        return false;
+          return false;
+        });
       });
-    });
-  
-    setFilteredData(filteredRows);
+
+      setFilteredData(filteredRows);
+    }
   };
-  
+
+
   const normalizeText = (text: any): string => {
-    return typeof text === "string" ? text.toLowerCase().trim() : text.toString().toLowerCase();
+    return typeof text === "string"
+      ? text.toLowerCase()
+      : text.toString().toLowerCase();
   };
-  
+
+
   const searchInObject = (obj: any, query: string): boolean => {
     return Object.values(obj).some((val) => {
       if (typeof val === "string" || typeof val === "number") {
         return normalizeText(val).includes(query);
       }
-  
+
       if (typeof val === "object" && val !== null) {
         return searchInObject(val, query);
       }
-  
+
       return false;
     });
   };
+
   
 
   return (
@@ -416,30 +347,31 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
       {filterButtonVisible && (
     
         <DsButton
-          id="iconfilterBtn"
-          buttonColor="btnPrimary"
-          buttonViewStyle="btnText"
-          className={btnStyles.btnTextPrimary }
-          startIcon={
-            <div
-              style={{
-                width: "100%",
-                height: "100%",
-                position: "relative",
-              }}
-            >
-              <Image
-                src={filter}
-                alt="Add Icon"
-                layout="fill"
-                objectFit="cover"
-              />
-            </div>
-          }
-          label="Filter"
-          onClick={() => DisplayPane("tenderFilter")}
-          iconSize="iconMedium"
-        />
+        id="iconfilterBtn"
+        buttonColor="btnPrimary"
+        buttonViewStyle="btnText"
+        className={btnStyles.btnTextPrimary + " text-dark-2"}
+        startIcon={
+          <div
+            style={{
+              width: "1.125em",
+              height: "1.125em",
+              position: "relative",
+            }}
+          >
+            <Image
+              src={filter}
+              alt="Add Icon"
+              layout="fill"
+              objectFit="cover"
+            />
+          </div>
+        }
+        label="Filter"
+        onClick={() => DisplayPane("tenderFilter")}
+        iconSize="iconMedium"
+
+      />
       )}
    
     </>

@@ -3,7 +3,7 @@ import DsMultiSelect from "@/Elements/DsComponents/dsSelect/dsMultiSelect";
 import DsSelectMultiLevel from "@/Elements/DsComponents/dsSelect/dsSelectMultiLevel";
 import {
   applierSupplierDetailsProps,
-
+ 
 } from "@/helpers/types";
 import { useTenderData } from "../TenderDataContextProvider";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
@@ -17,8 +17,8 @@ const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
     <>
       <div className={styles.inputDetails}>
         <div className={deptStyles.fields}>
-
-          <DsSelectMultiLevel
+ 
+          {/* <DsSelectMultiLevel
             isSearchable
             options={applierSupplierDetails.appliedBy}
             label="Applied By"
@@ -33,17 +33,12 @@ const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
                 updateTenderData("applierId", option.value);
               }
             }}
-          // handleOnChange={function (
-          //   e: React.ChangeEvent<HTMLElement>
-          // ): void {
-          //   throw new Error("Function not implemented.");
-          // }}
-          // isSearchable={true}
-          ></DsSelectMultiLevel>
+          
+          ></DsSelectMultiLevel> */}
         </div>
         <div className={deptStyles.fields}>
-
-          <DsSelectMultiLevel
+ 
+          {/* <DsSelectMultiLevel
             isSearchable
             options={applierSupplierDetails.suppliedBy}
             label="Supplied By"
@@ -58,23 +53,18 @@ const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
                 updateTenderData("suppliedId", option.value);
               }
             }}
-          // handleOnChange={function (
-          //   e: React.ChangeEvent<HTMLElement>
-          // ): void {
-          //   throw new Error("Function not implemented.");
-          // }}
-          // isSearchable={true}
-          ></DsSelectMultiLevel>
+        
+          ></DsSelectMultiLevel> */}
         </div>
         <div className={deptStyles.fields}>
-
+ 
           <DsMultiSelect
             options={applierSupplierDetails.depot}
             // type="multi"  
             label="Depot"
             placeholder={"Please search or select here"}
             id={"depot"}
-
+ 
           // setSelectOptions={(options) => {
           // updateTenderData(
           //   "shippingLocations",
@@ -85,8 +75,8 @@ const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
           //     return acc;
           //   }, [])
           // );                                
-
-
+ 
+ 
           // handleOnChange={function (
           //   e: React.ChangeEvent<HTMLElement>
           // ): void {
@@ -96,7 +86,7 @@ const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
         </div>
         <div></div>
         <div className={deptStyles.fields}>
-
+ 
           <DsTextField
             label="Stockist / Liasioner name"
           // placeholder="Please type here"
@@ -104,7 +94,7 @@ const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
           ></DsTextField>
         </div>
         <div className={deptStyles.fields}>
-
+ 
           <DsTextField
             label="Stockist / Liasioner discount %"
             // placeholder="Please type here"
@@ -116,4 +106,6 @@ const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
   );
 };
 export default DsApplierSupplierDetails;
-
+ 
+ 
+ 

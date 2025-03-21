@@ -11,13 +11,18 @@ import {
   searchCustomers,
   tenderDetailsProps,
 } from "@/helpers/types";
+import {
+  datalistOptions,
+  searchCustomers,
+  tenderDetailsProps,
+} from "@/helpers/types";
 import { useTenderData } from "../TenderDataContextProvider";
 import { debounce } from "@/helpers/Method/optimization";
 import DsDatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import copybtnenabled from "@/Icons/smallIcons/copyEnabled.svg";
 import Image from "next/image";
-
+ 
 const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
   const [customers, setCustomers] = useState<searchCustomers[]>([]);
   const [dataListOption, setDataListOption] = useState<datalistOptions[]>();
@@ -36,7 +41,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
     "success" | "bonus" | "info" | "error"
   >("info");
   const [showNotification, setShowNotification] = useState<boolean>(false);
-
+ 
   const { updateTenderData } = useTenderData();
   const handleFetch = async (searchTerm: string) => {
     try {
@@ -54,7 +59,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
       console.error("Fetch error: ", error);
     }
   };
-
+ 
   const handleRoleFetch = async () => {
     try {
       const res = await fetchData({ url: getTenderUserRoles });
@@ -70,7 +75,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
       console.error("Fetch error: ", error);
     }
   };
-
+ 
   useEffect(() => {
     handleRoleFetch();
   }, []);
@@ -138,7 +143,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
             options={dataListOption}
           ></DsDataList>
         </div>
-
+ 
         <div className={deptStyle.fields}>
           {/* <DsButton label="Fetch Information" startIcon={<Image src={copybtndisabled} alt="fetch information" />} buttonViewStyle="btnText" buttonSize="btnMedium" disable /> */}
           {fetchVisible && (
@@ -299,5 +304,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
     </>
   );
 };
-
+ 
 export default DsTenderDetails;
+ 
+ 

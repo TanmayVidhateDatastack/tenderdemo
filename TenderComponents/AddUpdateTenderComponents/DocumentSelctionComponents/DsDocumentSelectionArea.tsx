@@ -1,89 +1,55 @@
-// "use client";
-// import styles from "./document.module.css";
-// import pagestyles from "@/app/page.module.css";
-// import React, { useContext, useEffect, useState } from "react";
-// import Image from "next/image";
-// import stampIcon from "@/Icons/mediumIcons/cross.svg";
-// import DocumentSelector from "@/Elements/DsComponents/dsDocumentSelector/dsDocumentSelector";
-// import { closeAllContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
-// import DsTabButton from "@/Elements/DsComponents/DsButtons/dsTabButton";
-// import PaneOpenButton from "@/Elements/DsComponents/DsPane/PaneOpenButton";
-// import DocumentProvider, { DocumentContext } from "./DocumentsContextProvider";
+import { useContext } from "react";
+import styles from "./document.module.css";
+import DocumentSelector from "@/Elements/DsComponents/dsDocumentSelector/dsDocumentSelector";
+import { DocumentContext } from "./DocumentsContextProvider";
+import { documents } from "@/helpers/types"; // ✅ Import correct type
 
-// export default function DocumentsSelectionArea() {
-//   const [visibleSections, setVisibleSections] = useState<{ [key: string]: boolean }>({});
-//   const count = "01";
+const DocumentSelectorArea: React.FC = () => {
+  const documentContext = useContext(DocumentContext);
+  if (!documentContext) {
+    throw new Error("DocumentSelectorArea must be used within a DocumentContext");
+  }
+
+  const { documentData, setDocumentData, selectedDocuments, setSelectedDocuments } = documentContext;
+
+  const handleRemoveDocument = (documentName: string) => { // 🔥 Fix: Use string instead of documents
+    if (!documentContext) return;
+   
+    // ✅ Remove document from context
+    documentContext.setDocumentData((prevData) =>
+      prevData
+        .map((group) => ({
+          ...group,
+          documents: group.documents.filter((d) => d.documentName !== documentName),
+        }))
+        .filter((group) => group.documents.length > 0)
+    );
   
-//   const docContext = useContext(DocumentContext);
-//   if (!docContext) {
-//     throw new Error("DocumentsSelectionArea must be used within a DocumentContext");
-//   }
+    // ✅ Remove from selectedDocuments & force update
+    documentContext.setSelectedDocuments((prev) => {
+      const updatedSelection = prev.filter((d) => d.documentName !== documentName);
+      console.log("Updated selectedDocuments:", updatedSelection); // Debugging Log
+      return updatedSelection;
+    });
+  };
   
-//   const { selectedFiles, setSelectedFiles } = docContext;
 
-//   useEffect(() => {
-//     const visibilityMap: { [key: string]: boolean } = {};
-//     selectedFiles.forEach((sf) => {
-//       visibilityMap[sf.docType] = true;
-//     });
-//     setVisibleSections(visibilityMap);
-//   }, [selectedFiles]);
+  return (
+    <div className={styles.selectorContainer}>
+      {documentData.map(({ type, documents }) =>
+        documents.length > 0 ? (
+          <div key={type} className={styles.documentsDivs}>
+         <DocumentSelector
+                    headerTitle={type}
+                    headerNumber={documents.length.toString()}
+                    initialDocuments={documents.map((doc) => doc.documentName)} // 🔥 Pass only names
+                    handleOnRemoveClick={(docName) => handleRemoveDocument(docName)} // 🔥 Pass only name, not full object
+                    />
+          </div>
+        ) : null
+      )}
+    </div>
+  );
+};
 
-//   const handleRemoveDocument = (docType: string, docValue: string) => {
-//     setSelectedFiles((prevFiles) => {
-//       const updatedFiles = prevFiles.filter((d) => !(d.docType === docType && d.docvalue === docValue));
-//       const checkbox = document.querySelector(
-//         prevFiles.find((d) => d.docType === docType && d.docvalue === docValue)?.checkboxId as string
-//       ) as HTMLInputElement;
-//       if (checkbox) checkbox.checked = false;
-//       return updatedFiles;
-//     });
-//   };
-
-//   const documentCategories = [
-//     { type: "product", title: "Product Licenses" },
-//     { type: "fda", title: "FDA Documents" },
-//     { type: "financial", title: "Financial Documents" },
-//     { type: "company", title: "Company Documents" },
-//     { type: "miscellaneous", title: "Miscellaneous Annexures and Under..." },
-//   ];
-
-//   return (
-//     <DocumentProvider>
-//       <div className={pagestyles.container} onScroll={closeAllContext}>
-//         <div className={styles.Customer}>
-//           <div className={styles.container + " " + styles["flex-column"]}>
-//             <div className={styles.add_documents}>
-//               <div className={styles.count_div}>
-//                 <div>Selected Document</div>
-//                 <div>
-//                   <DsTabButton className={styles.countBtn} count={count} />
-//                 </div>
-//               </div>
-//               <div>
-//                 <PaneOpenButton
-//                   startIcon={<Image src={stampIcon} alt="stamp" />}
-//                   id="actionBtn12"
-//                   paneId="myPane"
-//                   label="Add Document"
-//                 />
-//               </div>
-//             </div>
-//             {documentCategories.map(({ type, title }) => (
-//               visibleSections[type] && (
-//                 <div key={type} className={styles.documentsDivs}>
-//                   <DocumentSelector
-//                     headerTitle={title}
-//                     headerNumber={selectedFiles.filter((x) => x.docType === type).length.toString()}
-//                     initialDocuments={selectedFiles.filter((x) => x.docType === type).map((x) => x.docvalue)}
-//                     handleOnRemoveClick={(doc) => handleRemoveDocument(type, doc)}
-//                   />
-//                 </div>
-//               )
-//             ))}
-//           </div>
-//         </div>
-//       </div>
-//     </DocumentProvider>  
-//   );
-// }  
+export default DocumentSelectorArea;

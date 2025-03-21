@@ -30,21 +30,32 @@ export interface DepositeDocumentsProps {
   setDepositeDocuments: (depositeDocuments: DepositDocument[]) => void;
   depositeDocument: DepositDocument[] | null;
   applicableDeposits: DsSelectOption[] | [];
+  role: string;
 }
  
 const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
-  depositeDocument, 
-  applicableDeposits
+  depositeDocument,
+  applicableDeposits,
+  role
 }) => {
   const contextMenuId = "context-display-10"; 
   const { addTenderFee, removeTenderFeeByType } = useTenderData();
   const [mode, setMode] = useState<DsSelectOption[]>([]);
   const [paidBy, setPaidBy] = useState<DsSelectOption[]>([]);
   const [applicablefees, SetApplicablefees] = useState<DsSelectOption[]>([]);
+  const [paymentCheckVisible, setPaymentCheckVisible] = useState<boolean>(false)
   const [feeVisibility, setFeeVisibility] = useState<Record<string, boolean>>(
-    {}
+    { "": true }
   );
- 
+
+  useEffect(() => {
+    if (role == "MAKER" || role == "CHECKER") {
+      setPaymentCheckVisible(false);
+    } else {
+      setPaymentCheckVisible(true);
+    }
+  }, [role])
+
   useEffect(() => {
     if (depositeDocument) {
       const modesData = depositeDocument[0]?.modes || [];
@@ -108,6 +119,29 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
     // console.log("Currently Selected:", Array.from(selectedFees));
   };
 
+  useEffect(() => {
+    applicablefees.forEach((opt) => {
+      const id = opt.value.toString();
+      const checkbox = document.getElementById(id) as HTMLInputElement;
+      selectedFees.add(id);
+      feeVisibility[id] = true;
+      addTenderFee(id);
+      if (checkbox?.checked) {
+        selectedFees.add(id);
+        feeVisibility[id] = true;
+        addTenderFee(id);
+      } else if (checkbox) {
+        selectedFees.add(id);
+        feeVisibility[id] = true;
+        addTenderFee(id);
+      } else {
+        selectedFees.delete(id);
+        feeVisibility[id] = false;
+        removeTenderFeeByType(id);
+      }
+    })
+  }, [applicablefees])
+
   // useEffect(() => {
   //   console.log("feevisibility : ", feeVisibility);
   // }, [feeVisibility]);
@@ -116,7 +150,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
     createContext(
       contextMenuId,
       <>
-        <div>
+        <div className={styles.feesCheckboxes}>
           {applicablefees.map((checkbox, index) => (
             <Ds_checkbox
               key={index}
@@ -124,6 +158,8 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
               name={checkbox.label}
               value={checkbox.value.toString()}
               label={checkbox.label}
+              defaultChecked={true}
+            // defaultChecked={true}
             />
           ))}
         </div>
@@ -185,7 +221,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
         <div className={styles.applicationDeposits}>
           <DsButton
             id="optionBtn"
-            label="Application Deposits"
+            label="Applicable Deposits"
             className={styles.optionBtn + " " + styles.depositsBtn}
             endIcon={<Image src={downarrow} alt="downarrow" />}
             onClick={(e) => handleonclick(e)}
@@ -204,7 +240,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
                   mode={mode}
                   paidBy={paidBy}
                   downloadVisible={true}
-                />
+                  paymentCompletedVisible={paymentCheckVisible} />
               </div>
             )
           );

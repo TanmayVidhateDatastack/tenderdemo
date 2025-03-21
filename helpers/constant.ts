@@ -86,6 +86,8 @@ export const getAllOrdersURL = apiHostUrl + "/orders";
 export const searchTransporterURL = apiHostUrl + "/customers/filter?name=";
 export const getTransporterURL = apiHostUrl + "/customers/";
 export const getAllStatusLogURL = apiHostUrl + "/status";
+export const getAllDocuments = apiLocalUrl + "/tender/docs";
+
 
 export const getAllTenders = apiServerUrl + "/tenders";
 

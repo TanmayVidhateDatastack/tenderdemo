@@ -64,6 +64,7 @@
   .notes{
     padding: 3px;
     padding-top: 20px;
+    background-color: var(--grey-50) !important;
   }
   
   .optionBtn{
@@ -117,6 +118,6 @@
     color: var(--background);
   }
 
-  
- 
- 
+  .feesCheckboxes{
+    padding: 0.1rem !important;
+  }

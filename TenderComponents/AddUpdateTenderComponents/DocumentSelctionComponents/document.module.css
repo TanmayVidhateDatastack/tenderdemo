@@ -88,6 +88,9 @@
   border-bottom: 1px solid var(--grey-100);
   padding: 2px;
 }
+.documentsDivs{
+  margin-bottom: 15px !important;
+}
 @media (max-width: 1200px) {
   .details > div,.transportDetails {
     grid-template-columns: repeat(

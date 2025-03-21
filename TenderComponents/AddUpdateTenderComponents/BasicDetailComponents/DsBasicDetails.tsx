@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAllMetaData, getTenderUserRoles, getUserRoles } from "@/helpers/constant";
+import { getAllMetaData, getTenderUserRoles } from "@/helpers/constant";
 import fetchData from "@/helpers/Method/fetchData";
 import { tenderDetails, applierSupplierDetails, supplyDetails, DsSelectOption } from "../../../helpers/types";
 import DsDepositeDocuments, { DepositDocument } from "./DsDepositeDocuments";
@@ -42,6 +42,7 @@ const DsBasicDetails = () => {
     DsSelectOption[]
   >([]);
   const [metadata, setMetadata] = useState<MetadataItem[]>([]);
+  const [role, setRole] = useState<string>("");
 
   const handleFetch = async () => {
     try {
@@ -121,9 +122,27 @@ const DsBasicDetails = () => {
     } catch (error) {
       console.error("Fetch error: ", error);
     }
-  }; 
+  };
+
+  const handleRoleFetch = async () => {
+    try {
+      const res = await fetchData({ url: getTenderUserRoles });
+      if (res.code === 200) {
+        const result = res.result;
+        setRole(result.roleName);
+        console.log("result teder role : ", result)
+      } else {
+        console.error("Error fetching data: ", res.message || "Unknown error");
+      }
+    } catch (error) {
+      console.error("Fetch error: ", error);
+    }
+  };
+
+
   useEffect(() => {
     handleFetch();
+    handleRoleFetch()
   }, []);
 
 
@@ -156,7 +175,9 @@ const DsBasicDetails = () => {
             setDepositeDocuments(docs);
           }}
           depositeDocument={depositeDocument}
-          applicableDeposits={applicableDocuments} />
+          applicableDeposits={applicableDocuments}
+          role={role}
+        />
       </div>
       <span className={styles.Seperator}>
       </span>

@@ -16,8 +16,8 @@ class ActionStatus {
   notiType: "success" | "bonus" | "info" | "error" | "cross" = "success";
   notiMsg: string = "";
   showNotification: boolean = false;
-} 
-
+}
+ 
 interface TenderDataContextType {
   tenderData: TenderData;
   actionStatus: ActionStatus; 
@@ -54,15 +54,15 @@ interface TenderDataContextType {
   removeApplicableCondition: (conditionType: string) => void;
   saveTender: (status: dsStatus) => Promise<void>;
 }
-
+ 
 const TenderDataContext = createContext<TenderDataContextType | undefined>(
   undefined
 );
-
+ 
 export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   children
 }) => {
-
+ 
   const [tenderData, setTenderData] = useState<TenderData>({
     customerId: 0,
     customerLocationId: 0,
@@ -84,7 +84,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     suppliedId: null,
     supplierDiscount: 0,
     createdBy: 0,
-    lastUpdatedBy: 0, 
+    lastUpdatedBy: 0,
     comments: "",
     fees: [],
     supplyConditions: {
@@ -97,16 +97,16 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     products: [],
     documentList: []
   });
-
-
-
-
+ 
+ 
+ 
+ 
   const [actionStatus, setActionStatus] = useState<ActionStatus>({
     notiMsg: "",
     notiType: "success",
     showNotification: false,
   });
-
+ 
   // ✅ Update top-level tender fields
   const updateTenderData = (
     key: keyof TenderData,
@@ -235,7 +235,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   const addApplicableCondition = (type: string) => {
     setTenderData((prev) => ({
       ...prev,
-
+ 
       supplyConditions: {
         ...prev.supplyConditions,
         applicableConditions: [
@@ -248,12 +248,12 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       }
     }));
   };
-
+ 
   // ✅ Remove an applicable condition by type
   const removeApplicableCondition = (conditionType: string) => {
     setTenderData((prev) => ({
       ...prev,
-
+ 
       supplyConditions: {
         ...prev.supplyConditions,
         applicableConditions: prev.supplyConditions.applicableConditions.filter(
@@ -262,33 +262,33 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       }
     }));
   };
-  
+ 
   const setActionStatusValues = useCallback((actionStatus: ActionStatus) => {
     setActionStatus(actionStatus);
   }, [tenderData]
   );
-
+ 
   const tenderDataCopyRef = useRef(tenderData);
-
+ 
   const router = useRouter();
   const goBack = () => {
     router.back();
   };
-
+ 
   // Update the ref whenever orderDataCopy changes
   useEffect(() => {
     tenderDataCopyRef .current = tenderData;
   }, [tenderData]);
-
+ 
   const stripReadOnlyProperties = (obj: any): any => {
     if (Array.isArray(obj)) {
       return obj.map((item) => stripReadOnlyProperties(item));
     }
-
+ 
     if (typeof obj !== "object" || obj === null) {
       return obj;
     }
-
+ 
     const newObj: any = {};
     for (const key in obj) {
       if (obj[key] && typeof obj[key] === "object") {
@@ -306,13 +306,13 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     async (status: dsStatus) => {
       if (!tenderData) return;
       console.log("sAVEEEE", tenderData);
-
+ 
       const dataToSend = stripReadOnlyProperties({
         ...tenderData,
         status: status.toUpperCase(),
         createdBy: 3,
       });
-
+ 
       console.log("sAVEEEE", dataToSend);
       try {
         await fetchData({
@@ -330,7 +330,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             showToaster("create-order-toaster");
             setTimeout(() => {
               goBack();
-
+ 
             }, closeTimeForTender)
           } else {
             setActionStatus({
@@ -341,7 +341,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             showToaster("create-order-toaster");
           }
         });
-
+ 
         // console.log("result  = ", result);
         //console.log("Order saved successfully");
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -351,8 +351,8 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     },
     [tenderData, fetchData]
   );
-
-
+ 
+ 
   return (
     <TenderDataContext.Provider
       value={{
@@ -377,7 +377,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     </TenderDataContext.Provider>
   );
 };
-
+ 
 // ✅ Custom hook to access context
 export const useTenderData = () => {
   const context = useContext(TenderDataContext);
@@ -386,4 +386,6 @@ export const useTenderData = () => {
   }
   return context;
 };
-
+ 
+ 
+ 

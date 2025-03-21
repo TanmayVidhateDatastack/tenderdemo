@@ -26,7 +26,7 @@ import addIcon from "../Icons/smallIcons/add.svg";
 import { RootState } from "@/Redux/store/store";
 import { useAppSelector } from "@/Redux/hook/hook";
 import DsName from "@/Elements/DsComponents/DsName/DsName";
-// import DsName from "@/Elements/DsComponents/DsName/dsName";
+ import btnStyles from "@/Elements/DsComponents/DsButtons/dsButton.module.css";
 
 
 
@@ -260,7 +260,7 @@ export default function Home() {
           {
             columnIndex: 1,
             className: " cell  cell-submissiondate text-dark-0 ",
-            content: <DsName id={item.tenderId + "submittionDate"} name={item.submittionDate || "-"} />,
+            content: <DsName id={item.tenderId + "submittionDate"} name={formatDate(item.submittionDate)} />,
             filterValue: item.submittionDate || "-",
             contentType: "string",
           },
@@ -406,46 +406,7 @@ export default function Home() {
       console.error("Error fetching data:", error);
     }
   };
-  // const fetchMetaData = async () => {
-  //   try {
-  //     const result = await fetchData({ url: getAllMetaData });
-  //     console.log("Fetched Metadata Response:", result);
 
-  //     if (!result || typeof result !== "object") {
-  //       console.error(" API returned unexpected format:", result);
-  //       return;
-  //     }
-
-  //     // Extract the `tenderType` array from the metadata response
-  //     const metadataArray = result.result?.tenderType ?? [];
-
-  //     if (!Array.isArray(metadataArray)) {
-  //       console.error("tenderType metadata is not an array:", metadataArray);
-  //       return;
-  //     }
-
-  //     setMetaData(metadataArray);
-  //     console.log("Metadata successfully set:", metadataArray);
-  //   } catch (err) {
-  //     console.error(" Error fetching metadata:", err);
-  //   }
-  // };
-  // useEffect(() => {
-  //   if (metaData.length > 0 && data.length > 0) {
-  //     const metadataMap = new Map(metaData.map((item) => [item.codeValue, item.codeDescription]));
-
-  //     const enriched = data.map((tender) => ({
-  //       ...tender,
-  //       tenderType: metadataMap.get(tender.tenderType) || "Unknown Type",
-  //     }));
-
-  //     setEnrichedTenders(enriched);
-  // console.log("data of tender type ",enriched);
-
-
-
-  //   }
-  // }, [metaData, data]); // Runs when metadata or tenders change
 
   const handleFetchMetaData = async () => {
     await fetchData({ url: getAllMetaData })
@@ -494,220 +455,14 @@ export default function Home() {
 
     }
   };
-
-
-
-
-
-  // const addTableData = (tender: Tender[]) => {
-  //   console.log("Adding table data:", tender);
-  //   const newRows: DsTableRow[] = tender.map((t, index) => ({
-  //     rowIndex: index,
-  //     className: "cellRow ",
-  //     rowIcon:
-  //       t?.type === "institutional" ? (
-  //         <div
-  //         style={{
-  //           width: "0.875em",
-  //           height: "0.875em",
-  //           position: "relative",
-  //         }}
-  //       >
-  //         <Image
-  //           src={institutional}
-  //           alt="institutional"
-  //           layout="fill"
-  //         objectFit="cover"
-  //         />
-  //       </div>
-  //     ) : (
-  //       <div
-  //         style={{
-  //           width: "0.875em",
-  //           height: "0.875em",
-  //           position: "relative",
-  //         }}
-  //       >
-  //         <Image src={corporate} 
-  //         alt="corporate"
-  //         layout="fill"
-  //         objectFit="cover" />
-  //       </div>
-  //       ),
-  //     customAttributes: { iconValue: t?.type?.toString() ?? "" },
-  //     content: [
-  //       {
-  //         columnIndex: 0,
-  //         className: " cell cell-customer text-dark-1 " ,
-  //         content:t.customerName || "-",
-  //         filterValue:t.customerName || "-",
-  //         contentType: "string",
-  //       },
-  //       {
-  //         columnIndex: 1,
-  //         className: " cell cell-submissiondate text-dark-0 ",
-  //         content: t.submittionDate,
-  //         filterValue: t.submittionDate,
-  //         contentType: "string",
-  //       },
-  //       {
-  //         columnIndex: 2,
-  //         className: " cell cell-days-to-submit ",
-  //         content: t.submittionDate ? calculateDueStatus(t.submittionDate) : "-",
-  //         filterValue: t.submittionDate ? calculateDueStatus(t.submittionDate) : "-",
-  //         contentType: "string",
-  //       },
-  //       {
-  //         columnIndex: 3,
-  //         className: " cell cell-tenderid text-dark-0 ",
-  //         content: t.tenderId,
-  //         filterValue: t.tenderId,
-  //         contentType: "string",
-  //       },
-  //       {
-  //         columnIndex: 4,
-  //         className: "cell cell-tendertype text-dark-1",
-  //         content: formatTenderType(t.tenderType), // Apply formatting
-  //         filterValue: formatTenderType(t.tenderType), // Apply formatting
-  //         contentType: "string",
-  //       },
-
-  //       {
-  //         columnIndex: 5,
-  //         className: " cell cell-depot text-dark-1 ",
-
-  //         content:t.depot || "-",
-  //         filterValue: t.depot || "-",
-
-  //         contentType: "string",
-  //       },
-  //       {
-  //         columnIndex: 6,
-  //         className: " cell cell-appliedby text-dark-0 ",
-
-  //         content:t.appliedBy || "-",
-  //         filterValue: t.appliedBy || "-",
-
-  //         contentType: "string",
-  //       },
-  //       {
-  //         columnIndex: 7,
-  //         className: " cell cell-suppliedby text-dark-0 ",
-
-  //         content: t.suppliedBy || "-",
-  //         filterValue: t.suppliedBy || "-",
-
-  //         contentType: "string",
-  //       },
-  //       {
-  //         columnIndex: 8,
-  //         className: " cell cell-preparedby text-dark-0 ",
-
-  //         content: t.preparedBy || "-",
-  //         filterValue: t.preparedBy || "-",
-  //         contentType: "string",
-  //       },
-  //       {
-  //         columnIndex: 9,
-  //         className: " cell cell-value  text-dark-1 ",
-  //         content: <DsCurrency format={"IND"} id={"value"} amount={parseInt(t.value)} type={"short"}/>,
-  //         filterValue: t.value,
-  //         contentType: "number",
-  //       },
-  //       {
-  //         columnIndex: 10,
-  //         className: " cell cell-status ",
-
-  //         content: t.status ? (
-  //           <DsStatusIndicator
-  //             type="user_defined"
-  //             className={`${
-  //               t?.status?.tenderStatus
-  //                 ? styles[
-  //                     t?.status?.tenderStatus
-  //                       ?.replaceAll(" ", "_")
-  //                       .toLowerCase()
-  //                   ]
-  //                 : ""
-  //             }`}
-  //           status={t.status.tenderStatus }
-  //           label={t.status.tenderStatus }
-  //             comment={
-  //               t.status?.message
-  //                 ? typeof t.status.message === "object"
-  //                   ? JSON.stringify(t.status.message)
-  //                   : t.status.message.toString()
-  //                 : ""
-  //             }
-  //           />
-  //         ) : 
-  //         (
-  //           "No Status"
-  //         ),
-  //         filterValue: t.status?.tenderStatus ?? "Unknown",
-  //         contentType: "reactNode",
-  //       },
-  //     ],
-  //   }));
-
-  //   console.log("New Rows:", newRows);
-
-  //   setTempTableData((prevData) => ({
-  //     ...prevData,
-  //     rows: newRows,
-  //   }));
-
-  // };
-
-
-  // useEffect(() => {
-  //   createContext(
-  //     "overflowContents",
-
-
-  //   );
-  // }, []);
-
-
-
-
-
-
-
-
-
-
-
-  // const enrichTendersWithMetadata = () => {
-  //   if (data.length === 0 || metaData.length === 0) {
-  //     console.error("Tenders or metadata not available yet!");
-  //     return;
-  //   }
-
-  //   // Find the tenderType metadata
-  //   const tenderTypeMeta = metaData.find((category:TenderMetaData) => category.result.tenderType);
-  //   if (!tenderTypeMeta || !Array.isArray(tenderTypeMeta.result.tenderType)) {
-  //     console.error("Tender type metadata not found!");
-  //     return;
-  //   }
-
-  //   // Create a lookup map for tender types
-  //   const metadataMap = new Map<string, string>();
-  //   tenderTypeMeta.result.tenderType.forEach((item) => {
-  //     metadataMap.set(item.codeValue, item.codeDescription);
-  //   });
-
-  //   // Update tenders with metadata descriptions
-  //   const updatedTenders = data.map((tender) => ({
-  //     ...tender,
-  //     tenderType: metadataMap.get(tender.tenderType) || tender.tenderType, // Replace code with description
-  //   }));
-
-  //   setData(updatedTenders); 
-  //   console.log("updatedTenders",updatedTenders)// Update state with enriched tenders
-  // };
-
-
+  function formatDate(isoString) {
+    if (!isoString) return "-"; // Handle empty or undefined values
+    const date = new Date(isoString);
+    const day = date.getDate();
+    const month = date.getMonth() + 1; // Months are zero-based
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+}
 
 
   const addTableData = (tender: Tender[]) => {
@@ -737,7 +492,7 @@ export default function Home() {
         {
           columnIndex: 1,
           className: " cell cell-submissiondate text-dark-0 ",
-          content: <DsName id={t.tenderId + "submittionDate"} name={t.submittionDate || "-"} />,
+          content: <DsName id={t.tenderId + "submittionDate"} name={formatDate(t.submittionDate)} />,
           filterValue: t.submittionDate,
           contentType: "string",
         },
@@ -869,25 +624,25 @@ export default function Home() {
           <>
             <DsFilterActions data={data} setFilteredData={setFilteredData} />
             {newButtonVisible &&
+    
               <DsButton
-                id="actionBtn"
-                buttonColor="btnPrimary"
-                className={styles.newbutton1}
-                buttonViewStyle="btnOutlined"
-                startIcon={
-                  <div
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      position: "relative",
-                    }}
-                  >
-                    <Image
-                      src={iconSrc}
-                      alt="Add Icon"
-                      layout="fill"
-                      objectFit="cover"
-                    />
+              id="actionBtn"
+              buttonColor="btnPrimary"
+              className={btnStyles.btnOutlined}
+              startIcon={
+                <div
+                  style={{
+                    width: "0.875em",
+                    height: "0.875em",
+                    position: "relative",
+                  }}
+                >
+                  <Image
+                    src={iconSrc}
+                    alt="Add Icon"
+                    layout="fill"
+                    objectFit="cover"
+                  />
                   </div>
                 }
                 onClick={(e) =>

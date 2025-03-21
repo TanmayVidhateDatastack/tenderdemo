@@ -10,9 +10,17 @@ import Toaster from "@/Elements/DsComponents/DsToaster/DsToaster";
 import { closeTimeForTender } from "@/helpers/constant";
 import pagestyles from "@/app/page.module.css"
 import { closeAllContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
+import DocumentProvider from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/DocumentsContextProvider";
+import DsPane from "@/Elements/DsComponents/DsPane/DsPane";
+import DsAddTenderDocumentPane from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/DsAddTenderDocumentPane";
+import DocumentSelectorArea from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/DsDocumentSelectionArea";
+import PaneOpenButton from "@/Elements/DsComponents/DsPane/PaneOpenButton";
+import styles from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/document.module.css";
+
 const DsTenderIdPage: React.FC = () => {
   const { setActionStatusValues, actionStatus, saveTender } = useTenderData();
   const [selectedTabId] = useTabState("tenderPage"); // Use the custom hook
+  
 
   //  console.log(tenderData);
   const tabs = [
@@ -39,6 +47,15 @@ const DsTenderIdPage: React.FC = () => {
               <DsBasicDetails />
             </div>
           </TabView>
+          <TabView tabId="2" pageName="tenderPage"> 
+                  <DocumentProvider>   
+                  <DsPane id="high" side="right" title="Documents"> 
+                      <DsAddTenderDocumentPane/>  
+                  </DsPane>  {/* ✅ Now inside DocumentProvider */}
+                    <DocumentSelectorArea />  {/* ✅ Now inside DocumentProvider */}
+                  </DocumentProvider>   
+                 <PaneOpenButton className={styles.pane} id="high" paneId="high" label="Add Documents"/>
+                </TabView>
           {/* <TabView tabId="1" pageName="tenderPage" >
           <DsTenderProduct productList={tenderData.products} setProductList={addTenderProduct} />
           new prod
