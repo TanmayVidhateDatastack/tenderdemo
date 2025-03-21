@@ -12,7 +12,7 @@
 // export const InProcess = "InProcess";
 // export const Inactive = "INAC";
 // export const Active = "ACTV";
-// export const Complete = "CMPL";
+// export const Complete = "CMPL";  
 // export const Submit = "SUBMIT";
 // export const Processing = "PROC";
 // export const Review_Pending = "REVP";
