@@ -375,10 +375,6 @@ export interface tab {
   disable?: boolean;
   customAttributes?: Record<string, string | number | boolean>;
   onClick?: (tab: tab) => void;
-  count?: number | "00";
-  disable?: boolean;
-  customAttributes?: Record<string, string | number | boolean>;
-  onClick?: (tab: tab) => void;
 }
  
 export interface TabNavProps {
@@ -403,6 +399,7 @@ export interface datalistOptions {
   attributes: Record<string, string>;
   id: string;
   value?: string;
+  label?:string;
   secondaryValue?: string | React.ReactNode;
 }
 
