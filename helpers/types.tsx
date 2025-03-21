@@ -1171,4 +1171,16 @@ export type TenderMetaData = {
   error: null | string;
   exception: null | string;
 };
-
+export interface MultiLevelSearchProps{
+  setOptions:(values:unknown)=>datalistOptions[];
+  setSearchUrl:(searchTerm:string)=>string;
+  onSelect?:(selectedOption:datalistOptions)=>void;
+  id:string;
+  selectedOption?: datalistOptions;
+  label:string;
+ }
+ export interface DsMultiLevelSelectOption{
+  label:string;
+  value:string|MultiLevelSearchProps
+ }
+ 
