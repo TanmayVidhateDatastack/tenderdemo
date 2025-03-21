@@ -3,11 +3,11 @@ import { getAllMetaData, getTenderUserRoles } from "@/helpers/constant";
 import fetchData from "@/helpers/Method/fetchData";
 import { tenderDetails, applierSupplierDetails, supplyDetails, DsSelectOption } from "../../../helpers/types";
 import DsDepositeDocuments, { DepositDocument } from "./DsDepositeDocuments";
-import DsApplicableConditions from "./DsApplicableConditions";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css"
 import DsApplierSupplierDetails from "./DsApplierSupplierDetails ";
-import DsSupplyDetails from "./DsSupplyDetails ";
 import DsTenderDetails from "./DsTenderDetails ";
+import DsSupplyDetails from "./DsSupplyDetails";
+import DsApplicableConditions from "./DsApplicableConditions";
 
 const DsBasicDetails = () => {
   const [tenderDetails, setTenderDetails] = useState<tenderDetails>({

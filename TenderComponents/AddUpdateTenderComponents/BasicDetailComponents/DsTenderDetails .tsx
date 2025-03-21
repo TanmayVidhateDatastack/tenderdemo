@@ -11,11 +11,6 @@ import {
   searchCustomers,
   tenderDetailsProps,
 } from "@/helpers/types";
-import {
-  datalistOptions,
-  searchCustomers,
-  tenderDetailsProps,
-} from "@/helpers/types";
 import { useTenderData } from "../TenderDataContextProvider";
 import { debounce } from "@/helpers/Method/optimization";
 import DsDatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker";

@@ -13,15 +13,15 @@ import {
   closeContext
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import { DsSelectOption } from "@/helpers/types";
-import DsButton from "@/Elements/DsComponents/DsButtons/dsButton"; 
- 
+import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
+
 import DsSupplyConditions from "./DsSupplyConditions";
 import { useTenderData } from "../TenderDataContextProvider";
- 
+
 export interface ApplicableConditionsProps {
   applicableConditions: DsSelectOption[] | [];
 }
- 
+
 const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
   applicableConditions
 }) => {
@@ -31,7 +31,7 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
     DsSelectOption[]
   >([]);
   const { addApplicableCondition, removeApplicableCondition } = useTenderData();
- 
+
   const [conditionsVisibility, setConditionsVisibility] = useState<
     Record<string, boolean>
   >({});
@@ -52,21 +52,21 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
         value: conditions.value
       }));
       console.log("mapped Conditions:", mappedConditions);
- 
+
       setApplicableCheckboxes(mappedConditions);
- 
+
       const options: Record<string, boolean> = mappedConditions.reduce<
         Record<string, boolean>
-      >((acc, opt) => { 
+      >((acc, opt) => {
         const val = opt.value;
- 
+
         if (typeof val === "string") {
           acc[val] = false; // Add string keys directly to the object
         }
- 
+
         return acc;
       }, {});
- 
+
       setConditionsVisibility(options);
     }
   }, [applicableConditions]);
@@ -84,11 +84,11 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
     applicableCheckboxes.forEach((opt) => {
       const id = opt.value.toString();
       const checkbox = document.getElementById(id) as HTMLInputElement;
- 
+
       if (checkbox?.checked) {
         selectedConditions.add(id); // 🔥 Add to Set (prevents duplicates)
         conditionsVisibility[id] = true;
- 
+
         addApplicableCondition(id);
       } else {
         selectedConditions.delete(id); // 🔥 Remove if unchecked
@@ -99,7 +99,7 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
     closeAllContext();
     // console.log("Currently Selected:", Array.from(selectedConditions)); // Debugging output
   };
- 
+
   useEffect(() => {
     createContext(
       contextMenuId,
@@ -129,22 +129,22 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
       const target = (e.target as HTMLElement).closest(
         `.${styles["depositsBtn"]}`
       );
- 
+
       const target2 = (e.target as HTMLElement).closest(`#${contextMenuId}`);
- 
+
       if (!target && !target2) {
         closeContext(contextMenuId);
         return;
       }
     });
- 
+
     return () => {
       window.removeEventListener("click", (e) => {
         const target = (e.target as HTMLElement).closest(
           `.${styles["depositsBtn"]}`
         );
         const target2 = (e.target as HTMLElement).closest(`#${contextMenuId}`);
- 
+
         if (!target && !target2) {
           closeContext(contextMenuId);
           return;
@@ -180,5 +180,3 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
   );
 };
 export default DsApplicableConditions;
- 
- 

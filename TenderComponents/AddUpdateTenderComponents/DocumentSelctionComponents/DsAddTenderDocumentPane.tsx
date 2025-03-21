@@ -37,7 +37,6 @@ const DsAddTenderDocumentPane: React.FC = () => {
           },
           {}
         );
-
         setGroupedDocuments(grouped);
       } else {
         console.error("Error fetching data: ", res.message || "Unknown error");
@@ -91,7 +90,6 @@ const DsAddTenderDocumentPane: React.FC = () => {
         });
 
         console.log("Updated Document Context:", updatedData); // ✅ Debugging output
-
         return updatedData;
       });
     }
