@@ -469,7 +469,7 @@ export interface tdprops {
   className: string;
   children?: React.ReactNode;
   content?: string | React.ReactNode;
-  filterValue?: string | number | React.ReactNode | undefined;
+  filterValue?: string | number|React.ReactNode;
   type: string;
   colSpan?: number;
   rowSpan?: number;
@@ -490,6 +490,7 @@ export interface tdprops {
   ) => void;
   onClick?: (rowIndex: number, columnIndex: number) => void;
   handleMouseOver?: (e: React.MouseEvent<HTMLElement>) => void;
+  handleDoubleClick?:(e:React.MouseEvent<HTMLElement>)=>void;
   customAttributes?: Record<string, string | number | boolean>;
 }
 
