@@ -7,6 +7,9 @@ import fetchData from "@/helpers/Method/fetchData";
 import { documents } from "@/helpers/types";
 import { DocumentContext } from "./DocumentsContextProvider";
 import { getAllDocuments } from "@/helpers/constant";
+import DsDataList from "@/Elements/DsComponents/DsInputs/dsDatalist";
+import Image from "next/image";
+import search from "@/Icons/searchicon.svg"
 
 const DsAddTenderDocumentPane: React.FC = () => {
   const [openAccordion, setOpenAccordion] = useState<string | null>(null);
@@ -100,6 +103,13 @@ const DsAddTenderDocumentPane: React.FC = () => {
   return (
     <>
       <div className={styles.padd}>
+        <DsDataList
+          id="documentOpt"
+          dataListId="documents"
+          label="Search Document Here"
+          iconEnd={<Image src={search} alt="search" />}
+          options={[]}
+        />
         {Object.entries(groupedDocuments).map(([type, docs]) => (
           <Accordion
             key={type}

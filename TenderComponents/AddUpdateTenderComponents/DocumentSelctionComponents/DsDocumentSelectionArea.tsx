@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import styles from "./document.module.css";
 import DocumentSelector from "@/Elements/DsComponents/dsDocumentSelector/dsDocumentSelector";
 import { DocumentContext } from "./DocumentsContextProvider";
@@ -12,7 +12,7 @@ const DocumentSelectorArea: React.FC = () => {
 
   const { documentData } = documentContext;
 
-  const handleRemoveDocument = (documentName: string) => { // 🔥 Fix: Use string instead of documents
+  const handleRemoveDocument = (documentName: string) => {
     if (!documentContext) return;
 
     // ✅ Remove document from context
@@ -33,6 +33,17 @@ const DocumentSelectorArea: React.FC = () => {
     });
   };
 
+  const [totalSelectedDocuments, setTotalSelectedDocuments] = useState(0);
+
+  useEffect(() => {
+    const totalCount = documentData.reduce((acc, { documents }) => acc + documents.length, 0);
+    setTotalSelectedDocuments(totalCount);
+  }, [documentData]); // Runs whenever documentData changes
+
+  useEffect(() => {
+    console.log("total selected documents : ", totalSelectedDocuments);
+  }, [totalSelectedDocuments]);
+
 
   return (
     <div className={styles.selectorContainer}>
@@ -42,8 +53,8 @@ const DocumentSelectorArea: React.FC = () => {
             <DocumentSelector
               headerTitle={type}
               headerNumber={documents.length.toString()}
-              initialDocuments={documents.map((doc) => doc.documentName)} // 🔥 Pass only names
-              handleOnRemoveClick={(docName) => handleRemoveDocument(docName)} // 🔥 Pass only name, not full object
+              initialDocuments={documents.map((doc) => doc.documentName)}
+              handleOnRemoveClick={(docName) => handleRemoveDocument(docName)}
             />
           </div>
         ) : null

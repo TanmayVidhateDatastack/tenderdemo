@@ -16,6 +16,7 @@ interface DocumentContextType {
   setDocumentData: Dispatch<SetStateAction<DocumentType[]>>;
   selectedDocuments: Document[];
   setSelectedDocuments: Dispatch<SetStateAction<Document[]>>;
+  totalSelectedDocuments: number;
   toggleDocumentVisibility: (type: string, documentName: string) => void;
 }
 
@@ -28,17 +29,18 @@ interface DocumentProviderProps {
 export const DocumentProvider: React.FC<DocumentProviderProps> = ({ children }) => {
   const [documentData, setDocumentData] = useState<DocumentType[]>([]);
   const [selectedDocuments, setSelectedDocuments] = useState<Document[]>([]);
+  const [totalSelectedDocuments, setTotalSelectedDocuments] = useState(0);
 
   const toggleDocumentVisibility = (type: string, documentName: string) => {
     setDocumentData((prevData) =>
       prevData.map((docType) =>
         docType.type === type
           ? {
-              ...docType,
-              documents: docType.documents.map((doc) =>
-                doc.documentName === documentName ? { ...doc, isVisible: !doc.isVisible } : doc
-              ),
-            }
+            ...docType,
+            documents: docType.documents.map((doc) =>
+              doc.documentName === documentName ? { ...doc, isVisible: !doc.isVisible } : doc
+            ),
+          }
           : docType
       )
     );
@@ -46,21 +48,28 @@ export const DocumentProvider: React.FC<DocumentProviderProps> = ({ children }) 
 
   // ✅ Automatically remove deselected documents from selectedDocuments
   useEffect(() => {
-    setSelectedDocuments((prevSelected) => 
-      prevSelected.filter((doc) => 
-        documentData.some((group) => 
+    setSelectedDocuments((prevSelected) =>
+      prevSelected.filter((doc) =>
+        documentData.some((group) =>
           group.documents.some((d) => d.documentName === doc.documentName)
         )
       )
     );
   }, [documentData]);
-  
+
+  // ✅ Update totalSelectedDocuments count when documentData changes
+  useEffect(() => {
+    const totalCount = documentData.reduce((acc, { documents }) => acc + documents.length, 0);
+    setTotalSelectedDocuments(totalCount);
+  }, [documentData]);
+
   useEffect(() => {
     console.log("Context Updated SelectedDocuments:", selectedDocuments);
   }, [selectedDocuments]); // ✅ Debugging
-  
+
 
   const contextValue: DocumentContextType = {
+    totalSelectedDocuments,
     documentData,
     setDocumentData,
     selectedDocuments,

@@ -117,8 +117,22 @@
 
   .docPane{
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: right;
+  }
+  .totalCount{
+    display: flex;
+    padding-left: 0.5rem;
+    padding-top: 0.5rem;
+  }
+
+  .count{
+    margin-left: 1rem;
+    background-color: var(--grey-50);
+    border-radius: 50%;
+    width: 2rem;
+    align-items: center;
+    text-align: center;
   }
   @media (max-width: 1200px) {
     .details > div,
