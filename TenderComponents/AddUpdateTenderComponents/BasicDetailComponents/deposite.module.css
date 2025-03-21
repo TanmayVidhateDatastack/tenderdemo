@@ -59,6 +59,11 @@
     font-size: var(--subtitle2);
     background: inherit;
   } 
+
+  .fieldColors{
+    background-color: var(--background) !important;
+    border-radius: 4px;
+  }
   
   .notes{
     padding: 3px;
