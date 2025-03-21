@@ -60,7 +60,7 @@ export interface applierSupplierDetails {
 }
 export interface supplyDetails {
   supplyPoints: DsSelectOption[];
-  reportRequirements: DsSelectOption[];
+  reportRequirements: DsMultiLevelSelectOption[];
   eligibility: DsSelectOption[];
 }
 
@@ -403,8 +403,11 @@ export interface datalistOptions {
   attributes: Record<string, string>;
   id: string;
   value?: string;
+  label?: string;
   secondaryValue?: string | React.ReactNode;
 }
+
+
 
 export interface InputTextAreaProps {
   //input textfield and textArea propes
@@ -469,7 +472,7 @@ export interface tdprops {
   className: string;
   children?: React.ReactNode;
   content?: string | React.ReactNode;
-  filterValue?: string | number|React.ReactNode;
+  filterValue?: string | number | React.ReactNode;
   type: string;
   colSpan?: number;
   rowSpan?: number;
@@ -490,7 +493,7 @@ export interface tdprops {
   ) => void;
   onClick?: (rowIndex: number, columnIndex: number) => void;
   handleMouseOver?: (e: React.MouseEvent<HTMLElement>) => void;
-  handleDoubleClick?:(e:React.MouseEvent<HTMLElement>)=>void;
+  handleDoubleClick?: (e: React.MouseEvent<HTMLElement>) => void;
   customAttributes?: Record<string, string | number | boolean>;
 }
 
@@ -1173,4 +1176,17 @@ export type TenderMetaData = {
   error: null | string;
   exception: null | string;
 };
+
+export interface MultiLevelSearchProps {
+  setOptions: (values: unknown) => datalistOptions[];
+  setSearchUrl: (searchTerm: string) => string;
+  onSelect?: (selectedOption: datalistOptions) => void;
+  id: string;
+  selectedOption?: datalistOptions;
+  label: string;
+}
+export interface DsMultiLevelSelectOption {
+  label: string;
+  value: string | MultiLevelSearchProps
+}
 

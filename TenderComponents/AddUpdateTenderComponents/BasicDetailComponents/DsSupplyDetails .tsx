@@ -2,26 +2,26 @@ import DsSingleSelect from "@/Elements/DsComponents/dsSelect/dsSingleSelect";
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import DsMultiSelect from "@/Elements/DsComponents/dsSelect/dsMultiSelect";
 import DsSelectMultiLevel from "@/Elements/DsComponents/dsSelect/dsSelectMultiLevel";
-import { supplyDetailsProps } from "@/helpers/types";
+import { datalistOptions, supplyDetailsProps } from "@/helpers/types";
 import { useTenderData } from "../TenderDataContextProvider";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css"
 const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
   const { updateSupplyCondition } = useTenderData();
   return (
     <>
-    <div>Supply Conditions </div> 
+      <div>Supply Conditions </div>
       <div className={styles.inputDetails}>
-        <DsSingleSelect 
+        <DsSingleSelect
           options={supplyDetails.supplyPoints}
           label="Supply points"
           placeholder={"Please select here"}
           id={"supplyPoints"}
-          setSelectOption={(option) => { 
+          setSelectOption={(option) => {
             if (typeof option.value == "string")
               updateSupplyCondition("supplyPoint", option.value);
           }}
         ></DsSingleSelect>
-        <DsTextField 
+        <DsTextField
           label="Provide no. of consignees"
           // placeholder="Please type here"
           onChange={(e) => updateSupplyCondition("consigneesCount", e.target.value)}
@@ -30,13 +30,16 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
           options={supplyDetails.reportRequirements}
           label="Test report requirement"
           placeholder={"Please select here"}
-          id={"reportReq"}                                                             
+          id={"reportReq"}
           setSelectOption={(option) => {
             if (typeof option.value == "string") {
-              updateSupplyCondition("testReportRequirement", option.value); 
+              updateSupplyCondition("testReportRequirement", option.value);
             }
-          }} 
-        ></DsSelectMultiLevel>
+          }}
+          isOpen={false}
+          onSelect={function (value: datalistOptions): void {
+            throw new Error("Function not implemented.");
+          }}        ></DsSelectMultiLevel>
         <DsMultiSelect
           options={supplyDetails.eligibility}
           label="Eligibility"
@@ -50,11 +53,11 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
                   acc.push(option.value);
                 }
                 return acc;
-              }, []) 
+              }, [])
             );
           }}
-        ></DsMultiSelect> 
-    </div>
+        ></DsMultiSelect>
+      </div>
     </>
   );
 };
