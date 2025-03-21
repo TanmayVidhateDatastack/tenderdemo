@@ -26,7 +26,6 @@ const DsAddTenderDocumentPane: React.FC = () => {
         const tenderDocuments = res.result.Documents.filter(
           (doc: documents) => doc.category === "TenderDocument"
         );
-
         const grouped = tenderDocuments.reduce(
           (acc: Record<string, documents[]>, doc: documents) => {
             if (!acc[doc.type]) {
@@ -53,11 +52,9 @@ const DsAddTenderDocumentPane: React.FC = () => {
   const handleCheckboxChange = (doc: documents) => {
     setSelectedDocuments((prev) => {
       const alreadySelected = prev.some((d) => d.id === doc.id);
-
       const updatedSelection = alreadySelected
         ? prev.filter((d) => d.id !== doc.id)
         : [...prev, doc];
-
       console.log("Updated selectedDocuments:", updatedSelection);
 
       return updatedSelection;

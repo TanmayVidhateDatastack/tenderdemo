@@ -167,9 +167,9 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
             }
           ></DsTextField>
         </div>
-        <div className={deptStyle.fields}>
+        <div className={deptStyle.fields}> 
           <DsTextField
-            label="Tender Number"
+            label="Tender Number"   
             // placeholder="Please Type Here"
             onChange={(e) => updateTenderData("tenderNumber", e.target.value)}
           ></DsTextField>
@@ -191,8 +191,6 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         <div className={deptStyle.fields}>
           <DsDatePicker
             id={"issueDate"}
-            initialDate={""}
-            className={""}
             setDateValue={(date) => {
               if (date instanceof Date) {
                 updateTenderData("issueDate", getTodayDate(date));
@@ -201,13 +199,11 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
             // disable={true}
             placeholder="DD/MM/YYYY"
             label="Tender issue date"
-          />
+          />  
         </div>
         <div className={deptStyle.fields}>
           <DsDatePicker
             id={"lastPurchaseDate"}
-            initialDate={""}
-            className={""}
             setDateValue={(date) => {
               if (date instanceof Date) {
                 updateTenderData("lastPurchaseDate", getTodayDate(date));
@@ -221,8 +217,6 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         <div className={deptStyle.fields}>
           <DsDatePicker
             id={"submissionDate"}
-            initialDate={""}
-            className={""}
             setDateValue={(date) => {
               if (date instanceof Date) {
                 updateTenderData("submissionDate", getTodayDate(date));
@@ -234,21 +228,23 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
           />
         </div>
         <div className={deptStyle.fields}>
-          <DsDatePicker
+          {/* <DsDatePicker
             id={"rateContractValidity"}
-            initialDate={""}
-            className={""}
             setDateValue={(date) => {
               if (date instanceof Date) {
                 updateTenderData("rateContractValidity", getTodayDate(date));
               }
             }}
-            // disable={true}
             placeholder="DD/MM/YYYY"
             label="Rate contract validity"
-          />
-        </div>
-        <div className={deptStyle.fields}>
+          /> */}
+          <DsTextField
+            inputType="number"
+            label="Rate contract validity"
+            onChange={(e) => updateTenderData("rateContractValidity", e.target.value)}
+          ></DsTextField>
+        </div> 
+        <div className={deptStyle.fields}> 
           <DsSingleSelect
             options={tenderDetails.submissionMode}
             // type={"single"}
@@ -264,14 +260,14 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         </div>
         <div className={deptStyle.fields}>
           <DsTextField
-            label={"Delivery Period"}
+            label={"Delivery Period ( In days )"}
             // placeholder={"Please type or select"}
             onChange={(e) => updateTenderData("deliveryPeriod", e.target.value)}
           ></DsTextField>
         </div>
         <div className={deptStyle.fields}>
           <DsTextField
-            label={"Extended Delivery Period"}
+            label={"Extended Delivery Period ( In days )"}
             // placeholder={"Please type or select"}
             inputType={"number"}
             onChange={(e) =>

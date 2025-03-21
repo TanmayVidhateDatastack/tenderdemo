@@ -53,9 +53,8 @@ const DsTenderIdPage: React.FC = () => {
                 <PaneOpenButton className={styles.pane} id="documentPaneOpenBtn" paneId="documentPane" label="Add Documents" />
               </div>
 
-              {/* ✅ Now inside DocumentProvider */}
               <div>
-                <DocumentSelectorArea />  {/* ✅ Now inside DocumentProvider */}
+                <DocumentSelectorArea />  
               </div>
 
             </TabView>

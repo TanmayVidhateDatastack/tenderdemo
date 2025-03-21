@@ -26,7 +26,7 @@ const OutsideEventObserver: React.FC<OutsideEventObserverProps> = ({ eventGroups
         );
 
         if (!isExcluded) {
-          console.log(`Event "${event.type}" outside the specified elements:`, target);
+          // console.log(`Event "${event.type}" outside the specified elements:`, target);
           if (onEventOutside) onEventOutside(event);
         }
       };

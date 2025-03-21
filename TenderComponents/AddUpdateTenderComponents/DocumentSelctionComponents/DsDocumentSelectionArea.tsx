@@ -15,7 +15,7 @@ const DocumentSelectorArea: React.FC = () => {
   const handleRemoveDocument = (documentName: string) => { // 🔥 Fix: Use string instead of documents
     if (!documentContext) return;
 
-    // ✅ Remove document from context
+    // ✅ Remove document from context   
     documentContext.setDocumentData((prevData) =>
       prevData
         .map((group) => ({
@@ -32,7 +32,6 @@ const DocumentSelectorArea: React.FC = () => {
       return updatedSelection;
     });
   };
-
 
   return (
     <div className={styles.selectorContainer}>
