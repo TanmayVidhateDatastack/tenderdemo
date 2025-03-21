@@ -49,6 +49,7 @@ export const devHostUrl = "http://localhost:3000";
 export const hostUrl = devHostUrl;
 export const Component_Library = hostUrl + "/ComponentsLibrary";
 
+// export const getAllDocuments = apiLocalUrl + "/tender/docs";
 ///Urls application Level
 
 export const salesOUrl = hostUrl + "/";

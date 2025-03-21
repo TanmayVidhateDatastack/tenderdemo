@@ -10,6 +10,13 @@ import Toaster from "@/Elements/DsComponents/DsToaster/DsToaster";
 import { closeTimeForTender } from "@/helpers/constant";
 import pagestyles from "@/app/page.module.css"
 import { closeAllContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
+import DsPane from "@/Elements/DsComponents/DsPane/DsPane";
+import PaneOpenButton from "@/Elements/DsComponents/DsPane/PaneOpenButton";
+import DocumentProvider from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/DocumentsContextProvider";
+import DsAddTenderDocumentPane from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/DsAddTenderDocumentPane";
+import DocumentSelectorArea from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/DsDocumentSelectionArea";
+import styles from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/document.module.css";
+
 const DsTenderIdPage: React.FC = () => {
   const { setActionStatusValues, actionStatus, saveTender } = useTenderData();
   const [selectedTabId] = useTabState("tenderPage"); // Use the custom hook
@@ -24,43 +31,61 @@ const DsTenderIdPage: React.FC = () => {
 
   return (
     <>
-      <DsApplication
-        selectedTabId={selectedTabId}
+      <DocumentProvider>
 
-        appTitle="Tender"
-        tabs={tabs}
+        <DsApplication
+          selectedTabId={selectedTabId}
 
-      >
-        <div className={pagestyles.container}
-          onScroll={() => closeAllContext()}>
-          <TabView tabId="0" pageName="tenderPage">
-            <div className={style.tenderDetails}>
+          appTitle="Tender"
+          tabs={tabs}
 
-              <DsBasicDetails />
-            </div>
-          </TabView>
-          {/* <TabView tabId="1" pageName="tenderPage" >
+        >
+          <div className={pagestyles.container}
+            onScroll={() => closeAllContext()}>
+            <TabView tabId="0" pageName="tenderPage">
+              <div className={style.tenderDetails}>
+
+                <DsBasicDetails />
+              </div>
+            </TabView>
+            <TabView tabId="2" pageName="tenderPage">
+              <div className={style.docPane}>
+                <PaneOpenButton className={styles.pane} id="documentPaneOpenBtn" paneId="documentPane" label="Add Documents" />
+              </div>
+
+              {/* ✅ Now inside DocumentProvider */}
+              <div>
+                <DocumentSelectorArea />  {/* ✅ Now inside DocumentProvider */}
+              </div>
+
+            </TabView>
+            {/* <TabView tabId="1" pageName="tenderPage" >
           <DsTenderProduct productList={tenderData.products} setProductList={addTenderProduct} />
           new prod
         </TabView> */}
+          </div>
+        </DsApplication>
+        <DsPane id="documentPane" side="right" title="Documents">
+          <DsAddTenderDocumentPane />
+        </DsPane>
+        <Toaster
+          handleClose={() => {
+          }}
+          id={"create-order-toaster"}
+          type={actionStatus?.notiType}
+          message={actionStatus?.notiMsg}
+          position={"top"}
+          duration={closeTimeForTender}
+        />
+
+        <div className={style.footerContainer}>
+          <DSTendrFooter setActionStatus={setActionStatusValues}
+
+            saveTender={saveTender}
+          ></DSTendrFooter>
         </div>
-      </DsApplication>
-      <Toaster
-        handleClose={() => {
-        }}
-        id={"create-order-toaster"}
-        type={actionStatus?.notiType}
-        message={actionStatus?.notiMsg}
-        position={"top"}
-        duration={closeTimeForTender}
-      />
+      </DocumentProvider>
 
-      <div className={style.footerContainer}>
-        <DSTendrFooter setActionStatus={setActionStatusValues}
-
-          saveTender={saveTender}
-        ></DSTendrFooter>
-      </div>
     </>
 
   );

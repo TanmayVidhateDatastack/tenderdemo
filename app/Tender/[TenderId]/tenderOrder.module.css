@@ -114,6 +114,12 @@
     padding-right: 0.5rem !important;
    
   }
+
+  .docPane{
+    display: flex;
+    justify-content: flex-end;
+    align-items: right;
+  }
   @media (max-width: 1200px) {
     .details > div,
     .transportDetails {
