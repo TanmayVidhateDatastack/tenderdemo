@@ -5,8 +5,8 @@ import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import styles from "./document.module.css";
 import fetchData from "@/helpers/Method/fetchData";
 import { documents } from "@/helpers/types";
-import { getAllDocuments } from "@/helpers/constant";
 import { DocumentContext } from "./DocumentsContextProvider";
+import { getAllDocuments } from "@/helpers/constant";
 
 const DsAddTenderDocumentPane: React.FC = () => {
   const [openAccordion, setOpenAccordion] = useState<string | null>(null);
@@ -54,22 +54,22 @@ const DsAddTenderDocumentPane: React.FC = () => {
   const handleCheckboxChange = (doc: documents) => {
     setSelectedDocuments((prev) => {
       const alreadySelected = prev.some((d) => d.id === doc.id);
-      
+
       const updatedSelection = alreadySelected
-        ? prev.filter((d) => d.id !== doc.id) 
-        : [...prev, doc]; 
-  
-      console.log("Updated selectedDocuments:", updatedSelection); 
-  
+        ? prev.filter((d) => d.id !== doc.id)
+        : [...prev, doc];
+
+      console.log("Updated selectedDocuments:", updatedSelection);
+
       return updatedSelection;
     });
   };
-  
+
   const handledocument = () => {
     if (documentContext) {
       documentContext.setDocumentData((prevData) => {
         const updatedData = [...prevData];
-  
+
         selectedDocuments.forEach((doc) => {
           const existingType = updatedData.find((group) => group.type === doc.type);
           if (existingType) {
@@ -89,14 +89,14 @@ const DsAddTenderDocumentPane: React.FC = () => {
             });
           }
         });
-  
+
         console.log("Updated Document Context:", updatedData); // ✅ Debugging output
-  
+
         return updatedData;
       });
     }
   };
-  
+
   return (
     <>
       <div className={styles.padd}>
@@ -111,14 +111,14 @@ const DsAddTenderDocumentPane: React.FC = () => {
             <div className={styles.documents}>
               {docs.map((doc) => (
                 <Ds_checkbox
-                key={doc.id}
-                id={doc.id.toString()}
-                name={doc.documentName}
-                value={doc.id.toString()}
-                label={doc.documentName}
-                onChange={() => handleCheckboxChange(doc)}
-                isChecked={selectedDocuments.some((d) => d.id === doc.id)} // ✅ Fix
-               />
+                  key={doc.id}
+                  id={doc.id.toString()}
+                  name={doc.documentName}
+                  value={doc.id.toString()}
+                  label={doc.documentName}
+                  onChange={() => handleCheckboxChange(doc)}
+                  isChecked={selectedDocuments.some((d) => d.id === doc.id)} // ✅ Fix
+                />
               ))}
             </div>
           </Accordion>

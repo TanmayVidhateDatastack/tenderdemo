@@ -49,6 +49,7 @@ export const devHostUrl = "http://localhost:3000";
 export const hostUrl = devHostUrl;
 export const Component_Library = hostUrl + "/ComponentsLibrary";
 
+// export const getAllDocuments = apiLocalUrl + "/tender/docs";
 ///Urls application Level
 
 export const salesOUrl = hostUrl + "/";
@@ -86,7 +87,6 @@ export const getAllOrdersURL = apiHostUrl + "/orders";
 export const searchTransporterURL = apiHostUrl + "/customers/filter?name=";
 export const getTransporterURL = apiHostUrl + "/customers/";
 export const getAllStatusLogURL = apiHostUrl + "/status";
-export const getAllDocuments = apiLocalUrl + "/tender/docs";
 
 
 export const getAllTenders = apiServerUrl + "/tenders";
@@ -103,6 +103,8 @@ export const getTenderSearchProducts =
   apiHostUrl + "/tenderproducts/filter?name=";
 export const updateApprovalTypes =
   "http://172.145.1.102:7001/api/order/approval/5175";
+
+export const getAllDocuments = apiLocalUrl + "/tender/docs";
 
 export const DsStatus: Record<string, dsStatus> = {
   DRFT: "Draft",

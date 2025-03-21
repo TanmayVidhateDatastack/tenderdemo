@@ -74,74 +74,89 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           </div>
         </div>
         <div className={eleStyles.inputDetails}>
-          <DsTextField
-            className={styles.fieldColors}
-            label={"Amount"}
-            // placeholder="Please type here"
-            inputType="number"
-            onChange={(e) => {
-              updateTenderFee(
-                id.replace("DocumentView", ""),
-                "amount",
-                e.target.value
-              );
-            }}
-          ></DsTextField>
-          <DsSingleSelect
-            className={styles.fieldColors}
-            id={id + "_paidType1"}
-            options={paidBy}
-            label="Paid by"
-            placeholder={"Please select here"}
-            setSelectOption={(option) => {
-              if (typeof option.value == "string") {
+          <div className={styles.fieldColors}>
+
+            <DsTextField
+              className={styles.fieldColors}
+              label={"Amount"}
+              // placeholder="Please type here"
+              inputType="number"
+              onChange={(e) => {
                 updateTenderFee(
                   id.replace("DocumentView", ""),
-                  "paidBy",
-                  option.value
+                  "amount",
+                  e.target.value
                 );
-              }
-            }}
-          ></DsSingleSelect>
-          <DsSingleSelect
-            className={styles.fieldColors}
-            id={id + "_modes1"}
-            options={mode}
-            label="Modes"
-            placeholder={"Please search and select here"}
-            setSelectOption={(option) => {
-              if (typeof option.value == "string") {
-                updateTenderFee(
-                  id.replace("DocumentView", ""),
-                  "paymentMode",
-                  option.value
-                );
-              }
-            }}
-          ></DsSingleSelect>
-          <DatePicker
-            id={"dueDate"}
-            initialDate={""}
-            className={""}
-            placeholder="DD/MM/YYYY"
-            label="Due Date"
-          />
+              }}
+            ></DsTextField>
+          </div>
+          <div className={styles.fieldColors}>
+
+            <DsSingleSelect
+              className={styles.fieldColors}
+              id={id + "_paidType1"}
+              options={paidBy}
+              label="Paid by"
+              placeholder={"Please select here"}
+              setSelectOption={(option) => {
+                if (typeof option.value == "string") {
+                  updateTenderFee(
+                    id.replace("DocumentView", ""),
+                    "paidBy",
+                    option.value
+                  );
+                }
+              }}
+            ></DsSingleSelect>
+          </div>
+          <div className={styles.fieldColors}>
+
+            <DsSingleSelect
+              className={styles.fieldColors}
+              id={id + "_modes1"}
+              options={mode}
+              label="Modes"
+              placeholder={"Please search and select here"}
+              setSelectOption={(option) => {
+                if (typeof option.value == "string") {
+                  updateTenderFee(
+                    id.replace("DocumentView", ""),
+                    "paymentMode",
+                    option.value
+                  );
+                }
+              }}
+            ></DsSingleSelect>
+          </div>
+          <div className={styles.fieldColors}>
+
+            <DatePicker
+              id={"dueDate"}
+              initialDate={""}
+              className={""}
+              placeholder="DD/MM/YYYY"
+              label="Due Date"
+            />
+          </div>
         </div>
  
         <div className={styles.notes}>
           <h4>Notes</h4>
-          <TextArea
-            className={styles.fieldColors}
-            placeholder="Please type here"
-            disable={false}
-            onChange={(e) => {
-              updateTenderFee(
-                id.replace("DocumentView", ""),
-                "type",
-                e.target.value
-              );
-            }}
-          />
+          <div className={styles.fieldColors}>
+
+            <TextArea
+              className={styles.fieldColors}
+              placeholder="Please type here"
+              disable={false}
+              onChange={(e) => {
+                updateTenderFee(
+                  id.replace("DocumentView", ""),
+                  "type",
+                  e.target.value
+                );
+              }}
+            />
+          </div>
         </div>
         <div>
           <DsCsvUpload
