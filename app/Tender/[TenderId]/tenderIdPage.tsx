@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import TabView from "@/Elements/DsComponents/dsTabs/TabView";
 import DsApplication from "@/Elements/ERPComponents/DsApplicationComponents/DsApplication";
 import DsBasicDetails from "@/TenderComponents/AddUpdateTenderComponents/BasicDetailComponents/DsBasicDetails";

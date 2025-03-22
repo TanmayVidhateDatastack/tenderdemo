@@ -114,6 +114,7 @@ gap:0px;
 } */
 .totalorder {
   padding: 0px !important;
+  font-size:var(--font-12);
 }
 .datalist {
   width: 30%!important;
