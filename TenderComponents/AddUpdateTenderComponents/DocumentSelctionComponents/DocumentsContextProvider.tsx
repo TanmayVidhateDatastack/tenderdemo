@@ -45,7 +45,6 @@ export const DocumentProvider: React.FC<DocumentProviderProps> = ({ children }) 
       )
     );
   };
-
   // ✅ Automatically remove deselected documents from selectedDocuments
   useEffect(() => {
     setSelectedDocuments((prevSelected) =>
@@ -76,8 +75,6 @@ export const DocumentProvider: React.FC<DocumentProviderProps> = ({ children }) 
     setSelectedDocuments,
     toggleDocumentVisibility,
   };
-
   return <DocumentContext.Provider value={contextValue}>{children}</DocumentContext.Provider>;
 };
-
 export default DocumentProvider;

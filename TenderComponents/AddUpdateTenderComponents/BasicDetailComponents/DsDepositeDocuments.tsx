@@ -16,29 +16,29 @@ import { DsSelectOption } from "@/helpers/types";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import DsFeesDocument from "./DsFeesDocument";
 import { useTenderData } from "../TenderDataContextProvider";
-
+ 
 export interface DepositDocument {
   modes: DsSelectOption[];
   paidBy: DsSelectOption[];
 }
-
+ 
 export interface FeesDocument {
   applicableDeposits: DsSelectOption[];
 }
-
+ 
 export interface DepositeDocumentsProps {
   setDepositeDocuments: (depositeDocuments: DepositDocument[]) => void;
   depositeDocument: DepositDocument[] | null;
   applicableDeposits: DsSelectOption[] | [];
   role: string;
 }
-
+ 
 const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   depositeDocument,
   applicableDeposits,
   role
 }) => {
-  const contextMenuId = "context-display-10";
+  const contextMenuId = "context-display-10"; 
   const { addTenderFee, removeTenderFeeByType } = useTenderData();
   const [mode, setMode] = useState<DsSelectOption[]>([]);
   const [paidBy, setPaidBy] = useState<DsSelectOption[]>([]);
@@ -60,7 +60,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
     if (depositeDocument) {
       const modesData = depositeDocument[0]?.modes || [];
       const paidByData = depositeDocument[0]?.paidBy || [];
-
+ 
       setMode(modesData);
       setPaidBy(paidByData);
     }
@@ -70,24 +70,24 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
         label: deposit.label,
         value: deposit.value
       }));
-
+ 
       SetApplicablefees(mappedDeposits);
       const options: Record<string, boolean> = mappedDeposits.reduce<
         Record<string, boolean>
       >((acc, opt) => {
         const val = opt.value;
-
+ 
         if (typeof val === "string") {
           acc[val] = false;
         }
-
+ 
         return acc;
       }, {});
-
+ 
       setFeeVisibility(options);
     }
   }, [depositeDocument, applicableDeposits]);
-
+ 
   useEffect(() => {
     if (applicablefees) {
       console.log("applicable fees : ", applicablefees);
@@ -104,7 +104,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
     applicablefees.forEach((opt) => {
       const id = opt.value.toString();
       const checkbox = document.getElementById(id) as HTMLInputElement;
-
+ 
       if (checkbox?.checked) {
         selectedFees.add(id);
         feeVisibility[id] = true;
@@ -159,7 +159,6 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
               value={checkbox.value.toString()}
               label={checkbox.label}
               defaultChecked={true}
-            // defaultChecked={true}
             />
           ))}
         </div>
@@ -177,15 +176,14 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
       const target = (e.target as HTMLElement).closest(
         `.${styles["depositsBtn"]}`
       );
-
+ 
       const target2 = (e.target as HTMLElement).closest(`#${contextMenuId}`);
-
+ 
       if (!target && !target2) {
         closeContext(contextMenuId);
         return;
       }
     });
-
     return () => {
       window.removeEventListener("click", (e) => {
         const target = (e.target as HTMLElement).closest(
@@ -199,7 +197,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
       });
     };
   }, [applicablefees]);
-
+ 
   useEffect(() => {
     const handleScroll = (event: any) => {
       const excludedElement = document.getElementById("optionBtn");
@@ -213,7 +211,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
       window.removeEventListener("scroll", handleScroll, true);
     };
   }, []);
-
+ 
   return (
     <div className={styles.container}>
       <div className={styles.containerHead}>
@@ -228,7 +226,6 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
           />
         </div>
       </div>
-      {/* {/*  */}
       {applicableDeposits.map((deposit) => {
         if (typeof deposit.value == "string")
           return (
@@ -245,10 +242,9 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
             )
           );
       })}
-
-      {/* // */}
     </div>
   );
 };
-
 export default DsDepositeDocuments;
+ 
+ 

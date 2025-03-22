@@ -12,7 +12,7 @@
 // export const InProcess = "InProcess";
 // export const Inactive = "INAC";
 // export const Active = "ACTV";
-// export const Complete = "CMPL";
+// export const Complete = "CMPL";  
 // export const Submit = "SUBMIT";
 // export const Processing = "PROC";
 // export const Review_Pending = "REVP";
@@ -44,7 +44,7 @@ export const apiServerUrl = "http://172.145.1.102:7005/api";
 // export const apiHostUrl = apiLocalUrl;
 export const apiHostUrl = apiServerJsonUrl;
 export const devHostUrl = "http://localhost:3000";
-
+ 
 ///Urls application Level
 export const hostUrl = devHostUrl;
 export const Component_Library = hostUrl + "/ComponentsLibrary";
@@ -84,10 +84,9 @@ export const getConsolidatedOrder =
   apiHostUrl + "/orders/consolidatedOrders?ids=";
 export const createOrder = apiHostUrl + "/order";
 export const getAllOrdersURL = apiHostUrl + "/orders";
-export const searchTransporterURL = apiHostUrl + "/customers/filter?name=";
+export const searchTransporterURL = apiHostUrl + "/customers/filter?name="; 
 export const getTransporterURL = apiHostUrl + "/customers/";
 export const getAllStatusLogURL = apiHostUrl + "/status";
-
 export const getAllTenders = apiServerUrl + "/tenders";
 
 // export const getAllMetaData = apiHostUrl + "/tenderMetadata";

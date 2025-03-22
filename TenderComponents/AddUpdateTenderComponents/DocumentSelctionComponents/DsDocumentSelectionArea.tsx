@@ -15,7 +15,7 @@ const DocumentSelectorArea: React.FC = () => {
   const handleRemoveDocument = (documentName: string) => {
     if (!documentContext) return;
 
-    // ✅ Remove document from context
+    // ✅ Remove document from context   
     documentContext.setDocumentData((prevData) =>
       prevData
         .map((group) => ({

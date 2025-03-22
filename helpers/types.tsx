@@ -41,7 +41,7 @@ export interface AccordionProps {
   children: string | React.ReactElement;
   isOpen?: boolean;
   onToggle?: (id: string) => void;
-
+ 
 }
 
 export interface tenderDetailsProps {
@@ -61,7 +61,6 @@ export interface applierSupplierDetails {
 }
 export interface supplyDetails {
   supplyPoints: DsSelectOption[];
-  // reportRequirements: DsMultiLevelSelectOption[];
   reportRequirements: DsMultiLevelSelectOption[];
   eligibility: DsSelectOption[];
 }
@@ -296,8 +295,9 @@ export interface DsOptionProps {
 
 export interface DsSelectOption {
   label: string;
-  value: string | DsSelectOption[];
+  value: string | DsSelectOption[] |number;
 }
+
 export interface RadioCheckOption {
   customAttribute?: Record<string, string>;
   id: string;
@@ -377,6 +377,7 @@ export interface tab {
   customAttributes?: Record<string, string | number | boolean>;
   onClick?: (tab: tab) => void;
 }
+ 
 export interface TabNavProps {
   selectedTabId: string;
   tabs: tab[];
@@ -393,12 +394,6 @@ export interface TabContextType {
 export interface TabsProviderProps {
   children: ReactNode;
 }
-export interface TabProps {
-  tabId: string;
-  children: React.ReactNode;
-  pageName: string; // Add this line
-}
-
 
 export interface datalistOptions {
   //datalist attributes
@@ -409,11 +404,8 @@ export interface datalistOptions {
   label?: string;
   secondaryValue?: string | React.ReactNode;
 }
-
-
-
-
-
+ 
+ 
 export interface InputTextAreaProps {
   //input textfield and textArea propes
   handleInputChange?: (
@@ -477,7 +469,7 @@ export interface tdprops {
   className: string;
   children?: React.ReactNode;
   content?: string | React.ReactNode;
-  filterValue?: string | number | React.ReactNode;
+  filterValue?: string | number|React.ReactNode;
   type: string;
   colSpan?: number;
   rowSpan?: number;
@@ -498,7 +490,7 @@ export interface tdprops {
   ) => void;
   onClick?: (rowIndex: number, columnIndex: number) => void;
   handleMouseOver?: (e: React.MouseEvent<HTMLElement>) => void;
-  handleDoubleClick?: (e: React.MouseEvent<HTMLElement>) => void;
+  handleDoubleClick?:(e:React.MouseEvent<HTMLElement>)=>void;
   customAttributes?: Record<string, string | number | boolean>;
 }
 
@@ -790,22 +782,22 @@ export type customer = {
   address: location;
   bank: bankDetail;
 };
-export interface MultiLevelSearchProps {
-  setOptions: (values: unknown) => datalistOptions[];
-  setSearchUrl: (searchTerm: string) => string;
-  onSelect?: (selectedOption: datalistOptions) => void;
-  id: string;
+export interface MultiLevelSearchProps{
+  setOptions:(values:unknown)=>datalistOptions[];
+  setSearchUrl:(searchTerm:string)=>string;
+  onSelect?:(selectedOption:datalistOptions)=>void;
+  id:string;
   selectedOption?: datalistOptions;
-  label: string;
-}
-export interface DsMultiLevelSelectOption {
-  label: string;
-  value: string | MultiLevelSearchProps
-}
+  label:string;
+ }
+ export interface DsMultiLevelSelectOption{
+  label:string;
+  value:string|MultiLevelSearchProps
+ }
 // export type tieUpProduct = {
 //   productId: number;
 //   productCode: string;
-//   productName: string;
+//   productName: string;  
 //   batchId: number;
 //   batchNumber: string;
 //   expiryDate: string;
@@ -1030,11 +1022,18 @@ export type tenderFee = {
   currency: string;
   paidBy: string;
   paymentMode: string;
-  paymentDueDate: string;
+  paymentDueDate: string; 
   notes: string;
-  status?: dsStatus;
+  status?: dsStatus; 
   documents: Document[];
 };
+export type documents = {
+  documentPath: string; 
+  category: string;
+  type: string;
+  id: number;
+  documentName: string;
+}
 export type applicableSupplyConditions = {
   type: string | number;
   notes: string;
@@ -1135,6 +1134,7 @@ export type Tender = {
   [key: string]: any; // Allows indexing with a string
 };
 
+
 export type TenderDetails = {
   code: number;
   error: string | null;
@@ -1193,30 +1193,16 @@ export type TenderMetaData = {
   error: null | string;
   exception: null | string;
 };
-
-export interface MultiLevelSearchProps {
-  setOptions: (values: unknown) => datalistOptions[];
-  setSearchUrl: (searchTerm: string) => string;
-  onSelect?: (selectedOption: datalistOptions) => void;
-  id: string;
+export interface MultiLevelSearchProps{
+  setOptions:(values:unknown)=>datalistOptions[];
+  setSearchUrl:(searchTerm:string)=>string;
+  onSelect?:(selectedOption:datalistOptions)=>void;
+  id:string;
   selectedOption?: datalistOptions;
-  label: string;
-}
-export interface DsMultiLevelSelectOption {
-  label: string;
-  value: string | MultiLevelSearchProps
-}
-
-export type documents = {
-  documentPath: string;
-  category: string;
-  type: string;
-  id: number;
-  documentName: string;
-}
-interface FloatingMenuProps {
-  selected?: number;
-  id: string;
-  children?: React.ReactElement;
-  onCloseClick: (e: React.MouseEvent<HTMLElement>) => void;
-}
+  label:string;
+ }
+ export interface DsMultiLevelSelectOption{
+  label:string;
+  value:string|MultiLevelSearchProps
+ }
+ 
