@@ -118,4 +118,7 @@
     grid-template-columns: 1fr; /* 1 column on very small screens */
   }
 } 
+.documentsCkechS{
+  margin-bottom: 0.5rem !important;
+}
    

@@ -82,7 +82,7 @@ const DsTenderIdPage: React.FC = () => {
 
           </div>
         </DsApplication>
-        <DsPane id="documentPane" side="right" title="Documents">
+        <DsPane id="documentPane" side="right" title="Documents" isBackdrop={true}>
           <DsAddTenderDocumentPane />
         </DsPane>
         <Toaster

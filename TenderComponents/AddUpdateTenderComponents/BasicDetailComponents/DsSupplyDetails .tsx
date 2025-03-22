@@ -3,6 +3,7 @@ import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import DsMultiSelect from "@/Elements/DsComponents/dsSelect/dsMultiSelect";
 import DsSelectMultiLevel from "@/Elements/DsComponents/dsSelect/dsSelectMultiLevel";
 import { datalistOptions, supplyDetailsProps } from "@/helpers/types";
+// import { datalistOptions, supplyDetailsProps } from "@/helpers/types";
 import { useTenderData } from "../TenderDataContextProvider";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css"
 const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
@@ -35,8 +36,7 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
             if (typeof option.value == "string") {
               updateSupplyCondition("testReportRequirement", option.value);
             }
-          }}
-          isOpen={false}
+          }} isOpen={false}
           onSelect={function (value: datalistOptions): void {
             throw new Error("Function not implemented.");
           }}        ></DsSelectMultiLevel>

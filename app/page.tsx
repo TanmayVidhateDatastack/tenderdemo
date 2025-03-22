@@ -27,6 +27,7 @@ import { RootState } from "@/Redux/store/store";
 import { useAppSelector } from "@/Redux/hook/hook";
 import DsName from "@/Elements/DsComponents/DsName/DsName";
  import btnStyles from "@/Elements/DsComponents/DsButtons/dsButton.module.css";
+import DsTenderTableFloatingMenu from "@/TenderComponents/TenderLogComponents/TenderlogFloatingMenu";
 
 
 
@@ -562,7 +563,7 @@ export default function Home() {
         {
           columnIndex: 10,
           className: " cell cell-status ",
-
+   
           content: t.status ? (
             <DsStatusIndicator
               type="user_defined"
@@ -603,10 +604,6 @@ export default function Home() {
     }));
   };
 
-
-
-
-
   useEffect(() => {
     console.log("Data updated:", data);
     if (data.length > 0) {
@@ -614,7 +611,7 @@ export default function Home() {
     }
   }, [data]);
 
-
+  const [selectedRow, setSelectedRow] = useState<{ e: React.MouseEvent<HTMLElement>; rowIndex: number; statuscell: string } | null>(null);
 
   return (
     <>
@@ -680,8 +677,30 @@ export default function Home() {
               rows={tempTableData.rows}
               isFooterRequired={true}
               isSortable={true}
+              handleRowClick={(e, rowIndex) => {
+                const row = tempTableData.rows[rowIndex];
+              
+                // Convert statuscell to string if it's not already one
+                const statuscell = String(
+                  row?.content?.find((cell) => cell?.columnIndex === 10)?.filterValue ?? ""
+                );
+              
+                console.log("statuscellintable", statuscell);
+              
+                // Store selected row data
+                setSelectedRow({ e, rowIndex, statuscell });
+              }}
+              
+              
             />
           </div>
+          {selectedRow && (
+          <DsTenderTableFloatingMenu
+            e={selectedRow.e}
+            rowIndex={selectedRow.rowIndex}
+            statuscell={selectedRow.statuscell}
+          />
+)}
         </div>
 
       </DsApplication>
