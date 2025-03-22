@@ -103,7 +103,8 @@ export const getTenderSearchProducts =
 export const updateApprovalTypes =
   "http://172.145.1.102:7001/api/order/approval/5175";
 
-export const getAllDocuments = apiLocalUrl + "/tender/docs";
+// export const getAllDocuments = apiLocalUrl + "/tender/docs";
+export const getAllDocuments = apiHostUrl + "/tender/docs";
 
 export const DsStatus: Record<string, dsStatus> = {
   DRFT: "Draft",

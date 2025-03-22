@@ -68,13 +68,39 @@ const DsAddTenderDocumentPane: React.FC = () => {
     });
   };
 
+
+
+  useEffect(() => {
+    if (!documentContext || !documentContext.documentData) return;
+
+    const updatedSelectedDocuments = selectedDocuments.filter((doc) =>
+      documentContext.documentData.some((contextDoc) =>
+        contextDoc.documents.some((d) => d.documentName === doc.documentName)
+      )
+    );
+
+    setSelectedDocuments(updatedSelectedDocuments);
+
+
+
+  }, [documentContext]);
+
+
   const handledocument = () => {
     if (documentContext) {
       documentContext.setDocumentData((prevData) => {
-        const updatedData = [...prevData];
+        let updatedData: {
+          type: string;
+          documents: {
+            documentName: string;
+            isVisible: boolean;
+            documentPath: string;
+          }[];
+        }[] = [...prevData]; // Explicit type declaration
 
         selectedDocuments.forEach((doc) => {
           const existingType = updatedData.find((group) => group.type === doc.type);
+
           if (existingType) {
             if (!existingType.documents.some((d) => d.documentName === doc.documentName)) {
               existingType.documents.push({
@@ -93,12 +119,25 @@ const DsAddTenderDocumentPane: React.FC = () => {
           }
         });
 
+        // Remove documents that are not in selectedDocuments
+        updatedData = updatedData.map((group) => {
+          return {
+            ...group,
+            documents: group.documents.filter((doc) =>
+              selectedDocuments.some((selectedDoc) =>
+                selectedDoc.documentName === doc.documentName && selectedDoc.type === group.type
+              )
+            ),
+          };
+        }).filter(group => group.documents.length > 0);
+
         console.log("Updated Document Context:", updatedData); // ✅ Debugging output
 
         return updatedData;
       });
     }
   };
+
 
   return (
     <>
@@ -115,12 +154,14 @@ const DsAddTenderDocumentPane: React.FC = () => {
             key={type}
             id={type}
             title={type}
+
             isOpen={openAccordion === type}
             onToggle={handleAccordionToggle} // ✅ Corrected function call
           >
             <div className={styles.documents}>
               {docs.map((doc) => (
                 <Ds_checkbox
+                  className={styles.documentsCkechS}
                   key={doc.id}
                   id={doc.id.toString()}
                   name={doc.documentName}
