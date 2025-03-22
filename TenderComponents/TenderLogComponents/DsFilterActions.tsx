@@ -17,16 +17,14 @@ import { DisplayPane } from "@/Elements/DsComponents/DsPane/DsPane";
 import btnStyles from "@/Elements/DsComponents/DsButtons/dsButton.module.css";
 
 export interface DsFilterActionProps {
-  data: Tender[];
-  setFilteredData: Dispatch<SetStateAction<Tender[]>>;
+ 
+
   searchQuery: string;
   setSearchQuery: Dispatch<SetStateAction<string>>;
   selectedStatus: string;
   setSelectedStatus: Dispatch<SetStateAction<string>>;
 }
 const DsFilterActions: React.FC<DsFilterActionProps> = ({
-  data,
-  setFilteredData,
   searchQuery,
   setSearchQuery, selectedStatus, setSelectedStatus 
 }) => {
@@ -420,7 +418,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
           </div>
         }
         label="Filter"
-        onClick={() => DisplayPane("tenderFilter")}
+        onClick={() => DisplayPane("AdvancedFilterComponent")}
         iconSize="iconMedium"
 
       />

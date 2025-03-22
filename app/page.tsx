@@ -19,8 +19,8 @@ import DsStatusIndicator from "@/Elements/DsComponents/dsStatus/dsStatusIndicato
 import { getAllMetaData, getAllTenders } from "@/helpers/constant";
 import fetchData from "@/helpers/Method/fetchData";
 import DsTableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableComponent";
-import DsPane from "@/Elements/DsComponents/DsPane/DsPane";
-import AdvancedFilterComponent, { filterTypes } from "@/Elements/DsComponents/AdvancedFilterComponent/AdvancedFilterComponent";
+
+import { filterTypes } from "@/Elements/DsComponents/AdvancedFilterComponent/AdvancedFilterComponent";
 import DsCurrency from "@/Elements/DsComponents/dsCurrency/dsCurrency";
 import addIcon from "../Icons/smallIcons/add.svg";
 import { RootState } from "@/Redux/store/store";
@@ -28,14 +28,19 @@ import { useAppSelector } from "@/Redux/hook/hook";
 import DsName from "@/Elements/DsComponents/DsName/DsName";
  import btnStyles from "@/Elements/DsComponents/DsButtons/dsButton.module.css";
 import DsTenderTableFloatingMenu from "@/TenderComponents/TenderLogComponents/TenderlogFloatingMenu";
+import DsAdvanceFilterPane from "@/TenderComponents/TenderLogComponents/DsAdvanceFilterPane";
+
 
 
 
 export default function Home() {
   const [data, setData] = useState<Tender[]>([]); //for table data
   const [metaData, setMetaData] = useState<CodeItem[]>([]);
+  const [searchQuery, setSearchQuery] = useState(""); //for search query
+  const [selectedStatus, setSelectedStatus] = useState(""); //for quickfilter
+  const [advFilter, setAdvFilter] = useState<Record<string, any>>({});
   // const [enrichedTenders, setEnrichedTenders] = useState<Tender[]>([]);
-  const [filteredData, setFilteredData] = useState<Tender[]>([]); //for filtered table data
+  // const [filteredData, setFilteredData] = useState<Tender[]>([]); //for filtered table data
   const [iconSrc] = useState(addIcon);
   const permissions = useAppSelector((state: RootState) => state.permissions);
 
@@ -209,203 +214,303 @@ export default function Home() {
   };
 
 
+  // useEffect(() => {
+  //   if (filteredData && filteredData.length >= 0) {
+  //     console.log("filter data in tabel : ", filteredData);
+  //     const transformedRows: DsTableRow[] = filteredData.map((item, index) => ({
+  //       rowIndex: index,
+  //       className: "cellRow logRow",
+  //       rowIcon:
+  //         item?.type === "institutional" ? (
+  //           <div
+  //             style={{
+  //               width: "0.875em",
+  //               height: "0.875em",
+  //               position: "relative",
+  //             }}
+  //           >
+  //             <Image
+  //               src={institutional}
+  //               alt="institutional"
+  //               layout="fill"
+  //               objectFit="cover"
+  //             />
+  //           </div>
+  //         ) : (
+  //           <div
+  //             style={{
+  //               width: "0.875em",
+  //               height: "0.875em",
+  //               position: "relative",
+  //             }}
+  //           >
+  //             <Image src={corporate} alt="corporate"
+  //               layout="fill"
+  //               objectFit="cover" />
+  //           </div>
+  //         ),
+  //       customAttributes: { iconValue: item?.type?.toString() ?? "" },
+
+  //       content: [
+  //         {
+  //           columnIndex: 0,
+  //           className: "cell cell-customer text-dark-1",
+  //           content: <DsName id={item.tenderId + "customerName "} name={item.customerName || "-"} />,
+  //           filterValue: item.customerName || "-",
+  //           // content:item.customerName || "-",
+  //           contentType: "string",
+  //         },
+  //         {
+  //           columnIndex: 1,
+  //           className: " cell  cell-submissiondate text-dark-0 ",
+  //           content: <DsName id={item.tenderId + "submittionDate"} name={formatDate(item.submittionDate)} />,
+  //           filterValue: item.submittionDate || "-",
+  //           contentType: "string",
+  //         },
+  //         {
+  //           columnIndex: 2,
+  //           className: " cell  cell-days-to-submit ",
+  //           content: <DsName id={item.tenderId + "daystosubmit"} name={item.submittionDate ? calculateDueStatus(item.submittionDate) : "-"} />,
+  //           filterValue: item.submittionDate ? calculateDueStatus(item.submittionDate) : "-",
+  //           contentType: "string",
+  //         },
+  //         {
+  //           columnIndex: 3,
+  //           className: " cell  cell-tenderid text-dark-0 ",
+  //           content: <DsName id={item.tenderId + "tenderId"} name={item.tenderId || "-"} />,
+  //           filterValue: item.tenderId || "-",
+  //           contentType: "string",
+  //         },
+  //         {
+  //           columnIndex: 4,
+  //           className: " cell cell-tendertype text-dark-1  ",
+  //           content: <DsName id={item.tenderId + "tenderType"} name={getTenderTypeDescription(item.tenderType)} />,
+  //           filterValue: getTenderTypeDescription(item.tenderType),
+  //           contentType: "string",
+  //         },
+  //         {
+  //           columnIndex: 5,
+  //           className: " cell cell-depot text-dark-1",
+  //           // content: item.depot || "-",
+  //           content: <DsName id={item.tenderId + "depot"} name={item.depot || "-"} />,
+  //           filterValue: item.depot || "-",
+  //           contentType: "string",
+  //         },
+  //         {
+  //           columnIndex: 6,
+  //           className: " cell cell-appliedby text-dark-0 ",
+  //           // content: item.appliedBy || "-",
+  //           content: <DsName id={item.tenderId + "appliedBy"} name={item.appliedBy || "-"} />,
+  //           filterValue: item.appliedBy || "-",
+  //           contentType: "string",
+  //         },
+  //         {
+  //           columnIndex: 7,
+  //           className: " cell cell-suppliedby text-dark-0 ",
+  //           // content: item.suppliedBy || "-",
+  //           content: <DsName id={item.tenderId + "suppliedBy"} name={item.suppliedBy || "-"} />,
+  //           filterValue: item.suppliedBy || "-",
+  //           contentType: "string",
+  //         },
+  //         {
+  //           columnIndex: 8,
+  //           className: " cell cell-preparedby text-dark-0 ",
+  //           // content: item.preparedBy || "-",
+  //           content: <DsName id={item.tenderId + "preparedBy"} name={item.preparedBy || "-"} />,
+  //           filterValue: item.preparedBy || "-",
+  //           contentType: "string",
+  //         },
+  //         {
+  //           columnIndex: 9,
+  //           className: " cell cell-value text-dark-1 ",
+
+  //           content: <DsCurrency format={"IND"} id={"value"} amount={parseInt(item.value)} type={"short"} />,
+  //           filterValue: item.value,
+  //           contentType: "number",
+  //         },
+  //         {
+  //           columnIndex: 10,
+  //           className: " cell cell-status ",
+
+  //           content: item.status ? (
+  //             <DsStatusIndicator
+  //               type="user_defined"
+  //               className={`${item?.status?.tenderStatus
+  //                 ? styles[
+  //                 item?.status?.tenderStatus
+  //                   ?.replaceAll(" ", "_")
+  //                   .toLowerCase()
+  //                 ]
+  //                 : ""
+  //                 }`}
+  //               status={item.status.tenderStatus}
+  //               label={item.status.tenderStatus}
+  //               comment={
+  //                 item.status?.message
+  //                   ? typeof item.status.message === "object"
+  //                     ? JSON.stringify(item.status.message)
+  //                     : item.status.message.toString()
+  //                   : ""
+  //               }
+  //             />
+  //           ) :
+  //             (
+  //               "No Status"
+  //             ),
+  //           filterValue: item.status.tenderStatus,
+  //           contentType: "reactNode",
+  //         },
+  //       ],
+
+  //     }));
+
+  //     console.log("Final Transformed Rows:", transformedRows);
+
+  //     setTimeout(() => {
+  //       setTempTableData((data) => ({ ...data, rows: transformedRows }));
+  //     }, 1);
+  //   }
+  // }, [filteredData]);
 
 
+  // const handleFetch = async () => {
+  //   try {
+  //     const res = await fetchData({ url: getAllTenders });
 
-  useEffect(() => {
-    if (filteredData && filteredData.length >= 0) {
-      console.log("filter data in tabel : ", filteredData);
-      const transformedRows: DsTableRow[] = filteredData.map((item, index) => ({
-        rowIndex: index,
-        className: "cellRow logRow",
-        rowIcon:
-          item?.type === "institutional" ? (
-            <div
-              style={{
-                width: "0.875em",
-                height: "0.875em",
-                position: "relative",
-              }}
-            >
-              <Image
-                src={institutional}
-                alt="institutional"
-                layout="fill"
-                objectFit="cover"
-              />
-            </div>
-          ) : (
-            <div
-              style={{
-                width: "0.875em",
-                height: "0.875em",
-                position: "relative",
-              }}
-            >
-              <Image src={corporate} alt="corporate"
-                layout="fill"
-                objectFit="cover" />
-            </div>
-          ),
-        customAttributes: { iconValue: item?.type?.toString() ?? "" },
 
-        content: [
-          {
-            columnIndex: 0,
-            className: "cell cell-customer text-dark-1",
-            content: <DsName id={item.tenderId + "customerName "} name={item.customerName || "-"} />,
-            filterValue: item.customerName || "-",
-            // content:item.customerName || "-",
-            contentType: "string",
-          },
-          {
-            columnIndex: 1,
-            className: " cell  cell-submissiondate text-dark-0 ",
-            content: <DsName id={item.tenderId + "submittionDate"} name={formatDate(item.submittionDate)} />,
-            filterValue: item.submittionDate || "-",
-            contentType: "string",
-          },
-          {
-            columnIndex: 2,
-            className: " cell  cell-days-to-submit ",
-            content: <DsName id={item.tenderId + "daystosubmit"} name={item.submittionDate ? calculateDueStatus(item.submittionDate) : "-"} />,
-            filterValue: item.submittionDate ? calculateDueStatus(item.submittionDate) : "-",
-            contentType: "string",
-          },
-          {
-            columnIndex: 3,
-            className: " cell  cell-tenderid text-dark-0 ",
-            content: <DsName id={item.tenderId + "tenderId"} name={item.tenderId || "-"} />,
-            filterValue: item.tenderId || "-",
-            contentType: "string",
-          },
-          {
-            columnIndex: 4,
-            className: " cell cell-tendertype text-dark-1  ",
-            content: <DsName id={item.tenderId + "tenderType"} name={getTenderTypeDescription(item.tenderType)} />,
-            filterValue: getTenderTypeDescription(item.tenderType),
-            contentType: "string",
-          },
-          {
-            columnIndex: 5,
-            className: " cell cell-depot text-dark-1",
-            // content: item.depot || "-",
-            content: <DsName id={item.tenderId + "depot"} name={item.depot || "-"} />,
-            filterValue: item.depot || "-",
-            contentType: "string",
-          },
-          {
-            columnIndex: 6,
-            className: " cell cell-appliedby text-dark-0 ",
-            // content: item.appliedBy || "-",
-            content: <DsName id={item.tenderId + "appliedBy"} name={item.appliedBy || "-"} />,
-            filterValue: item.appliedBy || "-",
-            contentType: "string",
-          },
-          {
-            columnIndex: 7,
-            className: " cell cell-suppliedby text-dark-0 ",
-            // content: item.suppliedBy || "-",
-            content: <DsName id={item.tenderId + "suppliedBy"} name={item.suppliedBy || "-"} />,
-            filterValue: item.suppliedBy || "-",
-            contentType: "string",
-          },
-          {
-            columnIndex: 8,
-            className: " cell cell-preparedby text-dark-0 ",
-            // content: item.preparedBy || "-",
-            content: <DsName id={item.tenderId + "preparedBy"} name={item.preparedBy || "-"} />,
-            filterValue: item.preparedBy || "-",
-            contentType: "string",
-          },
-          {
-            columnIndex: 9,
-            className: " cell cell-value text-dark-1 ",
+  //     console.log("Fetched Response:", res);
 
-            content: <DsCurrency format={"IND"} id={"value"} amount={parseInt(item.value)} type={"short"} />,
-            filterValue: item.value,
-            contentType: "number",
-          },
-          {
-            columnIndex: 10,
-            className: " cell cell-status ",
 
-            content: item.status ? (
-              <DsStatusIndicator
-                type="user_defined"
-                className={`${item?.status?.tenderStatus
-                  ? styles[
-                  item?.status?.tenderStatus
-                    ?.replaceAll(" ", "_")
-                    .toLowerCase()
-                  ]
-                  : ""
-                  }`}
-                status={item.status.tenderStatus}
-                label={item.status.tenderStatus}
-                comment={
-                  item.status?.message
-                    ? typeof item.status.message === "object"
-                      ? JSON.stringify(item.status.message)
-                      : item.status.message.toString()
-                    : ""
-                }
-              />
-            ) :
-              (
-                "No Status"
-              ),
-            filterValue: item.status.tenderStatus,
-            contentType: "reactNode",
-          },
-        ],
+  //     if (res?.code === 200 && Array.isArray(res?.result)) {
+  //       const mappedData: Tender[] = res.result.map((item: Tender) => ({
+  //         customerName: item.customerName,
+  //         submittionDate: item.submissionDate,
+  //         daystosubmit: item.daysToSubmit ?? "N/A",
+  //         tenderId: item.tenderId.toString(),
+  //         type: item.customerType,
+  //         tenderType: item.tenderType,
+  //         depot: item.shippingLocations.map((loc: Tender) => loc.name).join(", "),
+  //         appliedBy: item.applierName,
+  //         suppliedBy: item.supplierName,
+  //         preparedBy: item.preparedBy,
+  //         value: item.value.toString(),
+  //         status: {
+  //           tenderStatus: item.status?.tenderStatus ?? "null",
+  //           message: item.status?.message ?? "No message",
+  //         },
+  //         customAttributes: { iconValue: "defaultIcon" },
+  //       }));
 
-      }));
-
-      console.log("Final Transformed Rows:", transformedRows);
-
-      setTimeout(() => {
-        setTempTableData((data) => ({ ...data, rows: transformedRows }));
-      }, 1);
-    }
-  }, [filteredData]);
+  //       setData(mappedData);
+  //     } else {
+  //       console.error("Error: Invalid response format or empty result", res);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
 
 
   const handleFetch = async () => {
-    try {
-      const res = await fetchData({ url: getAllTenders });
-
-
-      console.log("Fetched Response:", res);
-
-
-      if (res?.code === 200 && Array.isArray(res?.result)) {
-        const mappedData: Tender[] = res.result.map((item: Tender) => ({
-          customerName: item.customerName,
-          submittionDate: item.submissionDate,
-          daystosubmit: item.daysToSubmit ?? "N/A",
-          tenderId: item.tenderId.toString(),
-          type: item.customerType,
-          tenderType: item.tenderType,
-          depot: item.shippingLocations.map((loc: Tender) => loc.name).join(", "),
-          appliedBy: item.applierName,
-          suppliedBy: item.supplierName,
-          preparedBy: item.preparedBy,
-          value: item.value.toString(),
-          status: {
-            tenderStatus: item.status?.tenderStatus ?? "null",
-            message: item.status?.message ?? "No message",
-          },
-          customAttributes: { iconValue: "defaultIcon" },
-        }));
-
-        setData(mappedData);
-      } else {
-        console.error("Error: Invalid response format or empty result", res);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
+    const onlyStatus = {
+      "userId": 3,
+      "pageNo": 0,
+      "pageSize": 0,
+      "quickFilter": selectedStatus,
     }
+    const onlySearch = {
+      "userId": 3,
+      "pageNo": 0,
+      "pageSize": 0,
+      "searchTerm": searchQuery
+    }
+    const statusAndSearch = {
+      "userId": 3,
+      "pageNo": 0,
+      "pageSize": 0,
+      "quickFilter": selectedStatus,
+      "searchTerm": searchQuery,
+    }
+    const advanceFilter = {
+      "userId": 3,
+      "pageNo": 0,
+      "pageSize": 0,
+      "filters": advFilter,
+    }
+    const advanceAndSearch = {
+      "userId": 3,
+      "pageNo": 0,
+      "pageSize": 0,
+      "filters": advFilter,
+      "searchTerm": searchQuery,
+    }
+    const tenderFilters = advFilter && Object.keys(advFilter).length > 0 && searchQuery
+      ? advanceAndSearch
+      : advFilter && Object.keys(advFilter).length > 0
+        ? advanceFilter
+        : selectedStatus && searchQuery
+          ? statusAndSearch
+          : selectedStatus
+            ? onlyStatus
+            : searchQuery
+              ? onlySearch
+              : { "userId": 3, "pageNo": 0, "pageSize": 0 };
+      console.log("json object :",JSON.stringify(tenderFilters));
+    await fetchData({
+      url: getAllTenders,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Tenders-Filters": JSON.stringify(tenderFilters),
+      },
+    })
+      .then((res) => {
+        console.log("objevct to be send", tenderFilters);
+        console.log("Response RESULT:", res.result);
+
+        if (res?.code === 200 && Array.isArray(res?.result)) {
+          const formattedData = formatTenders (res?.result);
+          console.log("formatted data:", formattedData);
+          setData(formattedData);
+          // addOrder(formattedData);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching orders:", error);
+      });
+
+  };
+
+  const formatTenders = (tenders: Tender[]): Tender[] => {
+    return tenders.map((item) => ({
+      ...tenders,
+    
+      customerName: item.customerName,
+              submittionDate: item.submissionDate,
+              daystosubmit: item.daysToSubmit ?? "N/A",
+              tenderId: item.tenderId.toString(),
+              type: item.customerType,
+              tenderType: item.tenderType,
+              depot: item.shippingLocations.map((loc: Tender) => loc.name).join(", "),
+              appliedBy: item.applierName,
+              suppliedBy: item.supplierName,
+              preparedBy: item.preparedBy,
+              value: item.value.toString(),
+              status: {
+                tenderStatus: item.status?.tenderStatus ?? "null",
+                message: item.status?.message ?? "No message",
+              },
+              customAttributes: { iconValue: "defaultIcon" },
+
+
+    }));
+  };
+
+  const handleFiltersApplied = (apiFilter: Record<string, any>) => {
+    console.log("Received apiFilter in parent:", apiFilter);
+    // Use apiFilter to make API calls or update state
+    setAdvFilter(apiFilter);
+    console.log("advvvvvvvv", advFilter);
   };
 
 
@@ -430,12 +535,87 @@ export default function Home() {
 
 
 
+  const [filters, setFilters] = useState<filterTypes[]>([]);
+  useEffect(() => {
+    const fetchFilters = async () => {
+      try {
+
+        const updatedFilters: filterTypes[] = [
+    
+
+          { filterId: "0", filterFor: "Customer", filterType: "SearchAndMultiSelect"},
+          { filterId: "1", filterFor: "Date", filterType: "DateRange", maxValue: new Date(2025, 9, 21).getTime(), minValue: new Date(2050, 11, 26).getTime() },
+          { filterId: "2", filterFor: "Type", filterType: "MultiSelection", multiSelectOptions:  [
+            { label: "Institutional", value: "institutional" },
+            { label: "corporate", value: "corporate" },
+          ]
+        },
+          { filterId: "3", filterFor: "Supply type", filterType: "MultiSelection", multiSelectOptions:  [
+            { label: "Multi-delivery", value: "multidelivery" },
+            { label: "single-delivery", value: "singledelivery" },
+          ]
+        },
+          { filterId: "4", filterFor: "Applied by", filterType: "MultiSelection", multiSelectOptions: [
+            { label: "Ipca", value: "Ipca" },
+            { label: "Stockist", value: "stockist" },
+          ]
+        },
+          { filterId: "5", filterFor: "Supplied by", filterType: "MultiSelection", multiSelectOptions:  [
+            { label: "Ipca", value: "Ipca" },
+            { label: "Stockist", value: "stockist" },
+          ]
+        }, 
+          { filterId: "6", filterFor: "Depot", filterType: "MultiSelection", multiSelectOptions:  [
+            { label: "pune", value: "pune" },
+            { label: "satara", value: "satara" },
+          ]
+        },
+          { filterId: "7", filterFor: "Supply type", filterType: "MultiSelection", multiSelectOptions: [
+            { label: "abc", value: "abc" },
+            { label: "abc", value:"abc" },
+          ]
+        },
+          { filterId: "8", filterFor: "Value", filterType: "RangeSlider", maxValue: 4000000, minValue: 0 },
+          { filterId: "9", filterFor: "Status", filterType: "MultiSelection", multiSelectOptions:  [
+            { label: "Apporavl", value: "Approval" },
+            { label: "cancelled", value: "cancelled" },
+          ]
+        },
+
+
+          // { filterId: "0", filterFor: "Customer", filterType: "SearchAndMultiSelect"},
+          // { filterId: "1", filterFor: "Date", filterType: "DateRange", maxValue: new Date(2025, 9, 21).getTime(), minValue: new Date(2050, 11, 26).getTime() },
+          // { filterId: "2", filterFor: "Type", filterType: "MultiSelection", multiSelectOptions: sourceOptions },
+          // { filterId: "3", filterFor: "Supply type", filterType: "MultiSelection", multiSelectOptions: statusOptions },
+          // { filterId: "4", filterFor: "Applied by", filterType: "MultiSelection", multiSelectOptions: statusOptions }, 
+          // { filterId: "5", filterFor: "Supplied by", filterType: "MultiSelection", multiSelectOptions: statusOptions },
+          // { filterId: "6", filterFor: "Depot", filterType: "MultiSelection", multiSelectOptions: statusOptions },
+          // { filterId: "7", filterFor: "Supply type", filterType: "MultiSelection", multiSelectOptions: statusOptions },
+          // { filterId: "8", filterFor: "Value", filterType: "RangeSlider", maxValue: 4000000, minValue: 0 },
+          // { filterId: "9", filterFor: "Status", filterType: "MultiSelection", multiSelectOptions: statusOptions },        
+        ];
+
+        setFilters(updatedFilters);
+        console.log("updatedfilters",filters);
+
+      } catch (error) {
+        console.error("Error fetching filter data:", error);
+      }
+    };
+
+    fetchFilters();
+  }, []);
+  
   useEffect(() => {
     handleFetch();
     handleFetchMetaData();
 
 
   }, []);
+  useEffect(() => {
+    handleFetch();
+  }, [selectedStatus, searchQuery, advFilter]);
+
   useEffect(() => {
     console.log("Updated MetaData:", metaData);
   }, [metaData]);
@@ -619,7 +799,11 @@ export default function Home() {
         appTitle="Tenders"
         appMenu={
           <>
-            <DsFilterActions data={data} setFilteredData={setFilteredData} />
+            <DsFilterActions
+             searchQuery={searchQuery}
+             setSearchQuery={setSearchQuery}
+             selectedStatus={selectedStatus}
+             setSelectedStatus={setSelectedStatus}   />
             {newButtonVisible &&
     
               <DsButton
@@ -704,100 +888,12 @@ export default function Home() {
         </div>
 
       </DsApplication>
-      <DsPane id="tenderFilter" side="right" title="Filter">
-        <AdvancedFilterComponent
-          filters={[
-            {
-              filterId: "0",
-              filterFor: "Customer name",
-              filterType: "SearchAndMultiSelect",
-
-            },
-            {
-              filterId: "1",
-              filterFor: " Sub Date",
-              filterType: "DateRange",
-
-            },
-            {
-              filterId: "2",
-              filterFor: "Type",
-              filterType: "MultiSelection",
-              multiSelectOptions: [
-                { label: "Electronics", value: "electronics" },
-                { label: "Clothing", value: "clothing" },
-              ],
-
-            },
-            {
-              filterId: "3",
-              filterFor: "Supply type",
-              filterType: "MultiSelection",
-              multiSelectOptions: [
-                { label: "Electronics", value: "electronics" },
-                { label: "Clothing", value: "clothing" },
-              ],
-
-
-            },
-            {
-              filterId: "4",
-              filterFor: "Applied by",
-              filterType: "MultiSelection",
-              multiSelectOptions: [
-                { label: "Electronics", value: "electronics" },
-                { label: "Clothing", value: "clothing" },
-              ],
-
-
-            },
-            {
-              filterId: "5",
-              filterFor: "Depot",
-              filterType: "MultiSelection",
-              multiSelectOptions: [
-                { label: "Electronics", value: "electronics" },
-                { label: "Clothing", value: "clothing" },
-              ],
-
-
-            },
-            {
-              filterId: "6",
-              filterFor: "Value",
-              filterType: "RangeSlider",
-              maxValue: 3125342513,
-              minValue: 0,
-            },
-            {
-              filterId: "7",
-              filterFor: "Status",
-              filterType: "MultiSelection",
-              multiSelectOptions: [
-                { label: "Electronics", value: "electronics" },
-                { label: "Clothing", value: "clothing" },
-              ],
-
-
-            }
-          ]}
-          applyFilters={function (
-            filterValues: filterTypes[],
-            filterCount: number
-          ): 0 | 1 {
-            console.log(
-              "filterValues:",
-              filterValues,
-              "filterConsole: ",
-              filterCount
-            );
-            return 0;
-          }}
-          clearFilters={function (): void {
-            console.log("clearFilters");
-          }}
-        />
-      </DsPane>
+      {/* <DsPane id="tenderFilter" side="right" title="Filter"> */}
+      <DsAdvanceFilterPane
+        filters={filters}
+        onFiltersApplied={handleFiltersApplied}
+      />
+      {/* </DsPane> */}
 
       <ContextMenu
         id={"CreateNewActions"}
