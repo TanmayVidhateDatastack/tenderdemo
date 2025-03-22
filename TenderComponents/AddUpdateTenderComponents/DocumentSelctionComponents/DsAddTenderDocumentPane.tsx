@@ -4,10 +4,9 @@ import Ds_checkbox from "@/Elements/DsComponents/DsCheckbox/dsCheckbox";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import styles from "./document.module.css";
 import fetchData from "@/helpers/Method/fetchData";
-import { documents } from "@/helpers/types";
 import { DocumentContext } from "./DocumentsContextProvider";
 import { getAllDocuments } from "@/helpers/constant";
-
+import {documents} from "@/helpers/types"
 const DsAddTenderDocumentPane: React.FC = () => {
   const [openAccordion, setOpenAccordion] = useState<string | null>(null);
   const [groupedDocuments, setGroupedDocuments] = useState<Record<string, documents[]>>({});

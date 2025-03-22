@@ -1007,11 +1007,18 @@ export type tenderFee = {
   currency: string;
   paidBy: string;
   paymentMode: string;
-  paymentDueDate: string;
+  paymentDueDate: string; 
   notes: string;
-  status?: dsStatus;
+  status?: dsStatus; 
   documents: Document[];
 };
+export type documents = {
+  documentPath: string; 
+  category: string;
+  type: string;
+  id: number;
+  documentName: string;
+}
 export type applicableSupplyConditions = {
   type: string | number;
   notes: string;
