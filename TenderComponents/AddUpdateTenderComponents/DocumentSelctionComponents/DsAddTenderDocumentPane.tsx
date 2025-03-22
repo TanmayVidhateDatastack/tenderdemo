@@ -49,7 +49,6 @@ const DsAddTenderDocumentPane: React.FC = () => {
       console.error("Fetch error: ", error);
     }
   };
-
   const handleAccordionToggle = (type: string) => {
     setOpenAccordion((prevType) => (prevType === type ? null : type));
   };

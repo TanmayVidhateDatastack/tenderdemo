@@ -84,11 +84,9 @@ export const getConsolidatedOrder =
   apiHostUrl + "/orders/consolidatedOrders?ids=";
 export const createOrder = apiHostUrl + "/order";
 export const getAllOrdersURL = apiHostUrl + "/orders";
-export const searchTransporterURL = apiHostUrl + "/customers/filter?name=";
+export const searchTransporterURL = apiHostUrl + "/customers/filter?name="; 
 export const getTransporterURL = apiHostUrl + "/customers/";
 export const getAllStatusLogURL = apiHostUrl + "/status";
-
-
 export const getAllTenders = apiServerUrl + "/tenders";
 
 // export const getAllMetaData = apiHostUrl + "/tenderMetadata";

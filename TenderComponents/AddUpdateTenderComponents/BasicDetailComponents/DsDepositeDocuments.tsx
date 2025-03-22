@@ -159,7 +159,6 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
               value={checkbox.value.toString()}
               label={checkbox.label}
               defaultChecked={true}
-            // defaultChecked={true}
             />
           ))}
         </div>
@@ -185,7 +184,6 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
         return;
       }
     });
- 
     return () => {
       window.removeEventListener("click", (e) => {
         const target = (e.target as HTMLElement).closest(
@@ -228,7 +226,6 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
           />
         </div>
       </div>
-      {/* {/*  */}
       {applicableDeposits.map((deposit) => {
         if (typeof deposit.value == "string")
           return (
@@ -245,12 +242,9 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
             )
           );
       })}
- 
-      {/* // */}
     </div>
   );
 };
- 
 export default DsDepositeDocuments;
  
  

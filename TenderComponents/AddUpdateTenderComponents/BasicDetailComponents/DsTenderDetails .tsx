@@ -10,14 +10,14 @@ import {
   datalistOptions,
   searchCustomers,
   tenderDetailsProps,
-} from "@/helpers/types";
+} from "@/helpers/types";  
 import { useTenderData } from "../TenderDataContextProvider";
 import { debounce } from "@/helpers/Method/optimization";
 import DsDatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import copybtnenabled from "@/Icons/smallIcons/copyEnabled.svg";
 import Image from "next/image";
- 
+
 const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
   const [customers, setCustomers] = useState<searchCustomers[]>([]);
   const [dataListOption, setDataListOption] = useState<datalistOptions[]>();
@@ -38,6 +38,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
   const [showNotification, setShowNotification] = useState<boolean>(false);
  
   const { updateTenderData } = useTenderData();
+
   const handleFetch = async (searchTerm: string) => {
     try {
       await fetchData({ url: searchCustomerURL + searchTerm }).then((res) => {
@@ -70,7 +71,6 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
       console.error("Fetch error: ", error);
     }
   };
- 
   useEffect(() => {
     handleRoleFetch();
   }, []);
@@ -124,7 +124,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
             disable={false}
             className={styles.datalist}
             onOptionSelect={(option) => {
-              if (typeof option.value == "number") {
+              if (typeof option.value == "string") {
                 updateTenderData("customerId", option.value);
               }
             }}
@@ -295,7 +295,4 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
     </>
   );
 };
- 
 export default DsTenderDetails;
- 
- 
