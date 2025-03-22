@@ -40,7 +40,8 @@ export interface AccordionProps {
   title: string; // The title of the accordion
   children: string | React.ReactElement;
   isOpen?: boolean;
-  onToggle?: (id: number | string) => void;// The content inside the accordion, can be a string or a React element
+  onToggle?: (id: string) => void;
+ 
 }
 
 export interface tenderDetailsProps {
@@ -60,7 +61,7 @@ export interface applierSupplierDetails {
 }
 export interface supplyDetails {
   supplyPoints: DsSelectOption[];
-  reportRequirements: DsSelectOption[];
+  reportRequirements: DsMultiLevelSelectOption[];
   eligibility: DsSelectOption[];
 }
 
@@ -400,9 +401,11 @@ export interface datalistOptions {
   id: string;
   value?: string;
   label?:string;
+  label?:string;
   secondaryValue?: string | React.ReactNode;
 }
-
+ 
+ 
 export interface InputTextAreaProps {
   //input textfield and textArea propes
   handleInputChange?: (
@@ -779,6 +782,18 @@ export type customer = {
   address: location;
   bank: bankDetail;
 };
+export interface MultiLevelSearchProps{
+  setOptions:(values:unknown)=>datalistOptions[];
+  setSearchUrl:(searchTerm:string)=>string;
+  onSelect?:(selectedOption:datalistOptions)=>void;
+  id:string;
+  selectedOption?: datalistOptions;
+  label:string;
+ }
+ export interface DsMultiLevelSelectOption{
+  label:string;
+  value:string|MultiLevelSearchProps
+ }
 // export type tieUpProduct = {
 //   productId: number;
 //   productCode: string;

@@ -12,7 +12,7 @@ import pagestyles from "@/app/page.module.css"
 import { closeAllContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import DsPane from "@/Elements/DsComponents/DsPane/DsPane";
 import PaneOpenButton from "@/Elements/DsComponents/DsPane/PaneOpenButton";
-import DocumentProvider from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/DocumentsContextProvider";
+import DocumentProvider, { DocumentContext } from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/DocumentsContextProvider";
 import DsAddTenderDocumentPane from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/DsAddTenderDocumentPane";
 import DocumentSelectorArea from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/DsDocumentSelectionArea";
 import styles from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/document.module.css";
@@ -20,6 +20,13 @@ import styles from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctio
 const DsTenderIdPage: React.FC = () => {
   const { setActionStatusValues, actionStatus, saveTender } = useTenderData();
   const [selectedTabId] = useTabState("tenderPage"); // Use the custom hook
+
+  // const documentContext = useContext(DocumentContext);
+  // if (!documentContext) {
+  //   throw new Error("DocumentSelectorArea must be used within a DocumentContext");
+  // }
+
+  // const { totalSelectedDocuments } = documentContext;
 
   //  console.log(tenderData);
   const tabs = [
@@ -29,16 +36,15 @@ const DsTenderIdPage: React.FC = () => {
     // { tabId: "3", tabName: "New" },
   ];
 
+  // const docCount = totalSelectedDocuments;
+
   return (
     <>
       <DocumentProvider>
-
         <DsApplication
           selectedTabId={selectedTabId}
-
           appTitle="Tender"
           tabs={tabs}
-
         >
           <div className={pagestyles.container}
             onScroll={() => closeAllContext()}>
@@ -49,19 +55,31 @@ const DsTenderIdPage: React.FC = () => {
               </div>
             </TabView>
             <TabView tabId="2" pageName="tenderPage">
-              <div className={style.docPane}>
-                <PaneOpenButton className={styles.pane} id="documentPaneOpenBtn" paneId="documentPane" label="Add Documents" />
-              </div>
+              <DocumentContext.Consumer>
+                {(context) => {
+                  if (!context) {
+                    return <div>Error: Document context is not available</div>; // ✅ Prevents undefined errors
+                  }
+                  const { totalSelectedDocuments } = context;
 
-              <div>
-                <DocumentSelectorArea />  
-              </div>
+                  return (
+                    <div>
+                      <div className={style.docPane}>
+                        <div className={style.totalCount}>
+                          <div>Selected Document</div>
+                          <div className={style.count}> {totalSelectedDocuments}</div>
+                        </div>
+                        <PaneOpenButton className={styles.pane} id="documentPaneOpenBtn" paneId="documentPane" label="Add Documents" />
+                      </div>
 
+                      <DocumentSelectorArea />
+                    </div>
+                  );
+                }}
+              </DocumentContext.Consumer>
             </TabView>
-            {/* <TabView tabId="1" pageName="tenderPage" >
-          <DsTenderProduct productList={tenderData.products} setProductList={addTenderProduct} />
-          new prod
-        </TabView> */}
+
+
           </div>
         </DsApplication>
         <DsPane id="documentPane" side="right" title="Documents">

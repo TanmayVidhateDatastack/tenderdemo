@@ -4,9 +4,13 @@ import Ds_checkbox from "@/Elements/DsComponents/DsCheckbox/dsCheckbox";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import styles from "./document.module.css";
 import fetchData from "@/helpers/Method/fetchData";
+import { documents } from "@/helpers/types";
 import { DocumentContext } from "./DocumentsContextProvider";
 import { getAllDocuments } from "@/helpers/constant";
-import {documents} from "@/helpers/types"
+import DsDataList from "@/Elements/DsComponents/DsInputs/dsDatalist";
+import Image from "next/image";
+import search from "@/Icons/searchicon.svg"
+
 const DsAddTenderDocumentPane: React.FC = () => {
   const [openAccordion, setOpenAccordion] = useState<string | null>(null);
   const [groupedDocuments, setGroupedDocuments] = useState<Record<string, documents[]>>({});
@@ -25,6 +29,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
         const tenderDocuments = res.result.Documents.filter(
           (doc: documents) => doc.category === "TenderDocument"
         );
+
         const grouped = tenderDocuments.reduce(
           (acc: Record<string, documents[]>, doc: documents) => {
             if (!acc[doc.type]) {
@@ -35,6 +40,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
           },
           {}
         );
+
         setGroupedDocuments(grouped);
       } else {
         console.error("Error fetching data: ", res.message || "Unknown error");
@@ -51,9 +57,11 @@ const DsAddTenderDocumentPane: React.FC = () => {
   const handleCheckboxChange = (doc: documents) => {
     setSelectedDocuments((prev) => {
       const alreadySelected = prev.some((d) => d.id === doc.id);
+
       const updatedSelection = alreadySelected
         ? prev.filter((d) => d.id !== doc.id)
         : [...prev, doc];
+
       console.log("Updated selectedDocuments:", updatedSelection);
 
       return updatedSelection;
@@ -86,6 +94,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
         });
 
         console.log("Updated Document Context:", updatedData); // ✅ Debugging output
+
         return updatedData;
       });
     }
@@ -94,6 +103,13 @@ const DsAddTenderDocumentPane: React.FC = () => {
   return (
     <>
       <div className={styles.padd}>
+        <DsDataList
+          id="documentOpt"
+          dataListId="documents"
+          label="Search Document Here"
+          iconEnd={<Image src={search} alt="search" />}
+          options={[]}
+        />
         {Object.entries(groupedDocuments).map(([type, docs]) => (
           <Accordion
             key={type}
