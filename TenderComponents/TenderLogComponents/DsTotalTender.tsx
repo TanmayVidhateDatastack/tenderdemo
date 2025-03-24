@@ -7,10 +7,10 @@ import {
   displayContext,
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import DsInfoDisplay from "@/Elements/ERPComponents/DsInfoDisplay/DsInfoDisplay";
-import { Tender } from "@/helpers/types";
+import { Tender } from "@/Common/helpers/types";
 import Image from "next/image";
-import institutionalimg from "@/Icons/institutional.svg";
-import corporateimag from "@/Icons/corporate.svg";
+import institutionalimg from "@/Common/TenderIcons/institutional.svg";
+import corporateimag from "@/Common/TenderIcons/corporate.svg";
 import Ds_SummaryCount from "@/Elements/DsComponents/DsSummaryCount/DsSummaryCount";
 import styles from "./filteractions.module.css";
 

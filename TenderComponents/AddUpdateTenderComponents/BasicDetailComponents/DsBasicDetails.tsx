@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
-import { getAllMetaData, getTenderUserRoles } from "@/helpers/constant";
-import fetchData from "@/helpers/Method/fetchData";
-import { tenderDetails, applierSupplierDetails, supplyDetails, DsSelectOption } from "../../../helpers/types";
+import { getAllMetaData, getTenderUserRoles } from "@/Common/helpers/constant";
+import fetchData from "@/Common/helpers/Method/fetchData";
+import {
+  tenderDetails,
+  applierSupplierDetails,
+  supplyDetails,
+  DsSelectOption,
+} from "@/Common/helpers/types";
 import DsDepositeDocuments, { DepositDocument } from "./DsDepositeDocuments";
-import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css"
+import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import DsApplierSupplierDetails from "./DsApplierSupplierDetails ";
 import DsTenderDetails from "./DsTenderDetails ";
 import DsSupplyDetails from "./DsSupplyDetails";
@@ -54,12 +59,12 @@ const DsBasicDetails = () => {
         const tenderDetailsData = {
           tenderType: result.tenderType.map((item: any) => ({
             value: item.codeValue,
-            label: item.codeDescription
+            label: item.codeDescription,
           })),
           submissionMode: result.submissionMode.map((item: any) => ({
             value: item.codeValue,
-            label: item.codeDescription
-          }))
+            label: item.codeDescription,
+          })),
         };
         setTenderDetails(tenderDetailsData);
 
@@ -70,52 +75,55 @@ const DsBasicDetails = () => {
         const supplyDetailsData = {
           supplyPoints: result.supplyPoint.map((item: any) => ({
             value: item.codeValue,
-            label: item.codeDescription
+            label: item.codeDescription,
           })),
           reportRequirements: result.testReportRequirement.map((item: any) => ({
             value: item.codeValue,
-            label: item.codeDescription
+            label: item.codeDescription,
           })),
           eligibility: result.eligibility.map((item: any) => ({
             value: item.codeValue,
-            label: item.codeDescription
-          }))
+            label: item.codeDescription,
+          })),
         };
         setSupplyDetails(supplyDetailsData);
 
         // Applicable Deposits
         const applicableDeposits = result.feesType.map((item: any) => ({
           value: item.codeValue,
-          label: item.codeDescription
+          label: item.codeDescription,
         }));
         setApplicableDocuments(applicableDeposits);
 
         // Applicable Supply Conditions
-        const applicableSupplyCond = result.tenderSupplyCondition.map((item: any) => ({
-          value: item.codeValue,
-          label: item.codeDescription
-        }));
+        const applicableSupplyCond = result.tenderSupplyCondition.map(
+          (item: any) => ({
+            value: item.codeValue,
+            label: item.codeDescription,
+          })
+        );
         setApplicableSupplyConditions(applicableSupplyCond);
 
         // Deposit Document Modes (Assuming paymentMode == modes)
-        const depositDocData = [{
-          paidBy: [
-            {
-              value: "PAID_BY_IPCA",
-              label: "Paid By Ipca" 
-            }, 
-            {  
-              value: "PAID_BY_STOCKIEST",
-              label: "Paid By Stockiest"
-            }
-          ],
-          modes: result.paymentMode.map((item: any) => ({
-            value: item.codeValue.toLowerCase(),  // Optional: Lowercase if needed
-            label: item.codeDescription
-          }))
-        }];
+        const depositDocData = [
+          {
+            paidBy: [
+              {
+                value: "PAID_BY_IPCA",
+                label: "Paid By Ipca",
+              },
+              {
+                value: "PAID_BY_STOCKIEST",
+                label: "Paid By Stockiest",
+              },
+            ],
+            modes: result.paymentMode.map((item: any) => ({
+              value: item.codeValue.toLowerCase(), // Optional: Lowercase if needed
+              label: item.codeDescription,
+            })),
+          },
+        ];
         setDepositeDocuments(depositDocData);
-
       } else {
         console.error("Error fetching data: ", res.message || "Unknown error");
       }
@@ -130,7 +138,7 @@ const DsBasicDetails = () => {
       if (res.code === 200) {
         const result = res.result;
         setRole(result.roleName);
-        console.log("result teder role : ", result)
+        console.log("result teder role : ", result);
       } else {
         console.error("Error fetching data: ", res.message || "Unknown error");
       }
@@ -139,13 +147,10 @@ const DsBasicDetails = () => {
     }
   };
 
-
   useEffect(() => {
     handleFetch();
-    handleRoleFetch()
+    handleRoleFetch();
   }, []);
-
-
 
   useEffect(() => {
     console.log("metadata : ", metadata);
@@ -155,20 +160,19 @@ const DsBasicDetails = () => {
       setApplicableSupplyConditions(metadata[0].applicableSupplyConditions);
     }
   }, [metadata]);
- 
+
   return (
     <>
-      <div >
+      <div>
         <DsTenderDetails tenderDetails={tenderDetails} />
       </div>
-      <span className={styles.Seperator}>
-      </span>
+      <span className={styles.Seperator}></span>
       <div>
         <DsApplierSupplierDetails
-          applierSupplierDetails={applierSupplierDetails} />
+          applierSupplierDetails={applierSupplierDetails}
+        />
       </div>
-      <span className={styles.Seperator}>
-      </span>
+      <span className={styles.Seperator}></span>
       <div>
         <DsDepositeDocuments
           setDepositeDocuments={(docs) => {
@@ -179,16 +183,15 @@ const DsBasicDetails = () => {
           role={role}
         />
       </div>
-      <span className={styles.Seperator}>
-      </span>
+      <span className={styles.Seperator}></span>
       <div>
         <DsSupplyDetails supplyDetails={supplyDetails} />
       </div>
-      <span className={styles.Seperator}>
-      </span>
+      <span className={styles.Seperator}></span>
       <div>
         <DsApplicableConditions
-          applicableConditions={applicableSupplyConditions} />
+          applicableConditions={applicableSupplyConditions}
+        />
       </div>
     </>
   );

@@ -1,4 +1,4 @@
-// import { DsStatus } from "@/helpers/constant";
+// import { DsStatus } from "@/Common/helpers/constant";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type PermissionState = {

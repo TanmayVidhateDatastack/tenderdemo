@@ -1,5 +1,5 @@
-// import { DsStatus } from "@/helpers/constant";
-// import { Company, datalistOptions } from "@/helpers/types";
+// import { DsStatus } from "@/Common/helpers/constant";
+// import { Company, datalistOptions } from "@/Common/helpers/types";
 // import DsSearchComponent from "@/Elements/ERPComponents/DsSearchComponent/searchComponent";
 // import { useState } from "react";
 // export interface CompanySearchProps {

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { InitState, DsTableRow } from "@/helpers/types";
+import { InitState, DsTableRow } from "@/Common/helpers/types";
 
 export const initialState: InitState = {
   rows: [],

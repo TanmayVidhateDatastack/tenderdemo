@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Ds_SummaryCount from "@/Elements/DsComponents/DsSummaryCount/DsSummaryCount";
-import { Tender } from "@/helpers/types";
+import { Tender } from "@/Common/helpers/types";
 import {
   closeContext,
   createContext,

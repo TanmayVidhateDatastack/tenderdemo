@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import styles from "./document.module.css";
 import DocumentSelector from "@/Elements/DsComponents/dsDocumentSelector/dsDocumentSelector";
 import { DocumentContext } from "./DocumentsContextProvider";
-// import { documents } from "@/helpers/types"; // ✅ Import correct type
+// import { documents } from "@/Common/helpers/types"; // ✅ Import correct type
 
 const DocumentSelectorArea: React.FC = () => {
   const documentContext = useContext(DocumentContext);

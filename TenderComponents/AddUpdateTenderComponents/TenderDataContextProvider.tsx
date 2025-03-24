@@ -1,6 +1,6 @@
 import { showToaster } from "@/Elements/DsComponents/DsToaster/DsToaster";
-import { closeTimeForTender, dsStatus,saveTenderurl } from "@/helpers/constant";
-import fetchData from "@/helpers/Method/fetchData";
+import { closeTimeForTender, dsStatus,saveTenderurl } from "@/Common/helpers/constant";
+import fetchData from "@/Common/helpers/Method/fetchData";
 import {
   applicableSupplyConditions,
   TenderData,
@@ -9,7 +9,7 @@ import {
   tenderSupplyCondition,
   TenderProduct,
   Company,
-} from "@/helpers/types";
+} from "@/Common/helpers/types";
 import { useRouter } from "next/navigation";
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 class ActionStatus {

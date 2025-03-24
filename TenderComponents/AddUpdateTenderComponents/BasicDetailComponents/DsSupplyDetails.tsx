@@ -2,8 +2,8 @@ import DsSingleSelect from "@/Elements/DsComponents/dsSelect/dsSingleSelect";
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import DsMultiSelect from "@/Elements/DsComponents/dsSelect/dsMultiSelect";
 import DsSelectMultiLevel from "@/Elements/DsComponents/dsSelect/dsSelectMultiLevel";
-import { datalistOptions, supplyDetailsProps } from "@/helpers/types";
-// import { datalistOptions, supplyDetailsProps } from "@/helpers/types";
+import { datalistOptions, supplyDetailsProps } from "@/Common/helpers/types";
+// import { datalistOptions, supplyDetailsProps } from "@/Common/helpers/types";
 import { useTenderData } from "../TenderDataContextProvider";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css"
 const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {

@@ -3,13 +3,13 @@ import Accordion from "@/Elements/DsComponents/dsAccordion/accordion";
 import Ds_checkbox from "@/Elements/DsComponents/DsCheckbox/dsCheckbox";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import styles from "./document.module.css";
-import fetchData from "@/helpers/Method/fetchData";
-import { documents } from "@/helpers/types";
+import fetchData from "@/Common/helpers/Method/fetchData";
+import { documents } from "@/Common/helpers/types";
 import { DocumentContext } from "./DocumentsContextProvider";
-import { getAllDocuments } from "@/helpers/constant";
+import { getAllDocuments } from "@/Common/helpers/constant";
 import DsDataList from "@/Elements/DsComponents/DsInputs/dsDatalist";
 import Image from "next/image";
-import search from "@/Icons/searchicon.svg"
+import search from "@/Common/TenderIcons/searchicon.svg"
 
 const DsAddTenderDocumentPane: React.FC = () => {
   const [openAccordion, setOpenAccordion] = useState<string | null>(null);

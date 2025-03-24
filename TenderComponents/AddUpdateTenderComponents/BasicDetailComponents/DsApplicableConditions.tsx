@@ -1,6 +1,6 @@
 import styles from "./deposite.module.css";
 import Image from "next/image";
-import downarrow from "@/Icons/smallIcons/verticleArrow.svg";
+import downarrow from "@/Common/TenderIcons/smallIcons/verticleArrow.svg";
 import { useState, useEffect } from "react";
 import React from "react";
 import Ds_checkbox from "@/Elements/DsComponents/DsCheckbox/dsCheckbox";
@@ -12,7 +12,7 @@ import {
   displayContext,
   closeContext
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
-import { DsSelectOption } from "@/helpers/types";
+import { DsSelectOption } from "@/Common/helpers/types";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 
 import DsSupplyConditions from "./DsSupplyConditions";

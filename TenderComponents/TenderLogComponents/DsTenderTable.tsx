@@ -1,12 +1,12 @@
 // "use client";
 // import { useEffect, useState } from "react";
 // import DsApplication from "@/Elements/ERPComponents/DsApplicationComponents/DsApplication";
-// import fetchData from "@/helpers/Method/fetchData";
-// import { DsTableRow, tableData, Tender } from "@/helpers/types";
-// import { getAllTenders } from "@/helpers/constant";
+// import fetchData from "@/Common/helpers/Method/fetchData";
+// import { DsTableRow, tableData, Tender } from "@/Common/helpers/types";
+// import { getAllTenders } from "@/Common/helpers/constant";
 // import DsTableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableComponent";
-// import institutional from "@/Icons/institutional.svg";
-// import corporate from "@/Icons/corporate.svg";
+// import institutional from "@/Common/TenderIcons/institutional.svg";
+// import corporate from "@/Common/TenderIcons/corporate.svg";
 // import Image from "next/image";
 // import AdvancedFilterComponent from "@/Elements/DsComponents/AdvancedFilterComponent/AdvancedFilterComponent";
 // import DsPane, { ClosePane } from "@/Elements/DsComponents/DsPane/DsPane";

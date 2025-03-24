@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import "./globals.css";
+import "../Common/globals.css";
 import DsElLayout from "@/Elements/ERPComponents/DsElLayout/DsElLayout";
 
 const openSans = localFont({
-  src: "../fonts/Open_Sans/OpenSans-VariableFont_wdth,wght.ttf",
+  src: "../Common/fonts/Open_Sans/OpenSans-VariableFont_wdth,wght.ttf",
   variable: "--font-Open-sans",
   weight: "100 900",
 }); 

@@ -7,7 +7,7 @@ import { useTabState } from "@/Redux/hook/tabHook"; // Import the custom hook
 import DSTendrFooter from "@/TenderComponents/TenderLogComponents/DsTenderFooter";
 import style from "./tenderOrder.module.css";
 import Toaster from "@/Elements/DsComponents/DsToaster/DsToaster";
-import { closeTimeForTender } from "@/helpers/constant";
+import { closeTimeForTender } from "@/Common/helpers/constant";
 import pagestyles from "@/app/page.module.css"
 import { closeAllContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import DsPane from "@/Elements/DsComponents/DsPane/DsPane";

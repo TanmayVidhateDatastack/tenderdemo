@@ -1,6 +1,6 @@
 // import React, { useEffect, useMemo, useState } from "react";
 // import TableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableComponent";
-// import { tableData, tcolumn, DsTableRow, TenderProduct } from "@/helpers/types";
+// import { tableData, tcolumn, DsTableRow, TenderProduct } from "@/Common/helpers/types";
 // import { useTenderData } from "../TenderDataContextProvider";
 // import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 // import ProductTableSearch from "./ProductTableSearch";

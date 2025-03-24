@@ -4,7 +4,7 @@ import DsSelectMultiLevel from "@/Elements/DsComponents/dsSelect/dsSelectMultiLe
 import {
   applierSupplierDetailsProps,
  
-} from "@/helpers/types";
+} from "@/Common/helpers/types";
 import { useTenderData } from "../TenderDataContextProvider";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import deptStyles from "@/TenderComponents/AddUpdateTenderComponents/BasicDetailComponents/deposite.module.css";

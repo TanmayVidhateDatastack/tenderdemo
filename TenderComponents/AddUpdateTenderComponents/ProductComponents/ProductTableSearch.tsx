@@ -1,7 +1,7 @@
 // import DsInfoDisplay from "@/Elements/ERPComponents/DsInfoDisplay/DsInfoDisplay";
 // import DsSearchComponent from "@/Elements/ERPComponents/DsSearchComponent/searchComponent";
-// import { getTenderSearchProducts } from "@/helpers/constant";
-// import {  TenderProduct } from "@/helpers/types";
+// import { getTenderSearchProducts } from "@/Common/helpers/constant";
+// import {  TenderProduct } from "@/Common/helpers/types";
 // import { useState } from "react";
 // import { areSearchProduct } from "./companySearch";
 

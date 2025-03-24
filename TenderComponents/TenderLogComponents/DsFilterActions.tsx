@@ -1,16 +1,16 @@
 import styles from "./filteractions.module.css";
 import Image from "next/image";
-import filter from "@/Icons/smallIcons/filtericon.svg";
+import filter from "@/Common/TenderIcons/smallIcons/filtericon.svg";
 import { useAppDispatch, useAppSelector } from "@/Redux/hook/hook";
 import { AppDispatch, RootState } from "@/Redux/store/store";
-import fetchData from "@/helpers/Method/fetchData";
+import fetchData from "@/Common/helpers/Method/fetchData";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { dsStatus, DsStatus, getTenderUserRoles } from "@/helpers/constant";
+import {  getTenderUserRoles } from "@/Common/helpers/constant";
 import { setUserRole } from "@/Redux/slice/UserSlice/userSlice";
 import { setVisibilityByRole } from "@/Redux/slice/PermissionSlice/permissionSlice";
-import { Tender } from "@/helpers/types";
+// import { Tender } from "@/Common/helpers/types";
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
-import searchicon from "@/Icons/smallIcons/searchicon.svg";
+import searchicon from "@/Common/TenderIcons/smallIcons/searchicon.svg";
 import DsFilterButton from "@/Elements/DsComponents/DsButtons/dsFilterButton";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import { DisplayPane } from "@/Elements/DsComponents/DsPane/DsPane";
@@ -30,7 +30,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
 }) => {
 
   const initialFilterState = Object.fromEntries(
-    [...Object.values(DsStatus), "nearSubmission", "feesPending","feesPaid"].map(
+    [ "nearSubmission", "feesPending","approval","underApproval","underReview"].map(
       (status) => [status, false]
     )
   );
@@ -353,7 +353,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
           buttonViewStyle={
             isFiltered["feesPending"] ? "btnContained" : "btnOutlined"
           }
-          onClick={() =>(DsStatus.APRV, "fees pending")}
+          onClick={() =>handleFilter("feesPending")}
           label="Fees Pending"
         />
       )}
@@ -364,14 +364,14 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
           buttonColor="btnPrimary"
           className={styles.dis}
           buttonViewStyle={
-            isFiltered[DsStatus.APRV || DsStatus.UREV || DsStatus.UAPR]
+            isFiltered["approval"]
               ? "btnContained"
               : "btnOutlined"
           }
 
           onClick={() =>
             handleFilter
-              (DsStatus.APRL)
+              ("approval")
           }
           label="Approval"
         />
@@ -381,8 +381,12 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
             label="Under Approval"
             className={styles.dis}
             id="underApproval"
-            buttonViewStyle="btnOutlined"
-            onClick={() => handleFilter(DsStatus.UAPR)}
+            buttonViewStyle={
+              isFiltered["underApproval"]
+                ? "btnContained"
+                : "btnOutlined"
+            }
+            onClick={() => handleFilter("underApproval")}
           />
         )}
         {underReviewButtonVisible && (
@@ -390,8 +394,12 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
             label="Under Review"
             className={styles.dis}
             id="underReview"
-            buttonViewStyle="btnOutlined"
-            onClick={() => handleFilter(DsStatus.UREV)}
+            buttonViewStyle={
+              isFiltered["underReview"]
+                ? "btnContained"
+                : "btnOutlined"
+            }
+            onClick={() => handleFilter("underReview")}
           />
         )}
       {filterButtonVisible && (

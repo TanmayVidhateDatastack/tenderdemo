@@ -3,11 +3,11 @@ import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import { FloatingMenu, displayTableMenu } from "@/Elements/DsComponents/FloatingMenu/dsFloatingMenu";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import cancle from "@/Icons/smallIcons/cancle.svg";
-import lost from "@/Icons/smallIcons/lost.svg";
-import awarded from "@/Icons/smallIcons/awarded.svg";
- import version  from "@/Icons/smallIcons/V.svg";
-// import cancle from "@/Icons/smallIcons/cancle.svg";
+import cancle from "@/Common/TenderIcons/smallIcons/cancle.svg";
+import lost from "@/Common/TenderIcons/smallIcons/lost.svg";
+import awarded from "@/Common/TenderIcons/smallIcons/awarded.svg";
+ import version  from "@/Common/TenderIcons/smallIcons/V.svg";
+// import cancle from "@/Common/TenderIcons/smallIcons/cancle.svg";
 
 
 interface DsTenderTableFloatingMenuProps {

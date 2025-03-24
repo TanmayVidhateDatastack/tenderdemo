@@ -1,11 +1,11 @@
 // import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 // import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
-// import lprSelectedSVG from "@/Icons/smallIcons/lprSelected.svg";
-// import lprSVG from "@/Icons/smallIcons/lpr.svg";
+// import lprSelectedSVG from "@/Common/TenderIcons/smallIcons/lprSelected.svg";
+// import lprSVG from "@/Common/TenderIcons/smallIcons/lpr.svg";
 // import Image from "next/image";
 // import { useEffect, useState } from "react";
 // // import { useTenderData } from "../TenderDataContextProvider";
-// import { Company, datalistOptions } from "@/helpers/types";
+// import { Company, datalistOptions } from "@/Common/helpers/types";
 // import { createContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 // // import DsSearchComponent from "@/Elements/ERPComponents/DsSearchComponent/searchComponent";
 // import CompanySearch from "./companySearch";
