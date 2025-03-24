@@ -37,6 +37,14 @@ export interface DsFeesProps {
   paymentCompletedVisible: boolean;
 }
  
+const getTodayDate = (date: Date) => {
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Ensure two digits
+  const day = date.getDate().toString().padStart(2, "0"); // Ensure two digits
+
+  return `${year}-${month}-${day}`;
+};
+
 const DsFeesDocument: React.FC<DsFeesProps> = ({
   title,
   id,
@@ -130,12 +138,17 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           </div>
           <div className={styles.fieldColors}>
 
-            <DatePicker
-              id={"dueDate"}
+          <DatePicker
+              id={id + "dueDate"}
               initialDate={""}
               className={""}
               placeholder="DD/MM/YYYY"
               label="Due Date"
+              setDateValue={(date) => {
+                if (date instanceof Date) {
+                  updateTenderFee(id.replace("DocumentView",""),"paymentDueDate",getTodayDate(date));
+                }
+              }}
             />
           </div>
         </div>

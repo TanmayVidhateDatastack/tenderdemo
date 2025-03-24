@@ -5,18 +5,18 @@ import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import deptStyle from "./deposite.module.css";
 import { useEffect, useState } from "react";
 import { getTenderUserRoles, searchCustomerURL } from "@/Common/helpers/constant";
-import fetchData from "../../../helpers/Method/fetchData";
 import {
   datalistOptions,
   searchCustomers,
-  tenderDetailsProps,
+  tenderDetailsProps, 
 } from "@/Common/helpers/types";  
 import { useTenderData } from "../TenderDataContextProvider";
 import { debounce } from "@/Common/helpers/Method/optimization";
 import DsDatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
-import copybtnenabled from "@/Common/TenderIcons/smallIcons/copyEnabled.svg";
 import Image from "next/image";
+import fetchData from "@/Common/helpers/Method/fetchData";
+import copybtnenabled from "@/Common/TenderIcons/smallIcons/copyEnabled.svg"
 
 const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
   const [customers, setCustomers] = useState<searchCustomers[]>([]);
