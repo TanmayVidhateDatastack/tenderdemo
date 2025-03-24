@@ -48,13 +48,13 @@ const DsTenderIdPage: React.FC = () => {
         >
           <div className={pagestyles.container}
             onScroll={() => closeAllContext()}>
-            <TabView tabId="0" pageName="tenderPage">
+            <TabView tabId="0" >
               <div className={style.tenderDetails}>
 
                 <DsBasicDetails />
               </div>
             </TabView>
-            <TabView tabId="2" pageName="tenderPage">
+            <TabView tabId="2">
               <DocumentContext.Consumer>
                 {(context) => {
                   if (!context) {

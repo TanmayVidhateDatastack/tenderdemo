@@ -1,124 +1,124 @@
 .SaveBtn{
-    display: flex;
-    justify-content: center;
-  }
-  .savebtn{
-    width: 98%;
-    height: 60px;
-    margin-top: 120px;
-    background-color: var(--primary-hover);
-    color: var(--text-white) !important;
-    border: none !important;
-  }
-  .documents{
-    font-size: 13px;
-    font-family: sans-serif;
-  }
-  .padd{ 
-    padding: 20px;
-  }  
-  .docs{
   display: flex;
-  justify-content: space-between;
-  }
-  .btn{
-    border: none !important;
-    color: var(--grey-900) !important;
-    font-size: 16px !important;
-  }
-  .pane{
-    width:fit-content;
-    height: 30px;
-    border: none !important;
-  }
-  .checkbox{
-    margin-bottom: 8px !important;
-    border-radius: 3px 3px 3px 3px !important;
-  }
-  /* */
+  justify-content: center;
+}
+.savebtn{
+  width: 98%;
+  height: 60px;
+  margin-top: 120px;
+  background-color: var(--primary-hover);
+  color: var(--text-white) !important;
+  border: none !important;
+}
+.documents{
+  font-size: 13px;
+  font-family: sans-serif;
+}
+.padd{ 
+  padding: 20px;
+}  
+.docs{
+display: flex;
+justify-content: space-between;
+}
+.btn{
+  border: none !important;
+  color: var(--grey-900) !important;
+  font-size: 16px !important;
+}
+.pane{
+  width:fit-content;
+  height: 30px;
+  border: none !important;
+}
+.checkbox{
+  margin-bottom: 8px !important;
+  border-radius: 3px 3px 3px 3px !important;
+}
+/* */
 
-  .container {
-  width: 100%;
+.container {
+width: 100%;
 }
 .checkHolder{
-  width: 100%;
+width: 100%;
 }
 .Customer > div,
 .Product > div,
 .shipping > div {
-  padding: var(--ds-padding);
+padding: var(--ds-padding);
 }
 
 .saveBtn, .saveBtnDiv{
-  width: 100% !important;
-  margin-bottom: 10px !important;
-  min-width: 100% !important;
-  min-height: 40px !important;
-  font-size: 20px !important;
-  margin-top: 140px;
+width: 100% !important;
+margin-bottom: 10px !important;
+min-width: 100% !important;
+min-height: 40px !important;
+font-size: 20px !important;
+margin-top: 140px;
 }
 
 .buttonDiv{
-  display: flex;
-  align-items: center;
-  justify-content: end;
-  padding-right: 1px;
-  margin-left: 600px;
-  min-width: 60%;
-  }
+display: flex;
+align-items: center;
+justify-content: end;
+padding-right: 1px;
+margin-left: 600px;
+min-width: 60%;
+}
 
-  .datalist{
-    color: var(--secondary);
-  }
+.datalist{
+  color: var(--secondary);
+}
 
 .inputDetails {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 equal columns */
-  gap: var(--ds-margin); /* spacing between items */
-  border-bottom: 0.5px solid var(--grey-100);
-  padding: var(--ds-padding);
-  background: inherit;
+display: grid;
+grid-template-columns: repeat(4, 1fr); /* 4 equal columns */
+gap: var(--ds-margin); /* spacing between items */
+border-bottom: 0.5px solid var(--grey-100);
+padding: var(--ds-padding);
+background: inherit;
 }
 
 .inputDetails > div {
-  margin: 0; /* Remove margin if you want exact grid alignment */
+margin: 0; /* Remove margin if you want exact grid alignment */
 }
 
 .inputComps{
-  border-bottom: 1px solid var(--grey-100);
-  padding: 2px;
+border-bottom: 1px solid var(--grey-100);
+padding: 2px;
 }
 .documentsDivs{
-  margin-bottom: 15px !important;
+margin-bottom: 15px !important;
 }
 @media (max-width: 1200px) {
-  .details > div,.transportDetails {
-    grid-template-columns: repeat(
-      3,
-      minmax(150px, 1fr)
-    ); /* 3 columns on medium screens */
-  }
+.details > div,.transportDetails {
+  grid-template-columns: repeat(
+    3,
+    minmax(150px, 1fr)
+  ); /* 3 columns on medium screens */
+}
 }
 
 @media (max-width: 800px) {
-  .details > div,.transportDetails {
-    grid-template-columns: repeat(
-      2,
-      minmax(150px, 1fr)
-    ); /* 2 columns on smaller screens */
-  }
-  .ToFrom {
-    grid-template-columns: 1fr; /* 1 column on very small screens */
-  }
+.details > div,.transportDetails {
+  grid-template-columns: repeat(
+    2,
+    minmax(150px, 1fr)
+  ); /* 2 columns on smaller screens */
+}
+.ToFrom {
+  grid-template-columns: 1fr; /* 1 column on very small screens */
+}
 }
 
 @media (max-width: 500px) {
-  .details > div,
-  .ToFrom ,.transportDetails{
-    grid-template-columns: 1fr; /* 1 column on very small screens */
-  }
+.details > div,
+.ToFrom ,.transportDetails{
+  grid-template-columns: 1fr; /* 1 column on very small screens */
+}
 } 
 .documentsCkechS{
-  margin-bottom: 0.5rem !important;
+margin-bottom: 0.5rem !important;
 }
-   
+ 

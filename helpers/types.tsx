@@ -295,9 +295,12 @@ export interface DsOptionProps {
 
 export interface DsSelectOption {
   label: string;
-  value: string | DsSelectOption[] |number;
+  value: string | DsSelectOption[] ;
 }
-
+export interface TabProps {
+  tabId: string;
+  children: React.ReactNode;
+}
 export interface RadioCheckOption {
   customAttribute?: Record<string, string>;
   id: string;

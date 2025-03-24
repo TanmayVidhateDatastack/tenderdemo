@@ -54,12 +54,15 @@ export const DsTenderTableFloatingMenu: React.FC<DsTenderTableFloatingMenuProps>
     console.log("Calling displayTableMenu for id:", rowIndex);
     displayTableMenu(e, String(rowIndex), "bottom", "center");
   }, [e, rowIndex]);
+  const handleClose = () => {
+    console.log("close");
+  };
   
 
   return (
     <FloatingMenu selected={1} id={String(rowIndex)}
     
-    
+    onCloseClick={handleClose}
     >
       <>
         {isCancelBtnVisible && (

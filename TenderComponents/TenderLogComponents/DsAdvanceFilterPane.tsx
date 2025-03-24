@@ -23,65 +23,71 @@ import AdvancedFilterComponent, {
     }
   
     const convertFilterValuesToApiFormat = (filterValues: any[]): Record<string, any> => {
+      console.log("Raw filter values:", filterValues); // Debug step
+    
       const apiFilter: Record<string, any> = {};
-  
+    
       filterValues.forEach((filter) => {
-        switch (filter.filterFor.toLowerCase()) {
-   
-        case "Customer": if (filter.filterValues)
-            apiFilter["customers"] = filter.filterValues?.map((value) => parseInt(value)) ?? [];
-                break;
-
-          case "Date": if (filter.filterValues?.from || filter.filterValues?.to)
-            apiFilter["DateRange"] = {
-              from: formatDate(filter.filterValues?.from),
-              to: formatDate(filter.filterValues?.to)
-            };
+        console.log("Processing filter:", filter);
+    
+        switch (filter.filterFor.trim().toLowerCase()) { // Use `trim()` to avoid extra spaces
+          case "customer":
+            if (filter.filterValues)
+              apiFilter["customers"] = filter.filterValues?.map((value) => parseInt(value)) ?? [];
             break;
-
-            case "Type": if (filter.filterValues)
-                apiFilter["tendertype"] = filter.filterValues ?? [];
-                break;
-
-            case "Supply type": if (filter.filterValues)
-                    apiFilter["supplytype"] = filter.filterValues ?? [];
-                    break;
-                
-            case "Applied by": if (filter.filterValues)
-                        apiFilter["appliedby"] = filter.filterValues ?? [];
-                        break;
-
-                                    
-            case "Supplied by": if (filter.filterValues)
-                apiFilter["suppliedby"] = filter.filterValues ?? [];
-                break;
-
-
-            case "Depot": if (filter.filterValues)
-                            apiFilter["depot"] = filter.filterValues ?? [];
-                            break;
-
-           case " Supply type": if (filter.filterValues)
-          apiFilter["Supply Type"] = 
-            apiFilter["depot"] = filter.filterValues ?? [];
-          break;
-
-          case "Value":if(filter.filterValues?.from || filter.filterValues?.to) 
-          apiFilter["value"]={
-            min: filter.filterValues?.from,
-            max: filter.filterValues?.to
-          }
-          case "status": if (filter.filterValues)
-            apiFilter["Status"] = filter.filterValues ?? [];
+    
+          case "date":
+            if (filter.filterValues?.from || filter.filterValues?.to)
+              apiFilter["DateRange"] = {
+                from: formatDate(filter.filterValues?.from),
+                to: formatDate(filter.filterValues?.to),
+              };
             break;
+    
+          case "type":
+            if (filter.filterValues) apiFilter["tendertype"] = filter.filterValues ?? [];
+            break;
+    
+          case "supply type":
+            if (filter.filterValues) apiFilter["supplytype"] = filter.filterValues ?? [];
+            break;
+    
+          case "applied by":
+            if (filter.filterValues) apiFilter["appliedby"] = filter.filterValues ?? [];
+            break;
+    
+          case "supplied by":
+            if (filter.filterValues) apiFilter["suppliedby"] = filter.filterValues ?? [];
+            break;
+    
+          case "depot":
+            if (filter.filterValues) apiFilter["depot"] = filter.filterValues ?? [];
+            break;
+    
+          case "value":
+            if (filter.filterValues?.from || filter.filterValues?.to) {
+              apiFilter["value"] = {
+                min: filter.filterValues?.from,
+                max: filter.filterValues?.to,
+              };
+            }
+            break; // <-- Added missing break
+    
+          case "status":
+            if (filter.filterValues) apiFilter["Status"] = filter.filterValues ?? [];
+            break;
+    
           default:
+            console.warn("Unhandled filter:", filter.filterFor);
             break;
         }
       });
-      console.log("api for filter component ", apiFilter);
+    
+      console.log("api for filter component:", apiFilter);
       onFiltersApplied(apiFilter);
       return apiFilter;
     };
+    
   
     return (
       <>

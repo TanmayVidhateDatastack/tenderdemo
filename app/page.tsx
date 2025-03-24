@@ -38,7 +38,7 @@ export default function Home() {
   const [metaData, setMetaData] = useState<CodeItem[]>([]);
   const [searchQuery, setSearchQuery] = useState(""); //for search query
   const [selectedStatus, setSelectedStatus] = useState(""); //for quickfilter
-  const [advFilter, setAdvFilter] = useState<Record<string, any>>({});
+  const [advFilter, setAdvFilter] = useState<Record<string, React.ReactNode>>({});
   // const [enrichedTenders, setEnrichedTenders] = useState<Tender[]>([]);
   // const [filteredData, setFilteredData] = useState<Tender[]>([]); //for filtered table data
   const [iconSrc] = useState(addIcon);
@@ -506,7 +506,7 @@ export default function Home() {
     }));
   };
 
-  const handleFiltersApplied = (apiFilter: Record<string, any>) => {
+  const handleFiltersApplied = (apiFilter: Record<string, React.ReactNode>) => {
     console.log("Received apiFilter in parent:", apiFilter);
     // Use apiFilter to make API calls or update state
     setAdvFilter(apiFilter);
@@ -583,16 +583,6 @@ export default function Home() {
         },
 
 
-          // { filterId: "0", filterFor: "Customer", filterType: "SearchAndMultiSelect"},
-          // { filterId: "1", filterFor: "Date", filterType: "DateRange", maxValue: new Date(2025, 9, 21).getTime(), minValue: new Date(2050, 11, 26).getTime() },
-          // { filterId: "2", filterFor: "Type", filterType: "MultiSelection", multiSelectOptions: sourceOptions },
-          // { filterId: "3", filterFor: "Supply type", filterType: "MultiSelection", multiSelectOptions: statusOptions },
-          // { filterId: "4", filterFor: "Applied by", filterType: "MultiSelection", multiSelectOptions: statusOptions }, 
-          // { filterId: "5", filterFor: "Supplied by", filterType: "MultiSelection", multiSelectOptions: statusOptions },
-          // { filterId: "6", filterFor: "Depot", filterType: "MultiSelection", multiSelectOptions: statusOptions },
-          // { filterId: "7", filterFor: "Supply type", filterType: "MultiSelection", multiSelectOptions: statusOptions },
-          // { filterId: "8", filterFor: "Value", filterType: "RangeSlider", maxValue: 4000000, minValue: 0 },
-          // { filterId: "9", filterFor: "Status", filterType: "MultiSelection", multiSelectOptions: statusOptions },        
         ];
 
         setFilters(updatedFilters);
@@ -888,12 +878,12 @@ export default function Home() {
         </div>
 
       </DsApplication>
-      {/* <DsPane id="tenderFilter" side="right" title="Filter"> */}
+    
       <DsAdvanceFilterPane
         filters={filters}
         onFiltersApplied={handleFiltersApplied}
       />
-      {/* </DsPane> */}
+  
 
       <ContextMenu
         id={"CreateNewActions"}
