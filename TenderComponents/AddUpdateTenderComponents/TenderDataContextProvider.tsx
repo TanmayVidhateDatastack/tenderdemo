@@ -20,8 +20,8 @@ class ActionStatus {
  
 interface TenderDataContextType {
   tenderData: TenderData;
-  actionStatus: ActionStatus; 
-  setActionStatusValues: (actionStatus: ActionStatus) => void; 
+  actionStatus: ActionStatus;
+  setActionStatusValues: (actionStatus: ActionStatus) => void;
   updateTenderData: (
     key: keyof TenderData,
     value: string | number |number[]| tenderFee[] | tenderSupplyCondition
@@ -40,7 +40,7 @@ interface TenderDataContextType {
   ) => void;
   updateSupplyCondition: (
     key: keyof tenderSupplyCondition,
-    value: string | number | string[] | Document[] 
+    value: string | number | string[] | Document[]
   ) => void;
   addNewTenderDocument: (docType: string, document: Document[]) => void;
   addDocumentToExistingType: (docType: string, document: Document) => void;
@@ -386,6 +386,7 @@ export const useTenderData = () => {
   }
   return context;
 };
+ 
  
  
  

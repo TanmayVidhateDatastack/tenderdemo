@@ -2,21 +2,23 @@ import DsDataList from "@/Elements/DsComponents/DsInputs/dsDatalist";
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import DsSingleSelect from "@/Elements/DsComponents/dsSelect/dsSingleSelect";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
-import deptStyle from "./deposite.module.css";
+import deptStyle from "./deposite.module.css"; 
 import { useEffect, useState } from "react";
-import { getTenderUserRoles, searchCustomerURL } from "@/Common/helpers/constant";
+import { customerSearch, getTenderUserRoles, searchCustomerURL } from "@/Common/helpers/constant";
 import {
-  datalistOptions,
+  datalistOptions, 
   searchCustomers,
   tenderDetailsProps, 
-} from "@/Common/helpers/types";  
+} from "@/Common/helpers/types";    
 import { useTenderData } from "../TenderDataContextProvider";
 import { debounce } from "@/Common/helpers/Method/optimization";
-import DsDatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker";
+import DsDatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker"; 
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
-import Image from "next/image";
+import Image from "next/image"; 
 import fetchData from "@/Common/helpers/Method/fetchData";
 import copybtnenabled from "@/Common/TenderIcons/smallIcons/copyEnabled.svg"
+import DsAddressSelect from "@/Elements/DsComponents/dsSelect/dsAddressSelect";
+import CustomerSearch from "./customerSearch";
 
 const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
   const [customers, setCustomers] = useState<searchCustomers[]>([]);
@@ -39,23 +41,22 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
  
   const { updateTenderData } = useTenderData();
 
-  const handleFetch = async (searchTerm: string) => {
-    try {
-      await fetchData({ url: searchCustomerURL + searchTerm }).then((res) => {
-        if ((res.code = 200)) {
-          setCustomers(res.result);
-        } else {
-          console.error(
-            "Error fetching data: ",
-            res.message || "Unknown error"
-          );
-        }
-      });
-    } catch (error) {
-      console.error("Fetch error: ", error);
-    }
-  };
- 
+  // const handleFetch = async (searchTerm: string) => {
+  //   try {
+  //     await fetchData({ url: customerSearch + searchTerm }).then((res) => {
+  //       if ((res.code = 200)) {
+  //         setCustomers(res.result); 
+  //       } else {
+  //         console.error(
+  //           "Error fetching data: ",
+  //           res.message || "Unknown error"
+  //         );
+  //       } 
+  //     }); 
+  //   } catch (error) {
+  //     console.error("Fetch error: ", error); 
+  //   }
+  // };
   const handleRoleFetch = async () => {
     try {
       const res = await fetchData({ url: getTenderUserRoles });
@@ -81,19 +82,19 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
       setFetchVisible(false);
     }
   }, [role]);
-  useEffect(() => {
-    if (customers.length > 0) {
-      const opt = customers.map((customer) => {
-        return {
-          attributes: {},
-          id: customer.id.toString(),
-          value: customer.code + "-" + customer.name,
-        };
-      });
-      setDataListOption(opt);
-    }
-  }, [customers]);
 
+  // useEffect(() => {
+  //   if (customers.length > 0) {
+  //     const opt = customers.map((customer) => {
+  //       return {
+  //         attributes: {},
+  //         id: customer.id.toString(),
+  //         value: customer.code + "-" + customer.name,
+  //       };
+  //     });
+  //     setDataListOption(opt);
+  //   }
+  // }, [customers]);  
   const getTodayDate = (date: Date) => {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Ensure two digits
@@ -102,21 +103,12 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
     return `${year}-${month}-${day}`;
   };
 
-  // const todayDate = getTodayDate();
-  // console.log(todayDate); // Outputs in yyyy-mm-dd format
-  //   // function convertDateFormat(dateStr: string): string {
-  //   //   // Split the date string into day, month, and year parts
-  //   //   const [day, month, year] = dateStr.split("-");
-
-  //   //   // Reformat the date into yyyy-mm-dd format
-  //   //   return `${year}-${month}-${day}`;
-  //   // }
-
   return (
     <>
       <div className={styles.inputDetails}>
         <div className={deptStyle.fields}>
-          <DsDataList
+
+          {/* <DsDataList
             // placeholder="Please search and select here"
             label="Select Customer"
             id="customerSelect"
@@ -131,12 +123,18 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
             onKeyUp={debounce(async (e: React.KeyboardEvent<HTMLElement>) => {
               const input = e.target as HTMLInputElement;
               const searchTerm = input.value;
-              if (searchTerm.trim().length > 3) {
+              if (searchTerm.trim().length > 2) { 
                 handleFetch(searchTerm);
               }
             }, 500)}
             options={dataListOption}
-          ></DsDataList>
+            onChange={customerSearch}
+          ></DsDataList> */}
+          
+            <CustomerSearch  
+              customer={""} 
+              orderData={undefined}>
+            </CustomerSearch>
         </div>
  
         <div className={deptStyle.fields}>
@@ -159,14 +157,28 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
           )}
         </div>
         <div className={deptStyle.fields}>
-          <DsTextField
+          {/* <DsTextField
             // placeholder={"Please Type Here"}
             label={"Customer Location"}
             onChange={(e) =>
               updateTenderData("customerLocationId", e.target.value)
             }
-          ></DsTextField>
-        </div>
+          ></DsTextField> */}
+
+          <DsAddressSelect 
+           id={"CustomerAddress"}
+           placeholder={"Customer Location"} 
+           options={[ 
+            {
+              value: "PAID_BY_IPCA",
+              label: "Paid By Ipca",
+            },
+            {
+              value: "PAID_BY_STOCKIEST",
+              label: "Paid By Stockiest",
+            }]}>
+          </DsAddressSelect>
+        </div>  
         <div className={deptStyle.fields}> 
           <DsTextField
             label="Tender Number"   
@@ -210,9 +222,9 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
               }
             }}
             // disable={true}
-            placeholder="DD/MM/YYYY"
+            placeholder="DD/MM/YYYY" 
             label="Last date of purchasing"
-          />
+          /> 
         </div>
         <div className={deptStyle.fields}>
           <DsDatePicker
@@ -233,9 +245,9 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
             setDateValue={(date) => {
               if (date instanceof Date) {
                 updateTenderData("rateContractValidity", getTodayDate(date));
-              }
+              } 
             }}
-            placeholder="DD/MM/YYYY"
+            placeholder="DD/MM/YYYY" 
             label="Rate contract validity"
           /> */}
           <DsTextField
@@ -294,5 +306,5 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
       </div>
     </>
   );
-};
-export default DsTenderDetails;
+}; 
+export default DsTenderDetails; 
