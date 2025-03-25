@@ -16,6 +16,7 @@ import DocumentProvider, { DocumentContext } from "@/TenderComponents/AddUpdateT
 import DsAddTenderDocumentPane from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/DsAddTenderDocumentPane";
 import DocumentSelectorArea from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/DsDocumentSelectionArea";
 import styles from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/document.module.css";
+import DsProductTable from "@/TenderComponents/AddUpdateTenderComponents/ProductComponents/DsProductTable";
 
 const DsTenderIdPage: React.FC = () => {
   const { setActionStatusValues, actionStatus, saveTender } = useTenderData();
@@ -54,7 +55,10 @@ const DsTenderIdPage: React.FC = () => {
                 <DsBasicDetails />
               </div>
             </TabView>
-            <TabView tabId="2">
+            <TabView tabId="1"><DsProductTable/> </TabView>
+            <TabView tabId="2"
+            
+            >
               <DocumentContext.Consumer>
                 {(context) => {
                   if (!context) {
