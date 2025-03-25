@@ -2,19 +2,19 @@ import DsDataList from "@/Elements/DsComponents/DsInputs/dsDatalist";
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import DsSingleSelect from "@/Elements/DsComponents/dsSelect/dsSingleSelect";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
-import deptStyle from "./deposite.module.css";
+import deptStyle from "./deposite.module.css"; 
 import { useEffect, useState } from "react";
-import { getTenderUserRoles, searchCustomerURL } from "@/Common/helpers/constant";
+import { customerSearch, getTenderUserRoles, searchCustomerURL } from "@/Common/helpers/constant";
 import {
   datalistOptions,
   searchCustomers,
   tenderDetailsProps, 
-} from "@/Common/helpers/types";  
+} from "@/Common/helpers/types";   
 import { useTenderData } from "../TenderDataContextProvider";
 import { debounce } from "@/Common/helpers/Method/optimization";
 import DsDatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
-import Image from "next/image";
+import Image from "next/image"; 
 import fetchData from "@/Common/helpers/Method/fetchData";
 import copybtnenabled from "@/Common/TenderIcons/smallIcons/copyEnabled.svg"
 
@@ -41,9 +41,9 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
 
   const handleFetch = async (searchTerm: string) => {
     try {
-      await fetchData({ url: searchCustomerURL + searchTerm }).then((res) => {
+      await fetchData({ url: customerSearch + searchTerm }).then((res) => {
         if ((res.code = 200)) {
-          setCustomers(res.result);
+          setCustomers(res.result); 
         } else {
           console.error(
             "Error fetching data: ",
@@ -81,6 +81,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
       setFetchVisible(false);
     }
   }, [role]);
+
   useEffect(() => {
     if (customers.length > 0) {
       const opt = customers.map((customer) => {
@@ -92,7 +93,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
       });
       setDataListOption(opt);
     }
-  }, [customers]);
+  }, [customers]);  
 
   const getTodayDate = (date: Date) => {
     const year = date.getFullYear();
@@ -130,7 +131,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
             onKeyUp={debounce(async (e: React.KeyboardEvent<HTMLElement>) => {
               const input = e.target as HTMLInputElement;
               const searchTerm = input.value;
-              if (searchTerm.trim().length > 3) {
+              if (searchTerm.trim().length > 2) {
                 handleFetch(searchTerm);
               }
             }, 500)}
