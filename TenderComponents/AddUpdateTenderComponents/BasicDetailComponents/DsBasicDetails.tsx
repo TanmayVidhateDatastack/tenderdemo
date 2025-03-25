@@ -55,6 +55,7 @@ const DsBasicDetails = () => {
       if (res.code === 200) {
         const result = res.result;
         setMetadata(result);
+        
         // Tender Details
         const tenderDetailsData = {
           tenderType: result.tenderType.map((item: any) => ({

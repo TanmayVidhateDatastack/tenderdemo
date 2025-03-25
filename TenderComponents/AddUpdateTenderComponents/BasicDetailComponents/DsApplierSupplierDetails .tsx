@@ -8,15 +8,16 @@ import {
 import { useTenderData } from "../TenderDataContextProvider";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import deptStyles from "@/TenderComponents/AddUpdateTenderComponents/BasicDetailComponents/deposite.module.css";
+
 const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
   applierSupplierDetails,
 }) => {
   const { updateTenderData } = useTenderData();
-  // console.log("djhdjd",applierSupplierDetails.appliedBy);
+  console.log("djhdjd",applierSupplierDetails);
   return (
     <>
       <div className={styles.inputDetails}>
-        <div className={deptStyles.fields}>
+        <div className={deptStyles.fields}>  
           {/* <DsSelectMultiLevel
             isSearchable
             options={applierSupplierDetails.appliedBy}
@@ -50,7 +51,6 @@ const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
                 updateTenderData("suppliedId", option.value);
               }
             }}
-        
           ></DsSelectMultiLevel> */}
         </div>
         <div className={deptStyles.fields}>
@@ -61,24 +61,17 @@ const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
             label="Depot"
             placeholder={"Please search or select here"}
             id={"depot"}
- 
-          // setSelectOptions={(options) => {
-          // updateTenderData(
-          //   "shippingLocations",
-          //   options.reduce<number[]>((acc, option) => {
-          //     if (typeof option.value === "string") {
-          //       acc.push(parseInt(option.value));
-          //     }
-          //     return acc;
-          //   }, [])
-          // );                                
- 
- 
-          // handleOnChange={function (
-          //   e: React.ChangeEvent<HTMLElement>
-          // ): void {
-          //   throw new Error("Function not implemented.");
-          // }}
+            setSelectOptions={(options) => {
+            updateTenderData(
+              "shippingLocations",
+              options.reduce<number[]>((acc, option) => {
+                if (typeof option.value === "string") {
+                  acc.push(parseInt(option.value));
+                }
+                return acc;
+              }, [])
+            );                                
+          }}
           ></DsMultiSelect>
         </div>
         <div></div>
