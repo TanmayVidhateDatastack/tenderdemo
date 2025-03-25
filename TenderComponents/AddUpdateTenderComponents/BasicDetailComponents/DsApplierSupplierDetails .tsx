@@ -17,12 +17,11 @@ const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
     <>
       <div className={styles.inputDetails}>
         <div className={deptStyles.fields}>
- 
           {/* <DsSelectMultiLevel
             isSearchable
             options={applierSupplierDetails.appliedBy}
             label="Applied By"
-            placeholder={"Please search or select here"}
+            placeholder={"Please search or select here"} 
             id={"appliedBy"}
             setSelectOption={(option) => {
               if (typeof option.value == "string") {
@@ -33,11 +32,9 @@ const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
                 updateTenderData("applierId", option.value);
               }
             }}
-          
           ></DsSelectMultiLevel> */}
         </div>
-        <div className={deptStyles.fields}>
- 
+        <div className={deptStyles.fields}> 
           {/* <DsSelectMultiLevel
             isSearchable
             options={applierSupplierDetails.suppliedBy}

@@ -50,9 +50,9 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
             res.message || "Unknown error"
           );
         }
-      });
+      }); 
     } catch (error) {
-      console.error("Fetch error: ", error);
+      console.error("Fetch error: ", error); 
     }
   };
  
@@ -101,7 +101,6 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
 
     return `${year}-${month}-${day}`;
   };
-
   // const todayDate = getTodayDate();
   // console.log(todayDate); // Outputs in yyyy-mm-dd format
   //   // function convertDateFormat(dateStr: string): string {
@@ -210,9 +209,9 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
               }
             }}
             // disable={true}
-            placeholder="DD/MM/YYYY"
+            placeholder="DD/MM/YYYY" 
             label="Last date of purchasing"
-          />
+          /> 
         </div>
         <div className={deptStyle.fields}>
           <DsDatePicker
@@ -233,9 +232,9 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
             setDateValue={(date) => {
               if (date instanceof Date) {
                 updateTenderData("rateContractValidity", getTodayDate(date));
-              }
+              } 
             }}
-            placeholder="DD/MM/YYYY"
+            placeholder="DD/MM/YYYY" 
             label="Rate contract validity"
           /> */}
           <DsTextField
@@ -294,5 +293,5 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
       </div>
     </>
   );
-};
-export default DsTenderDetails;
+}; 
+export default DsTenderDetails; 
