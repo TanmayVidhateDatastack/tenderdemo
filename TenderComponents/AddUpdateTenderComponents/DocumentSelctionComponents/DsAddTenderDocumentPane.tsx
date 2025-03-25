@@ -15,6 +15,8 @@ const DsAddTenderDocumentPane: React.FC = () => {
   const [openAccordion, setOpenAccordion] = useState<string | null>(null);
   const [groupedDocuments, setGroupedDocuments] = useState<Record<string, documents[]>>({});
   const [selectedDocuments, setSelectedDocuments] = useState<documents[]>([]);
+  const [openAccordions, setOpenAccordions] = useState<(string | number)[]>([]);
+
 
   const documentContext = useContext(DocumentContext);
 
@@ -49,10 +51,11 @@ const DsAddTenderDocumentPane: React.FC = () => {
       console.error("Fetch error: ", error);
     }
   };
-  const handleAccordionToggle = (type: string) => {
-    setOpenAccordion((prevType) => (prevType === type ? null : type));
+  const handleAccordionToggle = (type: string | number) => {
+    setOpenAccordions((prev) =>
+      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
+    );
   };
-
   const handleCheckboxChange = (doc: documents) => {
     setSelectedDocuments((prev) => {
       const alreadySelected = prev.some((d) => d.id === doc.id);

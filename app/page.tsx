@@ -163,16 +163,16 @@ export default function Home() {
 
   const calculateDueStatus = (submissionDate: string) => {
     if (!submissionDate) return "-"; // Handle empty values
-
+  
     let subDate = new Date(submissionDate);
-
+  
     // If parsing fails, try manual parsing
     if (isNaN(subDate.getTime())) {
       // Handle formats like "DD/MM/YYYY"
       const dateParts = submissionDate.split(/[\/\-\.]/);
       if (dateParts.length === 3) {
         let day, month, year;
-
+  
         if (submissionDate.includes("/")) {
           // Assuming "DD/MM/YYYY" format
           day = parseInt(dateParts[0], 10);
@@ -184,232 +184,38 @@ export default function Home() {
           month = parseInt(dateParts[1], 10) - 1;
           day = parseInt(dateParts[2], 10);
         }
-
+  
         subDate = new Date(year, month, day);
       }
     }
-
+  
     // Validate parsed date
     if (isNaN(subDate.getTime())) return "-";
-
+  
     // Get today's date in UTC (ignoring time)
     const currentDate = new Date();
     const todayUTC = new Date(Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()));
-
+  
     // Calculate difference in days
     const diffTime = subDate.getTime() - todayUTC.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
+  
     // Determine result
     const result = diffDays <= 0 ? "0 Days Left" : `${diffDays} Days Left`;
-
-    // console.log(`Submission Date: ${submissionDate}, Parsed: ${subDate.toISOString()}, Status: ${result}`);
-
-    // Apply color coding
+  
+    return getStyledDueStatus(result, diffDays);
+  };
+  
+  const getStyledDueStatus = (result: string, diffDays: number) => {
     let className = styles.blackText;
     if (diffDays <= 0) className = styles.zeroText;
     else if (diffDays <= 20) className = styles.orangeText;
-
+  
     return <span className={className}>{result}</span>;
   };
+  
 
-
-  // useEffect(() => {
-  //   if (filteredData && filteredData.length >= 0) {
-  //     console.log("filter data in tabel : ", filteredData);
-  //     const transformedRows: DsTableRow[] = filteredData.map((item, index) => ({
-  //       rowIndex: index,
-  //       className: "cellRow logRow",
-  //       rowIcon:
-  //         item?.type === "institutional" ? (
-  //           <div
-  //             style={{
-  //               width: "0.875em",
-  //               height: "0.875em",
-  //               position: "relative",
-  //             }}
-  //           >
-  //             <Image
-  //               src={institutional}
-  //               alt="institutional"
-  //               layout="fill"
-  //               objectFit="cover"
-  //             />
-  //           </div>
-  //         ) : (
-  //           <div
-  //             style={{
-  //               width: "0.875em",
-  //               height: "0.875em",
-  //               position: "relative",
-  //             }}
-  //           >
-  //             <Image src={corporate} alt="corporate"
-  //               layout="fill"
-  //               objectFit="cover" />
-  //           </div>
-  //         ),
-  //       customAttributes: { iconValue: item?.type?.toString() ?? "" },
-
-  //       content: [
-  //         {
-  //           columnIndex: 0,
-  //           className: "cell cell-customer text-dark-1",
-  //           content: <DsName id={item.tenderId + "customerName "} name={item.customerName || "-"} />,
-  //           filterValue: item.customerName || "-",
-  //           // content:item.customerName || "-",
-  //           contentType: "string",
-  //         },
-  //         {
-  //           columnIndex: 1,
-  //           className: " cell  cell-submissiondate text-dark-0 ",
-  //           content: <DsName id={item.tenderId + "submittionDate"} name={formatDate(item.submittionDate)} />,
-  //           filterValue: item.submittionDate || "-",
-  //           contentType: "string",
-  //         },
-  //         {
-  //           columnIndex: 2,
-  //           className: " cell  cell-days-to-submit ",
-  //           content: <DsName id={item.tenderId + "daystosubmit"} name={item.submittionDate ? calculateDueStatus(item.submittionDate) : "-"} />,
-  //           filterValue: item.submittionDate ? calculateDueStatus(item.submittionDate) : "-",
-  //           contentType: "string",
-  //         },
-  //         {
-  //           columnIndex: 3,
-  //           className: " cell  cell-tenderid text-dark-0 ",
-  //           content: <DsName id={item.tenderId + "tenderId"} name={item.tenderId || "-"} />,
-  //           filterValue: item.tenderId || "-",
-  //           contentType: "string",
-  //         },
-  //         {
-  //           columnIndex: 4,
-  //           className: " cell cell-tendertype text-dark-1  ",
-  //           content: <DsName id={item.tenderId + "tenderType"} name={getTenderTypeDescription(item.tenderType)} />,
-  //           filterValue: getTenderTypeDescription(item.tenderType),
-  //           contentType: "string",
-  //         },
-  //         {
-  //           columnIndex: 5,
-  //           className: " cell cell-depot text-dark-1",
-  //           // content: item.depot || "-",
-  //           content: <DsName id={item.tenderId + "depot"} name={item.depot || "-"} />,
-  //           filterValue: item.depot || "-",
-  //           contentType: "string",
-  //         },
-  //         {
-  //           columnIndex: 6,
-  //           className: " cell cell-appliedby text-dark-0 ",
-  //           // content: item.appliedBy || "-",
-  //           content: <DsName id={item.tenderId + "appliedBy"} name={item.appliedBy || "-"} />,
-  //           filterValue: item.appliedBy || "-",
-  //           contentType: "string",
-  //         },
-  //         {
-  //           columnIndex: 7,
-  //           className: " cell cell-suppliedby text-dark-0 ",
-  //           // content: item.suppliedBy || "-",
-  //           content: <DsName id={item.tenderId + "suppliedBy"} name={item.suppliedBy || "-"} />,
-  //           filterValue: item.suppliedBy || "-",
-  //           contentType: "string",
-  //         },
-  //         {
-  //           columnIndex: 8,
-  //           className: " cell cell-preparedby text-dark-0 ",
-  //           // content: item.preparedBy || "-",
-  //           content: <DsName id={item.tenderId + "preparedBy"} name={item.preparedBy || "-"} />,
-  //           filterValue: item.preparedBy || "-",
-  //           contentType: "string",
-  //         },
-  //         {
-  //           columnIndex: 9,
-  //           className: " cell cell-value text-dark-1 ",
-
-  //           content: <DsCurrency format={"IND"} id={"value"} amount={parseInt(item.value)} type={"short"} />,
-  //           filterValue: item.value,
-  //           contentType: "number",
-  //         },
-  //         {
-  //           columnIndex: 10,
-  //           className: " cell cell-status ",
-
-  //           content: item.status ? (
-  //             <DsStatusIndicator
-  //               type="user_defined"
-  //               className={`${item?.status?.tenderStatus
-  //                 ? styles[
-  //                 item?.status?.tenderStatus
-  //                   ?.replaceAll(" ", "_")
-  //                   .toLowerCase()
-  //                 ]
-  //                 : ""
-  //                 }`}
-  //               status={item.status.tenderStatus}
-  //               label={item.status.tenderStatus}
-  //               comment={
-  //                 item.status?.message
-  //                   ? typeof item.status.message === "object"
-  //                     ? JSON.stringify(item.status.message)
-  //                     : item.status.message.toString()
-  //                   : ""
-  //               }
-  //             />
-  //           ) :
-  //             (
-  //               "No Status"
-  //             ),
-  //           filterValue: item.status.tenderStatus,
-  //           contentType: "reactNode",
-  //         },
-  //       ],
-
-  //     }));
-
-  //     console.log("Final Transformed Rows:", transformedRows);
-
-  //     setTimeout(() => {
-  //       setTempTableData((data) => ({ ...data, rows: transformedRows }));
-  //     }, 1);
-  //   }
-  // }, [filteredData]);
-
-
-  // const handleFetch = async () => {
-  //   try {
-  //     const res = await fetchData({ url: getAllTenders });
-
-
-  //     console.log("Fetched Response:", res);
-
-
-  //     if (res?.code === 200 && Array.isArray(res?.result)) {
-  //       const mappedData: Tender[] = res.result.map((item: Tender) => ({
-  //         customerName: item.customerName,
-  //         submittionDate: item.submissionDate,
-  //         daystosubmit: item.daysToSubmit ?? "N/A",
-  //         tenderId: item.tenderId.toString(),
-  //         type: item.customerType,
-  //         tenderType: item.tenderType,
-  //         depot: item.shippingLocations.map((loc: Tender) => loc.name).join(", "),
-  //         appliedBy: item.applierName,
-  //         suppliedBy: item.supplierName,
-  //         preparedBy: item.preparedBy,
-  //         value: item.value.toString(),
-  //         status: {
-  //           tenderStatus: item.status?.tenderStatus ?? "null",
-  //           message: item.status?.message ?? "No message",
-  //         },
-  //         customAttributes: { iconValue: "defaultIcon" },
-  //       }));
-
-  //       setData(mappedData);
-  //     } else {
-  //       console.error("Error: Invalid response format or empty result", res);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
-
+  
 
   const handleFetch = async () => {
     const onlyStatus = {
@@ -671,7 +477,7 @@ export default function Home() {
           columnIndex: 2,
           className: " cell cell-days-to-submit ",
           content: <DsName id={t.tenderId + "daystosubmit"} name={t.submittionDate ? calculateDueStatus(t.submittionDate) : "-"} />,
-          filterValue: t.submittionDate ? calculateDueStatus(t.submittionDate) : "-",
+          filterValue: t.submittionDate,
           contentType: "string",
         },
         {
@@ -687,7 +493,7 @@ export default function Home() {
           columnIndex: 4,
           className: "cell cell-tendertype text-dark-1",
           content: <DsName id={t.tenderId + "tenderType"} name={getTenderTypeDescription(t.tenderType)} />,
-          filterValue: getTenderTypeDescription(t.tenderType),
+          filterValue: t.tenderType,
           contentType: "string",
         },
 
