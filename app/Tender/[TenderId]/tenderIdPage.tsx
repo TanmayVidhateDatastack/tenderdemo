@@ -16,20 +16,16 @@ import DocumentProvider, { DocumentContext } from "@/TenderComponents/AddUpdateT
 import DsAddTenderDocumentPane from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/DsAddTenderDocumentPane";
 import DocumentSelectorArea from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/DsDocumentSelectionArea";
 import styles from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/document.module.css";
-import DsProductTable from "@/TenderComponents/AddUpdateTenderComponents/ProductComponents/DsProductTable";
+
+import DsTenderProduct from "@/TenderComponents/AddUpdateTenderComponents/ProductComponents/DsTenderProduct";
+
 
 const DsTenderIdPage: React.FC = () => {
-  const { setActionStatusValues, actionStatus, saveTender } = useTenderData();
-  const [selectedTabId] = useTabState("tenderPage"); // Use the custom hook
 
-  // const documentContext = useContext(DocumentContext);
-  // if (!documentContext) {
-  //   throw new Error("DocumentSelectorArea must be used within a DocumentContext");
-  // }
+  const [selectedTabId] = useTabState("tenderPage"); 
+  const { tenderData, addTenderProduct,setActionStatusValues , actionStatus,saveTender} = useTenderData();
 
-  // const { totalSelectedDocuments } = documentContext;
 
-  //  console.log(tenderData);
   const tabs = [
     { tabId: "0", tabName: "Basic Details" },
     { tabId: "1", tabName: "Products ₹ (V1)" },
@@ -55,7 +51,10 @@ const DsTenderIdPage: React.FC = () => {
                 <DsBasicDetails />
               </div>
             </TabView>
-            <TabView tabId="1"><DsProductTable/> </TabView>
+            <TabView tabId="1" >
+          <DsTenderProduct productList={tenderData.products} setProductList={addTenderProduct} />
+          new prod
+        </TabView>
             <TabView tabId="2"
             
             >

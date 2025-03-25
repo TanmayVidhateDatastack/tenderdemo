@@ -326,3 +326,9 @@ a.secondary {
   margin:0px;
 
 }
+.kpi{
+  display: flex;
+  flex-direction: row; 
+  justify-content: flex-start; 
+  padding: 10px;
+}

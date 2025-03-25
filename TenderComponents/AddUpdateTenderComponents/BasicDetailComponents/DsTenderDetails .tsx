@@ -1,17 +1,17 @@
-import DsDataList from "@/Elements/DsComponents/DsInputs/dsDatalist";
+
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import DsSingleSelect from "@/Elements/DsComponents/dsSelect/dsSingleSelect";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import deptStyle from "./deposite.module.css"; 
 import { useEffect, useState } from "react";
-import { customerSearch, getTenderUserRoles, searchCustomerURL } from "@/Common/helpers/constant";
+import {  getTenderUserRoles } from "@/Common/helpers/constant";
 import {
   datalistOptions, 
   searchCustomers,
   tenderDetailsProps, 
 } from "@/Common/helpers/types";    
 import { useTenderData } from "../TenderDataContextProvider";
-import { debounce } from "@/Common/helpers/Method/optimization";
+
 import DsDatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker"; 
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import Image from "next/image"; 

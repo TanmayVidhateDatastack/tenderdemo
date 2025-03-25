@@ -6,6 +6,7 @@ import DsProductKpis from "./DsProductKpis";
 
 import fetchData from "@/Common/helpers/Method/fetchData";
 import {  getAllDepot } from "@/Common/helpers/constant";
+import style from "@/app/page.module.css";
 
  
 const DsTenderProduct: React.FC<{
@@ -39,7 +40,9 @@ const DsTenderProduct: React.FC<{
     <>
       <div>
         <DsAddProduct setProductList={setProductList}></DsAddProduct>
+    <div className={style.kpi}>
         <DsProductKpis productData={productList||fetchdata}></DsProductKpis>
+        </div>
       </div>
       <DsProductTable />
     </>
