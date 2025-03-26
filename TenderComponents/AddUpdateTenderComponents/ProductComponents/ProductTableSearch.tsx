@@ -1,9 +1,9 @@
 import DsInfoDisplay from "@/Elements/ERPComponents/DsInfoDisplay/DsInfoDisplay";
-import DsSearchComponent from "@/Elements/ERPComponents/DsSearchComponent/searchComponent";
 import { searchProductsURL} from "@/Common/helpers/constant";
 import { TenderProduct } from "@/Common/helpers/types";
 import { useState } from "react";
 import { areSearchProduct } from "./productSearch";
+import DsSearchComponent from "@/Elements/DsComponents/DsSearch/searchComponent";
  
 interface TableSearchProps {
   tableRowIndex: number;

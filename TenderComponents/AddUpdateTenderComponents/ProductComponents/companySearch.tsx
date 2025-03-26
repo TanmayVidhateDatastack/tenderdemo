@@ -1,6 +1,6 @@
 import { DsStatus } from "@/Common/helpers/constant";
 import { Company, datalistOptions } from "@/Common/helpers/types";
-import DsSearchComponent from "@/Elements/ERPComponents/DsSearchComponent/searchComponent";
+import DsSearchComponent from "@/Elements/DsComponents/DsSearch/searchComponent";
 import { useState } from "react";
 export interface CompanySearchProps {
   orderStatus?: string;

@@ -1,8 +1,8 @@
 import DsInfoDisplay from "@/Elements/ERPComponents/DsInfoDisplay/DsInfoDisplay";
 import { DsStatus, searchProductsURL } from "@/Common/helpers/constant";
 import { TenderProduct, datalistOptions } from "@/Common/helpers/types";
-import DsSearchComponent from "@/Elements/ERPComponents/DsSearchComponent/searchComponent";
 import { Dispatch, SetStateAction, useState } from "react";
+import DsSearchComponent from "@/Elements/DsComponents/DsSearch/searchComponent";
 export interface ProductSearchProps {
   // initialValue?:string;
   orderStatus?: string;
