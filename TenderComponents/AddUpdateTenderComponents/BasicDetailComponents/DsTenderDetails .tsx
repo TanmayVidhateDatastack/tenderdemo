@@ -1,30 +1,22 @@
-
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import DsSingleSelect from "@/Elements/DsComponents/dsSelect/dsSingleSelect";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
-import deptStyle from "./deposite.module.css"; 
+import deptStyle from "./deposite.module.css";
 import { useEffect, useState } from "react";
-import {  getTenderUserRoles } from "@/Common/helpers/constant";
-import {
-  datalistOptions, 
-  searchCustomers,
-  tenderDetailsProps, 
-} from "@/Common/helpers/types";    
+import {getTenderUserRoles} from "@/Common/helpers/constant";
+import {tenderDetailsProps,location} from "@/Common/helpers/types";
 import { useTenderData } from "../TenderDataContextProvider";
-
-import DsDatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker"; 
+import DsDatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
-import Image from "next/image"; 
+import Image from "next/image";
 import fetchData from "@/Common/helpers/Method/fetchData";
-import copybtnenabled from "@/Common/TenderIcons/smallIcons/copyEnabled.svg"
+import copybtnenabled from "@/Common/TenderIcons/smallIcons/copyEnabled.svg";
 import DsAddressSelect from "@/Elements/DsComponents/dsSelect/dsAddressSelect";
 import CustomerSearch from "./customerSearch";
 
 const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
-  const [customers, setCustomers] = useState<searchCustomers[]>([]); 
-  const [dataListOption, setDataListOption] = useState<datalistOptions[]>();
   const [fetchVisible, setFetchVisible] = useState(true);
-  const [role, setRole] = useState("checker"); 
+  const [role, setRole] = useState("checker");
   const [pos, setPos] = useState<
     | "top"
     | "topleft"
@@ -38,25 +30,8 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
     "success" | "bonus" | "info" | "error"
   >("info");
   const [showNotification, setShowNotification] = useState<boolean>(false);
- 
   const { updateTenderData } = useTenderData();
 
-  // const handleFetch = async (searchTerm: string) => {
-  //   try {
-  //     await fetchData({ url: customerSearch + searchTerm }).then((res) => {
-  //       if ((res.code = 200)) {
-  //         setCustomers(res.result); 
-  //       } else {
-  //         console.error(
-  //           "Error fetching data: ",
-  //           res.message || "Unknown error"
-  //         );
-  //       } 
-  //     }); 
-  //   } catch (error) {
-  //     console.error("Fetch error: ", error); 
-  //   }
-  // };
   const handleRoleFetch = async () => {
     try {
       const res = await fetchData({ url: getTenderUserRoles });
@@ -83,62 +58,27 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
     }
   }, [role]);
 
-  // useEffect(() => {
-  //   if (customers.length > 0) {
-  //     const opt = customers.map((customer) => {
-  //       return {
-  //         attributes: {},
-  //         id: customer.id.toString(),
-  //         value: customer.code + "-" + customer.name,
-  //       };
-  //     });
-  //     setDataListOption(opt);
-  //   }
-  // }, [customers]);  
   const getTodayDate = (date: Date) => {
     const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Ensure two digits
-    const day = date.getDate().toString().padStart(2, "0"); // Ensure two digits
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
 
     return `${year}-${month}-${day}`;
   };
+  const [customerLocations, setCustomerLocations] = useState<location[]>([]);
 
   return (
     <>
       <div className={styles.inputDetails}>
         <div className={deptStyle.fields}>
-
-          {/* <DsDataList
-            // placeholder="Please search and select here"
-            label="Select Customer"
-            id="customerSelect"
-            dataListId="customer-list"
-            disable={false}
-            className={styles.datalist}
-            onOptionSelect={(option) => {
-              if (typeof option.value == "string") {
-                updateTenderData("customerId", option.value);
-              }
-            }}
-            onKeyUp={debounce(async (e: React.KeyboardEvent<HTMLElement>) => {
-              const input = e.target as HTMLInputElement;
-              const searchTerm = input.value;
-              if (searchTerm.trim().length > 2) { 
-                handleFetch(searchTerm);
-              }
-            }, 500)}
-            options={dataListOption}
-            onChange={customerSearch}
-          ></DsDataList> */}
-          
-            <CustomerSearch  
-              customer={""} 
-              orderData={undefined}>
-            </CustomerSearch>
+          <CustomerSearch
+            customer={""}
+            orderData={undefined}
+            setCustomerLocations={setCustomerLocations} // ✅ Set addresses dynamically
+          />
         </div>
- 
+
         <div className={deptStyle.fields}>
-          {/* <DsButton label="Fetch Information" startIcon={<Image src={copybtndisabled} alt="fetch information" />} buttonViewStyle="btnText" buttonSize="btnMedium" disable /> */}
           {fetchVisible && (
             <DsButton
               id="copyBtn"
@@ -157,35 +97,25 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
           )}
         </div>
         <div className={deptStyle.fields}>
-          {/* <DsTextField
-            // placeholder={"Please Type Here"}
-            label={"Customer Location"}
-            onChange={(e) =>
-              updateTenderData("customerLocationId", e.target.value)
-            }
-          ></DsTextField> */}
+          <DsAddressSelect
+            id="CustomerAddress"
+            placeholder="Select Customer Location"
+            options={customerLocations.map((addr) => ({
+              id: addr.id.toString(),
+              value: `${addr.address1}, ${addr.city}, ${addr.state} - ${addr.pinCode}`,
+              label: `${addr.address1}, ${addr.city}, ${addr.state} - ${addr.pinCode}`,
+            }))}
+          />
+        </div>
 
-          <DsAddressSelect 
-           id={"CustomerAddress"}
-           placeholder={"Customer Location"} 
-           options={[ 
-            {
-              value: "PAID_BY_IPCA",
-              label: "Paid By Ipca",
-            },
-            {
-              value: "PAID_BY_STOCKIEST",
-              label: "Paid By Stockiest",
-            }]}>
-          </DsAddressSelect>
-        </div>  
-        <div className={deptStyle.fields}> 
+        <div className={deptStyle.fields}>
           <DsTextField
-            label="Tender Number"   
+            label="Tender Number"
             // placeholder="Please Type Here"
             onChange={(e) => updateTenderData("tenderNumber", e.target.value)}
           ></DsTextField>
         </div>
+
         <div className={deptStyle.fields}>
           <DsSingleSelect
             options={tenderDetails.tenderType}
@@ -211,7 +141,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
             // disable={true}
             placeholder="DD/MM/YYYY"
             label="Tender issue date"
-          />  
+          />
         </div>
         <div className={deptStyle.fields}>
           <DsDatePicker
@@ -222,9 +152,9 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
               }
             }}
             // disable={true}
-            placeholder="DD/MM/YYYY" 
+            placeholder="DD/MM/YYYY"
             label="Last date of purchasing"
-          /> 
+          />
         </div>
         <div className={deptStyle.fields}>
           <DsDatePicker
@@ -253,10 +183,12 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
           <DsTextField
             inputType="number"
             label="Rate contract validity"
-            onChange={(e) => updateTenderData("rateContractValidity", e.target.value)}
+            onChange={(e) =>
+              updateTenderData("rateContractValidity", e.target.value)
+            }
           ></DsTextField>
-        </div> 
-        <div className={deptStyle.fields}> 
+        </div>
+        <div className={deptStyle.fields}>
           <DsSingleSelect
             options={tenderDetails.submissionMode}
             // type={"single"}
@@ -306,5 +238,5 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
       </div>
     </>
   );
-}; 
-export default DsTenderDetails; 
+};
+export default DsTenderDetails;

@@ -1,5 +1,8 @@
 /* eslint-disable react/display-name */
-import { searchCustomerURL } from "@/Common/helpers/constant";
+import {
+  searchCustomerURL,
+  getAllCustomerLocationsURL,
+} from "@/Common/helpers/constant";
 import {
   customer,
   datalistOptions,
@@ -13,98 +16,82 @@ import DsSearchComponent from "@/Elements/DsComponents/DsSearch/searchComponent"
 export interface CustomerSearchProps {
   orderData: TenderData | null;
   setSelectedCustomer?: Dispatch<SetStateAction<customer | undefined>>;
-  setCustomerLocations?: Dispatch<SetStateAction<location[] | undefined>>;
+  setCustomerLocations?: Dispatch<SetStateAction<location[]>>; // ✅ Updated to ensure array of locations
 }
 
-export function isLocation(value: unknown): value is location { 
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    "id" in value &&
-    "address1" in value &&
-    typeof (value as unknown as location).id === "number" &&
-    typeof (value as unknown as location).address1 === "string" 
-  );
-}
-export function isCustomer(value: unknown): value is customer {
-  return (
-    typeof value === "object" && 
-    value !== null && 
-    "id" in value && 
-    "name" in value && 
-    "code" in value && 
-    "address" in value &&  
-    typeof (value as unknown as customer).id === "number" &&
-    typeof (value as unknown as customer).name === "string" &&
-    typeof (value as unknown as customer).code === "string" &&
-    isLocation((value as unknown as customer).address)
-  );
-}
-export function isSearchCustomer(value: unknown): value is customer {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    "id" in value &&
-    "name" in value &&
-    "code" in value &&
-    typeof (value as unknown as customer).id === "number" &&
-    typeof (value as unknown as customer).name === "string" &&
-    typeof (value as unknown as customer).code === "string"
-  );
-}
-export function areSearchCustomers(value: unknown): value is customer[] {
-  return Array.isArray(value) && value.every(isSearchCustomer);
-}
-const CustomerSearch: React.FC<{ 
+const CustomerSearch: React.FC<{
   customer: string;
-  orderData?: TenderData; 
+  orderData?: TenderData;
   updateTenderData?: (
     key: keyof Omit<TenderData, "id" | "orderItems">,
-    value: any 
-  ) => void; 
-}> = React.memo(({ customer,  updateTenderData }) => {
+    value: any
+  ) => void;
+  setCustomerLocations?: Dispatch<SetStateAction<location[]>>; // ✅ Added prop
+}> = React.memo(({ customer, updateTenderData, setCustomerLocations }) => {
   const [customers, setCustomers] = useState<datalistOptions[]>();
   const [selectedCustomer, setSelectedCustomer] = useState<number>();
+
   async function setSelectedOptions(option: datalistOptions): Promise<void> {
-    const selectedCustomerId = option.id;
-    setSelectedCustomer(selectedCustomer);
-    // const getCustomerByCustomerId = getCustomersURL + ;
-  //   updateTenderData("customerId", selectedCustomerId);
-  }
-  // }
-  function setOptions(values: unknown) {
-    if (areSearchCustomers(values)) {
-      const customers: datalistOptions[] = values.map(
-        (x: { id: number; code: string; name: string }) => {
-          return {
-            id: x?.id?.toString(), 
-            value: x?.code.toUpperCase() + " - " + x.name,
-            attributes: { "customer-id": x.id.toString() },
-          };
-        }
+    const selectedCustomerId = Number(option.id);
+    setSelectedCustomer(selectedCustomerId);
+    updateTenderData?.("customerId", selectedCustomerId);
+
+    try {
+      const response = await fetch(
+        `${getAllCustomerLocationsURL}${selectedCustomerId}`
       );
-      setCustomers(customers);
-    } 
+      const data = await response.json();
+
+      if (data.code === 200 && Array.isArray(data.result)) {
+        const formattedAddresses: location[] = data.result.map((addr) => ({
+          id: addr.id,
+          address1: addr.address1,
+          address2: addr.address2,
+          address3: addr.address3,
+          address4: addr.address4,
+          city: addr.city,
+          state: addr.state,
+          pinCode: addr.pinCode,
+          isPrimary: addr.isPrimary === "Y",
+        }));
+
+        setCustomerLocations?.(formattedAddresses); // ✅ Set address list
+      } else {
+        console.error("Invalid API response:", data);
+        setCustomerLocations?.([]); // Clear if no valid data
+      }
+    } catch (error) {
+      console.error("Error fetching customer details:", error);
+      setCustomerLocations?.([]); // Handle error by clearing addresses
+    }
   }
+
+  function setOptions(values: unknown) {
+    if (
+      Array.isArray(values) &&
+      values.every((val) => val.id && val.name && val.code)
+    ) {
+      const customers: datalistOptions[] = values.map((x) => ({
+        id: x?.id?.toString(),
+        value: `${x.code.toUpperCase()} - ${x.name}`,
+        attributes: { "customer-id": x.id.toString() },
+      }));
+      setCustomers(customers);
+    }
+  }
+
   return (
     <DsSearchComponent
       id="customerSearch"
       initialValue={customer}
       dataListId="customerSearchDatalist"
       label={"Customer ID and Name"}
-      options={customers ? customers : undefined}
+      options={customers || undefined}
       setOptions={setOptions}
-      setSearchUrl={(searchTerm: string) => {
-        return searchCustomerURL + searchTerm;
-      }} 
+      setSearchUrl={(searchTerm: string) => searchCustomerURL + searchTerm}
       setSelectedOption={setSelectedOptions}
-      // onBlur={(e)=>{
-      //   const value=  (e.target as HTMLInputElement).value;
-      //   // console.log("value = ",value)
-      //    if(value!== orderData?.customer?.code + " " + orderData?.customer?.name){
-      //      updateOrderDataField("customerId",null)}}
-      //    }
     />
   );
 });
+
 export default CustomerSearch;
