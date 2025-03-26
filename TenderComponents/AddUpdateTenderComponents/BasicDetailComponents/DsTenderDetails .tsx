@@ -21,10 +21,10 @@ import DsAddressSelect from "@/Elements/DsComponents/dsSelect/dsAddressSelect";
 import CustomerSearch from "./customerSearch";
 
 const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
-  const [customers, setCustomers] = useState<searchCustomers[]>([]);
+  const [customers, setCustomers] = useState<searchCustomers[]>([]); 
   const [dataListOption, setDataListOption] = useState<datalistOptions[]>();
   const [fetchVisible, setFetchVisible] = useState(true);
-  const [role, setRole] = useState("checker");
+  const [role, setRole] = useState("checker"); 
   const [pos, setPos] = useState<
     | "top"
     | "topleft"
