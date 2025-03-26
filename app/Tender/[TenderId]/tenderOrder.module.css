@@ -271,4 +271,8 @@
 border-bottom: 1px solid var(--grey-200) !important;
 padding: 10px;
 }
+.productkpi{
+display: flex !important;
+
+}
 

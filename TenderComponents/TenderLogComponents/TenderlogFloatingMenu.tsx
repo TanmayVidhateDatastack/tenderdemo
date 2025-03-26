@@ -7,6 +7,7 @@ import cancle from "@/Common/TenderIcons/smallIcons/cancle.svg";
 import lost from "@/Common/TenderIcons/smallIcons/lost.svg";
 import awarded from "@/Common/TenderIcons/smallIcons/awarded.svg";
  import version  from "@/Common/TenderIcons/smallIcons/V.svg";
+import { changeImage } from "@/Common/helpers/Method/conversion";
 // import cancle from "@/Common/TenderIcons/smallIcons/cancle.svg";
 
 
@@ -18,7 +19,8 @@ interface DsTenderTableFloatingMenuProps {
 
 export const DsTenderTableFloatingMenu: React.FC<DsTenderTableFloatingMenuProps> = ({ e, rowIndex, statuscell }) => {
   console.log("statuscell", statuscell);
-
+  
+  const [isFloatingMenuVisible, setIsFloatingMenuVisible] = useState(false);
   const [isCancelBtnVisible, setIsCancelBtnVisible] = useState(false);
   const [isLostBtnVisible, setLostBtnVisible] = useState(false);
   const [isPartiallyAwardedBtnVisible, setIsPartiallyAwardedBtnVisible] = useState(false);
@@ -27,18 +29,23 @@ export const DsTenderTableFloatingMenu: React.FC<DsTenderTableFloatingMenuProps>
   const [isSubmitVisible, setIsSubmitVisible] = useState(false);
 
   useEffect(() => {
+    console.log("statuscell on load:", statuscell); // Debugging
+  
     if (statuscell === "CANCELLED" || statuscell === "TENDERLOST") {
+      setIsFloatingMenuVisible(false);
       setIsCancelBtnVisible(false);
     } else {
+      setIsFloatingMenuVisible(true);
       setIsCancelBtnVisible(true);
+
     }
   
-    if (statuscell === "Submit ") {
+    if (statuscell === "SUBMITTED") {
       setLostBtnVisible(true);
       setIsPartiallyAwardedBtnVisible(true);
       setIsAwardedBtnVisible(true);
       setIsNewVersionBtnVisible(true);
-      setIsSubmitVisible(true);
+
     } else {
       setLostBtnVisible(false);
       setIsPartiallyAwardedBtnVisible(false);
@@ -48,22 +55,23 @@ export const DsTenderTableFloatingMenu: React.FC<DsTenderTableFloatingMenuProps>
     }
   }, [statuscell]);
   
-  
   useEffect(() => {
-    console.log("Mouse Event:", e);
-    console.log("Calling displayTableMenu for id:", rowIndex);
-    displayTableMenu(e, String(rowIndex), "bottom", "center");
-  }, [e, rowIndex]);
-  const handleClose = () => {
-    console.log("close");
-  };
+    if (isFloatingMenuVisible) {
+      console.log("Displaying floating menu on page load for row:", rowIndex);
+      displayTableMenu(e, String(rowIndex), "bottom", "center");
+    }
+  }, [isFloatingMenuVisible, e, rowIndex]);
   
 
+  const handleClose = () => {
+    console.log("close");
+    setIsFloatingMenuVisible(false);
+  };
+
+
   return (
-    <FloatingMenu selected={1} id={String(rowIndex)}
-    
-    onCloseClick={handleClose}
-    >
+    <FloatingMenu selected={isFloatingMenuVisible ? 1 : 0} id={String(rowIndex)} onCloseClick={handleClose}>
+
       <>
         {isCancelBtnVisible && (
           <DsButton id="deleteBtn" buttonColor="btnWarning" buttonViewStyle="btnContained" 
@@ -83,6 +91,12 @@ export const DsTenderTableFloatingMenu: React.FC<DsTenderTableFloatingMenuProps>
               />
             </div>
           }
+          // onHover={(e) => {
+          //   changeImage(e, addIconWhite);
+          // }}
+          onMouseLeave={(e) => {
+            changeImage(e, cancle);
+          }}
           label="Tender Cancelled" />
         )}
         {isLostBtnVisible && (
@@ -103,7 +117,12 @@ export const DsTenderTableFloatingMenu: React.FC<DsTenderTableFloatingMenuProps>
               />
             </div>
           }
-          
+          // onHover={(e) => {
+          //   changeImage(e, addIconWhite);
+          // }}
+          onMouseLeave={(e) => {
+            changeImage(e, lost);
+          }}
           
           label="Tender Lost" />
         )}
@@ -126,6 +145,12 @@ export const DsTenderTableFloatingMenu: React.FC<DsTenderTableFloatingMenuProps>
               />
             </div>
           }
+          // onHover={(e) => {
+          //   changeImage(e, addIconWhite);
+          // }}
+          onMouseLeave={(e) => {
+            changeImage(e, awarded);
+          }}
           
           label="Partially Awarded" />
         )}
@@ -148,7 +173,12 @@ export const DsTenderTableFloatingMenu: React.FC<DsTenderTableFloatingMenuProps>
               />
             </div>
           }
-          
+          // onHover={(e) => {
+          //   changeImage(e, addIconWhite);
+          // }}
+          onMouseLeave={(e) => {
+            changeImage(e, awarded);
+          }}
           label="Awarded" />
         )}
         {isNewVersionBtnVisible && (
@@ -170,7 +200,12 @@ export const DsTenderTableFloatingMenu: React.FC<DsTenderTableFloatingMenuProps>
               />
             </div>
           }
-          
+          // onHover={(e) => {
+          //   changeImage(e, addIconWhite);
+          // }}
+          onMouseLeave={(e) => {
+            changeImage(e, version);
+          }}
           label="Create New Version" />
         )}
         {isSubmitVisible && (
@@ -192,6 +227,12 @@ export const DsTenderTableFloatingMenu: React.FC<DsTenderTableFloatingMenuProps>
               />
             </div>
           }
+          // onHover={(e) => {
+          //   changeImage(e, addIconWhite);
+          // }}
+          onMouseLeave={(e) => {
+            changeImage(e, lost);
+          }}
           label="Customer Submission Done" />
         )}
       </>

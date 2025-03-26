@@ -97,7 +97,7 @@ const DsTotalTenders: React.FC<TotalTendersProps> = React.memo(({ data }) => {
 
             ),
             status: "Corporate",
-            value: corporate.toString(),
+            value: corporate.toString().padStart(3, "0"),
           },
         ]}
       />,

@@ -57,20 +57,21 @@ export function areSearchCustomers(value: unknown): value is customer[] {
 }
 const CustomerSearch: React.FC<{ 
   customer: string;
-  orderData: TenderData; 
-  updateTenderData: (
+  orderData?: TenderData; 
+  updateTenderData?: (
     key: keyof Omit<TenderData, "id" | "orderItems">,
     value: any 
   ) => void; 
-}> = React.memo(({ customer, orderData, updateTenderData }) => {
+}> = React.memo(({ customer,  updateTenderData }) => {
   const [customers, setCustomers] = useState<datalistOptions[]>();
   const [selectedCustomer, setSelectedCustomer] = useState<number>();
   async function setSelectedOptions(option: datalistOptions): Promise<void> {
     const selectedCustomerId = option.id;
     setSelectedCustomer(selectedCustomer);
     // const getCustomerByCustomerId = getCustomersURL + ;
-    updateTenderData("customerId", selectedCustomerId);
+  //   updateTenderData("customerId", selectedCustomerId);
   }
+  // }
   function setOptions(values: unknown) {
     if (areSearchCustomers(values)) {
       const customers: datalistOptions[] = values.map(
