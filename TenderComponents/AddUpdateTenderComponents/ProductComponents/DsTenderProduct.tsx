@@ -5,8 +5,8 @@ import DsProductTable from "./DsProductTable";
 import DsProductKpis from "./DsProductKpis";
 
 import fetchData from "@/Common/helpers/Method/fetchData";
-import {  getAllDepot } from "@/Common/helpers/constant";
-import style from "@/app/page.module.css";
+import { getProductURL  } from "@/Common/helpers/constant";
+
 
  
 const DsTenderProduct: React.FC<{
@@ -17,7 +17,7 @@ const DsTenderProduct: React.FC<{
  
     const handleFetch = async () => {
         try {
-            const res = await fetchData({ url: getAllDepot });
+            const res = await fetchData({ url:  getProductURL  });
             console.log("Fetched Response:", res);
  
             if (res?.code === 200 && Array.isArray(res?.result)) {
@@ -38,12 +38,11 @@ const DsTenderProduct: React.FC<{
  
   return (
     <>
-      <div>
-        <DsAddProduct setProductList={setProductList}></DsAddProduct>
-    <div className={style.kpi}>
-        <DsProductKpis productData={productList||fetchdata}></DsProductKpis>
-        </div>
-      </div>
+   <div style={{ display: "flex", gap: "16rem", alignItems: "flex-start", margin: "20px" }}>
+  <DsAddProduct setProductList={setProductList} />
+  <DsProductKpis productData={productList || fetchdata} />
+</div>
+
       <DsProductTable />
     </>
   );

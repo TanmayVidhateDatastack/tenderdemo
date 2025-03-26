@@ -273,6 +273,7 @@ padding: 10px;
 }
 .productkpi{
 display: flex !important;
+gap:1rem;
 
 }
 

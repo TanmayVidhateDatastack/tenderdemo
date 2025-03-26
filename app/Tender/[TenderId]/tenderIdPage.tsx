@@ -40,7 +40,7 @@ const DsTenderIdPage: React.FC = () => {
       <DocumentProvider>
         <DsApplication
           selectedTabId={selectedTabId}
-          appTitle="Tender"
+          appTitle=" New Tender"
           tabs={tabs}
         >
           <div className={pagestyles.container}
@@ -53,7 +53,7 @@ const DsTenderIdPage: React.FC = () => {
             </TabView>
             <TabView tabId="1" >
           <DsTenderProduct productList={tenderData.products} setProductList={addTenderProduct} />
-          new prod
+         
         </TabView>
             <TabView tabId="2"
             

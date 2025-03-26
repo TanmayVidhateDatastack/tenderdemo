@@ -7,6 +7,7 @@ import { TenderProduct } from "@/Common/helpers/types";
 import DsButton from "../../../Elements/DsComponents/DsButtons/dsButton";
 import DsTextField from "../../../Elements/DsComponents/DsInputs/dsTextField";
 import { SetStateAction, useState } from "react";
+
  
 export interface addProductProps {
   orderStatus?: string;
@@ -49,13 +50,14 @@ const DsAddProduct: React.FC<addProductProps> = ({
               } }      ></ProductSearch>
    
       <DsTextField
-        placeholder={"+ Qty"}
         label={"+ Qty"}
         initialValue={qtyInputVal}
         onChange={(e) => setQtyInputVal(e.target.value)}
         id="qty"
         disable={orderStatus === DsStatus.APRV ? true : false}
       ></DsTextField>
+    
+     
       <DsButton
         buttonSize="btnLarge"
         onClick={selectProduct}

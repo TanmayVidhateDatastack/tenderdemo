@@ -6,6 +6,9 @@ import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import DsCustomerLPR from "./CustomerLpr";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import ProductTableSearch from "./ProductTableSearch";
+import Image from "next/image";
+import EmptyHour from "@/Common/TenderIcons/mediumIcons/emptyHourglass.svg";
+import styles from "@/app/page.module.css";
  
 const DsProductTable: React.FC = () => {
   const { tenderData, updateTenderProduct } = useTenderData();
@@ -13,14 +16,7 @@ const DsProductTable: React.FC = () => {
   const [localProducts, setLocalProducts] = useState<TenderProduct[]>(tenderData.products);
   const [hasChanges, setHasChanges] = useState(false);
  
-  // async function setTenderProductOptions() {
-  //   await fetchData({ url: getAllTenderProducts }).then((data) => setProductOptions(data))
-  // }
-  // useEffect(() => {
-  //   if (dataSource === "file") {
-  //     setTenderProductOptions()
-  //   }
-  // }, [dataSource]);
+
  
   const calculatedProducts = useMemo(() => {
     return localProducts.map((product) => {
@@ -32,6 +28,7 @@ const DsProductTable: React.FC = () => {
       }
       if (product.PTRpercent && product.ptr) calculated.stockistDiscount = Number(product.ptr) * (product.PTRpercent / 100);
       calculated.netValue = (calculated.totalCost || 0) + (calculated.marginValue || 0);
+      console.log("In product table");
       return calculated;
     });
   }, [localProducts]);
@@ -136,7 +133,26 @@ const DsProductTable: React.FC = () => {
  
   return (
     <div className="tender-product-container">
-      {tenderProductTable && <TableComponent className={tenderProductTable.className} id={tenderProductTable.id} columns={tenderProductTable.columns} rows={tenderProductTable.rows} />}
+      {tenderProductTable &&
+       <TableComponent className={tenderProductTable.className} 
+       id={tenderProductTable.id}
+        columns={tenderProductTable.columns}
+         rows={tenderProductTable.rows}
+    
+         />}
+       
+        
+           {tenderProductTable?.rows.length == 0 && (
+                  <div className={styles.noDataFound}>
+                    <div></div>
+                    <div className={styles.noData}>
+                      <Image src={EmptyHour} alt="-"></Image>
+                      <div>Products Not Available</div>
+                    </div>
+                    <div className={styles.noDataBorders}></div>
+                  </div>
+                )
+              }
       <div className="table-actions">
         <DsButton onClick={handleSave} disable={!hasChanges} className="save-button">Save Changes</DsButton>
       </div>

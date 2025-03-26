@@ -1,6 +1,5 @@
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import DsMultiSelect from "@/Elements/DsComponents/dsSelect/dsMultiSelect";
-import DsSelectMultiLevel from "@/Elements/DsComponents/dsSelect/dsSelectMultiLevel";
 import {
   applierSupplierDetailsProps,
  
@@ -13,7 +12,7 @@ const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
   applierSupplierDetails,
 }) => {
   const { updateTenderData } = useTenderData();
-  console.log("djhdjd",applierSupplierDetails);
+  // console.log("djhdjd",applierSupplierDetails);
   return (
     <>
       <div className={styles.inputDetails}>
