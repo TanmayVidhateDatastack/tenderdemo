@@ -1,0 +1,123 @@
+.container {
+    padding: 0px;
+  }
+  .container_head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    border: 0.1rem solid var(--primary);
+    border-radius: 0.5rem;
+    border-style: dashed;
+    gap: 3.3rem;
+    height: 6rem;
+    margin-top: 2rem;
+    background-color: #f8f9ff !important;
+  }
+  .footer:hover {
+    background-color: #f3f1fb !important;
+    opacity: 1;
+  }
+  .footer_menu {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    margin-top: 2rem;
+  }
+  .attachbtn {
+    border: none !important ;
+  }
+  .statusIndicator {
+    position: relative;
+    padding-left: 2rem;
+    margin-top: 1rem;
+    font-size: 1.3rem;
+  }
+  .statusIndicator::before {
+    content: "";
+    position: absolute;
+    left: 0.6rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1rem;
+    height: 1rem;
+    background-color: #555555;
+    border-radius: 50%;
+    opacity: 0.2;
+  }
+  .list {
+    color: #555555;
+    opacity: 1;
+  }
+  
+  .instruction {
+    font-size: 1.4rem;
+    color: var(--grey-700);
+    opacity: 1;
+    height: 1.9rem;
+    width: fit-content;
+    margin-left: 0.5rem;
+    font-weight: bold;
+  }
+  .popup {
+    border-radius: 0.8rem !important;
+    height: 42rem !important;
+    width: 72rem !important;
+    padding: 1rem;
+    /* background-color: var(--white) 0% 0% no-repeat padding-box; */
+    /* background: #FFFFFF 0% 0% no-repeat padding-box; */
+  }
+  
+  /* .uploadbtn:enabled{
+      color: white !important;
+      opacity: 1 !important;
+      font-size: 1.3rem !important;
+      height: 3.6rem !important;
+      width: 10rem !important;
+      background-color:#055D57!important;
+      border: none !important;
+      cursor:pointer !important;
+  } */
+  
+  .uploadbtn {
+    color: white !important;
+    opacity: 1 !important;
+    font-size: 1.3rem !important;
+    height: 3.6rem !important;
+    width: 10rem !important;
+    background-color: var(--disable) !important;
+    border: none !important;
+    cursor: pointer !important;
+  }
+  .l1 {
+    color: var(--grey-600);
+    font-size: 1.3rem;
+    opacity: 1;
+    font-family: sans-serif;
+    /* font: normal normal normal 1.3rem/1.8rem Open Sans; */
+    /* font: var(--unnamed-font-style-normal) normal var(--unnamed-font-weight-normal) var(--unnamed-font-size-13)/var(--unnamed-line-spacing-18) var(--unnamed-font-family-open-sans); */
+  }
+  .attachfile {
+    cursor: pointer;
+    color: var(--primary);
+    /* background-color:transparent; */
+    opacity: 1;
+    font-size: 1.4rem;
+    font-weight: bold;
+    width: 67.2rem;
+    height: 6rem;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100%;
+  }
+  .file {
+    /* width:672px;
+      height:60px;
+      align-items: center;
+      justify-content: center; */
+  }

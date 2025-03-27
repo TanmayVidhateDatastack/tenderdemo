@@ -356,3 +356,13 @@ a.secondary {
   color: var(--grey-300);
   font-size: var(--custome-1);
 }
+
+.csvpopupBtn {
+  color: var(--primary);
+  background-color: var(--background);
+}
+
+.csvpopupBtn:hover {
+  color: var(--primary) !important;
+  background-color: var(--btngroup-primary-hover) !important;
+}

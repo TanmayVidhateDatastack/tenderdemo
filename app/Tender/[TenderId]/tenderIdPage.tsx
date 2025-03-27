@@ -16,8 +16,13 @@ import DocumentProvider, { DocumentContext } from "@/TenderComponents/AddUpdateT
 import DsAddTenderDocumentPane from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/DsAddTenderDocumentPane";
 import DocumentSelectorArea from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/DsDocumentSelectionArea";
 import styles from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/document.module.css";
-
 import DsTenderProduct from "@/TenderComponents/AddUpdateTenderComponents/ProductComponents/DsTenderProduct";
+import { OpenPopup } from "@/Elements/DsComponents/dsPopup/dsPopup";
+import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
+import Image from "next/image";
+import upload from "@/Common/TenderIcons/smallIcons/uploadicon.svg";
+import CsvPopup from "@/TenderComponents/TenderLogComponents/CsvPopup";
+
 
 
 const DsTenderIdPage: React.FC = () => {
@@ -30,84 +35,116 @@ const DsTenderIdPage: React.FC = () => {
     { tabId: "0", tabName: "Basic Details" },
     { tabId: "1", tabName: "Products ₹ (V1)" },
     { tabId: "2", tabName: "Documents" },
-    // { tabId: "3", tabName: "New" },
+
   ];
-
-  // const docCount = totalSelectedDocuments;
-
   return (
     <>
       <DocumentProvider>
         <DsApplication
           selectedTabId={selectedTabId}
-          appTitle=" New Tender"
+          appTitle="New Tender"
+          appMenu={
+            <>
+              <div>
+                {  
+                  <>
+                    <DsButton
+                      className={style.csvpopupBtn}
+                      startIcon={
+                        <div
+                          style={{
+                            width: "1.125em",
+                            height: "1.125em",
+                            position: "relative",
+                          }}
+                        >
+                          <Image
+                            src={upload}
+                            alt="Add Icon"
+                            layout="fill"
+                            objectFit="cover"
+                          />
+                        </div>
+                      }
+                      buttonSize="btnLarge"
+                      buttonViewStyle="btnText"
+                      id="CSV"
+                      onClick={() => OpenPopup("csvpopup")}
+                    >
+                      CSV file
+                    </DsButton>
+  
+                    <div>
+                      <CsvPopup />
+                    </div>
+                  </>
+                }
+              </div>
+            </>
+          }
           tabs={tabs}
         >
-          <div className={pagestyles.container}
-            onScroll={() => closeAllContext()}>
-            <TabView tabId="0" >
+          <div className={pagestyles.container} onScroll={() => closeAllContext()}>
+            <TabView tabId="0">
               <div className={style.tenderDetails}>
-
                 <DsBasicDetails />
               </div>
             </TabView>
-            <TabView tabId="1" >
-          <DsTenderProduct productList={tenderData.products} setProductList={addTenderProduct} />
-         
-        </TabView>
-            <TabView tabId="2"
-            
-            >
+            <TabView tabId="1">
+              <DsTenderProduct
+                productList={tenderData.products}
+                setProductList={addTenderProduct}
+              />
+            </TabView>
+            <TabView tabId="2">
               <DocumentContext.Consumer>
                 {(context) => {
                   if (!context) {
-                    return <div>Error: Document context is not available</div>; // ✅ Prevents undefined errors
+                    return <div>Error: Document context is not available</div>;
                   }
                   const { totalSelectedDocuments } = context;
-
+  
                   return (
                     <div>
                       <div className={style.docPane}>
                         <div className={style.totalCount}>
                           <div>Selected Document</div>
-                          <div className={style.count}> {totalSelectedDocuments}</div>
+                          <div className={style.count}>{totalSelectedDocuments}</div>
                         </div>
-                        <PaneOpenButton className={styles.pane} id="documentPaneOpenBtn" paneId="documentPane" label="Add Documents" />
+                        <PaneOpenButton
+                          className={styles.pane}
+                          id="documentPaneOpenBtn"
+                          paneId="documentPane"
+                          label="Add Documents"
+                        />
                       </div>
-
+  
                       <DocumentSelectorArea />
                     </div>
                   );
                 }}
               </DocumentContext.Consumer>
             </TabView>
-
-
           </div>
         </DsApplication>
         <DsPane id="documentPane" side="right" title="Documents" isBackdrop={true}>
           <DsAddTenderDocumentPane />
         </DsPane>
         <Toaster
-          handleClose={() => {
-          }}
+          handleClose={() => {}}
           id={"create-order-toaster"}
           type={actionStatus?.notiType}
           message={actionStatus?.notiMsg}
           position={"top"}
           duration={closeTimeForTender}
         />
-
+  
         <div className={style.footerContainer}>
-          <DSTendrFooter setActionStatus={setActionStatusValues}
-
-            saveTender={saveTender}
-          ></DSTendrFooter>
+          <DSTendrFooter setActionStatus={setActionStatusValues} saveTender={saveTender} />
         </div>
       </DocumentProvider>
-
     </>
-
   );
+  
 };
 export default DsTenderIdPage;

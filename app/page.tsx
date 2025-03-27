@@ -32,7 +32,6 @@ import DsAdvanceFilterPane from "@/TenderComponents/TenderLogComponents/DsAdvanc
 
 
 
-
 export default function Home() {
   const [data, setData] = useState<Tender[]>([]); //for table data
   const [metaData, setMetaData] = useState<CodeItem[]>([]);
@@ -717,6 +716,7 @@ export default function Home() {
 
         }
       ></ContextMenu>
+  
     </>
   );
 }

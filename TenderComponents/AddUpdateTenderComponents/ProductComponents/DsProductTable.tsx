@@ -9,14 +9,13 @@ import ProductTableSearch from "./ProductTableSearch";
 import Image from "next/image";
 import EmptyHour from "@/Common/TenderIcons/mediumIcons/emptyHourglass.svg";
 import styles from "@/app/page.module.css";
+
  
 const DsProductTable: React.FC = () => {
   const { tenderData, updateTenderProduct } = useTenderData();
   const [tenderProductTable, setTenderProductTable] = useState<tableData | undefined>();
   const [localProducts, setLocalProducts] = useState<TenderProduct[]>(tenderData.products);
   const [hasChanges, setHasChanges] = useState(false);
- 
-
  
   const calculatedProducts = useMemo(() => {
     return localProducts.map((product) => {
@@ -132,6 +131,7 @@ const DsProductTable: React.FC = () => {
   }, [columns, rows]);
  
   return (
+    <>
     <div className="tender-product-container">
       {tenderProductTable &&
        <TableComponent className={tenderProductTable.className} 
@@ -140,7 +140,6 @@ const DsProductTable: React.FC = () => {
          rows={tenderProductTable.rows}
     
          />}
-       
         
            {tenderProductTable?.rows.length == 0 && (
                   <div className={styles.noDataFound}>
@@ -157,6 +156,7 @@ const DsProductTable: React.FC = () => {
         <DsButton onClick={handleSave} disable={!hasChanges} className="save-button">Save Changes</DsButton>
       </div>
     </div>
+    </>
   );
 };
  
