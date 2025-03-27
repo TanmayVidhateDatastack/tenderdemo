@@ -16,21 +16,23 @@ import CustomerSearch from "./customerSearch";
 
 const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
   const [fetchVisible, setFetchVisible] = useState(true);
-  const [role, setRole] = useState("checker");
+  const [role, setRole] = useState("checker"); 
   const [pos, setPos] = useState<
     | "top"
     | "topleft"
-    | "topright"
+    | "topright" 
     | "middle"
     | "bottom"
     | "bottomleft"
     | "bottomright"
   >("bottom");
+  
   const [notiType, setNotiType] = useState<
     "success" | "bonus" | "info" | "error"
   >("info");
   const [showNotification, setShowNotification] = useState<boolean>(false);
   const { updateTenderData } = useTenderData();
+  const [customerLocations, setCustomerLocations] = useState<location[]>([]); 
 
   const handleRoleFetch = async () => {
     try {
@@ -42,7 +44,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         }
       } else {
         console.error("Error fetching data: ", res.message || "Unknown error");
-      }
+      } 
     } catch (error) {
       console.error("Fetch error: ", error);
     }
@@ -64,9 +66,8 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
     const day = date.getDate().toString().padStart(2, "0");
 
     return `${year}-${month}-${day}`;
-  };
-  const [customerLocations, setCustomerLocations] = useState<location[]>([]);
-
+  }; 
+  
   return (
     <>
       <div className={styles.inputDetails}>
@@ -80,7 +81,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
 
         <div className={deptStyle.fields}>
           {fetchVisible && (
-            <DsButton
+            <DsButton 
               id="copyBtn"
               label="Fetch Information"
               buttonViewStyle="btnText"
@@ -91,30 +92,31 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
               onClick={() => {
                 setShowNotification(true);
                 setPos("top");
-                setNotiType("info");
-              }}
+                setNotiType("info"); 
+              }} 
             ></DsButton>
           )}
         </div>
         <div className={deptStyle.fields}>
-          <DsAddressSelect
+          <DsAddressSelect 
             id="CustomerAddress"
-            placeholder="Select Customer Location"
+            placeholder="Select Customer Location" 
             options={customerLocations.map((addr) => ({
-              id: addr.id.toString(),
+              id: addr.id.toString(), 
               value: `${addr.address1}, ${addr.city}, ${addr.state} - ${addr.pinCode}`,
               label: `${addr.address1}, ${addr.city}, ${addr.state} - ${addr.pinCode}`,
+              key: addr.id.toString(),
             }))}
-          />
+          /> 
         </div>
 
         <div className={deptStyle.fields}>
           <DsTextField
             label="Tender Number"
-            // placeholder="Please Type Here"
+            // placeholder="Please Type Here"  
             onChange={(e) => updateTenderData("tenderNumber", e.target.value)}
           ></DsTextField>
-        </div>
+        </div> 
 
         <div className={deptStyle.fields}>
           <DsSingleSelect

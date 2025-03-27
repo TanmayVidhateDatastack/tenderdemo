@@ -20,51 +20,57 @@ export interface CustomerSearchProps {
 }
 
 const CustomerSearch: React.FC<{
-  customer: string;
+  customer: string; 
   orderData?: TenderData;
   updateTenderData?: (
-    key: keyof Omit<TenderData, "id" | "orderItems">,
-    value: any
-  ) => void;
+    key: keyof Omit<TenderData, "id" | "orderItems">, 
+    value: any 
+  ) => void; 
   setCustomerLocations?: Dispatch<SetStateAction<location[]>>; // ✅ Added prop
 }> = React.memo(({ customer, updateTenderData, setCustomerLocations }) => {
   const [customers, setCustomers] = useState<datalistOptions[]>();
   const [selectedCustomer, setSelectedCustomer] = useState<number>();
+  const [selectedAddress, setSelectedAddress] = useState<string>(""); // Track selected address
+
 
   async function setSelectedOptions(option: datalistOptions): Promise<void> {
     const selectedCustomerId = Number(option.id);
     setSelectedCustomer(selectedCustomerId);
     updateTenderData?.("customerId", selectedCustomerId);
-
+  
+    // ✅ Reset the selected address when a new customer is chosen
+    setSelectedAddress("");
+  
+    setCustomerLocations?.([]); // ✅ Clear locations before fetching new ones
+  
     try {
-      const response = await fetch(
-        `${getAllCustomerLocationsURL}${selectedCustomerId}`
-      );
+      const response = await fetch(`${getAllCustomerLocationsURL}${selectedCustomerId}`);
       const data = await response.json();
-
+  
       if (data.code === 200 && Array.isArray(data.result)) {
         const formattedAddresses: location[] = data.result.map((addr) => ({
           id: addr.id,
           address1: addr.address1,
           address2: addr.address2,
-          address3: addr.address3,
-          address4: addr.address4,
+          address3: addr.address3, 
+          address4: addr.address4, 
           city: addr.city,
           state: addr.state,
           pinCode: addr.pinCode,
-          isPrimary: addr.isPrimary === "Y",
-        }));
-
-        setCustomerLocations?.(formattedAddresses); // ✅ Set address list
+          isPrimary: addr.isPrimary === "Y", 
+        })); 
+        setCustomerLocations?.(formattedAddresses);
       } else {
         console.error("Invalid API response:", data);
-        setCustomerLocations?.([]); // Clear if no valid data
+        setCustomerLocations?.([]);
       }
     } catch (error) {
       console.error("Error fetching customer details:", error);
-      setCustomerLocations?.([]); // Handle error by clearing addresses
+      setCustomerLocations?.([]);
     }
   }
+  
+  
 
   function setOptions(values: unknown) {
     if (
