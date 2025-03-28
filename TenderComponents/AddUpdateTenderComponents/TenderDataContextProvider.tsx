@@ -30,15 +30,15 @@ interface TenderDataContextType {
     feeType: string,
     key: keyof tenderFee,
     value: Document[] | string | number
-  ) => void;
+  ) => void; 
   addTenderFee: (type: string) => void;
   removeTenderFeeByType: (feeType: string) => void;
-  updateApplicableCondition: (
+  updateApplicableCondition: ( 
     conditionType: string,
-    key: keyof applicableSupplyConditions,
-    value: string | number | Document[]
+    key: keyof applicableSupplyConditions, 
+    value: string | number | Document[] 
   ) => void;
-  updateSupplyCondition: (
+  updateSupplyCondition: ( 
     key: keyof tenderSupplyCondition,
     value: string | number | string[] | Document[]
   ) => void;

@@ -9,6 +9,7 @@
   .inputDetails {
     display: grid;
     align-items: center;
+    align-items: flex-start !important;
     border-bottom: 0.5px solid var(--separator);
     padding: var(--ds-padding);
     flex-wrap: wrap;

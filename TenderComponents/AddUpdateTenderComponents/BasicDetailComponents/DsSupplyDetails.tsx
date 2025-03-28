@@ -23,11 +23,13 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
           }}
         ></DsSingleSelect>
         <DsTextField
+        inputType="number"
           label="Provide no. of consignees"
           // placeholder="Please type here"
           onChange={(e) => updateSupplyCondition("consigneesCount", e.target.value)}
         ></DsTextField>
-        <DsSelectMultiLevel
+
+        <DsSingleSelect
           options={supplyDetails.reportRequirements}
           label="Test report requirement"
           placeholder={"Please select here"}
@@ -36,10 +38,9 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
             if (typeof option.value == "string") {
               updateSupplyCondition("testReportRequirement", option.value);
             }
-          }} isOpen={false}
-          onSelect={function (value: datalistOptions): void {
-            throw new Error("Function not implemented.");
-          }}        ></DsSelectMultiLevel>
+          }}
+        ></DsSingleSelect>
+
         <DsMultiSelect
           options={supplyDetails.eligibility}
           label="Eligibility"

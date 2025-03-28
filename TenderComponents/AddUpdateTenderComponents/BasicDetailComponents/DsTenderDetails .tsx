@@ -33,6 +33,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
   const [showNotification, setShowNotification] = useState<boolean>(false);
   const { updateTenderData } = useTenderData();
   const [customerLocations, setCustomerLocations] = useState<location[]>([]); 
+  // const [customerIdName, setCustomerIdName] = useState<string>("");
 
   const handleRoleFetch = async () => {
     try {
@@ -75,7 +76,8 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
           <CustomerSearch
             customer={""}
             orderData={undefined}
-            setCustomerLocations={setCustomerLocations} // ✅ Set addresses dynamically
+            setCustomerLocations={setCustomerLocations}
+            // updateTenderData={updateTenderData}
           />
         </div>
 
@@ -98,18 +100,23 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
           )}
         </div>
         <div className={deptStyle.fields}>
-          <DsAddressSelect 
+          <DsSingleSelect 
             id="CustomerAddress"
             placeholder="Select Customer Location" 
             options={customerLocations.map((addr) => ({
               id: addr.id.toString(), 
-              value: `${addr.address1}, ${addr.city}, ${addr.state} - ${addr.pinCode}`,
-              label: `${addr.address1}, ${addr.city}, ${addr.state} - ${addr.pinCode}`,
+              value: `${addr.city}, ${addr.state}, ${addr.pinCode}`,
+              label: `${addr.city}, ${addr.state}, ${addr.pinCode}`, 
               key: addr.id.toString(),
             }))}
+            setSelectOption={(option) => {
+              if (typeof option.value == "string") {
+                updateTenderData("customerLocationId", option.value);
+                // console.log("customerLocationId",option.value)
+              }
+            }}           
           /> 
         </div>
-
         <div className={deptStyle.fields}>
           <DsTextField
             label="Tender Number"
@@ -117,7 +124,6 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
             onChange={(e) => updateTenderData("tenderNumber", e.target.value)}
           ></DsTextField>
         </div> 
-
         <div className={deptStyle.fields}>
           <DsSingleSelect
             options={tenderDetails.tenderType}
@@ -206,6 +212,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         </div>
         <div className={deptStyle.fields}>
           <DsTextField
+           inputType="number"
             label={"Delivery Period ( In days )"}
             // placeholder={"Please type or select"}
             onChange={(e) => updateTenderData("deliveryPeriod", e.target.value)}
@@ -224,6 +231,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         <div className={deptStyle.fields}>
           <DsTextField
             label="Penalty for last delivery purchase %"
+            inputType="number"
             // placeholder="Please type here"
             onChange={(e) =>
               updateTenderData("lateDeliveryPenalty", e.target.value)

@@ -2,11 +2,13 @@ import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import DsMultiSelect from "@/Elements/DsComponents/dsSelect/dsMultiSelect";
 import {
   applierSupplierDetailsProps,
+  datalistOptions,
  
 } from "@/Common/helpers/types";
 import { useTenderData } from "../TenderDataContextProvider";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import deptStyles from "@/TenderComponents/AddUpdateTenderComponents/BasicDetailComponents/deposite.module.css";
+import DsSelectMultiLevel from "@/Elements/DsComponents/dsSelect/dsSelectMultiLevel";
 
 const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
   applierSupplierDetails,
@@ -41,6 +43,7 @@ const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
             label="Supplied By"
             placeholder={"Please search or select here"}
             id={"suppliedBy"}
+            isOpen={true} 
             setSelectOption={(option) => {
               if (typeof option.value == "string") {
                 updateTenderData(
@@ -49,8 +52,8 @@ const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
                 );
                 updateTenderData("suppliedId", option.value);
               }
-            }}
-          ></DsSelectMultiLevel> */}
+            } } 
+            ></DsSelectMultiLevel> */}
         </div>
         <div className={deptStyles.fields}>
  
@@ -67,7 +70,7 @@ const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
                 if (typeof option.value === "string") {
                   acc.push(parseInt(option.value));
                 }
-                return acc;
+                return acc; 
               }, [])
             );                                
           }}
@@ -78,13 +81,15 @@ const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
  
           <DsTextField
             label="Stockist / Liasioner name"
+            inputType="text"
           // placeholder="Please type here"
-          // onChange={(e) => updateTenderData("", e.target.value)}
+          //  onChange={(e) => updateTenderData(" ", e.target.value)}
           ></DsTextField>
         </div>
         <div className={deptStyles.fields}>
  
           <DsTextField
+            inputType="number"
             label="Stockist / Liasioner discount %"
             // placeholder="Please type here"
             onChange={(e) => updateTenderData("supplierDiscount", e.target.value)}

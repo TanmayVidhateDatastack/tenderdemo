@@ -16,9 +16,8 @@ import DsSearchComponent from "@/Elements/DsComponents/DsSearch/searchComponent"
 export interface CustomerSearchProps {
   orderData: TenderData | null;
   setSelectedCustomer?: Dispatch<SetStateAction<customer | undefined>>;
-  setCustomerLocations?: Dispatch<SetStateAction<location[]>>; // ✅ Updated to ensure array of locations
+  setCustomerLocations?: Dispatch<SetStateAction<location[]>>; 
 }
-
 const CustomerSearch: React.FC<{
   customer: string; 
   orderData?: TenderData;
@@ -26,22 +25,18 @@ const CustomerSearch: React.FC<{
     key: keyof Omit<TenderData, "id" | "orderItems">, 
     value: any 
   ) => void; 
-  setCustomerLocations?: Dispatch<SetStateAction<location[]>>; // ✅ Added prop
+  setCustomerLocations?: Dispatch<SetStateAction<location[]>>; 
 }> = React.memo(({ customer, updateTenderData, setCustomerLocations }) => {
   const [customers, setCustomers] = useState<datalistOptions[]>();
   const [selectedCustomer, setSelectedCustomer] = useState<number>();
   const [selectedAddress, setSelectedAddress] = useState<string>(""); // Track selected address
-
 
   async function setSelectedOptions(option: datalistOptions): Promise<void> {
     const selectedCustomerId = Number(option.id);
     setSelectedCustomer(selectedCustomerId);
     updateTenderData?.("customerId", selectedCustomerId);
   
-    // ✅ Reset the selected address when a new customer is chosen
     setSelectedAddress("");
-  
-    setCustomerLocations?.([]); // ✅ Clear locations before fetching new ones
   
     try {
       const response = await fetch(`${getAllCustomerLocationsURL}${selectedCustomerId}`);
@@ -60,10 +55,10 @@ const CustomerSearch: React.FC<{
           isPrimary: addr.isPrimary === "Y", 
         })); 
         setCustomerLocations?.(formattedAddresses);
-      } else {
-        console.error("Invalid API response:", data);
+      } else { 
+        console.error("Invalid API response:", data); 
         setCustomerLocations?.([]);
-      }
+      } 
     } catch (error) {
       console.error("Error fetching customer details:", error);
       setCustomerLocations?.([]);
