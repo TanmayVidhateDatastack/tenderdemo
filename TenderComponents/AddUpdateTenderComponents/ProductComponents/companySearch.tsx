@@ -72,12 +72,14 @@ const CompanySearch: React.FC<CompanySearchProps> = ({
       placeholder={"Search Company"}
       options={company ? company : undefined}
       setOptions={setOptions}
+      // setSearchUrl={(searchTerm: string) => {
+      //   return searchCompanysURL  + searchTerm;
+      // }}
       setSearchUrl={(searchTerm: string) => {
-        return searchCompanysURL + "name=" + searchTerm;
+        const url = `${searchCompanysURL}?partialProductNameOrCode=${encodeURIComponent(searchTerm)}`;
+        console.log("Final Search URL:", url); // Debugging log
+        return url;
       }}
-      //   setOnSelectUrl={function (selectedOptionId: string): string {
-      //     return getCompanyURL + selectedOptionId;
-      //   }}
       setSelectedOption={setSelectedOption}
       disable={orderStatus === DsStatus.APRV ? true : false}
     />

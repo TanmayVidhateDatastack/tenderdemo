@@ -154,7 +154,7 @@ console.log("Total Margin Percentage:", totalMarginPercentage);
         Highlight={false}
       />
         <DsKpl
-        //   quantity={<DsCurrency format={"IND"} id={"marginsum"} amount={totalMarginProductSum} type={"short"} unit={"Cr"}/>}
+   //   quantity={<DsCurrency format={"IND"} id={"marginsum"} amount={totalMarginProductSum} type={"short"} unit={"Cr"}/>}
           quantity={<DsCurrency format={"IND"} id={"marginsum"} amount={totalMarginProductSum} type={"short"} />}
           title={"Margin"}
           Subquantity={isNaN(totalMarginPercentage) ? "NaN%" : `${totalMarginPercentage.toFixed(2)}%`}

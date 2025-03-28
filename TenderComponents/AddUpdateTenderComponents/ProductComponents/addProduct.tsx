@@ -6,7 +6,7 @@ import fetchData from "@/Common/helpers/Method/fetchData";
 import { TenderProduct } from "@/Common/helpers/types";
 import DsButton from "../../../Elements/DsComponents/DsButtons/dsButton";
 import DsTextField from "../../../Elements/DsComponents/DsInputs/dsTextField";
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 
  
 export interface addProductProps {
@@ -18,6 +18,7 @@ const DsAddProduct: React.FC<addProductProps> = ({
   orderStatus,
   setProductList,
 }) => {
+  console.log("Add product ",orderStatus);
   const [selectedProductId, setSelectedProductId] = useState<number>();
  
   const [qtyInputVal, setQtyInputVal] = useState<string>("");
@@ -34,20 +35,22 @@ const DsAddProduct: React.FC<addProductProps> = ({
       });
       if (product.statusCode === 200) {
         setProductList(product.result);
+        console.log("product in add product file :",product.result);
         setSelectedProductId(0);
         setQtyInputVal("");
       }
       console.log(product);
+      console.log("product ",product);
     }
   };
  
   return (
     <div className={styles.input}>
       <ProductSearch
-              orderStatus={orderStatus}
-              setSelectedProductId={(id) => setSelectedProductId(id)} setSelectedProductBatchId={function (value: SetStateAction<number | undefined>): void {
-                  throw new Error("Function not implemented.");
-              } }      ></ProductSearch>
+        orderStatus={orderStatus}
+        setSelectedProductId={(id) => setSelectedProductId(id)}
+        setSelectedProductBatchId={(id)=>setSelectedProductId(id)}
+      ></ProductSearch>
    
       <DsTextField
         label={"+ Qty"}
@@ -68,6 +71,7 @@ const DsAddProduct: React.FC<addProductProps> = ({
     </div>
   );
 };
+
 export default DsAddProduct;
  
  

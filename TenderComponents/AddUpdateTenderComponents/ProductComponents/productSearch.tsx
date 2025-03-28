@@ -16,10 +16,10 @@ export function isSearchProduct(value: unknown): value is TenderProduct {
     value !== null &&
     "id" in value &&
     "name" in value &&
-    "packSize" in value &&
+    // "packSize" in value &&
     typeof (value as unknown as TenderProduct).id === "number" &&
-    typeof (value as unknown as TenderProduct).name === "string" &&
-    typeof (value as unknown as TenderProduct).packSize === "string"
+    typeof (value as unknown as TenderProduct).name === "string" 
+    // typeof (value as unknown as TenderProduct).packSize === "string"
   );
 }
 export function areSearchProduct(value: unknown): value is TenderProduct[] {
@@ -31,8 +31,10 @@ const ProductSearch: React.FC<ProductSearchProps> = ({
   setSelectedProductBatchId,
 }) => {
   const [products, setProducts] = useState<datalistOptions[]>();
+  console.log("Product serach",orderStatus);
  
   const setOptions = (values: unknown) => {
+    console.log("setOptions called with values:", values);
     if (areSearchProduct(values)) {
       const products: datalistOptions[] = values.map(
         (x: { id?: number; name?: string; packSize?: string }) => {
@@ -41,18 +43,22 @@ const ProductSearch: React.FC<ProductSearchProps> = ({
             value: x.name,
             attributes: {
               "product-id": x.id?.toString() || "0",
+         
             },
+       
             secondaryValue: (
               <>
-                <DsInfoDisplay detailOf="Pack Size">
-                  {x.packSize || 0}
+                <DsInfoDisplay detailOf="">
+                  {/* {x.packSize || 0} */}
                 </DsInfoDisplay>
               </>
             ),
           };
         }
       );
+
       setProducts(products);
+      console.log("Processed products:", products);
     } else {
       console.log("product values are = ", values);
     }
@@ -65,30 +71,35 @@ const ProductSearch: React.FC<ProductSearchProps> = ({
  
       if (selectedProductId) {
         setSelectedProductId(parseInt(selectedProductId));
+   console.log("selected product id",selectedProductId);
       }
       if (selectedProductBatchId) {
         setSelectedProductBatchId(parseInt(selectedProductBatchId));
+        console.log("selected product batch id",selectedProductBatchId);
       }
     }
   };
   return (
     <DsSearchComponent
       id="productSearch"
-      // initialValue={initialValue}
       dataListId="productSearchDatalist"
       label={"Product"}
       placeholder={"Add product & qty & hit enter"}
       options={products ? products : undefined}
       setOptions={(value) => setOptions(value)}
       setSearchUrl={(searchTerm: string) => {
-        return searchProductsURL + "name=" + searchTerm;
+        console.log("name", searchProductsURL +searchTerm);
+        return searchProductsURL +searchTerm;
+     
       }}
-      //   setOnSelectUrl={function (selectedOptionId: string): string {
-      //     return getCustomerURL + selectedOptionId;
-      //   }}
+    
+ 
       setSelectedOption={setSelectedOption}
+
+    
       disable={orderStatus === DsStatus.APRV ? true : false}
     />
+ 
   );
 };
 export default ProductSearch;

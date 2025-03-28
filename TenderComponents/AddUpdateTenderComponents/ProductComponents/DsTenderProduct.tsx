@@ -44,6 +44,5 @@ const DsTenderProduct: React.FC<{
     </>
   );
 };
+
 export default DsTenderProduct;
- 
- 

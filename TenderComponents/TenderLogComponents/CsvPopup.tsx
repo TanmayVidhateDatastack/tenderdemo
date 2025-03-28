@@ -1,5 +1,5 @@
 "use client";
-import styles from "./csvpopup.module.css";
+import styles from "./CsvPopup.module.css";
 // import Image from "next/image";
 // import uploadIcon from "@/Common/SalesIcons/smallIcons/uploadicon.svg";
 import { useState } from "react";
