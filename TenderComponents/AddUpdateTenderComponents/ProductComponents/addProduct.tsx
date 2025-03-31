@@ -24,18 +24,31 @@ const DsAddProduct: React.FC<addProductProps> = ({
   const [qtyInputVal, setQtyInputVal] = useState<string>("");
  
   const selectProduct = async () => {
+    console.log("Quantity entered:", qtyInputVal);
     const quantity = (document.querySelector("#qty") as HTMLInputElement)
       ?.value;
     console.log("selected product id = ", quantity);
  
     if (selectedProductId) {
       const product = await fetchData({
-        url:
-          getProductURL + selectedProductId + "?requestedQuantity=" + quantity,
+        url: `${getProductURL}${selectedProductId}?requestedQuantity=${qtyInputVal}`,
+
+
+          // getProductURL + selectedProductId + "?requestedQuantity=" + quantity,
       });
-      if (product.statusCode === 200) {
-        setProductList(product.result);
-        console.log("product in add product file :",product.result);
+      console.log("url",`${getProductURL}${selectedProductId}?requestedQuantity=${qtyInputVal}`);
+      if (product?.code === 200) {  // ✅ Change `statusCode` to `code`
+        if (!product.result) {
+          console.error("🚨 product.result is undefined! Full response:", product);
+          return;
+        }
+        console.log("✅ Condition matched! Updating product list.");
+        if (!setProductList) {
+          console.error("🚨 setProductList is undefined! Check prop passing.");
+          return;
+        }
+  
+        setProductList(product.result); // ✅ Corrected
         setSelectedProductId(0);
         setQtyInputVal("");
       }
@@ -44,6 +57,7 @@ const DsAddProduct: React.FC<addProductProps> = ({
     }
   };
  
+  
   return (
     <div className={styles.input}>
       <ProductSearch
