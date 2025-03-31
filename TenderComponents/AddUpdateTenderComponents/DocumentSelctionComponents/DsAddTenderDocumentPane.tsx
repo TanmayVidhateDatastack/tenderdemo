@@ -3,20 +3,18 @@ import Accordion from "@/Elements/DsComponents/dsAccordion/accordion";
 import Ds_checkbox from "@/Elements/DsComponents/DsCheckbox/dsCheckbox";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import styles from "./document.module.css";
+import DsDataList from "@/Elements/DsComponents/DsInputs/dsDatalist";
+import Image from "next/image";
+import search from "@/Common/TenderIcons/searchicon.svg"
 import fetchData from "@/Common/helpers/Method/fetchData";
 import { documents } from "@/Common/helpers/types";
 import { DocumentContext } from "./DocumentsContextProvider";
 import { getAllDocuments } from "@/Common/helpers/constant";
-import DsDataList from "@/Elements/DsComponents/DsInputs/dsDatalist";
-import Image from "next/image";
-import search from "@/Common/TenderIcons/searchicon.svg"
 
 const DsAddTenderDocumentPane: React.FC = () => {
-  const [openAccordion, setOpenAccordion] = useState<string | null>(null);
+  const [openAccordion, setOpenAccordion] = useState<string | null |number>(null);
   const [groupedDocuments, setGroupedDocuments] = useState<Record<string, documents[]>>({});
   const [selectedDocuments, setSelectedDocuments] = useState<documents[]>([]);
-  const [openAccordions, setOpenAccordions] = useState<(string | number)[]>([]);
-
 
   const documentContext = useContext(DocumentContext);
 
@@ -51,11 +49,11 @@ const DsAddTenderDocumentPane: React.FC = () => {
       console.error("Fetch error: ", error);
     }
   };
+
   const handleAccordionToggle = (type: string | number) => {
-    setOpenAccordions((prev) =>
-      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
-    );
+    setOpenAccordion((prevType) => (prevType === type ? null : type));
   };
+
   const handleCheckboxChange = (doc: documents) => {
     setSelectedDocuments((prev) => {
       const alreadySelected = prev.some((d) => d.id === doc.id);
@@ -166,7 +164,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
                   className={styles.documentsCkechS}
                   key={doc.id}
                   id={doc.id.toString()}
-                  name={doc.documentName}
+                  name={doc.documentName} 
                   value={doc.id.toString()}
                   label={doc.documentName}
                   onChange={() => handleCheckboxChange(doc)}

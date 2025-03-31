@@ -91,8 +91,8 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
               className={deptStyle.copyBtn}
               startIcon={<Image src={copybtnenabled} alt="copy" />}
               // disable
-              onClick={() => {
-                setShowNotification(true);
+              onClick={() => { 
+                setShowNotification(true); 
                 setPos("top");
                 setNotiType("info"); 
               }} 

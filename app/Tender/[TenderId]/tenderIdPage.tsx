@@ -108,7 +108,7 @@ const DsTenderIdPage: React.FC = () => {
                     <div>
                       <div className={style.docPane}>
                         <div className={style.totalCount}>
-                          <div>Selected Document</div>
+                          <div className={style.selectedDocsCount}>Selected Document</div>
                           <div className={style.count}>{totalSelectedDocuments}</div>
                         </div>
                         <PaneOpenButton

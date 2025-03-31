@@ -78,7 +78,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
         const val = opt.value;
  
         if (typeof val === "string") {
-          acc[val] = false;
+          acc[val] = true;
         }
  
         return acc;
@@ -90,7 +90,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
  
   useEffect(() => {
     if (applicablefees) {
-      console.log("applicable fees : ", applicablefees);
+      console.log("applicable fees : ", applicablefees); 
     }
   }, [applicablefees]);
 
@@ -99,48 +99,47 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   }
 
   const selectedFees = new Set();
-
   const handleAdd = () => {
-    applicablefees.forEach((opt) => {
+    applicablefees.forEach((opt) => {  
       const id = opt.value.toString();
       const checkbox = document.getElementById(id) as HTMLInputElement;
  
       if (checkbox?.checked) {
-        selectedFees.add(id);
+        selectedFees.add(id); 
         feeVisibility[id] = true;
         addTenderFee(id);
       } else {
         selectedFees.delete(id);
         feeVisibility[id] = false;
-        removeTenderFeeByType(id);
+        removeTenderFeeByType(id);  
       }
     });
     closeAllContext();
     // console.log("Currently Selected:", Array.from(selectedFees));
   };
 
-  useEffect(() => {
-    applicablefees.forEach((opt) => {
-      const id = opt.value.toString();
-      const checkbox = document.getElementById(id) as HTMLInputElement;
-      selectedFees.add(id);
-      feeVisibility[id] = true;
-      addTenderFee(id);
-      if (checkbox?.checked) {
-        selectedFees.add(id);
-        feeVisibility[id] = true;
-        addTenderFee(id);
-      } else if (checkbox) {
-        selectedFees.add(id);
-        feeVisibility[id] = true;
-        addTenderFee(id);
-      } else {
-        selectedFees.delete(id);
-        feeVisibility[id] = false;
-        removeTenderFeeByType(id);
-      }
-    })
-  }, [applicablefees])
+  // useEffect(() => {
+  //   applicablefees.forEach((opt) => {
+  //     const id = opt.value.toString();
+  //     const checkbox = document.getElementById(id) as HTMLInputElement;
+  //     selectedFees.add(id);
+  //     feeVisibility[id] = true;
+  //     addTenderFee(id);
+  //     if (checkbox?.checked) {
+  //       selectedFees.add(id);
+  //       feeVisibility[id] = true;
+  //       addTenderFee(id);
+  //     } else if (checkbox) {
+  //       selectedFees.add(id);
+  //       feeVisibility[id] = true;
+  //       addTenderFee(id); 
+  //     } else {
+  //       selectedFees.delete(id);
+  //       feeVisibility[id] = false;
+  //       removeTenderFeeByType(id);
+  //     }
+  //   })
+  // }, [applicablefees])
 
   // useEffect(() => {
   //   console.log("feevisibility : ", feeVisibility);
@@ -161,13 +160,13 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
               defaultChecked={true}
             />
           ))}
-        </div>
+        </div> 
         <DsButton
           label="Add"
           buttonViewStyle="btnContained"
           buttonSize="btnLarge"
           className={styles.addBtn}
-          onClick={handleAdd}
+          onClick={handleAdd}  
         />
       </>,
       true

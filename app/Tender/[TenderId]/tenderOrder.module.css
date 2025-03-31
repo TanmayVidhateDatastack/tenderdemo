@@ -275,6 +275,8 @@ padding: 10px;
 .productkpi{
 display: flex !important;
 gap:1rem;
-
+}
+.selectedDocsCount{
+  margin-left: 0.7rem;
 }
 

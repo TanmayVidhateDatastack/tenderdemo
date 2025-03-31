@@ -61,7 +61,7 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
         const val = opt.value;
 
         if (typeof val === "string") {
-          acc[val] = false; // Add string keys directly to the object
+          acc[val] = true; // Add string keys directly to the object
         }
 
         return acc;
@@ -70,13 +70,6 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
       setConditionsVisibility(options);
     }
   }, [applicableConditions]);
-
-  // useEffect(() => {
-  //   console.log(
-  //     "feevisibility in applicable condition : ",
-  //     conditionsVisibility
-  //   );
-  // }, [conditionsVisibility]);
 
   const selectedConditions = new Set(); // 🔥 Store selected checkboxes globally
 
@@ -112,6 +105,7 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
               name={checkbox.label}
               value={checkbox.value.toString()}
               label={checkbox.label}
+              defaultChecked={true}
             />
           ))}
         </div>
