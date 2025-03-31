@@ -4,7 +4,7 @@ import downarrow from "@/Common/TenderIcons/smallIcons/verticleArrow.svg";
 import { useState, useEffect } from "react";
 import React from "react";
 import Ds_checkbox from "@/Elements/DsComponents/DsCheckbox/dsCheckbox";
-import {
+import ContextMenu, {
   closeAllContext,
   createContext
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
@@ -94,31 +94,31 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
   };
 
   useEffect(() => {
-    createContext(
-      contextMenuId,
-      <>
-        <div>
-          {applicableCheckboxes.map((checkbox, index) => (
-            <Ds_checkbox
-              key={index} // Unique key
-              id={checkbox.value.toString()}
-              name={checkbox.label}
-              value={checkbox.value.toString()}
-              label={checkbox.label}
-              defaultChecked={true}
-            />
-          ))}
-        </div>
-        <DsButton
-          label="Add"
-          buttonViewStyle="btnContained"
-          className={styles.addBtn}
-          buttonSize="btnLarge"
-          onClick={() => handleAdd()}
-        />{" "}
-      </>,
-      true
-    );
+    // createContext(
+    //   contextMenuId,
+    //   <>
+    //     <div>
+    //       {applicableCheckboxes.map((checkbox, index) => (
+    //         <Ds_checkbox
+    //           key={index} // Unique key
+    //           id={checkbox.value.toString()}
+    //           name={checkbox.label}
+    //           value={checkbox.value.toString()}
+    //           label={checkbox.label}
+    //           defaultChecked={true}
+    //         />
+    //       ))}
+    //     </div>
+    //     <DsButton
+    //       label="Add"
+    //       buttonViewStyle="btnContained"
+    //       className={styles.addBtn}
+    //       buttonSize="btnLarge"
+    //       onClick={() => handleAdd()}
+    //     />{" "}
+    //   </>,
+    //   true
+    // );
     window.addEventListener("click", (e) => {
       const target = (e.target as HTMLElement).closest(
         `.${styles["depositsBtn"]}`
@@ -170,6 +170,29 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
             )
           );
       })}
+      <ContextMenu id={contextMenuId} content={
+        <>
+        <div>
+          {applicableCheckboxes.map((checkbox, index) => (
+            <Ds_checkbox
+              key={index} // Unique key
+              id={checkbox.value.toString()}
+              name={checkbox.label}
+              value={checkbox.value.toString()}
+              label={checkbox.label}
+              defaultChecked={true}
+            />
+          ))}
+        </div>
+        <DsButton
+          label="Add"
+          buttonViewStyle="btnContained"
+          className={styles.addBtn}
+          buttonSize="btnMedium"
+          onClick={() => handleAdd()}
+        />{" "}
+      </>
+      } showArrow={true}/>
     </div>
   );
 };

@@ -154,7 +154,6 @@ const DsAddTenderDocumentPane: React.FC = () => {
             key={type}
             id={type}
             title={type}
-
             isOpen={openAccordion === type}
             onToggle={handleAccordionToggle} // ✅ Corrected function call
           >

@@ -126,6 +126,8 @@ const DsTenderIdPage: React.FC = () => {
               </DocumentContext.Consumer>
             </TabView>
           </div>
+          <DSTendrFooter setActionStatus={setActionStatusValues} saveTender={saveTender} />
+
         </DsApplication>
         <DsPane id="documentPane" side="right" title="Documents" isBackdrop={true}>
           <DsAddTenderDocumentPane />
@@ -139,9 +141,6 @@ const DsTenderIdPage: React.FC = () => {
           duration={closeTimeForTender}
         />
   
-        <div className={style.footerContainer}>
-          <DSTendrFooter setActionStatus={setActionStatusValues} saveTender={saveTender} />
-        </div>
       </DocumentProvider>
     </>
   );

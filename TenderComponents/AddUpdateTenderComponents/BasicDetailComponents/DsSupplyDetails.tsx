@@ -23,7 +23,7 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
           }}
         ></DsSingleSelect>
         <DsTextField
-        inputType="number"
+          inputType="positive"
           label="Provide no. of consignees"
           // placeholder="Please type here"
           onChange={(e) => updateSupplyCondition("consigneesCount", e.target.value)}

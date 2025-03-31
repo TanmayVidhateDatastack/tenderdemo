@@ -49,12 +49,12 @@ const CustomerSearch: React.FC<{
           address2: addr.address2,
           address3: addr.address3, 
           address4: addr.address4, 
-          city: addr.city,
+          city: addr.city, 
           state: addr.state,
           pinCode: addr.pinCode,
-          isPrimary: addr.isPrimary === "Y", 
+          isPrimary: addr.isPrimary === "Y",  
         })); 
-        setCustomerLocations?.(formattedAddresses);
+        setCustomerLocations?.(formattedAddresses); 
       } else { 
         console.error("Invalid API response:", data); 
         setCustomerLocations?.([]);
@@ -66,7 +66,6 @@ const CustomerSearch: React.FC<{
   }
   
   
-
   function setOptions(values: unknown) {
     if (
       Array.isArray(values) &&

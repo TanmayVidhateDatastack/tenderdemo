@@ -2,51 +2,52 @@ import styles from "./deposite.module.css";
 import Image from "next/image";
 import downarrow from "@/Common/TenderIcons/smallIcons/verticleArrow.svg";
 import { useEffect, useState } from "react";
-import {
+import ContextMenu, {
   closeAllContext,
-  createContext
+  createContext,
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import React from "react";
 import Ds_checkbox from "@/Elements/DsComponents/DsCheckbox/dsCheckbox";
 import {
   displayContext,
-  closeContext
+  closeContext,
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import { DsSelectOption } from "@/Common/helpers/types";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import DsFeesDocument from "./DsFeesDocument";
 import { useTenderData } from "../TenderDataContextProvider";
- 
+
 export interface DepositDocument {
   modes: DsSelectOption[];
   paidBy: DsSelectOption[];
 }
- 
+
 export interface FeesDocument {
   applicableDeposits: DsSelectOption[];
 }
- 
+
 export interface DepositeDocumentsProps {
   setDepositeDocuments: (depositeDocuments: DepositDocument[]) => void;
   depositeDocument: DepositDocument[] | null;
   applicableDeposits: DsSelectOption[] | [];
   role: string;
 }
- 
+
 const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   depositeDocument,
   applicableDeposits,
-  role
+  role,
 }) => {
-  const contextMenuId = "context-display-10"; 
+  const contextMenuId = "context-display-10";
   const { addTenderFee, removeTenderFeeByType } = useTenderData();
   const [mode, setMode] = useState<DsSelectOption[]>([]);
   const [paidBy, setPaidBy] = useState<DsSelectOption[]>([]);
   const [applicablefees, SetApplicablefees] = useState<DsSelectOption[]>([]);
-  const [paymentCheckVisible, setPaymentCheckVisible] = useState<boolean>(false)
-  const [feeVisibility, setFeeVisibility] = useState<Record<string, boolean>>(
-    { "": true }
-  );
+  const [paymentCheckVisible, setPaymentCheckVisible] =
+    useState<boolean>(false);
+  const [feeVisibility, setFeeVisibility] = useState<Record<string, boolean>>({
+    "": true,
+  });
 
   useEffect(() => {
     if (role == "MAKER" || role == "CHECKER") {
@@ -54,13 +55,13 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
     } else {
       setPaymentCheckVisible(true);
     }
-  }, [role])
+  }, [role]);
 
   useEffect(() => {
     if (depositeDocument) {
       const modesData = depositeDocument[0]?.modes || [];
       const paidByData = depositeDocument[0]?.paidBy || [];
- 
+
       setMode(modesData);
       setPaidBy(paidByData);
     }
@@ -68,50 +69,55 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
       // console.log("000 : ", applicableDeposits);
       const mappedDeposits = applicableDeposits.map((deposit) => ({
         label: deposit.label,
-        value: deposit.value
+        value: deposit.value,
       }));
- 
+
       SetApplicablefees(mappedDeposits);
       const options: Record<string, boolean> = mappedDeposits.reduce<
         Record<string, boolean>
       >((acc, opt) => {
         const val = opt.value;
- 
+
         if (typeof val === "string") {
           acc[val] = true;
         }
- 
+
         return acc;
       }, {});
- 
+
       setFeeVisibility(options);
     }
   }, [depositeDocument, applicableDeposits]);
- 
+
   useEffect(() => {
     if (applicablefees) {
-      console.log("applicable fees : ", applicablefees); 
+      console.log("applicable fees : ", applicablefees);
     }
   }, [applicablefees]);
 
-  function handleonclick(e: React.MouseEvent<HTMLElement, MouseEvent> | React.FocusEvent<HTMLElement, Element> | FocusEvent) {
+  function handleonclick(
+    e:
+      | React.MouseEvent<HTMLElement, MouseEvent>
+      | React.FocusEvent<HTMLElement, Element>
+      | FocusEvent
+  ) {
     displayContext(e, contextMenuId, "vertical", "center");
   }
 
   const selectedFees = new Set();
   const handleAdd = () => {
-    applicablefees.forEach((opt) => {  
+    applicablefees.forEach((opt) => {
       const id = opt.value.toString();
       const checkbox = document.getElementById(id) as HTMLInputElement;
- 
+
       if (checkbox?.checked) {
-        selectedFees.add(id); 
+        selectedFees.add(id);
         feeVisibility[id] = true;
         addTenderFee(id);
       } else {
         selectedFees.delete(id);
         feeVisibility[id] = false;
-        removeTenderFeeByType(id);  
+        removeTenderFeeByType(id);
       }
     });
     closeAllContext();
@@ -132,7 +138,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   //     } else if (checkbox) {
   //       selectedFees.add(id);
   //       feeVisibility[id] = true;
-  //       addTenderFee(id); 
+  //       addTenderFee(id);
   //     } else {
   //       selectedFees.delete(id);
   //       feeVisibility[id] = false;
@@ -146,38 +152,38 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   // }, [feeVisibility]);
 
   useEffect(() => {
-    createContext(
-      contextMenuId,
-      <>
-        <div className={styles.feesCheckboxes}>
-          {applicablefees.map((checkbox, index) => (
-            <Ds_checkbox
-              key={index}
-              id={checkbox.value.toString()}
-              name={checkbox.label}
-              value={checkbox.value.toString()}
-              label={checkbox.label}
-              defaultChecked={true}
-            />
-          ))}
-        </div> 
-        <DsButton
-          label="Add"
-          buttonViewStyle="btnContained"
-          buttonSize="btnLarge"
-          className={styles.addBtn}
-          onClick={handleAdd}  
-        />
-      </>,
-      true
-    );
+    // createContext(
+    //   contextMenuId,
+    //   <>
+    //     <div className={styles.feesCheckboxes}>
+    //       {applicablefees.map((checkbox, index) => (
+    //         <Ds_checkbox
+    //           key={index}
+    //           id={checkbox.value.toString()}
+    //           name={checkbox.label}
+    //           value={checkbox.value.toString()}
+    //           label={checkbox.label}
+    //           defaultChecked={true}
+    //         />
+    //       ))}
+    //     </div>
+    //     <DsButton
+    //       label="Add"
+    //       buttonViewStyle="btnContained"
+    //       buttonSize="btnLarge"
+    //       className={styles.addBtn}
+    //       onClick={handleAdd}
+    //     />
+    //   </>,
+    //   true
+    // );
     window.addEventListener("click", (e) => {
       const target = (e.target as HTMLElement).closest(
         `.${styles["depositsBtn"]}`
       );
- 
+
       const target2 = (e.target as HTMLElement).closest(`#${contextMenuId}`);
- 
+
       if (!target && !target2) {
         closeContext(contextMenuId);
         return;
@@ -196,7 +202,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
       });
     };
   }, [applicablefees]);
- 
+
   useEffect(() => {
     const handleScroll = (event: any) => {
       const excludedElement = document.getElementById("optionBtn");
@@ -210,7 +216,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
       window.removeEventListener("scroll", handleScroll, true);
     };
   }, []);
- 
+
   return (
     <div className={styles.container}>
       <div className={styles.containerHead}>
@@ -236,14 +242,40 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
                   mode={mode}
                   paidBy={paidBy}
                   downloadVisible={true}
-                  paymentCompletedVisible={paymentCheckVisible} />
+                  paymentCompletedVisible={paymentCheckVisible}
+                />
               </div>
             )
           );
       })}
+      <ContextMenu
+        id={contextMenuId}
+        content={
+          <>
+            <div className={styles.feesCheckboxes}>
+              {applicablefees.map((checkbox, index) => (
+                <Ds_checkbox
+                  key={index}
+                  id={checkbox.value.toString()}
+                  name={checkbox.label}
+                  value={checkbox.value.toString()}
+                  label={checkbox.label}
+                  defaultChecked={true}
+                />
+              ))}
+            </div>
+            <DsButton
+              label="Add"
+              buttonViewStyle="btnContained"
+              buttonSize="btnMedium"
+              className={styles.addBtn}
+              onClick={handleAdd}
+            />
+          </>
+        }
+        showArrow={true}
+      />
     </div>
   );
 };
 export default DsDepositeDocuments;
- 
- 
