@@ -6,9 +6,9 @@ import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import DsCustomerLPR from "./CustomerLpr";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import ProductTableSearch from "./ProductTableSearch";
-import Image from "next/image";
-import EmptyHour from "@/Common/TenderIcons/mediumIcons/emptyHourglass.svg";
+
 import styles from "@/app/page.module.css";
+import IconFactory from "@/Elements/IconComponent";
 
  
 const DsProductTable: React.FC = () => {
@@ -145,7 +145,8 @@ const DsProductTable: React.FC = () => {
                   <div className={styles.noDataFound}>
                     <div></div>
                     <div className={styles.noData}>
-                      <Image src={EmptyHour} alt="-"></Image>
+                
+                      <IconFactory name={"emptyHourGlass"}/>
                       <div>Products Not Available</div>
                     </div>
                     <div className={styles.noDataBorders}></div>

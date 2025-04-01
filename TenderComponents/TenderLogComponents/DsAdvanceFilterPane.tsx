@@ -1,9 +1,12 @@
+
+
 /* eslint-disable react/display-name */
+"use client";
 import AdvancedFilterComponent, {
   filterTypes,
 } from "@/Elements/DsComponents/AdvancedFilterComponent/AdvancedFilterComponent";
-import DsPane from "@/Elements/DsComponents/DsPane/DsPane";
-import React from "react";
+import DsPane, { ClosePane } from "@/Elements/DsComponents/DsPane/DsPane";
+import React, { Dispatch, SetStateAction } from "react";
 import styles from "@/app/page.module.css";
 
 
@@ -11,11 +14,9 @@ import styles from "@/app/page.module.css";
 export interface advProps {
   filters: filterTypes[];
   onFiltersApplied: (apiFilter: Record<string, any>) => void;
+  setIsQuickFilter: Dispatch<SetStateAction<boolean>>;
 }
-const DsAdvanceFilterPane: React.FC<advProps> = ({ filters, onFiltersApplied }) => {
-
-
-  console.log("filters in advance",filters);
+const DsAdvanceFilterPane: React.FC<advProps> = ({ filters, onFiltersApplied, setIsQuickFilter }) => {
 
   function formatDate(inputDate) {
     const [year, month, day] = inputDate.split('/').map(Number);
@@ -23,71 +24,52 @@ const DsAdvanceFilterPane: React.FC<advProps> = ({ filters, onFiltersApplied }) 
   }
 
   const convertFilterValuesToApiFormat = (filterValues: any[]): Record<string, any> => {
-    console.log("Raw filter values:", filterValues); // Debug step
- 
     const apiFilter: Record<string, any> = {};
- 
+
     filterValues.forEach((filter) => {
-      console.log("Processing filter:", filter);
- 
-      switch (filter.filterFor.trim().toLowerCase()) { // Use `trim()` to avoid extra spaces
-        case "customer":
-          if (filter.filterValues)
-            apiFilter["customers"] = filter.filterValues?.map((value) => parseInt(value)) ?? [];
+      switch (filter.filterFor.trim().toLowerCase()) { 
+     case "customers": if (filter.filterValues)
+          apiFilter["customers"] = filter.filterValues?.map((value) => parseInt(value.id)) ?? [];
           break;
- 
-        case "date":
-          if (filter.filterValues?.from || filter.filterValues?.to)
-            apiFilter["DateRange"] = {
-              from: formatDate(filter.filterValues?.from),
-              to: formatDate(filter.filterValues?.to),
+
+    case "date": if (filter.filterValues?.from || filter.filterValues?.to)
+            apiFilter["submissionDate"] = {
+              ...(filter.filterValues?.from && { from: formatDate(filter.filterValues?.from) }),
+              ...(filter.filterValues?.to && { to: formatDate(filter.filterValues?.to) })
             };
+            break;
+       case "customer types": if (filter.filterValues)
+           apiFilter["customerTypes"] = filter.filterValues ?? [];
+             break;
+       case "tender types": if (filter.filterValues)
+            apiFilter["tenderTypes"] = filter.filterValues ?? [];
+            break;
+        case "applied by": if (filter.filterValues)
+             apiFilter["appliedBy"] = filter.filterValues ?? [];
+              break;
+           case "supplied by": if (filter.filterValues)
+             apiFilter["suppliedBy"] = filter.filterValues ?? [];
+               break;
+          case "depot": if (filter.filterValues)
+            apiFilter["shippingLocations"] = filter.filterValues ?? [];
+             break;
+        case "value": if (filter.filterValues?.from || filter.filterValues?.to)
+          apiFilter["tenderValue"] = {
+            ...(filter.filterValues?.from && { min: Number(filter.filterValues.from) }),
+            ...(filter.filterValues?.to && { max: Number(filter.filterValues.to) })
+          };
           break;
- 
-        case "type":
-          if (filter.filterValues) apiFilter["tendertype"] = filter.filterValues ?? [];
+        case "status": if (filter.filterValues)
+          apiFilter["status"] = filter.filterValues ?? [];
           break;
- 
-        case "supply type":
-          if (filter.filterValues) apiFilter["supplytype"] = filter.filterValues ?? [];
-          break;
- 
-        case "applied by":
-          if (filter.filterValues) apiFilter["appliedby"] = filter.filterValues ?? [];
-          break;
- 
-        case "supplied by":
-          if (filter.filterValues) apiFilter["suppliedby"] = filter.filterValues ?? [];
-          break;
- 
-        case "depot":
-          if (filter.filterValues) apiFilter["depot"] = filter.filterValues ?? [];
-          break;
- 
-        case "value":
-          if (filter.filterValues?.from || filter.filterValues?.to) {
-            apiFilter["value"] = {
-              min: filter.filterValues?.from,
-              max: filter.filterValues?.to,
-            };
-          }
-          break; // <-- Added missing break
- 
-        case "status":
-          if (filter.filterValues) apiFilter["Status"] = filter.filterValues ?? [];
-          break;
- 
         default:
-          console.warn("Unhandled filter:", filter.filterFor);
           break;
       }
     });
- 
-    console.log("api for filter component:", apiFilter);
+    console.log("api for filter component ", apiFilter);
     onFiltersApplied(apiFilter);
     return apiFilter;
   };
- 
 
   return (
     <>
@@ -100,11 +82,12 @@ const DsAdvanceFilterPane: React.FC<advProps> = ({ filters, onFiltersApplied }) 
         <AdvancedFilterComponent
           filters={filters}
           applyFilters={function (
-            e:React.MouseEvent,
+            e: React.MouseEvent<HTMLElement>,
             filterValues: filterTypes[],
             filterCount: number
           ): 0 | 1 {
             convertFilterValuesToApiFormat(filterValues);
+            ClosePane(e);
             ///api call to getAllOrderData with filters
             console.log(
               "filterValues:",
@@ -115,7 +98,7 @@ const DsAdvanceFilterPane: React.FC<advProps> = ({ filters, onFiltersApplied }) 
             return 0;
           }}
           clearFilters={function (): void {
-            // console.log("clearFilters");
+            setIsQuickFilter(() => true);
           }}
         ></AdvancedFilterComponent>
       </DsPane>
