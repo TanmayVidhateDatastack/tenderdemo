@@ -2,13 +2,13 @@
 import React, { useEffect, useState } from "react";
 import Ds_SummaryCount from "@/Elements/DsComponents/DsSummaryCount/DsSummaryCount";
 import { Tender } from "@/Common/helpers/types";
-import {
+import ContextMenu, {
   closeContext,
-  createContext,
   displayContext,
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import DsInfoDisplay from "@/Elements/ERPComponents/DsInfoDisplay/DsInfoDisplay";
 import styles from "./filteractions.module.css"
+import DsCurrency from "@/Elements/DsComponents/dsCurrency/dsCurrency";
 
 interface TotalValuesProps {
   data: Tender[]; 
@@ -16,6 +16,7 @@ interface TotalValuesProps {
 
 const DsTotalValues: React.FC<TotalValuesProps> = React.memo(({ data }) => {
   const [totalValue, setTotalValue] = useState<string>("0.00");
+  const [formattedValues,setFormattedValues]=useState<{status:string,value:string|number}[]>([]);
 
   useEffect(() => {
     if (Array.isArray(data)) {
@@ -36,28 +37,21 @@ const DsTotalValues: React.FC<TotalValuesProps> = React.memo(({ data }) => {
         ([status, value]) => ({
           status,
           value: value.toFixed(2),
+          //  value:<DsCurrency format={"IND"} id={""} amount={value} type={"short"}/>,
         })
       );
-
+setFormattedValues(formattedValues)
       const total = formattedValues
-        .reduce((sum, item) => sum + parseFloat(item.value), 0)
+        .reduce((sum, item) => sum + parseFloat(item.value ), 0)
         .toFixed(2);
 
       setTotalValue(total);
 
-      createContext(
-        "TotalValues",
-        <Ds_SummaryCount
-        Title="Total Values"
-        Value={`${Number(total).toFixed(0)}`}
-        statusValues={formattedValues.map(item => ({ ...item, value: Number(item.value).toFixed(0) }))}
-      />,
-        true
-      );
+ 
     }
   }, [data]);
 
-  console.log("total values", data);
+  console.log("total values", data); 
 
   return (
     <div
@@ -69,10 +63,18 @@ const DsTotalValues: React.FC<TotalValuesProps> = React.memo(({ data }) => {
         closeContext("TotalValues");
       }}
     >
-      {/* <DsInfoDisplay detailOf="Total Values (₹)" value={Number(totalValue).toFixed(0)} /> */}
+    
       <DsInfoDisplay detailOf="Total Values (₹)" className={styles.totalorder}>
-        {Number(totalValue).toFixed(0)}
+      
+        <DsCurrency format={"IND"} id={""} amount={Number(totalValue)} type={"short"}/>
       </DsInfoDisplay>
+      <ContextMenu id={"TotalValues"} showArrow={false} content={<Ds_SummaryCount
+        Title="Total Values"
+      
+        Value={<DsCurrency format={"IND"} id={""} amount={Number(totalValue)} type={"short"}/>}
+        // statusValues={formattedValues.map(item => ({ ...item, value: Number(item.value).toFixed(0) }))}
+        statusValues={formattedValues.map(item => ({ ...item, value:<DsCurrency format={"IND"} id={""} amount={Number(item.value)} type={"short"}/> }))}
+      />}/>
     </div>
   );
 });
