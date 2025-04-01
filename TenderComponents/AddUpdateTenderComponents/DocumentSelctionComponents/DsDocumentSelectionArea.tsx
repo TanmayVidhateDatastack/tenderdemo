@@ -46,7 +46,7 @@ const DocumentSelectorArea: React.FC = () => {
 
 
   return (
-    <div className={styles.selectorContainer}>
+    <>
       {documentData.map(({ type, documents }) =>
         documents.length > 0 ? (
           <div key={type} className={styles.documentsDivs}>
@@ -59,7 +59,8 @@ const DocumentSelectorArea: React.FC = () => {
           </div>
         ) : null
       )}
-    </div>
+       </>
+
   );
 };
 

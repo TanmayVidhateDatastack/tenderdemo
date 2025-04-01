@@ -133,17 +133,22 @@
   }
   .totalCount{
     display: flex;
-    padding-left: 0.5rem;
-    padding-top: 0.5rem;
+    align-items: center;
   }
 
   .count{
-    margin-left: 1rem;
-    background-color: var(--grey-50);
-    border-radius: 50%;
-    width: 2rem;
-    align-items: center;
-    text-align: center;
+    padding: 0.125em 0.1875em 0.125em 0.1875em;
+    margin-left: 0.8em;
+    margin-right: 0.5265em;
+    display: flex;
+    border-radius: 70%;
+    min-width: 1.4em;
+    min-height: 1em;
+    justify-content: center;
+    color: var(--dark) !important;
+    background-color: rgb(15, 15, 15, 0.04);
+    font-size: var(--font-12);
+    height: fit-content;
   }
   @media (max-width: 1200px) {
     .details > div,
@@ -287,6 +292,16 @@ display: flex !important;
 gap:1rem;
 }
 .selectedDocsCount{
-  margin-left: 0.7rem;
+  font-size: var(--font-16);
+  color: var(--grey-900);
+  
 }
+.documentContainer{
+  display: flex;
+  flex-direction: column;
+padding: 0.625em 0.75em ;
+gap: 1em ;
+}
+
+
 

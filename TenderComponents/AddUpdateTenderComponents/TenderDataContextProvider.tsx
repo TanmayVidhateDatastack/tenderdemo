@@ -1,5 +1,5 @@
 import { showToaster } from "@/Elements/DsComponents/DsToaster/DsToaster";
-import { closeTimeForTender, dsStatus,saveTenderurl } from "@/Common/helpers/constant";
+import { closeTimeForTender, DsStatus, dsStatus,saveTenderurl } from "@/Common/helpers/constant";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import {
   applicableSupplyConditions,
@@ -95,11 +95,9 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       applicableConditions: []
     },
     products: [],
-    documentList: []
+    documentList: [],
+    status:{tenderStatus:DsStatus.DRFT}
   });
- 
- 
- 
  
   const [actionStatus, setActionStatus] = useState<ActionStatus>({
     notiMsg: "",

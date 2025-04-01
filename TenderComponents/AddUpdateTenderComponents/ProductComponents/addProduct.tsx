@@ -76,7 +76,7 @@ const DsAddProduct: React.FC<addProductProps> = ({
     
      
       <DsButton
-        buttonSize="btnLarge"
+        buttonSize="btnMedium"
         onClick={selectProduct}
         disable={orderStatus === DsStatus.APRV ? true : false}
       >
