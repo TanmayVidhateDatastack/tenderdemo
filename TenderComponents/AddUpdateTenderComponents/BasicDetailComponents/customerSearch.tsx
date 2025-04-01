@@ -18,6 +18,21 @@ export interface CustomerSearchProps {
   setSelectedCustomer?: Dispatch<SetStateAction<customer | undefined>>;
   setCustomerLocations?: Dispatch<SetStateAction<location[]>>; 
 }
+export function isSearchCustomer(value: unknown): value is customer {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "id" in value &&
+    "name" in value &&
+    "code" in value &&
+    typeof (value as unknown as customer).id === "number" &&
+    typeof (value as unknown as customer).name === "string" &&
+    typeof (value as unknown as customer).code === "string"
+  );
+}
+export function areSearchCustomers(value: unknown): value is customer[] {
+  return Array.isArray(value) && value.every(isSearchCustomer);
+}
 const CustomerSearch: React.FC<{
   customer: string; 
   orderData?: TenderData;
@@ -31,6 +46,7 @@ const CustomerSearch: React.FC<{
   const [selectedCustomer, setSelectedCustomer] = useState<number>();
   const [selectedAddress, setSelectedAddress] = useState<string>(""); // Track selected address
 
+  
   async function setSelectedOptions(option: datalistOptions): Promise<void> {
     const selectedCustomerId = Number(option.id);
     setSelectedCustomer(selectedCustomerId);
