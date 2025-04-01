@@ -106,9 +106,19 @@
     /* flex-wrap: wrap; */
   }
   .footer {
+    /* display: flex;
+    justify-content: flex-end;
+    padding: var(--ds-padding); */
+    /* position: fixed; */
     display: flex;
     justify-content: flex-end;
     padding: var(--ds-padding);
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    background-color: #ffffff;
+    /* margin-left: 84%; */
+    width: 100%;
   }
   .tenderDetails {
     padding-left: 0.5rem !important;
@@ -275,6 +285,8 @@ padding: 10px;
 .productkpi{
 display: flex !important;
 gap:1rem;
-
+}
+.selectedDocsCount{
+  margin-left: 0.7rem;
 }
 

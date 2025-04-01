@@ -9,6 +9,7 @@ import { useTenderData } from "../TenderDataContextProvider";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import deptStyles from "@/TenderComponents/AddUpdateTenderComponents/BasicDetailComponents/deposite.module.css";
 import DsSelectMultiLevel from "@/Elements/DsComponents/dsSelect/dsSelectMultiLevel";
+import DsDataList from "@/Elements/DsComponents/DsInputs/dsDatalist";
 
 const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
   applierSupplierDetails,
@@ -19,11 +20,11 @@ const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
     <>
       <div className={styles.inputDetails}>
         <div className={deptStyles.fields}>  
-          {/* <DsSelectMultiLevel
+          <DsSelectMultiLevel
             isSearchable
-            options={applierSupplierDetails.appliedBy}
+            options={[]}
             label="Applied By"
-            placeholder={"Please search or select here"} 
+            placeholder={"Please search or select here"}
             id={"appliedBy"}
             setSelectOption={(option) => {
               if (typeof option.value == "string") {
@@ -33,17 +34,18 @@ const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
                 );
                 updateTenderData("applierId", option.value);
               }
-            }}
-          ></DsSelectMultiLevel> */}
+            } }onSelect={()=>{}}
+             isOpen={false}
+              ></DsSelectMultiLevel>
         </div>
         <div className={deptStyles.fields}> 
-          {/* <DsSelectMultiLevel
+          <DsSelectMultiLevel
             isSearchable
-            options={applierSupplierDetails.suppliedBy}
+            options={[]}
             label="Supplied By"
             placeholder={"Please search or select here"}
             id={"suppliedBy"}
-            isOpen={true} 
+            isOpen={true}
             setSelectOption={(option) => {
               if (typeof option.value == "string") {
                 updateTenderData(
@@ -52,8 +54,8 @@ const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
                 );
                 updateTenderData("suppliedId", option.value);
               }
-            } } 
-            ></DsSelectMultiLevel> */}
+            } } onSelect={()=>{}} 
+              ></DsSelectMultiLevel>
         </div>
         <div className={deptStyles.fields}>
  
@@ -89,7 +91,7 @@ const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
         <div className={deptStyles.fields}>
  
           <DsTextField
-            inputType="number"
+            inputType="positive"
             label="Stockist / Liasioner discount %"
             // placeholder="Please type here"
             onChange={(e) => updateTenderData("supplierDiscount", e.target.value)}

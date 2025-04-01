@@ -85,10 +85,10 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           <div className={styles.fieldColors}>
 
             <DsTextField
-              className={styles.fieldColors}
+              // className={styles.fieldColors}
               label={"Amount"}
               // placeholder="Please type here"
-              inputType="number"
+              inputType="positive"
               onChange={(e) => {
                 updateTenderFee(
                   id.replace("DocumentView", ""),
@@ -101,7 +101,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           <div className={styles.fieldColors}>
 
             <DsSingleSelect
-              className={styles.fieldColors}
+              // className={styles.fieldColors}
               id={id + "_paidType1"}
               options={paidBy}
               label="Paid by"
@@ -120,7 +120,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           <div className={styles.fieldColors}>
 
             <DsSingleSelect
-              className={styles.fieldColors}
+              // className={styles.fieldColors}
               id={id + "_modes1"}
               options={mode}
               label="Modes"
@@ -158,7 +158,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           <div className={styles.fieldColors}>
 
             <TextArea
-              className={styles.fieldColors}
+              // className={styles.fieldColors}
               placeholder="Please type here"
               disable={false}
               onChange={(e) => {

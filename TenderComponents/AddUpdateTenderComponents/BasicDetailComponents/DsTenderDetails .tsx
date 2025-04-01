@@ -75,7 +75,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         <div className={deptStyle.fields}>
           <CustomerSearch
             customer={""}
-            orderData={undefined}
+            orderData={undefined} 
             setCustomerLocations={setCustomerLocations}
             // updateTenderData={updateTenderData}
           />
@@ -86,13 +86,13 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
             <DsButton 
               id="copyBtn"
               label="Fetch Information"
-              buttonViewStyle="btnText"
+              buttonViewStyle="btnText" 
               buttonSize="btnSmall"
               className={deptStyle.copyBtn}
               startIcon={<Image src={copybtnenabled} alt="copy" />}
               // disable
-              onClick={() => {
-                setShowNotification(true);
+              onClick={() => { 
+                setShowNotification(true); 
                 setPos("top");
                 setNotiType("info"); 
               }} 
@@ -189,7 +189,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
             label="Rate contract validity"
           /> */}
           <DsTextField
-            inputType="number"
+            inputType="positive"
             label="Rate contract validity"
             onChange={(e) =>
               updateTenderData("rateContractValidity", e.target.value)
@@ -212,7 +212,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         </div>
         <div className={deptStyle.fields}>
           <DsTextField
-           inputType="number"
+            inputType="positive"
             label={"Delivery Period ( In days )"}
             // placeholder={"Please type or select"}
             onChange={(e) => updateTenderData("deliveryPeriod", e.target.value)}
@@ -220,9 +220,9 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         </div>
         <div className={deptStyle.fields}>
           <DsTextField
+            inputType="positive"
             label={"Extended Delivery Period ( In days )"}
             // placeholder={"Please type or select"}
-            inputType={"number"}
             onChange={(e) =>
               updateTenderData("extendedDeliveryPeriod", e.target.value)
             }
@@ -231,7 +231,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         <div className={deptStyle.fields}>
           <DsTextField
             label="Penalty for last delivery purchase %"
-            inputType="number"
+             inputType="positive"
             // placeholder="Please type here"
             onChange={(e) =>
               updateTenderData("lateDeliveryPenalty", e.target.value)
