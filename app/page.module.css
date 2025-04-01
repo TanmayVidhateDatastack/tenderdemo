@@ -366,3 +366,8 @@ a.secondary {
   color: var(--primary) !important;
   background-color: var(--btngroup-primary-hover) !important;
 }
+.tenderTable
+{
+  flex:1;
+  max-height: 100%;
+}

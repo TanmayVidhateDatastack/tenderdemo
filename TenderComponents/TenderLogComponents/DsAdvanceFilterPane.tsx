@@ -100,6 +100,7 @@ const DsAdvanceFilterPane: React.FC<advProps> = ({ filters, onFiltersApplied }) 
         <AdvancedFilterComponent
           filters={filters}
           applyFilters={function (
+            e:React.MouseEvent,
             filterValues: filterTypes[],
             filterCount: number
           ): 0 | 1 {

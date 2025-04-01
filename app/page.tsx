@@ -29,6 +29,7 @@ import DsName from "@/Elements/DsComponents/DsName/DsName";
  import btnStyles from "@/Elements/DsComponents/DsButtons/dsButton.module.css";
 import DsTenderTableFloatingMenu from "@/TenderComponents/TenderLogComponents/TenderlogFloatingMenu";
 import DsAdvanceFilterPane from "@/TenderComponents/TenderLogComponents/DsAdvanceFilterPane";
+import style from "./page.module.css";
 
 
 
@@ -49,7 +50,7 @@ export default function Home() {
   } = permissions;
 
   const [tempTableData, setTempTableData] = useState<tableData>({
-    className: "sample-table",
+    className: style.tenderTable,
     type: "InterActive",
     id: "table-1",
     isSortable: true,
@@ -445,7 +446,7 @@ export default function Home() {
     console.log("Adding table data:", tender);
     const newRows: DsTableRow[] = tender.map((t, index) => ({
       rowIndex: index,
-      className: "cellRow",
+      className: "cellRow ",
       rowIcon:
         t?.type === "institutional" ? (
           <div style={{ width: "0.875em", height: "0.875em", position: "relative" }}>
@@ -456,7 +457,8 @@ export default function Home() {
             <Image src={corporate} alt="corporate" layout="fill" objectFit="cover" />
           </div>
         ),
-      customAttributes: { iconValue: t?.type?.toString() ?? "" },
+      customAttributes: {  iconValue: t?.type?.toString() ?? "" },
+
       content: [
         {
           columnIndex: 0,

@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import {
+import ContextMenu, {
   closeAllContext,
   closeContext,
   createContext,
@@ -60,9 +60,29 @@ const DsTotalTenders: React.FC<TotalTendersProps> = React.memo(({ data }) => {
     setInstitutionalCount(institutional);
     setCorporateCount(corporate);
     
-    createContext(
-      "TotalTenders",
-      <Ds_SummaryCount
+   
+  }, [data]);
+
+
+return (
+  <div
+    onMouseOver={(e) => {
+      displayContext(e, "TotalTenders", "vertical", "center");
+     
+    }}
+
+    onMouseOut={(e) => {
+      closeContext("TotalTenders")
+
+    }}
+ 
+  >
+    <DsInfoDisplay
+      detailOf="Total Tenders"
+
+      className={styles.totalorder}
+    >{totalTenders}</DsInfoDisplay>
+    <ContextMenu id={"TotalTenders"} showArrow={false} content={<Ds_SummaryCount
         Title="Total Tenders"
         Value={`${data.length}`}
         statusValues={[
@@ -80,7 +100,7 @@ const DsTotalTenders: React.FC<TotalTendersProps> = React.memo(({ data }) => {
           
             ),
             status: "Institutional",
-            value: institutional.toString(),
+            value: institutionalCount.toString(),
           },
           {
             addimage: (
@@ -97,33 +117,10 @@ const DsTotalTenders: React.FC<TotalTendersProps> = React.memo(({ data }) => {
 
             ),
             status: "Corporate",
-            value: corporate.toString().padStart(3, "0"),
+            value: corporateCount.toString().padStart(3, "0"),
           },
         ]}
-      />,
-
-      true
-    );
-  }, [data]);
-
-
-return (
-  <div
-    onMouseOver={(e) => {
-      displayContext(e, "TotalTenders", "vertical", "center");
-    }}
-
-    onMouseOut={(e) => {
-      closeContext("TotalTenders")
-
-    }}
- 
-  >
-    <DsInfoDisplay
-      detailOf="Total Tenders"
-
-      className={styles.totalorder}
-    >{totalTenders}</DsInfoDisplay>
+      />}/>
   </div>
 );
 });
