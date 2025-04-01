@@ -4,25 +4,23 @@ import DsApplication from "@/Elements/ERPComponents/DsApplicationComponents/DsAp
 import DsNavTo from "@/Elements/ERPComponents/DsNavigationComponent/DsNavTo";
 import styles from "./page.module.css";
 import DsFilterActions from "@/TenderComponents/TenderLogComponents/DsFilterActions";
-import addIconWhite from "@/Common/TenderIcons/smallIcons/whiteadd.svg";  
-import Image from "next/image"; 
+
+
 import { useEffect, useState } from "react";
-import { CodeItem, DsTableRow, tableData, Tender } from "@/Common/helpers/types";
+import { CodeItem, datalistOptions, DsTableRow, tableData, Tender } from "@/Common/helpers/types";
 import DsTotalTenders from "@/TenderComponents/TenderLogComponents/DsTotalTender";
 import DsTotalValues from "@/TenderComponents/TenderLogComponents/DsTotalValues";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import ContextMenu, { displayContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
-import { changeImage } from "@/Common/helpers/Method/conversion";
-import institutional from "@/Common/TenderIcons/institutional.svg";
-import corporate from "@/Common/TenderIcons/corporate.svg";
+
 import DsStatusIndicator from "@/Elements/DsComponents/dsStatus/dsStatusIndicator";
-import { getAllMetaData, getAllTenders } from "@/Common/helpers/constant";
+import { getAllMetaData, getAllTenders, searchCustomerURL } from "@/Common/helpers/constant";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import DsTableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableComponent";
 
-import { filterTypes } from "@/Elements/DsComponents/AdvancedFilterComponent/AdvancedFilterComponent";
+
 import DsCurrency from "@/Elements/DsComponents/dsCurrency/dsCurrency";
-import addIcon from "@/Common/TenderIcons/smallIcons/add.svg";
+
 import { RootState } from "@/Redux/store/store";
 import { useAppSelector } from "@/Redux/hook/hook";
 import DsName from "@/Elements/DsComponents/DsName/DsName";
@@ -30,6 +28,8 @@ import DsName from "@/Elements/DsComponents/DsName/DsName";
 import DsTenderTableFloatingMenu from "@/TenderComponents/TenderLogComponents/TenderlogFloatingMenu";
 import DsAdvanceFilterPane from "@/TenderComponents/TenderLogComponents/DsAdvanceFilterPane";
 import style from "./page.module.css";
+import IconFactory from "@/Elements/IconComponent";
+import { areSearchCustomers } from "@/TenderComponents/AddUpdateTenderComponents/BasicDetailComponents/customerSearch";
 
 
 
@@ -39,9 +39,11 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState(""); //for search query
   const [selectedStatus, setSelectedStatus] = useState(""); //for quickfilter
   const [advFilter, setAdvFilter] = useState<Record<string, React.ReactNode>>({});
+  const [isFilterActive, setIsFilterActive] = useState(true);
   // const [enrichedTenders, setEnrichedTenders] = useState<Tender[]>([]);
   // const [filteredData, setFilteredData] = useState<Tender[]>([]); //for filtered table data
-  const [iconSrc] = useState(addIcon);
+  console.log(isFilterActive);
+const[isAddWhite,setIsAddWhite]=useState<boolean>(false);
   const permissions = useAppSelector((state: RootState) => state.permissions);
 
   const {
@@ -312,10 +314,28 @@ export default function Home() {
     }));
   };
 
-  const handleFiltersApplied = (apiFilter: Record<string, React.ReactNode>) => {
+  const [searchOptions, setSearchOptions] = useState<datalistOptions[]>([]);
+  function setOptions(values: unknown) {
+    if (areSearchCustomers(values)) {
+      const customers: datalistOptions[] = values.map(
+        (x: { id: number; code: string; name: string }) => {
+          return {
+            id: x?.id?.toString(),
+            label: x?.code.toUpperCase() + " - " + x.name,
+            value: x?.code.toUpperCase() + " - " + x.name,
+            attributes: { "customer-id": x.id.toString() },
+          };
+        }
+      );
+      return customers;
+    } else return [];
+  }
+
+  const handleFiltersApplied = (apiFilter: Record<string,React.ReactNode>) => {
     console.log("Received apiFilter in parent:", apiFilter);
     // Use apiFilter to make API calls or update state
     setAdvFilter(apiFilter);
+    setIsFilterActive(false);
     console.log("advvvvvvvv", advFilter);
   };
 
@@ -338,69 +358,62 @@ export default function Home() {
   };
 
 
+  // const [filters, setFilters] = useState<filterTypes[]>([]);
+  // useEffect(() => {
+  //   const fetchFilters = async () => {
+  //     try {
 
-
-
-  const [filters, setFilters] = useState<filterTypes[]>([]);
-  useEffect(() => {
-    const fetchFilters = async () => {
-      try {
-
-        const updatedFilters: filterTypes[] = [
+  //       const updatedFilters: filterTypes[] = [
     
 
-          { filterId: "0", filterFor: "Customer", filterType: "SearchAndMultiSelect"},
-          { filterId: "1", filterFor: "Date", filterType: "DateRange", maxValue: new Date(2025, 9, 21).getTime(), minValue: new Date(2050, 11, 26).getTime() },
-          { filterId: "2", filterFor: "Type", filterType: "MultiSelection", multiSelectOptions:  [
-            { label: "Institutional", value: "institutional" },
-            { label: "corporate", value: "corporate" },
-          ]
-        },
-          { filterId: "3", filterFor: "Supply type", filterType: "MultiSelection", multiSelectOptions:  [
-            { label: "Multi-delivery", value: "multidelivery" },
-            { label: "single-delivery", value: "singledelivery" },
-          ]
-        },
-          { filterId: "4", filterFor: "Applied by", filterType: "MultiSelection", multiSelectOptions: [
-            { label: "Ipca", value: "Ipca" },
-            { label: "Stockist", value: "stockist" },
-          ]
-        },
-          { filterId: "5", filterFor: "Supplied by", filterType: "MultiSelection", multiSelectOptions:  [
-            { label: "Ipca", value: "Ipca" },
-            { label: "Stockist", value: "stockist" },
-          ]
-        }, 
-          { filterId: "6", filterFor: "Depot", filterType: "MultiSelection", multiSelectOptions:  [
-            { label: "pune", value: "pune" },
-            { label: "satara", value: "satara" },
-          ]
-        },
-          { filterId: "7", filterFor: "Supply type", filterType: "MultiSelection", multiSelectOptions: [
-            { label: "abc", value: "abc" },
-            { label: "abc", value:"abc" },
-          ]
-        },
-          { filterId: "8", filterFor: "Value", filterType: "RangeSlider", maxValue: 4000000, minValue: 0 },
-          { filterId: "9", filterFor: "Status", filterType: "MultiSelection", multiSelectOptions:  [
-            { label: "Apporavl", value: "Approval" },
-            { label: "cancelled", value: "cancelled" },
-          ]
-        },
+  //         { filterId: "0", filterFor: "customer", filterType: "SearchAndMultiSelect"},
+  //         { filterId: "1", filterFor: "date", filterType: "DateRange", maxValue: new Date(2025, 9, 21).getTime(), minValue: new Date(2050, 11, 26).getTime() },
+  //         { filterId: "2", filterFor: "customerTypes", filterType: "MultiSelection", multiSelectOptions:  [
+  //           { label: "Institutional", value: "institutional" },
+  //           { label: "corporate", value: "corporate" },
+  //         ]
+  //       },
+  //         { filterId: "3", filterFor: "tenderTypes", filterType: "MultiSelection", multiSelectOptions:  [
+  //           { label: "Multi-delivery", value: "multidelivery" },
+  //           { label: "single-delivery", value: "singledelivery" },
+  //         ]
+  //       },
+  //         { filterId: "4", filterFor: "Applied by", filterType: "MultiSelection", multiSelectOptions: [
+  //           { label: "Ipca", value: "Ipca" },
+  //           { label: "Stockist", value: "stockist" },
+  //         ]
+  //       },
+  //         { filterId: "5", filterFor: "Supplied by", filterType: "MultiSelection", multiSelectOptions:  [
+  //           { label: "Ipca", value: "Ipca" },
+  //           { label: "Stockist", value: "stockist" },
+  //         ]
+  //       }, 
+  //         { filterId: "6", filterFor: "Depot", filterType: "MultiSelection", multiSelectOptions:  [
+  //           { label: "pune", value: "pune" },
+  //           { label: "satara", value: "satara" },
+  //         ]
+  //       },
+       
+  //         { filterId: "7", filterFor: "Value", filterType: "RangeSlider", maxValue: 4000000, minValue: 0 },
+  //         { filterId: "8", filterFor: "Status", filterType: "MultiSelection", multiSelectOptions:  [
+  //           { label: "Apporavl", value: "Approval" },
+  //           { label: "cancelled", value: "cancelled" },
+  //         ]
+  //       },
 
 
-        ];
+  //       ];
 
-        setFilters(updatedFilters);
-        console.log("updatedfilters",filters);
+  //       setFilters(updatedFilters);
+  //       console.log("updatedfilters",filters);
 
-      } catch (error) {
-        console.error("Error fetching filter data:", error);
-      }
-    };
+  //     } catch (error) {
+  //       console.error("Error fetching filter data:", error);
+  //     }
+  //   };
 
-    fetchFilters();
-  }, []);
+  //   fetchFilters();
+  // }, []);
   
   useEffect(() => {
     handleFetch();
@@ -450,11 +463,13 @@ export default function Home() {
       rowIcon:
         t?.type === "institutional" ? (
           <div style={{ width: "0.875em", height: "0.875em", position: "relative" }}>
-            <Image src={institutional} alt="institutional" layout="fill" objectFit="cover" />
+            {/* <Image src={institutional} alt="institutional" layout="fill" objectFit="cover" /> */}
+            <IconFactory name={"instituitional"}  />
           </div>
         ) : (
           <div style={{ width: "0.875em", height: "0.875em", position: "relative" }}>
-            <Image src={corporate} alt="corporate" layout="fill" objectFit="cover" />
+            {/* <Image src={corporate} alt="corporate" layout="fill" objectFit="cover" /> */}
+            <IconFactory name={"corporate"}  />
           </div>
         ),
       customAttributes: {  iconValue: t?.type?.toString() ?? "" },
@@ -615,22 +630,26 @@ export default function Home() {
                     position: "relative",
                   }}
                 >
-                  <Image
+                  {/* <Image
                     src={iconSrc}
                     alt="Add Icon"
                     layout="fill"
                     objectFit="cover"
-                  />
+                  /> */}
+                              <IconFactory name="add" isWhite={isAddWhite} />
                   </div>
                 }
                 onClick={(e) =>
                   displayContext(e, "CreateNewActions", "vertical", "right")
                 }
-                onHover={(e) => {
-                  changeImage(e, addIconWhite);
+                onHover={() => {
+                  setIsAddWhite(true);
+                  // changeImage(e, addIconWhite);
                 }}
-                onMouseLeave={(e) => {
-                  changeImage(e, addIcon);
+                onMouseLeave={() => {
+                  setIsAddWhite(false);
+
+                  // changeImage(e, addIcon);
                 }}
                 tooltip="variants : btnPrimary, btnOutlined, btnMedium"
                 label="New"
@@ -687,8 +706,102 @@ export default function Home() {
       </DsApplication>
     
       <DsAdvanceFilterPane
-        filters={filters}
-        onFiltersApplied={handleFiltersApplied}
+       filters={[
+        { filterId: "0",
+          filterFor: "Customers",
+          filterType: "SearchAndMultiSelect",
+          multiSearchData: {
+            options: searchOptions,
+            setOptions: (options) => {
+              const customers = setOptions(options);
+              setSearchOptions(customers);
+            },
+            setSearchUrl: (term) => {
+              return searchCustomerURL + term;
+            },
+          },
+            
+        
+          },
+        { 
+          filterId: "1",
+           filterFor: "Date", 
+           filterType: "DateRange", 
+           maxValue: new Date(2025, 9, 21).getTime(), 
+           minValue: new Date(2050, 11, 26).getTime() 
+          },
+
+        {
+           filterId: "2", 
+           filterFor: "Customer Types", 
+           filterType: "MultiSelection",
+            multiSelectOptions: 
+            [
+              { label: "Institutional", value: "INSTITUTION" },
+              { label: "corporate", value: "CORPORATE" },
+           ]
+      },
+        { 
+          filterId: "3",
+          filterFor: "Tender Types",
+          filterType: "MultiSelection", 
+          multiSelectOptions: 
+          [
+            { label: "Multi-delivery", value: "MULTPLE_DELIVERY" },
+            { label: "single-delivery", value: "SINGLE_DELIVERY" },
+          ]
+      },
+        { 
+          filterId: "4",
+          filterFor: "Applied by",
+          filterType: "MultiSelection", 
+          multiSelectOptions: 
+          [
+            { label: "Ipca", value: "IPCA" },
+            { label: "Stockist", value: "stockist" },
+          ]
+      },
+        { 
+          filterId: "5", 
+          filterFor: "Supplied by", 
+          filterType: "MultiSelection", 
+          multiSelectOptions:
+          [
+            { label: "Ipca", value: "IPCA" },
+            { label: "Stockist", value: "stockist" },
+          ]
+      }, 
+        { 
+          filterId: "6",
+          filterFor: "Depot", 
+          filterType: "MultiSelection", 
+          multiSelectOptions:
+          [
+            { label: "1", value: "1" },
+            { label: "2", value: "2" },
+         ]
+      },
+     
+        { 
+          filterId: "7",
+          filterFor: "Value",
+          filterType: "RangeSlider",
+          maxValue: 4000000, minValue: 0 
+        
+        },
+        { 
+          filterId: "8", filterFor: "Status", 
+          filterType: "MultiSelection", 
+          multiSelectOptions:  
+          [
+            { label: "Approved", value: "APPROVED" },
+            { label: "cancelled", value: "CANCELLED" },
+          ]
+      },
+
+      ]}
+      onFiltersApplied={handleFiltersApplied}
+      setIsQuickFilter={setIsFilterActive}
       />
   
 

@@ -39,16 +39,16 @@ const DsAddProduct: React.FC<addProductProps> = ({
       console.log("url",`${getProductURL}${selectedProductId}?requestedQuantity=${qtyInputVal}`);
       if (product?.code === 200) {  // ✅ Change `statusCode` to `code`
         if (!product.result) {
-          console.error("🚨 product.result is undefined! Full response:", product);
+          console.error(" product.result is undefined! Full response:", product);
           return;
         }
-        console.log("✅ Condition matched! Updating product list.");
+        console.log("Condition matched! Updating product list.");
         if (!setProductList) {
-          console.error("🚨 setProductList is undefined! Check prop passing.");
+          console.error(" setProductList is undefined! Check prop passing.");
           return;
         }
   
-        setProductList(product.result); // ✅ Corrected
+        setProductList(product.result); // Corrected
         setSelectedProductId(0);
         setQtyInputVal("");
       }
