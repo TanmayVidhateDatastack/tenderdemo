@@ -10,6 +10,7 @@ import fetchData from "@/Common/helpers/Method/fetchData";
 import { documents } from "@/Common/helpers/types";
 import { DocumentContext } from "./DocumentsContextProvider";
 import { getAllDocuments } from "@/Common/helpers/constant";
+import buttonstyle from "@/Elements/DsComponents/DsButtons/dsButton.module.css"
 
 const DsAddTenderDocumentPane: React.FC = () => {
   const [openAccordion, setOpenAccordion] = useState<string | null |number>(null);
@@ -62,7 +63,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
         ? prev.filter((d) => d.id !== doc.id)
         : [...prev, doc];
 
-      console.log("Updated selectedDocuments:", updatedSelection);
+      // console.log("Updated selectedDocuments:", updatedSelection);
 
       return updatedSelection;
     });
@@ -131,7 +132,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
           };
         }).filter(group => group.documents.length > 0);
 
-        console.log("Updated Document Context:", updatedData); // ✅ Debugging output
+        console.log("Updated Document Context:", updatedData); 
 
         return updatedData;
       });
@@ -141,7 +142,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
 
   return (
     <>
-      <div className={styles.padd}>
+      <div className={styles.documentsSelection}>
         <DsDataList
           id="documentOpt"
           dataListId="documents"
@@ -154,8 +155,8 @@ const DsAddTenderDocumentPane: React.FC = () => {
             key={type}
             id={type}
             title={type}
-            isOpen={openAccordion === type}
-            onToggle={handleAccordionToggle} // ✅ Corrected function call
+            isOpen={openAccordion === type} 
+            onToggle={handleAccordionToggle} 
           >
             <div className={styles.documents}>
               {docs.map((doc) => (
@@ -167,15 +168,13 @@ const DsAddTenderDocumentPane: React.FC = () => {
                   value={doc.id.toString()}
                   label={doc.documentName}
                   onChange={() => handleCheckboxChange(doc)}
-                  isChecked={selectedDocuments.some((d) => d.id === doc.id)} // ✅ Fix
+                  isChecked={selectedDocuments.some((d) => d.id === doc.id)} 
                 />
               ))}
             </div>
           </Accordion>
         ))}
-        <div className={styles.SaveBtn}>
-          <DsButton className={styles.savebtn} label="Save" onClick={handledocument} />
-        </div>
+          <DsButton buttonViewStyle="btnContained" className={buttonstyle.btnAutoWidth +" "+styles.SaveBtn} label="Save" onClick={handledocument} />
       </div>
     </>
   );

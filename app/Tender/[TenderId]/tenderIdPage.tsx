@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState ,useEffect, useRef} from "react";
 import TabView from "@/Elements/DsComponents/dsTabs/TabView";
 import DsApplication from "@/Elements/ERPComponents/DsApplicationComponents/DsApplication";
 import DsBasicDetails from "@/TenderComponents/AddUpdateTenderComponents/BasicDetailComponents/DsBasicDetails";
@@ -7,7 +7,7 @@ import { useTabState } from "@/Redux/hook/tabHook"; // Import the custom hook
 import DSTendrFooter from "@/TenderComponents/TenderLogComponents/DsTenderFooter";
 import style from "./tenderOrder.module.css";
 import Toaster from "@/Elements/DsComponents/DsToaster/DsToaster";
-import { closeTimeForTender } from "@/Common/helpers/constant";
+import { closeTimeForTender, DsStatus } from "@/Common/helpers/constant";
 import pagestyles from "@/app/page.module.css"
 import { closeAllContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import DsPane from "@/Elements/DsComponents/DsPane/DsPane";
@@ -19,17 +19,18 @@ import styles from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctio
 import DsTenderProduct from "@/TenderComponents/AddUpdateTenderComponents/ProductComponents/DsTenderProduct";
 import { OpenPopup } from "@/Elements/DsComponents/dsPopup/dsPopup";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
-import Image from "next/image";
-import upload from "@/Common/TenderIcons/smallIcons/uploadicon.svg";
 import CsvPopup from "@/TenderComponents/TenderLogComponents/CsvPopup";
+import IconFactory from "@/Elements/IconComponent";
+import DsStatusIndicator from "@/Elements/DsComponents/dsStatus/dsStatusIndicator";
 
-
-
-const DsTenderIdPage: React.FC = () => {
+const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({paramOrderId}) => {
 
   const [selectedTabId] = useTabState("tenderPage"); 
-  const { tenderData, addTenderProduct,setActionStatusValues , actionStatus,saveTender} = useTenderData();
-
+  const {tenderData, addTenderProduct,setActionStatusValues , actionStatus,saveTender} = useTenderData();
+  const [isCsvWhite,setIsCsvWhite]=useState(false);
+  const [orderId] = useState<string>(paramOrderId?.toString());
+  const appTitle = useRef<string>("New"); 
+   
 
   const tabs = [
     { tabId: "0", tabName: "Basic Details" },
@@ -37,39 +38,57 @@ const DsTenderIdPage: React.FC = () => {
     { tabId: "2", tabName: "Documents" },
 
   ];
+
+  const [displayFlag, setDisplayFlag] = useState<"New"|"Existing">("Existing"); 
+
+  useEffect(() => {
+    if (orderId?.toString().toLowerCase() == "new") {
+      setDisplayFlag("New");
+      appTitle.current = "New Order";  
+    } else if (Number(orderId) > 0) {
+      setDisplayFlag("Existing");
+  
+    } else {
+      // setNotFound(true);
+      // return {notFound:true}
+      ////Page not Found
+    }
+  }, [orderId]);
+  
+  
   return (
     <>
       <DocumentProvider>
         <DsApplication
           selectedTabId={selectedTabId}
-          appTitle="New Tender"
+          appTitle={ appTitle.current}
           appMenu={
             <>
-              <div>
-                {  
-                  <>
-                    <DsButton
+               <DsButton
                       className={style.csvpopupBtn}
                       startIcon={
                         <div
                           style={{
                             width: "1.125em",
-                            height: "1.125em",
+                            height: "1.130em",
                             position: "relative",
                           }}
                         >
-                          <Image
-                            src={upload}
-                            alt="Add Icon"
-                            layout="fill"
-                            objectFit="cover"
-                          />
+                          <IconFactory name={"upload"} isWhite={isCsvWhite}>
+                            
+                          </IconFactory>
                         </div>
                       }
-                      buttonSize="btnLarge"
+                      buttonSize="btnMedium"
                       buttonViewStyle="btnText"
                       id="CSV"
                       onClick={() => OpenPopup("csvpopup")}
+                      onHover={()=> {
+                        setIsCsvWhite(true);
+                      }}
+                      onMouseLeave={() => {
+                        setIsCsvWhite(false);
+                      }}
                     >
                       CSV file
                     </DsButton>
@@ -77,11 +96,32 @@ const DsTenderIdPage: React.FC = () => {
                     <div>
                       <CsvPopup />
                     </div>
+            
+              <div>
+                 {  
+                  <>
+                        <DsStatusIndicator
+                      label={`${displayFlag == "Existing"
+                        ? tenderData?.status.tenderStatus
+                        : DsStatus.DRFT
+                        }`}
+                      className={styles.statusIndicator}
+                      type="user_defined"
+                      id="state"
+                      status={ 
+                        displayFlag == "Existing"
+                          ? tenderData?.status.tenderStatus ?? DsStatus.DRFT
+                          : DsStatus.DRFT
+                      }
+                      // handleClickableOnClick={handleStatusClick}
+                    />
+                   
                   </>
                 }
               </div>
             </>
           }
+          hasPrevious={true}
           tabs={tabs}
         >
           <div className={pagestyles.container} onScroll={() => closeAllContext()}>
@@ -105,14 +145,16 @@ const DsTenderIdPage: React.FC = () => {
                   const { totalSelectedDocuments } = context;
   
                   return (
-                    <div>
+                    <div className={style.documentContainer}>
                       <div className={style.docPane}>
                         <div className={style.totalCount}>
                           <div className={style.selectedDocsCount}>Selected Document</div>
-                          <div className={style.count}>{totalSelectedDocuments}</div>
+                          <div className={style.count}>{Number(totalSelectedDocuments).toLocaleString("en-US",{minimumIntegerDigits:2,useGrouping:false})}</div>
+                          
                         </div>
                         <PaneOpenButton
-                          className={styles.pane}
+                          className={styles.docPaneBtn}
+                          buttonViewStyle="btnText"
                           id="documentPaneOpenBtn"
                           paneId="documentPane"
                           label="Add Documents"
@@ -129,7 +171,7 @@ const DsTenderIdPage: React.FC = () => {
           <DSTendrFooter setActionStatus={setActionStatusValues} saveTender={saveTender} />
 
         </DsApplication>
-        <DsPane id="documentPane" side="right" title="Documents" isBackdrop={true}>
+        <DsPane id="documentPane" side="right" title="Documents" isBackdrop={true} className={styles.documentSelectionPane}>
           <DsAddTenderDocumentPane />
         </DsPane>
         <Toaster
