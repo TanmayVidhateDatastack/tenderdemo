@@ -302,6 +302,8 @@ gap:1rem;
 padding: 0.625em 0.75em ;
 gap: 1em ;
 }
-
+.downloadPricing{
+ color: var(--disable);
+}
 
 

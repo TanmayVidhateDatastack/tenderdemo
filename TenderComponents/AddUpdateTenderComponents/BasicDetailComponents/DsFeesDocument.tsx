@@ -85,16 +85,17 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           <div className={styles.fieldColors}>
 
             <DsTextField
+            maxLength={10}
+             initialValue=""
               // className={styles.fieldColors}
               label={"Amount"}
               // placeholder="Please type here"
               inputType="positive"
-              onChange={(e) => {
+              onBlur={(e) => {
                 updateTenderFee(
                   id.replace("DocumentView", ""),
                   "amount",
-                  e.target.value
-                );
+                  (e.target as HTMLInputElement).value);
               }}
             ></DsTextField>
           </div>
@@ -140,8 +141,8 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
 
           <DatePicker
               id={id + "dueDate"}
+              minDate={new Date()}
               initialDate={""}
-              className={""}
               placeholder="DD/MM/YYYY"
               label="Due Date"
               setDateValue={(date) => {
