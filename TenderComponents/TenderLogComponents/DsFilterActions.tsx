@@ -185,68 +185,8 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
     }
   }, [role]);
 
-  // const [searchText, setSearchText] = useState("");
+ 
 
-  // const handleSearch = (e) => {
-  //   if (e.key === "Enter") {
-  //     const searchQuery = normalizeText(searchText);
-
-     
-  //     const searchableColumns: (keyof Tender)[] = [
-  //       "customerName",
-  //       "tenderId",
-  //       "value",
-  //     ];
-
-  //     const filteredRows = data.filter((originalData) => {
-  //       return searchableColumns.some((column) => {
-  //         const value = originalData[column]; 
-
-  //         if (typeof value === "string" || typeof value === "number") {
-  //           return normalizeText(value).includes(searchQuery);
-  //         }
-
-  //         if (Array.isArray(value)) {
-  //           return value.some(
-  //             (item: any) =>
-  //               typeof item === "string" &&
-  //               normalizeText(item).includes(searchQuery)
-  //           );
-  //         }
-
-  //         if (typeof value === "object" && value !== null) {
-  //           return searchInObject(value, searchQuery);
-  //         }
-
-  //         return false;
-  //       });
-  //     });
-
-  //     setFilteredData(filteredRows);
-  //   }
-  // };
-
-
-  // const normalizeText = (text: any): string => {
-  //   return typeof text === "string"
-  //     ? text.toLowerCase()
-  //     : text.toString().toLowerCase();
-  // };
-
-
-  // const searchInObject = (obj: any, query: string): boolean => {
-  //   return Object.values(obj).some((val) => {
-  //     if (typeof val === "string" || typeof val === "number") {
-  //       return normalizeText(val).includes(query);
-  //     }
-
-  //     if (typeof val === "object" && val !== null) {
-  //       return searchInObject(val, query);
-  //     }
-
-  //     return false;
-  //   });
-  // };
 
  
   const handleFilter = async (value: string) => {
@@ -259,15 +199,11 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
       const isFilterActive = !newFilterState[value];
 
       if (isFilterActive) {
-        // If the filter is deselected, reset the data
-        // setFilteredData(data);
+       
         setSelectedStatus("");
       } else {
         const lowerCaseValue = value.toUpperCase();
-        // const filteredRows = data.filter(
-        //   (order) => order.status?.orderStatus?.toUpperCase() === lowerCaseValue
-        // );
-        // setFilteredData(filteredRows);
+      
         setSelectedStatus(lowerCaseValue);
       }
 
@@ -278,7 +214,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
     if (e.key === "Enter") {
 
       // 
-      const searchQueryLower = searchText.toLowerCase();
+      const searchQueryLower = searchText;
      
       setSearchQuery(searchQueryLower);
      
