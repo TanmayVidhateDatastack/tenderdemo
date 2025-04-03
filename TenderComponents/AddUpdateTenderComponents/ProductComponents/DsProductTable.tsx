@@ -92,8 +92,7 @@ const DsProductTable: React.FC = () => {
  
       {
         columnIndex: 3,
-        content: product.dataSource === "fetch" ? "-" : product.packingSize || "-",
-      
+        content: (product.dataSource) === "fetch" ? <DsTextField initialValue={product.packingSize|| ""} onChange={(e) => handleFieldChange(index, "genericName", e.target.value)} /> : product.packingSize || "-",
             className:styles.cellpackingsize
       },
  
@@ -105,6 +104,15 @@ const DsProductTable: React.FC = () => {
   
         className:styles.cellproductname
       },
+      {
+        columnIndex: 5,
+        content: product.dataSource === "csv" ?
+          <ProductTableSearch tableRowIndex={index + 1} setLocalProducts={setLocalProducts} setHasChanges={setHasChanges} />
+          : product.packingSize || "-",
+  
+        className:styles.cellproductpakingsize
+      },
+     
       { columnIndex: 6, content: product?.dataSource == "saved" ? product.mrpRate?.toString() || "-" : "-" ,    className:styles.cellmrp},
       { columnIndex: 7, content: product?.dataSource == "saved" ? product.ptr?.toString() || "-" : "-",    className:styles.cellptr},
       { columnIndex: 8, content: product?.dataSource == "saved" ? product.directCost?.toString() || "-" : "-",    className:styles.celldirectcost},

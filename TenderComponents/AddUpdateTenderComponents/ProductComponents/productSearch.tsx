@@ -3,6 +3,8 @@ import { DsStatus, searchProductsURL } from "@/Common/helpers/constant";
 import { TenderProduct, datalistOptions } from "@/Common/helpers/types";
 import { Dispatch, SetStateAction, useState } from "react";
 import DsSearchComponent from "@/Elements/DsComponents/DsSearch/searchComponent";
+import Image from "next/image";
+import IconFactory from "@/Elements/IconComponent";
 export interface ProductSearchProps {
   // initialValue?:string;
   orderStatus?: string;
@@ -87,9 +89,16 @@ const ProductSearch: React.FC<ProductSearchProps> = ({
       placeholder={"Add product & qty & hit enter"}
       options={products ? products : undefined}
       setOptions={(value) => setOptions(value)}
+      starticon={
+        <div style={{ width: "1.125em", height: "1.125em", position: "relative" }}>
+          {/* <Image src={searchicon} layout="fill" objectFit="cover" alt="searchicon" /> */}
+          <IconFactory name={"search"}/>
+        </div>
+      }
       setSearchUrl={(searchTerm: string) => {
         console.log("name", searchProductsURL +searchTerm);
         return searchProductsURL +searchTerm;
+     
      
       }}
     

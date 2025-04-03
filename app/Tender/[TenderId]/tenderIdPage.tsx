@@ -24,7 +24,7 @@ import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import CsvPopup from "@/TenderComponents/TenderLogComponents/CsvPopup";
 import IconFactory from "@/Elements/IconComponent";
 import DsStatusIndicator from "@/Elements/DsComponents/dsStatus/dsStatusIndicator";
-
+ 
 const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
   paramOrderId,
 }) => {
@@ -39,17 +39,17 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
   const [isCsvWhite, setIsCsvWhite] = useState(false);
   const [orderId] = useState<string>(paramOrderId?.toString());
   const appTitle = useRef<string>("New");
-
+ 
   const tabs = [
     { tabId: "0", tabName: "Basic Details" },
     { tabId: "1", tabName: "Products ₹ (V1)" },
     { tabId: "2", tabName: "Documents" },
   ];
-
+ 
   const [displayFlag, setDisplayFlag] = useState<"New" | "Existing">(
     "Existing"
   );
-
+ 
   useEffect(() => {
     if (orderId?.toString().toLowerCase() == "new") {
       setDisplayFlag("New");
@@ -62,13 +62,13 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
       ////Page not Found
     }
   }, [orderId]);
-
+ 
 // useEffect(()=>{
-
+ 
 //   console.log("tab Id", selectedTabId);
-
+ 
 // })
-
+ 
   return (
     <>
       <DocumentProvider>
@@ -108,16 +108,15 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
                   >
                     CSV file
                   </DsButton>
-
+ 
                   <div>
                     <CsvPopup />
                   </div>
-                  
+                 
                   <DsButton
                    label="Download Pricing"
                    buttonSize="btnMedium"
                    className={style.downloadPricing}
-                   butt
                    startIcon={
                     <div
                         style={{
@@ -186,7 +185,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
                     return <div>Error: Document context is not available</div>;
                   }
                   const { totalSelectedDocuments } = context;
-
+ 
                   return (
                     <div className={style.documentContainer}>
                       <div className={style.docPane}>
@@ -209,7 +208,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
                           label="Add Documents"
                         />
                       </div>
-
+ 
                       <DocumentSelectorArea />
                     </div>
                   );
@@ -244,3 +243,5 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
   );
 };
 export default DsTenderIdPage;
+ 
+ 

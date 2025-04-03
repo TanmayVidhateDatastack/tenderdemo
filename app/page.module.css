@@ -410,8 +410,12 @@ a.secondary {
 }
 .cellproductpakingsize
 {
-  max-width:0em;
-  width:0em;
+  max-width:100% ;
+  min-width: 15em !important;
+  width: 15em !important;
+  white-space:nowrap;
+  text-overflow: ellipsis; 
+  padding: 0rem 1rem!important;
 }
 .cellmrp
 {
