@@ -82,19 +82,23 @@ const DsApplierSupplierDetails: React.FC<applierSupplierDetailsProps> = ({
         <div className={deptStyles.fields}>
  
           <DsTextField
+            initialValue=""
             label="Stockist / Liasioner name"
             inputType="text"
           // placeholder="Please type here"
-          //  onChange={(e) => updateTenderData(" ", e.target.value)}
+            //  onBlur={(e) => updateTenderData(" ", (e.target as HTMLInputElement).value)}
           ></DsTextField>
         </div>
         <div className={deptStyles.fields}>
  
           <DsTextField
+            maxLength={3}
+            minimumNumber={100}
+            initialValue=""
             inputType="positive"
             label="Stockist / Liasioner discount %"
             // placeholder="Please type here"
-            onChange={(e) => updateTenderData("supplierDiscount", e.target.value)}
+            onBlur={(e) => updateTenderData("supplierDiscount", (e.target as HTMLInputElement).value)}
           ></DsTextField>
         </div>
       </div>

@@ -7,7 +7,7 @@ export const useTabState = (pageName: string) => {
   const selectedTabId = useSelector((state: RootState) => state.tab[pageName] || '0');
 
   const setTabId = (tabId: string) => {
-    dispatch(setSelectedTabId({ pageName, tabId }));
+    dispatch(setSelectedTabId({ pageName, tabId })); 
   };
 
   return [selectedTabId, setTabId] as const;
