@@ -14,7 +14,7 @@ import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import ContextMenu, { displayContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 
 import DsStatusIndicator from "@/Elements/DsComponents/dsStatus/dsStatusIndicator";
-import { getAllMetaData, getAllTenders, searchCustomerURL } from "@/Common/helpers/constant";
+import { getAllDepots, getAllMetaData, getAllTenders, searchCustomerURL } from "@/Common/helpers/constant";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import DsTableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableComponent";
 
@@ -72,10 +72,15 @@ interface Metadata {
   customerType?: CodeItem[];
 }
 
+type Depot = {
+  id: number;
+  name: string;
+  code: string;
+}
+
 
 export default function Home() {
   const [data, setData] = useState<Tender[]>([]); //for table data
-  const [metaData, setMetaData] = useState<CodeItem[]>([]);
   const [searchQuery, setSearchQuery] = useState(""); //for search query
   const [selectedStatus, setSelectedStatus] = useState(""); //for quickfilter
   const [advFilter, setAdvFilter] = useState<Record<string, React.ReactNode>>({});
@@ -87,21 +92,22 @@ export default function Home() {
     metaDataTypes: [],
   });
   const [fetchedMetadata, setFetchedMetadata] = useState<Metadata>({})
-  console.log(isFilterActive);
+  // console.log(isFilterActive);
   const [isAddWhite, setIsAddWhite] = useState<boolean>(false);
 
 
-  const [paymentMode, setPaymentMode] = useState<CodeItem[]>([]);
+  // const [paymentMode, setPaymentMode] = useState<CodeItem[]>([]);
   const [tenderType, setTenderType] = useState<CodeItem[]>([]);
   const [customerType, setCustomerType] = useState<CodeItem[]>([]);
-  const [submissionMode, setSubmissionMode] = useState<CodeItem[]>([]);
-  const [supplyPoint, setSupplyPoint] = useState<CodeItem[]>([]);
-  const [testReportRequirement, setTestReportRequirement] = useState<CodeItem[]>([]);
-  const [eligibility, setEligibility] = useState<CodeItem[]>([]);
-  const [feesType, setFeesType] = useState<CodeItem[]>([]);
-  const [tenderSupplyCondition, setTenderSupplyCondition] = useState<CodeItem[]>([]);
-  const [documentType, setDocumentType] = useState<CodeItem[]>([]);
+  // const [submissionMode, setSubmissionMode] = useState<CodeItem[]>([]);
+  // const [supplyPoint, setSupplyPoint] = useState<CodeItem[]>([]);
+  // const [testReportRequirement, setTestReportRequirement] = useState<CodeItem[]>([]);
+  // const [eligibility, setEligibility] = useState<CodeItem[]>([]);
+  // const [feesType, setFeesType] = useState<CodeItem[]>([]);
+  // const [tenderSupplyCondition, setTenderSupplyCondition] = useState<CodeItem[]>([]);
+  // const [documentType, setDocumentType] = useState<CodeItem[]>([]);
   const [tenderStatus, setTenderStatus] = useState<CodeItem[]>([]);
+  const [depotList, setDepotList] = useState<Depot[]>([]);
 
 
   const permissions = useAppSelector((state: RootState) => state.permissions);
@@ -324,7 +330,7 @@ export default function Home() {
             : searchQuery
               ? onlySearch
               : { "userId": 3, "pageNo": 0, "pageSize": 0 };
-    console.log("json object :", JSON.stringify(tenderFilters));
+    // console.log("json object :", JSON.stringify(tenderFilters));
     await fetchData({
       url: getAllTenders,
       method: "GET",
@@ -334,12 +340,12 @@ export default function Home() {
       },
     })
       .then((res) => {
-        console.log("objevct to be send", tenderFilters);
+        // console.log("objevct to be send", tenderFilters);
         console.log("Response RESULT:", res.result);
 
         if (res?.code === 200 && Array.isArray(res?.result)) {
           const formattedData = formatTenders(res?.result);
-          console.log("formatted data:", formattedData);
+          // console.log("formatted data:", formattedData);
           setData(formattedData);
           // addOrder(formattedData);
         }
@@ -393,11 +399,11 @@ export default function Home() {
   }
 
   const handleFiltersApplied = (apiFilter: Record<string, React.ReactNode>) => {
-    console.log("Received apiFilter in parent:", apiFilter);
+    // console.log("Received apiFilter in parent:", apiFilter);
     // Use apiFilter to make API calls or update state
     setAdvFilter(apiFilter);
     setIsFilterActive(false);
-    console.log("advv filter", advFilter);
+    // console.log("advv filter", advFilter);
   };
 
   useEffect(() => {
@@ -407,22 +413,22 @@ export default function Home() {
     // Updating state with filtered metadata
     setTenderMetadataFilters({ userId: 3, metaDataTypes: filteredMetaData });
 
-    console.log("Filtered Metadata Filters:", { userId: 3, metaDataTypes: filteredMetaData });
+    // console.log("Filtered Metadata Filters:", { userId: 3, metaDataTypes: filteredMetaData });
 
   }, [advFilter])
 
   useEffect(() => {
-    console.log("fetched metadata : ", fetchedMetadata);
+    // console.log("fetched metadata : ", fetchedMetadata);
     if (fetchedMetadata) {
-      if (fetchedMetadata.documentType) setDocumentType(fetchedMetadata.documentType);
-      if (fetchedMetadata.eligibility) setEligibility(fetchedMetadata.eligibility);
-      if (fetchedMetadata.feesType) setFeesType(fetchedMetadata.feesType);
-      if (fetchedMetadata.paymentMode) setPaymentMode(fetchedMetadata.paymentMode);
-      if (fetchedMetadata.submissionMode) setSubmissionMode(fetchedMetadata.submissionMode);
-      if (fetchedMetadata.supplyPoint) setSupplyPoint(fetchedMetadata.supplyPoint);
-      if (fetchedMetadata.tenderSupplyCondition) setTenderSupplyCondition(fetchedMetadata.tenderSupplyCondition);
+      // if (fetchedMetadata.documentType) setDocumentType(fetchedMetadata.documentType);
+      // if (fetchedMetadata.eligibility) setEligibility(fetchedMetadata.eligibility);
+      // if (fetchedMetadata.feesType) setFeesType(fetchedMetadata.feesType);
+      // if (fetchedMetadata.paymentMode) setPaymentMode(fetchedMetadata.paymentMode);
+      // if (fetchedMetadata.submissionMode) setSubmissionMode(fetchedMetadata.submissionMode);
+      // if (fetchedMetadata.supplyPoint) setSupplyPoint(fetchedMetadata.supplyPoint);
+      // if (fetchedMetadata.tenderSupplyCondition) setTenderSupplyCondition(fetchedMetadata.tenderSupplyCondition);
       if (fetchedMetadata.tenderType) setTenderType(fetchedMetadata.tenderType);
-      if (fetchedMetadata.testReportRequirement) setTestReportRequirement(fetchedMetadata.testReportRequirement);
+      // if (fetchedMetadata.testReportRequirement) setTestReportRequirement(fetchedMetadata.testReportRequirement);
       if (fetchedMetadata.tenderStatus) setTenderStatus(fetchedMetadata.tenderStatus);
       if (fetchedMetadata.customerType) setCustomerType(fetchedMetadata.customerType);
     }
@@ -446,6 +452,27 @@ export default function Home() {
           console.log("Stored Tender Type:", res.result);
         } else {
           console.error("Error: Invalid data format or empty tenderType");
+        }
+      })
+      .catch((err) => {
+        console.error("Error fetching data:", err);
+      });
+  };
+
+
+  const handleFetchDepot = async () => {
+    await fetchData({
+      url: getAllDepots
+    })
+      .then((res) => {
+        console.log("depot fetched response :", res); // Log the fetched response
+
+        if (res?.code === 200 && res?.result) {
+          // if(res?.c)
+          setDepotList(res.result);
+          console.log("stored depot result:", res.result);
+        } else {
+          console.error("Error: Invalid data format or empty depot");
         }
       })
       .catch((err) => {
@@ -514,16 +541,16 @@ export default function Home() {
   useEffect(() => {
     handleFetch();
     handleFetchMetaData();
-
+    handleFetchDepot();
 
   }, []);
   useEffect(() => {
     handleFetch();
   }, [selectedStatus, searchQuery, advFilter]);
 
-  useEffect(() => {
-    console.log("Updated MetaData:", metaData);
-  }, [metaData]);
+  // useEffect(() => {
+  //   console.log("Updated MetaData:", metaData);
+  // }, [metaData]);
 
 
   const getTenderTypeDescription = (tenderType?: string) => {
@@ -552,7 +579,7 @@ export default function Home() {
 
 
   const addTableData = (tender: Tender[]) => {
-    console.log("Adding table data:", tender);
+    // console.log("Adding table data:", tender);
     const newRows: DsTableRow[] = tender.map((t, index) => ({
       rowIndex: index,
       className: "cellRow ",
@@ -694,7 +721,7 @@ export default function Home() {
   };
 
   useEffect(() => {
-    console.log("Data updated:", data);
+    // console.log("Data updated:", data);
     if (data.length > 0) {
       addTableData(data);
     }
@@ -702,9 +729,7 @@ export default function Home() {
 
   const [selectedRow, setSelectedRow] = useState<{ e: React.MouseEvent<HTMLElement>; rowIndex: number; statuscell: string } | null>(null);
 
-  useEffect(() => {
-    console.log("tender type : ", tenderType);
-  }, [tenderType])
+
 
   return (
     <>
@@ -786,7 +811,7 @@ export default function Home() {
                   row?.content?.find((cell) => cell?.columnIndex === 10)?.filterValue ?? ""
                 );
 
-                console.log("statuscellintable", statuscell);
+                // console.log("statuscellintable", statuscell);
 
                 // Store selected row data
                 setSelectedRow({ e, rowIndex, statuscell });
@@ -876,11 +901,10 @@ export default function Home() {
             filterId: "6",
             filterFor: "Depot",
             filterType: "MultiSelection",
-            multiSelectOptions:
-              [
-                { label: "1", value: "1" },
-                { label: "2", value: "2" },
-              ]
+            multiSelectOptions: depotList.map((item) => ({
+              label: item.name,
+              value: item.id.toString(),
+            })),
           },
 
           {
