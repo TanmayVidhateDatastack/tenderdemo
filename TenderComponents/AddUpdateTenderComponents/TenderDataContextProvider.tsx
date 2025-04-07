@@ -1,5 +1,5 @@
 import { showToaster } from "@/Elements/DsComponents/DsToaster/DsToaster";
-import { closeTimeForTender, DsStatus, dsStatus,saveTenderurl } from "@/Common/helpers/constant";
+import { closeTimeForTender, DsStatus, dsStatus,getTenderByTenderId,saveTenderurl } from "@/Common/helpers/constant";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import {
   applicableSupplyConditions,
@@ -53,6 +53,7 @@ interface TenderDataContextType {
   addApplicableCondition: (type: string) => void;
   removeApplicableCondition: (conditionType: string) => void;
   saveTender: (status: dsStatus) => Promise<void>;
+  // fetchAndSetOriginalTender: (tenderId: number) => Promise<void>;
 }
  
 const TenderDataContext = createContext<TenderDataContextType | undefined>(
@@ -349,6 +350,60 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     },
     [tenderData, fetchData]
   );
+  // const fetchAndSetOriginalTender= useCallback(
+  //   async (tenderId: number) => {
+  //     try {
+
+  //       const response = await fetchData({ url: getTenderByTenderId }); 
+  //       const tenderData = response.result as TenderData 
+  //       console.log("tenderData= ", tenderData);
+
+  //       setTenderData((prev) => {
+  //         return {
+  //           ...prev,
+  //           ...tenderData ,
+  //           transporter:
+  //           tenderData?.transporter !== null &&
+  //           tenderData ?.transporter !== undefined
+  //               ? tenderData ?.transporter
+  //               : {
+  //                 type: "read-only",
+  //                 id: 0,
+  //                 name: "",
+  //                 code: "",
+  //               },
+  //           purchaseOrderDate: tenderData ?.purchaseOrderDate,
+  //           status:tenderData ?.status,
+  //           lastUpdatedBy: -1,
+  //           ewayBillStatus: "NAVL",
+  //         };
+  //       });
+
+  //       setOrderDataCopy((prev) => {
+  //         return {
+  //           ...prev,
+  //           ...tenderData ,
+  //           purchaseOrderDate: tenderData ?.purchaseOrderDate,
+  //           transporter:
+  //           tenderData ?.transporter !== null &&
+  //           tenderData ?.transporter !== undefined
+  //               ? tenderData ?.transporter
+  //               : {
+  //                 type: "read-only",
+  //                 id: 0,
+  //                 name: "",
+  //                 code: "",
+  //               },
+  //           ewayBillStatus: "NAVL",
+  //         };
+  //       });
+  //       return response;
+  //     } catch (error) {
+  //       console.error("Error fetching order:", error); 
+  //     }
+  //   },
+  //   [fetchData]
+  // );
  
  
   return (
@@ -368,7 +423,8 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         updateTenderProduct,
         addApplicableCondition,
         removeApplicableCondition,
-        saveTender,setActionStatusValues
+        saveTender,setActionStatusValues,
+        // fetchAndSetOriginalTender
       }}
     >
       {children}

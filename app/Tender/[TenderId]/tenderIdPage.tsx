@@ -1,4 +1,4 @@
-import React, { useState ,useEffect, useRef} from "react";
+import React, { useState, useEffect, useRef } from "react";
 import TabView from "@/Elements/DsComponents/dsTabs/TabView";
 import DsApplication from "@/Elements/ERPComponents/DsApplicationComponents/DsApplication";
 import DsBasicDetails from "@/TenderComponents/AddUpdateTenderComponents/BasicDetailComponents/DsBasicDetails";
@@ -8,11 +8,13 @@ import DSTendrFooter from "@/TenderComponents/TenderLogComponents/DsTenderFooter
 import style from "./tenderOrder.module.css";
 import Toaster from "@/Elements/DsComponents/DsToaster/DsToaster";
 import { closeTimeForTender, DsStatus } from "@/Common/helpers/constant";
-import pagestyles from "@/app/page.module.css"
+import pagestyles from "@/app/page.module.css";
 import { closeAllContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import DsPane from "@/Elements/DsComponents/DsPane/DsPane";
 import PaneOpenButton from "@/Elements/DsComponents/DsPane/PaneOpenButton";
-import DocumentProvider, { DocumentContext } from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/DocumentsContextProvider";
+import DocumentProvider, {
+  DocumentContext,
+} from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/DocumentsContextProvider";
 import DsAddTenderDocumentPane from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/DsAddTenderDocumentPane";
 import DocumentSelectorArea from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/DsDocumentSelectionArea";
 import styles from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/document.module.css";
@@ -22,100 +24,136 @@ import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import CsvPopup from "@/TenderComponents/TenderLogComponents/CsvPopup";
 import IconFactory from "@/Elements/IconComponent";
 import DsStatusIndicator from "@/Elements/DsComponents/dsStatus/dsStatusIndicator";
-
-const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({paramOrderId}) => {
-
-  const [selectedTabId] = useTabState("tenderPage"); 
-  const {tenderData, addTenderProduct,setActionStatusValues , actionStatus,saveTender} = useTenderData();
-  const [isCsvWhite,setIsCsvWhite]=useState(false);
+ 
+const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
+  paramOrderId,
+}) => {
+  const [selectedTabId,setTabId] = useTabState("tenderPage");
+  const {
+    tenderData,
+    addTenderProduct,
+    setActionStatusValues,
+    actionStatus,
+    saveTender,
+  } = useTenderData();
+  const [isCsvWhite, setIsCsvWhite] = useState(false);
   const [orderId] = useState<string>(paramOrderId?.toString());
-  const appTitle = useRef<string>("New"); 
-   
-
+  const appTitle = useRef<string>("New");
+ 
   const tabs = [
     { tabId: "0", tabName: "Basic Details" },
     { tabId: "1", tabName: "Products ₹ (V1)" },
     { tabId: "2", tabName: "Documents" },
-
   ];
-
-  const [displayFlag, setDisplayFlag] = useState<"New"|"Existing">("Existing"); 
-
+ 
+  const [displayFlag, setDisplayFlag] = useState<"New" | "Existing">(
+    "Existing"
+  );
+ 
   useEffect(() => {
     if (orderId?.toString().toLowerCase() == "new") {
       setDisplayFlag("New");
-      appTitle.current = "New Order";  
+      appTitle.current = "New Order";
     } else if (Number(orderId) > 0) {
       setDisplayFlag("Existing");
-  
     } else {
       // setNotFound(true);
       // return {notFound:true}
       ////Page not Found
     }
   }, [orderId]);
-  
-  
+ 
+// useEffect(()=>{
+ 
+//   console.log("tab Id", selectedTabId);
+ 
+// })
+ 
   return (
     <>
       <DocumentProvider>
         <DsApplication
           selectedTabId={selectedTabId}
-          appTitle={ appTitle.current}
+          appTitle={appTitle.current}
           appMenu={
             <>
-               <DsButton
-                      className={style.csvpopupBtn}
-                      startIcon={
-                        <div
-                          style={{
-                            width: "1.125em",
-                            height: "1.130em",
-                            position: "relative",
-                          }}
-                        >
-                          <IconFactory name={"upload"} isWhite={isCsvWhite}>
-                            
-                          </IconFactory>
-                        </div>
-                      }
-                      buttonSize="btnMedium"
-                      buttonViewStyle="btnText"
-                      id="CSV"
-                      onClick={() => OpenPopup("csvpopup")}
-                      onHover={()=> {
-                        setIsCsvWhite(true);
-                      }}
-                      onMouseLeave={() => {
-                        setIsCsvWhite(false);
-                      }}
-                    >
-                      CSV file
-                    </DsButton>
-  
-                    <div>
-                      <CsvPopup />
-                    </div>
-            
+              { selectedTabId === "1" && (
+                <>
+                  <DsButton
+                    className={style.csvpopupBtn}
+                    startIcon={
+                      <div
+                        style={{
+                          width: "1.125em",
+                          height: "1.130em",
+                          position: "relative",
+                        }}
+                      >
+                        <IconFactory
+                          name={"upload"}
+                          isWhite={isCsvWhite}
+                        ></IconFactory>
+                      </div>
+                    }
+                    buttonSize="btnMedium"
+                    buttonViewStyle="btnText"
+                    id="CSV"
+                    onClick={() => OpenPopup("csvpopup")}
+                    onHover={() => {
+                      setIsCsvWhite(true);
+                    }}
+                    onMouseLeave={() => {
+                      setIsCsvWhite(false);
+                    }}
+                  >
+                    CSV file
+                  </DsButton>
+ 
+                  <div>
+                    <CsvPopup />
+                  </div>
+                 
+                  <DsButton
+                   label="Download Pricing"
+                   buttonSize="btnMedium"
+                   className={style.downloadPricing}
+                   startIcon={
+                    <div
+                        style={{
+                          width: "1.125em",
+                          height: "1.130em",
+                          position: "relative",
+                        }}
+                      >
+                        <IconFactory
+                          name={"download"}
+                          // isWhite={isCsvWhite}
+                        ></IconFactory>
+                      </div>
+                   }
+                   >
+                   </DsButton>
+                </>
+              )}
               <div>
-                 {  
+                {
                   <>
-                        <DsStatusIndicator
-                      label={`${displayFlag == "Existing"
-                        ? tenderData?.status.tenderStatus
-                        : DsStatus.DRFT
-                        }`}
+                    <DsStatusIndicator
+                      label={`${
+                        displayFlag == "Existing"
+                          ? tenderData?.status.tenderStatus
+                          : DsStatus.DRFT
+                      }`}
                       className={styles.statusIndicator}
                       type="user_defined"
                       id="state"
-                      status={ 
+                      status={
                         displayFlag == "Existing"
                           ? tenderData?.status.tenderStatus ?? DsStatus.DRFT
                           : DsStatus.DRFT
                       }
                       // handleClickableOnClick={handleStatusClick}
                     />
-                   
                   </>
                 }
               </div>
@@ -123,8 +161,12 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({paramOrder
           }
           hasPrevious={true}
           tabs={tabs}
+          onTabChange={(x)=> {setTabId(x.tabId)}}
         >
-          <div className={pagestyles.container} onScroll={() => closeAllContext()}>
+          <div
+            className={pagestyles.container}
+            onScroll={() => closeAllContext()}
+          >
             <TabView tabId="0">
               <div className={style.tenderDetails}>
                 <DsBasicDetails />
@@ -143,14 +185,20 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({paramOrder
                     return <div>Error: Document context is not available</div>;
                   }
                   const { totalSelectedDocuments } = context;
-  
+ 
                   return (
                     <div className={style.documentContainer}>
                       <div className={style.docPane}>
                         <div className={style.totalCount}>
-                          <div className={style.selectedDocsCount}>Selected Document</div>
-                          <div className={style.count}>{Number(totalSelectedDocuments).toLocaleString("en-US",{minimumIntegerDigits:2,useGrouping:false})}</div>
-                          
+                          <div className={style.selectedDocsCount}>
+                            Selected Document
+                          </div>
+                          <div className={style.count}>
+                            {Number(totalSelectedDocuments).toLocaleString(
+                              "en-US",
+                              { minimumIntegerDigits: 2, useGrouping: false }
+                            )}
+                          </div>
                         </div>
                         <PaneOpenButton
                           className={styles.docPaneBtn}
@@ -160,7 +208,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({paramOrder
                           label="Add Documents"
                         />
                       </div>
-  
+ 
                       <DocumentSelectorArea />
                     </div>
                   );
@@ -168,10 +216,18 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({paramOrder
               </DocumentContext.Consumer>
             </TabView>
           </div>
-          <DSTendrFooter setActionStatus={setActionStatusValues} saveTender={saveTender} />
-
+          <DSTendrFooter
+            setActionStatus={setActionStatusValues}
+            saveTender={saveTender}
+          />
         </DsApplication>
-        <DsPane id="documentPane" side="right" title="Documents" isBackdrop={true} className={styles.documentSelectionPane}>
+        <DsPane
+          id="documentPane"
+          side="right"
+          title="Documents"
+          isBackdrop={true}
+          className={styles.documentSelectionPane}
+        >
           <DsAddTenderDocumentPane />
         </DsPane>
         <Toaster
@@ -182,10 +238,10 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({paramOrder
           position={"top"}
           duration={closeTimeForTender}
         />
-  
       </DocumentProvider>
     </>
   );
-  
 };
 export default DsTenderIdPage;
+ 
+ 

@@ -76,6 +76,7 @@
     justify-content: space-between;
     align-items: center;
     min-width: 20%;
+    gap:0.5em;
   }
   
   /* font stylings*/
@@ -302,6 +303,8 @@ gap:1rem;
 padding: 0.625em 0.75em ;
 gap: 1em ;
 }
-
+.downloadPricing{
+ color: var(--disable);
+}
 
 

@@ -5,7 +5,7 @@ import DsSelectMultiLevel from "@/Elements/DsComponents/dsSelect/dsSelectMultiLe
 import { datalistOptions, supplyDetailsProps } from "@/Common/helpers/types";
 // import { datalistOptions, supplyDetailsProps } from "@/Common/helpers/types";
 import { useTenderData } from "../TenderDataContextProvider";
-import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css"
+import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
   const { updateSupplyCondition } = useTenderData();
   return (
@@ -23,10 +23,14 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
           }}
         ></DsSingleSelect>
         <DsTextField
-          inputType="positive"
+          maxLength={10}
+          initialValue=""
+          inputType="positive" 
           label="Provide no. of consignees"
-          // placeholder="Please type here"
-          onChange={(e) => updateSupplyCondition("consigneesCount", e.target.value)}
+          // placeholder="Please type here" 
+          onBlur={(e) =>
+            updateSupplyCondition("consigneesCount",(e.target as HTMLInputElement).value)
+          }
         ></DsTextField>
 
         <DsSingleSelect
@@ -49,9 +53,9 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
           setSelectOptions={(options) => {
             updateSupplyCondition(
               "eligibility",
-              options.reduce<string[]>((acc, option) => {
-                if (typeof option.value === "string") {
-                  acc.push(option.value);
+              options.reduce<string[]>((acc, option) => { 
+                if (typeof option.value === "string") {   
+                  acc.push(option.value);    
                 }
                 return acc;
               }, [])

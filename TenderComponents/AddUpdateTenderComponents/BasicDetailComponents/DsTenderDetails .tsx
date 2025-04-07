@@ -43,7 +43,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         if (result) {
           setRole(result.roleName);
         }
-      } else {
+      } else { 
         console.error("Error fetching data: ", res.message || "Unknown error");
       } 
     } catch (error) {
@@ -61,6 +61,8 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
     }
   }, [role]);
 
+  
+
   const getTodayDate = (date: Date) => {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -68,6 +70,8 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
 
     return `${year}-${month}-${day}`;
   }; 
+
+  const urlRegex = /^(https?:\/\/)?([\w-]+(\.[\w-]+)+)(:\d+)?(\/[^\s]*)?$/; 
   
   return (
     <>
@@ -111,7 +115,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
             }))}
             setSelectOption={(option) => {
               if (typeof option.value == "string") {
-                updateTenderData("customerLocationId", option.value);
+                updateTenderData("customerLocationId", option.value); 
                 // console.log("customerLocationId",option.value)
               }
             }}           
@@ -119,14 +123,16 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         </div>
         <div className={deptStyle.fields}>
           <DsTextField
+            initialValue=""
+            maxLength={50}
             label="Tender Number"
             // placeholder="Please Type Here"  
-            onChange={(e) => updateTenderData("tenderNumber", e.target.value)}
+            onBlur={(e) => updateTenderData("tenderNumber", (e.target as HTMLInputElement).value)}
           ></DsTextField>
         </div> 
         <div className={deptStyle.fields}>
           <DsSingleSelect
-            options={tenderDetails.tenderType}
+            options={tenderDetails.tenderType} 
             // label="Tender Type"
             placeholder={"Tender Type"}
             id={"tenderType"}
@@ -140,6 +146,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         </div>
         <div className={deptStyle.fields}>
           <DsDatePicker
+            maxDate={new Date()}
             id={"issueDate"}
             setDateValue={(date) => {
               if (date instanceof Date) {
@@ -153,6 +160,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         </div>
         <div className={deptStyle.fields}>
           <DsDatePicker
+            minDate={new Date()}
             id={"lastPurchaseDate"}
             setDateValue={(date) => {
               if (date instanceof Date) {
@@ -166,8 +174,9 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         </div>
         <div className={deptStyle.fields}>
           <DsDatePicker
+            minDate={new Date()}
             id={"submissionDate"}
-            setDateValue={(date) => {
+             setDateValue={(date) => {
               if (date instanceof Date) {
                 updateTenderData("submissionDate", getTodayDate(date));
               }
@@ -189,10 +198,12 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
             label="Rate contract validity"
           /> */}
           <DsTextField
+            maxLength={6}
+            initialValue=""
             inputType="positive"
             label="Rate contract validity"
-            onChange={(e) =>
-              updateTenderData("rateContractValidity", e.target.value)
+            onBlur={(e) =>
+              updateTenderData("rateContractValidity", (e.target as HTMLInputElement).value)
             }
           ></DsTextField>
         </div>
@@ -212,37 +223,45 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         </div>
         <div className={deptStyle.fields}>
           <DsTextField
+            maxLength={5}
+            initialValue=""
             inputType="positive"
-            label={"Delivery Period ( In days )"}
+            label={"Delivery Period ( In days )"} 
             // placeholder={"Please type or select"}
-            onChange={(e) => updateTenderData("deliveryPeriod", e.target.value)}
+            onBlur={(e) => updateTenderData("deliveryPeriod",(e.target as HTMLInputElement).value)}
           ></DsTextField>
         </div>
         <div className={deptStyle.fields}>
           <DsTextField
+            maxLength={5}
+            initialValue=""
             inputType="positive"
             label={"Extended Delivery Period ( In days )"}
             // placeholder={"Please type or select"}
-            onChange={(e) =>
-              updateTenderData("extendedDeliveryPeriod", e.target.value)
+            onBlur={(e) =>
+              updateTenderData("extendedDeliveryPeriod", (e.target as HTMLInputElement).value)
             }
           ></DsTextField>
         </div>
         <div className={deptStyle.fields}>
           <DsTextField
-            label="Penalty for last delivery purchase %"
+             maxLength={3}
+             initialValue=""
+             label="Penalty for last delivery purchase %"
              inputType="positive"
             // placeholder="Please type here"
-            onChange={(e) =>
-              updateTenderData("lateDeliveryPenalty", e.target.value)
+            onBlur={(e) =>
+              updateTenderData("lateDeliveryPenalty", (e.target as HTMLInputElement).value)
             }
           ></DsTextField>
         </div>
         <div className={deptStyle.fields}>
           <DsTextField
+            maxLength={2000}
+            initialValue=""
             label="Tender site/url"
             // placeholder="Please type here"
-            onChange={(e) => updateTenderData("tenderURL", e.target.value)}
+            onBlur={(e) => updateTenderData("tenderURL", (e.target as HTMLInputElement).value)}
           ></DsTextField>
         </div>
       </div>

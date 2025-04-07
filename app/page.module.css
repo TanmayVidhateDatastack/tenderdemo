@@ -371,6 +371,156 @@ a.secondary {
   flex:1;
   max-height: 100%;
 }
-/* .advPane{
-  padding: 1rem !important;
- } */
+.cellgenericname
+{
+  max-width:100% ;
+  min-width: 15em !important;
+  width: 15em !important;
+  white-space:nowrap;
+  text-overflow: ellipsis; 
+  padding: 0rem 1rem!important;
+
+}
+.cellquantity
+{
+  max-width:100% ;
+  min-width: 12em !important;
+  width: 12em !important;
+  white-space:nowrap;
+  text-overflow: ellipsis; 
+  padding: 0rem 1rem!important;
+}
+.cellpackingsize
+{
+  max-width:100% ;
+  min-width: 10em !important;
+  width:10em !important;
+  white-space:nowrap;
+  text-overflow: ellipsis; 
+  padding: 0rem 1rem!important;
+}
+.cellproductname
+{
+  max-width:100% ;
+  min-width: 15em !important;
+  width: 15em !important;
+  white-space:nowrap;
+  text-overflow: ellipsis; 
+  padding: 0rem 1rem!important;
+}
+.cellproductpakingsize
+{
+  max-width:100% ;
+  min-width: 15em !important;
+  width: 15em !important;
+  white-space:nowrap;
+  text-overflow: ellipsis; 
+  padding: 0rem 1rem!important;
+}
+.cellmrp
+{
+  max-width:100% ;
+  min-width: 7em !important;
+  width: 7em !important;
+  white-space:nowrap;
+  text-overflow: ellipsis; 
+  padding: 0rem 1rem!important;
+}
+.cellptr
+{
+  max-width:100% ;
+  min-width: 7em !important;
+  width: 7em !important;
+  white-space:nowrap;
+  text-overflow: ellipsis; 
+  padding: 0rem 1rem!important;
+}
+.celldirectcost
+{
+  max-width:100% ;
+  min-width: 8em!important;
+  width: 8em !important;
+  white-space:nowrap;
+  text-overflow: ellipsis; 
+  padding: 0rem 1rem!important;
+}
+.celllqr
+{
+  max-width:100% ;
+  min-width: 7em !important;
+  width: 7em!important;
+  white-space:nowrap;
+  text-overflow: ellipsis; 
+  padding: 0rem 1rem!important;
+}
+.celllpr
+{
+  max-width:100% ;
+  min-width: 9em !important;
+  width: 9em!important;
+  white-space:nowrap;
+  text-overflow: ellipsis; 
+  padding: 0rem 1rem!important;
+}
+.cellproposedrate
+{
+  max-width:100% ;
+  min-width: 10em!important;
+  width: 10em !important;
+  white-space:nowrap;
+  text-overflow: ellipsis; 
+  padding: 0rem 1rem!important;
+}
+.cellptr{
+  max-width:100% ;
+  min-width: 7em !important;
+  width: 7em !important;
+  white-space:nowrap;
+  text-overflow: ellipsis; 
+  padding: 0rem 1rem!important;
+}
+.celldiscount
+{
+  max-width:100% ;
+  min-width: 8em !important;
+  width: 8em !important;
+  white-space:nowrap;
+  text-overflow: ellipsis; 
+  padding: 0rem 1rem!important;
+}
+.celltotalcost
+{
+  max-width:100% ;
+  min-width: 7em !important;
+  width: 7em !important;
+  white-space:nowrap;
+  text-overflow: ellipsis; 
+  padding: 0rem 1rem!important;
+}
+.cellmargin
+{
+  max-width:100% ;
+  min-width: 6em!important;
+  width: 6em !important;
+  white-space:nowrap;
+  text-overflow: ellipsis; 
+  padding: 0rem 1rem!important;
+}
+.cellmarginper
+{
+  max-width:100% ;
+  min-width: 7em !important;
+  width: 7em !important;
+  white-space:nowrap;
+  text-overflow: ellipsis; 
+  padding: 0rem 1rem!important;
+}
+.cellnetvalue
+{
+  max-width:100% ;
+  min-width: 7em !important;
+  width: 7em !important;
+  white-space:nowrap;
+  text-overflow: ellipsis; 
+  padding: 0rem 1rem!important;
+}

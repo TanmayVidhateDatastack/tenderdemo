@@ -3,7 +3,7 @@ import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import React, { useEffect, useState } from "react";
 
 import btnStyles from "@/Elements/DsComponents/DsButtons/dsButton.module.css";
-import {
+import ContextMenu, {
   createContext,
   displayContext,
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
@@ -54,14 +54,14 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
   useEffect(() => {
     handleFetch();
   }, []);
+ 
 
   useEffect(() => {
     if (role && role !== "") {
       dispatch(setVisibilityByRole(role));
       console.log("Role=", role);
-
       let contextContent: React.ReactElement | null = null;
-
+      
       if (role === "ACCOUNTANCE") {
         contextContent = (
           <DsButton
@@ -101,10 +101,10 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
       } else if (role === "CHECKER") {
         contextContent = (
           <>
-            <PopupOpenButton
+           <PopupOpenButton
               popupId="popup1"
               buttonSize="btnSmall"
-              buttonText="Reviewed"
+              buttonText="Approve"
               buttonViewStyle="btnText"
               className={btnStyles.btnTextPrimary}
             />
@@ -114,7 +114,13 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
               buttonText="Revise"
               buttonViewStyle="btnText"
               className={btnStyles.btnTextPrimary}
-            />
+            /><PopupOpenButton
+            popupId="popup3"
+            buttonSize="btnSmall"
+            buttonText="Reject"
+            buttonViewStyle="btnText"
+            className={btnStyles.btnTextPrimary}
+          />
           </>
         );
       } else if (role === "MAKER") {
@@ -211,6 +217,7 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
         duration={4000}
         handleClose={() => setToasterVisible(false)}
       />
+      {/* <ContextMenu id={"contextMenuId4"} showArrow={true} content={<div>{contextContent}</div>}/> */}
     </>
   );
 };

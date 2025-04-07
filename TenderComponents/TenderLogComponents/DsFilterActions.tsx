@@ -204,6 +204,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
       } else {
         const lowerCaseValue = value.toUpperCase();
 
+
         setSelectedStatus(lowerCaseValue);
       }
 
