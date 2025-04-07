@@ -70,7 +70,7 @@ const CustomerSearch: React.FC<{
           pinCode: addr.pinCode,
           isPrimary: addr.isPrimary === "Y",  
         })); 
-        setCustomerLocations?.(formattedAddresses); 
+        setCustomerLocations?.(formattedAddresses);  
       } else { 
         console.error("Invalid API response:", data); 
         setCustomerLocations?.([]);

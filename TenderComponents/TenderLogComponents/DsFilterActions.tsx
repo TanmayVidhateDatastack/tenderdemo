@@ -17,13 +17,8 @@ import { DisplayPane } from "@/Elements/DsComponents/DsPane/DsPane";
 import btnStyles from "@/Elements/DsComponents/DsButtons/dsButton.module.css";
  
 export interface DsFilterActionProps {
-<<<<<<< HEAD
  
  
-=======
-
-
->>>>>>> 0cfc6fc393a629173af83517b46a16b3d39f7cb4
   searchQuery: string;
   setSearchQuery: Dispatch<SetStateAction<string>>;
   selectedStatus: string;
@@ -104,11 +99,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
  
   //         if (value === "nearSubmission") {
   //           filteredRows = filteredRows.filter((tender) => {
-<<<<<<< HEAD
  
-=======
-
->>>>>>> 0cfc6fc393a629173af83517b46a16b3d39f7cb4
   //             const [day, month, year] = tender.submittionDate.split("/");
   //             const dateToCheck = new Date(
   //               parseInt(year),
@@ -119,13 +110,8 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
   //             const today = new Date();
   //             const futureDate = new Date(today);
   //             futureDate.setDate(today.getDate() + 20); //near submission change 20 days
-<<<<<<< HEAD
  
  
-=======
-
-
->>>>>>> 0cfc6fc393a629173af83517b46a16b3d39f7cb4
   //             return (
   //               (dateToCheck < today || dateToCheck <= futureDate) &&
   //               tender.status.tenderStatus?.toLowerCase() !== DsStatus.SMBT
@@ -143,11 +129,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
   //               : tender.status?.tenderStatus?.toLowerCase() === lowerCaseValue
   //           );
   //         }
-<<<<<<< HEAD
  
-=======
-
->>>>>>> 0cfc6fc393a629173af83517b46a16b3d39f7cb4
   //         else {
   //           const lowerCaseValue = value.toLowerCase();
   //           filteredRows = filteredRows.filter((tender) =>
@@ -202,19 +184,11 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
       dispatch(setVisibilityByRole(role));
     }
   }, [role]);
-<<<<<<< HEAD
  
  
  
  
  
-=======
-
-
-
-
-
->>>>>>> 0cfc6fc393a629173af83517b46a16b3d39f7cb4
   const handleFilter = async (value: string) => {
     console.log("valueee", value);
     setIsFiltered((prev) => {
@@ -225,20 +199,11 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
       const isFilterActive = !newFilterState[value];
  
       if (isFilterActive) {
-<<<<<<< HEAD
  
         setSelectedStatus("");
       } else {
         const lowerCaseValue = value.toUpperCase();
  
-=======
-
-        setSelectedStatus("");
-      } else {
-        const lowerCaseValue = value.toUpperCase();
-
-
->>>>>>> 0cfc6fc393a629173af83517b46a16b3d39f7cb4
         setSelectedStatus(lowerCaseValue);
       }
  
@@ -247,21 +212,12 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
   };
   const handleSearch = (e) => {
     if (e.key === "Enter") {
-<<<<<<< HEAD
  
       //
       const searchQueryLower = searchText;
  
       setSearchQuery(searchQueryLower);
  
-=======
-
-      //
-      const searchQueryLower = searchText;
-
-      setSearchQuery(searchQueryLower);
-
->>>>>>> 0cfc6fc393a629173af83517b46a16b3d39f7cb4
     }
   };
  
@@ -288,17 +244,10 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
   };
   console.log("searchhhhh", searchText);
   console.log("searchinobject", searchInObject);
-<<<<<<< HEAD
  
   return (
     <>
  
-=======
-
-  return (
-    <>
-
->>>>>>> 0cfc6fc393a629173af83517b46a16b3d39f7cb4
       {tenderDatalistVisible && (
         <DsTextField
           placeholder="Search Tender by Id, Name & Value"
@@ -324,26 +273,15 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
             buttonViewStyle={
               isFiltered["nearSubmission"] ? "btnContained" : "btnOutlined"
             }
-<<<<<<< HEAD
  
-=======
-
->>>>>>> 0cfc6fc393a629173af83517b46a16b3d39f7cb4
             onClick={() => handleFilter("NEAR_SUBMISSION")}
             label="Near Submission"
           />
         )}
-<<<<<<< HEAD
  
       </div>
       {feesPendingButtonVisible && (
  
-=======
-
-      </div>
-      {feesPendingButtonVisible && (
-
->>>>>>> 0cfc6fc393a629173af83517b46a16b3d39f7cb4
         <DsFilterButton
           id="dispatch"
           buttonColor="btnPrimary"
@@ -356,11 +294,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
         />
       )}
       {approvalButtonVisible && (
-<<<<<<< HEAD
  
-=======
-
->>>>>>> 0cfc6fc393a629173af83517b46a16b3d39f7cb4
         <DsFilterButton
           id="dispatch"
           buttonColor="btnPrimary"
@@ -405,11 +339,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
         />
       )}
       {filterButtonVisible && (
-<<<<<<< HEAD
  
-=======
-
->>>>>>> 0cfc6fc393a629173af83517b46a16b3d39f7cb4
         <DsButton
           id="iconfilterBtn"
           buttonColor="btnPrimary"
@@ -434,27 +364,16 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
           label="Filter"
           onClick={() => DisplayPane("AdvancedFilterComponent")}
           iconSize="iconMedium"
-<<<<<<< HEAD
  
         />
       )}
  
-=======
-
-        />
-      )}
-
->>>>>>> 0cfc6fc393a629173af83517b46a16b3d39f7cb4
     </>
   );
 };
  
 export default DsFilterActions;
-<<<<<<< HEAD
  
  
  
  
-=======
-
->>>>>>> 0cfc6fc393a629173af83517b46a16b3d39f7cb4

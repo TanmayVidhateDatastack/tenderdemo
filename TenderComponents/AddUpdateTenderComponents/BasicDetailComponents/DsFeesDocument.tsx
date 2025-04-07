@@ -11,6 +11,10 @@ import { DsSelectOption } from "@/Common/helpers/types";
 import { useTenderData } from "../TenderDataContextProvider";
 import TextArea from "@/Elements/DsComponents/DsInputs/dsTextArea";
 import DatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker";
+import { paidBys } from "@/Common/helpers/constant";
+import fetchData from "@/Common/helpers/Method/fetchData";
+import { useEffect, useState } from "react";
+
 
 export type tenderDocument = {
   name: string;
@@ -36,6 +40,9 @@ export interface DsFeesProps {
   downloadVisible: boolean;
   paymentCompletedVisible: boolean;
 }
+export interface Deposit {
+  paidBy: DsSelectOption[];
+}
  
 const getTodayDate = (date: Date) => {
   const year = date.getFullYear();
@@ -54,6 +61,35 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
   paymentCompletedVisible
 }) => {
   const { updateTenderFee } = useTenderData();
+
+  const [depositeDocuments, setDepositeDocuments] = useState<DsSelectOption[]>([]);
+
+  const handleAppliedSuppliedFetch = async () => {
+    try {
+      const res = await fetchData({ url: paidBys });
+      if (res.code === 200) {
+        const result = res.result;
+
+        // console.log("appliedbysuppliedby : ", result);
+
+        const paidbys = result.paidBy.map((item: any) => ({
+          value: item.codeValue,
+          label: item.codeDescription
+        }));
+        setDepositeDocuments(paidbys);
+      } else {
+        console.error("Error fetching data: ", res.message || "Unknown error");
+      }
+    } catch (error) {
+      console.error("Fetch error: ", error);     
+    } 
+  };
+
+  useEffect(() => {
+    handleAppliedSuppliedFetch();
+  }, []);   
+
+
   return (
     <>
       <div>
@@ -85,7 +121,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           <div className={styles.fieldColors}>
 
             <DsTextField
-            maxLength={10}
+            maxLength={10} 
              initialValue=""
               // className={styles.fieldColors}
               label={"Amount"}
@@ -104,7 +140,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             <DsSingleSelect
               // className={styles.fieldColors}
               id={id + "_paidType1"}
-              options={paidBy}
+              options={depositeDocuments}
               label="Paid by"
               placeholder={"Please select here"}
               setSelectOption={(option) => {

@@ -9,24 +9,24 @@ import fetchData from "@/Common/helpers/Method/fetchData";
 import { useEffect, useState } from "react";
 import { appliedBySuppliedBy, getAllDepots } from "@/Common/helpers/constant";
 import {datalistOptions, DsMultiLevelSelectOption, DsSelectOption} from "@/Common/helpers/types";
-
+import {searchCustomerURL} from "@/Common/helpers/constant";
 type Depot = {
   id: number;
   name: string;
   code: string;
 } 
  
-const DsApplierSupplierDetails: React.FC = ({}) => {
+const DsApplierSupplierDetails: React.FC = ({}) => { 
+  
   const [depotList, setDepotList] = useState<Depot[]>([]); 
   const { updateTenderData } = useTenderData(); 
   const [applierSupplierDetails, setApplierSupplierDetails] = 
-    useState<DsMultiLevelSelectOption[]>([]);   
+    useState<DsMultiLevelSelectOption[]>([]);    
     const [formatedDepot, setFormatedDepot] = useState<DsSelectOption[]>([])
 
-
-     const [stockiestSearchUrl, setStcokiestSearchUrl] = useState<string>("");
+     const [stockiestSearchUrl, setStcokiestSearchUrl] = useState<string>(""); 
      const setStockiestSearchOptions = async (inputValue: string): Promise<DsSelectOption[]> => {
-        try {
+        try { 
           const res = await fetchData({
             url: `${stockiestSearchUrl}?search=${inputValue}`
           });
@@ -44,10 +44,9 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
 
      const onStockistSelect = (selectedOption: DsSelectOption) => {
       updateTenderData("appliedBy", "Stockist");
-      // updateTenderData("applierId", selectedOption.value);
-      console.log("selected option ",selectedOption);
+      // updateTenderData("applierId", selectedOption.value);  
+      console.log("selected option ",selectedOption);  
     };
-
 
   const handleAppliedSuppliedFetch = async () => { 
     try { 
