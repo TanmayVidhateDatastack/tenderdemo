@@ -54,13 +54,13 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
   useEffect(() => {
     handleFetch();
   }, []);
+ 
 
   useEffect(() => {
     if (role && role !== "") {
       dispatch(setVisibilityByRole(role));
       console.log("Role=", role);
       let contextContent: React.ReactElement | null = null;
-
       
       if (role === "ACCOUNTANCE") {
         contextContent = (
@@ -101,10 +101,10 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
       } else if (role === "CHECKER") {
         contextContent = (
           <>
-            <PopupOpenButton
+           <PopupOpenButton
               popupId="popup1"
               buttonSize="btnSmall"
-              buttonText="Reviewed"
+              buttonText="Approve"
               buttonViewStyle="btnText"
               className={btnStyles.btnTextPrimary}
             />
@@ -114,7 +114,13 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
               buttonText="Revise"
               buttonViewStyle="btnText"
               className={btnStyles.btnTextPrimary}
-            />
+            /><PopupOpenButton
+            popupId="popup3"
+            buttonSize="btnSmall"
+            buttonText="Reject"
+            buttonViewStyle="btnText"
+            className={btnStyles.btnTextPrimary}
+          />
           </>
         );
       } else if (role === "MAKER") {

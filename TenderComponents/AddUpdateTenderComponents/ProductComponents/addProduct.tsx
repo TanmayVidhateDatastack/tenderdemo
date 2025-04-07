@@ -42,6 +42,8 @@ const DsAddProduct: React.FC<addProductProps> = ({
           console.error(" product.result is undefined! Full response:", product);
           return;
         }
+        product.result.dataSource="fetch";
+        product.result.quantity=qtyInputVal;
         console.log("Condition matched! Updating product list.");
         if (!setProductList) {
           console.error(" setProductList is undefined! Check prop passing.");
@@ -78,7 +80,11 @@ const DsAddProduct: React.FC<addProductProps> = ({
       <DsButton
         buttonSize="btnMedium"
         onClick={selectProduct}
-        disable={orderStatus === DsStatus.APRV ? true : false}
+        disable={
+          orderStatus === DsStatus.APRV || 
+          !selectedProductId || 
+          !qtyInputVal
+        }
       >
         Add
       </DsButton>
