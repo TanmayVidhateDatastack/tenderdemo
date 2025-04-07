@@ -464,12 +464,12 @@ const[isAddWhite,setIsAddWhite]=useState<boolean>(false);
         t?.type === "institutional" ? (
           <div style={{ width: "0.875em", height: "0.875em", position: "relative" }}>
             {/* <Image src={institutional} alt="institutional" layout="fill" objectFit="cover" /> */}
-            <IconFactory name={"instituitional"}  />
+            {/* <IconFactory name={"instituitional"}  /> */}
           </div>
         ) : (
           <div style={{ width: "0.875em", height: "0.875em", position: "relative" }}>
             {/* <Image src={corporate} alt="corporate" layout="fill" objectFit="cover" /> */}
-            <IconFactory name={"corporate"}  />
+            {/* <IconFactory name={"corporate"}  /> */}
           </div>
         ),
       customAttributes: {  iconValue: t?.type?.toString() ?? "" },

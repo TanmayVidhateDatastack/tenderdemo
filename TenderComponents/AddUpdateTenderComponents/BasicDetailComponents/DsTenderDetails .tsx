@@ -43,7 +43,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         if (result) {
           setRole(result.roleName);
         }
-      } else {
+      } else { 
         console.error("Error fetching data: ", res.message || "Unknown error");
       } 
     } catch (error) {
@@ -61,6 +61,8 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
     }
   }, [role]);
 
+  
+
   const getTodayDate = (date: Date) => {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -68,6 +70,8 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
 
     return `${year}-${month}-${day}`;
   }; 
+
+  const urlRegex = /^(https?:\/\/)?([\w-]+(\.[\w-]+)+)(:\d+)?(\/[^\s]*)?$/; 
   
   return (
     <>
@@ -111,7 +115,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
             }))}
             setSelectOption={(option) => {
               if (typeof option.value == "string") {
-                updateTenderData("customerLocationId", option.value);
+                updateTenderData("customerLocationId", option.value); 
                 // console.log("customerLocationId",option.value)
               }
             }}           
