@@ -107,7 +107,7 @@ const DsProductTable: React.FC = () => {
       {
         columnIndex: 5,
         content: product.dataSource === "csv" ?
-          <ProductTableSearch tableRowIndex={index + 1} setLocalProducts={setLocalProducts} setHasChanges={setHasChanges} />
+          <ProductTableSearch tableRowIndex={index + 2} setLocalProducts={setLocalProducts} setHasChanges={setHasChanges} />
           : product.packingSize || "-",
   
         className:styles.cellproductpakingsize

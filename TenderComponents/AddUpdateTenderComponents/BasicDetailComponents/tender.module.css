@@ -78,4 +78,13 @@
     grid-template-columns: 1fr; /* 1 column on very small screens */
   }
 }
-
+.LPR
+{
+  display :flex;
+  direction: row;
+}
+/* .lprwitharrow
+{
+  display :flex;
+  direction: row;
+} */
