@@ -14,13 +14,13 @@ type Depot = {
   id: number;
   name: string;
   code: string;
-}
-
+} 
+ 
 const DsApplierSupplierDetails: React.FC = ({}) => {
   const [depotList, setDepotList] = useState<Depot[]>([]); 
   const { updateTenderData } = useTenderData(); 
   const [applierSupplierDetails, setApplierSupplierDetails] = 
-    useState<DsMultiLevelSelectOption[]>([]);  
+    useState<DsMultiLevelSelectOption[]>([]);   
     const [formatedDepot, setFormatedDepot] = useState<DsSelectOption[]>([])
 
 
