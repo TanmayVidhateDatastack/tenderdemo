@@ -19,12 +19,12 @@ const DsBasicDetails = () => {
     tenderType: [],
     submissionMode: [],
   });
-  const [applierSupplierDetails, setApplierSupplierDetails] =
-    useState<applierSupplierDetails>({
-      appliedBy: [],
-      suppliedBy: [],
-      depot: [],
-    });
+  // const [applierSupplierDetails, setApplierSupplierDetails] =
+  //   useState<applierSupplierDetails>({
+  //     appliedBy: [],
+  //     suppliedBy: [],
+  //     depot: [],
+  //   });
   const [supplyDetails, setSupplyDetails] = useState<supplyDetails>({
     supplyPoints: [],
     reportRequirements: [],
@@ -37,9 +37,7 @@ const DsBasicDetails = () => {
     applicableSupplyConditions: DsSelectOption[];
   }
 
-  const [depositeDocument, setDepositeDocuments] = useState<DepositDocument[]>(
-    []
-  );
+  const [depositeDocument, setDepositeDocuments] = useState<DepositDocument[]>([]);
   const [applicableDocuments, setApplicableDocuments] = useState<
     DsSelectOption[]
   >([]);
@@ -108,16 +106,6 @@ const DsBasicDetails = () => {
         // Deposit Document Modes (Assuming paymentMode == modes)
         const depositDocData = [
           {
-            paidBy: [
-              {
-                value: "PAID_BY_IPCA",
-                label: "Paid By Ipca",
-              },
-              {
-                value: "PAID_BY_STOCKIEST",
-                label: "Paid By Stockiest",
-              },
-            ],
             modes: result.paymentMode.map((item: any) => ({
               value: item.codeValue.toLowerCase(), // Optional: Lowercase if needed
               label: item.codeDescription,
@@ -170,7 +158,6 @@ const DsBasicDetails = () => {
       <span className={styles.Seperator}></span>
       <div>
         <DsApplierSupplierDetails
-          applierSupplierDetails={applierSupplierDetails}
         />
       </div>
       <span className={styles.Seperator}></span>
@@ -185,13 +172,13 @@ const DsBasicDetails = () => {
         />
       </div>
       <span className={styles.Seperator}></span>
-      <div>
-        <DsSupplyDetails supplyDetails={supplyDetails} />
+      <div> 
+        <DsSupplyDetails supplyDetails={supplyDetails} />   
       </div>
       <span className={styles.Seperator}></span>
       <div>
         <DsApplicableConditions
-          applicableConditions={applicableSupplyConditions}
+          applicableConditions={applicableSupplyConditions} 
         />
       </div>
     </>

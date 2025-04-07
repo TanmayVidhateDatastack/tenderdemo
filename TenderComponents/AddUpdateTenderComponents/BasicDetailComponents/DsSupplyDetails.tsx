@@ -53,9 +53,9 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
           setSelectOptions={(options) => {
             updateSupplyCondition(
               "eligibility",
-              options.reduce<string[]>((acc, option) => {
-                if (typeof option.value === "string") {
-                  acc.push(option.value);
+              options.reduce<string[]>((acc, option) => { 
+                if (typeof option.value === "string") {   
+                  acc.push(option.value);    
                 }
                 return acc;
               }, [])

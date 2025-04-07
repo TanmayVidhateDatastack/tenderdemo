@@ -16,9 +16,14 @@ import { DsSelectOption } from "@/Common/helpers/types";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import DsFeesDocument from "./DsFeesDocument";
 import { useTenderData } from "../TenderDataContextProvider";
+import fetchData from "@/Common/helpers/Method/fetchData";
+import { paidByIPCA } from "@/Common/helpers/constant";
 
 export interface DepositDocument {
   modes: DsSelectOption[];
+  // paidBy: DsSelectOption[];
+}
+export interface Deposit {
   paidBy: DsSelectOption[];
 }
 
@@ -60,10 +65,10 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   useEffect(() => {
     if (depositeDocument) {
       const modesData = depositeDocument[0]?.modes || [];
-      const paidByData = depositeDocument[0]?.paidBy || [];
+      // const paidByData = depositeDocument[0]?.paidBy || [];
 
       setMode(modesData);
-      setPaidBy(paidByData);
+      // setPaidBy(paidByData);
     }
     if (applicableDeposits && applicableDeposits.length > 0) {
       // console.log("000 : ", applicableDeposits);
@@ -216,6 +221,37 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
       window.removeEventListener("scroll", handleScroll, true);
     };
   }, []);
+
+  const [depositeDocuments, setDepositeDocuments] = useState<Deposit>({
+    paidBy:[]
+  });
+  const handleAppliedSuppliedFetch = async () => {
+    try {
+      const res = await fetchData({ url: paidByIPCA });
+      if (res.code === 200) {
+        const result = res.result;
+
+        console.log("appliedbysuppliedby : ", result);
+
+        const paidbys = {
+          paidBy: result.paidBy.map((item: any) => ({
+            value: item.codeValue,  
+            label: item.codeDescription,
+          })),
+          
+        };
+        setDepositeDocuments(paidbys); 
+      } else {
+        console.error("Error fetching data: ", res.message || "Unknown error");
+      }
+    } catch (error) {
+      console.error("Fetch error: ", error);     
+    } 
+  };
+
+  useEffect(() => {
+    handleAppliedSuppliedFetch();
+  }, []);   
 
   return (
     <div className={styles.container}>

@@ -117,7 +117,6 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
                    label="Download Pricing"
                    buttonSize="btnMedium"
                    className={style.downloadPricing}
-                   butt
                    startIcon={
                     <div
                         style={{

@@ -54,12 +54,12 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
   useEffect(() => {
     handleFetch();
   }, []);
-  let contextContent: React.ReactElement | null = null;
 
   useEffect(() => {
     if (role && role !== "") {
       dispatch(setVisibilityByRole(role));
       console.log("Role=", role);
+      let contextContent: React.ReactElement | null = null;
 
       
       if (role === "ACCOUNTANCE") {
@@ -129,9 +129,9 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
         );
       }
 
-      // if (contextContent) {
-      //   createContext("contextMenuId4", <div>{contextContent}</div>, true);
-      // }
+      if (contextContent) {
+        createContext("contextMenuId4", <div>{contextContent}</div>, true);
+      }
     }
   }, [role]);
 
@@ -211,7 +211,7 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
         duration={4000}
         handleClose={() => setToasterVisible(false)}
       />
-      <ContextMenu id={"contextMenuId4"} showArrow={true} content={<div>{contextContent}</div>}/>
+      {/* <ContextMenu id={"contextMenuId4"} showArrow={true} content={<div>{contextContent}</div>}/> */}
     </>
   );
 };
