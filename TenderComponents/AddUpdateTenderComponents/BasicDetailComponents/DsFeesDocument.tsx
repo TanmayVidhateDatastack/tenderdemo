@@ -4,19 +4,23 @@ import Ds_checkbox from "@/Elements/DsComponents/DsCheckbox/dsCheckbox";
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import DsSingleSelect from "@/Elements/DsComponents/dsSelect/dsSingleSelect";
 import Image from "next/image";
-import downloadReciept from "@/Common/TenderIcons/smallIcons/downloadReciept.svg";
+// import downloadReciept from "@/Common/TenderIcons/smallIcons/downloadReciept.svg";
 import styles from "./deposite.module.css";
 import eleStyles from "./tender.module.css";
 import { DsSelectOption } from "@/Common/helpers/types";
 import { useTenderData } from "../TenderDataContextProvider";
 import TextArea from "@/Elements/DsComponents/DsInputs/dsTextArea";
 import DatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker";
+import { paidBys } from "@/Common/helpers/constant";
+import fetchData from "@/Common/helpers/Method/fetchData";
+import { useEffect, useState } from "react";
+import IconFactory from "@/Elements/IconComponent";
 
 export type tenderDocument = {
   name: string;
   document: File;
 };
- 
+
 export type tenderFee = {
   type: string;
   amount: number;
@@ -27,7 +31,7 @@ export type tenderFee = {
   notes: string;
   documents: tenderDocument[];
 };
- 
+
 export interface DsFeesProps {
   title: string;
   id: string;
@@ -36,7 +40,10 @@ export interface DsFeesProps {
   downloadVisible: boolean;
   paymentCompletedVisible: boolean;
 }
- 
+export interface Deposit {
+  paidBy: DsSelectOption[];
+}
+
 const getTodayDate = (date: Date) => {
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Ensure two digits
@@ -51,9 +58,39 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
   mode,
   paidBy,
   downloadVisible,
-  paymentCompletedVisible
+  paymentCompletedVisible,
 }) => {
   const { updateTenderFee } = useTenderData();
+
+  const [depositeDocuments, setDepositeDocuments] = useState<DsSelectOption[]>(
+    []
+  );
+
+  const handleAppliedSuppliedFetch = async () => {
+    try {
+      const res = await fetchData({ url: paidBys });
+      if (res.code === 200) {
+        const result = res.result;
+
+        console.log("appliedbysuppliedby : ", result);
+
+        const paidbys = result.paidBy.map((item: any) => ({
+          value: item.codeValue,
+          label: item.codeDescription,
+        }));
+        setDepositeDocuments(paidbys);
+      } else {
+        console.error("Error fetching data: ", res.message || "Unknown error");
+      }
+    } catch (error) {
+      console.error("Fetch error: ", error);
+    }
+  };
+
+  useEffect(() => {
+    handleAppliedSuppliedFetch();
+  }, []);
+
   return (
     <>
       <div>
@@ -64,7 +101,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               <DsButton
                 label="Download Reciept"
                 disable={true}
-                startIcon={<Image src={downloadReciept} alt="downarrow"/>}
+                startIcon={<IconFactory name="downloadReciept" />}
               />
             )}
           </div>
@@ -83,10 +120,9 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
         </div>
         <div className={eleStyles.inputDetails}>
           <div className={styles.fieldColors}>
-
             <DsTextField
-            maxLength={10}
-             initialValue=""
+              maxLength={10}
+              initialValue=""
               // className={styles.fieldColors}
               label={"Amount"}
               // placeholder="Please type here"
@@ -95,16 +131,16 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 updateTenderFee(
                   id.replace("DocumentView", ""),
                   "amount",
-                  (e.target as HTMLInputElement).value);
+                  (e.target as HTMLInputElement).value
+                );
               }}
             ></DsTextField>
           </div>
           <div className={styles.fieldColors}>
-
             <DsSingleSelect
               // className={styles.fieldColors}
               id={id + "_paidType1"}
-              options={paidBy}
+              options={depositeDocuments}
               label="Paid by"
               placeholder={"Please select here"}
               setSelectOption={(option) => {
@@ -119,7 +155,6 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             ></DsSingleSelect>
           </div>
           <div className={styles.fieldColors}>
-
             <DsSingleSelect
               // className={styles.fieldColors}
               id={id + "_modes1"}
@@ -138,8 +173,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             ></DsSingleSelect>
           </div>
           <div className={styles.fieldColors}>
-
-          <DatePicker
+            <DatePicker
               id={id + "dueDate"}
               minDate={new Date()}
               initialDate={""}
@@ -147,17 +181,20 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               label="Due Date"
               setDateValue={(date) => {
                 if (date instanceof Date) {
-                  updateTenderFee(id.replace("DocumentView",""),"paymentDueDate",getTodayDate(date));
+                  updateTenderFee(
+                    id.replace("DocumentView", ""),
+                    "paymentDueDate",
+                    getTodayDate(date)
+                  );
                 }
               }}
             />
           </div>
         </div>
- 
+
         <div className={styles.notes}>
           <h4>Notes</h4>
           <div className={styles.fieldColors}>
-
             <TextArea
               // className={styles.fieldColors}
               placeholder="Please type here"
@@ -184,7 +221,5 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     </>
   );
 };
- 
+
 export default DsFeesDocument;
- 
- 

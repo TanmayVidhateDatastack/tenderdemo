@@ -1,15 +1,7 @@
 import { showToaster } from "@/Elements/DsComponents/DsToaster/DsToaster";
 import { closeTimeForTender, DsStatus, dsStatus,getTenderByTenderId,saveTenderurl } from "@/Common/helpers/constant";
 import fetchData from "@/Common/helpers/Method/fetchData";
-import {
-  applicableSupplyConditions,
-  TenderData,
-  Document,
-  tenderFee,
-  tenderSupplyCondition,
-  TenderProduct,
-  Company,
-} from "@/Common/helpers/types";
+
 import { useRouter } from "next/navigation";
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 class ActionStatus {
@@ -17,6 +9,100 @@ class ActionStatus {
   notiMsg: string = "";
   showNotification: boolean = false;
 }
+export type Document = {
+  name: string;
+  document: File;
+}
+export type TenderDocument = {
+  type: string;
+  documents: Document[];
+};
+export type tenderStatus = {
+  tenderStatus?: string;
+  statusDescription?: string;
+  messageType?: string;
+  message?: string;
+};
+export type TenderProduct = {
+  genericName?: string;
+  quantity?: number;
+  packingSize?: string;
+  id?: number;
+  name?: string;
+  packSize?: string;
+  mrpRate?: string | number;
+  ptr?: string | number;
+  directCost?: string | number;
+  LQR?: number;
+  customerLprValue?: number;
+  customerLprTo?: Company;
+  proposedRate?: number;
+  PTRpercent?: number;
+  stockistDiscount?: number;
+  totalCost?: number;
+  marginValue?: number;
+  marginPercent?: number;
+  netValue?: number;
+  dataSource?: "fetch" | "csv" | "saved";
+};
+export type Company = {
+  id: number;
+  name: string;
+}
+export type tenderSupplyCondition = {
+  supplyPoint: string;
+  consigneesCount: number;
+  testReportRequirement: string;
+  eligibility: string[];
+  applicableConditions: applicableSupplyConditions[];
+};
+export type applicableSupplyConditions = {
+  type: string | number;
+  notes: string;
+  documents: Document[];
+  status?: dsStatus;
+};
+export type tenderFee = {
+  type: string | number;
+  amount: number;
+  currency: string;
+  paidBy: string;
+  paymentMode: string;
+  paymentDueDate: string;
+  notes: string;
+  status?: dsStatus;
+  documents: Document[];
+};
+export type TenderData = {
+  customerId: number;
+  customerLocationId: number;
+  tenderNumber: string;
+  tenderType: string;
+  issueDate: string;
+  lastPurchaseDate: string;
+  submissionDate: string;
+  rateContractValidity: string;
+  submissionMode: string;
+  deliveryPeriod: number;
+  extendedDeliveryPeriod: number;
+  lateDeliveryPenalty: number;
+  tenderURL: string;
+  shippingLocations: number[];
+  appliedBy: string;
+  applierId: number | null;
+  suppliedBy: string;
+  suppliedId: number | null;
+  supplierDiscount: number;
+  createdBy: number;
+  lastUpdatedBy: number;
+  comments: string;
+  fees: tenderFee[];
+  supplyConditions: tenderSupplyCondition;
+  products: TenderProduct[];
+  documentList: TenderDocument[];
+  status: tenderStatus;
+ 
+};
  
 interface TenderDataContextType {
   tenderData: TenderData;

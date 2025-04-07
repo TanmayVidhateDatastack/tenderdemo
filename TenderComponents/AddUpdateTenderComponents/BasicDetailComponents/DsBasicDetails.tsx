@@ -3,7 +3,7 @@ import { getAllMetaData, getTenderUserRoles } from "@/Common/helpers/constant";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import {
   tenderDetails,
-  applierSupplierDetails,
+  // applierSupplierDetsails,
   supplyDetails,
   DsSelectOption,
 } from "@/Common/helpers/types";
@@ -13,7 +13,23 @@ import DsApplierSupplierDetails from "./DsApplierSupplierDetails ";
 import DsTenderDetails from "./DsTenderDetails ";
 import DsSupplyDetails from "./DsSupplyDetails";
 import DsApplicableConditions from "./DsApplicableConditions";
-
+ 
+const metaDataTypes = [
+  "TENDER_TYPE",
+  "SUBMISSION_MODE",
+  "SUPPLY_POINT",
+  "TEST_REPORT_REQUIREMENT",
+  "ELIGIBILITY",
+  "FEES_TYPE",
+  "TENDER_SUPPLY_CONDITION",
+  "PAYMENT_MODE",
+ 
+];
+export interface Deposit {
+  paidBy: DsSelectOption[];
+}
+ 
+ 
 const DsBasicDetails = () => {
   const [tenderDetails, setTenderDetails] = useState<tenderDetails>({
     tenderType: [],
@@ -36,7 +52,7 @@ const DsBasicDetails = () => {
     applicableDeposits: DsSelectOption[];
     applicableSupplyConditions: DsSelectOption[];
   }
-
+ 
   const [depositeDocument, setDepositeDocuments] = useState<DepositDocument[]>([]);
   const [applicableDocuments, setApplicableDocuments] = useState<
     DsSelectOption[]
@@ -46,14 +62,18 @@ const DsBasicDetails = () => {
   >([]);
   const [metadata, setMetadata] = useState<MetadataItem[]>([]);
   const [role, setRole] = useState<string>("");
-
+ 
   const handleFetch = async () => {
-    try {
-      const res = await fetchData({ url: getAllMetaData });
+    try {  
+      const res = await fetchData({ url:getAllMetaData,method:"GET",headers:{
+        "Content-Type": "application/json",
+        "Tender-Codes": JSON.stringify(metaDataTypes),
+      }});
       if (res.code === 200) {
         const result = res.result;
+        console.log("GetAllMetaData",result);
         setMetadata(result);
-        
+       
         // Tender Details
         const tenderDetailsData = {
           tenderType: result.tenderType.map((item: any) => ({
@@ -66,11 +86,11 @@ const DsBasicDetails = () => {
           })),
         };
         setTenderDetails(tenderDetailsData);
-
+ 
         // ApplierSupplierDetails: Data navin JSON madhye nahiye,
         // Tar mag tyacha nava source ahe ka? Ki static thevaychay? Let me know.
         // Supply Details
-
+ 
         const supplyDetailsData = {
           supplyPoints: result.supplyPoint.map((item: any) => ({
             value: item.codeValue,
@@ -86,14 +106,14 @@ const DsBasicDetails = () => {
           })),
         };
         setSupplyDetails(supplyDetailsData);
-
+ 
         // Applicable Deposits
         const applicableDeposits = result.feesType.map((item: any) => ({
           value: item.codeValue,
           label: item.codeDescription,
         }));
         setApplicableDocuments(applicableDeposits);
-
+ 
         // Applicable Supply Conditions
         const applicableSupplyCond = result.tenderSupplyCondition.map(
           (item: any) => ({
@@ -102,7 +122,7 @@ const DsBasicDetails = () => {
           })
         );
         setApplicableSupplyConditions(applicableSupplyCond);
-
+ 
         // Deposit Document Modes (Assuming paymentMode == modes)
         const depositDocData = [
           {
@@ -120,7 +140,7 @@ const DsBasicDetails = () => {
       console.error("Fetch error: ", error);
     }
   };
-
+ 
   const handleRoleFetch = async () => {
     try {
       const res = await fetchData({ url: getTenderUserRoles });
@@ -135,12 +155,12 @@ const DsBasicDetails = () => {
       console.error("Fetch error: ", error);
     }
   };
-
+ 
   useEffect(() => {
     handleFetch();
     handleRoleFetch();
   }, []);
-
+ 
   useEffect(() => {
     console.log("metadata : ", metadata);
     if (metadata.length > 0 && metadata[0]?.depositeDocument) {
@@ -149,7 +169,7 @@ const DsBasicDetails = () => {
       setApplicableSupplyConditions(metadata[0].applicableSupplyConditions);
     }
   }, [metadata]);
-
+ 
   return (
     <>
       <div>
@@ -172,16 +192,18 @@ const DsBasicDetails = () => {
         />
       </div>
       <span className={styles.Seperator}></span>
-      <div> 
-        <DsSupplyDetails supplyDetails={supplyDetails} />   
+      <div>
+        <DsSupplyDetails supplyDetails={supplyDetails} />  
       </div>
       <span className={styles.Seperator}></span>
       <div>
         <DsApplicableConditions
-          applicableConditions={applicableSupplyConditions} 
+          applicableConditions={applicableSupplyConditions}
         />
       </div>
     </>
   );
 };
 export default DsBasicDetails;
+ 
+ 
