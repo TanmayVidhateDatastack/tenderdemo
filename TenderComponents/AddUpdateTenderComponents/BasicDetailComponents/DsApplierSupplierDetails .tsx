@@ -61,13 +61,13 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
           label: item.name  
         }));  
         applyBysupplyBy.push({
-          value:{ 
+          value:{  
               setStockiestSearchOptions,   
               setStcokiestSearchUrl, 
               onStockistSelect,
               id: "",     
               selectedOption: [],   
-              label: "Search Stockiest"   
+              label: "Search Stockiest"    
           }, 
           label:"Stockiest" 
         })
