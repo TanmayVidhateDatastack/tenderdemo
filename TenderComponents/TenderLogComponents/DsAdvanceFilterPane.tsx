@@ -1,5 +1,5 @@
-
-
+ 
+ 
 /* eslint-disable react/display-name */
 "use client";
 import AdvancedFilterComponent, {
@@ -8,30 +8,30 @@ import AdvancedFilterComponent, {
 import DsPane, { ClosePane } from "@/Elements/DsComponents/DsPane/DsPane";
 import React, { Dispatch, SetStateAction } from "react";
 import styles from "@/app/page.module.css";
-
-
-
+ 
+ 
+ 
 export interface advProps {
   filters: filterTypes[];
   onFiltersApplied: (apiFilter: Record<string, any>) => void;
   setIsQuickFilter: Dispatch<SetStateAction<boolean>>;
 }
 const DsAdvanceFilterPane: React.FC<advProps> = ({ filters, onFiltersApplied, setIsQuickFilter }) => {
-
+ 
   function formatDate(inputDate) {
     const [year, month, day] = inputDate.split('/').map(Number);
     return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
   }
-
+ 
   const convertFilterValuesToApiFormat = (filterValues: any[]): Record<string, any> => {
     const apiFilter: Record<string, any> = {};
-
+ 
     filterValues.forEach((filter) => {
-      switch (filter.filterFor.trim().toLowerCase()) { 
+      switch (filter.filterFor.trim().toLowerCase()) {
      case "customers": if (filter.filterValues)
           apiFilter["customers"] = filter.filterValues?.map((value) => parseInt(value.id)) ?? [];
           break;
-
+ 
     case "date": if (filter.filterValues?.from || filter.filterValues?.to)
             apiFilter["submissionDate"] = {
               ...(filter.filterValues?.from && { from: formatDate(filter.filterValues?.from) }),
@@ -70,7 +70,7 @@ const DsAdvanceFilterPane: React.FC<advProps> = ({ filters, onFiltersApplied, se
     onFiltersApplied(apiFilter);
     return apiFilter;
   };
-
+ 
   return (
     <>
       <DsPane
@@ -104,5 +104,7 @@ const DsAdvanceFilterPane: React.FC<advProps> = ({ filters, onFiltersApplied, se
       </DsPane>
     </>
   );
-};
+}; 
 export default DsAdvanceFilterPane;
+ 
+ 
