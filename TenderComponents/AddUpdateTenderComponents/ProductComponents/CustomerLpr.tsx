@@ -29,7 +29,7 @@ const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
  
   const setSelectedCompany = (option: datalistOptions | undefined) => {
     if (option?.value && onCompanyChange) {
-      onCompanyChange({ id: Number(option.id), name: option.value });
+      onCompanyChange({ id: option.id, name: option.value });
       setIsLpr(true);
     } else {
       setIsLpr(false);

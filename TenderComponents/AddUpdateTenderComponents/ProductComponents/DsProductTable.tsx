@@ -95,7 +95,7 @@ const DsProductTable: React.FC = () => {
  
       {
         columnIndex: 3,
-        content: (product.dataSource) === "fetch" ? <DsTextField initialValue={product.packingSize|| ""} onChange={(e) => handleFieldChange(index, "packingsize", e.target.value)} /> : product.packingSize || "-",
+        content: (product.dataSource) === "fetch" ? <DsTextField initialValue={product.packingSize|| ""} onChange={(e) => handleFieldChange(index, "packingSize", e.target.value)} /> : product.packingSize || "-",
             className:styles.cellpackingsize
       },
  

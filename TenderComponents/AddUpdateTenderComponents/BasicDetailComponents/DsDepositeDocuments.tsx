@@ -17,8 +17,8 @@ import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import DsFeesDocument from "./DsFeesDocument";
 import { useTenderData } from "../TenderDataContextProvider";
 import fetchData from "@/Common/helpers/Method/fetchData";
-import { paidByIPCA } from "@/Common/helpers/constant";
 
+import { paidBys } from "@/Common/helpers/constant";
 export interface DepositDocument {
   modes: DsSelectOption[];
   // paidBy: DsSelectOption[];
@@ -227,7 +227,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   });
   const handleAppliedSuppliedFetch = async () => {
     try {
-      const res = await fetchData({ url: paidByIPCA });
+      const res = await fetchData({ url:  paidBys});
       if (res.code === 200) {
         const result = res.result;
 
