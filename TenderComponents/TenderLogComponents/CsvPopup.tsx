@@ -141,7 +141,7 @@ export default function CsvPopup({ onUpload }: CsvPopupProps) {
           <div className={styles.footer_menu}>
             <DSButton 
             label="Upload Now" 
-         
+         buttonSize="btnSmall"
             onClick={(e)=>handleUploadFile(e)}
             disable={file === null}
           />

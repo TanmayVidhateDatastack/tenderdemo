@@ -26,6 +26,7 @@ import IconFactory from "@/Elements/IconComponent";
 import DsStatusIndicator from "@/Elements/DsComponents/dsStatus/dsStatusIndicator";
 import { TenderProduct } from "@/Common/helpers/types";
 
+
  
 const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
   paramOrderId,
@@ -73,7 +74,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
 // })
 const [message, setMessage] = useState<string>("");
 
-
+console.log(message);
 const handleUpload = (file: File | null) => {
  
   if (!file) {

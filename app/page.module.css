@@ -524,3 +524,6 @@ a.secondary {
   text-overflow: ellipsis; 
   padding: 0rem 1rem!important;
 }
+.tender-product-table{
+  font-size:var(--font-12);
+}

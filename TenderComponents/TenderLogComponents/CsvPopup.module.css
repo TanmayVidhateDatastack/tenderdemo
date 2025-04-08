@@ -15,7 +15,7 @@
     border-radius: 0.5rem;
     border-style: dashed;
     gap: 3.3rem;
-    height: 6rem;
+    height: 3.7em;
     margin-top: 2rem;
     background-color: #f8f9ff !important;
   }
@@ -36,7 +36,7 @@
     position: relative;
     padding-left: 2rem;
     margin-top: 1rem;
-    font-size: 1.3rem;
+    font-size: var(--font-11);
   }
   .statusIndicator::before {
     content: "";
@@ -44,8 +44,8 @@
     left: 0.6rem;
     top: 50%;
     transform: translateY(-50%);
-    width: 1rem;
-    height: 1rem;
+    width: 0.625em;
+    height:  0.625em;
     background-color: #555555;
     border-radius: 50%;
     opacity: 0.2;
@@ -56,7 +56,7 @@
   }
   
   .instruction {
-    font-size: 1.4rem;
+    font-size: var(--font-12);
     color: var(--grey-700);
     opacity: 1;
     height: 1.9rem;
@@ -96,7 +96,7 @@
   }
   .l1 {
     color: var(--grey-600);
-    font-size: 1.3rem;
+    font-size: var(--font-11);
     opacity: 1;
     font-family: sans-serif;
     /* font: normal normal normal 1.3rem/1.8rem Open Sans; */
@@ -107,13 +107,14 @@
     color: var(--primary);
     /* background-color:transparent; */
     opacity: 1;
-    font-size: 1.4rem;
+   
     font-weight: bold;
-    width: 67.2rem;
-    height: 6rem;
+    width: 8.8125em;
+    height:3.75em;
     align-items: center !important;
     justify-content: center !important;
     width: 100%;
+    font-size: var(--font-12);
   }
   .file {
     /* width:672px;

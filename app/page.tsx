@@ -155,7 +155,7 @@ const[isAddWhite,setIsAddWhite]=useState<boolean>(false);
         className: " cell-status  ",
         columnHeader: "STATUS",
         isHidden: false,
-        sort: "NONE",
+       
         columnContentType: "reactNode",
         hasSort: true,
       },
