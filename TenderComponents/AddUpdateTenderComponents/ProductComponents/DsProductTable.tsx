@@ -10,12 +10,20 @@ import ProductTableSearch from "./ProductTableSearch";
 import styles from "@/app/page.module.css";
 import IconFactory from "@/Elements/IconComponent";
 
+
  
 const DsProductTable: React.FC = () => {
+
+
   const { tenderData, updateTenderProduct } = useTenderData();
   const [tenderProductTable, setTenderProductTable] = useState<tableData | undefined>();
   const [localProducts, setLocalProducts] = useState<TenderProduct[]>(tenderData.products);
   const [hasChanges, setHasChanges] = useState(false);
+
+
+
+ 
+
  
   const calculatedProducts = useMemo(() => {
     return localProducts.map((product) => {
@@ -149,6 +157,7 @@ const DsProductTable: React.FC = () => {
   useEffect(() => {
     setTenderProductTable({ className: "tender-product-table", id: "productTable", type: "InterActive", isSortable: false, hasSearch: false, columns, rows });
   }, [columns, rows]);
+ 
  
   return (
     <>

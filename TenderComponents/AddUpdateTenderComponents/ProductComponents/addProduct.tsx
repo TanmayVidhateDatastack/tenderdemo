@@ -42,7 +42,7 @@ const DsAddProduct: React.FC<addProductProps> = ({
           console.error(" product.result is undefined! Full response:", product);
           return;
         }
-        product.result.dataSource="saved";
+        product.result.dataSource="fetch";
         product.result.quantity=qtyInputVal;
         console.log("Condition matched! Updating product list.");
         if (!setProductList) {

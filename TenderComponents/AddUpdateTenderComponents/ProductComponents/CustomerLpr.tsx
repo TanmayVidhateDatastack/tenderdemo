@@ -65,7 +65,7 @@ const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
                   startIcon={<div
                     style={{
                       position: "relative",
-                      height: "0.8375em", width: "0.5.5em",
+                      height: "0.23em", width: "0.5.5em",
                     }}
                     
                   >
