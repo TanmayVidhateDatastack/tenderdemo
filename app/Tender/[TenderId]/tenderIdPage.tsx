@@ -199,7 +199,7 @@ const prd:TenderProduct[]= rows.map((x)=>{
           }
           hasPrevious={true}
           tabs={tabs}
-          onTabChange={(x)=> {setTabId(x.tabId)}}
+          onTabChange={(x)=> {setTabId(x.tabId)}}   
         >
           <div
             className={pagestyles.container}

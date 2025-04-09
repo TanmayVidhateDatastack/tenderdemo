@@ -16,7 +16,7 @@ import styles from "./filteractions.module.css";
 
 
 interface TotalTendersProps {
-  data: Tender[]; 
+  data: Tender[];
 }
 
 const DsTotalTenders: React.FC<TotalTendersProps> = React.memo(({ data }) => {
@@ -42,9 +42,9 @@ const DsTotalTenders: React.FC<TotalTendersProps> = React.memo(({ data }) => {
         return;
       }
 
-      if (tender.type === "Institution") {
+      if (tender.type === "INSTITUTION") {
         institutional++;
-      } else if (tender.type === "Corporate") {
+      } else if (tender.type === "CORPORATE") {
         corporate++;
       }
     });
@@ -59,45 +59,45 @@ const DsTotalTenders: React.FC<TotalTendersProps> = React.memo(({ data }) => {
     setTotalTenders(data.length);
     setInstitutionalCount(institutional);
     setCorporateCount(corporate);
-    
-   
+
+
   }, [data]);
 
 
-return (
-  <div
-    onMouseOver={(e) => {
-      displayContext(e, "TotalTenders", "vertical", "center");
-     
-    }}
+  return (
+    <div
+      onMouseOver={(e) => {
+        displayContext(e, "TotalTenders", "vertical", "center");
 
-    onMouseOut={(e) => {
-      closeContext("TotalTenders")
+      }}
 
-    }}
- 
-  >
-    <DsInfoDisplay
-      detailOf="Total Tenders"
+      onMouseOut={(e) => {
+        closeContext("TotalTenders")
 
-      className={styles.totalorder}
-    >{totalTenders}</DsInfoDisplay>
-    <ContextMenu id={"TotalTenders"} showArrow={false} content={<Ds_SummaryCount
+      }}
+
+    >
+      <DsInfoDisplay
+        detailOf="Total Tenders"
+
+        className={styles.totalorder}
+      >{totalTenders}</DsInfoDisplay>
+      <ContextMenu id={"TotalTenders"} showArrow={false} content={<Ds_SummaryCount
         Title="Total Tenders"
         Value={`${data.length}`}
         statusValues={[
           {
             addimage: (
-          
+
               <div style={{ width: "0.875em", height: "0.875em", position: "relative" }}>
-              <Image
-                src={institutionalimg}
-                alt={"Institutional"}
-                 layout="fill"
-                 objectFit="cover"
-              />
+                <Image
+                  src={institutionalimg}
+                  alt={"Institutional"}
+                  layout="fill"
+                  objectFit="cover"
+                />
               </div>
-          
+
             ),
             status: "Institutional",
             value: institutionalCount.toString(),
@@ -105,26 +105,26 @@ return (
           {
             addimage: (
 
-          <div style={{ width: "0.875em", height: "0.875em", position: "relative" }}>
-            <Image
-             src={corporateimag}
-              layout="fill"
-              objectFit="cover"
-              alt="corporateimag"
+              <div style={{ width: "0.875em", height: "0.875em", position: "relative" }}>
+                <Image
+                  src={corporateimag}
+                  layout="fill"
+                  objectFit="cover"
+                  alt="corporateimag"
 
-            />
-          </div>
+                />
+              </div>
 
             ),
             status: "Corporate",
             value: corporateCount.toString().padStart(3, "0"),
           },
         ]}
-      />}/>
-  </div>
-);
+      />} />
+    </div>
+  );
 });
- DsTotalTenders.displayName = "DsTotalTenders";
+DsTotalTenders.displayName = "DsTotalTenders";
 export default DsTotalTenders;
 
 
