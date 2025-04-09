@@ -18,6 +18,7 @@ import DsFeesDocument from "./DsFeesDocument";
 import { useTenderData } from "../TenderDataContextProvider"; 
 
 import { paidBys } from "@/Common/helpers/constant";
+import IconFactory from "@/Elements/IconComponent";
 export interface DepositDocument {
   modes: DsSelectOption[];
   // paidBy: DsSelectOption[];
@@ -261,13 +262,25 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
             id="optionBtn"
             label="Applicable Deposits"
             className={styles.optionBtn + " " + styles.depositsBtn}
-            endIcon={<Image src={downarrow} alt="downarrow" />}
-            onClick={(e) => handleonclick(e)}
+            onClick={(e) => handleonclick(e)} 
+            endIcon={
+                <div
+                  style={{
+                    position: "relative",
+                    width: "0.8375em",
+                    height: "0.491875em",
+                  }}
+                  className={styles.DownArrow}
+                >
+                  <IconFactory name="dropDownArrow" />
+                </div>
+            
+            }
           />
         </div>
       </div>
       {applicableDeposits.map((deposit) => {
-        if (typeof deposit.value == "string")
+        if (typeof deposit.value == "string") 
           return (
             feeVisibility[deposit.value] && (
               <div className={styles.emdContainer2}>
@@ -286,26 +299,28 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
       <ContextMenu
         id={contextMenuId}
         content={
-          <>
+          <>  
+          <div className={styles.applicableDeposit}> 
             <div className={styles.feesCheckboxes}>
               {applicablefees.map((checkbox, index) => (
                 <Ds_checkbox
-                  key={index}
-                  id={checkbox.value.toString()}
-                  name={checkbox.label}
-                  value={checkbox.value.toString()}
-                  label={checkbox.label}
-                  defaultChecked={true}
+                key={index}
+                id={checkbox.value.toString()}
+                name={checkbox.label}
+                value={checkbox.value.toString()}
+                label={checkbox.label}
+                defaultChecked={true}
                 />
               ))}
-            </div>
-            <DsButton
-              label="Add"
-              buttonViewStyle="btnContained"
-              buttonSize="btnMedium"
-              className={styles.addBtn}
-              onClick={handleAdd}
-            />
+              </div>
+              <DsButton
+                label="Add"
+                buttonViewStyle="btnContained"
+                buttonSize="btnSmall"
+                className={styles.addBtn}
+                onClick={handleAdd}
+                />
+             </div>
           </>
         }
         showArrow={true}
@@ -314,3 +329,4 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   );
 };
 export default DsDepositeDocuments;
+ 

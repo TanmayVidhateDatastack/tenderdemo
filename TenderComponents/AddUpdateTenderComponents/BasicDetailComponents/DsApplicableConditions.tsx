@@ -17,6 +17,7 @@ import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 
 import DsSupplyConditions from "./DsSupplyConditions";
 import { useTenderData } from "../TenderDataContextProvider";
+import IconFactory from "@/Elements/IconComponent";
 
 export interface ApplicableConditionsProps {
   applicableConditions: DsSelectOption[] | [];
@@ -152,8 +153,20 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
         <DsButton
           buttonViewStyle="btnText"
           className={styles.optionBtn + " " + styles.depositsBtn}
-          label="Applicable Supply Conditions"
-          endIcon={<Image src={downarrow} alt="downarrow" />}
+          label="Applicable Supply Conditions" 
+            endIcon={ 
+            <div 
+              style={{
+                position: "relative",
+                width: "0.8375em",
+                height: "0.491875em",
+              }}
+              className={styles.DownArrow}
+            >
+              <IconFactory name="dropDownArrow" />
+            </div>
+        
+        }
           onClick={(e) => handleonclick(e)}
         />
       </div>
@@ -172,7 +185,7 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
       })}
       <ContextMenu id={contextMenuId} content={
         <>
-        <div>
+        <div className={styles.applicableDeposit}>
           {applicableCheckboxes.map((checkbox, index) => (
             <Ds_checkbox
               key={index} // Unique key
@@ -183,14 +196,14 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
               defaultChecked={true}
             />
           ))}
-        </div>
         <DsButton
           label="Add"
           buttonViewStyle="btnContained"
           className={styles.addBtn}
-          buttonSize="btnMedium"
+          buttonSize="btnSmall"
           onClick={() => handleAdd()}
         />{" "}
+        </div>
       </>
       } showArrow={true}/>
     </div>

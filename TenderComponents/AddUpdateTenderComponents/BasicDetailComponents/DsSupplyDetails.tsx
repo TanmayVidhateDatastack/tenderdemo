@@ -14,7 +14,7 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
       <div className={styles.inputDetails}>
         <DsSingleSelect
           options={supplyDetails.supplyPoints}
-          label="Supply points"
+          label="Supply point"
           placeholder={"Please select here"}
           id={"supplyPoints"}
           setSelectOption={(option) => {

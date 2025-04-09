@@ -2,6 +2,7 @@ import DsCsvUpload from "@/Elements/DsComponents/DsButtons/dsCsvUpload";
 import TextArea from "@/Elements/DsComponents/DsInputs/dsTextArea";
 import styles from "./deposite.module.css";
 import { useTenderData } from "../TenderDataContextProvider";
+import IconFactory from "@/Elements/IconComponent";
 
 export interface DsApplicableConditionsProps {
   title: string;
@@ -43,6 +44,8 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
             label="Attach File"
             buttonViewStyle="btnText"
             buttonSize="btnSmall"
+            startIcon={<IconFactory name="fileAttach" /> }
+             
           // onSetFiles={(id) => {
           //   getFilesFromLocalStorage(id).then((files) => {
           //     if (files && files.length > 0) {

@@ -14,6 +14,7 @@ import DatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker";
 import { paidBys } from "@/Common/helpers/constant";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import { useEffect, useState } from "react";
+import IconFactory from "@/Elements/IconComponent";
 
 
 export type tenderDocument = {
@@ -93,16 +94,16 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
   return (
     <>
       <div>
-        <div>
           <div className={styles.emdContainerHead} id={id}>
             <div>{title}</div>
-            {downloadVisible && (
+            {/* {downloadVisible && ( */}
               <DsButton
-                label="Download Reciept"
-                disable={true}
+               className={styles.downloadreciept}
+                label="Download Reciept"  
+                disable={true} 
                 startIcon={<Image src={downloadReciept} alt="downarrow"/>}
               />
-            )}
+            {/* )} */} 
           </div>
           <div>
             {paymentCompletedVisible && (
@@ -110,17 +111,15 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 <Ds_checkbox
                   id={"payment"}
                   name={"Payment Completed"}
-                  value={"Payment Completed"}
+                  value={"Payment Completed"} 
                   label={"Payment Completed"}
                 />
               </div>
             )}
-          </div>
         </div>
         <div className={eleStyles.inputDetails}>
           <div className={styles.fieldColors}>
-
-            <DsTextField
+            <DsTextField 
             maxLength={10} 
              initialValue=""
               // className={styles.fieldColors}
@@ -174,7 +173,6 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             ></DsSingleSelect>
           </div>
           <div className={styles.fieldColors}>
-
           <DatePicker
               id={id + "dueDate"}
               minDate={new Date()}
@@ -195,15 +193,11 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           <div className={styles.fieldColors}>
 
             <TextArea
-              // className={styles.fieldColors}
               placeholder="Please type here"
               disable={false}
-              onChange={(e) => {
-                updateTenderFee(
-                  id.replace("DocumentView", ""),
-                  "type",
-                  e.target.value
-                );
+              minRows={2}
+              onBlur={(e) => {
+                updateTenderFee(id.replace("DocumentView", ""), "type",(e.target as HTMLInputElement).value);
               }}
             />
           </div>
@@ -214,6 +208,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             label="Attach File"
             buttonViewStyle="btnText"
             buttonSize="btnSmall"
+            startIcon={<IconFactory name="fileAttach" /> }
           ></DsCsvUpload>
         </div>
       </div>
