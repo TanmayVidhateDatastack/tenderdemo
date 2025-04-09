@@ -215,6 +215,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
                 }}
               </DocumentContext.Consumer>
             </TabView>
+            
           </div>
           <DSTendrFooter
             setActionStatus={setActionStatusValues}

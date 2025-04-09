@@ -1,9 +1,23 @@
 import { showToaster } from "@/Elements/DsComponents/DsToaster/DsToaster";
-import { closeTimeForTender, DsStatus, dsStatus,getTenderByTenderId,saveTenderurl } from "@/Common/helpers/constant";
+import {
+  closeTimeForTender,
+  // DsStatus,
+  dsStatus,
+  getTenderByTenderId,
+  saveTenderurl,
+} from "@/Common/helpers/constant";
 import fetchData from "@/Common/helpers/Method/fetchData";
 
 import { useRouter } from "next/navigation";
-import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { generatePatchDocument } from "@/Common/helpers/Method/UpdatePatchObjectCreation";
 class ActionStatus {
   notiType: "success" | "bonus" | "info" | "error" | "cross" = "success";
   notiMsg: string = "";
@@ -12,70 +26,105 @@ class ActionStatus {
 export type Document = {
   name: string;
   document: File;
-}
+};
 export type TenderDocument = {
-  type: string;
-  documents: Document[];
-};
-export type tenderStatus = {
-  tenderStatus?: string;
-  statusDescription?: string;
-  messageType?: string;
-  message?: string;
-};
-export type TenderProduct = {
-  genericName?: string;
-  quantity?: number;
-  packingSize?: string;
   id?: number;
-  name?: string;
-  packSize?: string;
-  mrpRate?: string | number;
-  ptr?: string | number;
-  directCost?: string | number;
-  LQR?: number;
-  customerLprValue?: number;
-  customerLprTo?: Company;
-  proposedRate?: number;
-  PTRpercent?: number;
-  stockistDiscount?: number;
-  totalCost?: number;
-  marginValue?: number;
-  marginPercent?: number;
-  netValue?: number;
-  dataSource?: "fetch" | "csv" | "saved";
-};
-export type Company = {
-  id: number;
+
+  documentType: string;
+  category: string;
+  subCategory?: string;
   name: string;
-}
+  documentPath?: string;
+  data?: File;
+  documentStorageId?: number;
+
+  // documents: Document[];
+};
+
+export type TenderProduct = {
+  id?: number;
+  requestedGenericName?: string;
+  requestedQuantity?: number;
+  requestedPackingSize?: string;
+  productId?: number;
+  lpr?: number;
+  competitorId: number;
+  proposedRate?: number;
+  ptrPercent?: number;
+  supplierDiscount?: number;
+  product?: {
+    type?: "read-only";
+    name?: string;
+    productPackingSize?: string;
+    mrp?: string | number;
+    ptr?: string | number;
+    directCost?: string | number;
+    lqr?: number;
+    competitorName?: string;
+
+    totalCost?: number;
+    marginValue?: number;
+    marginPercent?: number;
+    netValue?: number;
+    dataSource?: "fetch" | "csv" | "saved";
+  };
+};
+// export type Company = {
+//   id: number;
+//   name: string;
+// };
 export type tenderSupplyCondition = {
   supplyPoint: string;
   consigneesCount: number;
-  testReportRequirement: string;
+  testReportRequired: string;
   eligibility: string[];
   applicableConditions: applicableSupplyConditions[];
 };
 export type applicableSupplyConditions = {
   type: string | number;
   notes: string;
-  documents: Document[];
+  // documents: Document[];
   status?: dsStatus;
 };
 export type tenderFee = {
-  type: string | number;
+  id?: number;
+  feesType: string | number;
   amount: number;
   currency: string;
   paidBy: string;
   paymentMode: string;
   paymentDueDate: string;
-  notes: string;
+  instructionNotes: string;
   status?: dsStatus;
-  documents: Document[];
+  // documents: Document[];
+};
+export type ContractItems = {
+  id?: number;
+  productId?: number;
+  product: {
+    type: "read-only";
+    requestedGenericName: string;
+    requestedPackingSize: string;
+    productName: string;
+    awardedToName: string;
+  };
+  awardedQuantity?: number;
+  awardedTo?: string;
+  awardedRate?: number;
+};
+export type TenderContract = {
+  contractStatus?: string;
+  contractJustification?: string;
+  contractStatusNotes?: string;
+  tenderRevisions?: {
+    id: number;
+    tenderItems?: ContractItems[];
+  };
 };
 export type TenderData = {
+  id?: number;
   customerId: number;
-  customerLocationId: number;
+  customerAddressId: number;
   tenderNumber: string;
   tenderType: string;
   issueDate: string;
@@ -88,71 +137,100 @@ export type TenderData = {
   lateDeliveryPenalty: number;
   tenderURL: string;
   shippingLocations: number[];
-  appliedBy: string;
-  applierId: number | null;
-  suppliedBy: string;
-  suppliedId: number | null;
+  // appliedBy: string;
+  applierId: number;
+  applierType: string;
+  // suppliedBy: string;
+  suppliedId: number;
+  supplierType: string;
+  stockistName: string;
   supplierDiscount: number;
-  createdBy: number;
-  lastUpdatedBy: number;
-  comments: string;
-  fees: tenderFee[];
+  // createdBy: number;
+  lastUpdatedById: number;
+  status: string;
+  tenderDetails: {
+    type: "read-only";
+    customerName: string;
+    customerAddressName: string;
+    applierName: string;
+    supplierName: string;
+    lastUpdatedByName: string;
+    lastUpdatedByEmpId: string;
+    statusDescription: string;
+  };
+  // comments: string;
+  tenderFees: tenderFee[];
   supplyConditions: tenderSupplyCondition;
-  products: TenderProduct[];
-  documentList: TenderDocument[];
-  status: tenderStatus;
- 
+  tenderRevisions: {
+    id: number;
+    version: number;
+    tenderItems: TenderProduct[];
+  }[];
+  tenderContract?: TenderContract;
+  tenderDocuments?: TenderDocument[];
 };
- 
+
 interface TenderDataContextType {
   tenderData: TenderData;
   actionStatus: ActionStatus;
   setActionStatusValues: (actionStatus: ActionStatus) => void;
   updateTenderData: (
-    key: keyof TenderData,
-    value: string | number |number[]| tenderFee[] | tenderSupplyCondition
+    key:
+      | keyof TenderData
+      | `tenderDetails.${keyof TenderData["tenderDetails"]}`,
+    value: string | number | number[] | tenderFee[] | tenderSupplyCondition
   ) => void;
   updateTenderFee: (
     feeType: string,
     key: keyof tenderFee,
     value: Document[] | string | number
-  ) => void; 
+  ) => void;
   addTenderFee: (type: string) => void;
   removeTenderFeeByType: (feeType: string) => void;
-  updateApplicableCondition: ( 
+  updateApplicableCondition: (
     conditionType: string,
-    key: keyof applicableSupplyConditions, 
-    value: string | number | Document[] 
+    key: keyof applicableSupplyConditions,
+    value: string | number | Document[]
   ) => void;
-  updateSupplyCondition: ( 
+  updateSupplyCondition: (
     key: keyof tenderSupplyCondition,
     value: string | number | string[] | Document[]
   ) => void;
   addNewTenderDocument: (docType: string, document: Document[]) => void;
-  addDocumentToExistingType: (docType: string, document: Document) => void;
-  addTenderProduct: (product: TenderProduct) => void;
+  // addDocumentToExistingType: (docType: string, document: Document) => void;
+  addTenderProduct: (version: number, product: TenderProduct) => void;
   updateTenderProduct: (
+    version: number,
     id: number,
-    key: keyof TenderProduct,
-    value: string | number|Company
+    key: keyof TenderProduct | `product.${keyof TenderProduct["product"]}`,
+    value: string | number
   ) => void;
   addApplicableCondition: (type: string) => void;
   removeApplicableCondition: (conditionType: string) => void;
+  updateContractDetails: (
+    key: keyof TenderContract,
+    value: string | { id: number; tenderItems: ContractItems[] }
+  ) => void;
+  updateContractItems: (
+    key: keyof ContractItems,
+    id: number,
+    value: string | number
+  ) => void;
   saveTender: (status: dsStatus) => Promise<void>;
-  // fetchAndSetOriginalTender: (tenderId: number) => Promise<void>;
+  updateTender: () => Promise<void>;
+  fetchAndSetOriginalTender: (tenderId: number) => Promise<void>;
 }
- 
+
 const TenderDataContext = createContext<TenderDataContextType | undefined>(
   undefined
 );
- 
+
 export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
-  children
+  children,
 }) => {
- 
   const [tenderData, setTenderData] = useState<TenderData>({
     customerId: 0,
-    customerLocationId: 0,
+    customerAddressId: 0,
     tenderNumber: "",
     tenderType: "",
     issueDate: "",
@@ -164,43 +242,81 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     extendedDeliveryPeriod: 0,
     lateDeliveryPenalty: 0,
     tenderURL: "",
-    shippingLocations: [1,2],
-    appliedBy: "IPCA",
-    applierId: null,
-    suppliedBy: "STOCKIST",
-    suppliedId: null,
+    shippingLocations: [1, 2],
+    applierType: "",
+    applierId: 0,
+    supplierType: "",
+    suppliedId: 0,
+    stockistName: "",
     supplierDiscount: 0,
-    createdBy: 0,
-    lastUpdatedBy: 0,
-    comments: "",
-    fees: [],
+    lastUpdatedById: 0,
+    status: "DRAFT",
+    tenderDetails: {
+      type: "read-only",
+      customerName: "",
+      customerAddressName: "",
+      applierName: "",
+      supplierName: "",
+      lastUpdatedByName: "",
+      lastUpdatedByEmpId: "",
+      statusDescription: "Draft",
+    },
+    tenderFees: [],
     supplyConditions: {
       supplyPoint: "",
       consigneesCount: 0,
-      testReportRequirement: "",
+      testReportRequired: "",
       eligibility: [],
-      applicableConditions: []
+      applicableConditions: [],
     },
-    products: [],
-    documentList: [],
-    status:{tenderStatus:DsStatus.DRFT}
+    tenderRevisions: [],
+    tenderDocuments: [],
+    tenderContract: {
+      contractStatus: "",
+      contractJustification: "",
+      contractStatusNotes: "",
+      tenderRevisions: {
+        id: 0,
+        tenderItems: [],
+      },
+    },
   });
- 
+  const [tenderDataCopy, setTenderDataCopy] = useState<TenderData>({
+    ...tenderData,
+  });
   const [actionStatus, setActionStatus] = useState<ActionStatus>({
     notiMsg: "",
     notiType: "success",
     showNotification: false,
   });
- 
+
   // ✅ Update top-level tender fields
+
   const updateTenderData = (
-    key: keyof TenderData,
-    value: string | number|number[] | tenderFee[] | tenderSupplyCondition
+    key:
+      | keyof TenderData
+      | `tenderDetails.${keyof TenderData["tenderDetails"]}`,
+    value: string | number | number[] | tenderFee[] | tenderSupplyCondition
   ) => {
-    setTenderData((prev) => ({
-      ...prev,
-      [key]: value
-    }));
+    setTenderData((prev) => {
+      if (key.startsWith("tenderDetails.")) {
+        const nestedKey = key.split(
+          "."
+        )[1] as keyof TenderData["tenderDetails"];
+        return {
+          ...prev,
+          tenderDetails: {
+            ...prev.tenderDetails,
+            [nestedKey]: value,
+          },
+        };
+      } else {
+        return {
+          ...prev,
+          [key]: value,
+        };
+      }
+    });
   };
   // ✅ Update a specific tender fee field (Only if fee type exists)
   const updateTenderFee = (
@@ -210,48 +326,48 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   ) => {
     setTenderData((prev) => ({
       ...prev,
-      fees: prev.fees.map((fee) =>
-        fee.type === feeType ? { ...fee, [key]: value } : fee
-      )
+      tenderFees: prev.tenderFees.map((fee) =>
+        fee.feesType === feeType ? { ...fee, [key]: value } : fee
+      ),
     }));
   };
   // ✅ Add a new tender fee
   const addTenderFee = (type: string) => {
     setTenderData((prev) => ({
       ...prev,
-      fees: [
-        ...prev.fees,
+      tenderFees: [
+        ...prev.tenderFees,
         {
-          type,
+          feesType: type,
           amount: 0,
           currency: "",
           paidBy: "",
           paymentMode: "",
           paymentDueDate: "",
-          notes: "",
-          documents: []
-        }
-      ]
+          instructionNotes: "",
+          // documents: []
+        },
+      ],
     }));
   };
   // ✅ Remove tender fee by type
   const removeTenderFeeByType = (feeType: string) => {
     setTenderData((prev) => ({
       ...prev,
-      fees: prev.fees.filter((fee) => fee.type !== feeType)
+      tenderFees: prev.tenderFees.filter((fee) => fee.feesType !== feeType),
     }));
   };
   // ✅ Update supply condition fields
   const updateSupplyCondition = (
     key: keyof tenderSupplyCondition,
-    value: string | number | string[]| Document[]
+    value: string | number | string[] | Document[]
   ) => {
     setTenderData((prev) => ({
       ...prev,
       supplyConditions: {
         ...prev.supplyConditions,
-        [key]: value
-      }
+        [key]: value,
+      },
     }));
   };
   // ✅ Update applicable condition fields
@@ -269,111 +385,178 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             condition.type === conditionType
               ? { ...condition, [key]: value }
               : condition
-        )
-      }
+        ),
+      },
     }));
   };
   // ✅ Add a document to the tender-level document list
   const addNewTenderDocument = (docType: string, documentList: Document[]) => {
     setTenderData((prev) => ({
       ...prev,
-      documentList: [
-        ...prev.documentList,
+      tenderDocuments: [
+        ...(prev.tenderDocuments || []),
         {
-          type: docType,
-          documents: documentList
-        }
-      ]
+          documentType: docType,
+          category: docType,
+          name: documentList[0].name,
+          documentPath: "",
+          documentStorageId: 0,
+          data: documentList[0].document,
+        },
+      ],
     }));
   };
-  const addDocumentToExistingType = (docType: string, document: Document) => {
-    setTenderData((prev) => ({
-      ...prev,
-      documentList: prev.documentList.map((doc) =>
-        doc.type === docType
-          ? { ...doc, documents: [...doc.documents, document] }
-          : doc
-      )
-    }));
-  };
+  // const addDocumentToExistingType = (docType: string, document: Document) => {
+  //   setTenderData((prev) => ({
+  //     ...prev,
+  //     tenderDocuments: prev.tenderDocuments.map((doc) =>
+  //       doc.type === docType
+  //         ? { ...doc, data: [...doc.data, document.document] }
+  //         : doc
+  //     ),
+  //   }));
+  // };
   // ✅ Add a new tender product
-  const addTenderProduct = (product: TenderProduct) => {
+  const addTenderProduct = (version: number, product: TenderProduct) => {
     setTenderData((prev) => ({
       ...prev,
-      products: [...prev.products, product]
+      tenderRevisions: prev.tenderRevisions.map((revision) =>
+        revision.version === version
+          ? {
+              ...revision,
+              tenderItems: [...(revision.tenderItems || []), product],
+            }
+          : revision
+      ),
     }));
   };
   // ✅ Update a tender product field
   const updateTenderProduct = (
+    version: number,
     id: number,
-    key: keyof TenderProduct,
-    value: string | number|Company
+    key: keyof TenderProduct | `product.${keyof TenderProduct["product"]}`,
+    value: string | number
   ) => {
     setTenderData((prev) => ({
       ...prev,
-      products: prev.products.map((product) =>
-        product.id === id ? { ...product, [key]: value } : product
-      )
+      tenderRevisions: prev.tenderRevisions.map((revision) =>
+        revision.version === version
+          ? {
+              ...revision,
+              tenderItems: revision.tenderItems.map((item) =>
+                item.id === id || item.productId === id
+                  ? key.startsWith("product.")
+                    ? {
+                        ...item,
+                        product: {
+                          ...item.product,
+                          [key.split(".")[1]]: value, // Update the nested product field
+                        },
+                      }
+                    : { ...item, [key]: value } // Update the top-level field
+                  : item
+              ),
+            }
+          : revision
+      ),
+    }));
+  };
+  const updateContractDetails = (
+    key: keyof TenderContract,
+    value: string | { id: number; tenderItems: ContractItems[] }
+  ) => {
+    setTenderData((prev) => ({
+      ...prev,
+      tenderContract: {
+        ...prev.tenderContract,
+        [key]: value,
+      },
+    }));
+  };
+  const updateContractItems = (
+    key: keyof ContractItems,
+    id: number,
+    value: string | number
+  ) => {
+    setTenderData((prev) => ({
+      ...prev,
+      tenderContract: {
+        ...prev.tenderContract,
+        tenderRevisions: {
+          id: prev.tenderContract?.tenderRevisions?.id || 0,
+          tenderItems: prev.tenderContract?.tenderRevisions?.tenderItems?.map(
+            (item) =>
+              item.id === id
+                ? {
+                    ...item,
+                    [key]: value,
+                  }
+                : item
+          ),
+        },
+      },
     }));
   };
   // ✅ Add a new applicable condition
   const addApplicableCondition = (type: string) => {
     setTenderData((prev) => ({
       ...prev,
- 
+
       supplyConditions: {
         ...prev.supplyConditions,
         applicableConditions: [
           {
             type,
             notes: "",
-            documents: []
-          }
-        ]
-      }
+            documents: [],
+          },
+        ],
+      },
     }));
   };
- 
+
   // ✅ Remove an applicable condition by type
   const removeApplicableCondition = (conditionType: string) => {
     setTenderData((prev) => ({
       ...prev,
- 
+
       supplyConditions: {
         ...prev.supplyConditions,
         applicableConditions: prev.supplyConditions.applicableConditions.filter(
           (condition) => condition.type !== conditionType
-        )
-      }
+        ),
+      },
     }));
   };
- 
-  const setActionStatusValues = useCallback((actionStatus: ActionStatus) => {
-    setActionStatus(actionStatus);
-  }, [tenderData]
+
+  const setActionStatusValues = useCallback(
+    (actionStatus: ActionStatus) => {
+      setActionStatus(actionStatus);
+    },
+    [tenderData]
   );
- 
+
   const tenderDataCopyRef = useRef(tenderData);
- 
+
   const router = useRouter();
   const goBack = () => {
     router.back();
   };
- 
+
   // Update the ref whenever orderDataCopy changes
   useEffect(() => {
-    tenderDataCopyRef .current = tenderData;
+    tenderDataCopyRef.current = tenderData;
   }, [tenderData]);
- 
+
   const stripReadOnlyProperties = (obj: any): any => {
     if (Array.isArray(obj)) {
       return obj.map((item) => stripReadOnlyProperties(item));
     }
- 
+
     if (typeof obj !== "object" || obj === null) {
       return obj;
     }
- 
+
     const newObj: any = {};
     for (const key in obj) {
       if (obj[key] && typeof obj[key] === "object") {
@@ -390,22 +573,22 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   const saveTender = useCallback(
     async (status: dsStatus) => {
       if (!tenderData) return;
-      console.log("sAVEEEE", tenderData);
- 
+      // console.log("sAVEEEE", tenderData);
+
       const dataToSend = stripReadOnlyProperties({
         ...tenderData,
         status: status.toUpperCase(),
-        createdBy: 3,
+        lastUpdatedBy: 3,
       });
- 
-      console.log("sAVEEEE", dataToSend);
+
+      // console.log("sAVEEEE", dataToSend);
       try {
         await fetchData({
           url: saveTenderurl,
           method: "POST",
           dataObject: dataToSend,
         }).then((res) => {
-          console.log("res = ",res);
+          console.log("res = ", res);
           if (res.code === 200) {
             setActionStatus({
               notiMsg: "Tender Created Successfully",
@@ -415,8 +598,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             showToaster("create-order-toaster");
             setTimeout(() => {
               goBack();
- 
-            }, closeTimeForTender)
+            }, closeTimeForTender);
           } else {
             setActionStatus({
               notiMsg: "Tender could not be saved",
@@ -426,72 +608,88 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             showToaster("create-order-toaster");
           }
         });
- 
+
         // console.log("result  = ", result);
         //console.log("Order saved successfully");
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         // console.error("Error saving order:", error);
       }
     },
     [tenderData, fetchData]
   );
-  // const fetchAndSetOriginalTender= useCallback(
-  //   async (tenderId: number) => {
-  //     try {
+  const updateTender = useCallback(async () => {
+    try {
+      const dataToSendTenderCopy = stripReadOnlyProperties({
+        ...tenderDataCopy,
+      });
+      const dataToSendOriginalTender = stripReadOnlyProperties({
+        ...tenderData,
+      });
+      const patchDocument = generatePatchDocument(
+        dataToSendTenderCopy,
+        dataToSendOriginalTender
+      );
+      console.log("patchDocument= ", patchDocument);
+      await fetchData({
+        url: saveTenderurl,
+        method: "PATCH",
+        dataObject: patchDocument,
+      }).then((res) => {
+        console.log("res = ", res);
+        if (res.code === 200) {
+          setActionStatus({
+            notiMsg: "Tender Updated Successfully",
+            notiType: "success",
+            showNotification: true,
+          });
+          showToaster("create-order-toaster");
+          setTimeout(() => {
+            goBack();
+          }, closeTimeForTender);
+        } else {
+          setActionStatus({
+            notiMsg: "Tender could not be updated",
+            notiType: "error",
+            showNotification: true,
+          });
+          showToaster("create-order-toaster");
+        }
+      });
+    } catch (error) {
+      console.error("Error saving order:", error);
+    }
+  }, [tenderData, tenderDataCopy, fetchData, generatePatchDocument]);
 
-  //       const response = await fetchData({ url: getTenderByTenderId }); 
-  //       const tenderData = response.result as TenderData 
-  //       console.log("tenderData= ", tenderData);
+  const fetchAndSetOriginalTender = useCallback(
+    async (tenderId: number) => {
+      try {
+        const response = await fetchData({
+          url: getTenderByTenderId + tenderId,
+        });
+        const tenderData = response.result;
+        console.log("tenderData= ", tenderData);
+        const newTenderData: TenderData = {
+          ...tenderData,
+          tenderFees: tenderData.tenderFees.map((fee) => ({
+            ...fee,
+            status: "ACTV",
+          })),
+        };
+        setTenderData(newTenderData);
+        setTenderDataCopy({
+          ...newTenderData,
+          status: "",
+          lastUpdatedById: -1,
+        });
+        return response;
+      } catch (error) {
+        console.error("Error fetching order:", error);
+      }
+    },
+    [fetchData]
+  );
 
-  //       setTenderData((prev) => {
-  //         return {
-  //           ...prev,
-  //           ...tenderData ,
-  //           transporter:
-  //           tenderData?.transporter !== null &&
-  //           tenderData ?.transporter !== undefined
-  //               ? tenderData ?.transporter
-  //               : {
-  //                 type: "read-only",
-  //                 id: 0,
-  //                 name: "",
-  //                 code: "",
-  //               },
-  //           purchaseOrderDate: tenderData ?.purchaseOrderDate,
-  //           status:tenderData ?.status,
-  //           lastUpdatedBy: -1,
-  //           ewayBillStatus: "NAVL",
-  //         };
-  //       });
-
-  //       setOrderDataCopy((prev) => {
-  //         return {
-  //           ...prev,
-  //           ...tenderData ,
-  //           purchaseOrderDate: tenderData ?.purchaseOrderDate,
-  //           transporter:
-  //           tenderData ?.transporter !== null &&
-  //           tenderData ?.transporter !== undefined
-  //               ? tenderData ?.transporter
-  //               : {
-  //                 type: "read-only",
-  //                 id: 0,
-  //                 name: "",
-  //                 code: "",
-  //               },
-  //           ewayBillStatus: "NAVL",
-  //         };
-  //       });
-  //       return response;
-  //     } catch (error) {
-  //       console.error("Error fetching order:", error); 
-  //     }
-  //   },
-  //   [fetchData]
-  // );
- 
- 
   return (
     <TenderDataContext.Provider
       value={{
@@ -504,20 +702,24 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         updateSupplyCondition,
         updateApplicableCondition,
         addNewTenderDocument,
-        addDocumentToExistingType,
+        // addDocumentToExistingType,
         addTenderProduct,
         updateTenderProduct,
         addApplicableCondition,
         removeApplicableCondition,
-        saveTender,setActionStatusValues,
-        // fetchAndSetOriginalTender
+        setActionStatusValues,
+        fetchAndSetOriginalTender,
+        updateContractDetails,
+        updateContractItems,
+        saveTender,
+        updateTender,
       }}
     >
       {children}
     </TenderDataContext.Provider>
   );
 };
- 
+
 // ✅ Custom hook to access context
 export const useTenderData = () => {
   const context = useContext(TenderDataContext);
@@ -526,7 +728,3 @@ export const useTenderData = () => {
   }
   return context;
 };
- 
- 
- 
- 

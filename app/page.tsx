@@ -7,7 +7,7 @@ import DsFilterActions from "@/TenderComponents/TenderLogComponents/DsFilterActi
 
 
 import { useEffect, useState } from "react";
-import { CodeItem, datalistOptions, DsTableRow, tableData, Tender } from "@/Common/helpers/types";
+import { CodeItem, datalistOptions, DsTableRow, location, tableData, Tender } from "@/Common/helpers/types";
 import DsTotalTenders from "@/TenderComponents/TenderLogComponents/DsTotalTender";
 import DsTotalValues from "@/TenderComponents/TenderLogComponents/DsTotalValues";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
@@ -222,7 +222,7 @@ export default function Home() {
         className: " cell-status  ",
         columnHeader: "STATUS",
         isHidden: false,
-        sort: "NONE",
+        sort: "CLEAR",
         columnContentType: "reactNode",
         hasSort: true,
       },
@@ -356,7 +356,7 @@ export default function Home() {
 
   };
 
-  const formatTenders = (tenders: Tender[]): Tender[] => {
+  const formatTenders = (tenders): Tender[] => {
     return tenders.map((item) => ({
       ...tenders,
 
@@ -366,7 +366,7 @@ export default function Home() {
       tenderId: item.tenderId.toString(),
       type: item.customerType,
       tenderType: item.tenderType,
-      depot: item.shippingLocations.map((loc: Tender) => loc.name).join(", "),
+      depot: item.shippingLocations.map((loc:{id:number,name:string}) => loc.name).join(", "),
       appliedBy: item.applierName,
       suppliedBy: item.supplierName,
       preparedBy: item.preparedBy,
@@ -444,12 +444,13 @@ export default function Home() {
       },
     })
       .then((res) => {
-        console.log("Meta Fetched Response:", res); // Log the fetched response
+        // console.log("Meta Fetched Response:", res); // Log the fetched response
 
         if (res?.code === 200 && res?.result) {
           // if(res?.c)
+          
           setFetchedMetadata(res.result); // Store only tenderType
-          console.log("Stored Tender Type:", res.result);
+          // console.log("Stored Tender Type:", res.result);
         } else {
           console.error("Error: Invalid data format or empty tenderType");
         }
@@ -470,7 +471,7 @@ export default function Home() {
         if (res?.code === 200 && res?.result) {
           // if(res?.c)
           setDepotList(res.result);
-          console.log("stored depot result:", res.result);
+          // console.log("stored depot result:", res.result);
         } else {
           console.error("Error: Invalid data format or empty depot");
         }
@@ -539,7 +540,7 @@ export default function Home() {
   // }, []);
 
   useEffect(() => {
-    handleFetch();
+    // handleFetch();
     handleFetchMetaData();
     handleFetchDepot();
 
@@ -608,15 +609,15 @@ export default function Home() {
         {
           columnIndex: 1,
           className: " cell cell-submissiondate text-dark-0 ",
-          content: <DsName id={t.tenderId + "submittionDate"} name={formatDate(t.submittionDate)} />,
-          filterValue: t.submittionDate,
+          content: <DsName id={t.tenderId + "submittionDate"} name={formatDate(t.submissionDate)} />,
+          filterValue: t.submissionDate,
           contentType: "string",
         },
         {
           columnIndex: 2,
           className: " cell cell-days-to-submit ",
-          content: <DsName id={t.tenderId + "daystosubmit"} name={t.submittionDate ? calculateDueStatus(t.submittionDate) : "-"} />,
-          filterValue: t.submittionDate,
+          content: <DsName id={t.tenderId + "daystosubmit"} name={t.submissionDate ? calculateDueStatus(t.submissionDate) : "-"} />,
+          filterValue: t.submissionDate,
           contentType: "string",
         },
         {
@@ -632,7 +633,7 @@ export default function Home() {
           columnIndex: 4,
           className: "cell cell-tendertype text-dark-1",
           // content: <DsName id={t.tenderId + "tenderType"} name={t.tenderType || "-"} />,
-          content: <DsName id={t.tenderId + "tenderType"} name={getTenderTypeDescription(t.tenderType)} />,
+          content: <DsName id={t.tenderId + "tenderType"} name={getTenderTypeDescription(t.tenderType)||""} />,
           filterValue: t.tenderType,
           contentType: "string",
         },
@@ -712,7 +713,7 @@ export default function Home() {
 
     }));
 
-    console.log("New Rows:", newRows);
+    // console.log("New Rows:", newRows);
 
     setTempTableData((prevData) => ({
       ...prevData,

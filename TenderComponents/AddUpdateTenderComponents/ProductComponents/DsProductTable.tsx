@@ -92,7 +92,7 @@ const DsProductTable: React.FC = () => {
  
       {
         columnIndex: 3,
-        content: (product.dataSource) === "fetch" ? <DsTextField initialValue={product.packingSize|| ""} onChange={(e) => handleFieldChange(index, "genericName", e.target.value)} /> : product.packingSize || "-",
+        content: (product.dataSource) === "fetch" ? <DsTextField initialValue={product.packingSize|| ""} onChange={(e) => handleFieldChange(index, "packingSize", e.target.value)} /> : product.packingSize || "-",
             className:styles.cellpackingsize
       },
  
@@ -107,8 +107,9 @@ const DsProductTable: React.FC = () => {
       {
         columnIndex: 5,
         content: product.dataSource === "csv" ?
-          <ProductTableSearch tableRowIndex={index + 1} setLocalProducts={setLocalProducts} setHasChanges={setHasChanges} />
-          : product.packingSize || "-",
+          // <ProductTableSearch tableRowIndex={index + 1} setLocalProducts={setLocalProducts} setHasChanges={setHasChanges} />
+          <DsTextField initialValue={product.packSize|| ""} onChange={(e) => handleFieldChange(index, "packSize", e.target.value)} />
+          : product.packSize || "-",
   
         className:styles.cellproductpakingsize
       },
@@ -147,7 +148,7 @@ const DsProductTable: React.FC = () => {
     setLocalProducts(tenderData.products);
  },[tenderData.products])
   useEffect(() => {
-    setTenderProductTable({ className: "tender-product-table", id: "productTable", type: "InterActive", isSortable: false, hasSearch: false, columns, rows });
+    setTenderProductTable({ className: styles["tender-product-table"], id: "productTable", type: "InterActive", isSortable: false, hasSearch: false, columns, rows });
   }, [columns, rows]);
  
   return (

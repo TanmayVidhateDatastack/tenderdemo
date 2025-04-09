@@ -85,7 +85,7 @@ const ProductSearch: React.FC<ProductSearchProps> = ({
     <DsSearchComponent
       id="productSearch"
       dataListId="productSearchDatalist"
-      label={"Product"}
+      // label={"Product"}
       placeholder={"Add product & qty & hit enter"}
       options={products ? products : undefined}
       setOptions={(value) => setOptions(value)}
