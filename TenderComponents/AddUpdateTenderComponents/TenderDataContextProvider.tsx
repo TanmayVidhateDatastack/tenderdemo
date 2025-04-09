@@ -1,5 +1,5 @@
 import { showToaster } from "@/Elements/DsComponents/DsToaster/DsToaster";
-import { closeTimeForTender, DsStatus, dsStatus,getTenderByTenderId,saveTenderurl } from "@/Common/helpers/constant";
+import { closeTimeForTender, DsStatus, dsStatus,saveTenderurl } from "@/Common/helpers/constant";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import {
   applicableSupplyConditions,
@@ -78,7 +78,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     extendedDeliveryPeriod: 0,
     lateDeliveryPenalty: 0,
     tenderURL: "",
-    shippingLocations: [1,2],
+    shippingLocations:[],
     appliedBy: "IPCA",
     applierId: null,
     suppliedBy: "STOCKIST",
@@ -158,10 +158,10 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   // ✅ Update supply condition fields
   const updateSupplyCondition = (
     key: keyof tenderSupplyCondition,
-    value: string | number | string[]| Document[]
+    value: string | number | string[]| Document[] 
   ) => {
     setTenderData((prev) => ({
-      ...prev,
+      ...prev, 
       supplyConditions: {
         ...prev.supplyConditions,
         [key]: value
