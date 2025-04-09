@@ -123,21 +123,20 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
         <div className={deptStyles.fields}>
           <DsSelectMultiLevel  
             isSearchable
-            options={applierSupplierDetails }
+            options={applierSupplierDetails}
             label="Applied By"
             placeholder={"Please search or select here"}
             id={"appliedBy"}
             onSelect={handleAppliedBySelect}
             setSelectOption={(option) => {
-              if (typeof option.value == "string") { 
-                updateTenderData( 
+              if (typeof option.value == "string") {
+                updateTenderData(
                   "appliedBy",
-                  option.label == "IPCA" ? option.label : "Stockist" 
+                  option.label == "IPCA" ? option.label : "Stockist"
                 );
                 updateTenderData("applierId", option.value);
               }
-            }} 
-          
+            } } isOpen={false}          
             // isOpen={true}
           ></DsSelectMultiLevel>
         </div>

@@ -24,6 +24,9 @@ import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import CsvPopup from "@/TenderComponents/TenderLogComponents/CsvPopup";
 import IconFactory from "@/Elements/IconComponent";
 import DsStatusIndicator from "@/Elements/DsComponents/dsStatus/dsStatusIndicator";
+import { TenderProduct } from "@/Common/helpers/types";
+
+
  
 const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
   paramOrderId,
@@ -45,6 +48,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
     { tabId: "1", tabName: "Products ₹ (V1)" },
     { tabId: "2", tabName: "Documents" },
   ];
+
  
   const [displayFlag, setDisplayFlag] = useState<"New" | "Existing">(
     "Existing"
@@ -68,9 +72,43 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
 //   console.log("tab Id", selectedTabId);
  
 // })
+const [message, setMessage] = useState<string>("");
+
+console.log(message);
+const handleUpload = (file: File | null) => {
+ 
+  if (!file) {
+    console.log("Please select a file first.");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    const fileContent = event.target?.result;
+    console.log("File content :", fileContent);
+    setMessage("The File has been  attached successfully!");
+    const text = event.target?.result as string;
+    const rows = text.trim().split("\n").map((row) => row.split(","));
+const prd:TenderProduct[]= rows.map((x)=>{
+  return{
+    genericName:x[0],
+    quantity:Number(x[1]),
+    packingSize:x[2],
+    dataSource:"csv"
+  }
+})
+   prd.forEach((x)=>{addTenderProduct(x)});
+  };
+  reader.onerror = () => {
+    console.error("Error reading the file");
+  };
+  reader.readAsText(file);
+};
+
+  
  
   return (
-    <>
+    <> 
       <DocumentProvider>
         <DsApplication
           selectedTabId={selectedTabId}
@@ -110,7 +148,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
                   </DsButton>
  
                   <div>
-                    <CsvPopup />
+                  <CsvPopup onUpload={handleUpload} />
                   </div>
                  
                   <DsButton
@@ -239,6 +277,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
           duration={closeTimeForTender}
         />
       </DocumentProvider>
+  
     </>
   );
 };

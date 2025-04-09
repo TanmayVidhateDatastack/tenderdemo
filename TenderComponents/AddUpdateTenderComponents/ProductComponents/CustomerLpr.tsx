@@ -1,4 +1,4 @@
-import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
+
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import lprSelectedSVG from "@/Common/TenderIcons/smallIcons/lprSelected.svg";
 import lprSVG from "@/Common/TenderIcons/smallIcons/lpr.svg";
@@ -8,6 +8,8 @@ import { Company, datalistOptions } from "@/Common/helpers/types";
 import { createContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import CompanySearch from "./companySearch";
 import styles from "../../AddUpdateTenderComponents/BasicDetailComponents/tender.module.css";
+import DsIconButton from "@/Elements/DsComponents/DsButtons/dsIconButton";
+import IconFactory from "@/Elements/IconComponent";
  
 export interface CustomerLPRProps {
   index: number;
@@ -27,7 +29,7 @@ const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
  
   const setSelectedCompany = (option: datalistOptions | undefined) => {
     if (option?.value && onCompanyChange) {
-      onCompanyChange({ id: Number(option.id), name: option.value });
+      onCompanyChange({ id: option.id, name: option.value });
       setIsLpr(true);
     } else {
       setIsLpr(false);
@@ -59,14 +61,31 @@ const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
           if (e.target.value && onValueChange) onValueChange(e.target.value);
         }}
       />
-      <DsButton>
-        {isLPR ? (
-          <Image src={lprSelectedSVG} alt="LPR To" />
-        ) : (
-          <Image src={lprSVG} alt="LPR To" />
-        )}
-      </DsButton>
-    </div>
+      <DsIconButton
+                  startIcon={<div
+                    style={{
+                      position: "relative",
+                      height: "0.23em", width: "0.5.5em",
+                    }}
+                    
+                  >
+                   {isLPR ? (
+                    <>
+                    <div className={styles.lprwitharrow}>
+              <Image src={lprSelectedSVG} alt="LPR To" /> <IconFactory name="dropDownArrow" />
+              </div>
+              </>
+            ) : (
+              <>
+               <div className={styles.lprwitharrow}> <Image src={lprSVG} alt="LPR To" />
+              <IconFactory name="dropDownArrow" /> </div>
+             
+              </>
+            )} </div>}
+                  
+                />
+               
+</div>
   );
 };
 export default DsCustomerLPR;
