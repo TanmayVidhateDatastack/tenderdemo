@@ -70,7 +70,7 @@ const CustomerSearch: React.FC<{
           pinCode: addr.pinCode,
           isPrimary: addr.isPrimary === "Y",  
         })); 
-        setCustomerLocations?.(formattedAddresses); 
+        setCustomerLocations?.(formattedAddresses);  
       } else { 
         console.error("Invalid API response:", data); 
         setCustomerLocations?.([]);
@@ -91,7 +91,7 @@ const CustomerSearch: React.FC<{
         id: x?.id?.toString(),
         value: `${x.code.toUpperCase()} - ${x.name}`,
         attributes: { "customer-id": x.id.toString() },
-      }));
+      })); 
       setCustomers(customers);
     }
   }
@@ -101,7 +101,7 @@ const CustomerSearch: React.FC<{
       id="customerSearch"
       initialValue={customer}
       dataListId="customerSearchDatalist"
-      label={"Customer ID and Name"}
+      label={"Customer ID and Name"}  
       options={customers || undefined}
       setOptions={setOptions}
       setSearchUrl={(searchTerm: string) => searchCustomerURL + searchTerm}

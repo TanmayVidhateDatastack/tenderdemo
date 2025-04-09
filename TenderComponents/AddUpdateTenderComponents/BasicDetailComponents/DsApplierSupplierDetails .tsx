@@ -8,46 +8,46 @@ import DsSelectMultiLevel from "@/Elements/DsComponents/dsSelect/dsSelectMultiLe
 import fetchData from "@/Common/helpers/Method/fetchData";
 import { useEffect, useState } from "react";
 import { appliedBySuppliedBy, getAllDepots } from "@/Common/helpers/constant";
-import {datalistOptions, DsMultiLevelSelectOption, DsSelectOption} from "@/Common/helpers/types";
-
+import {datalistOptions, DsMultiLevelSelectOption, DsSelectOption, MultiLevelSearchProps} from "@/Common/helpers/types";
+import {searchCustomerURL} from "@/Common/helpers/constant";
+import CustomerSearch from "./customerSearch";
 type Depot = {
   id: number;
   name: string;
   code: string;
 } 
  
-const DsApplierSupplierDetails: React.FC = ({}) => {
+const DsApplierSupplierDetails: React.FC = ({}) => { 
+  
   const [depotList, setDepotList] = useState<Depot[]>([]); 
   const { updateTenderData } = useTenderData(); 
+  const [selected,setSelected]=useState<datalistOptions>();
   const [applierSupplierDetails, setApplierSupplierDetails] = 
-    useState<DsMultiLevelSelectOption[]>([]);   
+    useState<DsMultiLevelSelectOption[]>([]);    
     const [formatedDepot, setFormatedDepot] = useState<DsSelectOption[]>([])
 
-
-     const [stockiestSearchUrl, setStcokiestSearchUrl] = useState<string>("");
-     const setStockiestSearchOptions = async (inputValue: string): Promise<DsSelectOption[]> => {
-        try {
-          const res = await fetchData({
-            url: `${stockiestSearchUrl}?search=${inputValue}`
-          });
-          if (res.code === 200 && Array.isArray(res.result)) {
-            return res.result.map((item: any) => ({
-              value: item.id,
-              label: item.name
-            }));
-          }
-        } catch (err) {
-          console.error("Error fetching stockist options:", err);
-        }
-        return [];
+     function setStockiestSearchOptions (values:unknown) {
+      let customers: datalistOptions[] = [];
+         if (
+              Array.isArray(values) &&
+              values.every((val) => val.id && val.name)
+            ) {
+               customers =values.map((x) => ({
+                id: x?.id?.toString(),
+                value: `${x.name}`,
+                label: `${x.name}`,
+                attributes: {},
+              })); 
+            }
+            return customers;
+        
       };
 
-     const onStockistSelect = (selectedOption: DsSelectOption) => {
-      updateTenderData("appliedBy", "Stockist");
-      // updateTenderData("applierId", selectedOption.value);
-      console.log("selected option ",selectedOption);
+     const onStockistSelect = (selectedOption: datalistOptions) => {
+      // updateTenderData("appliedBy", "Stockist");
+      // updateTenderData("applierId", selectedOption.value);   
+      console.log("selected option ",selectedOption);  
     };
-
 
   const handleAppliedSuppliedFetch = async () => { 
     try { 
@@ -56,21 +56,25 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
         const result = res.result; 
         // console.log("appliedbysuppliedby 12131 : ", result); 
   
-        const applyBysupplyBy = result.organization.map((item: any) => ({ 
+        const applyBysupplyBy:DsMultiLevelSelectOption[] = result.organization.map((item: any) => ({ 
           value: item.id + "_" + item.type,
           label: item.name  
         }));  
+        
         applyBysupplyBy.push({
           value:{  
-              setStockiestSearchOptions,   
-              setStcokiestSearchUrl, 
-              onStockistSelect,
-              id: "",     
-              selectedOption: [],   
+              setOptions:setStockiestSearchOptions,   
+              setSearchUrl:(searchTerm: string) => searchCustomerURL + searchTerm , 
+              onSelect:onStockistSelect,
+              id: "",
+              selectedOption:selected,
+
+              // selectedOption,   
               label: "Search Stockiest"    
-          }, 
+          },  
           label:"Stockiest" 
         })
+        
         // console.log("appliedbysuppliedby 12131 : ", applyBysupplyBy);
         setApplierSupplierDetails(applyBysupplyBy);
       } else {
@@ -115,6 +119,8 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
     },[]); 
 
     const handleAppliedBySelect = (option: datalistOptions) => {
+      console.log(option);
+      setSelected(option)
     };
     
   return (
@@ -125,20 +131,24 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
             isSearchable
             options={applierSupplierDetails}
             label="Applied By"
-            placeholder={"Please search or select here"}
+            selectedOption={selected}
+            placeholder={"Please search or select here"} 
             id={"appliedBy"}
-            onSelect={handleAppliedBySelect}
+            onSelect={handleAppliedBySelect} 
             setSelectOption={(option) => {
-              if (typeof option.value == "string") {
-                updateTenderData(
+              console.log(option)
+              setSelected(option);
+              if (typeof option.value == "string") { 
+                updateTenderData( 
                   "appliedBy",
-                  option.label == "IPCA" ? option.label : "Stockist"
+                  option.label == "IPCA" ? option.label : "Stockist"  
                 );
                 updateTenderData("applierId", option.value);
               }
-            } } isOpen={false}          
+             
+            }} 
             // isOpen={true}
-          ></DsSelectMultiLevel>
+          ></DsSelectMultiLevel> 
         </div>
         <div className={deptStyles.fields}>
           <DsSelectMultiLevel
@@ -176,7 +186,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
                   } 
                   return acc;
                 }, [])
-              );
+              ); 
             }}
           ></DsMultiSelect> 
         </div>

@@ -56,7 +56,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
   useEffect(() => {
     if (role == "MAKER") {
       setFetchVisible(true);
-    } else {
+    } else { 
       setFetchVisible(false);
     }
   }, [role]);

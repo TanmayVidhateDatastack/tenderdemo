@@ -310,7 +310,7 @@ export default function Home() {
     const advanceAndSearch = {
       "userId": 3,
       "pageNo": 0,
-      "pageSize": 0,
+      "pageSize": 0, 
       "filters": advFilter,
       "searchTerm": searchQuery,
     }
@@ -333,7 +333,7 @@ export default function Home() {
         "Content-Type": "application/json",
         "Tenders-Filters": JSON.stringify(tenderFilters),
       },
-    })
+    }) 
       .then((res) => {
         // console.log("objevct to be send", tenderFilters);
         console.log("Response RESULT:", res.result);
