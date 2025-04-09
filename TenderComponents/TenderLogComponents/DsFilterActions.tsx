@@ -15,10 +15,10 @@ import DsFilterButton from "@/Elements/DsComponents/DsButtons/dsFilterButton";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import { DisplayPane } from "@/Elements/DsComponents/DsPane/DsPane";
 import btnStyles from "@/Elements/DsComponents/DsButtons/dsButton.module.css";
- 
+
 export interface DsFilterActionProps {
- 
- 
+
+
   searchQuery: string;
   setSearchQuery: Dispatch<SetStateAction<string>>;
   selectedStatus: string;
@@ -28,21 +28,21 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
   searchQuery,
   setSearchQuery, selectedStatus, setSelectedStatus
 }) => {
- 
+
   const initialFilterState = Object.fromEntries(
     ["NEAR_SUBMISSION", "FEES_PENDING", "APPROVAL", "UNDER_APPROVAL", "UNDER_REVIEW"].map(
       (status) => [status, false]
     )
   );
- 
+
   const [isFiltered, setIsFiltered] =
     useState<Record<string, boolean>>(initialFilterState);
- 
+
   const dispatch = useAppDispatch<AppDispatch>();
   const role = useAppSelector((state: RootState) => state.user.role);
   const permissions = useAppSelector((state: RootState) => state.permissions);
   const [searchText, setSearchText] = useState("");
- 
+
   const {
     tenderDatalistVisible,
     nearSubmissionButtonVisible,
@@ -51,10 +51,10 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
     approvalButtonVisible,
     underApprovalButtonVisible,
     underReviewButtonVisible
- 
- 
+
+
   } = permissions;
- 
+
   const handleFetch = async () => {
     try {
       await fetchData({ url: getTenderUserRoles }).then((res) => {
@@ -76,8 +76,8 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
   useEffect(() => {
     handleFetch();
   }, [role]);
- 
- 
+
+
   // const handleFilter = (value: string | string[], message?: string) => {
   //   setIsFiltered((prev) => {
   //     const newFilterState = Object.fromEntries(
@@ -90,28 +90,28 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
   //           : false,
   //       ])
   //     );
- 
+
   //     if (!Array.isArray(value)) {
   //       if (!newFilterState[value]) {
   //         setFilteredData(data);
   //       } else {
   //         let filteredRows = [...data];
- 
+
   //         if (value === "nearSubmission") {
   //           filteredRows = filteredRows.filter((tender) => {
- 
+
   //             const [day, month, year] = tender.submittionDate.split("/");
   //             const dateToCheck = new Date(
   //               parseInt(year),
   //               parseInt(month) - 1,
   //               parseInt(day)
   //             );
- 
+
   //             const today = new Date();
   //             const futureDate = new Date(today);
   //             futureDate.setDate(today.getDate() + 20); //near submission change 20 days
- 
- 
+
+
   //             return (
   //               (dateToCheck < today || dateToCheck <= futureDate) &&
   //               tender.status.tenderStatus?.toLowerCase() !== DsStatus.SMBT
@@ -129,7 +129,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
   //               : tender.status?.tenderStatus?.toLowerCase() === lowerCaseValue
   //           );
   //         }
- 
+
   //         else {
   //           const lowerCaseValue = value.toLowerCase();
   //           filteredRows = filteredRows.filter((tender) =>
@@ -151,7 +151,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
   //         setFilteredData(data);
   //       } else {
   //         let filteredRows = [...data];
- 
+
   //         filteredRows = filteredRows.filter((tender) =>
   //           activeFilters.some(
   //             (status) =>
@@ -164,90 +164,91 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
   //         );
   //         setFilteredData(filteredRows);
   //       }
- 
+
   //       return newFilterState;
   //     }
   //     return newFilterState;
   //   });
   // };
- 
+
   // useEffect(() => {
   //   handleFetch();
   // }, []);
- 
+
   // useEffect(() => {
   //   console.log("deta : ", data);
   // }, [data]);
- 
+
   useEffect(() => {
     if (role && role !== "") {
       dispatch(setVisibilityByRole(role));
     }
   }, [role]);
- 
- 
- 
- 
- 
+
+
+
+
+
   const handleFilter = async (value: string) => {
     console.log("valueee", value);
     setIsFiltered((prev) => {
       const newFilterState = Object.fromEntries(
         Object.keys(prev).map((key) => [key, key === value ? !prev[key] : false])
       );
- 
+
       const isFilterActive = !newFilterState[value];
- 
+
       if (isFilterActive) {
- 
+
         setSelectedStatus("");
       } else {
         const lowerCaseValue = value.toUpperCase();
- 
+
+
         setSelectedStatus(lowerCaseValue);
       }
- 
+
       return newFilterState;
     });
   };
   const handleSearch = (e) => {
     if (e.key === "Enter") {
- 
+
       //
       const searchQueryLower = searchText;
- 
+
       setSearchQuery(searchQueryLower);
- 
+
     }
   };
- 
+
   const normalizeText = (text: any): string => {
     if (typeof text !== "string") {
       return text.toString().toLowerCase();
     }
     return text.toLowerCase(); // Do not escape special characters like `/`, `,`
   };
- 
+
   // Helper function to search inside nested objects
   const searchInObject = (obj: any, query: string): boolean => {
     return Object.values(obj).some((val) => {
       if (typeof val === "string" || typeof val === "number") {
         return normalizeText(val).includes(query);
       }
- 
+
       if (typeof val === "object" && val !== null) {
         return searchInObject(val, query);
       }
- 
+
       return false;
     });
   };
   console.log("searchhhhh", searchText);
   console.log("searchinobject", searchInObject);
- 
+
   return (
     <>
- 
+
       {tenderDatalistVisible && (
         <DsTextField
           placeholder="Search Tender by Id, Name & Value"
@@ -273,15 +274,15 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
             buttonViewStyle={
               isFiltered["nearSubmission"] ? "btnContained" : "btnOutlined"
             }
- 
+
             onClick={() => handleFilter("NEAR_SUBMISSION")}
             label="Near Submission"
           />
         )}
- 
+
       </div>
       {feesPendingButtonVisible && (
- 
+
         <DsFilterButton
           id="dispatch"
           buttonColor="btnPrimary"
@@ -294,7 +295,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
         />
       )}
       {approvalButtonVisible && (
- 
+
         <DsFilterButton
           id="dispatch"
           buttonColor="btnPrimary"
@@ -304,7 +305,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
               ? "btnContained"
               : "btnOutlined"
           }
- 
+
           onClick={() =>
             handleFilter
               ("APPROVAL")
@@ -339,7 +340,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
         />
       )}
       {filterButtonVisible && (
- 
+
         <DsButton
           id="iconfilterBtn"
           buttonColor="btnPrimary"
@@ -364,16 +365,13 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
           label="Filter"
           onClick={() => DisplayPane("AdvancedFilterComponent")}
           iconSize="iconMedium"
- 
+
         />
       )}
- 
+
     </>
   );
 };
- 
+
 export default DsFilterActions;
- 
- 
- 
- 
+

@@ -17,6 +17,7 @@ import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import DsFeesDocument from "./DsFeesDocument";
 import { useTenderData } from "../TenderDataContextProvider"; 
 
+import { paidBys } from "@/Common/helpers/constant";
 export interface DepositDocument {
   modes: DsSelectOption[];
   // paidBy: DsSelectOption[];

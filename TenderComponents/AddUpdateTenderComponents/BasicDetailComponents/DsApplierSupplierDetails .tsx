@@ -129,7 +129,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
         <div className={deptStyles.fields}>
           <DsSelectMultiLevel  
             isSearchable
-            options={applierSupplierDetails }
+            options={applierSupplierDetails}
             label="Applied By"
             selectedOption={selected}
             placeholder={"Please search or select here"} 

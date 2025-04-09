@@ -10,8 +10,11 @@ import ProductTableSearch from "./ProductTableSearch";
 import styles from "@/app/page.module.css";
 import IconFactory from "@/Elements/IconComponent";
 
+
  
 const DsProductTable: React.FC = () => {
+
+
   const { tenderData, updateTenderProduct } = useTenderData();
   const [tenderProductTable, setTenderProductTable] = useState<tableData | undefined>();
   const [localProducts, setLocalProducts] = useState<TenderProduct[]>(tenderData.products);
@@ -85,14 +88,14 @@ const DsProductTable: React.FC = () => {
  
       {
         columnIndex: 2,
-        content: <DsTextField initialValue={product.quantity?.toString() || ""} onBlur={(e) => handleFieldChange(index, "quantity", Number((e.target as HTMLInputElement).value))} />,
+        content: (product.dataSource==="csv")?product.quantity||"-":<DsTextField initialValue={product.quantity?.toString() || ""} onBlur={(e) => handleFieldChange(index, "quantity", Number((e.target as HTMLInputElement).value))} />,
      
             className:styles.cellquantity
       },
  
       {
         columnIndex: 3,
-        content: (product.dataSource) === "fetch" ? <DsTextField initialValue={product.packingSize|| ""} onChange={(e) => handleFieldChange(index, "genericName", e.target.value)} /> : product.packingSize || "-",
+        content: (product.dataSource) === "fetch" ? <DsTextField initialValue={product.packingSize|| ""} onChange={(e) => handleFieldChange(index, "packingSize", e.target.value)} /> : product.packingSize || "-",
             className:styles.cellpackingsize
       },
  
@@ -106,9 +109,10 @@ const DsProductTable: React.FC = () => {
       },
       {
         columnIndex: 5,
-        content: product.dataSource === "csv" ?
-          <ProductTableSearch tableRowIndex={index + 1} setLocalProducts={setLocalProducts} setHasChanges={setHasChanges} />
-          : product.packingSize || "-",
+        content: product.dataSource === "csv" ? product.packSize || "-":
+        <DsTextField initialValue={product.packSize|| ""} onChange={(e) => handleFieldChange(index, "packSize", e.target.value)} />
+         ,
+ 
   
         className:styles.cellproductpakingsize
       },
@@ -147,8 +151,9 @@ const DsProductTable: React.FC = () => {
     setLocalProducts(tenderData.products);
  },[tenderData.products])
   useEffect(() => {
-    setTenderProductTable({ className: "tender-product-table", id: "productTable", type: "InterActive", isSortable: false, hasSearch: false, columns, rows });
+    setTenderProductTable({ className:  styles["tender-product-table"], id: "productTable", type: "InterActive", isSortable: false, hasSearch: false, columns, rows });
   }, [columns, rows]);
+ 
  
   return (
     <>

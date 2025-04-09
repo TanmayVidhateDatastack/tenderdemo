@@ -1,8 +1,12 @@
 "use client";
 import { TenderDataProvider } from "@/TenderComponents/AddUpdateTenderComponents/TenderDataContextProvider";
 import DsTenderIdPage from "./tenderIdPage";
-
-export default function Home(param:any) {
+ export type ParamType = {
+  params: {
+    orderId: string | number;
+  };
+};
+export default function Home(param:ParamType) {
 
 const paramOrderId: string | number = param?.params?.orderId;
  

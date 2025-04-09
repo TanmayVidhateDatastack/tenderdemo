@@ -14,7 +14,7 @@ import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import ContextMenu, { displayContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 
 import DsStatusIndicator from "@/Elements/DsComponents/dsStatus/dsStatusIndicator";
-import { getAllDepots, getAllMetaData, getAllTenders, searchCustomerURL } from "@/Common/helpers/constant";
+import { getAllDepots, getAllMetaData, getAllTenders, getApplierSupplierDetails, searchCustomerURL } from "@/Common/helpers/constant";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import DsTableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableComponent";
 
@@ -96,18 +96,13 @@ export default function Home() {
   const [isAddWhite, setIsAddWhite] = useState<boolean>(false);
 
 
-  // const [paymentMode, setPaymentMode] = useState<CodeItem[]>([]);
   const [tenderType, setTenderType] = useState<CodeItem[]>([]);
   const [customerType, setCustomerType] = useState<CodeItem[]>([]);
-  // const [submissionMode, setSubmissionMode] = useState<CodeItem[]>([]);
-  // const [supplyPoint, setSupplyPoint] = useState<CodeItem[]>([]);
-  // const [testReportRequirement, setTestReportRequirement] = useState<CodeItem[]>([]);
-  // const [eligibility, setEligibility] = useState<CodeItem[]>([]);
-  // const [feesType, setFeesType] = useState<CodeItem[]>([]);
-  // const [tenderSupplyCondition, setTenderSupplyCondition] = useState<CodeItem[]>([]);
-  // const [documentType, setDocumentType] = useState<CodeItem[]>([]);
+
   const [tenderStatus, setTenderStatus] = useState<CodeItem[]>([]);
+  const [applierSupplier, setApplierSupplier] = useState<CodeItem[]>([]);
   const [depotList, setDepotList] = useState<Depot[]>([]);
+  // const [uniqueAppliers, setUniqueAppliers] = useState<{ label: string; value: string }[]>([]);
 
 
   const permissions = useAppSelector((state: RootState) => state.permissions);
@@ -222,7 +217,7 @@ export default function Home() {
         className: " cell-status  ",
         columnHeader: "STATUS",
         isHidden: false,
-        sort: "NONE",
+       
         columnContentType: "reactNode",
         hasSort: true,
       },
@@ -399,36 +394,62 @@ export default function Home() {
   }
 
   const handleFiltersApplied = (apiFilter: Record<string, React.ReactNode>) => {
-    // console.log("Received apiFilter in parent:", apiFilter);
-    // Use apiFilter to make API calls or update state
     setAdvFilter(apiFilter);
     setIsFilterActive(false);
-    // console.log("advv filter", advFilter);
   };
 
+  // const [uniqueAppliers, setUniqueAppliers] = useState<{ label: string; value: string }[]>([]);
+  // useEffect(() => {
+  //   if (data.length > 0
+  //   ) {
+  //     console.log("data : ", data);
+  //     const names = data
+  //       .map(item => item?.applierName?.trim())
+  //       .filter(Boolean); // removes undefined, null, and empty strings
+  //     console.log("names : ", names);
+
+  //     setUniqueAppliers(names);
+  //   } else {
+  //     setUniqueAppliers([]);
+  //   }
+  // }, [data]);
+  const [uniqueAppliers, setUniqueAppliers] = useState<{ label: string; value: string }[]>([]);
+  const [applierDetails, setApplierDetails] = useState<string[]>([]);
+  const [supplierDetails, setSupplierDetails] = useState<string[]>([]);
+
   useEffect(() => {
-    // Filtering only valid metadata keys from advFilter
+    if (Array.isArray(data) && data.length > 0) {
+      const names1 = data.map((item) => item.appliedBy);
+      setApplierDetails(names1);
+
+      const name2 = data.map((item) => item.suppliedBy);
+      setSupplierDetails(name2);
+    } else {
+      setUniqueAppliers([]);
+    }
+  }, [data]);
+
+
+  useEffect(() => {
+    console.log("applier details  : ", applierDetails);
+  }, [applierDetails])
+
+
+
+
+
+  useEffect(() => {
     const filteredMetaData = metaDataTypes.filter((key) => advFilter?.[key] !== undefined);
 
-    // Updating state with filtered metadata
     setTenderMetadataFilters({ userId: 3, metaDataTypes: filteredMetaData });
 
-    // console.log("Filtered Metadata Filters:", { userId: 3, metaDataTypes: filteredMetaData });
 
   }, [advFilter])
 
   useEffect(() => {
-    // console.log("fetched metadata : ", fetchedMetadata);
     if (fetchedMetadata) {
-      // if (fetchedMetadata.documentType) setDocumentType(fetchedMetadata.documentType);
-      // if (fetchedMetadata.eligibility) setEligibility(fetchedMetadata.eligibility);
-      // if (fetchedMetadata.feesType) setFeesType(fetchedMetadata.feesType);
-      // if (fetchedMetadata.paymentMode) setPaymentMode(fetchedMetadata.paymentMode);
-      // if (fetchedMetadata.submissionMode) setSubmissionMode(fetchedMetadata.submissionMode);
-      // if (fetchedMetadata.supplyPoint) setSupplyPoint(fetchedMetadata.supplyPoint);
-      // if (fetchedMetadata.tenderSupplyCondition) setTenderSupplyCondition(fetchedMetadata.tenderSupplyCondition);
+
       if (fetchedMetadata.tenderType) setTenderType(fetchedMetadata.tenderType);
-      // if (fetchedMetadata.testReportRequirement) setTestReportRequirement(fetchedMetadata.testReportRequirement);
       if (fetchedMetadata.tenderStatus) setTenderStatus(fetchedMetadata.tenderStatus);
       if (fetchedMetadata.customerType) setCustomerType(fetchedMetadata.customerType);
     }
@@ -481,67 +502,34 @@ export default function Home() {
   };
 
 
-  // const [filters, setFilters] = useState<filterTypes[]>([]);
-  // useEffect(() => {
-  //   const fetchFilters = async () => {
-  //     try {
+  const handleFetchApplierSupplier = async () => {
+    await fetchData({
+      url: getApplierSupplierDetails
+    })
+      .then((res) => {
+        console.log("aplier supplier  fetched response :", res); // Log the fetched response
 
-  //       const updatedFilters: filterTypes[] = [
-
-
-  //         { filterId: "0", filterFor: "customer", filterType: "SearchAndMultiSelect"},
-  //         { filterId: "1", filterFor: "date", filterType: "DateRange", maxValue: new Date(2025, 9, 21).getTime(), minValue: new Date(2050, 11, 26).getTime() },
-  //         { filterId: "2", filterFor: "customerTypes", filterType: "MultiSelection", multiSelectOptions:  [
-  //           { label: "Institutional", value: "institutional" },
-  //           { label: "corporate", value: "corporate" },
-  //         ]
-  //       },
-  //         { filterId: "3", filterFor: "tenderTypes", filterType: "MultiSelection", multiSelectOptions:  [
-  //           { label: "Multi-delivery", value: "multidelivery" },
-  //           { label: "single-delivery", value: "singledelivery" },
-  //         ]
-  //       },
-  //         { filterId: "4", filterFor: "Applied by", filterType: "MultiSelection", multiSelectOptions: [
-  //           { label: "Ipca", value: "Ipca" },
-  //           { label: "Stockist", value: "stockist" },
-  //         ]
-  //       },
-  //         { filterId: "5", filterFor: "Supplied by", filterType: "MultiSelection", multiSelectOptions:  [
-  //           { label: "Ipca", value: "Ipca" },
-  //           { label: "Stockist", value: "stockist" },
-  //         ]
-  //       }, 
-  //         { filterId: "6", filterFor: "Depot", filterType: "MultiSelection", multiSelectOptions:  [
-  //           { label: "pune", value: "pune" },
-  //           { label: "satara", value: "satara" },
-  //         ]
-  //       },
-
-  //         { filterId: "7", filterFor: "Value", filterType: "RangeSlider", maxValue: 4000000, minValue: 0 },
-  //         { filterId: "8", filterFor: "Status", filterType: "MultiSelection", multiSelectOptions:  [
-  //           { label: "Apporavl", value: "Approval" },
-  //           { label: "cancelled", value: "cancelled" },
-  //         ]
-  //       },
+        if (res?.code === 200 && res?.result) {
+          // if(res?.c)
+          setApplierSupplier(res.result?.appliedBySuppliedBy);
+          console.log("stored applier supplier  result:", res.result);
+        } else {
+          console.error("Error: Invalid data format or empty depot");
+        }
+      })
+      .catch((err) => {
+        console.error("Error fetching data:", err);
+      });
+  };
 
 
-  //       ];
 
-  //       setFilters(updatedFilters);
-  //       console.log("updatedfilters",filters);
-
-  //     } catch (error) {
-  //       console.error("Error fetching filter data:", error);
-  //     }
-  //   };
-
-  //   fetchFilters();
-  // }, []);
 
   useEffect(() => {
     handleFetch();
     handleFetchMetaData();
     handleFetchDepot();
+    handleFetchApplierSupplier();
 
   }, []);
   useEffect(() => {
@@ -854,8 +842,8 @@ export default function Home() {
             filterId: "1",
             filterFor: "Date",
             filterType: "DateRange",
-            maxValue: new Date(2025, 9, 21).getTime(),
-            minValue: new Date(2050, 11, 26).getTime()
+            minValue: new Date(2025, 9, 21).toLocaleDateString("en-GB"),
+            maxValue: new Date(2050, 11, 26).toLocaleDateString("en-GB"),
           },
 
           {
@@ -881,21 +869,30 @@ export default function Home() {
             filterId: "4",
             filterFor: "Applied by",
             filterType: "MultiSelection",
-            multiSelectOptions:
-              [
-                { label: "Ipca", value: "IPCA" },
-                { label: "Stockist", value: "stockist" },
-              ]
+            multiSelectOptions: applierSupplier.map((item) => ({
+              label: item.codeDescription,
+              value: item.codeValue
+            }))
+
+            // multiSelectOptions:
+            //   [
+            //     { label: "Ipca", value: "IPCA" },
+            //     { label: "Stockist", value: "stockist" },
+            //   ]
           },
           {
             filterId: "5",
             filterFor: "Supplied by",
             filterType: "MultiSelection",
-            multiSelectOptions:
-              [
-                { label: "Ipca", value: "IPCA" },
-                { label: "Stockist", value: "stockist" },
-              ]
+            multiSelectOptions: applierSupplier.map((item) => ({
+              label: item.codeDescription,
+              value: item.codeValue
+            }))
+            // multiSelectOptions:
+            //   [
+            //     { label: "Ipca", value: "IPCA" },
+            //     { label: "Stockist", value: "stockist" },
+            //   ]
           },
           {
             filterId: "6",
@@ -911,7 +908,8 @@ export default function Home() {
             filterId: "7",
             filterFor: "Value",
             filterType: "RangeSlider",
-            maxValue: 4000000, minValue: 0
+            maxValue: 4000000,
+            minValue: 0
 
           },
           {
