@@ -91,6 +91,7 @@ export default function Home() {
     userId: 3,
     metaDataTypes: [],
   });
+  console.log(isFilterActive,tenderMetadataFilters);
   const [fetchedMetadata, setFetchedMetadata] = useState<Metadata>({})
   // console.log(isFilterActive);
   const [isAddWhite, setIsAddWhite] = useState<boolean>(false);
@@ -374,6 +375,7 @@ export default function Home() {
 
 
     }));
+  
   };
 
   const [searchOptions, setSearchOptions] = useState<datalistOptions[]>([]);
@@ -416,6 +418,7 @@ export default function Home() {
   const [uniqueAppliers, setUniqueAppliers] = useState<{ label: string; value: string }[]>([]);
   const [applierDetails, setApplierDetails] = useState<string[]>([]);
   const [supplierDetails, setSupplierDetails] = useState<string[]>([]);
+  console.log(uniqueAppliers,supplierDetails);
 
   useEffect(() => {
     if (Array.isArray(data) && data.length > 0) {
@@ -570,7 +573,7 @@ export default function Home() {
     // console.log("Adding table data:", tender);
     const newRows: DsTableRow[] = tender.map((t, index) => ({
       rowIndex: index,
-      className: "cellRow ",
+      className: styles["tender-product-table"],
       rowIcon:
         t?.type === "INSTITUTION" ? (
           <div style={{ width: "0.875em", height: "0.875em", position: "relative" }}>
@@ -681,11 +684,17 @@ export default function Home() {
                 }`}
               status={t.status.tenderStatus}
               label={t.status.tenderStatus}
+              status_icon={
+                <div style={{width:"10px"}}>
+
+                  <IconFactory name={"comment"}></IconFactory>
+                </div>
+              }
               comment={
                 t.status?.message
-                  ? typeof t.status.message === "object"
+                  ? typeof t.status.message === "string"
                     ? JSON.stringify(t.status.message)
-                    : t.status.message.toString()
+                    : t.status.message
                   : ""
               }
             />

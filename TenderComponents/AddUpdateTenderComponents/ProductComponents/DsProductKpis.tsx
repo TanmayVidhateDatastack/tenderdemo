@@ -130,7 +130,7 @@ console.log("Total Margin Percentage:", totalMarginPercentage);
  
     return (
         <>
-        <div  className={style.productkpi}>
+       <div  className={style.productkpi}>
       <DsKpl
        quantity={totalProducts.toString()}
         title={"Products"}
@@ -147,22 +147,23 @@ console.log("Total Margin Percentage:", totalMarginPercentage);
         startIcon={<Image src={rupees} alt="link" />}
         startIconwhite={<Image src={whiterupee} alt="link" />}  
         startIcondisable={<Image src={rupeedisabled} alt="link" />}
-        Highlight={false}
+        Highlight={true}
       />
         <DsKpl
           quantity={<DsCurrency format={"IND"} id={"marginsum"} amount={totalMarginProductSum} type={"short"} />}
+          // quantity={"45000Cr"}
           title={"Margin"}
-          Subquantity={isNaN(totalMarginPercentage) ? "NaN%" : `${totalMarginPercentage.toFixed(2)}%`}
+          Subquantity={isNaN(totalMarginPercentage) ? "0%" : `${totalMarginPercentage.toFixed(2)}%`}
           startIcon={<Image src={profit} alt="link" />}
           startIconwhite={<Image src={whiteprofit} alt="link" />}
           startIcondisable={<Image src={profitdisabled} alt="link" />}
-          Highlight={true}
+          Highlight={false}
         />
         <DsKpl
       
          quantity={<DsCurrency format={"IND"} id={"stockitssum"} amount={totalStockistDiscountSum} type={"short"} />}
           title={"Stocklist Discount"}
-          Subquantity={isNaN(totalStockistPercentage) ? "NaN%" : `${totalStockistPercentage.toFixed(2)}%`}
+          Subquantity={isNaN(totalStockistPercentage) ? "0%" : `${totalStockistPercentage.toFixed(2)}%`}
           startIcon={<Image src={profile} alt="link" />}
           startIconwhite={<Image src={whiteprofile} alt="link" />}
           startIcondisable={<Image src={profiledisabled} alt="link" />}
