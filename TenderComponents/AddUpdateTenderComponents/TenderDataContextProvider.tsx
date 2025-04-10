@@ -18,6 +18,7 @@ import React, {
   useState,
 } from "react";
 import { generatePatchDocument } from "@/Common/helpers/Method/UpdatePatchObjectCreation";
+import DsSupplyConditions from "./BasicDetailComponents/DsSupplyConditions";
 class ActionStatus {
   notiType: "success" | "bonus" | "info" | "error" | "cross" = "success";
   notiMsg: string = "";
@@ -52,7 +53,7 @@ export type TenderProduct = {
   proposedRate?: number;
   ptrPercent?: number;
   supplierDiscount?: number;
-  product?: {
+  product: {
     type?: "read-only";
     name?: string;
     productPackingSize?: string;
@@ -109,7 +110,7 @@ export type ContractItems = {
     awardedToName: string;
   };
   awardedQuantity?: number;
-  awardedTo?: string;
+  awardedTo?: number;
   awardedRate?: number;
 };
 export type TenderContract = {
@@ -250,7 +251,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     stockistName: "",
     supplierDiscount: 0,
     lastUpdatedById: 0,
-    status: "DRAFT",
+    status: "AWARDED",
     tenderDetails: {
       type: "read-only",
       customerName: "",
@@ -272,12 +273,25 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     tenderRevisions: [],
     tenderDocuments: [],
     tenderContract: {
-      contractStatus: "",
-      contractJustification: "",
-      contractStatusNotes: "",
+      contractStatus: "AWARDED",
+      contractJustification: "test",
+      contractStatusNotes: "test",
       tenderRevisions: {
         id: 0,
-        tenderItems: [],
+        tenderItems: [{
+          awardedQuantity:1,
+          awardedRate:2,
+          awardedTo:1,
+          id:2,
+          productId:1,
+          product:{
+            awardedToName:"Testor",
+            productName:"Zer",
+            requestedGenericName:"Zept",
+            requestedPackingSize:"15ml vail",
+            type:"read-only"
+          }
+        }],
       },
     },
   });
@@ -333,11 +347,45 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   };
   // ✅ Add a new tender fee
   const addTenderFee = (type: string) => {
-    setTenderData((prev) => ({
-      ...prev,
-      tenderFees: [
-        ...prev.tenderFees,
-        {
+    // setTenderData((prev) => ({
+    //   ...prev,
+    //   tenderFees: [
+    //     ...prev.tenderFees,
+    //     {
+    //       feesType: type,
+    //       amount: 0,
+    //       currency: "",
+    //       paidBy: "",
+    //       paymentMode: "",
+    //       paymentDueDate: "",
+    //       instructionNotes: "",
+    //       // documents: []
+    //     },
+    //   ],
+    // }));
+    setTenderData((prev) => {
+      let updated = false; // Flag to track if we updated an existing entry
+    
+      const updatedTenderFees = prev.tenderFees.map((fee) => {
+        if (fee.feesType === type) {
+          updated = true; // Mark that we found and updated the type
+          return {
+            ...fee,
+            feesType: type,
+            amount: 0,
+            currency: "",
+            paidBy: "",
+            paymentMode: "",
+            paymentDueDate: "",
+            instructionNotes: "",
+          };
+        }
+        return fee; // Keep existing entries unchanged
+      });
+    
+      // If no update was made, add a new entry
+      if (!updated) {
+        updatedTenderFees.push({
           feesType: type,
           amount: 0,
           currency: "",
@@ -345,10 +393,15 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           paymentMode: "",
           paymentDueDate: "",
           instructionNotes: "",
-          // documents: []
-        },
-      ],
-    }));
+        });
+      }
+    
+      return {
+        ...prev,
+        tenderFees: updatedTenderFees,
+      };
+    });
+    
   };
   // ✅ Remove tender fee by type
   const removeTenderFeeByType = (feeType: string) => {
@@ -622,9 +675,21 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       const dataToSendTenderCopy = stripReadOnlyProperties({
         ...tenderDataCopy,
+        supplyConditions: {
+          ...tenderDataCopy.supplyConditions,
+          applicableConditions: JSON.stringify(
+            tenderDataCopy.supplyConditions.applicableConditions
+          ),
+        },
       });
       const dataToSendOriginalTender = stripReadOnlyProperties({
         ...tenderData,
+        supplyConditions: {
+          ...tenderData.supplyConditions,
+          applicableConditions: JSON.stringify(
+            tenderData.supplyConditions.applicableConditions
+          ),
+        },
       });
       const patchDocument = generatePatchDocument(
         dataToSendTenderCopy,
@@ -637,7 +702,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         dataObject: patchDocument,
       }).then((res) => {
         console.log("res = ", res);
-        if (res.code === 200) {
+        if (res.code === 200) { 
           setActionStatus({
             notiMsg: "Tender Updated Successfully",
             notiType: "success",

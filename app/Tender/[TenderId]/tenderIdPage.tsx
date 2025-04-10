@@ -23,12 +23,15 @@ import { OpenPopup } from "@/Elements/DsComponents/dsPopup/dsPopup";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import CsvPopup from "@/TenderComponents/TenderLogComponents/CsvPopup";
 import IconFactory from "@/Elements/IconComponent";
-import DsStatusIndicator from "@/Elements/DsComponents/dsStatus/dsStatusIndicator";
- 
+import DsStatusIndicator, {
+  formatStatus,
+} from "@/Elements/DsComponents/dsStatus/dsStatusIndicator";
+import ContractView from "@/TenderComponents/AddUpdateTenderComponents/CustomTabViews/ContractView";
+
 const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
   paramOrderId,
 }) => {
-  const [selectedTabId,setTabId] = useTabState("tenderPage");
+  const [selectedTabId, setTabId] = useTabState("tenderPage");
   const {
     tenderData,
     addTenderProduct,
@@ -39,17 +42,32 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
   const [isCsvWhite, setIsCsvWhite] = useState(false);
   const [orderId] = useState<string>(paramOrderId?.toString());
   const appTitle = useRef<string>("New");
- 
-  const tabs = [
+
+  const [tabs, setTabs] = useState([
     { tabId: "0", tabName: "Basic Details" },
     { tabId: "1", tabName: "Products ₹ (V1)" },
     { tabId: "2", tabName: "Documents" },
-  ];
- 
+  ]);
+
   const [displayFlag, setDisplayFlag] = useState<"New" | "Existing">(
     "Existing"
   );
- 
+  useEffect(() => {
+    if (
+      tenderData.status == "AWARDED" ||
+      tenderData.status == "PARTIALLY_AWARDED" ||
+      tenderData.status == "LOST" ||
+      tenderData.status == "CANCELLED"
+    ) {
+      setTabs((prev) => [
+        ...prev,
+        {
+          tabId: "Contract",
+          tabName: "Tender " + formatStatus(tenderData.status),
+        },
+      ]);
+    }
+  }, []);
   useEffect(() => {
     if (orderId?.toString().toLowerCase() == "new") {
       setDisplayFlag("New");
@@ -62,13 +80,13 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
       ////Page not Found
     }
   }, [orderId]);
- 
-// useEffect(()=>{
- 
-//   console.log("tab Id", selectedTabId);
- 
-// })
- 
+
+  // useEffect(()=>{
+
+  //   console.log("tab Id", selectedTabId);
+
+  // })
+
   return (
     <>
       <DocumentProvider>
@@ -77,7 +95,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
           appTitle={appTitle.current}
           appMenu={
             <>
-              { selectedTabId === "1" && (
+              {selectedTabId === "1" && (
                 <>
                   <DsButton
                     className={style.csvpopupBtn}
@@ -108,17 +126,17 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
                   >
                     CSV file
                   </DsButton>
- 
+
                   <div>
                     <CsvPopup />
                   </div>
-                 
+
                   <DsButton
-                   label="Download Pricing"
-                   buttonSize="btnMedium"
-                   className={style.downloadPricing}
-                   startIcon={
-                    <div
+                    label="Download Pricing"
+                    buttonSize="btnMedium"
+                    className={style.downloadPricing}
+                    startIcon={
+                      <div
                         style={{
                           width: "1.125em",
                           height: "1.130em",
@@ -130,9 +148,8 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
                           // isWhite={isCsvWhite}
                         ></IconFactory>
                       </div>
-                   }
-                   >
-                   </DsButton>
+                    }
+                  ></DsButton>
                 </>
               )}
               <div>
@@ -161,7 +178,9 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
           }
           hasPrevious={true}
           tabs={tabs}
-          onTabChange={(x)=> {setTabId(x.tabId)}}   
+          onTabChange={(x) => {
+            setTabId(x.tabId);
+          }}
         >
           <div
             className={pagestyles.container}
@@ -185,7 +204,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
                     return <div>Error: Document context is not available</div>;
                   }
                   const { totalSelectedDocuments } = context;
- 
+
                   return (
                     <div className={style.documentContainer}>
                       <div className={style.docPane}>
@@ -208,14 +227,21 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
                           label="Add Documents"
                         />
                       </div>
- 
+
                       <DocumentSelectorArea />
                     </div>
                   );
                 }}
               </DocumentContext.Consumer>
             </TabView>
-            
+            <TabView tabId="Contract">
+              {(tenderData.status == "AWARDED" ||
+                tenderData.status == "PARTIALLY_AWARDED" ||
+                tenderData.status == "LOST" ||
+                tenderData.status == "CANCELLED") && (
+                <ContractView status={tenderData.status} />
+              )}
+            </TabView>
           </div>
           <DSTendrFooter
             setActionStatus={setActionStatusValues}
@@ -244,5 +270,3 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
   );
 };
 export default DsTenderIdPage;
- 
- 
