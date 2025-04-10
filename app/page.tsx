@@ -217,7 +217,7 @@ export default function Home() {
         className: " cell-status  ",
         columnHeader: "STATUS",
         isHidden: false,
-       
+
         columnContentType: "reactNode",
         hasSort: true,
       },
@@ -343,6 +343,8 @@ export default function Home() {
           // console.log("formatted data:", formattedData);
           setData(formattedData);
           // addOrder(formattedData);
+        } else {
+          setData([]);
         }
       })
       .catch((error) => {
@@ -710,14 +712,12 @@ export default function Home() {
 
   useEffect(() => {
     // console.log("Data updated:", data);
-    if (data.length > 0) {
-      addTableData(data);
-    }
+    // if (data.length > 0) {
+    addTableData(data);
+    // }
   }, [data]);
 
   const [selectedRow, setSelectedRow] = useState<{ e: React.MouseEvent<HTMLElement>; rowIndex: number; statuscell: string } | null>(null);
-
-
 
   return (
     <>
