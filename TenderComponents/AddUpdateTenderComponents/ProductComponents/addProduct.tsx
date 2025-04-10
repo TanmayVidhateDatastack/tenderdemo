@@ -62,20 +62,22 @@ const DsAddProduct: React.FC<addProductProps> = ({
   
   return (
     <div className={styles.input}>
+    <>
       <ProductSearch
         orderStatus={orderStatus}
         setSelectedProductId={(id) => setSelectedProductId(id)}
         setSelectedProductBatchId={(id)=>setSelectedProductId(id)}
       ></ProductSearch>
-   
+
       <DsTextField
         label={"+ Qty"}
         initialValue={qtyInputVal}
         onChange={(e) => setQtyInputVal(e.target.value)}
         id="qty"
         disable={orderStatus === DsStatus.APRV ? true : false}
+        className={styles.qtyinproduct}
       ></DsTextField>
-    
+  
      
       <DsButton
         buttonSize="btnMedium"
@@ -88,7 +90,8 @@ const DsAddProduct: React.FC<addProductProps> = ({
       >
         Add
       </DsButton>
-    </div>
+  </>
+  </div>
   );
 };
 

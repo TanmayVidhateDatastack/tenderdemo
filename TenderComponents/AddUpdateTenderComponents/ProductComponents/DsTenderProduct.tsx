@@ -35,7 +35,7 @@ const DsTenderProduct: React.FC<{
  
   return (
     <>
-   <div style={{ display: "flex", gap: "16rem", alignItems: "flex-start", margin: "20px" }}>
+   <div style={{ display: "flex", gap: "17.5em", alignItems: "flex-start", margin: "20px" }}>
   <DsAddProduct setProductList={setProductList} />
   <DsProductKpis productData={productList || fetchdata} />
 </div>
