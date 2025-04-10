@@ -14,6 +14,22 @@ import DsTenderDetails from "./DsTenderDetails ";
 import DsSupplyDetails from "./DsSupplyDetails";
 import DsApplicableConditions from "./DsApplicableConditions";
 
+const metaDataTypes = [
+  "TENDER_TYPE",
+  "SUBMISSION_MODE",
+  "SUPPLY_POINT",
+  "TEST_REPORT_REQUIREMENT",
+  "ELIGIBILITY",
+  "FEES_TYPE",
+  "TENDER_SUPPLY_CONDITION",
+  "PAYMENT_MODE",
+
+];
+export interface Deposit {
+  paidBy: DsSelectOption[];
+}
+
+
 const DsBasicDetails = () => {
   const [tenderDetails, setTenderDetails] = useState<tenderDetails>({
     tenderType: [],
@@ -48,10 +64,14 @@ const DsBasicDetails = () => {
   const [role, setRole] = useState<string>("");
 
   const handleFetch = async () => {
-    try {
-      const res = await fetchData({ url: getAllMetaData });
+    try {   
+      const res = await fetchData({ url:getAllMetaData,method:"GET",headers:{
+        "Content-Type": "application/json",
+        "Tender-Codes": JSON.stringify(metaDataTypes), 
+      }});
       if (res.code === 200) {
         const result = res.result;
+        console.log("GetAllMetaData",result);
         setMetadata(result);
         
         // Tender Details
@@ -164,10 +184,10 @@ const DsBasicDetails = () => {
       <div>
         <DsDepositeDocuments
           setDepositeDocuments={(docs) => {
-            setDepositeDocuments(docs);
+            setDepositeDocuments(docs); 
           }}
           depositeDocument={depositeDocument}
-          applicableDeposits={applicableDocuments}
+          applicableDeposits={applicableDocuments} 
           role={role}
         />
       </div>

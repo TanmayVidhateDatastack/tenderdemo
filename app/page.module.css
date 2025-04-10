@@ -355,6 +355,11 @@ a.secondary {
   align-items: center;
   color: var(--grey-300);
   font-size: var(--custome-1);
+  min-width:16.1875em !important;
+  max-width:16.1875 !important;
+  min-height:6.38625em !important;
+  max-height:6.38625em !important;
+
 }
 
 .csvpopupBtn {

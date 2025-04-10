@@ -3,7 +3,7 @@ import { DsStatus, searchProductsURL } from "@/Common/helpers/constant";
 import { TenderProduct, datalistOptions } from "@/Common/helpers/types";
 import { Dispatch, SetStateAction, useState } from "react";
 import DsSearchComponent from "@/Elements/DsComponents/DsSearch/searchComponent";
-import Image from "next/image";
+import style from "@/TenderComponents/AddUpdateTenderComponents/BasicDetailComponents/tender.module.css";
 import IconFactory from "@/Elements/IconComponent";
 export interface ProductSearchProps {
   // initialValue?:string;
@@ -82,15 +82,16 @@ const ProductSearch: React.FC<ProductSearchProps> = ({
     }
   };
   return (
+    <div className={style.addproduct}>
     <DsSearchComponent
       id="productSearch"
       dataListId="productSearchDatalist"
-      label={"Product"}
-      placeholder={"Add product & qty & hit enter"}
+      label={"   Add Product & quantity & hit enter"}
+      // placeholder={"Add product & qty & hit enter"}
       options={products ? products : undefined}
       setOptions={(value) => setOptions(value)}
       starticon={
-        <div style={{ width: "1.125em", height: "1.125em", position: "relative" }}>
+        <div style={{ width: "1.125em", height: "1.125em", position: "relative"}}>
           {/* <Image src={searchicon} layout="fill" objectFit="cover" alt="searchicon" /> */}
           <IconFactory name={"search"}/>
         </div>
@@ -108,6 +109,7 @@ const ProductSearch: React.FC<ProductSearchProps> = ({
     
       disable={orderStatus === DsStatus.APRV ? true : false}
     />
+    </div>
  
   );
 };

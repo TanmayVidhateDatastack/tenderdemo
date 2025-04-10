@@ -146,7 +146,7 @@ const prd:TenderProduct[]= rows.map((x)=>{
                   >
                     CSV file
                   </DsButton>
- 
+   
                   <div>
                   <CsvPopup onUpload={handleUpload} />
                   </div>
@@ -165,10 +165,12 @@ const prd:TenderProduct[]= rows.map((x)=>{
                       >
                         <IconFactory
                           name={"download"}
+                          disabled={true}
                           // isWhite={isCsvWhite}
                         ></IconFactory>
                       </div>
                    }
+                
                    >
                    </DsButton>
                 </>
