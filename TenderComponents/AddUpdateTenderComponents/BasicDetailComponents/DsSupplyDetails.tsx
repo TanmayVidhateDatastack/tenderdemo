@@ -12,9 +12,9 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
     <>
       <div>Supply Conditions </div>
       <div className={styles.inputDetails}>
-        <DsSingleSelect
+        <DsSingleSelect  
           options={supplyDetails.supplyPoints}
-          label="Supply points"
+          label="Supply point"
           placeholder={"Please select here"}
           id={"supplyPoints"}
           setSelectOption={(option) => {
@@ -40,7 +40,7 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
           id={"reportReq"}
           setSelectOption={(option) => {
             if (typeof option.value == "string") {
-              updateSupplyCondition("testReportRequirement", option.value);
+              updateSupplyCondition("testReportRequired", option.value);
             }
           }}
         ></DsSingleSelect>
