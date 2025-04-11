@@ -59,13 +59,17 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
       tenderData.status == "LOST" ||
       tenderData.status == "CANCELLED"
     ) {
-      setTabs((prev) => [
-        ...prev,
-        {
-          tabId: "Contract",
-          tabName: "Tender " + formatStatus(tenderData.status),
-        },
-      ]);
+      setTabs((prev) => {
+        if (prev.find((x) => x.tabId == "Contract") == undefined)
+          return [
+            ...prev,
+            {
+              tabId: "Contract",
+              tabName: "Tender " + formatStatus(tenderData.status),
+            },
+          ];
+        return prev;
+      });
     }
   }, []);
   useEffect(() => {

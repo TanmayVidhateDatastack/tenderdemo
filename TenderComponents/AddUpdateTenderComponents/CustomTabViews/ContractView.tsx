@@ -4,11 +4,18 @@ import DsSingleSelect from "@/Elements/DsComponents/dsSelect/dsSingleSelect";
 import TableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableOld";
 import DsInfoDisplay from "@/Elements/ERPComponents/DsInfoDisplay/DsInfoDisplay";
 import { ContractItems, useTenderData } from "../TenderDataContextProvider";
-import { DsSelectOption, DsTableRow, tableData } from "@/Common/helpers/types";
+import {
+  datalistOptions,
+  DsSelectOption,
+  DsTableRow,
+  tableData,
+} from "@/Common/helpers/types";
 import style from "./ContractView.module.css";
 import { useEffect, useState } from "react";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
+import DsSearchComponent from "@/Elements/DsComponents/DsSearch/searchComponent";
+import AwardedToSearch from "./AwardedToSearch";
 
 export interface ContractViewProps {
   status: "AWARDED" | "PARTIALLY_AWARDED" | "LOST" | "CANCELLED";
@@ -28,6 +35,7 @@ const ContractView: React.FC<ContractViewProps> = ({
   const [justificationOptions, setJustificationOptions] = useState<
     DsSelectOption[]
   >([]);
+
   const [selectedJustification, setSlectedJustification] =
     useState<DsSelectOption>({
       value: tenderData.tenderContract?.contractJustification || "",
@@ -144,15 +152,21 @@ const ContractView: React.FC<ContractViewProps> = ({
           className: "cell cell-awarded-to",
           // content: <DsName id={t.tenderId + "tenderType"} name={t.tenderType || "-"} />,
           content: (
-            <DsTextField
-              initialValue={item.awardedTo?.toString()}
-              onBlur={(e) => {
-                if (item.id)
+            <AwardedToSearch
+              awardedTo={{
+                id: item.awardedTo || 0,
+                name: item.product.awardedToName,
+              }}
+              index={0}
+              setAwardedTo={(option) => {
+                if (item.id && option.id && option.value) {
+                  updateContractItems("awardedTo", item.id, option.id);
                   updateContractItems(
-                    "awardedTo",
+                    "product.awardedToName",
                     item.id,
-                    (e.target as HTMLInputElement).value
+                    option.value
                   );
+                }
               }}
             />
           ),
@@ -251,7 +265,7 @@ const ContractView: React.FC<ContractViewProps> = ({
         />
       </div>
       <div>
-        <DsInfoDisplay detailOf="Updated By" value={"V"} />
+        <DsInfoDisplay detailOf="Updated By" value={"Val"} />
       </div>
     </>
   );

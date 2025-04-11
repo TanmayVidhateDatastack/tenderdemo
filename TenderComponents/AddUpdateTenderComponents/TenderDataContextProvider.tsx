@@ -1,6 +1,7 @@
 import { showToaster } from "@/Elements/DsComponents/DsToaster/DsToaster";
 import {
   closeTimeForTender,
+  DsStatus,
   // DsStatus,
   dsStatus,
   getTenderByTenderId,
@@ -30,7 +31,6 @@ export type Document = {
 };
 export type TenderDocument = {
   id?: number;
-
   documentType: string;
   category: string;
   subCategory?: string;
@@ -38,7 +38,6 @@ export type TenderDocument = {
   documentPath?: string;
   data?: File;
   documentStorageId?: number;
-
   // documents: Document[];
 };
 
@@ -85,7 +84,7 @@ export type applicableSupplyConditions = {
   type: string | number;
   notes: string;
   // documents: Document[];
-  status?: dsStatus;
+  status?: "ACTV" | "INAC";
 };
 export type tenderFee = {
   id?: number;
@@ -96,7 +95,7 @@ export type tenderFee = {
   paymentMode: string;
   paymentDueDate: string;
   instructionNotes: string;
-  status?: dsStatus;
+  status?: "ACTV" | "INAC";
   // documents: Document[];
 };
 export type ContractItems = {
@@ -163,14 +162,84 @@ export type TenderData = {
   tenderFees: tenderFee[];
   supplyConditions: tenderSupplyCondition;
   tenderRevisions: {
-    id: number;
+    id?: number;
     version: number;
     tenderItems: TenderProduct[];
   }[];
   tenderContract?: TenderContract;
   tenderDocuments?: TenderDocument[];
 };
+export function updateDocuments(
+  files: File[],
+  typeDocuments: TenderDocument[],
+  removeDocumentFunction: (
+    documentType: string,
+    documentCategory: string,
+    documentName: string,
+    documentSubCategory?: string
+  ) => void,
+  addDocumentFunction: (
+    documentType: string,
+    documentCategory: string,
+    document: {
+      name: string;
+      document: File;
+    },
+    documentSubCategory?: string
+  ) => void,
+  type: string,
+  category: string,
+  subCategory?: string
+) {
+  //If all current files array is empty (all documents are removed) then simply empty/remove the tenderDocument array (with their corresponding document_type, category and sub-category).
+  if (files.length == 0) {
+    typeDocuments?.forEach((x) => {
+      removeDocumentFunction(x.documentType, x.category, x.name, x.subCategory);
+    });
+    return;
+  }
 
+  //When first time document is getting uploaded the tenderDocument is empty then simply add the document in TenderDocument Array
+  if (typeDocuments?.length == 0) {
+    files.forEach((x) => {
+      addDocumentFunction(
+        type,
+        category,
+        {
+          name: x.name,
+          document: x,
+        },
+        subCategory
+      );
+    });
+    return;
+  }
+
+  // For add document --> document is not in tenderDocument array and it is present in latest files array
+  files?.forEach((x) => {
+    if (!typeDocuments?.find((f) => f.name == x.name)) {
+      addDocumentFunction(
+        type,
+        category,
+        {
+          name: x.name,
+          document: x,
+        },
+        subCategory
+      );
+    }
+    // else{
+    // settError Message for duplicate file
+    // console.error()
+    // }
+  });
+  // For remove document --> document is present in tenderDocument array and it is not present in latest files array.
+  typeDocuments?.forEach((x) => {
+    if (!files.find((f) => f.name == x.name)) {
+      removeDocumentFunction(x.documentType, x.category, x.name, x.subCategory);
+    }
+  });
+}
 interface TenderDataContextType {
   tenderData: TenderData;
   actionStatus: ActionStatus;
@@ -197,9 +266,22 @@ interface TenderDataContextType {
     key: keyof tenderSupplyCondition,
     value: string | number | string[] | Document[]
   ) => void;
-  addNewTenderDocument: (docType: string, document: Document[]) => void;
+  addNewTenderDocument: (
+    documentType: string,
+    documentCategory: string,
+    document: Document,
+    documentSubCategory?: string
+  ) => void;
+  removeTenderDocument: (
+    documentType: string,
+    documentCategory: string,
+    documentName: string,
+    documentSubCategory?: string
+  ) => void;
   // addDocumentToExistingType: (docType: string, document: Document) => void;
   addTenderProduct: (version: number, product: TenderProduct) => void;
+  removeTenderProduct: (version: number, id: number) => void;
+  createTenderVersion: () => void;
   updateTenderProduct: (
     version: number,
     id: number,
@@ -213,12 +295,12 @@ interface TenderDataContextType {
     value: string | { id: number; tenderItems: ContractItems[] }
   ) => void;
   updateContractItems: (
-    key: keyof ContractItems,
+    key: keyof ContractItems | `product.${keyof ContractItems["product"]}`,
     id: number,
     value: string | number
   ) => void;
   saveTender: (status: dsStatus) => Promise<void>;
-  updateTender: () => Promise<void>;
+  updateTender: (status: dsStatus) => Promise<void>;
   fetchAndSetOriginalTender: (tenderId: number) => Promise<void>;
 }
 
@@ -278,20 +360,22 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       contractStatusNotes: "test",
       tenderRevisions: {
         id: 0,
-        tenderItems: [{
-          awardedQuantity:1,
-          awardedRate:2,
-          awardedTo:1,
-          id:2,
-          productId:1,
-          product:{
-            awardedToName:"Testor",
-            productName:"Zer",
-            requestedGenericName:"Zept",
-            requestedPackingSize:"15ml vail",
-            type:"read-only"
-          }
-        }],
+        tenderItems: [
+          {
+            awardedQuantity: 1,
+            awardedRate: 2,
+            awardedTo: 1,
+            id: 2,
+            productId: 1,
+            product: {
+              awardedToName: "Testor",
+              productName: "Zer",
+              requestedGenericName: "Zept",
+              requestedPackingSize: "15ml vail",
+              type: "read-only",
+            },
+          },
+        ],
       },
     },
   });
@@ -365,24 +449,18 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     // }));
     setTenderData((prev) => {
       let updated = false; // Flag to track if we updated an existing entry
-    
+      const active: "ACTV" | "INAC" = "ACTV";
       const updatedTenderFees = prev.tenderFees.map((fee) => {
         if (fee.feesType === type) {
           updated = true; // Mark that we found and updated the type
           return {
             ...fee,
-            feesType: type,
-            amount: 0,
-            currency: "",
-            paidBy: "",
-            paymentMode: "",
-            paymentDueDate: "",
-            instructionNotes: "",
+            status: active,
           };
         }
         return fee; // Keep existing entries unchanged
       });
-    
+
       // If no update was made, add a new entry
       if (!updated) {
         updatedTenderFees.push({
@@ -393,15 +471,15 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           paymentMode: "",
           paymentDueDate: "",
           instructionNotes: "",
+          status: active,
         });
       }
-    
+
       return {
         ...prev,
         tenderFees: updatedTenderFees,
       };
     });
-    
   };
   // ✅ Remove tender fee by type
   const removeTenderFeeByType = (feeType: string) => {
@@ -443,19 +521,48 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     }));
   };
   // ✅ Add a document to the tender-level document list
-  const addNewTenderDocument = (docType: string, documentList: Document[]) => {
+  const addNewTenderDocument = (
+    documentType: string,
+    documentCategory: string,
+    document?: Document,
+    documentSubCategory?: string,
+    documentName?: string,
+    documentStorageId?: number,
+    documentPath?: string
+  ) => {
     setTenderData((prev) => ({
       ...prev,
       tenderDocuments: [
         ...(prev.tenderDocuments || []),
         {
-          documentType: docType,
-          category: docType,
-          name: documentList[0].name,
-          documentPath: "",
-          documentStorageId: 0,
-          data: documentList[0].document,
+          documentType: documentType,
+          category: documentCategory,
+          subCategory: documentSubCategory,
+          name: document?.name || documentName || "",
+          documentPath: documentPath || "",
+          documentStorageId: documentStorageId || 0,
+          data: document?.document || undefined,
         },
+      ],
+    }));
+  };
+  const removeTenderDocument = (
+    documentType: string,
+    documentCategory: string,
+    documentName: string,
+    documentSubCategory?: string
+  ) => {
+    setTenderData((prev) => ({
+      ...prev,
+
+      tenderDocuments: [
+        ...(prev.tenderDocuments?.filter(
+          (document) =>
+            document.name !== documentName &&
+            document.documentType !== documentType &&
+            document.category !== documentCategory &&
+            document.subCategory !== documentSubCategory
+        ) || []),
       ],
     }));
   };
@@ -481,6 +588,52 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             }
           : revision
       ),
+    }));
+  };
+  const removeTenderProduct = (version: number, id: number) => {
+    setTenderData((prev) => ({
+      ...prev,
+      tenderRevisions: prev.tenderRevisions.map((revision) =>
+        revision.version === version
+          ? {
+              ...revision,
+              tenderItems: [
+                ...revision.tenderItems.filter((item) => item.id !== id),
+              ],
+            }
+          : revision
+      ),
+    }));
+  };
+  const createTenderVersion = () => {
+    const latestRevision = tenderData.tenderRevisions.reduce(
+      (maxObj, currentObj) =>
+        currentObj.version > maxObj.version ? currentObj : maxObj
+    );
+    setTenderData((prev) => ({
+      ...prev,
+      tenderRevisions: [
+        ...prev.tenderRevisions,
+        {
+          version: latestRevision.version + 1,
+          tenderItems: [
+            ...latestRevision.tenderItems.map((x) => {
+              return {
+                requestedGenericName: x.requestedGenericName,
+                requestedQuantity: x.requestedQuantity,
+                requestedPackingSize: x.requestedPackingSize,
+                productId: x.productId,
+                product: x.product,
+                proposedRate: x.proposedRate,
+                ptrPercent: x.ptrPercent,
+                lpr: x.lpr,
+                competitorId: x.competitorId,
+                supplierDiscount: x.supplierDiscount,
+              } as TenderProduct;
+            }),
+          ],
+        },
+      ],
     }));
   };
   // ✅ Update a tender product field
@@ -527,7 +680,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     }));
   };
   const updateContractItems = (
-    key: keyof ContractItems,
+    key: keyof ContractItems | `product.${keyof ContractItems["product"]}`,
     id: number,
     value: string | number
   ) => {
@@ -539,11 +692,16 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           id: prev.tenderContract?.tenderRevisions?.id || 0,
           tenderItems: prev.tenderContract?.tenderRevisions?.tenderItems?.map(
             (item) =>
-              item.id === id
-                ? {
-                    ...item,
-                    [key]: value,
-                  }
+              item.id === id || item.productId === id
+                ? key.startsWith("product.")
+                  ? {
+                      ...item,
+                      product: {
+                        ...item.product,
+                        [key.split(".")[1]]: value, // Update the nested product field
+                      },
+                    }
+                  : { ...item, [key]: value } // Update the top-level field
                 : item
           ),
         },
@@ -552,20 +710,51 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   };
   // ✅ Add a new applicable condition
   const addApplicableCondition = (type: string) => {
-    setTenderData((prev) => ({
-      ...prev,
+    // setTenderData((prev) => ({
+    //   ...prev,
 
-      supplyConditions: {
-        ...prev.supplyConditions,
-        applicableConditions: [
-          {
-            type,
-            notes: "",
-            documents: [],
-          },
-        ],
-      },
-    }));
+    //   supplyConditions: {
+    //     ...prev.supplyConditions,
+    //     applicableConditions: [
+    //       ...prev.supplyConditions.applicableConditions,
+    //       {
+    //         type,
+    //         notes: "",
+    //         status: "ACTV",
+    //       },
+    //     ],
+    //   },
+    // }));
+    setTenderData((prev) => {
+      let updated = false; // Flag to track if we updated an existing entry
+      const active: "ACTV" | "INAC" = "ACTV";
+
+      const updatedTenderApplicableConditions =
+        prev.supplyConditions.applicableConditions.map((ac) => {
+          if (ac.type == type) {
+            updated = true;
+            return {
+              ...ac,
+              status: active,
+            };
+          }
+          return ac;
+        });
+      if (!updated) {
+        updatedTenderApplicableConditions.push({
+          type,
+          status: active,
+          notes: "",
+        });
+      }
+      return {
+        ...prev,
+        supplyConditions: {
+          ...prev.supplyConditions,
+          applicableConditions: updatedTenderApplicableConditions,
+        },
+      };
+    });
   };
 
   // ✅ Remove an applicable condition by type
@@ -626,7 +815,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   const saveTender = useCallback(
     async (status: dsStatus) => {
       if (!tenderData) return;
-      // console.log("sAVEEEE", tenderData);
+      console.log("sAVEEEE", tenderData);
 
       const dataToSend = stripReadOnlyProperties({
         ...tenderData,
@@ -671,60 +860,70 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     },
     [tenderData, fetchData]
   );
-  const updateTender = useCallback(async () => {
-    try {
-      const dataToSendTenderCopy = stripReadOnlyProperties({
-        ...tenderDataCopy,
-        supplyConditions: {
-          ...tenderDataCopy.supplyConditions,
-          applicableConditions: JSON.stringify(
-            tenderDataCopy.supplyConditions.applicableConditions
-          ),
-        },
-      });
-      const dataToSendOriginalTender = stripReadOnlyProperties({
-        ...tenderData,
-        supplyConditions: {
-          ...tenderData.supplyConditions,
-          applicableConditions: JSON.stringify(
-            tenderData.supplyConditions.applicableConditions
-          ),
-        },
-      });
-      const patchDocument = generatePatchDocument(
-        dataToSendTenderCopy,
-        dataToSendOriginalTender
-      );
-      console.log("patchDocument= ", patchDocument);
-      await fetchData({
-        url: saveTenderurl,
-        method: "PATCH",
-        dataObject: patchDocument,
-      }).then((res) => {
-        console.log("res = ", res);
-        if (res.code === 200) { 
-          setActionStatus({
-            notiMsg: "Tender Updated Successfully",
-            notiType: "success",
-            showNotification: true,
-          });
-          showToaster("create-order-toaster");
-          setTimeout(() => {
-            goBack();
-          }, closeTimeForTender);
-        } else {
-          setActionStatus({
-            notiMsg: "Tender could not be updated",
-            notiType: "error",
-            showNotification: true,
-          });
-          showToaster("create-order-toaster");
-        }
-      });
-    } catch (error) {
-      console.error("Error saving order:", error);
-    }
-  }, [tenderData, tenderDataCopy, fetchData, generatePatchDocument]);
+  const updateTender = useCallback(
+    async (status: string) => {
+      try {
+        const dataToSendTenderCopy = stripReadOnlyProperties({
+          ...tenderDataCopy,
+          supplyConditions: {
+            ...tenderDataCopy.supplyConditions,
+            applicableConditions: JSON.stringify(
+              tenderDataCopy.supplyConditions.applicableConditions
+            ),
+          },
+        });
+        const dataToSendOriginalTender = stripReadOnlyProperties({
+          ...tenderData,
+          supplyConditions: {
+            ...tenderData.supplyConditions,
+            applicableConditions: JSON.stringify(
+              tenderData.supplyConditions.applicableConditions
+            ),
+          },
+        });
+        const patchDocument = generatePatchDocument(
+          dataToSendTenderCopy,
+          dataToSendOriginalTender
+        );
+        let url = saveTenderurl;
+        if (
+          status.toLowerCase() == DsStatus.AWRD ||
+          status == DsStatus.PAWRD ||
+          status == DsStatus.LOST ||
+          status == DsStatus.CNCL
+        )
+          url = getTenderByTenderId + tenderData.id + "/contract";
+        await fetchData({
+          url: url,
+          method: "PATCH",
+          dataObject: patchDocument,
+        }).then((res) => {
+          console.log("res = ", res);
+          if (res.code === 200) {
+            setActionStatus({
+              notiMsg: "Tender Updated Successfully",
+              notiType: "success",
+              showNotification: true,
+            });
+            showToaster("create-order-toaster");
+            setTimeout(() => {
+              goBack();
+            }, closeTimeForTender);
+          } else {
+            setActionStatus({
+              notiMsg: "Tender could not be updated",
+              notiType: "error",
+              showNotification: true,
+            });
+            showToaster("create-order-toaster");
+          }
+        });
+      } catch (error) {
+        console.error("Error saving order:", error);
+      }
+    },
+    [tenderData, tenderDataCopy, fetchData, generatePatchDocument]
+  );
 
   const fetchAndSetOriginalTender = useCallback(
     async (tenderId: number) => {
@@ -735,11 +934,19 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         const tenderData = response.result;
         console.log("tenderData= ", tenderData);
         const newTenderData: TenderData = {
-          ...tenderData,
+          ...tenderData.tenders,
           tenderFees: tenderData.tenderFees.map((fee) => ({
             ...fee,
             status: "ACTV",
           })),
+          supplyConditions: {
+            ...tenderData.supplyConditions,
+            applicableCondition:
+              tenderData.supplyConditions.applicableCondition.map((ac) => ({
+                ...ac,
+                status: "ACTV",
+              })),
+          },
         };
         setTenderData(newTenderData);
         setTenderDataCopy({
@@ -767,8 +974,11 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         updateSupplyCondition,
         updateApplicableCondition,
         addNewTenderDocument,
+        removeTenderDocument,
         // addDocumentToExistingType,
         addTenderProduct,
+        removeTenderProduct,
+        createTenderVersion,
         updateTenderProduct,
         addApplicableCondition,
         removeApplicableCondition,
