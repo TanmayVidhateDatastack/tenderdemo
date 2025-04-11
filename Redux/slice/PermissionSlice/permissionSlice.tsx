@@ -8,8 +8,8 @@ type PermissionState = {
   approvalButtonVisible: boolean;
   newButtonVisible: boolean;
   filterButtonVisible: boolean;
-  underReviewButtonVisible: boolean;
-  underApprovalButtonVisible: boolean;
+  myApprovalButtonVisible: boolean;
+  // myApprovalButtonVisible: boolean;
 };
 
 const initialState: PermissionState = {
@@ -19,8 +19,8 @@ const initialState: PermissionState = {
   approvalButtonVisible: false,
   newButtonVisible: false,
   filterButtonVisible: false,
-  underReviewButtonVisible: false,
-  underApprovalButtonVisible: false,
+  myApprovalButtonVisible: false,
+  // myApprovalButtonVisible: false,
 
 };
 
@@ -37,8 +37,8 @@ const permissionsSlice = createSlice({
       state.filterButtonVisible = false;
       state.newButtonVisible = false;
       state.feesPendingButtonVisible = false;
-      state.underReviewButtonVisible = false;
-      state.underApprovalButtonVisible = false;
+      state.myApprovalButtonVisible = false;
+      state.myApprovalButtonVisible = false;
 
       switch (role) {
         case "MAKER":
@@ -46,13 +46,13 @@ const permissionsSlice = createSlice({
           state.nearSubmissionButtonVisible = true;
           state.filterButtonVisible = true;
           state.newButtonVisible = true;
-          state.feesPendingButtonVisible = true;
+          state.feesPendingButtonVisible = false;
           state.approvalButtonVisible = true;
           break;
 
         case "CHECKER":
           state.tenderDatalistVisible = true;
-          state.underReviewButtonVisible = true;
+          state.myApprovalButtonVisible = true;//replaced with underReviewButtonVisible
           state.filterButtonVisible = true;
           // state.newButtonVisible = true;
           break;
@@ -62,7 +62,7 @@ const permissionsSlice = createSlice({
           state.nearSubmissionButtonVisible = true;
           state.filterButtonVisible = true;
           state.feesPendingButtonVisible = true;
-          state.underApprovalButtonVisible = true;
+          state.myApprovalButtonVisible = true;//replaced with underApprovalButtonVisible
           state.approvalButtonVisible = true;
           break;
 
@@ -75,7 +75,7 @@ const permissionsSlice = createSlice({
       }
       return state;
     }
-   
+
   }
 });
 
