@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import TableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableComponent";
-import { tableData, tcolumn, DsTableRow, TenderProduct } from "@/Common/helpers/types";
-import { useTenderData } from "../TenderDataContextProvider";
+import { tableData, tcolumn, DsTableRow } from "@/Common/helpers/types";
+import { TenderProduct, useTenderData } from "../TenderDataContextProvider";
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import DsCustomerLPR from "./CustomerLpr";
 
@@ -41,20 +41,20 @@ const DsProductTable: React.FC = () => {
   };
  
  
-  const handleSave = () => {
-    calculatedProducts.forEach((product) => {
-      if (product.id) {
-        updateTenderProduct(product.id, "name", product.name || "");
-        updateTenderProduct(product.id, "quantity", product.quantity || 0);
-        updateTenderProduct(product.id, "packingSize", product.packingSize || "");
-        updateTenderProduct(product.id, "totalCost", product.totalCost || 0);
-        updateTenderProduct(product.id, "marginValue", product.marginValue || 0);
-        updateTenderProduct(product.id, "marginPercent", product.marginPercent || 0);
-        updateTenderProduct(product.id, "netValue", product.netValue || 0);
-      }
-    });
-    setHasChanges(false);
-  };
+  // const handleSave = () => {
+  //   calculatedProducts.forEach((product) => {
+  //     if (product.id) {
+  //       updateTenderProduct(1,product.id, "product.name", product.name || "");
+  //       updateTenderProduct(1,product.id, "requestedQuantity", product.quantity || 0);
+  //       updateTenderProduct(1,product.id, "requestedPackingSize", product.packingSize || "");
+  //       updateTenderProduct(product.id, "totalCost", product.totalCost || 0);
+  //       updateTenderProduct(product.id, "marginValue", product.marginValue || 0);
+  //       updateTenderProduct(product.id, "marginPercent", product.marginPercent || 0);
+  //       updateTenderProduct(product.id, "netValue", product.netValue || 0);
+  //     }
+  //   });
+  //   setHasChanges(false);
+  // };
  
   const columns:tcolumn[] = useMemo(() => [
 
@@ -186,5 +186,6 @@ const DsProductTable: React.FC = () => {
 };
  
 export default DsProductTable;
- 
- 
+
+
+
