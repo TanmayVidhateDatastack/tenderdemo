@@ -1,11 +1,11 @@
-// import React, { useEffect, useMemo, useState } from "react";
-// import TableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableComponent";
-// import { tableData, tcolumn, DsTableRow, TenderProduct } from "@/Common/helpers/types";
-// import { useTenderData } from "../TenderDataContextProvider";
-// import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
-// import DsCustomerLPR from "./CustomerLpr";
-// import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
-// import ProductTableSearch from "./ProductTableSearch";
+import React, { useEffect, useMemo, useState } from "react";
+import TableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableComponent";
+import { tableData, tcolumn, DsTableRow, TenderProduct } from "@/Common/helpers/types";
+import { useTenderData } from "../TenderDataContextProvider";
+import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
+import DsCustomerLPR from "./CustomerLpr";
+
+import ProductTableSearch from "./ProductTableSearch";
 
 // import styles from "@/app/page.module.css";
 // import IconFactory from "@/Elements/IconComponent";
@@ -167,18 +167,18 @@
     
 //          />}
         
-//            {tenderProductTable?.rows.length == 0 && (
-//                   <div className={styles.noDataFound}>
-//                     <div></div>
-//                     <div className={styles.noData}>
-                
-//                       <IconFactory name={"emptyHourGlass"}/>
-//                       <div>Products Not Available</div>
-//                     </div>
-//                     <div className={styles.noDataBorders}></div>
-//                   </div>
-//                 )
-//               }
+           {tenderProductTable?.rows.length == 0 && (
+                  <div className={styles.noDataFound}>
+                    <div></div>
+                    <div className={styles.noData}>
+              
+                      <IconFactory name={"emptyHourGlass"}/>
+                      <div>Products Not Available</div>
+                    </div>
+                    <div className={styles.noDataBorders}></div>
+                  </div>
+                )
+              }
      
 //     </div>
 //     </>

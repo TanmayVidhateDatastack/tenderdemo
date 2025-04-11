@@ -46,11 +46,11 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
   const {
     tenderDatalistVisible,
     nearSubmissionButtonVisible,
-    feesPendingButtonVisible,
+    // feesPendingButtonVisible,
     filterButtonVisible,
     approvalButtonVisible,
-    underApprovalButtonVisible,
-    underReviewButtonVisible
+    myApprovalButtonVisible,
+    // myApprovalButtonVisible
 
 
   } = permissions;
@@ -78,115 +78,12 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
   }, [role]);
 
 
-  // const handleFilter = (value: string | string[], message?: string) => {
-  //   setIsFiltered((prev) => {
-  //     const newFilterState = Object.fromEntries(
-  //       Object.keys(prev).map((key) => [
-  //         key,
-  //         Array.isArray(value)
-  //           ? value.includes(key)
-  //           : key === value
-  //           ? !prev[key]
-  //           : false,
-  //       ])
-  //     );
-
-  //     if (!Array.isArray(value)) {
-  //       if (!newFilterState[value]) {
-  //         setFilteredData(data);
-  //       } else {
-  //         let filteredRows = [...data];
-
-  //         if (value === "nearSubmission") {
-  //           filteredRows = filteredRows.filter((tender) => {
-
-  //             const [day, month, year] = tender.submittionDate.split("/");
-  //             const dateToCheck = new Date(
-  //               parseInt(year),
-  //               parseInt(month) - 1,
-  //               parseInt(day)
-  //             );
-
-  //             const today = new Date();
-  //             const futureDate = new Date(today);
-  //             futureDate.setDate(today.getDate() + 20); //near submission change 20 days
-
-
-  //             return (
-  //               (dateToCheck < today || dateToCheck <= futureDate) &&
-  //               tender.status.tenderStatus?.toLowerCase() !== DsStatus.SMBT
-  //             );
-  //           });
-  //         } else if (value == "feesPending") {
-  //           const lowerCaseValue = DsStatus.DRFT.toLowerCase();
-  //           message = "fees pending";
-  //           filteredRows = filteredRows.filter((tender) =>
-  //             message
-  //               ? tender.status?.tenderStatus?.toLowerCase() ===
-  //                   lowerCaseValue &&
-  //                 tender?.status?.message?.toLowerCase() ==
-  //                   message.toLowerCase()
-  //               : tender.status?.tenderStatus?.toLowerCase() === lowerCaseValue
-  //           );
-  //         }
-
-  //         else {
-  //           const lowerCaseValue = value.toLowerCase();
-  //           filteredRows = filteredRows.filter((tender) =>
-  //             message
-  //               ? tender.status?.tenderStatus?.toLowerCase() ===
-  //                   lowerCaseValue &&
-  //                 tender?.status?.message?.toLowerCase() ==
-  //                   message.toLowerCase()
-  //               : tender.status?.tenderStatus?.toLowerCase() === lowerCaseValue
-  //           );
-  //         }
-  //         setFilteredData(filteredRows);
-  //       }
-  //     } else {
-  //         const activeFilters = Object.entries(newFilterState)
-  //         .filter(([_, isActive]) => isActive)
-  //         .map(([key]) => key);
-  //       if (activeFilters.length === 0) {
-  //         setFilteredData(data);
-  //       } else {
-  //         let filteredRows = [...data];
-
-  //         filteredRows = filteredRows.filter((tender) =>
-  //           activeFilters.some(
-  //             (status) =>
-  //               tender.status?.tenderStatus?.toLowerCase() ===
-  //                 status.toLowerCase() &&
-  //               (tender.status.message && message
-  //                 ? tender.status.message.toLowerCase() == message.toLowerCase()
-  //                 : true)
-  //           )
-  //         );
-  //         setFilteredData(filteredRows);
-  //       }
-
-  //       return newFilterState;
-  //     }
-  //     return newFilterState;
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   handleFetch();
-  // }, []);
-
-  // useEffect(() => {
-  //   console.log("deta : ", data);
-  // }, [data]);
 
   useEffect(() => {
     if (role && role !== "") {
       dispatch(setVisibilityByRole(role));
     }
   }, [role]);
-
-
-
 
 
   const handleFilter = async (value: string) => {
@@ -281,7 +178,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
         )}
 
       </div>
-      {feesPendingButtonVisible && (
+      {/* {feesPendingButtonVisible && (
 
         <DsFilterButton
           id="dispatch"
@@ -293,7 +190,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
           onClick={() => handleFilter("FEES_PENDING")}
           label="Fees Pending"
         />
-      )}
+      )} */}
       {approvalButtonVisible && (
 
         <DsFilterButton
@@ -313,7 +210,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
           label="Approval"
         />
       )}
-      {underApprovalButtonVisible && (
+      {myApprovalButtonVisible && (
         <DsFilterButton
           label="Under Approval"
           className={styles.dis}
@@ -326,9 +223,10 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
           onClick={() => handleFilter("UNDER_APPROVAL")}
         />
       )}
-      {underReviewButtonVisible && (
+      {myApprovalButtonVisible && (
         <DsFilterButton
-          label="Under Review"
+          // label="Under Review"
+          label="My Approval"
           className={styles.dis}
           id="underReview"
           buttonViewStyle={

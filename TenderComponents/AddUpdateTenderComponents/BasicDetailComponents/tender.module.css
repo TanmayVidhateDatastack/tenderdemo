@@ -88,3 +88,11 @@
 direction: column;
 
 }
+.addproduct
+{
+  min-width:18.0625em !important;
+  max-width:18.0625em !important;
+  min-height:2.25em !important;
+  max-height:2.25em !important;
+  box-shadow:3px 3px 5px  #0000000F!important;
+}

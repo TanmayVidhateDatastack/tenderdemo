@@ -17,7 +17,7 @@ import DsStatusIndicator from "@/Elements/DsComponents/dsStatus/dsStatusIndicato
 import { getAllDepots, getAllMetaData, getAllTenders, getApplierSupplierDetails, searchCustomerURL } from "@/Common/helpers/constant";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import DsTableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableComponent";
-
+import { useRouter } from "next/navigation";
 
 import DsCurrency from "@/Elements/DsComponents/dsCurrency/dsCurrency";
 
@@ -91,6 +91,7 @@ export default function Home() {
     userId: 3,
     metaDataTypes: [],
   });
+  console.log(isFilterActive, tenderMetadataFilters);
   const [fetchedMetadata, setFetchedMetadata] = useState<Metadata>({})
   // console.log(isFilterActive);
   const [isAddWhite, setIsAddWhite] = useState<boolean>(false);
@@ -217,7 +218,7 @@ export default function Home() {
         className: " cell-status  ",
         columnHeader: "STATUS",
         isHidden: false,
-       
+
         columnContentType: "reactNode",
         hasSort: true,
       },
@@ -225,19 +226,19 @@ export default function Home() {
     rows: [],
   });
 
-  const calculateDueStatus = (submissionDate: string) => {
-    if (!submissionDate) return "-"; // Handle empty values
+  const calculateDueStatus = (submittionDate: string) => {
+    if (!submittionDate) return "-"; // Handle empty values
 
-    let subDate = new Date(submissionDate);
+    let subDate = new Date(submittionDate);
 
     // If parsing fails, try manual parsing
     if (isNaN(subDate.getTime())) {
       // Handle formats like "DD/MM/YYYY"
-      const dateParts = submissionDate.split(/[\/\-\.]/);
+      const dateParts = submittionDate.split(/[\/\-\.]/);
       if (dateParts.length === 3) {
         let day, month, year;
 
-        if (submissionDate.includes("/")) {
+        if (submittionDate.includes("/")) {
           // Assuming "DD/MM/YYYY" format
           day = parseInt(dateParts[0], 10);
           month = parseInt(dateParts[1], 10) - 1;
@@ -310,7 +311,7 @@ export default function Home() {
     const advanceAndSearch = {
       "userId": 3,
       "pageNo": 0,
-      "pageSize": 0, 
+      "pageSize": 0,
       "filters": advFilter,
       "searchTerm": searchQuery,
     }
@@ -333,7 +334,7 @@ export default function Home() {
         "Content-Type": "application/json",
         "Tenders-Filters": JSON.stringify(tenderFilters),
       },
-    }) 
+    })
       .then((res) => {
         // console.log("objevct to be send", tenderFilters);
         console.log("Response RESULT:", res.result);
@@ -343,6 +344,8 @@ export default function Home() {
           // console.log("formatted data:", formattedData);
           setData(formattedData);
           // addOrder(formattedData);
+        } else {
+          setData([]);
         }
       })
       .catch((error) => {
@@ -354,11 +357,11 @@ export default function Home() {
   const formatTenders = (tenders: Tender[]): Tender[] => {
     return tenders.map((item) => ({
       ...tenders,
-
+      tenderId: item.tenderId,
       customerName: item.customerName,
       submittionDate: item.submissionDate,
       daystosubmit: item.daysToSubmit ?? "N/A",
-      tenderId: item.tenderId.toString(),
+      tenderNumber: item.tenderNumber.toString(),
       type: item.customerType,
       tenderType: item.tenderType,
       depot: item.shippingLocations.map((loc: Tender) => loc.name).join(", "),
@@ -374,6 +377,7 @@ export default function Home() {
 
 
     }));
+
   };
 
   const [searchOptions, setSearchOptions] = useState<datalistOptions[]>([]);
@@ -416,6 +420,7 @@ export default function Home() {
   const [uniqueAppliers, setUniqueAppliers] = useState<{ label: string; value: string }[]>([]);
   const [applierDetails, setApplierDetails] = useState<string[]>([]);
   const [supplierDetails, setSupplierDetails] = useState<string[]>([]);
+  console.log(uniqueAppliers, supplierDetails);
 
   useEffect(() => {
     if (Array.isArray(data) && data.length > 0) {
@@ -570,7 +575,7 @@ export default function Home() {
     // console.log("Adding table data:", tender);
     const newRows: DsTableRow[] = tender.map((t, index) => ({
       rowIndex: index,
-      className: "cellRow ",
+      className: styles["tender-product-table"],
       rowIcon:
         t?.type === "INSTITUTION" ? (
           <div style={{ width: "0.875em", height: "0.875em", position: "relative" }}>
@@ -591,13 +596,15 @@ export default function Home() {
           className: " cell cell-customer text-dark-1 ",
           content: <DsName id={t.tenderId + "customerName"} name={t.customerName || "-"} />,
           filterValue: t.customerName,
+          customAttributes: t.tenderId,
           contentType: "string",
         },
         {
           columnIndex: 1,
           className: " cell cell-submissiondate text-dark-0 ",
           content: <DsName id={t.tenderId + "submittionDate"} name={formatDate(t.submittionDate)} />,
-          filterValue: t.submittionDate,
+          filterValue: t.submissionDate,
+          customAttributes: t.tenderId,
           contentType: "string",
         },
         {
@@ -605,13 +612,15 @@ export default function Home() {
           className: " cell cell-days-to-submit ",
           content: <DsName id={t.tenderId + "daystosubmit"} name={t.submittionDate ? calculateDueStatus(t.submittionDate) : "-"} />,
           filterValue: t.submittionDate,
+          customAttributes: t.tenderId,
           contentType: "string",
         },
         {
           columnIndex: 3,
           className: " cell cell-tenderid text-dark-0 ",
-          content: <DsName id={t.tenderId + "tenderId"} name={t.tenderId || "-"} />,
-          filterValue: t.tenderId,
+          content: <DsName id={t.tenderId + "tenderId"} name={t.tenderNumber || "-"} />,
+          filterValue: t.tenderNumber,
+          customAttributes: t.tenderId,
           contentType: "string",
         },
 
@@ -622,6 +631,7 @@ export default function Home() {
           // content: <DsName id={t.tenderId + "tenderType"} name={t.tenderType || "-"} />,
           content: <DsName id={t.tenderId + "tenderType"} name={getTenderTypeDescription(t.tenderType)} />,
           filterValue: t.tenderType,
+          customAttributes: t.tenderId,
           contentType: "string",
         },
 
@@ -631,6 +641,7 @@ export default function Home() {
           // content: t.depot,
           content: <DsName id={t.tenderId + "depot"} name={t.depot || "-"} />,
           filterValue: t.depot,
+          customAttributes: t.tenderId,
           contentType: "string",
         },
         {
@@ -639,6 +650,7 @@ export default function Home() {
           // content: t.appliedBy,
           content: <DsName id={t.tenderId + "appliedBy"} name={t.appliedBy || "-"} />,
           filterValue: t.appliedBy,
+          customAttributes: t.tenderId,
           contentType: "string",
         },
         {
@@ -647,6 +659,7 @@ export default function Home() {
           // content: t.suppliedBy,
           content: <DsName id={t.tenderId + "suppliedBy"} name={t.suppliedBy || "-"} />,
           filterValue: t.suppliedBy,
+          customAttributes: t.tenderId,
           contentType: "string",
         },
         {
@@ -655,6 +668,7 @@ export default function Home() {
           // content: t.preparedBy,
           content: <DsName id={t.tenderId + "preparedBy"} name={t.preparedBy || "-"} />,
           filterValue: t.preparedBy,
+          customAttributes: t.tenderId,
           contentType: "string",
         },
         {
@@ -662,12 +676,13 @@ export default function Home() {
           className: " cell cell-value  text-dark-1 ",
           content: <DsCurrency format={"IND"} id={"value"} amount={parseFloat(t.value)} type={"short"} />,
           filterValue: t.value,
+          customAttributes: t.tenderId,
           contentType: "number",
         },
         {
           columnIndex: 10,
           className: " cell cell-status ",
-
+          customAttributes: t.tenderId,
           content: t.status ? (
             <DsStatusIndicator
               type="user_defined"
@@ -681,13 +696,20 @@ export default function Home() {
                 }`}
               status={t.status.tenderStatus}
               label={t.status.tenderStatus}
-              comment={
-                t.status?.message
-                  ? typeof t.status.message === "object"
-                    ? JSON.stringify(t.status.message)
-                    : t.status.message.toString()
-                  : ""
+              status_icon={
+                <div style={{ width: "10px" }}>
+
+                  <IconFactory name={"comment"}></IconFactory>
+                </div>
               }
+              comment={t.status?.message}
+            // comment={
+            //   t.status?.message
+            //     ? typeof t.status.message === "string"
+            //       ? JSON.stringify(t.status.message)
+            //       : t.status.message
+            //     : ""
+            // }
             />
           ) :
             (
@@ -708,16 +730,38 @@ export default function Home() {
     }));
   };
 
+  const router = useRouter();
+  const goTo = (tenderId: number) => {
+    const location = `/Tender/${tenderId}`;
+    if (location) {
+      router.push(location); // Navigate to the dynamic route
+    }
+  };
+
+  const handleRowDoubleClick = (
+    e: React.MouseEvent<HTMLElement>,
+    rowIndex: number
+  ) => {
+    const row = tempTableData?.rows?.find((row) => row.rowIndex === rowIndex);
+
+    const tenderId = row?.content?.[0]?.customAttributes;
+
+    if (tenderId) {
+      goTo(Number(tenderId));
+    } else {
+      console.warn("TenderId not found on double-clicked row");
+    }
+  };
+
+
   useEffect(() => {
     // console.log("Data updated:", data);
-    if (data.length > 0) {
-      addTableData(data);
-    }
+    // if (data.length > 0) {
+    addTableData(data);
+    // }
   }, [data]);
 
   const [selectedRow, setSelectedRow] = useState<{ e: React.MouseEvent<HTMLElement>; rowIndex: number; statuscell: string } | null>(null);
-
-
 
   return (
     <>
@@ -791,6 +835,7 @@ export default function Home() {
               rows={tempTableData.rows}
               isFooterRequired={true}
               isSortable={true}
+              handleRowDoubleClick={handleRowDoubleClick}
               handleRowClick={(e, rowIndex) => {
                 const row = tempTableData.rows[rowIndex];
 

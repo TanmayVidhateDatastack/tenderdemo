@@ -3,7 +3,7 @@ import styles from "./CsvPopup.module.css";
 // import Image from "next/image";
 // import uploadIcon from "@/Common/SalesIcons/smallIcons/uploadicon.svg";
 import React, { useRef, useState } from "react";
-import DsPopup from "@/Elements/DsComponents/dsPopup/dsPopup";
+import DsPopup, { ClosePopup } from "@/Elements/DsComponents/dsPopup/dsPopup";
 import DSButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import Toaster from "@/Elements/DsComponents/DsToaster/DsToaster";
 
@@ -61,6 +61,12 @@ export default function CsvPopup({ onUpload }: CsvPopupProps) {
     e.preventDefault();
     onUpload(file); // Call the parent upload handler
   };
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    handleUploadFile(e);
+    ClosePopup("csvpopup");
+  };
+  
   
   return (
     <>
@@ -71,6 +77,8 @@ export default function CsvPopup({ onUpload }: CsvPopupProps) {
         position="center"
         size="large"
         className={styles.popup}
+        
+        
       >
         <div className={styles.container}>
           <div>
@@ -142,7 +150,7 @@ export default function CsvPopup({ onUpload }: CsvPopupProps) {
             <DSButton 
             label="Upload Now" 
          buttonSize="btnSmall"
-            onClick={(e)=>handleUploadFile(e)}
+         onClick={handleClick}
             disable={file === null}
           />
           </div>
