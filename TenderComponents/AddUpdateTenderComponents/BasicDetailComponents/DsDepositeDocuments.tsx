@@ -3,7 +3,7 @@ import Image from "next/image";
 import downarrow from "@/Common/TenderIcons/smallIcons/verticleArrow.svg";
 import { useEffect, useState } from "react";
 import ContextMenu, {
-  closeAllContext,
+  closeAllContext, 
   createContext,
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import React from "react";
@@ -129,28 +129,28 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
     // console.log("Currently Selected:", Array.from(selectedFees));
   };
 
-  // useEffect(() => {
-  //   applicablefees.forEach((opt) => {
-  //     const id = opt.value.toString();
-  //     const checkbox = document.getElementById(id) as HTMLInputElement;
-  //     selectedFees.add(id);
-  //     feeVisibility[id] = true;
-  //     addTenderFee(id);
-  //     if (checkbox?.checked) {
-  //       selectedFees.add(id);
-  //       feeVisibility[id] = true;
-  //       addTenderFee(id);
-  //     } else if (checkbox) {
-  //       selectedFees.add(id);
-  //       feeVisibility[id] = true;
-  //       addTenderFee(id);
-  //     } else {
-  //       selectedFees.delete(id);
-  //       feeVisibility[id] = false;
-  //       removeTenderFeeByType(id);
-  //     }
-  //   })
-  // }, [applicablefees])
+  useEffect(() => {
+    applicablefees.forEach((opt) => {
+      const id = opt.value.toString();
+      const checkbox = document.getElementById(id) as HTMLInputElement;
+      selectedFees.add(id);
+      feeVisibility[id] = true;
+      addTenderFee(id);
+      if (checkbox?.checked) {
+        selectedFees.add(id);
+        feeVisibility[id] = true;
+        addTenderFee(id);
+      } else if (checkbox) {
+        selectedFees.add(id);
+        feeVisibility[id] = true;
+        addTenderFee(id);
+      } else {
+        selectedFees.delete(id);
+        feeVisibility[id] = false;
+        removeTenderFeeByType(id); 
+      }
+    })
+  }, [applicablefees])
 
   // useEffect(() => {
   //   console.log("feevisibility : ", feeVisibility);
@@ -184,8 +184,8 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
     // );
     window.addEventListener("click", (e) => {
       const target = (e.target as HTMLElement).closest(
-        `.${styles["depositsBtn"]}`
-      );
+        `.${styles["depositsBtn"]}`  
+      ); 
 
       const target2 = (e.target as HTMLElement).closest(`#${contextMenuId}`);
 
@@ -222,36 +222,6 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
     };
   }, []);
 
-  // const [depositeDocuments, setDepositeDocuments] = useState<Deposit>({
-  //   paidBy:[]
-  // });
-  // const handleAppliedSuppliedFetch = async () => {
-  //   try {
-  //     const res = await fetchData({ url: paidBys });
-  //     if (res.code === 200) {
-  //       const result = res.result;
-
-  //       console.log("appliedbysuppliedby : ", result);
-
-  //       const paidbys = {
-  //         paidBy: result.paidBy.map((item: any) => ({
-  //           value: item.codeValue,  
-  //           label: item.codeDescription,
-  //         })),
-          
-  //       };
-  //       setDepositeDocuments(paidbys); 
-  //     } else {
-  //       console.error("Error fetching data: ", res.message || "Unknown error");
-  //     }
-  //   } catch (error) {
-  //     console.error("Fetch error: ", error);     
-  //   } 
-  // };
-
-  // useEffect(() => {
-  //   handleAppliedSuppliedFetch();
-  // }, []);   
 
   return (
     <div className={styles.container}>
@@ -285,6 +255,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
             feeVisibility[deposit.value] && (
               <div className={styles.emdContainer2}>
                 <DsFeesDocument
+                  type={deposit.value.toString()}  
                   title={deposit.label}
                   id={deposit.value + "DocumentView"}
                   mode={mode}

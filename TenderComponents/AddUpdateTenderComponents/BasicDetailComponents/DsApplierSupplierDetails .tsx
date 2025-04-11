@@ -14,10 +14,10 @@ type Depot = {
   id: number;
   name: string;
   code: string;
-} 
+}   
  
 const DsApplierSupplierDetails: React.FC = ({}) => { 
-  
+  const [allSuppliedBy, setAllSuppliedBy] = useState<DsMultiLevelSelectOption[]>([]);
   const [depotList, setDepotList] = useState<Depot[]>([]); 
   const [formatedDepot, setFormatedDepot] = useState<DsSelectOption[]>([])
   const { updateTenderData } = useTenderData(); 
@@ -25,8 +25,9 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
   const [selecteds,setSelecteds]=useState<datalistOptions>();
   const [appliedBy, setAppliedBy] = useState<DsMultiLevelSelectOption[]>([]);  
   const [suppliedBy,setSuppliedBy] = useState<DsMultiLevelSelectOption[]>([]);
+  
 
-     function setStockiestSearchOptions (values:unknown) {
+     function setStockistSearchOptions  (values:unknown) {
       let customers: datalistOptions[] = [];
          if (
               Array.isArray(values) &&
@@ -36,13 +37,13 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
                 id: x?.id?.toString(),
                 value: `${x.name}`,
                 label: `${x.name}`,
-                attributes: {},
+                attributes: {type:"STOCKIST"},
               })); 
             }
             return customers;
       };
 
-      function setStockiestSearchOptionss (values:unknown) {
+      function setStockistSearchOptionss (values:unknown) {
         let customers: datalistOptions[] = [];
            if (
                 Array.isArray(values) &&
@@ -52,8 +53,8 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
                   id: x?.id?.toString(),
                   value: `${x.name}`,
                   label: `${x.name}`,
-                  attributes: {},
-                })); 
+                  attributes: {type:"STOCKIST"},
+                }));
               }
               return customers;
         };
@@ -81,7 +82,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
         }));  
         appliedBys.push({
           value:{  
-              setOptions:setStockiestSearchOptions,   
+              setOptions:setStockistSearchOptions,   
               setSearchUrl:(searchTerm: string) => searchCustomerURL + searchTerm , 
               onSelect:onStockistSelect,
               id: "AppliedBy",
@@ -96,9 +97,9 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
           value: item.id + "_" + item.type,
           label: item.name  
         })); 
-        suppliedBys.push({
+        suppliedBys.push({ 
           value:{  
-              setOptions:setStockiestSearchOptionss,   
+              setOptions:setStockistSearchOptionss,   
               setSearchUrl:(searchTerm: string) => searchCustomerURL + searchTerm , 
               onSelect:onStockistSelects,
               id: "SuppliedBy",
@@ -107,7 +108,9 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
           },  
           label:"Stockist" 
         })
+        setAllSuppliedBy(suppliedBys);
         setSuppliedBy(suppliedBys);
+        
       } else {
         console.error("Error fetching data: ", res.message || "Unknown error");
       }
@@ -146,11 +149,24 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
       handleFetchDepot();
     },[]); 
 
-    const handleAppliedBySelect = (option: datalistOptions) => {
+    const handleAppliedBySelect = (isDatalistOpt: boolean, option: datalistOptions) => {
       console.log(option);
-      setSelected(option)
+      setSelected(option);
+      if (isDatalistOpt) {
+        const onlyStockist = allSuppliedBy.filter(opt => opt.label === "Stockist");
+        setSuppliedBy(onlyStockist);
+      } else if (typeof option.value === "string") {
+        const type = option.value.split("_")[1];
+        if (type === "ORGANIZATION") {
+          setSuppliedBy(allSuppliedBy);
+        } else {
+          setSuppliedBy(allSuppliedBy);
+        }
+      }
     };
-    const handleSuppliedBySelects = (option: datalistOptions) => {
+    
+    
+    const handleSuppliedBySelects = (isDatalistOpt:boolean,option: datalistOptions) => {
       console.log(option);
       setSelecteds(option)
     };
@@ -167,14 +183,30 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
             placeholder={"Please search or select here"} 
             id={"appliedBy"}
             onSelect={handleAppliedBySelect} 
-            setSelectOption={(option) => {
+            setSelectOption={(isDataListOptions,option) => {
               setSelected(option);
-              if (typeof option.value == "string") { 
+              console.log("applieridoption",option);
+              if(isDataListOptions){
                 updateTenderData( 
-                  "appliedBy",
-                  option.label == "IPCA" ? option.label : "Stockist"  
+                  "applierId",
+                  option.id 
                 );
-                updateTenderData("applierId", option.value);
+                updateTenderData( 
+                  "applierType",
+                  option.attributes.type
+                );
+                updateTenderData("tenderDetails.applierName", option.value||"");
+              }
+              else if (typeof option.value == "string") { 
+                updateTenderData( 
+                  "applierId",
+                  option.value.split("_")[0] 
+                );
+                updateTenderData( 
+                  "applierType",
+                  option.value.split("_")[1] 
+                );
+                updateTenderData("tenderDetails.applierName", option.label||"");
               }
              
             }} 
@@ -189,16 +221,32 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
             placeholder={"Please search or select here"}
             id={"suppliedBy"}
             onSelect={handleSuppliedBySelects}
-            setSelectOption={(option) => {
-              setSelecteds(option);
-              if (typeof option.value == "string") {
+            setSelectOption={(isDataListOptions,option) => {
+              setSelected(option);
+              console.log("applieridoption",option);
+              if(isDataListOptions){
                 updateTenderData( 
-                  "suppliedBy", 
-                  option.label == "IPCA" ? option.label : "Stockist" 
+                  "suppliedId",
+                  option.id 
                 );
-                updateTenderData("suppliedId", option.value); 
+                updateTenderData( 
+                  "supplierType",
+                  option.attributes.type
+                );
+                updateTenderData("tenderDetails.supplierName", option.value||"");
+              }
+              else if (typeof option.value == "string") {
+                updateTenderData( 
+                  "suppliedId",  
+                  option.value.split("_")[0]
+                ); 
+                updateTenderData( 
+                  "supplierType",
+                  option.value.split("_")[1] 
+                );
+                updateTenderData("tenderDetails.supplierName", option.label||""); 
               } 
-            }}
+            }} 
           ></DsSelectMultiLevel>
         </div>
         <div className={deptStyles.fields}> 
@@ -228,16 +276,16 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
             label="Stockist / Liasioner name"
             inputType="text"
             // placeholder="Please type here"
-            //  onBlur={(e) => updateTenderData(" ", (e.target as HTMLInputElement).value)}
+             onBlur={(e) => updateTenderData("stockistName", (e.target as HTMLInputElement).value)}
           ></DsTextField>
         </div>
         <div className={deptStyles.fields}>
           <DsTextField
             maxLength={3}
-            minimumNumber={100}
+            minimumNumber={100} 
             initialValue=""
             inputType="positive"
-            label="Stockist / Liasioner discount %"
+            label="Stockist / Liasioner discount %"  
             // placeholder="Please type here"
             onBlur={(e) =>
               updateTenderData(

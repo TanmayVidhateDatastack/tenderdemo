@@ -40,6 +40,7 @@ export interface DsFeesProps {
   paidBy: DsSelectOption[];
   downloadVisible: boolean;
   paymentCompletedVisible: boolean;
+  type:string;
 }
 export interface Deposit {
   paidBy: DsSelectOption[];
@@ -55,13 +56,14 @@ const getTodayDate = (date: Date) => {
 
 const DsFeesDocument: React.FC<DsFeesProps> = ({
   title,
+  type,
   id,
   mode,
   paidBy,
   downloadVisible,
   paymentCompletedVisible
 }) => {
-  const { updateTenderFee } = useTenderData();
+  const { updateTenderFee,addNewTenderDocument } = useTenderData();
 
   const [depositeDocuments, setDepositeDocuments] = useState<DsSelectOption[]>([]);
 
@@ -122,32 +124,21 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             <DsTextField 
             maxLength={10} 
              initialValue=""
-              // className={styles.fieldColors}
               label={"Amount"}
-              // placeholder="Please type here"
               inputType="positive"
-              onBlur={(e) => {
-                updateTenderFee(
-                  id.replace("DocumentView", ""),
-                  "amount",
-                  (e.target as HTMLInputElement).value);
-              }}
+              onBlur={(e) => updateTenderFee(type,"amount",(e.target as HTMLInputElement ).value)}
             ></DsTextField>
           </div>
           <div className={styles.fieldColors}>
 
             <DsSingleSelect
-              // className={styles.fieldColors}
               id={id + "_paidType1"}
               options={depositeDocuments}
               label="Paid by"
               placeholder={"Please select here"}
               setSelectOption={(option) => {
                 if (typeof option.value == "string") {
-                  updateTenderFee(
-                    id.replace("DocumentView", ""),
-                    "paidBy",
-                    option.value
+                  updateTenderFee(type, "paidBy", option.value
                   );
                 }
               }}
@@ -164,7 +155,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               setSelectOption={(option) => {
                 if (typeof option.value == "string") {
                   updateTenderFee(
-                    id.replace("DocumentView", ""),
+                   type,
                     "paymentMode",
                     option.value
                   );
@@ -172,7 +163,8 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               }}
             ></DsSingleSelect>
           </div>
-          <div className={styles.fieldColors}>
+          <div className={styles.fieldColors}> 
+
           <DatePicker
               id={id + "dueDate"}
               minDate={new Date()}
@@ -181,7 +173,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               label="Due Date"
               setDateValue={(date) => {
                 if (date instanceof Date) {
-                  updateTenderFee(id.replace("DocumentView",""),"paymentDueDate",getTodayDate(date));
+                  updateTenderFee(type,"paymentDueDate",getTodayDate(date));
                 }
               }}
             />
@@ -191,14 +183,14 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
         <div className={styles.notes}>
           <h4>Notes</h4>
           <div className={styles.fieldColors}>
-
+            
             <TextArea
               placeholder="Please type here"
               disable={false}
               minRows={2}
               onBlur={(e) => {
-                updateTenderFee(id.replace("DocumentView", ""), "type",(e.target as HTMLInputElement).value);
-              }}
+                updateTenderFee(type, "instructionNotes",(e.target as HTMLInputElement).value);
+              }} 
             />
           </div>
         </div>
@@ -209,7 +201,9 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             buttonViewStyle="btnText"
             buttonSize="btnSmall"
             startIcon={<IconFactory name="fileAttach" /> }
-          ></DsCsvUpload>
+            // onBlur={(e)=> addNewTenderDocument("ccc","dddd","ffff" ,Document ) }
+          ></DsCsvUpload> 
+
         </div>
       </div>
     </>
