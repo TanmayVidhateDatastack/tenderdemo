@@ -46,11 +46,11 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
   const {
     tenderDatalistVisible,
     nearSubmissionButtonVisible,
-    feesPendingButtonVisible,
+    // feesPendingButtonVisible,
     filterButtonVisible,
     approvalButtonVisible,
-    underApprovalButtonVisible,
-    underReviewButtonVisible
+    myApprovalButtonVisible,
+    // myApprovalButtonVisible
 
 
   } = permissions;
@@ -178,7 +178,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
         )}
 
       </div>
-      {feesPendingButtonVisible && (
+      {/* {feesPendingButtonVisible && (
 
         <DsFilterButton
           id="dispatch"
@@ -190,7 +190,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
           onClick={() => handleFilter("FEES_PENDING")}
           label="Fees Pending"
         />
-      )}
+      )} */}
       {approvalButtonVisible && (
 
         <DsFilterButton
@@ -210,7 +210,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
           label="Approval"
         />
       )}
-      {underApprovalButtonVisible && (
+      {myApprovalButtonVisible && (
         <DsFilterButton
           label="Under Approval"
           className={styles.dis}
@@ -223,9 +223,10 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
           onClick={() => handleFilter("UNDER_APPROVAL")}
         />
       )}
-      {underReviewButtonVisible && (
+      {myApprovalButtonVisible && (
         <DsFilterButton
-          label="Under Review"
+          // label="Under Review"
+          label="My Approval"
           className={styles.dis}
           id="underReview"
           buttonViewStyle={
