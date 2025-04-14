@@ -12,20 +12,25 @@ export interface ProductSearchProps {
   setSelectedProductId: Dispatch<SetStateAction<number | undefined>>;
   setSelectedProductBatchId: Dispatch<SetStateAction<number | undefined>>;
 }
+export type searchProduct={
+  id:number;
+  name:string;
+  quantity:number;
+}
  
-export function isSearchProduct(value: unknown): value is TenderProduct {
+export function isSearchProduct(value: unknown):value is searchProduct {
   return (
     typeof value === "object" &&
     value !== null &&
     "id" in value &&
     "name" in value &&
     // "packSize" in value &&
-    typeof (value as unknown as TenderProduct).id === "number" &&
-    typeof (value as unknown as TenderProduct).product?.name === "string" 
+    typeof (value ).id === "number" &&
+    typeof (value ).name === "string" 
     // typeof (value as unknown as TenderProduct).packSize === "string"
   );
 }
-export function areSearchProduct(value: unknown): value is TenderProduct[] {
+export function areSearchProduct(value: unknown): value is searchProduct[] {
   return Array.isArray(value) && value.every(isSearchProduct);
 }
 const ProductSearch: React.FC<ProductSearchProps> = ({

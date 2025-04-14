@@ -33,10 +33,7 @@ const DsTenderProduct: React.FC<{
     useEffect(() => {
         handleFetch();
     }, []);
-    console.log("productList:", productList);
-    console.log("fetchdata:", fetchdata);
-    console.log("Using data:", productList || fetchdata);
- 
+
   return (
     <>
    <div style={{ display: "flex", gap: "17.5em", alignItems: "flex-start", margin: "20px" }}>

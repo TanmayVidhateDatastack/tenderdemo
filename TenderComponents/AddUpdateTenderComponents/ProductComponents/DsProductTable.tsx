@@ -4,9 +4,7 @@ import { tableData, tcolumn, DsTableRow } from "@/Common/helpers/types";
 import { TenderProduct, useTenderData } from "../TenderDataContextProvider";
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import DsCustomerLPR from "./CustomerLpr";
-
 import ProductTableSearch from "./ProductTableSearch";
-
 import styles from "@/app/page.module.css";
 import IconFactory from "@/Elements/IconComponent";
 
@@ -43,9 +41,10 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
       if (tenderproduct.ptrPercent && tenderproduct.product.ptr)
         calculated.supplierDiscount =
           Number(tenderproduct.product.ptr) * (tenderproduct.ptrPercent / 100);
-      calculated.product.netValue =
-        (calculated.product.totalCost || 0) +
-        (calculated.product.marginValue || 0);
+      if (calculated.product)
+        calculated.product.netValue =
+          (calculated.product?.totalCost || 0) +
+          (calculated.product?.marginValue || 0);
       console.log("In product table");
       return calculated;
     });
@@ -218,7 +217,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
           {
             columnIndex: 1,
             content:
-              tenderproduct.product.dataSource === "fetch" ? (
+              tenderproduct.product?.dataSource === "fetch" ? (
                 <DsTextField
                   initialValue={tenderproduct.requestedGenericName || ""}
                   onChange={(e) =>
@@ -238,7 +237,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
           {
             columnIndex: 2,
             content:
-              tenderproduct.product.dataSource === "csv" ? (
+              tenderproduct.product?.dataSource === "csv" ? (
                 tenderproduct.requestedQuantity || "-"
               ) : (
                 <DsTextField
@@ -261,7 +260,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
           {
             columnIndex: 3,
             content:
-              tenderproduct.product.dataSource === "fetch" ? (
+              tenderproduct.product?.dataSource === "fetch" ? (
                 <DsTextField
                   initialValue={tenderproduct.requestedPackingSize || ""}
                   onChange={(e) =>
@@ -281,14 +280,14 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
           {
             columnIndex: 4,
             content:
-              tenderproduct.product.dataSource === "csv" ? (
+              tenderproduct.product?.dataSource === "csv" ? (
                 <ProductTableSearch
                   tableRowIndex={index + 1}
                   setLocalProducts={setLocalProducts}
                   setHasChanges={setHasChanges}
                 />
               ) : (
-                tenderproduct.product.name || "-"
+                tenderproduct.product?.name || "-"
               ),
 
             className: styles.cellproductname,
@@ -296,11 +295,11 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
           {
             columnIndex: 5,
             content:
-              tenderproduct.product.dataSource === "csv" ? (
+              tenderproduct.product?.dataSource === "csv" ? (
                 tenderproduct.product.productPackingSize || "-"
               ) : (
                 <DsTextField
-                  initialValue={tenderproduct.product.productPackingSize || ""}
+                  initialValue={tenderproduct.product?.productPackingSize || ""}
                   onChange={(e) =>
                     handleFieldChange(
                       index,
@@ -472,14 +471,13 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
     [calculatedProducts]
   );
   useEffect(() => {
-
     setLocalProducts(
       tenderData.tenderRevisions.filter((x) => x.version == version)[0]
-        ?.tenderItems||[]
+        ?.tenderItems || []
     );
   }, [
     tenderData.tenderRevisions.filter((x) => x.version == version)[0]
-      ?.tenderItems||[],
+      ?.tenderItems || [],
   ]);
 
   // useEffect(() => {

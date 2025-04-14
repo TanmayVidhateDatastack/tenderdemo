@@ -1,19 +1,16 @@
 "use client";
- 
-// import { TenderProduct } from "@/Common/helpers/types";
- 
 import link from "@/Common/TenderIcons/smallIcons/link.svg";
- import  whitelink from "@/Common/TenderIcons/smallIcons/whitelink.svg";
- import linkdisabled from "@/Common/TenderIcons/smallIcons/linkdisabled.svg";
- import rupees from "@/Common/TenderIcons/smallIcons/rupee.svg";
- import  whiterupee from "@/Common/TenderIcons/smallIcons/whiterupee.svg";
- import profile from "@/Common/TenderIcons/smallIcons/profile.svg";
- import whiteprofile from "@/Common/TenderIcons/smallIcons/whiteprofile.svg";
- import profiledisabled from "@/Common/TenderIcons/smallIcons/profiledisable.svg";
- import rupeedisabled from "@/Common/TenderIcons/smallIcons/rupeedisabled.svg";
- import profit from "@/Common/TenderIcons/smallIcons/profit.svg";
- import whiteprofit from "@/Common/TenderIcons/smallIcons/whiteprofit.svg";
- import profitdisabled from "@/Common/TenderIcons/smallIcons/profiledisable.svg";
+import  whitelink from "@/Common/TenderIcons/smallIcons/whitelink.svg";
+import linkdisabled from "@/Common/TenderIcons/smallIcons/linkdisabled.svg";
+import rupees from "@/Common/TenderIcons/smallIcons/rupee.svg";
+import  whiterupee from "@/Common/TenderIcons/smallIcons/whiterupee.svg";
+import profile from "@/Common/TenderIcons/smallIcons/profile.svg";
+import whiteprofile from "@/Common/TenderIcons/smallIcons/whiteprofile.svg";
+import profiledisabled from "@/Common/TenderIcons/smallIcons/profiledisable.svg";
+import rupeedisabled from "@/Common/TenderIcons/smallIcons/rupeedisabled.svg";
+import profit from "@/Common/TenderIcons/smallIcons/profit.svg";
+import whiteprofit from "@/Common/TenderIcons/smallIcons/whiteprofit.svg";
+import profitdisabled from "@/Common/TenderIcons/smallIcons/profiledisable.svg";
 import DsKpl from "@/Elements/DsComponents/DsKpl/DsKpl";
 import Image from "next/image";
 import style from "@/app/Tender/[TenderId]/tenderOrder.module.css";
@@ -35,10 +32,7 @@ const DsProductKpis: React.FC<ProductKpiProps> = ({ productData: data }) => {
     // Calculate total number of products
     const totalProducts = data.length;
  
-    // Count margin values < 30
- 
-   
- 
+
     const marginCount = data.filter(item => {
       const margin = Number(item?.product?.marginValue ?? NaN);
       console.log(`Checking margin: ${margin}, Condition: ${margin < marginPercentLimit}`);
