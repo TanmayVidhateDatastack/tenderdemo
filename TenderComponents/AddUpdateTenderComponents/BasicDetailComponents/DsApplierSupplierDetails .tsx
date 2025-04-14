@@ -176,7 +176,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
       <div className={styles.inputDetails}>
         <div className={deptStyles.fields}>
           <DsSelectMultiLevel  
-            isSearchable
+            isSearchable={true}
             options={appliedBy}
             label="Applied By"
             selectedOption={selected}
@@ -210,7 +210,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
         </div>
         <div className={deptStyles.fields}>
           <DsSelectMultiLevel
-            isSearchable
+            isSearchable={true}
             options={suppliedBy}
             selectedOption={selecteds}
             label="Supplied By"
