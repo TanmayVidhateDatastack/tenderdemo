@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import TabView from "@/Elements/DsComponents/dsTabs/TabView";
 import DsApplication from "@/Elements/ERPComponents/DsApplicationComponents/DsApplication";
 import DsBasicDetails from "@/TenderComponents/AddUpdateTenderComponents/BasicDetailComponents/DsBasicDetails";
-import { useTenderData } from "@/TenderComponents/AddUpdateTenderComponents/TenderDataContextProvider";
+import { TenderProduct, useTenderData } from "@/TenderComponents/AddUpdateTenderComponents/TenderDataContextProvider";
 import { useTabState } from "@/Redux/hook/tabHook"; // Import the custom hook
 import DSTendrFooter from "@/TenderComponents/TenderLogComponents/DsTenderFooter";
 import style from "./tenderOrder.module.css";
@@ -24,7 +24,7 @@ import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import CsvPopup from "@/TenderComponents/TenderLogComponents/CsvPopup";
 import IconFactory from "@/Elements/IconComponent";
 import DsStatusIndicator from "@/Elements/DsComponents/dsStatus/dsStatusIndicator";
-import { TenderProduct } from "@/Common/helpers/types";
+// import { TenderProduct } from "@/Common/helpers/types";
 
 
  
@@ -42,10 +42,25 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
   const [isCsvWhite, setIsCsvWhite] = useState(false);
   const [orderId] = useState<string>(paramOrderId?.toString());
   const appTitle = useRef<string>("New");
- 
+
+
+
+
+const version =1;
+
+  const revisionTabs = tenderData?.tenderRevisions?.length
+  ? tenderData.tenderRevisions.map((rev) => ({
+      tabId: `v${rev.version}`,
+      tabName: `Products ₹ (V${rev.version})`,
+    }))
+  : [{ tabId: "v1", tabName: "Products ₹ (V1)" }];
+
+
+
   const tabs = [
     { tabId: "0", tabName: "Basic Details" },
-    { tabId: "1", tabName: "Products ₹ (V1)" },
+  
+    ...revisionTabs,
     { tabId: "2", tabName: "Documents" },
   ];
 
@@ -91,13 +106,13 @@ const handleUpload = (file: File | null) => {
     const rows = text.trim().split("\n").map((row) => row.split(","));
 const prd:TenderProduct[]= rows.map((x)=>{
   return{
-    genericName:x[0],
-    quantity:Number(x[1]),
-    packingSize:x[2],
+   requestedGenericName:x[0],
+    requestedQuantity:Number(x[1]),
+    requestedPackingSize:x[2],
     dataSource:"csv"
   }
 })
-   prd.forEach((x)=>{addTenderProduct(x)});
+   prd.forEach((x)=>{addTenderProduct(version,x)});
   };
   reader.onerror = () => {
     console.error("Error reading the file");
@@ -115,7 +130,8 @@ const prd:TenderProduct[]= rows.map((x)=>{
           appTitle={appTitle.current}
           appMenu={
             <>
-              { selectedTabId === "1" && (
+            
+              {/* { selectedTabId === `v${rev.version}` && (
                 <>
                   <DsButton
                     className={style.csvpopupBtn}
@@ -174,7 +190,168 @@ const prd:TenderProduct[]= rows.map((x)=>{
                    >
                    </DsButton>
                 </>
+              )} */}
+          {tenderData?.tenderRevisions?.length ? (
+          tenderData.tenderRevisions.map((rev) => (
+            <div key={rev.version}>
+              {selectedTabId === `v${rev.version}` && (
+                <>
+                <div style={{display:"flex" , flexDirection: "row"}}>
+                  <DsButton
+                    className={style.csvpopupBtn}
+                    startIcon={
+                      <div
+                        style={{
+                          width: "1.125em",
+                          height: "1.130em",
+                          position: "relative",
+                        }}
+                      >
+                        <IconFactory name="upload" isWhite={isCsvWhite} />
+                      </div>
+                    }
+                    buttonSize="btnMedium"
+                    buttonViewStyle="btnText"
+                    id="CSV"
+                    onClick={() => OpenPopup("csvpopup")}
+                    onMouseEnter={() => setIsCsvWhite(true)}
+                    onMouseLeave={() => setIsCsvWhite(false)}
+                  >
+                    CSV file
+                  </DsButton>
+
+                  <div>
+                    <CsvPopup onUpload={ handleUpload} />
+                  </div>
+
+                  <DsButton
+                    label="Download Pricing"
+                    buttonSize="btnMedium"
+                    className={style.downloadPricing}
+                    startIcon={
+                      <div
+                        style={{
+                          width: "1.125em",
+                          height: "1.130em",
+                          position: "relative",
+                        }}
+                      >
+                        <IconFactory name="download" disabled={true} />
+                      </div>
+                    }
+                  />
+                  </div>
+                </>
               )}
+            </div>
+          ))
+        ) : (
+          <div key="v1">
+            {selectedTabId === "v1" && (
+              <>
+              <div style={{display:"flex" , flexDirection: "row"}}>
+                <DsButton
+                  className={style.csvpopupBtn}
+                  startIcon={
+                    <div
+                      style={{
+                        width: "1.125em",
+                        height: "1.130em",
+                        position: "relative",
+                      }}
+                    >
+                      <IconFactory name="upload" isWhite={isCsvWhite} />
+                    </div>
+                  }
+                  buttonSize="btnMedium"
+                  buttonViewStyle="btnText"
+                  id="CSV"
+                  onClick={() => OpenPopup("csvpopup")}
+                  onMouseEnter={() => setIsCsvWhite(true)}
+                  onMouseLeave={() => setIsCsvWhite(false)}
+                >
+                  CSV file
+                </DsButton>
+
+                <div>
+                  <CsvPopup onUpload={ handleUpload} />
+                </div>
+
+                <DsButton
+                  label="Download Pricing"
+                  buttonSize="btnMedium"
+                  className={style.downloadPricing}
+                  startIcon={
+                    <div
+                      style={{
+                        width: "1.125em",
+                        height: "1.130em",
+                        position: "relative",
+                      }}
+                    >
+                      <IconFactory name="download" disabled={true} />
+                    </div>
+                  }
+                />
+                </div>
+              </>
+            )}
+          </div>
+        )}
+
+
+          {tenderData?.tenderRevisions?.map((rev) => (
+            <div key={rev.version}>
+              {selectedTabId === `v${rev.version}` && (
+                <>
+                  <DsButton
+                    className={style.csvpopupBtn}
+                    startIcon={
+                      <div
+                        style={{
+                          width: "1.125em",
+                          height: "1.130em",
+                          position: "relative",
+                        }}
+                      >
+                        <IconFactory name="upload" isWhite={isCsvWhite} />
+                      </div>
+                    }
+                    buttonSize="btnMedium"
+                    buttonViewStyle="btnText"
+                    id="CSV"
+                    onClick={() => OpenPopup("csvpopup")}
+                    onMouseEnter={() => setIsCsvWhite(true)}
+                    onMouseLeave={() => setIsCsvWhite(false)}
+                  >
+                    CSV file
+                  </DsButton>
+
+                  <div>
+                    <CsvPopup onUpload={ handleUpload} />
+                  </div>
+
+                  <DsButton
+                    label="Download Pricing"
+                    buttonSize="btnMedium"
+                    className={style.downloadPricing}
+                    startIcon={
+                      <div
+                        style={{
+                          width: "1.125em",
+                          height: "1.130em",
+                          position: "relative",
+                        }}
+                      >
+                        <IconFactory name="download" disabled={true} />
+                      </div>
+                    }
+                  />
+                </>
+              )}
+            </div>
+          ))}
+
               <div>
                 {
                   <>
@@ -212,12 +389,43 @@ const prd:TenderProduct[]= rows.map((x)=>{
                 <DsBasicDetails />
               </div>
             </TabView>
-            <TabView tabId="1">
+            {/* <TabView tabId="1">
+              
               <DsTenderProduct
-                productList={tenderData.products}
-                setProductList={addTenderProduct}
-              />
-            </TabView>
+  productList={tenderData?.tenderRevisions?.find((x) => x.version == version)?.tenderItems ?? []}
+  setProductList={(product) => addTenderProduct(version, product)}
+/>
+
+            </TabView> */}
+            {/* {tenderData?.tenderRevisions?.map((rev, index) => (
+  <TabView key={rev.version} tabId={`${index + 1}`}>
+    <DsTenderProduct
+      productList={rev.tenderItems ?? []}
+      setProductList={(product) => addTenderProduct(rev.version, product)}
+    />
+  </TabView>
+))} */}
+
+
+
+{(tenderData?.tenderRevisions?.length
+  ? tenderData.tenderRevisions.map((rev) => (
+      <TabView key={rev.version} tabId={`v${rev.version}`}>
+        <DsTenderProduct
+          productList={rev.tenderItems ?? []}
+          setProductList={(product) => addTenderProduct(rev.version, product)}
+        />
+      </TabView>
+    ))
+  : [
+      <TabView key="v1" tabId="v1">
+        <DsTenderProduct
+          productList={[]}
+          setProductList={(product) => addTenderProduct(1, product)}
+        />
+      </TabView>,
+    ])}
+
             <TabView tabId="2">
               <DocumentContext.Consumer>
                 {(context) => {

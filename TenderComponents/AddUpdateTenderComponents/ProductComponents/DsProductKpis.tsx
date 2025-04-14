@@ -1,6 +1,6 @@
 "use client";
  
-import { TenderProduct } from "@/Common/helpers/types";
+// import { TenderProduct } from "@/Common/helpers/types";
  
 import link from "@/Common/TenderIcons/smallIcons/link.svg";
  import  whitelink from "@/Common/TenderIcons/smallIcons/whitelink.svg";
@@ -19,12 +19,14 @@ import Image from "next/image";
 import style from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import { marginPercentLimit } from "@/Common/helpers/constant";
 import DsCurrency from "@/Elements/DsComponents/dsCurrency/dsCurrency";
+import { TenderProduct } from "../TenderDataContextProvider";
  
 interface ProductKpiProps {
     productData: TenderProduct[] | null;
 }
  
 const DsProductKpis: React.FC<ProductKpiProps> = ({ productData: data }) => {
+  console.log("product table data ", data);
     if (!Array.isArray(data)) {
         console.error("Invalid data format:", data);
         return ;
@@ -38,10 +40,11 @@ const DsProductKpis: React.FC<ProductKpiProps> = ({ productData: data }) => {
    
  
     const marginCount = data.filter(item => {
-        const margin = Number(item?.marginValue ?? NaN);
-        console.log(`Checking margin: ${margin}, Condition: ${margin < marginPercentLimit}`);
-        return !isNaN(margin) && margin < marginPercentLimit;
+      const margin = Number(item?.product?.marginValue ?? NaN);
+      console.log(`Checking margin: ${margin}, Condition: ${margin < marginPercentLimit}`);
+      return !isNaN(margin) && margin < marginPercentLimit;
     }).length;
+    
    
     console.log("Final Margin Count:", marginCount);
    
@@ -53,7 +56,8 @@ const DsProductKpis: React.FC<ProductKpiProps> = ({ productData: data }) => {
     const totalNetValueSum = Array.isArray(data)
     ? data.reduce((sum, item) => {
        
-        const netValue = item?.netValue ?? null;
+       const netValue = item?.product?.netValue ?? null;
+
  
         // If both qty and netValue are null, skip this row
         if (netValue === null) {
@@ -72,8 +76,8 @@ const DsProductKpis: React.FC<ProductKpiProps> = ({ productData: data }) => {
  
     const totalMarginProductSum = Array.isArray(data)
   ? data.reduce((sum, item) => {
-      const qty = item?.quantity ?? null;
-      const marginValue = item?.marginValue ?? null;
+      const qty = item?.requestedQuantity ?? null;
+      const marginValue = item?.product?.marginValue ?? null;
  
       // If both quantity and marginValue are null, skip this row
       if (qty === null && marginValue === null) {
@@ -101,8 +105,8 @@ console.log("Total Margin Percentage:", totalMarginPercentage);
  
    const totalStockistDiscountSum = Array.isArray(data)
     ? data.reduce((sum, item) => {
-        const qty = item?.quantity ?? null;
-        const stockistDiscount = item?.stockistDiscount?? null;
+        const qty = item?.requestedQuantity?? null;
+        const stockistDiscount = item?.supplierDiscount?? null;
  
         // If both qty and netValue are null, skip this row
         if (qty === null && stockistDiscount === null) {

@@ -1,10 +1,11 @@
 import DsInfoDisplay from "@/Elements/ERPComponents/DsInfoDisplay/DsInfoDisplay";
 import { DsStatus, searchProductsURL } from "@/Common/helpers/constant";
-import { TenderProduct, datalistOptions } from "@/Common/helpers/types";
+import {  datalistOptions } from "@/Common/helpers/types";
 import { Dispatch, SetStateAction, useState } from "react";
 import DsSearchComponent from "@/Elements/DsComponents/DsSearch/searchComponent";
 import style from "@/TenderComponents/AddUpdateTenderComponents/BasicDetailComponents/tender.module.css";
 import IconFactory from "@/Elements/IconComponent";
+import { TenderProduct } from "../TenderDataContextProvider";
 export interface ProductSearchProps {
   // initialValue?:string;
   orderStatus?: string;
@@ -20,7 +21,7 @@ export function isSearchProduct(value: unknown): value is TenderProduct {
     "name" in value &&
     // "packSize" in value &&
     typeof (value as unknown as TenderProduct).id === "number" &&
-    typeof (value as unknown as TenderProduct).name === "string" 
+    typeof (value as unknown as TenderProduct).product?.name === "string" 
     // typeof (value as unknown as TenderProduct).packSize === "string"
   );
 }

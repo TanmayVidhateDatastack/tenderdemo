@@ -3,10 +3,10 @@ import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 
 import { getProductURL, DsStatus } from "@/Common/helpers/constant";
 import fetchData from "@/Common/helpers/Method/fetchData";
-import { TenderProduct } from "@/Common/helpers/types";
 import DsButton from "../../../Elements/DsComponents/DsButtons/dsButton";
 import DsTextField from "../../../Elements/DsComponents/DsInputs/dsTextField";
 import { useState } from "react";
+import { TenderProduct } from "../TenderDataContextProvider";
 
  
 export interface addProductProps {

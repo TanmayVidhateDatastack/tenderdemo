@@ -1,10 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import ContextMenu, {
-  closeAllContext,
+
   closeContext,
-  createContext,
-  displayContext,
+ displayContext,
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import DsInfoDisplay from "@/Elements/ERPComponents/DsInfoDisplay/DsInfoDisplay";
 import { Tender } from "@/Common/helpers/types";
@@ -25,8 +24,7 @@ const DsTotalTenders: React.FC<TotalTendersProps> = React.memo(({ data }) => {
   const [corporateCount, setCorporateCount] = useState<number>(0);
 
   useEffect(() => {
-    console.log("Type of data:", typeof data);
-    console.log("Actual data:", data);
+
 
     if (!data || !Array.isArray(data)) {
       console.warn("Invalid data format:", data);
@@ -117,7 +115,7 @@ const DsTotalTenders: React.FC<TotalTendersProps> = React.memo(({ data }) => {
 
             ),
             status: "Corporate",
-            value: corporateCount.toString().padStart(3, "0"),
+            value: corporateCount.toString().padStart(2, "0"),
           },
         ]}
       />} />
