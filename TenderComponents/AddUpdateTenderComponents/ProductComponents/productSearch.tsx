@@ -1,30 +1,37 @@
 import DsInfoDisplay from "@/Elements/ERPComponents/DsInfoDisplay/DsInfoDisplay";
 import { DsStatus, searchProductsURL } from "@/Common/helpers/constant";
-import { TenderProduct, datalistOptions } from "@/Common/helpers/types";
+import {  datalistOptions } from "@/Common/helpers/types";
 import { Dispatch, SetStateAction, useState } from "react";
 import DsSearchComponent from "@/Elements/DsComponents/DsSearch/searchComponent";
 import style from "@/TenderComponents/AddUpdateTenderComponents/BasicDetailComponents/tender.module.css";
 import IconFactory from "@/Elements/IconComponent";
+import { TenderProduct } from "../TenderDataContextProvider";
 export interface ProductSearchProps {
   // initialValue?:string;
   orderStatus?: string;
   setSelectedProductId: Dispatch<SetStateAction<number | undefined>>;
   setSelectedProductBatchId: Dispatch<SetStateAction<number | undefined>>;
 }
+export type searchProduct={
+  id:number;
+  name:string;
+  quantity:number;
+  cartonSize:string;
+}
  
-export function isSearchProduct(value: unknown): value is TenderProduct {
+export function isSearchProduct(value: unknown):value is searchProduct {
   return (
     typeof value === "object" &&
     value !== null &&
     "id" in value &&
     "name" in value &&
     // "packSize" in value &&
-    typeof (value as unknown as TenderProduct).id === "number" &&
-    typeof (value as unknown as TenderProduct).name === "string" 
+    typeof (value ).id === "number" &&
+    typeof (value ).name === "string" 
     // typeof (value as unknown as TenderProduct).packSize === "string"
   );
 }
-export function areSearchProduct(value: unknown): value is TenderProduct[] {
+export function areSearchProduct(value: unknown): value is searchProduct[] {
   return Array.isArray(value) && value.every(isSearchProduct);
 }
 const ProductSearch: React.FC<ProductSearchProps> = ({

@@ -1,9 +1,10 @@
 import DsInfoDisplay from "@/Elements/ERPComponents/DsInfoDisplay/DsInfoDisplay";
 import { searchProductsURL} from "@/Common/helpers/constant";
-import { TenderProduct } from "@/Common/helpers/types";
+// import { TenderProduct } from "@/Common/helpers/types";
 import { useState } from "react";
 import { areSearchProduct } from "./productSearch";
 import DsSearchComponent from "@/Elements/DsComponents/DsSearch/searchComponent";
+import { TenderProduct } from "../TenderDataContextProvider";
  
 interface TableSearchProps {
   tableRowIndex: number;
@@ -60,7 +61,7 @@ const ProductTableSearch: React.FC<TableSearchProps> = ({
         if (areSearchProduct(values)) {
           const products = values.map((x) => {
             const id=x.id||0;
-            return { id: id, name: x.name||"", packSize: x.packSize||"" };
+            return { id: id, name: x.name||"", packSize: x.cartonSize||"" };
           });
           setProductOptions(products);
         }
