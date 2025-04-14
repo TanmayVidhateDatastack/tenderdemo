@@ -74,12 +74,12 @@ const DsProductTable: React.FC = () => {
     { columnIndex: 14, columnHeader: "Total Cost" ,className:styles.celltotalcost},
     { columnIndex: 15, columnHeader: "Margin"  ,className:styles.cellmargin},
     { columnIndex: 16, columnHeader: "Margin %" ,className:styles.cellmarginper},
-    { columnIndex: 17, columnHeader: "Net Value" ,className:styles.cellnetvalue},
-  ], []);
+    { columnIndex: 17, columnHeader: "Net Value" ,className:styles.cellnetvalue}, 
+  ], []); 
  
   const rows: DsTableRow[] = useMemo(() => calculatedProducts.map((product, index) => ({
     rowIndex: index + 1,
-    content: [
+    content: [ 
       {
         columnIndex: 1,
         content: (product.dataSource === "fetch") ? <DsTextField initialValue={product.genericName || ""} onChange={(e) => handleFieldChange(index, "genericName", e.target.value)} /> : product.genericName || "-",
@@ -149,7 +149,7 @@ const DsProductTable: React.FC = () => {
   })), [calculatedProducts]);
  useEffect(()=>{
     setLocalProducts(tenderData.products);
- },[tenderData.products])
+ },[tenderData.products]) 
   useEffect(() => {
     setTenderProductTable({ className:  styles["tender-product-table"], id: "productTable", type: "InterActive", isSortable: false, hasSearch: false, columns, rows });
   }, [columns, rows]);

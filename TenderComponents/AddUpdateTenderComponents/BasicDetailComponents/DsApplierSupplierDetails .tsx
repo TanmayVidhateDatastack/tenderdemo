@@ -187,10 +187,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
               setSelected(option);
               console.log("applieridoption",option);
               if(isDataListOptions){
-                updateTenderData( 
-                  "applierId",
-                  option.id 
-                );
+                updateTenderData("applierId",Number(option.id ));
                 updateTenderData( 
                   "applierType",
                   option.attributes.type
@@ -226,9 +223,9 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
               console.log("applieridoption",option);
               if(isDataListOptions){
                 updateTenderData( 
-                  "suppliedId",
-                  option.id 
-                );
+                  "supplierId",
+                 Number( option.id 
+                ));
                 updateTenderData( 
                   "supplierType",
                   option.attributes.type
@@ -237,8 +234,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
               }
               else if (typeof option.value == "string") {
                 updateTenderData( 
-                  "suppliedId",  
-                  option.value.split("_")[0]
+                  "supplierId",option.value.split("_")[0]
                 ); 
                 updateTenderData( 
                   "supplierType",
@@ -281,7 +277,6 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
         </div>
         <div className={deptStyles.fields}>
           <DsTextField
-            maxLength={3}
             minimumNumber={100} 
             initialValue=""
             inputType="positive"

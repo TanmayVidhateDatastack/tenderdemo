@@ -53,7 +53,7 @@ const CustomerSearch: React.FC<{
     setSelectedCustomer(selectedCustomerId);
     if (updateTenderData) {
       updateTenderData("customerId", selectedCustomerId);
-      updateTenderData("tenderDetails.customerAddressName", selectedCustomerId);
+      updateTenderData("tenderDetails.customerName", option.attributes.name||"");
     }
     setSelectedAddress("");
 
@@ -94,7 +94,7 @@ const CustomerSearch: React.FC<{
       const customers: datalistOptions[] = values.map((x) => ({
         id: x?.id?.toString(),
         value: `${x.code.toUpperCase()} - ${x.name}`,
-        attributes: { "customer-id": x.id.toString() },
+        attributes: { "customer-id": x.id.toString() ,"name":x.name ,"code":x.code},
       }));
       setCustomers(customers);
     }
@@ -104,7 +104,7 @@ const CustomerSearch: React.FC<{
     <DsSearchComponent
       id="customerSearch"
       initialValue={customer}
-      dataListId="customerSearchDatalist"
+      dataListId="customerSearchDatalist" 
       label={"Customer ID and Name"}
       options={customers || undefined}
       setOptions={setOptions}
