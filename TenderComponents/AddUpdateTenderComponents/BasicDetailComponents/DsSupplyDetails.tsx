@@ -29,7 +29,7 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
           label="Provide no. of consignees"
           // placeholder="Please type here" 
           onBlur={(e) =>
-            updateSupplyCondition("consigneesCount",(e.target as HTMLInputElement).value)
+            updateSupplyCondition("consigneesCount",Number((e.target as HTMLInputElement).value))
           }
         ></DsTextField>
 

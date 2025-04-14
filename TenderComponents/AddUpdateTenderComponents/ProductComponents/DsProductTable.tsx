@@ -343,6 +343,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
                 ? tenderproduct.product.lqr?.toString() || "-"
                 : "-",
             className: styles.celllqr,
+            
           },
           {
             columnIndex: 10,
@@ -352,7 +353,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
                   index={index + 1}
                   lprValue={tenderproduct.lpr}
                   lprTo={{
-                    id: tenderproduct.competitorId.toString(),
+                    id: tenderproduct.competitorId||0,
                     name: tenderproduct.product.competitorName || "",
                   }}
                   onValueChange={(value) =>

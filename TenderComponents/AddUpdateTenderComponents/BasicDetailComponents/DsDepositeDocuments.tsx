@@ -55,7 +55,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   });
 
   useEffect(() => {
-    if (role == "MAKER" || role == "CHECKER") {
+    if (role == "MAKER" || role == "CHECKER" ) {
       setPaymentCheckVisible(false);
     } else {
       setPaymentCheckVisible(true);
@@ -275,7 +275,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
             <div className={styles.feesCheckboxes}>
               {applicablefees.map((checkbox, index) => (
                 <Ds_checkbox
-                key={index}
+                key={index} 
                 id={checkbox.value.toString()}
                 name={checkbox.label}
                 value={checkbox.value.toString()}

@@ -61,8 +61,6 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
     }
   }, [role]);
 
-  
-
   const getTodayDate = (date: Date) => {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -115,7 +113,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
             }))}
             setSelectOption={(option) => {
               if (typeof option.value == "string") {
-                updateTenderData("customerAddressId", option.value); 
+                updateTenderData("customerAddressId", Number(option.value));
                 updateTenderData("tenderDetails.customerAddressName", option.label
 
                 ); 
@@ -221,7 +219,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
             inputType="positive"
             label={"Delivery period (In days)"}  
             // placeholder={"Please type or select"}
-            onBlur={(e) => updateTenderData("deliveryPeriod",(e.target as HTMLInputElement).value)}
+            onBlur={(e) => updateTenderData("deliveryPeriod",Number((e.target as HTMLInputElement).value))}
           ></DsTextField>
         </div>
         <div className={deptStyle.fields}>
@@ -232,19 +230,18 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
             label={"Extended delivery period (In days)"}
             // placeholder={"Please type or select"}
             onBlur={(e) =>
-              updateTenderData("extendedDeliveryPeriod", (e.target as HTMLInputElement).value)
-            }
+              updateTenderData("extendedDeliveryPeriod",Number((e.target as HTMLInputElement).value))}
           ></DsTextField>
         </div>
         <div className={deptStyle.fields}>
           <DsTextField
-             maxLength={3}
+             minimumNumber={100} 
              initialValue=""
              label="Penalty for late delivery %"
              inputType="positive"
             // placeholder="Please type here"
             onBlur={(e) =>
-              updateTenderData("lateDeliveryPenalty", (e.target as HTMLInputElement).value)
+              updateTenderData("lateDeliveryPenalty", Number((e.target as HTMLInputElement).value))
             }
           ></DsTextField>
         </div>
@@ -252,8 +249,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
           <DsTextField
             maxLength={2000}
             initialValue=""
-            label="Tender site/url"
-            // placeholder="Please type here"
+            label="Tender site/url" 
             onBlur={(e) => updateTenderData("tenderURL", (e.target as HTMLInputElement).value)}
           ></DsTextField>
         </div>
