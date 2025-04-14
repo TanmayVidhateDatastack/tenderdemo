@@ -180,34 +180,33 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
             options={appliedBy}
             label="Applied By"
             selectedOption={selected}
-            placeholder={"Please search or select here"} 
+            placeholder={"Please search or select here"}
             id={"appliedBy"}
-            onSelect={handleAppliedBySelect} 
-            setSelectOption={(isDataListOptions,option) => {
+            onSelect={handleAppliedBySelect}
+            setSelectOption={(isDataListOptions, option) => {
               setSelected(option);
-              console.log("applieridoption",option);
-              if(isDataListOptions){
-                updateTenderData("applierId",Number(option.id ));
-                updateTenderData( 
+              console.log("applieridoption", option);
+              if (isDataListOptions) {
+                updateTenderData("applierId", Number(option.id));
+                updateTenderData(
                   "applierType",
                   option.attributes.type
                 );
-                updateTenderData("tenderDetails.applierName", option.value||"");
+                updateTenderData("tenderDetails.applierName", option.value || "");
               }
-              else if (typeof option.value == "string") { 
-                updateTenderData( 
+              else if (typeof option.value == "string") {
+                updateTenderData(
                   "applierId",
-                  option.value.split("_")[0] 
+                  option.value.split("_")[0]
                 );
-                updateTenderData( 
+                updateTenderData(
                   "applierType",
-                  option.value.split("_")[1] 
+                  option.value.split("_")[1]
                 );
-                updateTenderData("tenderDetails.applierName", option.label||"");
+                updateTenderData("tenderDetails.applierName", option.label || "");
               }
-             
-            }} 
-          ></DsSelectMultiLevel> 
+
+            } } isOpen={false}          ></DsSelectMultiLevel> 
         </div>
         <div className={deptStyles.fields}>
           <DsSelectMultiLevel
@@ -218,32 +217,31 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
             placeholder={"Please search or select here"}
             id={"suppliedBy"}
             onSelect={handleSuppliedBySelects}
-            setSelectOption={(isDataListOptions,option) => {
+            setSelectOption={(isDataListOptions, option) => {
               setSelected(option);
-              console.log("applieridoption",option);
-              if(isDataListOptions){
-                updateTenderData( 
+              console.log("applieridoption", option);
+              if (isDataListOptions) {
+                updateTenderData(
                   "supplierId",
-                 Number( option.id 
-                ));
-                updateTenderData( 
+                  Number(option.id
+                  ));
+                updateTenderData(
                   "supplierType",
                   option.attributes.type
                 );
-                updateTenderData("tenderDetails.supplierName", option.value||"");
+                updateTenderData("tenderDetails.supplierName", option.value || "");
               }
               else if (typeof option.value == "string") {
-                updateTenderData( 
-                  "supplierId",option.value.split("_")[0]
-                ); 
-                updateTenderData( 
-                  "supplierType",
-                  option.value.split("_")[1] 
+                updateTenderData(
+                  "supplierId", option.value.split("_")[0]
                 );
-                updateTenderData("tenderDetails.supplierName", option.label||""); 
-              } 
-            }} 
-          ></DsSelectMultiLevel>
+                updateTenderData(
+                  "supplierType",
+                  option.value.split("_")[1]
+                );
+                updateTenderData("tenderDetails.supplierName", option.label || "");
+              }
+            } } isOpen={false}          ></DsSelectMultiLevel>
         </div>
         <div className={deptStyles.fields}> 
           <DsMultiSelect
@@ -284,13 +282,13 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
             // placeholder="Please type here"
             onBlur={(e) =>
               updateTenderData(
-                "supplierDiscount",
+                "supplierDiscount", 
                 (e.target as HTMLInputElement).value
               )
             } 
           ></DsTextField>
         </div>
-      </div>
+      </div> 
     </>
   );
 };
