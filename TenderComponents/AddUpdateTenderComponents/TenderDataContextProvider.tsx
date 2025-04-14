@@ -8,7 +8,7 @@ import {
   saveTenderurl,
 } from "@/Common/helpers/constant";
 import fetchData from "@/Common/helpers/Method/fetchData";
- 
+
 import { useRouter } from "next/navigation";
 import React, {
   createContext,
@@ -40,7 +40,7 @@ export type TenderDocument = {
   documentStorageId?: number;
   // documents: Document[];
 };
- 
+
 export type TenderProduct = {
   id?: number;
   requestedGenericName?: string;
@@ -61,7 +61,7 @@ export type TenderProduct = {
     directCost?: string | number;
     lqr?: number;
     competitorName?: string;
- 
+
     totalCost?: number;
     marginValue?: number;
     marginPercent?: number;
@@ -122,11 +122,11 @@ export type TenderContract = {
   };
 };
 export type TenderData = {
-  id?: number;
+  id?: number; 
   customerId: number;
   customerAddressId: number;
   tenderNumber: string;
-  tenderType: string;
+  tenderType: string;  
   issueDate: string;
   lastPurchaseDate: string;
   submissionDate: string;
@@ -303,11 +303,11 @@ interface TenderDataContextType {
   updateTender: (status: dsStatus) => Promise<void>;
   fetchAndSetOriginalTender: (tenderId: number) => Promise<void>;
 }
- 
+
 const TenderDataContext = createContext<TenderDataContextType | undefined>(
   undefined
 );
- 
+
 export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
@@ -332,7 +332,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     supplierId: 0,
     stockistName: "",
     supplierDiscount: 0,
-    lastUpdatedById: 0,
+    lastUpdatedById: 0, 
     status: "AWARDED",
     tenderDetails: {
       type: "read-only",
@@ -349,7 +349,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       supplyPoint: "",
       consigneesCount: 0,
       testReportRequired: "",
-      eligibility: [],
+      eligibility: [], 
       applicableConditions: [],
     },
     tenderRevisions: [
@@ -384,6 +384,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       },
     },
   });
+ 
   const [tenderDataCopy, setTenderDataCopy] = useState<TenderData>({
     ...tenderData,
   });
@@ -392,7 +393,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     notiType: "success",
     showNotification: false,
   });
- 
+
   // ✅ Update top-level tender fields
   const updateTenderData = (
     key:
@@ -492,6 +493,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       fees: prev.fees.filter((fee) => fee.feesType !== feeType),
     }));
   };
+ 
   // ✅ Update supply condition fields
   const updateSupplyCondition = (
     key: keyof tenderSupplyCondition,
@@ -718,7 +720,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   const addApplicableCondition = (type: string) => {
     // setTenderData((prev) => ({
     //   ...prev,
- 
+
     //   supplyConditions: {
     //     ...prev.supplyConditions,
     //     applicableConditions: [
@@ -734,7 +736,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     setTenderData((prev) => {
       let updated = false; // Flag to track if we updated an existing entry
       const active: "ACTV" | "INAC" = "ACTV";
- 
+
       const updatedTenderApplicableConditions =
         prev.supplyConditions.applicableConditions.map((ac) => {
           if (ac.type == type) {
@@ -762,12 +764,12 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       };
     });
   };
- 
+
   // ✅ Remove an applicable condition by type
   const removeApplicableCondition = (conditionType: string) => {
     setTenderData((prev) => ({
       ...prev,
- 
+
       supplyConditions: {
         ...prev.supplyConditions,
         applicableConditions: prev.supplyConditions.applicableConditions.filter(
@@ -776,35 +778,35 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       },
     }));
   };
- 
+
   const setActionStatusValues = useCallback(
     (actionStatus: ActionStatus) => {
       setActionStatus(actionStatus);
     },
     [tenderData]
   );
- 
+
   const tenderDataCopyRef = useRef(tenderData);
- 
+
   const router = useRouter();
   const goBack = () => {
     router.back();
   };
- 
+
   // Update the ref whenever orderDataCopy changes
   useEffect(() => {
     tenderDataCopyRef.current = tenderData;
   }, [tenderData]);
- 
+
   const stripReadOnlyProperties = (obj: any): any => {
     if (Array.isArray(obj)) {
       return obj.map((item) => stripReadOnlyProperties(item));
     }
- 
+
     if (typeof obj !== "object" || obj === null) {
       return obj;
     }
- 
+
     const newObj: any = {};
     for (const key in obj) {
       if (obj[key] && typeof obj[key] === "object") {
@@ -1034,7 +1036,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     },
     [fetchData]
   );
- 
+
   return (
     <TenderDataContext.Provider
       value={{
@@ -1067,7 +1069,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     </TenderDataContext.Provider>
   );
 };
- 
+
 // ✅ Custom hook to access context
 export const useTenderData = () => {
   const context = useContext(TenderDataContext);
@@ -1076,5 +1078,3 @@ export const useTenderData = () => {
   }
   return context;
 };
- 
- 

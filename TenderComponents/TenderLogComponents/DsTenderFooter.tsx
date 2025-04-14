@@ -20,21 +20,28 @@ import DsSplitButton from "@/Elements/DsComponents/DsButtons/dsSplitButton";
 import DsApprovalPopup from "@/Elements/ERPComponents/DsApprovalPopups/DsApprovalPopups";
 import Toaster from "@/Elements/DsComponents/DsToaster/DsToaster";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css"
+import { useTenderData } from "../AddUpdateTenderComponents/TenderDataContextProvider";
+import {TenderData} from "@/TenderComponents/AddUpdateTenderComponents/TenderDataContextProvider"
+
+
 class ActionStatus {
   notiType: "success" | "bonus" | "info" | "error" | "cross" = "success";
   notiMsg: string = "";
   showNotification: boolean = false;
 }
 interface dsTenderfooter {
-  setActionStatus: (actionStatus: ActionStatus) => void;
+  setActionStatus: (actionStatus: ActionStatus) => void; 
   saveTender?: (status: dsStatus) => Promise<void>;
+  tenderData:TenderData | null;
+  // originalData: TenderData | null | undefined;
 }
 
 export const DSTendrFooter: React.FC<dsTenderfooter> = ({
   setActionStatus,
   saveTender,
+  tenderData,
 }) => {
-  const dispatch = useAppDispatch<AppDispatch>();
+  const dispatch = useAppDispatch<AppDispatch>();  
   const role = useAppSelector((state: RootState) => state.user.role);
   const [toasterVisible, setToasterVisible] = useState<boolean>(false);
 
@@ -55,6 +62,151 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
     handleFetch();
   }, []);
  
+  // const validateFields = () => {
+  //   const errors: string[] = [];
+
+  //   if (tenderData?.customerId == null || tenderData?.customerId == undefined) {
+  //     errors.push("Please select a customer.");
+  //   }
+  //   if (tenderData?.customerAddressId === 0){
+  //     errors.push("Please select a customer address.")
+  //   }
+    
+  //   if (tenderData?.tenderNumber?.trim() === "") {
+  //     errors.push("Please enter a tender no.");
+  //   }
+  //   if (tenderData?.tenderType === "") {
+  //     errors.push("Please enter a tendr type.");
+  //   }
+  //   if (tenderData?.issueDate === ""){
+  //     errors.push("Please enter a tender issue date.")
+  //   }
+  //     // Ensure todaysdate is a Date object
+  //   const todaysdate = new Date();
+  //     // Check if Tender issue is greater than today's date
+  //   if (
+  //      tenderData?.issueDate &&
+  //      new Date(tenderData.issueDate) > todaysdate
+  //    ) {
+  //      errors.push(
+  //      "Tender issue date should not be greater than today's date."
+  //     );
+  //    }
+  //   if (tenderData?.lastPurchaseDate === ""){
+  //       errors.push("Please enter a last purchase date.")
+  //   }
+  //   if (
+  //       tenderData?.lastPurchaseDate &&
+  //       new Date(tenderData.lastPurchaseDate) < todaysdate
+  //     ) {
+  //       errors.push(
+  //         "Last Purchase date should not be less than today's date."
+  //       );
+  //   }
+  //   if (tenderData?.submissionDate === ""){
+  //       errors.push("Please enter a submission date.")
+  //   }
+  //   if (
+  //       tenderData?.submissionDate &&
+  //       new Date(tenderData.submissionDate) < todaysdate
+  //     ) {
+  //       errors.push(
+  //         "Submission  date should not be less than today's date."
+  //       );
+  //   }
+  //   if (tenderData?.rateContractValidity?.trim() === "") {
+  //     errors.push("Please enter a rate contract validity.");
+  //   }
+  //   if (tenderData?.submissionMode?.trim() === "") {
+  //     errors.push("Please select a submission Mode.");
+  //   } 
+
+      //   const urlPattern = /^(https?:\/\/)?([\w\-]+\.)+[\w\-]+(\/[\w\-._~:/?#[\]@!$&'()*+,;=]*)?$/;
+
+      // if (tenderData?.tenderUrl?.trim() === "") {
+      //   errors.push("Please enter the tender URL.");
+      // } else if (!urlPattern.test(tenderData.tenderUrl.trim())) {
+      //   errors.push("Please enter a valid URL.");
+      // }
+ 
+  //   if (isRecordDuplicate) {
+  //     errors.push("Purchase order number is already present");
+  //   }
+  //   if (
+  //     ((tenderData?.purchaseOrderNumber?.length ?? 0) > 50 ||
+  //       (tenderData?.purchaseOrderNumber?.length ?? 0) < 3) &&
+  //       tenderData?.purchaseOrderNumber.trim() !== ""
+  //   ) {
+  //     errors.push(
+  //       "Purchase order number length should be between 3 to 50 characters."
+  //     );
+  //   }
+ 
+  
+  //   if (!tenderData?.orderItems || tenderData?.orderItems?.length === 0) {
+  //     errors.push("Please add atleast one product.");
+  //   }
+  //   if (
+  //     (tenderData?.orderItems?.filter(
+  //       (x) => x.requestedExpiryInDays < 30 || x.requestedExpiryInDays > 180
+  //     ).length ?? 0) >= 1
+  //   ) {
+  //     errors.push("Requested expiry should be between 30 to 180 days.");
+  //   }
+  //   if (
+  //     (tenderData?.orderItems?.filter((x) => x.requestedQuantity <= 0)
+  //       .length ?? 0) >= 1
+  //   ) {
+  //     errors.push("Requested quantity should be greater than 0.");
+  //   }
+  //   if (
+  //     (tenderData?.orderItems?.filter((x) => (x.orderQuantity ?? 1) <= 0)
+  //       .length ?? 0) >= 1
+  //   ) {
+  //     errors.push("Order quantity should be greater than 0.");
+  //   }
+  //   if (
+  //     (tenderData?.orderItems?.filter(
+  //       (x) => (x.orderQuantity ?? 1) > x.requestedQuantity
+  //     ).length ?? 0) >= 1
+  //   ) {
+  //     errors.push(
+  //       "Order quantity should not be greater than requested quantity."
+  //     );
+  //   }
+  //   if (tenderData?.shipToAddressId === 0) {
+  //     errors.push("Please enter a shipping address.");
+  //   }
+  //   if (tenderData?.billToAddressId === 0) {
+  //     errors.push("Please enter a billing address.");
+  //   }
+
+  //   // Convert transportationDate once for comparison
+  //   const transportationDate = new Date(tenderData?.transportationDate ?? "");
+  //   // const originalTransportationDate = new Date(
+  //   //   originalData?.transportationDate ?? ""
+  //   // );
+
+  //   transportationDate.setHours(0, 0, 0, 0);
+  //   todaysdate.setHours(0, 0, 0, 0);
+
+  //   // Check if transportationDate is earlier than today's date and has changed from originalData
+  //   if (
+  //     transportationDate &&
+  //     transportationDate.getTime() < todaysdate.getTime()
+  //     // &&
+  //     // transportationDate.getTime() !== originalTransportationDate.getTime()
+  //   ) {
+  //     errors.push(
+  //       "Transportation date should not be earlier than today's date."
+  //     );
+  //   }
+
+  //   return errors;
+  // };
+
+
+
 
   useEffect(() => {
     if (role && role !== "") {
