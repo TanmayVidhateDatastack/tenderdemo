@@ -1,10 +1,11 @@
-import { TenderProduct } from "@/Common/helpers/types";
+// import { TenderProduct } from "@/Common/helpers/types";
 import { useEffect, useState } from "react";
 import DsAddProduct from "./addProduct";
 import DsProductTable from "./DsProductTable";
 import DsProductKpis from "./DsProductKpis";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import { getProductURL  } from "@/Common/helpers/constant";
+import { TenderProduct } from "../TenderDataContextProvider";
 
 const DsTenderProduct: React.FC<{
   productList: TenderProduct[];
@@ -32,7 +33,7 @@ const DsTenderProduct: React.FC<{
     useEffect(() => {
         handleFetch();
     }, []);
- 
+
   return (
     <>
    <div style={{ display: "flex", gap: "17.5em", alignItems: "flex-start", margin: "20px" }}>
@@ -40,9 +41,10 @@ const DsTenderProduct: React.FC<{
   <DsProductKpis productData={productList || fetchdata} />
 </div>
 
-      <DsProductTable />
+      <DsProductTable version={1} />
     </>
   );
+
 };
 
 export default DsTenderProduct;

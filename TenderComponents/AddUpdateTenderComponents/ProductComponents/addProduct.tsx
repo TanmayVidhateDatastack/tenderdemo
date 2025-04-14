@@ -3,98 +3,104 @@ import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 
 import { getProductURL, DsStatus } from "@/Common/helpers/constant";
 import fetchData from "@/Common/helpers/Method/fetchData";
-import { TenderProduct } from "@/Common/helpers/types";
 import DsButton from "../../../Elements/DsComponents/DsButtons/dsButton";
 import DsTextField from "../../../Elements/DsComponents/DsInputs/dsTextField";
 import { useState } from "react";
+import { TenderProduct } from "../TenderDataContextProvider";
 
- 
 export interface addProductProps {
   orderStatus?: string;
   setProductList: (product: TenderProduct) => void;
 }
- 
+
 const DsAddProduct: React.FC<addProductProps> = ({
   orderStatus,
   setProductList,
 }) => {
-  console.log("Add product ",orderStatus);
+  console.log("Add product ", orderStatus);
   const [selectedProductId, setSelectedProductId] = useState<number>();
- 
+
   const [qtyInputVal, setQtyInputVal] = useState<string>("");
- 
+
   const selectProduct = async () => {
     console.log("Quantity entered:", qtyInputVal);
     const quantity = (document.querySelector("#qty") as HTMLInputElement)
       ?.value;
     console.log("selected product id = ", quantity);
- 
+
     if (selectedProductId) {
       const product = await fetchData({
         url: `${getProductURL}${selectedProductId}?requestedQuantity=${qtyInputVal}`,
 
-
-          // getProductURL + selectedProductId + "?requestedQuantity=" + quantity,
+        // getProductURL + selectedProductId + "?requestedQuantity=" + quantity,
       });
-      console.log("url",`${getProductURL}${selectedProductId}?requestedQuantity=${qtyInputVal}`);
-      if (product?.code === 200) {  // ✅ Change `statusCode` to `code`
+      console.log(
+        "url",
+        `${getProductURL}${selectedProductId}?requestedQuantity=${qtyInputVal}`
+      );
+      if (product?.code === 200) {
+        // ✅ Change `statusCode` to `code`
         if (!product.result) {
-          console.error(" product.result is undefined! Full response:", product);
+          console.error(
+            " product.result is undefined! Full response:",
+            product
+          );
           return;
         }
-        product.result.dataSource="fetch";
-        product.result.quantity=qtyInputVal;
         console.log("Condition matched! Updating product list.");
         if (!setProductList) {
           console.error(" setProductList is undefined! Check prop passing.");
           return;
         }
-  
-        setProductList(product.result); // Corrected
+        const tenderProduct: TenderProduct = {
+          productId: product.result.id,
+          requestedQuantity:Number(qtyInputVal),
+          product: {
+            name: product.result.name,
+            productPackingSize: product.result.cartonSize,
+            dataSource :"fetch",
+
+          },
+        };
+        setProductList(tenderProduct); // Corrected
         setSelectedProductId(0);
         setQtyInputVal("");
       }
       console.log(product);
-      console.log("product ",product);
+      console.log("product ", product);
     }
   };
- 
-  
+
   return (
     <div className={styles.input}>
-    <>
-      <ProductSearch
-        orderStatus={orderStatus}
-        setSelectedProductId={(id) => setSelectedProductId(id)}
-        setSelectedProductBatchId={(id)=>setSelectedProductId(id)}
-      ></ProductSearch>
+      <>
+        <ProductSearch
+          orderStatus={orderStatus}
+          setSelectedProductId={(id) => setSelectedProductId(id)}
+          setSelectedProductBatchId={(id) => setSelectedProductId(id)}
+        ></ProductSearch>
 
-      <DsTextField
-        label={"+ Qty"}
-        initialValue={qtyInputVal}
-        onChange={(e) => setQtyInputVal(e.target.value)}
-        id="qty"
-        disable={orderStatus === DsStatus.APRV ? true : false}
-        className={styles.qtyinproduct}
-      ></DsTextField>
-  
-     
-      <DsButton
-        buttonSize="btnMedium"
-        onClick={selectProduct}
-        disable={
-          orderStatus === DsStatus.APRV || 
-          !selectedProductId || 
-          !qtyInputVal
-        }
-      >
-        Add
-      </DsButton>
-  </>
-  </div>
+        <DsTextField
+          label={"+ Qty"}
+          initialValue={qtyInputVal}
+          onChange={(e) => setQtyInputVal(e.target.value)}
+          id="qty"
+          disable={orderStatus === DsStatus.APRV ? true : false}
+          className={styles.qtyinproduct}
+        ></DsTextField>
+
+        <DsButton
+          buttonSize="btnMedium"
+          onClick={selectProduct}
+          disable={
+            orderStatus === DsStatus.APRV || !selectedProductId || !qtyInputVal
+          }
+        >
+          Add
+        </DsButton>
+      </>
+    </div>
   );
 };
 
 export default DsAddProduct;
- 
- 

@@ -2,7 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import TabView from "@/Elements/DsComponents/dsTabs/TabView";
 import DsApplication from "@/Elements/ERPComponents/DsApplicationComponents/DsApplication";
 import DsBasicDetails from "@/TenderComponents/AddUpdateTenderComponents/BasicDetailComponents/DsBasicDetails";
-import { useTenderData } from "@/TenderComponents/AddUpdateTenderComponents/TenderDataContextProvider";
+import {
+  TenderProduct,
+  useTenderData,
+} from "@/TenderComponents/AddUpdateTenderComponents/TenderDataContextProvider";
 import { useTabState } from "@/Redux/hook/tabHook"; // Import the custom hook
 import DSTendrFooter from "@/TenderComponents/TenderLogComponents/DsTenderFooter";
 import style from "./tenderOrder.module.css";
@@ -24,14 +27,11 @@ import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import CsvPopup from "@/TenderComponents/TenderLogComponents/CsvPopup";
 import IconFactory from "@/Elements/IconComponent";
 import DsStatusIndicator from "@/Elements/DsComponents/dsStatus/dsStatusIndicator";
-import { TenderProduct } from "@/Common/helpers/types";
 
-
- 
 const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
   paramOrderId,
 }) => {
-  const [selectedTabId,setTabId] = useTabState("tenderPage");
+  const [selectedTabId, setTabId] = useTabState("tenderPage");
   const {
     tenderData,
     addTenderProduct,
@@ -42,18 +42,25 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
   const [isCsvWhite, setIsCsvWhite] = useState(false);
   const [orderId] = useState<string>(paramOrderId?.toString());
   const appTitle = useRef<string>("New");
- 
+
+  const version = 1;
+
+  const revisionTabs = tenderData.tenderRevisions.map((rev) => ({
+    tabId: `v${rev.version}`,
+    tabName: `Products ₹ (V${rev.version})`,
+  }));
+
   const tabs = [
     { tabId: "0", tabName: "Basic Details" },
-    { tabId: "1", tabName: "Products ₹ (V1)" },
+
+    ...revisionTabs,
     { tabId: "2", tabName: "Documents" },
   ];
 
- 
   const [displayFlag, setDisplayFlag] = useState<"New" | "Existing">(
     "Existing"
   );
- 
+
   useEffect(() => {
     if (orderId?.toString().toLowerCase() == "new") {
       setDisplayFlag("New");
@@ -61,61 +68,58 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
     } else if (Number(orderId) > 0) {
       setDisplayFlag("Existing");
     } else {
-      // setNotFound(true);
-      // return {notFound:true}
-      ////Page not Found
     }
   }, [orderId]);
- 
-// useEffect(()=>{
- 
-//   console.log("tab Id", selectedTabId);
- 
-// })
-const [message, setMessage] = useState<string>("");
 
-console.log(message);
-const handleUpload = (file: File | null) => {
- 
-  if (!file) {
-    console.log("Please select a file first.");
-    return;
-  }
+  const [message, setMessage] = useState<string>("");
 
-  const reader = new FileReader();
-  reader.onload = (event) => {
-    const fileContent = event.target?.result;
-    console.log("File content :", fileContent);
-    setMessage("The File has been  attached successfully!");
-    const text = event.target?.result as string;
-    const rows = text.trim().split("\n").map((row) => row.split(","));
-const prd:TenderProduct[]= rows.map((x)=>{
-  return{
-    genericName:x[0],
-    quantity:Number(x[1]),
-    packingSize:x[2],
-    dataSource:"csv"
-  }
-})
-   prd.forEach((x)=>{addTenderProduct(x)});
+  console.log(message);
+  const handleUpload = (file: File | null) => {
+    if (!file) {
+      console.log("Please select a file first.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const fileContent = event.target?.result;
+      console.log("File content :", fileContent);
+      setMessage("The File has been  attached successfully!");
+      const text = event.target?.result as string;
+      const rows = text
+        .trim()
+        .split("\n")
+        .map((row) => row.split(","));
+      const prd: TenderProduct[] = rows.map((x) => {
+        return {
+          requestedGenericName: x[0],
+          requestedQuantity: Number(x[1]),
+          requestedPackingSize: x[2],
+          competitorId: 0,
+          product: {
+            dataSource: "csv",
+          },
+        };
+      });
+      prd.forEach((x) => {
+        addTenderProduct(version, x);
+      });
+    };
+    reader.onerror = () => {
+      console.error("Error reading the file");
+    };
+    reader.readAsText(file);
   };
-  reader.onerror = () => {
-    console.error("Error reading the file");
-  };
-  reader.readAsText(file);
-};
 
-  
- 
   return (
-    <> 
+    <>
       <DocumentProvider>
         <DsApplication
           selectedTabId={selectedTabId}
           appTitle={appTitle.current}
           appMenu={
             <>
-              { selectedTabId === "1" && (
+              {/* { selectedTabId === `v${rev.version}` && (
                 <>
                   <DsButton
                     className={style.csvpopupBtn}
@@ -174,14 +178,74 @@ const prd:TenderProduct[]= rows.map((x)=>{
                    >
                    </DsButton>
                 </>
+              )} */}
+              {tenderData?.tenderRevisions?.length > 0 && (
+                <div>
+                  {selectedTabId &&
+                    tabs
+                      .find((x) => x.tabId === selectedTabId)
+                      ?.tabName.startsWith("Products") && (
+                      <>
+                        <div style={{ display: "flex", flexDirection: "row" }}>
+                          <DsButton
+                            className={style.csvpopupBtn}
+                            startIcon={
+                              <div
+                                style={{
+                                  width: "1.125em",
+                                  height: "1.130em",
+                                  position: "relative",
+                                }}
+                              >
+                                <IconFactory
+                                  name="upload"
+                                  isWhite={isCsvWhite}
+                                />
+                              </div>
+                            }
+                            buttonSize="btnMedium"
+                            buttonViewStyle="btnText"
+                            id="CSV"
+                            onClick={() => OpenPopup("csvpopup")}
+                            onMouseEnter={() => setIsCsvWhite(true)}
+                            onMouseLeave={() => setIsCsvWhite(false)}
+                          >
+                            CSV file
+                          </DsButton>
+
+                          <div>
+                            <CsvPopup onUpload={handleUpload} />
+                          </div>
+
+                          <DsButton
+                            label="Download Pricing"
+                            buttonSize="btnMedium"
+                            className={style.downloadPricing}
+                            startIcon={
+                              <div
+                                style={{
+                                  width: "1.125em",
+                                  height: "1.130em",
+                                  position: "relative",
+                                }}
+                              >
+                                <IconFactory name="download" disabled={true} />
+                              </div>
+                            }
+                          />
+                        </div>
+                      </>
+                    )}
+                </div>
               )}
+
               <div>
                 {
                   <>
                     <DsStatusIndicator
                       label={`${
                         displayFlag == "Existing"
-                          ? tenderData?.status.tenderStatus
+                          ? tenderData?.status
                           : DsStatus.DRFT
                       }`}
                       className={styles.statusIndicator}
@@ -189,7 +253,7 @@ const prd:TenderProduct[]= rows.map((x)=>{
                       id="state"
                       status={
                         displayFlag == "Existing"
-                          ? tenderData?.status.tenderStatus ?? DsStatus.DRFT
+                          ? tenderData?.status ?? DsStatus.DRFT
                           : DsStatus.DRFT
                       }
                       // handleClickableOnClick={handleStatusClick}
@@ -201,7 +265,9 @@ const prd:TenderProduct[]= rows.map((x)=>{
           }
           hasPrevious={true}
           tabs={tabs}
-          onTabChange={(x)=> {setTabId(x.tabId)}}   
+          onTabChange={(x) => {
+            setTabId(x.tabId);
+          }}
         >
           <div
             className={pagestyles.container}
@@ -212,12 +278,27 @@ const prd:TenderProduct[]= rows.map((x)=>{
                 <DsBasicDetails />
               </div>
             </TabView>
-            <TabView tabId="1">
-              <DsTenderProduct
-                productList={tenderData.products}
-                setProductList={addTenderProduct}
-              />
-            </TabView>
+
+            {tenderData?.tenderRevisions?.length > 1
+              ? tenderData.tenderRevisions.map((rev) => (
+                  <TabView key={rev.version} tabId={`v${rev.version}`}>
+                    <DsTenderProduct
+                      productList={[...(rev.tenderItems ?? [])]}
+                      setProductList={(product) =>
+                        addTenderProduct(rev.version, product)
+                      }
+                    />
+                  </TabView>
+                ))
+              : [
+                  <TabView key="v1" tabId="v1">
+                    <DsTenderProduct
+                      productList={[]}
+                      setProductList={(product) => addTenderProduct(1, product)}
+                    />
+                  </TabView>,
+                ]}
+
             <TabView tabId="2">
               <DocumentContext.Consumer>
                 {(context) => {
@@ -225,7 +306,7 @@ const prd:TenderProduct[]= rows.map((x)=>{
                     return <div>Error: Document context is not available</div>;
                   }
                   const { totalSelectedDocuments } = context;
- 
+
                   return (
                     <div className={style.documentContainer}>
                       <div className={style.docPane}>
@@ -248,7 +329,7 @@ const prd:TenderProduct[]= rows.map((x)=>{
                           label="Add Documents"
                         />
                       </div>
- 
+
                       <DocumentSelectorArea />
                     </div>
                   );
@@ -279,10 +360,7 @@ const prd:TenderProduct[]= rows.map((x)=>{
           duration={closeTimeForTender}
         />
       </DocumentProvider>
-  
     </>
   );
 };
 export default DsTenderIdPage;
- 
- 
