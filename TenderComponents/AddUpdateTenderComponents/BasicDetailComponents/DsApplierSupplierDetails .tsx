@@ -282,13 +282,13 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
             // placeholder="Please type here"
             onBlur={(e) =>
               updateTenderData(
-                "supplierDiscount",
+                "supplierDiscount", 
                 (e.target as HTMLInputElement).value
               )
             } 
           ></DsTextField>
         </div>
-      </div>
+      </div> 
     </>
   );
 };
