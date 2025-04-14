@@ -61,7 +61,7 @@ const ProductTableSearch: React.FC<TableSearchProps> = ({
         if (areSearchProduct(values)) {
           const products = values.map((x) => {
             const id=x.id||0;
-            return { id: id, name: x.product?.name||"", packSize: x.product?.productPackingSize||"" };
+            return { id: id, name: x.name||"", packSize: x.cartonSize||"" };
           });
           setProductOptions(products);
         }

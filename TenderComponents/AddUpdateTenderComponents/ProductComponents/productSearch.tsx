@@ -16,6 +16,7 @@ export type searchProduct={
   id:number;
   name:string;
   quantity:number;
+  cartonSize:string;
 }
  
 export function isSearchProduct(value: unknown):value is searchProduct {
