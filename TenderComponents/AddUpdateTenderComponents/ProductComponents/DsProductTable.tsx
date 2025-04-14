@@ -7,9 +7,17 @@ import DsCustomerLPR from "./CustomerLpr";
 import ProductTableSearch from "./ProductTableSearch";
 import styles from "@/app/page.module.css";
 import IconFactory from "@/Elements/IconComponent";
+import { FloatingMenu } from "@/Elements/DsComponents/FloatingMenu/dsFloatingMenu";
+import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
+import Image from "next/image";
+import { changeImage } from "@/Common/helpers/Method/conversion";
+import { displayContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
+import whitetrashbtn from "@/Common/TenderIcons/smallIcons/whitetrash.svg";
+import trashbtn from "@/Common/TenderIcons/smallIcons/trashbtn.svg";
 
 interface DsProductTableProps {
   version: number;
+  // removeTenderProduct: (version: number, id: number) => void;
 }
 
 const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
@@ -343,7 +351,6 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
                 ? tenderproduct.product.lqr?.toString() || "-"
                 : "-",
             className: styles.celllqr,
-            
           },
           {
             columnIndex: 10,
@@ -525,8 +532,35 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
             <div className={styles.noDataBorders}></div>
           </div>
         )}
+         {/* <FloatingMenu
+          selected={}
+          id={"sales-product"}
+          onCloseClick={}
+        >
+          <>
+          <DsButton
+                    id="deleteBtn"
+                    buttonColor="btnDanger"
+                    buttonSize="btnMedium"
+                    buttonViewStyle="btnContained"
+                    onClick={() => {
+                   
+                      if (productIds.length > 0) {
+                        removeMultipleOrderItem(productIds);
+                        setProductIds([]);
+                        closeContext("sales-product");
+                        closeContext("delete-menu");
+                      }
+                      // closeContext("contet2");
+                      // closeContext("contextMenuId4");
+                    }}
+                    tooltip="variants : btnDanger, btnContained, btnMedium"
+                    label="Delete"
+                  />
+          </>
+          </FloatingMenu> */}
       </div>
-    </>
+  </>
   );
 };
 

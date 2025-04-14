@@ -35,7 +35,7 @@ const CompanySearch: React.FC<CompanySearchProps> = ({
   const setOptions = (values: unknown[]) => {
     if (areSearchCompanys(values)) {
       const company: datalistOptions[] = values.map(
-        (x: { id: string; name?: string }) => {
+        (x: { id: number|string; name?: string }) => {
           return {
             id: x.id.toString(),
             value: x.name,

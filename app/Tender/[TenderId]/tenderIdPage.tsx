@@ -339,8 +339,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
           </div>
           <DSTendrFooter
             setActionStatus={setActionStatusValues}
-            saveTender={saveTender}
-          />
+            saveTender={saveTender} tenderData={null}          />
         </DsApplication>
         <DsPane
           id="documentPane"
