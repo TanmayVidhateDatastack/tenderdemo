@@ -311,8 +311,11 @@ gap: 1em ;
   max-height:1.8em !important;
   min-width: 4.75em !important;
   max-width:4.75em !important;
+}
+.qtyinproductContainer{
+  
   box-shadow:2px 2px 4px  #0000000F!important;
-  }
+}
 
   .toaster-message {
     padding: 0.2em;

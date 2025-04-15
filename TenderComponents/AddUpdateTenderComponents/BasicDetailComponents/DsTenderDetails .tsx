@@ -10,9 +10,10 @@ import DsDatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import Image from "next/image";
 import fetchData from "@/Common/helpers/Method/fetchData";
-import copybtnenabled from "@/Common/TenderIcons/smallIcons/copyEnabled.svg";
+// import copybtnenabled from "@/Common/TenderIcons/smallIcons/copyEnabled.svg";
 import DsAddressSelect from "@/Elements/DsComponents/dsSelect/dsAddressSelect";
 import CustomerSearch from "./customerSearch";
+import IconFactory from "@/Elements/IconComponent";
 const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
   const [fetchVisible, setFetchVisible] = useState(true);
   const [role, setRole] = useState("checker"); 
@@ -92,7 +93,10 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
               buttonViewStyle="btnText" 
               buttonSize="btnSmall"
               className={deptStyle.copyBtn}
-              startIcon={<Image src={copybtnenabled} alt="copy" />}
+              startIcon={<div style={{width:"0.95625em",height:"1.125em"}}>
+                <IconFactory name="copy"/>
+                </div>
+              }
               // disable
               onClick={() => { 
                 setShowNotification(true); 

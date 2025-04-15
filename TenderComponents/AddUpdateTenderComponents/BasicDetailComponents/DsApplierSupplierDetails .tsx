@@ -59,22 +59,22 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
     return customers;
   }
 
-  const onStockistSelect = (selectedOption: datalistOptions) => {
-    // updateTenderData("appliedBy", "Stockist");
-    // updateTenderData("applierId", selectedOption.value);
-    console.log("selected option ", selectedOption);
-  };
-  const onStockistSelects = (selectedOption: datalistOptions) => {
-    // updateTenderData("appliedBy", "Stockist");
-    // updateTenderData("applierId", selectedOption.value);
-    console.log("selected option ", selectedOption);
-  };
-
-  const handleAppliedSuppliedFetch = async () => {
-    try {
-      const res = await fetchData({ url: appliedBySuppliedBy });
-      if (res.code === 200) {
-        const result = res.result;
+     const onStockistSelect = (selectedOption: datalistOptions) => {
+      // updateTenderData("appliedBy", "Stockist");
+      // updateTenderData("applierId", selectedOption.value);   
+      // console.log("selected option ",selectedOption);  
+    };
+    const onStockistSelects = (selectedOption: datalistOptions) => {
+      // updateTenderData("appliedBy", "Stockist");
+      // updateTenderData("applierId", selectedOption.value);   
+      // console.log("selected option ",selectedOption);  
+    };
+ 
+  const handleAppliedSuppliedFetch = async () => { 
+    try {  
+      const res = await fetchData({ url: appliedBySuppliedBy }); 
+      if (res.code === 200) { 
+        const result = res.result; 
 
         const appliedBys: DsMultiLevelSelectOption[] = result.organization.map(
           (item: any) => ({
@@ -133,12 +133,11 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
       url: getAllDepots,
     })
       .then((res) => {
-        console.log("depot fetched response :", res);
-        const result = res.result;
-        const formatedDepot = result.map((item: any) => ({
-          value: item.id,
-          label: item.name,
-        }));
+        const result = res.result; 
+        const formatedDepot = result.map((item: any) => ({ 
+          value: item.id + "_" + item.type,
+          label: item.name  
+        }));  
         setFormatedDepot(formatedDepot);
         if (res?.code === 200 && res?.result) {
           console.log("stored depot result:", res.result);

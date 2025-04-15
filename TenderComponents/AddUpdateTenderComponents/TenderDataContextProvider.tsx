@@ -205,7 +205,7 @@ export function updateDocuments(
     });
     return;
   }
- 
+
   //When first time document is getting uploaded the tenderDocument is empty then simply add the document in TenderDocument Array
   if (typeDocuments?.length == 0) {
     files.forEach((x) => {
@@ -221,7 +221,7 @@ export function updateDocuments(
     });
     return;
   }
- 
+
   // For add document --> document is not in tenderDocument array and it is present in latest files array
   files?.forEach((x) => {
     if (!typeDocuments?.find((f) => f.name == x.name)) {
@@ -476,7 +476,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         }
         return fee; // Keep existing entries unchanged
       });
- 
+
       // If no update was made, add a new entry
       if (!updated) {
         updatedTenderFees.push({
@@ -490,7 +490,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           status: active,
         });
       }
- 
+
       return {
         ...prev,
         tenderFees: updatedTenderFees,
@@ -570,7 +570,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   ) => {
     setTenderData((prev) => ({
       ...prev,
- 
+
       documents: [
         ...(prev.documents?.filter(
           (document) =>
@@ -596,7 +596,9 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   // };
   // ✅ Add a new tender product
   const addTenderProduct = (version: number, product: TenderProduct) => {
+
     setTenderData((prev) => ({
+   
       ...prev,
       tenderRevisions: prev.tenderRevisions.map((revision) =>
         revision.version === version
@@ -914,7 +916,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         status: status.toUpperCase(),
         lastUpdatedBy: 3,
       });
- 
+
       // console.log("sAVEEEE", dataToSend);
       try {
         await fetchData({
@@ -941,7 +943,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             showToaster("create-order-toaster");
           }
         });
- 
+
         // console.log("result  = ", result);
         //console.log("Order saved successfully");
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -1014,7 +1016,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     },
     [tenderData, tenderDataCopy, fetchData, generatePatchDocument]
   );
- 
+
   const fetchAndSetOriginalTender = useCallback(
     async (tenderId: number) => {
       try {

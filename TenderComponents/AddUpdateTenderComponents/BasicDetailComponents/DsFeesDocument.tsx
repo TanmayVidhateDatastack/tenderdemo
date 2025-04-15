@@ -4,7 +4,7 @@ import Ds_checkbox from "@/Elements/DsComponents/DsCheckbox/dsCheckbox";
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import DsSingleSelect from "@/Elements/DsComponents/dsSelect/dsSingleSelect";
 import Image from "next/image";
-import downloadReciept from "@/Common/TenderIcons/smallIcons/downloadReciept.svg";
+// import downloadReciept from "@/Common/TenderIcons/smallIcons/downloadReciept.svg";
 import styles from "./deposite.module.css";
 import eleStyles from "./tender.module.css";
 import { DsSelectOption } from "@/Common/helpers/types";
@@ -110,7 +110,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             className={styles.downloadreciept}
             label="Download Reciept"
             disable={true}
-            startIcon={<Image src={downloadReciept} alt="downarrow" />}
+            startIcon={<IconFactory name="downloadReciept" />}
           />
           {/* // { )} } */}
         </div>

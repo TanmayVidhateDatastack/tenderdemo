@@ -81,9 +81,9 @@ const DsTotalTenders: React.FC<TotalTendersProps> = React.memo(({ data }) => {
         className={styles.totalorder}
       >{totalTenders}</DsInfoDisplay>
       <ContextMenu id={"TotalTenders"} showArrow={false} content={<Ds_SummaryCount
-        Title="Total Tenders"
-        Value={`${data.length}`}
-        statusValues={[
+        title="Total Tenders"
+        value={`${data.length}`}
+        statusValue={[
           {
             addimage: (
 
