@@ -41,7 +41,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
     setActionStatusValues,
     actionStatus,
     saveTender,
-    fetchAndSetOriginalTender
+    fetchAndSetOriginalTender,
   } = useTenderData();
   const [isCsvWhite, setIsCsvWhite] = useState(false);
   const [orderId] = useState<string>(paramOrderId?.toString());
@@ -49,15 +49,9 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
 
   const version = 1;
 
-  const revisionTabs = tenderData.tenderRevisions.map((rev) => ({
-    tabId: `v${rev.version}`,
-    tabName: `Products ₹ (V${rev.version})`,
-  }));
-
   const [tabs, setTabs] = useState([
     { tabId: "0", tabName: "Basic Details" },
-
-    ...revisionTabs,
+    { tabId: "v1", tabName: "Products ₹ (V1)" },
     { tabId: "2", tabName: "Documents" },
   ]);
 
@@ -65,26 +59,39 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
     "Existing"
   );
   useEffect(() => {
-    fetchAndSetOriginalTender(9163)
-    if (
-      tenderData.status == "AWARDED" ||
-      tenderData.status == "PARTIALLY_AWARDED" ||
-      tenderData.status == "LOST" ||
-      tenderData.status == "CANCELLED"
-    ) {
-      setTabs((prev) => {
-        if (prev.find((x) => x.tabId == "Contract") == undefined)
-          return [
-            ...prev,
-            {
-              tabId: "Contract",
-              tabName: "Tender " + formatStatus(tenderData.status),
-            },
-          ];
-        return prev;
-      });
-    }
+    fetchAndSetOriginalTender(9163);
   }, []);
+  useEffect(() => {
+    const revisionTabs = tenderData.tenderRevisions.map((rev) => ({
+      tabId: `v${rev.version}`,
+      tabName: `Products ₹ (V${rev.version})`,
+    }));
+    setTabs([
+      { tabId: "0", tabName: "Basic Details" },
+      ...revisionTabs,
+      { tabId: "2", tabName: "Documents" },
+    ]);
+    setTimeout(() => {
+      if (
+        tenderData.status == "AWARDED" ||
+        tenderData.status == "PARTIALLY_AWARDED" ||
+        tenderData.status == "LOST" ||
+        tenderData.status == "CANCELLED"
+      ) {
+        setTabs((prev) => {
+          if (prev.find((x) => x.tabId == "Contract") == undefined)
+            return [
+              ...prev,
+              {
+                tabId: "Contract",
+                tabName: "Tender " + formatStatus(tenderData.status),
+              },
+            ];
+          return prev;
+        });
+      }
+    }, 0);
+  }, [tenderData]);
   useEffect(() => {
     if (orderId?.toString().toLowerCase() == "new") {
       setDisplayFlag("New");
@@ -303,25 +310,16 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
               </div>
             </TabView>
 
-            {tenderData?.tenderRevisions?.length > 1
-              ? tenderData.tenderRevisions.map((rev) => (
-                  <TabView key={rev.version} tabId={`v${rev.version}`}>
-                    <DsTenderProduct
-                      productList={[...(rev.tenderItems ?? [])]}
-                      setProductList={(product) =>
-                        addTenderProduct(rev.version, product)
-                      }
-                    />
-                  </TabView>
-                ))
-              : [
-                  <TabView key="v1" tabId="v1">
-                    <DsTenderProduct
-                      productList={[]}
-                      setProductList={(product) => addTenderProduct(1, product)}
-                    />
-                  </TabView>,
-                ]}
+            {tenderData.tenderRevisions.map((rev) => (
+              <TabView key={rev.version} tabId={`v${rev.version}`}>
+                <DsTenderProduct
+                  productList={[...(rev.tenderItems ?? [])]}
+                  setProductList={(product) =>
+                    addTenderProduct(rev.version, product)
+                  }
+                />
+              </TabView>
+            ))}
 
             <TabView tabId="2">
               <DocumentContext.Consumer>
@@ -371,7 +369,9 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
           </div>
           <DSTendrFooter
             setActionStatus={setActionStatusValues}
-            saveTender={saveTender} tenderData={null}          />
+            saveTender={saveTender}
+            tenderData={null}
+          />
         </DsApplication>
         <DsPane
           id="documentPane"

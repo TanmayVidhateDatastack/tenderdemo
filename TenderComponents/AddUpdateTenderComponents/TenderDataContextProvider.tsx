@@ -95,12 +95,12 @@ export type tenderFee = {
   paymentMode: string;
   paymentDueDate: string;
   instructionNotes: string;
-  paymentStatus?:string;
-  paymentDate?:string;
-  paymentTransactionId?:string;
-  paymentReceiptId?:string;
-  acknowledgmentReceiptId?:string;
-  fundTransferConfirmationId?:string
+  paymentStatus?: string;
+  paymentDate?: string;
+  paymentTransactionId?: string;
+  paymentReceiptId?: string;
+  acknowledgmentReceiptId?: string;
+  fundTransferConfirmationId?: string;
   status?: "ACTV" | "INAC";
   // documents: Document[];
 };
@@ -165,11 +165,11 @@ export type TenderData = {
     statusDescription: string;
   };
   // comments: string;
-  fees: tenderFee[];
+  tenderFees: tenderFee[];
   supplyConditions: tenderSupplyCondition;
   tenderRevisions: {
     id?: number;
-    status?:string;
+    status?: string;
     version: number;
     tenderItems: TenderProduct[];
   }[];
@@ -287,7 +287,11 @@ interface TenderDataContextType {
   ) => void;
   // addDocumentToExistingType: (docType: string, document: Document) => void;
   addTenderProduct: (version: number, product: TenderProduct) => void;
-  removeTenderProduct: (version: number, id: number) => void;
+  removeTenderProduct: (
+    version: number,
+    id?: number,
+    genericName?: string
+  ) => void;
   createTenderVersion: () => void;
   updateTenderProduct: (
     version: number,
@@ -351,7 +355,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       lastUpdatedByEmpId: "",
       statusDescription: "Draft",
     },
-    fees: [],
+    tenderFees: [],
     supplyConditions: {
       supplyPoint: "",
       consigneesCount: 0,
@@ -362,7 +366,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     tenderRevisions: [
       {
         version: 1,
-        status:DsStatus.DRFT.toUpperCase(),
+        status: DsStatus.DRFT.toUpperCase(),
         tenderItems: [],
       },
     ],
@@ -391,7 +395,6 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         ],
       },
     },
-
   });
   const [tenderDataCopy, setTenderDataCopy] = useState<TenderData>({
     ...tenderData,
@@ -437,7 +440,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   ) => {
     setTenderData((prev) => ({
       ...prev,
-      fees: prev.fees.map((fee) =>
+      tenderFees: prev.tenderFees.map((fee) =>
         fee.feesType === feeType ? { ...fee, [key]: value } : fee
       ),
     }));
@@ -463,7 +466,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     setTenderData((prev) => {
       let updated = false; // Flag to track if we updated an existing entry
       const active: "ACTV" | "INAC" = "ACTV";
-      const updatedTenderFees = prev.fees.map((fee) => {
+      const updatedTenderFees = prev.tenderFees.map((fee) => {
         if (fee.feesType === type) {
           updated = true; // Mark that we found and updated the type
           return {
@@ -490,7 +493,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
 
       return {
         ...prev,
-        fees: updatedTenderFees,
+        tenderFees: updatedTenderFees,
       };
     });
   };
@@ -498,7 +501,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   const removeTenderFeeByType = (feeType: string) => {
     setTenderData((prev) => ({
       ...prev,
-      fees: prev.fees.filter((fee) => fee.feesType !== feeType),
+      tenderFees: prev.tenderFees.filter((fee) => fee.feesType !== feeType),
     }));
   };
   // ✅ Update supply condition fields
@@ -571,7 +574,6 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       documents: [
         ...(prev.documents?.filter(
           (document) =>
-
             !(
               document.name == documentName &&
               document.documentType == documentType &&
@@ -606,7 +608,11 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       ),
     }));
   };
-  const removeTenderProduct = (version: number, id: number) => {
+  const removeTenderProduct = (
+    version: number,
+    id?: number,
+    genericName?: string
+  ) => {
     setTenderData((prev) => ({
       ...prev,
       tenderRevisions: prev.tenderRevisions.map((revision) =>
@@ -614,7 +620,11 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           ? {
               ...revision,
               tenderItems: [
-                ...revision.tenderItems.filter((item) => item.id !== id),
+                ...revision.tenderItems.filter((item) =>
+                  item.productId == undefined
+                    ? item.requestedGenericName !== genericName
+                    : item.productId !== id
+                ),
               ],
             }
           : revision
@@ -871,7 +881,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         // createdBy: 3,
         lastUpdatedBy: 3,
         // status: status,
-        fees: tenderData.fees
+        tenderFees: tenderData.tenderFees
           .filter((x) => x.status == "ACTV")
           .map((x) => {
             return {
@@ -1016,16 +1026,31 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         });
         const tenderData = response.result;
         console.log("tenderData= ", tenderData);
+        if (
+          tenderData.tenderRevisions.length == 0 ||
+          tenderData.tenderRevisions == null
+        )
+          tenderData.tenderRevisions = [
+            {
+              version: 1,
+              status: DsStatus.DRFT.toUpperCase(),
+              tenderItems: [],
+            },
+          ];
+        tenderData.tenders.tenderDetails =
+          tenderData.tenders.tenderDetailsReadOnly;
+        delete tenderData.tenders.tenderDetailsReadOnly;
         const newTenderData: TenderData = {
           ...tenderData.tenders,
+          tenderRevisions:tenderData.tenderRevisions,
           tenderFees: tenderData.tenderFees.map((fee) => ({
             ...fee,
             status: "ACTV",
           })),
           supplyConditions: {
-            ...tenderData.supplyConditions,
-            applicableCondition:
-              tenderData.supplyConditions.applicableCondition.map((ac) => ({
+            ...tenderData.supplyCondition,
+            applicableConditions:
+              tenderData.supplyCondition.applicableConditions?.map((ac) => ({
                 ...ac,
                 status: "ACTV",
               })),
