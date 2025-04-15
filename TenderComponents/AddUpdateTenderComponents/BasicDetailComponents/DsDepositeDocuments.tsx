@@ -96,7 +96,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
 
   useEffect(() => {
     if (applicablefees) {
-      console.log("applicable fees : ", applicablefees);
+      // console.log("applicable fees : ", applicablefees);
     }
   }, [applicablefees]);
 

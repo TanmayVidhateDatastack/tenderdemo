@@ -67,7 +67,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
         calculated.product.netValue =
           (calculated.product?.totalCost || 0) +
           (calculated.product?.marginValue || 0);
-      console.log("In product table");
+     
       return calculated;
     });
   }, [localProducts]);
@@ -536,7 +536,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
         (row) => row.rowIndex === rowIndex
       );
       if (row) {
-        console.log("row ",row.rowIndex);
+
         const productId = row?.customAttributes?.productId;
 
         
@@ -550,7 +550,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
           const productName = String(
             row.customAttributes?.productName || row.customAttributes?.genericName || "-"
           );
-              console.log("productname:",productName);
+             
 
             setProductIds((prev) => [...prev, Number(productId)]);
             setSelectedProductName(productName);
@@ -704,7 +704,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
                         });
                       }
 
-                      console.log(productIds.length);
+                      // console.log(productIds.length);
                       setProductIds([]);
                       setSelectedRowIndices([]) // clear selected IDs
                       closeContext("sales-product");

@@ -104,7 +104,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
  
   const [message, setMessage] = useState<string>("");
  
-  console.log(message);
+
   // const handleUpload = (file: File | null) => {
   //   if (!file) {
   //     console.log("Please select a file first.");
@@ -151,7 +151,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
     const reader = new FileReader();
     reader.onload = (event) => {
       const fileContent = event.target?.result;
-      console.log("File content:", fileContent);
+ 
       setMessage("The File has been  attached successfully!");
   
       const text = event.target?.result as string;

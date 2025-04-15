@@ -17,16 +17,16 @@ const DsTenderProduct: React.FC<{
     const handleFetch = async () => {
         try {
             const res = await fetchData({ url:  getProductURL});
-            console.log("Fetched Response:", res);
+            // console.log("Fetched Response:", res);
  
             if (res?.code === 200 && Array.isArray(res?.result)) {
                 setfetchdata(res.result);
             } else {
-                console.error("Invalid data format or empty result");
+                // console.error("Invalid data format or empty result");
                 setfetchdata([]);
             }
         } catch (error) {
-            console.error("Error fetching data:", error);
+            // console.error("Error fetching data:", error);
             setfetchdata([]);
         }
     };

@@ -132,7 +132,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
           };
         }).filter(group => group.documents.length > 0);
 
-        console.log("Updated Document Context:", updatedData); 
+        // console.log("Updated Document Context:", updatedData); 
 
         return updatedData;
       });

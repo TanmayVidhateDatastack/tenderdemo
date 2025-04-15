@@ -62,12 +62,12 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
      const onStockistSelect = (selectedOption: datalistOptions) => {
       // updateTenderData("appliedBy", "Stockist");
       // updateTenderData("applierId", selectedOption.value);   
-      console.log("selected option ",selectedOption);  
+      // console.log("selected option ",selectedOption);  
     };
     const onStockistSelects = (selectedOption: datalistOptions) => {
       // updateTenderData("appliedBy", "Stockist");
       // updateTenderData("applierId", selectedOption.value);   
-      console.log("selected option ",selectedOption);  
+      // console.log("selected option ",selectedOption);  
     };
  
   const handleAppliedSuppliedFetch = async () => { 
@@ -112,10 +112,10 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
         setSuppliedBy(suppliedBys);
         
       } else {
-        console.error("Error fetching data: ", res.message || "Unknown error");
+        // console.error("Error fetching data: ", res.message || "Unknown error");
       }
     } catch (error) {
-      console.error("Fetch error: ", error);  
+      // console.error("Fetch error: ", error);  
     }
   };
 
@@ -128,7 +128,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
       url: getAllDepots
     })
       .then((res) => {
-        console.log("depot fetched response :", res); 
+        // console.log("depot fetched response :", res); 
         const result = res.result; 
         const formatedDepot = result.map((item: any) => ({ 
           value: item.id + "_" + item.type,
@@ -136,7 +136,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
         }));  
         setFormatedDepot(formatedDepot);
         if (res?.code === 200 && res?.result) {
-          console.log("stored depot result:", res.result);
+          // console.log("stored depot result:", res.result);
         } else {
           console.error("Error: Invalid data format or empty depot");
         }
@@ -150,7 +150,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
     },[]); 
 
     const handleAppliedBySelect = (isDatalistOpt: boolean, option: datalistOptions) => {
-      console.log(option);
+      // console.log(option);
       setSelected(option);
       if (isDatalistOpt) {
         const onlyStockist = allSuppliedBy.filter(opt => opt.label === "Stockist");
@@ -167,7 +167,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
     
     
     const handleSuppliedBySelects = (isDatalistOpt:boolean,option: datalistOptions) => {
-      console.log(option);
+      // console.log(option);
       setSelecteds(option)
     };
     
@@ -185,7 +185,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
             onSelect={handleAppliedBySelect}
             setSelectOption={(isDataListOptions, option) => {
               setSelected(option);
-              console.log("applieridoption", option);
+              // console.log("applieridoption", option);
               if (isDataListOptions) {
                 updateTenderData("applierId", Number(option.id));
                 updateTenderData(
@@ -219,7 +219,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
             onSelect={handleSuppliedBySelects}
             setSelectOption={(isDataListOptions, option) => {
               setSelected(option);
-              console.log("applieridoption", option);
+              // console.log("applieridoption", option);
               if (isDataListOptions) {
                 updateTenderData(
                   "supplierId",

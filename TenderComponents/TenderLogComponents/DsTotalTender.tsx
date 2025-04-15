@@ -27,7 +27,7 @@ const DsTotalTenders: React.FC<TotalTendersProps> = React.memo(({ data }) => {
 
 
     if (!data || !Array.isArray(data)) {
-      console.warn("Invalid data format:", data);
+      // console.warn("Invalid data format:", data);
       return;
     }
 
@@ -36,7 +36,7 @@ const DsTotalTenders: React.FC<TotalTendersProps> = React.memo(({ data }) => {
 
     data.forEach((tender) => {
       if (!tender.type) {
-        console.warn("Missing type for tender:", tender);
+        // console.warn("Missing type for tender:", tender);
         return;
       }
 
@@ -47,12 +47,12 @@ const DsTotalTenders: React.FC<TotalTendersProps> = React.memo(({ data }) => {
       }
     });
 
-    console.log(
-      "Institutional Count:",
-      institutional,
-      "Corporate Count:",
-      corporate
-    );
+    // console.log(
+    //   "Institutional Count:",
+    //   institutional,
+    //   "Corporate Count:",
+    //   corporate
+    // );
 
     setTotalTenders(data.length);
     setInstitutionalCount(institutional);

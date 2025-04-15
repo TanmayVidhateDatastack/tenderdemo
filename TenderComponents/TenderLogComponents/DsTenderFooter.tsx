@@ -211,7 +211,7 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
   useEffect(() => {
     if (role && role !== "") {
       dispatch(setVisibilityByRole(role));
-      console.log("Role=", role);
+      // console.log("Role=", role);
       let contextContent: React.ReactElement | null = null;
       
       if (role === "ACCOUNTANCE") {

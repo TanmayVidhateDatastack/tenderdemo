@@ -40,10 +40,10 @@ const ProductSearch: React.FC<ProductSearchProps> = ({
   setSelectedProductBatchId,
 }) => {
   const [products, setProducts] = useState<datalistOptions[]>();
-  console.log("Product serach",orderStatus);
+  // console.log("Product serach",orderStatus);
  
   const setOptions = (values: unknown) => {
-    console.log("setOptions called with values:", values);
+    // console.log("setOptions called with values:", values);
     if (areSearchProduct(values)) {
       const products: datalistOptions[] = values.map(
         (x: { id?: number; name?: string; packSize?: string }) => {
@@ -67,9 +67,9 @@ const ProductSearch: React.FC<ProductSearchProps> = ({
       );
 
       setProducts(products);
-      console.log("Processed products:", products);
+      // console.log("Processed products:", products);
     } else {
-      console.log("product values are = ", values);
+      // console.log("product values are = ", values);
     }
   };
  
@@ -80,11 +80,11 @@ const ProductSearch: React.FC<ProductSearchProps> = ({
  
       if (selectedProductId) {
         setSelectedProductId(parseInt(selectedProductId));
-   console.log("selected product id",selectedProductId);
+  //  console.log("selected product id",selectedProductId);
       }
       if (selectedProductBatchId) {
         setSelectedProductBatchId(parseInt(selectedProductBatchId));
-        console.log("selected product batch id",selectedProductBatchId);
+        // console.log("selected product batch id",selectedProductBatchId);
       }
     }
   };
@@ -104,7 +104,7 @@ const ProductSearch: React.FC<ProductSearchProps> = ({
         </div>
       }
       setSearchUrl={(searchTerm: string) => {
-        console.log("name", searchProductsURL +searchTerm);
+        // console.log("name", searchProductsURL +searchTerm);
         return searchProductsURL +searchTerm;
      
      

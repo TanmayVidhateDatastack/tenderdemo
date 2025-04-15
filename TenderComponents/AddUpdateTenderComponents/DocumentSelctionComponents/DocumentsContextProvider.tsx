@@ -63,7 +63,7 @@ export const DocumentProvider: React.FC<DocumentProviderProps> = ({ children }) 
   }, [documentData]);
 
   useEffect(() => {
-    console.log("Context Updated SelectedDocuments:", selectedDocuments);
+    // console.log("Context Updated SelectedDocuments:", selectedDocuments);
   }, [selectedDocuments]); // ✅ Debugging
 
 

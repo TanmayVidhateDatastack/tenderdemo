@@ -39,7 +39,7 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
 
   function handleonclick(e: React.MouseEvent<HTMLElement, MouseEvent> | React.FocusEvent<HTMLElement, Element> | FocusEvent) {
     setContext(true);
-    console.log("context : ", context);
+    // console.log("context : ", context);
     displayContext(e, contextMenuId);
   }
   
@@ -66,12 +66,12 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
   
   useEffect(() => {
     if (applicableConditions && applicableConditions.length > 0) {
-      console.log("000 : ", applicableConditions);
+      // console.log("000 : ", applicableConditions);
       const mappedConditions = applicableConditions.map((conditions) => ({
         label: conditions.label,
         value: conditions.value
       })); 
-      console.log("mapped Conditions:", mappedConditions);
+      // console.log("mapped Conditions:", mappedConditions);
       setApplicableCheckboxes(mappedConditions);
 
       const options: Record<string, boolean> = mappedConditions.reduce<

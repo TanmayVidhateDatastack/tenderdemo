@@ -288,8 +288,8 @@ interface TenderDataContextType {
   // addDocumentToExistingType: (docType: string, document: Document) => void;
   addTenderProduct: (version: number, product: TenderProduct) => void;
   removeTenderProduct: (
-    version: number|string,
-    id?: number|string,
+    version: number,
+    id?: number,
     genericName?: string
   ) => void;
   createTenderVersion: () => void;
@@ -616,7 +616,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     genericName?: string
 
   ) => {
-    console.log("generic",genericName);
+   
     setTenderData((prev) => ({
       ...prev,
       tenderRevisions: prev.tenderRevisions.map((revision) =>
@@ -845,7 +845,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   const saveTender = useCallback(
     async (status: dsStatus) => {
       if (!tenderData) return;
-      console.log("sAVEEEE", tenderData);
+      // console.log("sAVEEEE", tenderData);
       const tenderSaveData = {
         customerId: tenderData.customerId,
         customerAddressId: tenderData.customerAddressId,
@@ -927,7 +927,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           method: "POST",
           dataObject: dataToSend,
         }).then((res) => {
-          console.log("res = ", res);
+          // console.log("res = ", res);
           if (res.code === 200) {
             setActionStatus({
               notiMsg: "Tender Created Successfully",
@@ -995,7 +995,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           method: "PATCH",
           dataObject: patchDocument,
         }).then((res) => {
-          console.log("res = ", res);
+          // console.log("res = ", res);
           if (res.code === 200) {
             setActionStatus({
               notiMsg: "Tender Updated Successfully",

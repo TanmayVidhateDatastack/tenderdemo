@@ -82,7 +82,7 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
                   x.documentType == "TENDER_SUPPLY_CONDITION" &&
                   x.category == type
               )||[];
-              console.log("updateDocuments",files);
+              // console.log("updateDocuments",files);
               updateDocuments(
                 files,
                 typeDocuments, 

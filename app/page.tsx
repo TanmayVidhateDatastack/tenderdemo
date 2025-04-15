@@ -91,7 +91,7 @@ export default function Home() {
     userId: 3,
     metaDataTypes: [],
   });
-  console.log(isFilterActive, tenderMetadataFilters);
+
   const [fetchedMetadata, setFetchedMetadata] = useState<Metadata>({})
   // console.log(isFilterActive);
   const [isAddWhite, setIsAddWhite] = useState<boolean>(false);
@@ -337,7 +337,7 @@ export default function Home() {
     })
       .then((res) => {
         // console.log("objevct to be send", tenderFilters);
-        console.log("Response RESULT:", res.result);
+      
  
         if (res?.code === 200 && Array.isArray(res?.result)) {
           const formattedData = formatTenders(res?.result);
@@ -349,7 +349,7 @@ export default function Home() {
         }
       })
       .catch((error) => {
-        console.error("Error fetching orders:", error);
+        // console.error("Error fetching orders:", error);
       });
  
   };
@@ -407,8 +407,7 @@ export default function Home() {
   const [uniqueAppliers, setUniqueAppliers] = useState<{ label: string; value: string }[]>([]);
   const [applierDetails, setApplierDetails] = useState<string[]>([]);
   const [supplierDetails, setSupplierDetails] = useState<string[]>([]);
-  console.log(uniqueAppliers, supplierDetails);
- 
+   
   useEffect(() => {
     if (Array.isArray(data) && data.length > 0) {
       const names1 = data.map((item) => item.appliedBy);
@@ -423,7 +422,7 @@ export default function Home() {
  
  
   useEffect(() => {
-    console.log("applier details  : ", applierDetails);
+    // console.log("applier details  : ", applierDetails);
   }, [applierDetails])
  
  
@@ -457,12 +456,12 @@ export default function Home() {
       },
     })
       .then((res) => {
-        console.log("Meta Fetched Response:", res); // Log the fetched response
+       
  
         if (res?.code === 200 && res?.result) {
           // if(res?.c)
           setFetchedMetadata(res.result); // Store only tenderType
-          console.log("Stored Tender Type:", res.result);
+          
         } else {
           console.error("Error: Invalid data format or empty tenderType");
         }
@@ -478,12 +477,12 @@ export default function Home() {
       url: getAllDepots
     })
       .then((res) => {
-        console.log("depot fetched response :", res); // Log the fetched response
+      
  
         if (res?.code === 200 && res?.result) {
           // if(res?.c)
           setDepotList(res.result);
-          console.log("stored depot result:", res.result);
+         
         } else {
           console.error("Error: Invalid data format or empty depot");
         }
@@ -504,13 +503,13 @@ export default function Home() {
         if (res?.code === 200 && res?.result) {
           // if(res?.c)
           setApplierSupplier(res.result?.appliedBySuppliedBy);
-          console.log("stored applier supplier  result:", res.result);
+          // console.log("stored applier supplier  result:", res.result);
         } else {
-          console.error("Error: Invalid data format or empty depot");
+          // console.error("Error: Invalid data format or empty depot");
         }
       })
       .catch((err) => {
-        console.error("Error fetching data:", err);
+        // console.error("Error fetching data:", err);
       });
   };
  
@@ -544,7 +543,7 @@ export default function Home() {
       // console.log("Selected Tender Type:", matchedItem.codeDescription);
       return matchedItem.codeDescription;
     } else {
-      console.log("No matching tender type found.");
+      // console.log("No matching tender type found.");
  
     }
   };
@@ -700,7 +699,7 @@ export default function Home() {
     };
   });
 
-  console.log("New Rows:", newRows);
+
 
   setTempTableData((prevData) => ({
     ...prevData,
