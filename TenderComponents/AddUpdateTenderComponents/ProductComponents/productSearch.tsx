@@ -5,7 +5,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import DsSearchComponent from "@/Elements/DsComponents/DsSearch/searchComponent";
 import style from "@/TenderComponents/AddUpdateTenderComponents/BasicDetailComponents/tender.module.css";
 import IconFactory from "@/Elements/IconComponent";
-import { TenderProduct } from "../TenderDataContextProvider";
+
 export interface ProductSearchProps {
   // initialValue?:string;
   orderStatus?: string;

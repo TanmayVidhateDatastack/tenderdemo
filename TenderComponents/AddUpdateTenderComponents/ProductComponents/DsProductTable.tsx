@@ -7,11 +7,17 @@ import DsCustomerLPR from "./CustomerLpr";
 import ProductTableSearch from "./ProductTableSearch";
 import styles from "@/app/page.module.css";
 import IconFactory from "@/Elements/IconComponent";
-import { FloatingMenu } from "@/Elements/DsComponents/FloatingMenu/dsFloatingMenu";
+import {
+  displayTableMenu,
+  FloatingMenu,
+} from "@/Elements/DsComponents/FloatingMenu/dsFloatingMenu";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import Image from "next/image";
 import { changeImage } from "@/Common/helpers/Method/conversion";
-import { displayContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
+import ContextMenu, {
+  closeContext,
+  displayContext,
+} from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import whitetrashbtn from "@/Common/TenderIcons/smallIcons/whitetrash.svg";
 import trashbtn from "@/Common/TenderIcons/smallIcons/trashbtn.svg";
 
@@ -21,7 +27,8 @@ interface DsProductTableProps {
 }
 
 const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
-  const { tenderData, updateTenderProduct } = useTenderData();
+  const { tenderData, updateTenderProduct, removeTenderProduct } =
+    useTenderData();
   const [tenderProductTable, setTenderProductTable] = useState<
     tableData | undefined
   >();
@@ -30,6 +37,13 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
       ?.tenderItems || []
   );
   const [hasChanges, setHasChanges] = useState(false);
+  const [productIds, setProductIds] = useState<number[]>([]);
+  const [selectedProduct, setSelectedProduct] = useState<number | undefined>();
+  const [selectedProductName, setSelectedProductName] = useState<
+    string | undefined
+  >();
+  const [selectedRowIndices, setSelectedRowIndices] = useState<number[]>([]);
+
 
   const calculatedProducts = useMemo(() => {
     return localProducts.map((tenderproduct) => {
@@ -63,21 +77,6 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
     field: keyof TenderProduct | `product.${keyof TenderProduct["product"]}`,
     value: string | number
   ) => {
-    // .map(
-    //   (item) =>
-    //     item.id === id || item.productId === id
-    //       ? key.startsWith("product.")
-    //         ? {
-    //             ...item,
-    //             product: {
-    //               ...item.product,
-    //               [key.split(".")[1]]: value, // Update the nested product field
-    //             },
-    //           }
-    //         : { ...item, [key]: value } // Update the top-level field
-    //       : item
-    // ),
-
     setLocalProducts((prev) =>
       prev.map((p, i) =>
         i === index
@@ -95,6 +94,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
     );
     setHasChanges(true);
   };
+
 
   const handleSave = () => {
     calculatedProducts.forEach((product) => {
@@ -221,6 +221,14 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
     () =>
       calculatedProducts.map((tenderproduct, index) => ({
         rowIndex: index + 1,
+         customAttributes:
+        
+        {
+            genericName: tenderproduct.requestedGenericName || "",
+            productId: tenderproduct.productId || 0,
+            productName: tenderproduct.product.name || "",
+          },
+
         content: [
           {
             columnIndex: 1,
@@ -240,6 +248,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
                 tenderproduct.requestedGenericName || "-"
               ),
             className: styles.cellgenericname,
+        
           },
 
           {
@@ -360,7 +369,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
                   index={index + 1}
                   lprValue={tenderproduct.lpr}
                   lprTo={{
-                    id: tenderproduct.competitorId||0,
+                    id: tenderproduct.competitorId || 0,
                     name: tenderproduct.product.competitorName || "",
                   }}
                   onValueChange={(value) =>
@@ -509,6 +518,73 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
     });
   }, [columns, rows]);
 
+  const handleCheckBoxClick = (
+    e: React.MouseEvent<HTMLElement>,
+    rowIndex: number,
+    isChecked: boolean
+  ) => {
+    e.stopPropagation();
+
+    const table = (e.target as HTMLElement).closest("table");
+    if (table) {
+      const checkbox = table?.querySelector(
+        `.row-checkbox-${rowIndex}`
+      ) as HTMLInputElement;
+
+      // if (checkbox) {
+      const row = tenderProductTable?.rows?.find(
+        (row) => row.rowIndex === rowIndex
+      );
+      if (row) {
+        console.log("row ",row.rowIndex);
+        const productId = row?.customAttributes?.productId;
+
+        
+
+        if (isChecked === true) {
+          setSelectedRowIndices((prev) => [...prev, rowIndex]);
+          if (!productIds.includes(Number(productId))) {
+            const products = productIds.length + 1;
+          //   const productName =
+          // row?.customAttributes?.productName?.toString();
+          const productName = String(
+            row.customAttributes?.productName || row.customAttributes?.genericName || "-"
+          );
+              console.log("productname:",productName);
+
+            setProductIds((prev) => [...prev, Number(productId)]);
+            setSelectedProductName(productName);
+
+            if (products !== 0) {
+              displayTableMenu(e, "sales-product", "bottom", "center");
+            }
+          }
+        } else {
+          setSelectedRowIndices((prev) =>
+            prev.filter((index) => index !== rowIndex)
+          );
+          const updatedProductIds = productIds.filter(
+            (pid) => pid !== Number(productId)
+          );
+
+          setProductIds(updatedProductIds);
+          setSelectedProduct(Number(productId));
+        }
+      }
+    }
+  };
+
+  const handleUnselectRows = (e: React.MouseEvent<HTMLElement>) => {
+    const checkboxes = document.querySelectorAll(
+      `#${tenderProductTable?.id} .table-body-checkboxes:checked`
+    );
+    if (checkboxes) {
+      checkboxes.forEach((ch) => (ch as HTMLInputElement).click());
+    }
+    closeContext("sales-product");
+    closeContext("delete-menu");
+  };
+
   return (
     <>
       <div className="tender-product-container">
@@ -518,6 +594,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
             id={tenderProductTable.id}
             columns={tenderProductTable.columns}
             rows={tenderProductTable.rows}
+            handleCheckboxClick={handleCheckBoxClick}
             isSelectAble={true}
           />
         )}
@@ -532,35 +609,117 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
             <div className={styles.noDataBorders}></div>
           </div>
         )}
-         {/* <FloatingMenu
-          selected={}
+        <FloatingMenu
+          selected={productIds.length}
           id={"sales-product"}
-          onCloseClick={}
+          onCloseClick={handleUnselectRows}
         >
           <>
-          <DsButton
+            <DsButton
+              id="deleteBtn"
+              buttonColor="btnWarning"
+              buttonViewStyle="btnContained"
+              onClick={(e) => {
+                changeImage(e, whitetrashbtn);
+                displayContext(e, "delete-menu", "vertical", "center");
+              }}
+              startIcon={
+                <div
+                  style={{
+                    width: "1.0625em",
+                    height: "1.195625em",
+                    position: "relative",
+                  }}
+                >
+                  <Image
+                    src={trashbtn}
+                    alt="icon"
+                    layout="fill"
+                    objectFit="cover"
+                  />
+                </div>
+              }
+              tooltip="variants : btnWarning, btnContained, btnMedium"
+              label="Delete"
+            />
+          </>
+        </FloatingMenu>
+        <ContextMenu
+          id={"delete-menu"}
+          showArrow={false}
+          className={styles.productContext}
+          content={
+            <>
+              <div className={styles.contextcontainer}>
+                <div className={styles.deleteText}>
+                  Delete{" "}
+                  <span className={styles.selectedProduct}>
+                    {" "}
+                    {productIds.length === 1
+                      ? selectedProductName
+                      : `${productIds.length} products`}
+                  </span>
+                </div>
+              </div>
+              <p className={styles.confirmationtext}>
+                Are you sure you want to delete this product line item?
+              </p>
+
+              <div className={styles.btncontext}>
+                <div className={styles.delelbtn}>
+                  <DsButton
+                    id="cancelBtn"
+                    buttonColor="btnDark"
+                    buttonViewStyle="btnOutlined"
+                    onClick={(e) => {
+                      // closeContext("contextMenuId4");
+                      closeContext("delete-menu");
+                    }}
+                    tooltip="variants : btnDark, btnOutlined, btnSmall"
+                    label="Cancel"
+                  />
+                </div>
+
+                <div>
+                  <DsButton
                     id="deleteBtn"
                     buttonColor="btnDanger"
                     buttonSize="btnMedium"
                     buttonViewStyle="btnContained"
                     onClick={() => {
-                   
                       if (productIds.length > 0) {
-                        removeMultipleOrderItem(productIds);
-                        setProductIds([]);
-                        closeContext("sales-product");
-                        closeContext("delete-menu");
+                        productIds.forEach((id) => {
+                          removeTenderProduct(version, id,undefined);
+                        });
                       }
-                      // closeContext("contet2");
-                      // closeContext("contextMenuId4");
+                      if (selectedRowIndices.length > 0) {
+                        selectedRowIndices.forEach((rowIndex) => {
+                          const row = tenderProductTable?.rows?.find((r) => r.rowIndex === rowIndex);
+
+                          const genericName = String(row?.customAttributes?.genericName);
+                    
+                    
+                            removeTenderProduct(version, undefined,genericName);
+                          
+                        });
+                      }
+
+                      console.log(productIds.length);
+                      setProductIds([]);
+                      setSelectedRowIndices([]) // clear selected IDs
+                      closeContext("sales-product");
+                      closeContext("delete-menu");
                     }}
                     tooltip="variants : btnDanger, btnContained, btnMedium"
                     label="Delete"
                   />
-          </>
-          </FloatingMenu> */}
+                </div>
+              </div>
+            </>
+          }
+        ></ContextMenu>
       </div>
-  </>
+    </>
   );
 };
 

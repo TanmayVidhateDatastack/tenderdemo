@@ -26,8 +26,11 @@ import { OpenPopup } from "@/Elements/DsComponents/dsPopup/dsPopup";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import CsvPopup from "@/TenderComponents/TenderLogComponents/CsvPopup";
 import IconFactory from "@/Elements/IconComponent";
-import DsStatusIndicator from "@/Elements/DsComponents/dsStatus/dsStatusIndicator";
-
+import DsStatusIndicator, {
+  formatStatus,
+} from "@/Elements/DsComponents/dsStatus/dsStatusIndicator";
+// import ContractView from "@/TenderComponents/AddUpdateTenderComponents/CustomTabViews/ContractView";
+ 
 const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
   paramOrderId,
 }) => {
@@ -38,29 +41,57 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
     setActionStatusValues,
     actionStatus,
     saveTender,
+    fetchAndSetOriginalTender,
   } = useTenderData();
   const [isCsvWhite, setIsCsvWhite] = useState(false);
   const [orderId] = useState<string>(paramOrderId?.toString());
   const appTitle = useRef<string>("New");
-
+ 
   const version = 1;
-
-  const revisionTabs = tenderData.tenderRevisions.map((rev) => ({
-    tabId: `v${rev.version}`,
-    tabName: `Products ₹ (V${rev.version})`,
-  }));
-
-  const tabs = [
+ 
+  const [tabs, setTabs] = useState([
     { tabId: "0", tabName: "Basic Details" },
-
-    ...revisionTabs,
+    { tabId: "v1", tabName: "Products ₹ (V1)" },
     { tabId: "2", tabName: "Documents" },
-  ];
-
+  ]);
+ 
   const [displayFlag, setDisplayFlag] = useState<"New" | "Existing">(
     "Existing"
   );
-
+  useEffect(() => {
+    fetchAndSetOriginalTender(9163);
+  }, []);
+  useEffect(() => {
+    const revisionTabs = tenderData.tenderRevisions.map((rev) => ({
+      tabId: `v${rev.version}`,
+      tabName: `Products ₹ (V${rev.version})`,
+    }));
+    setTabs([
+      { tabId: "0", tabName: "Basic Details" },
+      ...revisionTabs,
+      { tabId: "2", tabName: "Documents" },
+    ]);
+    setTimeout(() => {
+      if (
+        tenderData.status == "AWARDED" ||
+        tenderData.status == "PARTIALLY_AWARDED" ||
+        tenderData.status == "LOST" ||
+        tenderData.status == "CANCELLED"
+      ) {
+        setTabs((prev) => {
+          if (prev.find((x) => x.tabId == "Contract") == undefined)
+            return [
+              ...prev,
+              {
+                tabId: "Contract",
+                tabName: "Tender " + formatStatus(tenderData.status),
+              },
+            ];
+          return prev;
+        });
+      }
+    }, 0);
+  }, [tenderData]);
   useEffect(() => {
     if (orderId?.toString().toLowerCase() == "new") {
       setDisplayFlag("New");
@@ -70,26 +101,76 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
     } else {
     }
   }, [orderId]);
-
+ 
   const [message, setMessage] = useState<string>("");
-
+ 
   console.log(message);
+  // const handleUpload = (file: File | null) => {
+  //   if (!file) {
+  //     console.log("Please select a file first.");
+  //     return;
+  //   }
+ 
+  //   const reader = new FileReader();
+  //   reader.onload = (event) => {
+  //     const fileContent = event.target?.result;
+  //     console.log("File content :", fileContent);
+  //     setMessage("The File has been  attached successfully!");
+  //     const text = event.target?.result as string;
+  //     const rows = text
+  //       .trim()
+  //       .split("\n")
+  //       .map((row) => row.split(","));
+  //     const prd: TenderProduct[] = rows.map((x) => {
+  //       return {
+  //         requestedGenericName: x[0],
+  //         requestedQuantity: Number(x[1]),
+  //         requestedPackingSize: x[2],
+  //         competitorId: 0,
+  //         product: {
+  //           dataSource: "csv",
+  //         },
+  //       };
+  //     });
+  //     prd.forEach((x) => {
+  //       addTenderProduct(version, x);
+  //     });
+  //   };
+  //   reader.onerror = () => {
+  //     console.error("Error reading the file");
+  //   };
+  //   reader.readAsText(file);
+  // };
+  
   const handleUpload = (file: File | null) => {
     if (!file) {
       console.log("Please select a file first.");
       return;
     }
-
+  
     const reader = new FileReader();
     reader.onload = (event) => {
       const fileContent = event.target?.result;
-      console.log("File content :", fileContent);
+      console.log("File content:", fileContent);
       setMessage("The File has been  attached successfully!");
+  
       const text = event.target?.result as string;
       const rows = text
         .trim()
         .split("\n")
         .map((row) => row.split(","));
+  
+      // Get existing products from the current version (v1)
+      const currentRevision = tenderData.tenderRevisions.find(
+        (rev) => rev.version === version
+      );
+  
+      const existingGenericNames = new Set(
+        (currentRevision?.tenderItems || [])
+          .map((p) => p.requestedGenericName?.trim().toLowerCase())
+          .filter(Boolean)
+      );
+  
       const prd: TenderProduct[] = rows.map((x) => {
         return {
           requestedGenericName: x[0],
@@ -101,16 +182,23 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
           },
         };
       });
+  
       prd.forEach((x) => {
-        addTenderProduct(version, x);
+        const name = x.requestedGenericName?.trim().toLowerCase();
+        if (name && !existingGenericNames.has(name)) {
+          addTenderProduct(version, x);
+          existingGenericNames.add(name); // prevent same product from being added multiple times in same upload
+        }
       });
     };
+  
     reader.onerror = () => {
       console.error("Error reading the file");
     };
+  
     reader.readAsText(file);
   };
-
+  
   return (
     <>
       <DocumentProvider>
@@ -154,13 +242,13 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
                   <div>
                   <CsvPopup onUpload={handleUpload} />
                   </div>
-                 
+ 
                   <DsButton
-                   label="Download Pricing"
-                   buttonSize="btnMedium"
-                   className={style.downloadPricing}
-                   startIcon={
-                    <div
+                    label="Download Pricing"
+                    buttonSize="btnMedium"
+                    className={style.downloadPricing}
+                    startIcon={
+                      <div
                         style={{
                           width: "1.125em",
                           height: "1.130em",
@@ -174,7 +262,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
                         ></IconFactory>
                       </div>
                    }
-                
+               
                    >
                    </DsButton>
                 </>
@@ -212,11 +300,11 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
                           >
                             CSV file
                           </DsButton>
-
+ 
                           <div>
                             <CsvPopup onUpload={handleUpload} />
                           </div>
-
+ 
                           <DsButton
                             label="Download Pricing"
                             buttonSize="btnMedium"
@@ -238,7 +326,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
                     )}
                 </div>
               )}
-
+ 
               <div>
                 {
                   <>
@@ -278,27 +366,18 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
                 <DsBasicDetails />
               </div>
             </TabView>
-
-            {tenderData?.tenderRevisions?.length > 1
-              ? tenderData.tenderRevisions.map((rev) => (
-                  <TabView key={rev.version} tabId={`v${rev.version}`}>
-                    <DsTenderProduct
-                      productList={[...(rev.tenderItems ?? [])]}
-                      setProductList={(product) =>
-                        addTenderProduct(rev.version, product)
-                      }
-                    />
-                  </TabView>
-                ))
-              : [
-                  <TabView key="v1" tabId="v1">
-                    <DsTenderProduct
-                      productList={[]}
-                      setProductList={(product) => addTenderProduct(1, product)}
-                    />
-                  </TabView>,
-                ]}
-
+ 
+            {tenderData.tenderRevisions.map((rev) => (
+              <TabView key={rev.version} tabId={`v${rev.version}`}>
+                <DsTenderProduct
+                  productList={[...(rev.tenderItems ?? [])]}
+                  setProductList={(product) =>
+                    addTenderProduct(rev.version, product)
+                  }
+                />
+              </TabView>
+            ))}
+ 
             <TabView tabId="2">
               <DocumentContext.Consumer>
                 {(context) => {
@@ -306,7 +385,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
                     return <div>Error: Document context is not available</div>;
                   }
                   const { totalSelectedDocuments } = context;
-
+ 
                   return (
                     <div className={style.documentContainer}>
                       <div className={style.docPane}>
@@ -329,17 +408,27 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
                           label="Add Documents"
                         />
                       </div>
-
+ 
                       <DocumentSelectorArea />
                     </div>
                   );
                 }}
               </DocumentContext.Consumer>
             </TabView>
+            {/* <TabView tabId="Contract">
+              {(tenderData.status == "AWARDED" ||
+                tenderData.status == "PARTIALLY_AWARDED" ||
+                tenderData.status == "LOST" ||
+                tenderData.status == "CANCELLED") && (
+                 <ContractView status={tenderData.status} />
+              )}
+            </TabView> */}
           </div>
           <DSTendrFooter
             setActionStatus={setActionStatusValues}
-            saveTender={saveTender} tenderData={null}          />
+            saveTender={saveTender}
+            tenderData={null}
+          />
         </DsApplication>
         <DsPane
           id="documentPane"
@@ -363,3 +452,5 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
   );
 };
 export default DsTenderIdPage;
+ 
+ 

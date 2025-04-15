@@ -527,3 +527,69 @@ a.secondary {
 .tendertable{
   font-size:var(--font-12) !important;
 }
+.productContext {
+  /* background-color: black !important; */
+  /* position: relative; */
+  font-size: 1.2rem !important;
+  min-height: 20% !important;
+  left: 50vh !important;
+  /* top: 50% !important; */
+}
+
+.deleteBtn {
+  /* margin-left: -30% !important; */
+  /* margin-right: 60% !important; */
+  min-width: fit-content !important;
+  left: 65% !important;
+  /* top: 50% !important; */
+}
+
+.confirmation-text {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #666;
+}
+
+.contextcontainer {
+  display: flex;
+  justify-content: left;
+  align-items: flex-start;
+  flex: 1;
+  min-height: min-content !important;
+}
+.deleteText {
+  font-weight: bold;
+  /* margin-left: 5px; */
+  font-size: 1.4rem !important;
+  display: flex;
+  gap: 0.3rem;
+  padding: 0.1rem 0.2rem 0rem 1.2rem;
+  /* font: var(--fonts-16-bold) !important; */
+}
+
+.selectedProduct {
+  font-size: 1.2rem !important;
+  font-weight: 100;
+  /* font: var(--fonts-14-reg) !important; */
+  margin-left: 7px;
+}
+.btncontext {
+  display: flex;
+  justify-content: right;
+  align-items: flex-end;
+  padding: 1px;
+  margin-top: -50px;
+}
+
+.delelbtn {
+  margin-top: 7rem;
+  margin-left: 150px;
+}
+.confirmationtext {
+  margin-top: 10px;
+  /* font-size: 12px; */
+  font: var(--fonts-13-reg) !important;
+  /* margin-left: -31px; */
+  /* padding-top: 1.2rem !important; */
+  padding: 0.1rem 1.2rem 0rem 1.2rem;
+}
