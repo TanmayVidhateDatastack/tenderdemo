@@ -1046,9 +1046,9 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             status: "ACTV",
           })),
           supplyConditions: {
-            ...tenderData.supplyCondition,
+            ...tenderData.supplyConditions,
             applicableConditions:
-              tenderData.supplyCondition.applicableConditions?.map((ac) => ({
+              tenderData.supplyConditions.applicableConditions?.map((ac) => ({
                 ...ac,
                 status: "ACTV",
               })),
