@@ -95,6 +95,12 @@ export type tenderFee = {
   paymentMode: string;
   paymentDueDate: string;
   instructionNotes: string;
+  paymentStatus?:string;
+  paymentDate?:string;
+  paymentTransactionId?:string;
+  paymentReceiptId?:string;
+  acknowledgmentReceiptId?:string;
+  fundTransferConfirmationId?:string
   status?: "ACTV" | "INAC";
   // documents: Document[];
 };
@@ -146,7 +152,7 @@ export type TenderData = {
   stockistName: string;
   supplierDiscount: number;
   // createdBy: number;
-  lastUpdatedById: number;
+  lastUpdatedBy: number;
   status: string;
   tenderDetails: {
     type: "read-only";
@@ -163,6 +169,7 @@ export type TenderData = {
   supplyConditions: tenderSupplyCondition;
   tenderRevisions: {
     id?: number;
+    status?:string;
     version: number;
     tenderItems: TenderProduct[];
   }[];
@@ -332,7 +339,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     supplierId: 0,
     stockistName: "",
     supplierDiscount: 0,
-    lastUpdatedById: 0,
+    lastUpdatedBy: 0,
     status: "AWARDED",
     tenderDetails: {
       type: "read-only",
@@ -355,6 +362,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     tenderRevisions: [
       {
         version: 1,
+        status:DsStatus.DRFT.toUpperCase(),
         tenderItems: [],
       },
     ],
@@ -383,6 +391,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         ],
       },
     },
+
   });
   const [tenderDataCopy, setTenderDataCopy] = useState<TenderData>({
     ...tenderData,
@@ -562,6 +571,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       documents: [
         ...(prev.documents?.filter(
           (document) =>
+
             !(
               document.name == documentName &&
               document.documentType == documentType &&
@@ -840,7 +850,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         appliedBy:
           tenderData.applierType.toLowerCase() == "organization"
             ? "IPCA"
-            : "STOCKIEST",
+            : "STOCKIST",
         applierId:
           tenderData.applierType.toLowerCase() == "organization"
             ? null
@@ -849,7 +859,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         suppliedBy:
           tenderData.supplierType.toLowerCase() == "organization"
             ? "IPCA"
-            : "STOCKIEST",
+            : "STOCKIST",
         supplierId:
           tenderData.supplierType.toLowerCase() == "organization"
             ? null
@@ -858,9 +868,9 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         // stockistName: ,
         supplierDiscount: tenderData.supplierDiscount,
         // createdBy: number;
-        createdBy: 3,
-        lastUpdatedById: tenderData.lastUpdatedById,
-        status: status,
+        // createdBy: 3,
+        lastUpdatedBy: 3,
+        // status: status,
         fees: tenderData.fees
           .filter((x) => x.status == "ACTV")
           .map((x) => {
@@ -1025,7 +1035,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         setTenderDataCopy({
           ...newTenderData,
           status: "",
-          lastUpdatedById: -1,
+          lastUpdatedBy: -1,
         });
         return response;
       } catch (error) {
