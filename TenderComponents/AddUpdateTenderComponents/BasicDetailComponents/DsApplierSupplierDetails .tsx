@@ -26,7 +26,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
   >([]);
   const [depotList, setDepotList] = useState<Depot[]>([]);
   const [formatedDepot, setFormatedDepot] = useState<DsSelectOption[]>([]);
-  
+
   const { updateTenderData, tenderData } = useTenderData();
   const [selected, setSelected] = useState<datalistOptions>();
   const [selecteds, setSelecteds] = useState<datalistOptions>();
@@ -59,22 +59,22 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
     return customers;
   }
 
-     const onStockistSelect = (selectedOption: datalistOptions) => {
-      // updateTenderData("appliedBy", "Stockist");
-      // updateTenderData("applierId", selectedOption.value);   
-      // console.log("selected option ",selectedOption);  
-    };
-    const onStockistSelects = (selectedOption: datalistOptions) => {
-      // updateTenderData("appliedBy", "Stockist");
-      // updateTenderData("applierId", selectedOption.value);   
-      // console.log("selected option ",selectedOption);  
-    };
- 
-  const handleAppliedSuppliedFetch = async () => { 
-    try {  
-      const res = await fetchData({ url: appliedBySuppliedBy }); 
-      if (res.code === 200) { 
-        const result = res.result; 
+  const onStockistSelect = (selectedOption: datalistOptions) => {
+    // updateTenderData("appliedBy", "Stockist");
+    // updateTenderData("applierId", selectedOption.value);
+    // console.log("selected option ",selectedOption);
+  };
+  const onStockistSelects = (selectedOption: datalistOptions) => {
+    // updateTenderData("appliedBy", "Stockist");
+    // updateTenderData("applierId", selectedOption.value);
+    // console.log("selected option ",selectedOption);
+  };
+
+  const handleAppliedSuppliedFetch = async () => {
+    try {
+      const res = await fetchData({ url: appliedBySuppliedBy });
+      if (res.code === 200) {
+        const result = res.result;
 
         const appliedBys: DsMultiLevelSelectOption[] = result.organization.map(
           (item: any) => ({
@@ -133,11 +133,11 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
       url: getAllDepots,
     })
       .then((res) => {
-        const result = res.result; 
-        const formatedDepot = result.map((item: any) => ({ 
-          value: item.id + "_" + item.type,
-          label: item.name  
-        }));  
+        const result = res.result;
+        const formatedDepot = result.map((item: any) => ({
+          value: item.id,
+          label: item.name,
+        }));
         setFormatedDepot(formatedDepot);
         if (res?.code === 200 && res?.result) {
           console.log("stored depot result:", res.result);
@@ -181,17 +181,21 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
     console.log(option);
     setSelecteds(option);
   };
-  const selectedDepo=useMemo(()=>{
-   return tenderData.shippingLocations.map((x) => {
+  const [selectedDepo, setSelectedDepo] = useState<DsSelectOption[]>([]);
+  useEffect(() => {
+    const loc = [...tenderData.shippingLocations];
+    console.log(loc)
+    const depo=loc.map((x) => {
       return (
         formatedDepot.find((d) => Number(d.value) == x) || {
           value: "",
           label: "",
         }
       );
-    })
-  },[formatedDepot,tenderData.shippingLocations]);
-     
+    });
+    setSelectedDepo(depo);
+  }, [formatedDepot, tenderData.shippingLocations]);
+
   return (
     <>
       <div className={styles.inputDetails}>

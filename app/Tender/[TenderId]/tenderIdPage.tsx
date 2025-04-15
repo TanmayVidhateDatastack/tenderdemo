@@ -59,7 +59,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
     "Existing"
   );
   useEffect(() => {
-    fetchAndSetOriginalTender(9163);
+    fetchAndSetOriginalTender(9917);
   }, []);
   useEffect(() => {
     const revisionTabs = tenderData.tenderRevisions.map((rev) => ({
