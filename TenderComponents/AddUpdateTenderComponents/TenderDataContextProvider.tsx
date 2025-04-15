@@ -141,7 +141,7 @@ export type TenderData = {
   deliveryPeriod: number;
   extendedDeliveryPeriod: number;
   lateDeliveryPenalty: number;
-  tenderURL: string;
+  tenderUrl: string;
   shippingLocations: number[];
   // appliedBy: string;
   applierId: number;
@@ -149,7 +149,7 @@ export type TenderData = {
   // suppliedBy: string;
   supplierId: number;
   supplierType: string;
-  stockistName: string;
+  supplierName: string;
   supplierDiscount: number;
   // createdBy: number;
   lastUpdatedBy: number;
@@ -158,8 +158,8 @@ export type TenderData = {
     type: "read-only";
     customerName: string;
     customerAddressName: string;
-    applierName: string;
-    supplierName: string;
+    appliedBy: string;
+    suppliedBy: string;
     lastUpdatedByName: string;
     lastUpdatedByEmpId: string;
     statusDescription: string;
@@ -335,13 +335,13 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     deliveryPeriod: 0,
     extendedDeliveryPeriod: 0,
     lateDeliveryPenalty: 0,
-    tenderURL: "",
+    tenderUrl: "",
     shippingLocations: [1, 2],
     applierType: "",
     applierId: 0,
     supplierType: "",
     supplierId: 0,
-    stockistName: "",
+    supplierName: "",
     supplierDiscount: 0,
     lastUpdatedBy: 0,
     status: "AWARDED",
@@ -349,8 +349,8 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       type: "read-only",
       customerName: "",
       customerAddressName: "",
-      applierName: "",
-      supplierName: "",
+      appliedBy: "",
+      suppliedBy: "",
       lastUpdatedByName: "",
       lastUpdatedByEmpId: "",
       statusDescription: "Draft",
@@ -854,7 +854,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         deliveryPeriod: tenderData.deliveryPeriod,
         extendedDeliveryPeriod: tenderData.extendedDeliveryPeriod,
         lateDeliveryPenalty: tenderData.lateDeliveryPenalty,
-        tenderURL: tenderData.tenderURL,
+        tenderUrl: tenderData.tenderUrl,
         shippingLocations: tenderData.shippingLocations.join(","),
         appliedBy:
           tenderData.applierType.toLowerCase() == "organization"
@@ -874,7 +874,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             ? null
             : tenderData.supplierId,
         // supplierType: ,
-        // stockistName: ,
+        // supplierName: ,
         supplierDiscount: tenderData.supplierDiscount,
         // createdBy: number;
         // createdBy: 3,
