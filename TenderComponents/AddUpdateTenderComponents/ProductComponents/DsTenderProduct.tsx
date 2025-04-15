@@ -6,6 +6,7 @@ import DsProductKpis from "./DsProductKpis";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import { getProductURL  } from "@/Common/helpers/constant";
 import { TenderProduct } from "../TenderDataContextProvider";
+import { version } from "os";
 
 const DsTenderProduct: React.FC<{
   productList: TenderProduct[];
@@ -41,7 +42,7 @@ const DsTenderProduct: React.FC<{
   <DsProductKpis productData={productList || fetchdata} />
 </div>
 
-      <DsProductTable version={1} />
+      <DsProductTable version={1}  />
     </>
   );
 
