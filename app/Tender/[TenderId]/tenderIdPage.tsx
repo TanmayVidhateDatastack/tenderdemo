@@ -52,7 +52,6 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
   const [tabs, setTabs] = useState([
     { tabId: "0", tabName: "Basic Details" },
     { tabId: "v1", tabName: "Products ₹ (V1)" },
-    { tabId: "v1", tabName: "Products ₹ (V1)" },
     { tabId: "2", tabName: "Documents" },
   ]);
 
@@ -60,7 +59,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
     "Existing"
   );
   useEffect(() => {
-    fetchAndSetOriginalTender(9163);
+    fetchAndSetOriginalTender(9917);
   }, []);
   useEffect(() => {
     const revisionTabs = tenderData.tenderRevisions.map((rev) => ({
@@ -210,6 +209,11 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
                     className={style.downloadPricing}
                     startIcon={
                       <div
+                    label="Download Pricing"
+                    buttonSize="btnMedium"
+                    className={style.downloadPricing}
+                    startIcon={
+                      <div
                         style={{
                           width: "1.125em",
                           height: "1.130em",
@@ -327,7 +331,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
                 <DsBasicDetails />
               </div>
             </TabView>
-
+ 
             {tenderData.tenderRevisions.map((rev) => (
               <TabView key={rev.version} tabId={`v${rev.version}`}>
                 <DsTenderProduct
@@ -338,7 +342,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
                 />
               </TabView>
             ))}
-
+ 
             <TabView tabId="2">
               <DocumentContext.Consumer>
                 {(context) => {

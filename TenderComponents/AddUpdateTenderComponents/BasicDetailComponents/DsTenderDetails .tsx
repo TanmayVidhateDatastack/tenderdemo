@@ -4,7 +4,7 @@ import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import deptStyle from "./deposite.module.css";
 import { useEffect, useState } from "react";
 import {getTenderUserRoles} from "@/Common/helpers/constant";
-import {tenderDetailsProps,location} from "@/Common/helpers/types";
+import {tenderDetailsProps,location, DsSelectOption} from "@/Common/helpers/types";
 import { useTenderData } from "../TenderDataContextProvider";
 import DsDatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
@@ -14,16 +14,15 @@ import fetchData from "@/Common/helpers/Method/fetchData";
 import DsAddressSelect from "@/Elements/DsComponents/dsSelect/dsAddressSelect";
 import CustomerSearch from "./customerSearch";
 import IconFactory from "@/Elements/IconComponent";
-
 const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
   const [fetchVisible, setFetchVisible] = useState(true);
   const [role, setRole] = useState("checker"); 
   const [pos, setPos] = useState<
-    | "top"
-    | "topleft"
-    | "topright" 
+    | "top" 
+    | "topleft"  
+    | "topright"  
     | "middle"
-    | "bottom"
+    | "bottom" 
     | "bottomleft"
     | "bottomright"
   >("bottom");
@@ -32,10 +31,12 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
     "success" | "bonus" | "info" | "error"
   >("info");
   const [showNotification, setShowNotification] = useState<boolean>(false);
-  const { updateTenderData ,tenderData} = useTenderData();
+  const { updateTenderData,tenderData } = useTenderData();
   const [customerLocations, setCustomerLocations] = useState<location[]>([]); 
-  // const [customerIdName, setCustomerIdName] = useState<string>("");
-
+  
+  // const [cust, setCust] = useState<DsSelectOption>();
+  //     value:
+  //     label:
   const handleRoleFetch = async () => {
     try {
       const res = await fetchData({ url: getTenderUserRoles });
@@ -115,6 +116,10 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
               label: `${addr.city}, ${addr.state}, ${addr.pinCode}`, 
               key: addr.id.toString(),
             }))}
+            selectedOption={{
+              label:tenderData.tenderDetails.customerAddressName,
+              value:tenderData.customerAddressId.toString()
+            }}
             setSelectOption={(option) => {
               if (typeof option.value == "string") {
                 updateTenderData("customerAddressId", Number(option.value));
@@ -129,7 +134,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         </div>
         <div className={deptStyle.fields}>
           <DsTextField
-            initialValue=""
+            initialValue={tenderData.tenderNumber}
             maxLength={50}
             label="Tender number"
             // placeholder="Please Type Here"  
@@ -142,7 +147,12 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
             label="Tender type"
             // placeholder={"Tender type"}
             id={"tenderType"}
+            selectedOption={{
+              value:tenderData.tenderType,
+              label:tenderData.tenderType,
+            }}
             setSelectOption={(option) => {
+              
               if (typeof option.value == "string") {
                 updateTenderData("tenderType", option.value);
                 console.log("tendertype", option.value);
@@ -152,6 +162,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         </div>
         <div className={deptStyle.fields}>
           <DsDatePicker
+           initialDate={new Date(tenderData.issueDate).toLocaleDateString("en-GB",)}
             maxDate={new Date()}
             id={"issueDate"}
             setDateValue={(date) => {
@@ -166,6 +177,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         </div>
         <div className={deptStyle.fields}>
           <DsDatePicker
+            initialDate={new Date(tenderData.lastPurchaseDate).toLocaleDateString("en-GB")}
             minDate={new Date()}
             id={"lastPurchaseDate"}
             setDateValue={(date) => {
@@ -180,6 +192,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         </div>
         <div className={deptStyle.fields}>
           <DsDatePicker
+            initialDate={new Date(tenderData.submissionDate).toLocaleDateString("en-GB")}
             minDate={new Date()}
             id={"submissionDate"}
              setDateValue={(date) => {
@@ -195,7 +208,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         <div className={deptStyle.fields}>
           <DsTextField
             maxLength={6}
-            initialValue=""
+            initialValue={tenderData.rateContractValidity}
             inputType="positive"
             label="Rate contract validity"
             onBlur={(e) =>
@@ -205,6 +218,10 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         </div>
         <div className={deptStyle.fields}>
           <DsSingleSelect
+            selectedOption={{
+              value:tenderData.submissionMode,
+              label:tenderData.submissionMode,
+            }}
             options={tenderDetails.submissionMode}
             // type={"single"}
             label="Submission Mode"
@@ -218,8 +235,8 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         </div>
         <div className={deptStyle.fields}>
           <DsTextField
+            initialValue={tenderData.deliveryPeriod.toString()}
             maxLength={5}
-            initialValue=""
             inputType="positive"
             label={"Delivery period (In days)"}  
             // placeholder={"Please type or select"}
@@ -228,8 +245,8 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         </div>
         <div className={deptStyle.fields}>
           <DsTextField
+            initialValue={tenderData.extendedDeliveryPeriod.toString()}
             maxLength={5}
-            initialValue=""
             inputType="positive"
             label={"Extended delivery period (In days)"}
             // placeholder={"Please type or select"}
@@ -240,7 +257,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         <div className={deptStyle.fields}>
           <DsTextField
              minimumNumber={100} 
-             initialValue=""
+             initialValue={tenderData.lateDeliveryPenalty.toString()}
              label="Penalty for late delivery %"
              inputType="positive"
             // placeholder="Please type here"
@@ -252,9 +269,9 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         <div className={deptStyle.fields}>
           <DsTextField
             maxLength={2000}
-            initialValue=""
+            initialValue={tenderData.tenderUrl}
             label="Tender site/url" 
-            onBlur={(e) => updateTenderData("tenderURL", (e.target as HTMLInputElement).value)}
+            onBlur={(e) => updateTenderData("tenderUrl", (e.target as HTMLInputElement).value)}
           ></DsTextField>
         </div>
       </div>

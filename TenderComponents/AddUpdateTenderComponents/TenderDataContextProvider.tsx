@@ -1046,9 +1046,9 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             status: "ACTV",
           })),
           supplyConditions: {
-            ...tenderData.supplyCondition,
+            ...tenderData.supplyConditions,
             applicableConditions:
-              tenderData.supplyCondition.applicableConditions?.map((ac) => ({
+              tenderData.supplyConditions.applicableConditions?.map((ac) => ({
                 ...ac,
                 status: "ACTV",
               })),
@@ -1105,7 +1105,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
 export const useTenderData = () => {
   const context = useContext(TenderDataContext);
   if (!context) {
-    throw new Error("useTenderData must be used within a TenderDataProvider");
+    throw new Error("TenderDataContextProvider must be used");
   }
   return context;
 };

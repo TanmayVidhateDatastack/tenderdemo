@@ -71,7 +71,7 @@ const DsBasicDetails = () => {
       }});
       if (res.code === 200) {
         const result = res.result;
-        console.log("GetAllMetaData",result);
+        console.log("GetAllMetaData",result); 
         setMetadata(result);
        
         // Tender Details
