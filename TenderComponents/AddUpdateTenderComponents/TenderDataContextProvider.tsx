@@ -501,6 +501,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       fees: prev.fees.filter((fee) => fee.feesType !== feeType),
     }));
   };
+ 
   // ✅ Update supply condition fields
   const updateSupplyCondition = (
     key: keyof tenderSupplyCondition,

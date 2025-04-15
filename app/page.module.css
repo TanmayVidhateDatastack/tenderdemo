@@ -457,8 +457,8 @@ a.secondary {
 .celllpr
 {
   max-width:100% ;
-  min-width: 9em !important;
-  width: 9em!important;
+  min-width: 15em !important;
+  width: 15em!important;
   white-space:nowrap;
   text-overflow: ellipsis; 
   padding: 0rem 1rem!important;
@@ -524,6 +524,9 @@ a.secondary {
   white-space:nowrap;
   text-overflow: ellipsis; 
   padding: 0rem 1rem!important;
+}
+.tendertable{
+  font-size:var(--font-12) !important;
 }
 .tender-product-table{
   font-size:var(--font-13);

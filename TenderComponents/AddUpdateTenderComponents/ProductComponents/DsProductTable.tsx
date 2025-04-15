@@ -1,46 +1,58 @@
 import React, { useEffect, useMemo, useState } from "react";
 import TableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableComponent";
-import {
-  tableData,
-  tcolumn,
-  DsTableRow,
-  TenderProduct,
-} from "@/Common/helpers/types";
-import { useTenderData } from "../TenderDataContextProvider";
+import { tableData, tcolumn, DsTableRow } from "@/Common/helpers/types";
+import { TenderProduct, useTenderData } from "../TenderDataContextProvider";
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import DsCustomerLPR from "./CustomerLpr";
-import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import ProductTableSearch from "./ProductTableSearch";
-
 import styles from "@/app/page.module.css";
 import IconFactory from "@/Elements/IconComponent";
+import { FloatingMenu } from "@/Elements/DsComponents/FloatingMenu/dsFloatingMenu";
+import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
+import Image from "next/image";
+import { changeImage } from "@/Common/helpers/Method/conversion";
+import { displayContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
+import whitetrashbtn from "@/Common/TenderIcons/smallIcons/whitetrash.svg";
+import trashbtn from "@/Common/TenderIcons/smallIcons/trashbtn.svg";
 
-const DsProductTable: React.FC = () => {
+interface DsProductTableProps {
+  version: number;
+  // removeTenderProduct: (version: number, id: number) => void;
+}
+
+const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
   const { tenderData, updateTenderProduct } = useTenderData();
   const [tenderProductTable, setTenderProductTable] = useState<
     tableData | undefined
   >();
   const [localProducts, setLocalProducts] = useState<TenderProduct[]>(
-    tenderData.products
+    tenderData.tenderRevisions?.filter((x) => x.version == version)[0]
+      ?.tenderItems || []
   );
   const [hasChanges, setHasChanges] = useState(false);
 
   const calculatedProducts = useMemo(() => {
-    return localProducts.map((product) => {
-      const calculated: TenderProduct = { ...product };
-      if (product.proposedRate && product.quantity)
-        calculated.totalCost = product.quantity * product.proposedRate;
-      if (product.proposedRate && product.directCost) {
-        calculated.marginValue =
-          Number(product.proposedRate) - Number(product.directCost);
-        calculated.marginPercent =
-          (calculated.marginValue / Number(product.directCost)) * 100 || 0;
+    return localProducts.map((tenderproduct) => {
+      const calculated: TenderProduct = { ...tenderproduct };
+      if (tenderproduct.proposedRate && tenderproduct.requestedQuantity)
+        calculated.product.totalCost =
+          tenderproduct.requestedQuantity * tenderproduct.proposedRate;
+      if (tenderproduct.proposedRate && tenderproduct.product.directCost) {
+        calculated.product.marginValue =
+          Number(tenderproduct.proposedRate) -
+          Number(tenderproduct.product.directCost);
+        calculated.product.marginPercent =
+          (calculated.product.marginValue /
+            Number(tenderproduct.product.directCost)) *
+            100 || 0;
       }
-      if (product.PTRpercent && product.ptr)
-        calculated.stockistDiscount =
-          Number(product.ptr) * (product.PTRpercent / 100);
-      calculated.netValue =
-        (calculated.totalCost || 0) + (calculated.marginValue || 0);
+      if (tenderproduct.ptrPercent && tenderproduct.product.ptr)
+        calculated.supplierDiscount =
+          Number(tenderproduct.product.ptr) * (tenderproduct.ptrPercent / 100);
+      if (calculated.product)
+        calculated.product.netValue =
+          (calculated.product?.totalCost || 0) +
+          (calculated.product?.marginValue || 0);
       console.log("In product table");
       return calculated;
     });
@@ -48,11 +60,38 @@ const DsProductTable: React.FC = () => {
 
   const handleFieldChange = (
     index: number,
-    field: keyof TenderProduct,
+    field: keyof TenderProduct | `product.${keyof TenderProduct["product"]}`,
     value: string | number
   ) => {
+    // .map(
+    //   (item) =>
+    //     item.id === id || item.productId === id
+    //       ? key.startsWith("product.")
+    //         ? {
+    //             ...item,
+    //             product: {
+    //               ...item.product,
+    //               [key.split(".")[1]]: value, // Update the nested product field
+    //             },
+    //           }
+    //         : { ...item, [key]: value } // Update the top-level field
+    //       : item
+    // ),
+
     setLocalProducts((prev) =>
-      prev.map((p, i) => (i === index ? { ...p, [field]: value } : p))
+      prev.map((p, i) =>
+        i === index
+          ? field.startsWith("product.")
+            ? {
+                ...p,
+                product: {
+                  ...p.product,
+                  [field.split(".")[1]]: value, // Update the nested product field
+                },
+              }
+            : { ...p, [field]: value }
+          : p
+      )
     );
     setHasChanges(true);
   };
@@ -60,25 +99,48 @@ const DsProductTable: React.FC = () => {
   const handleSave = () => {
     calculatedProducts.forEach((product) => {
       if (product.id) {
-        updateTenderProduct(product.id, "name", product.name || "");
-        updateTenderProduct(product.id, "quantity", product.quantity || 0);
         updateTenderProduct(
+          1,
           product.id,
-          "packingSize",
-          product.packingSize || ""
-        );
-        updateTenderProduct(product.id, "totalCost", product.totalCost || 0);
-        updateTenderProduct(
-          product.id,
-          "marginValue",
-          product.marginValue || 0
+          "product.name",
+          product.product.name || ""
         );
         updateTenderProduct(
+          1,
           product.id,
-          "marginPercent",
-          product.marginPercent || 0
+          "requestedQuantity",
+          product.requestedQuantity || 0
         );
-        updateTenderProduct(product.id, "netValue", product.netValue || 0);
+        updateTenderProduct(
+          1,
+          product.id,
+          "requestedPackingSize",
+          product.requestedPackingSize || ""
+        );
+        updateTenderProduct(
+          1,
+          product.id,
+          "product.totalCost",
+          product.product.totalCost || 0
+        );
+        updateTenderProduct(
+          1,
+          product.id,
+          "product.marginValue",
+          product.product.marginValue || 0
+        );
+        updateTenderProduct(
+          1,
+          product.id,
+          "product.marginPercent",
+          product.product.marginPercent || 0
+        );
+        updateTenderProduct(
+          1,
+          product.id,
+          "product.netValue",
+          product.product.netValue || 0
+        );
       }
     });
     setHasChanges(false);
@@ -157,39 +219,48 @@ const DsProductTable: React.FC = () => {
 
   const rows: DsTableRow[] = useMemo(
     () =>
-      calculatedProducts.map((product, index) => ({
+      calculatedProducts.map((tenderproduct, index) => ({
         rowIndex: index + 1,
         content: [
           {
             columnIndex: 1,
             content:
-              product.dataSource === "fetch" ? (
+              tenderproduct.product?.dataSource === "fetch" ? (
                 <DsTextField
-                  initialValue={product.genericName || ""}
+                  initialValue={tenderproduct.requestedGenericName || ""}
                   onChange={(e) =>
-                    handleFieldChange(index, "genericName", e.target.value)
+                    handleFieldChange(
+                      index,
+                      "requestedGenericName",
+                      e.target.value
+                    )
                   }
                 />
               ) : (
-                product.genericName || "-"
+                tenderproduct.requestedGenericName || "-"
               ),
             className: styles.cellgenericname,
           },
 
           {
             columnIndex: 2,
-            content: (
-              <DsTextField
-                initialValue={product.quantity?.toString() || ""}
-                onBlur={(e) =>
-                  handleFieldChange(
-                    index,
-                    "quantity",
-                    Number((e.target as HTMLInputElement).value)
-                  )
-                }
-              />
-            ),
+            content:
+              tenderproduct.product?.dataSource === "csv" ? (
+                tenderproduct.requestedQuantity || "-"
+              ) : (
+                <DsTextField
+                  initialValue={
+                    tenderproduct.requestedQuantity?.toString() || ""
+                  }
+                  onBlur={(e) =>
+                    handleFieldChange(
+                      index,
+                      "requestedQuantity",
+                      Number((e.target as HTMLInputElement).value)
+                    )
+                  }
+                />
+              ),
 
             className: styles.cellquantity,
           },
@@ -197,15 +268,19 @@ const DsProductTable: React.FC = () => {
           {
             columnIndex: 3,
             content:
-              product.dataSource === "fetch" ? (
+              tenderproduct.product?.dataSource === "fetch" ? (
                 <DsTextField
-                  initialValue={product.packingSize || ""}
+                  initialValue={tenderproduct.requestedPackingSize || ""}
                   onChange={(e) =>
-                    handleFieldChange(index, "packingSize", e.target.value)
+                    handleFieldChange(
+                      index,
+                      "requestedPackingSize",
+                      e.target.value
+                    )
                   }
                 />
               ) : (
-                product.packingSize || "-"
+                tenderproduct.requestedPackingSize || "-"
               ),
             className: styles.cellpackingsize,
           },
@@ -213,14 +288,14 @@ const DsProductTable: React.FC = () => {
           {
             columnIndex: 4,
             content:
-              product.dataSource === "csv" ? (
+              tenderproduct.product?.dataSource === "csv" ? (
                 <ProductTableSearch
                   tableRowIndex={index + 1}
                   setLocalProducts={setLocalProducts}
                   setHasChanges={setHasChanges}
                 />
               ) : (
-                product.name || "-"
+                tenderproduct.product?.name || "-"
               ),
 
             className: styles.cellproductname,
@@ -228,67 +303,77 @@ const DsProductTable: React.FC = () => {
           {
             columnIndex: 5,
             content:
-              product.dataSource === "csv" ? (
-                // <ProductTableSearch tableRowIndex={index + 1} setLocalProducts={setLocalProducts} setHasChanges={setHasChanges} />
+              tenderproduct.product?.dataSource === "csv" ? (
+                tenderproduct.product.productPackingSize || "-"
+              ) : (
                 <DsTextField
-                  initialValue={product.packSize || ""}
+                  initialValue={tenderproduct.product?.productPackingSize || ""}
                   onChange={(e) =>
-                    handleFieldChange(index, "packSize", e.target.value)
+                    handleFieldChange(
+                      index,
+                      "product.productPackingSize",
+                      e.target.value
+                    )
                   }
                 />
-              ) : (
-                product.packSize || "-"
               ),
-
             className: styles.cellproductpakingsize,
           },
 
           {
             columnIndex: 6,
             content:
-              product?.dataSource == "saved"
-                ? product.mrpRate?.toString() || "-"
+              tenderproduct.product?.dataSource == "saved"
+                ? tenderproduct.product.mrp?.toString() || "-"
                 : "-",
             className: styles.cellmrp,
           },
           {
             columnIndex: 7,
             content:
-              product?.dataSource == "saved"
-                ? product.ptr?.toString() || "-"
+              tenderproduct.product?.dataSource == "saved"
+                ? tenderproduct.product.ptr?.toString() || "-"
                 : "-",
             className: styles.cellptr,
           },
           {
             columnIndex: 8,
             content:
-              product?.dataSource == "saved"
-                ? product.directCost?.toString() || "-"
+              tenderproduct.product?.dataSource == "saved"
+                ? tenderproduct.product.directCost?.toString() || "-"
                 : "-",
             className: styles.celldirectcost,
           },
           {
             columnIndex: 9,
             content:
-              product?.dataSource == "saved"
-                ? product.LQR?.toString() || "-"
+              tenderproduct.product?.dataSource == "saved"
+                ? tenderproduct.product.lqr?.toString() || "-"
                 : "-",
             className: styles.celllqr,
           },
           {
             columnIndex: 10,
             content:
-              product?.dataSource == "saved" ? (
+              tenderproduct.product?.dataSource == "saved" ? (
                 <DsCustomerLPR
                   index={index + 1}
-                  lprValue={product.customerLprValue}
-                  lprTo={product.customerLprTo}
+                  lprValue={tenderproduct.lpr}
+                  lprTo={{
+                    id: tenderproduct.competitorId||0,
+                    name: tenderproduct.product.competitorName || "",
+                  }}
                   onValueChange={(value) =>
-                    handleFieldChange(index, "customerLprValue", Number(value))
+                    handleFieldChange(index, "lpr", Number(value))
                   }
-                  onCompanyChange={(company) =>
-                    handleFieldChange(index, "customerLprTo", company.id)
-                  }
+                  onCompanyChange={(company) => {
+                    handleFieldChange(index, "competitorId", company.id);
+                    handleFieldChange(
+                      index,
+                      "product.competitorName",
+                      company.name
+                    );
+                  }}
                 />
               ) : (
                 "-"
@@ -298,10 +383,10 @@ const DsProductTable: React.FC = () => {
           {
             columnIndex: 11,
             content:
-              product?.dataSource == "saved" ? (
+              tenderproduct.product?.dataSource == "saved" ? (
                 <DsTextField
                   inputType="number"
-                  initialValue={product.proposedRate?.toString() || ""}
+                  initialValue={tenderproduct.proposedRate?.toString() || ""}
                   onChange={(e) =>
                     handleFieldChange(
                       index,
@@ -318,14 +403,14 @@ const DsProductTable: React.FC = () => {
           {
             columnIndex: 12,
             content:
-              product?.dataSource == "saved" ? (
+              tenderproduct.product?.dataSource == "saved" ? (
                 <DsTextField
                   inputType="number"
-                  initialValue={product.PTRpercent?.toString() || ""}
+                  initialValue={tenderproduct.ptrPercent?.toString() || ""}
                   onChange={(e) =>
                     handleFieldChange(
                       index,
-                      "PTRpercent",
+                      "ptrPercent",
                       Number(e.target.value)
                     )
                   }
@@ -338,14 +423,16 @@ const DsProductTable: React.FC = () => {
           {
             columnIndex: 13,
             content:
-              product?.dataSource == "saved" ? (
+              tenderproduct.product?.dataSource == "saved" ? (
                 <DsTextField
                   inputType="number"
-                  initialValue={product.stockistDiscount?.toFixed(2) || ""}
+                  initialValue={
+                    tenderproduct.supplierDiscount?.toFixed(2) || ""
+                  }
                   onChange={(e) =>
                     handleFieldChange(
                       index,
-                      "stockistDiscount",
+                      "supplierDiscount",
                       Number(e.target.value)
                     )
                   }
@@ -358,32 +445,32 @@ const DsProductTable: React.FC = () => {
           {
             columnIndex: 14,
             content:
-              product?.dataSource == "saved"
-                ? product.totalCost?.toFixed(2) || "-"
+              tenderproduct.product?.dataSource == "saved"
+                ? tenderproduct.product.totalCost?.toFixed(2) || "-"
                 : "-",
             className: styles.celltotalcost,
           },
           {
             columnIndex: 15,
             content:
-              product?.dataSource == "saved"
-                ? product.marginValue?.toFixed(2) || "-"
+              tenderproduct.product?.dataSource == "saved"
+                ? tenderproduct.product.marginValue?.toFixed(2) || "-"
                 : "-",
             className: styles.cellmargin,
           },
           {
             columnIndex: 16,
             content:
-              product?.dataSource == "saved"
-                ? product.marginPercent?.toFixed(2) + "%" || "-"
+              tenderproduct.product?.dataSource == "saved"
+                ? tenderproduct.product.marginPercent?.toFixed(2) + "%" || "-"
                 : "-",
             className: styles.cellmarginper,
           },
           {
             columnIndex: 17,
             content:
-              product?.dataSource == "saved"
-                ? product.netValue?.toFixed(2) || "-"
+              tenderproduct.product?.dataSource == "saved"
+                ? tenderproduct.product.netValue?.toFixed(2) || "-"
                 : "-",
             className: styles.cellnetvalue,
           },
@@ -392,8 +479,24 @@ const DsProductTable: React.FC = () => {
     [calculatedProducts]
   );
   useEffect(() => {
-    setLocalProducts(tenderData.products);
-  }, [tenderData.products]);
+    setLocalProducts(
+      tenderData.tenderRevisions.filter((x) => x.version == version)[0]
+        ?.tenderItems || []
+    );
+  }, [
+    tenderData.tenderRevisions.filter((x) => x.version == version)[0]
+      ?.tenderItems || [],
+  ]);
+
+  // useEffect(() => {
+  //   const revision = tenderData.tenderRevisions.find(
+  //     (rev) => rev.version === version
+  //   );
+  //   if (revision) {
+  //     setLocalProducts(revision.tenderItems);
+  //   }
+  // }, [version, tenderData]);
+
   useEffect(() => {
     setTenderProductTable({
       className: styles["tender-product-table"],
@@ -429,8 +532,35 @@ const DsProductTable: React.FC = () => {
             <div className={styles.noDataBorders}></div>
           </div>
         )}
+         {/* <FloatingMenu
+          selected={}
+          id={"sales-product"}
+          onCloseClick={}
+        >
+          <>
+          <DsButton
+                    id="deleteBtn"
+                    buttonColor="btnDanger"
+                    buttonSize="btnMedium"
+                    buttonViewStyle="btnContained"
+                    onClick={() => {
+                   
+                      if (productIds.length > 0) {
+                        removeMultipleOrderItem(productIds);
+                        setProductIds([]);
+                        closeContext("sales-product");
+                        closeContext("delete-menu");
+                      }
+                      // closeContext("contet2");
+                      // closeContext("contextMenuId4");
+                    }}
+                    tooltip="variants : btnDanger, btnContained, btnMedium"
+                    label="Delete"
+                  />
+          </>
+          </FloatingMenu> */}
       </div>
-    </>
+  </>
   );
 };
 

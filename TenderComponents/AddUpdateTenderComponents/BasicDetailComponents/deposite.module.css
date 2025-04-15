@@ -43,7 +43,7 @@
     display: flex;
     justify-content: space-between;
     /* justify-content: end; */
-    background: inherit;
+    background: inherit !important;
   } 
   .emdContainerHead2{
     display: flex;
@@ -77,7 +77,7 @@
   }
   .optionBtn:hover{
     background-color: var(--text-primary-hover) !important;
-    color: var(--text-white) !important;
+    /* color: var(--text-white) !important; */
     border-radius: 25px !important;
   }
   .copyBtn{
@@ -123,4 +123,10 @@
 
   .feesCheckboxes{
     padding: 0.1rem !important;
+  }
+  .applicableDeposit{
+    padding: 8px;
+  }
+  .downloadreciept{
+    background-color: inherit !important;
   }

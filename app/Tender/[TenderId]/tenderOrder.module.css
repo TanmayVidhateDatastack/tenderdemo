@@ -273,16 +273,15 @@
     display: grid;
     gap: 2%;
     align-items: center;
-    /* border-bottom: 10px solid var(--black); */
     padding: var(--ds-padding);
     flex-wrap: wrap;
     grid-template-columns: repeat(4, minmax(150px, 1fr));
     background-color: var(--background);
   }
-  /* .inputDetails > div {
+  .inputDetails > div {
     flex: 1;
     margin: var(--ds-margin);
-  } */
+  }
  
 .Seperator{
 border-bottom: 1px solid var(--grey-200) !important;
@@ -290,7 +289,7 @@ padding: 10px;
 }
 .productkpi{
 display: flex !important;
-gap:1rem;
+gap:1em;
 }
 .selectedDocsCount{
   font-size: var(--font-16);
@@ -306,5 +305,12 @@ gap: 1em ;
 .downloadPricing{
  color: var(--disable);
 }
-
+.qtyinproduct
+{
+  min-height:1.8em !important;
+  max-height:1.8em !important;
+  min-width: 4.75em !important;
+  max-width:4.75em !important;
+  box-shadow:2px 2px 4px  #0000000F!important;
+  }
 

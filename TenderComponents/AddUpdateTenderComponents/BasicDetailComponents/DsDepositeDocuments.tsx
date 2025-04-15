@@ -3,7 +3,7 @@ import Image from "next/image";
 import downarrow from "@/Common/TenderIcons/smallIcons/verticleArrow.svg";
 import { useEffect, useState } from "react";
 import ContextMenu, {
-  closeAllContext,
+  closeAllContext, 
   createContext,
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import React from "react";
@@ -15,17 +15,17 @@ import {
 import { DsSelectOption } from "@/Common/helpers/types";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import DsFeesDocument from "./DsFeesDocument";
-import { useTenderData } from "../TenderDataContextProvider";
-import fetchData from "@/Common/helpers/Method/fetchData";
-import { paidByIPCA } from "@/Common/helpers/constant";
+import { useTenderData } from "../TenderDataContextProvider"; 
 
+import { paidBys } from "@/Common/helpers/constant";
+import IconFactory from "@/Elements/IconComponent";
 export interface DepositDocument {
   modes: DsSelectOption[];
   // paidBy: DsSelectOption[];
 }
-export interface Deposit {
-  paidBy: DsSelectOption[];
-}
+// export interface Deposit {
+//   paidBy: DsSelectOption[];
+// }
 
 export interface FeesDocument {
   applicableDeposits: DsSelectOption[];
@@ -55,7 +55,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   });
 
   useEffect(() => {
-    if (role == "MAKER" || role == "CHECKER") {
+    if (role == "MAKER" || role == "CHECKER" ) {
       setPaymentCheckVisible(false);
     } else {
       setPaymentCheckVisible(true);
@@ -129,28 +129,28 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
     // console.log("Currently Selected:", Array.from(selectedFees));
   };
 
-  // useEffect(() => {
-  //   applicablefees.forEach((opt) => {
-  //     const id = opt.value.toString();
-  //     const checkbox = document.getElementById(id) as HTMLInputElement;
-  //     selectedFees.add(id);
-  //     feeVisibility[id] = true;
-  //     addTenderFee(id);
-  //     if (checkbox?.checked) {
-  //       selectedFees.add(id);
-  //       feeVisibility[id] = true;
-  //       addTenderFee(id);
-  //     } else if (checkbox) {
-  //       selectedFees.add(id);
-  //       feeVisibility[id] = true;
-  //       addTenderFee(id);
-  //     } else {
-  //       selectedFees.delete(id);
-  //       feeVisibility[id] = false;
-  //       removeTenderFeeByType(id);
-  //     }
-  //   })
-  // }, [applicablefees])
+  useEffect(() => {
+    applicablefees.forEach((opt) => {
+      const id = opt.value.toString();
+      const checkbox = document.getElementById(id) as HTMLInputElement;
+      selectedFees.add(id);
+      feeVisibility[id] = true;
+      addTenderFee(id);
+      if (checkbox?.checked) {
+        selectedFees.add(id);
+        feeVisibility[id] = true;
+        addTenderFee(id);
+      } else if (checkbox) {
+        selectedFees.add(id);
+        feeVisibility[id] = true;
+        addTenderFee(id);
+      } else {
+        selectedFees.delete(id);
+        feeVisibility[id] = false;
+        removeTenderFeeByType(id); 
+      }
+    })
+  }, [applicablefees])
 
   // useEffect(() => {
   //   console.log("feevisibility : ", feeVisibility);
@@ -184,8 +184,8 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
     // );
     window.addEventListener("click", (e) => {
       const target = (e.target as HTMLElement).closest(
-        `.${styles["depositsBtn"]}`
-      );
+        `.${styles["depositsBtn"]}`  
+      ); 
 
       const target2 = (e.target as HTMLElement).closest(`#${contextMenuId}`);
 
@@ -222,36 +222,6 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
     };
   }, []);
 
-  const [depositeDocuments, setDepositeDocuments] = useState<Deposit>({
-    paidBy:[]
-  });
-  const handleAppliedSuppliedFetch = async () => {
-    try {
-      const res = await fetchData({ url: paidByIPCA });
-      if (res.code === 200) {
-        const result = res.result;
-
-        console.log("appliedbysuppliedby : ", result);
-
-        const paidbys = {
-          paidBy: result.paidBy.map((item: any) => ({
-            value: item.codeValue,  
-            label: item.codeDescription,
-          })),
-          
-        };
-        setDepositeDocuments(paidbys); 
-      } else {
-        console.error("Error fetching data: ", res.message || "Unknown error");
-      }
-    } catch (error) {
-      console.error("Fetch error: ", error);     
-    } 
-  };
-
-  useEffect(() => {
-    handleAppliedSuppliedFetch();
-  }, []);   
 
   return (
     <div className={styles.container}>
@@ -262,17 +232,30 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
             id="optionBtn"
             label="Applicable Deposits"
             className={styles.optionBtn + " " + styles.depositsBtn}
-            endIcon={<Image src={downarrow} alt="downarrow" />}
-            onClick={(e) => handleonclick(e)}
+            onClick={(e) => handleonclick(e)} 
+            endIcon={
+                <div
+                  style={{
+                    position: "relative",
+                    width: "0.8375em",
+                    height: "0.491875em",
+                  }}
+                  className={styles.DownArrow}
+                >
+                  <IconFactory name="dropDownArrow" />
+                </div>
+            
+            }
           />
         </div>
       </div>
       {applicableDeposits.map((deposit) => {
-        if (typeof deposit.value == "string")
+        if (typeof deposit.value == "string") 
           return (
             feeVisibility[deposit.value] && (
               <div className={styles.emdContainer2}>
                 <DsFeesDocument
+                  type={deposit.value.toString()}  
                   title={deposit.label}
                   id={deposit.value + "DocumentView"}
                   mode={mode}
@@ -287,26 +270,28 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
       <ContextMenu
         id={contextMenuId}
         content={
-          <>
+          <>  
+          <div className={styles.applicableDeposit}> 
             <div className={styles.feesCheckboxes}>
               {applicablefees.map((checkbox, index) => (
                 <Ds_checkbox
-                  key={index}
-                  id={checkbox.value.toString()}
-                  name={checkbox.label}
-                  value={checkbox.value.toString()}
-                  label={checkbox.label}
-                  defaultChecked={true}
+                key={index} 
+                id={checkbox.value.toString()}
+                name={checkbox.label}
+                value={checkbox.value.toString()}
+                label={checkbox.label}
+                defaultChecked={true}
                 />
               ))}
-            </div>
-            <DsButton
-              label="Add"
-              buttonViewStyle="btnContained"
-              buttonSize="btnMedium"
-              className={styles.addBtn}
-              onClick={handleAdd}
-            />
+              </div>
+              <DsButton
+                label="Add"
+                buttonViewStyle="btnContained"
+                buttonSize="btnSmall"
+                className={styles.addBtn}
+                onClick={handleAdd}
+                />
+             </div>
           </>
         }
         showArrow={true}
@@ -315,3 +300,4 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   );
 };
 export default DsDepositeDocuments;
+ 

@@ -1,30 +1,37 @@
 import DsInfoDisplay from "@/Elements/ERPComponents/DsInfoDisplay/DsInfoDisplay";
 import { DsStatus, searchProductsURL } from "@/Common/helpers/constant";
-import { TenderProduct, datalistOptions } from "@/Common/helpers/types";
+import {  datalistOptions } from "@/Common/helpers/types";
 import { Dispatch, SetStateAction, useState } from "react";
 import DsSearchComponent from "@/Elements/DsComponents/DsSearch/searchComponent";
-import Image from "next/image";
+import style from "@/TenderComponents/AddUpdateTenderComponents/BasicDetailComponents/tender.module.css";
 import IconFactory from "@/Elements/IconComponent";
+import { TenderProduct } from "../TenderDataContextProvider";
 export interface ProductSearchProps {
   // initialValue?:string;
   orderStatus?: string;
   setSelectedProductId: Dispatch<SetStateAction<number | undefined>>;
   setSelectedProductBatchId: Dispatch<SetStateAction<number | undefined>>;
 }
+export type searchProduct={
+  id:number;
+  name:string;
+  quantity:number;
+  cartonSize:string;
+}
  
-export function isSearchProduct(value: unknown): value is TenderProduct {
+export function isSearchProduct(value: unknown):value is searchProduct {
   return (
     typeof value === "object" &&
     value !== null &&
     "id" in value &&
     "name" in value &&
     // "packSize" in value &&
-    typeof (value as unknown as TenderProduct).id === "number" &&
-    typeof (value as unknown as TenderProduct).name === "string" 
+    typeof (value ).id === "number" &&
+    typeof (value ).name === "string" 
     // typeof (value as unknown as TenderProduct).packSize === "string"
   );
 }
-export function areSearchProduct(value: unknown): value is TenderProduct[] {
+export function areSearchProduct(value: unknown): value is searchProduct[] {
   return Array.isArray(value) && value.every(isSearchProduct);
 }
 const ProductSearch: React.FC<ProductSearchProps> = ({
@@ -82,15 +89,16 @@ const ProductSearch: React.FC<ProductSearchProps> = ({
     }
   };
   return (
+    <div className={style.addproduct}>
     <DsSearchComponent
       id="productSearch"
       dataListId="productSearchDatalist"
-      // label={"Product"}
-      placeholder={"Add product & qty & hit enter"}
+      label={"   Add Product & quantity & hit enter"}
+      // placeholder={"Add product & qty & hit enter"}
       options={products ? products : undefined}
       setOptions={(value) => setOptions(value)}
       starticon={
-        <div style={{ width: "1.125em", height: "1.125em", position: "relative" }}>
+        <div style={{ width: "1.125em", height: "1.125em", position: "relative"}}>
           {/* <Image src={searchicon} layout="fill" objectFit="cover" alt="searchicon" /> */}
           <IconFactory name={"search"}/>
         </div>
@@ -108,6 +116,7 @@ const ProductSearch: React.FC<ProductSearchProps> = ({
     
       disable={orderStatus === DsStatus.APRV ? true : false}
     />
+    </div>
  
   );
 };
