@@ -10,9 +10,10 @@ import DsDatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import Image from "next/image";
 import fetchData from "@/Common/helpers/Method/fetchData";
-import copybtnenabled from "@/Common/TenderIcons/smallIcons/copyEnabled.svg";
+// import copybtnenabled from "@/Common/TenderIcons/smallIcons/copyEnabled.svg";
 import DsAddressSelect from "@/Elements/DsComponents/dsSelect/dsAddressSelect";
 import CustomerSearch from "./customerSearch";
+import IconFactory from "@/Elements/IconComponent";
 
 const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
   const [fetchVisible, setFetchVisible] = useState(true);
@@ -31,7 +32,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
     "success" | "bonus" | "info" | "error"
   >("info");
   const [showNotification, setShowNotification] = useState<boolean>(false);
-  const { updateTenderData } = useTenderData();
+  const { updateTenderData ,tenderData} = useTenderData();
   const [customerLocations, setCustomerLocations] = useState<location[]>([]); 
   // const [customerIdName, setCustomerIdName] = useState<string>("");
 
@@ -76,7 +77,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
       <div className={styles.inputDetails}>
         <div className={deptStyle.fields}>
           <CustomerSearch
-            customer={""}
+            customer={tenderData.tenderDetails.customerName}
             orderData={undefined} 
             setCustomerLocations={setCustomerLocations}
             updateTenderData={updateTenderData}
@@ -91,7 +92,10 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
               buttonViewStyle="btnText" 
               buttonSize="btnSmall"
               className={deptStyle.copyBtn}
-              startIcon={<Image src={copybtnenabled} alt="copy" />}
+              startIcon={<div style={{width:"0.95625em",height:"1.125em"}}>
+                <IconFactory name="copy"/>
+                </div>
+              }
               // disable
               onClick={() => { 
                 setShowNotification(true); 

@@ -141,7 +141,7 @@ export type TenderData = {
   deliveryPeriod: number;
   extendedDeliveryPeriod: number;
   lateDeliveryPenalty: number;
-  tenderURL: string;
+  tenderUrl: string;
   shippingLocations: number[];
   // appliedBy: string;
   applierId: number;
@@ -149,7 +149,7 @@ export type TenderData = {
   // suppliedBy: string;
   supplierId: number;
   supplierType: string;
-  stockistName: string;
+  supplierName: string;
   supplierDiscount: number;
   // createdBy: number;
   lastUpdatedBy: number;
@@ -158,8 +158,8 @@ export type TenderData = {
     type: "read-only";
     customerName: string;
     customerAddressName: string;
-    applierName: string;
-    supplierName: string;
+    appliedBy: string;
+    suppliedBy: string;
     lastUpdatedByName: string;
     lastUpdatedByEmpId: string;
     statusDescription: string;
@@ -205,7 +205,7 @@ export function updateDocuments(
     });
     return;
   }
- 
+
   //When first time document is getting uploaded the tenderDocument is empty then simply add the document in TenderDocument Array
   if (typeDocuments?.length == 0) {
     files.forEach((x) => {
@@ -221,7 +221,7 @@ export function updateDocuments(
     });
     return;
   }
- 
+
   // For add document --> document is not in tenderDocument array and it is present in latest files array
   files?.forEach((x) => {
     if (!typeDocuments?.find((f) => f.name == x.name)) {
@@ -288,8 +288,8 @@ interface TenderDataContextType {
   // addDocumentToExistingType: (docType: string, document: Document) => void;
   addTenderProduct: (version: number, product: TenderProduct) => void;
   removeTenderProduct: (
-    version: number|string,
-    id?: number|string,
+    version: number,
+    id?: number,
     genericName?: string
   ) => void;
   createTenderVersion: () => void;
@@ -335,13 +335,13 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     deliveryPeriod: 0,
     extendedDeliveryPeriod: 0,
     lateDeliveryPenalty: 0,
-    tenderURL: "",
+    tenderUrl: "",
     shippingLocations: [1, 2],
     applierType: "",
     applierId: 0,
     supplierType: "",
     supplierId: 0,
-    stockistName: "",
+    supplierName: "",
     supplierDiscount: 0,
     lastUpdatedBy: 0,
     status: "AWARDED",
@@ -349,8 +349,8 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       type: "read-only",
       customerName: "",
       customerAddressName: "",
-      applierName: "",
-      supplierName: "",
+      appliedBy: "",
+      suppliedBy: "",
       lastUpdatedByName: "",
       lastUpdatedByEmpId: "",
       statusDescription: "Draft",
@@ -476,7 +476,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         }
         return fee; // Keep existing entries unchanged
       });
- 
+
       // If no update was made, add a new entry
       if (!updated) {
         updatedTenderFees.push({
@@ -490,7 +490,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           status: active,
         });
       }
- 
+
       return {
         ...prev,
         tenderFees: updatedTenderFees,
@@ -570,7 +570,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   ) => {
     setTenderData((prev) => ({
       ...prev,
- 
+
       documents: [
         ...(prev.documents?.filter(
           (document) =>
@@ -614,9 +614,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     version: number,
     id?: number,
     genericName?: string
-
   ) => {
-    console.log("generic",genericName);
     setTenderData((prev) => ({
       ...prev,
       tenderRevisions: prev.tenderRevisions.map((revision) =>
@@ -845,7 +843,6 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   const saveTender = useCallback(
     async (status: dsStatus) => {
       if (!tenderData) return;
-      console.log("sAVEEEE", tenderData);
       const tenderSaveData = {
         customerId: tenderData.customerId,
         customerAddressId: tenderData.customerAddressId,
@@ -859,7 +856,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         deliveryPeriod: tenderData.deliveryPeriod,
         extendedDeliveryPeriod: tenderData.extendedDeliveryPeriod,
         lateDeliveryPenalty: tenderData.lateDeliveryPenalty,
-        tenderURL: tenderData.tenderURL,
+        tenderUrl: tenderData.tenderUrl,
         shippingLocations: tenderData.shippingLocations.join(","),
         appliedBy:
           tenderData.applierType.toLowerCase() == "organization"
@@ -879,7 +876,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             ? null
             : tenderData.supplierId,
         // supplierType: ,
-        // stockistName: ,
+        // supplierName: ,
         supplierDiscount: tenderData.supplierDiscount,
         // createdBy: number;
         // createdBy: 3,
@@ -919,7 +916,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         status: status.toUpperCase(),
         lastUpdatedBy: 3,
       });
- 
+
       // console.log("sAVEEEE", dataToSend);
       try {
         await fetchData({
@@ -927,7 +924,6 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           method: "POST",
           dataObject: dataToSend,
         }).then((res) => {
-          console.log("res = ", res);
           if (res.code === 200) {
             setActionStatus({
               notiMsg: "Tender Created Successfully",
@@ -947,7 +943,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             showToaster("create-order-toaster");
           }
         });
- 
+
         // console.log("result  = ", result);
         //console.log("Order saved successfully");
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -995,7 +991,6 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           method: "PATCH",
           dataObject: patchDocument,
         }).then((res) => {
-          console.log("res = ", res);
           if (res.code === 200) {
             setActionStatus({
               notiMsg: "Tender Updated Successfully",
@@ -1021,7 +1016,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     },
     [tenderData, tenderDataCopy, fetchData, generatePatchDocument]
   );
- 
+
   const fetchAndSetOriginalTender = useCallback(
     async (tenderId: number) => {
       try {
@@ -1029,7 +1024,6 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           url: getTenderByTenderId + tenderId,
         });
         const tenderData = response.result;
-        console.log("tenderData= ", tenderData);
         if (
           tenderData.tenderRevisions.length == 0 ||
           tenderData.tenderRevisions == null

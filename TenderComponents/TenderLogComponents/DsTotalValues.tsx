@@ -69,11 +69,11 @@ setFormattedValues(formattedValues)
         <DsCurrency format={"IND"} id={""} amount={Number(totalValue)} type={"short"}/>
       </DsInfoDisplay>
       <ContextMenu id={"TotalValues"} showArrow={false} content={<Ds_SummaryCount
-        Title="Total Values"
+        title="Total Values"
       
-        Value={<DsCurrency format={"IND"} id={""} amount={Number(totalValue)} type={"short"}/>}
+        value={<DsCurrency format={"IND"} id={""} amount={Number(totalValue)} type={"short"}/>}
         // statusValues={formattedValues.map(item => ({ ...item, value: Number(item.value).toFixed(0) }))}
-        statusValues={formattedValues.map(item => ({ ...item, value:<DsCurrency format={"IND"} id={""} amount={Number(item.value)} type={"short"}/> }))}
+        statusValue={formattedValues.map(item => ({ ...item, value:<DsCurrency format={"IND"} id={""} amount={Number(item.value)} type={"short"}/> }))}
       />}/>
     </div>
   );

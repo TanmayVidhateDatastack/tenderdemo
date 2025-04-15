@@ -11,7 +11,7 @@ import rupeedisabled from "@/Common/TenderIcons/smallIcons/rupeedisabled.svg";
 import profit from "@/Common/TenderIcons/smallIcons/profit.svg";
 import whiteprofit from "@/Common/TenderIcons/smallIcons/whiteprofit.svg";
 import profitdisabled from "@/Common/TenderIcons/smallIcons/profiledisable.svg";
-import DsKpl from "@/Elements/DsComponents/DsKpl/DsKpl";
+import DsKpi from "@/Elements/DsComponents/DsKpi/DsKpi";
 import Image from "next/image";
 import style from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import { marginPercentLimit } from "@/Common/helpers/constant";
@@ -129,43 +129,43 @@ console.log("Total Margin Percentage:", totalMarginPercentage);
     return (
         <>
        <div  className={style.productkpi}>
-      <DsKpl
+      <DsKpi
        quantity={totalProducts.toString()}
         title={"Products"}
-        Subquantity={marginCount}
+        subQuantity={marginCount}
         classForQuantity={"redalert"}
          startIcon={<Image src={link} alt="link" />}
         startIconwhite={<Image src={whitelink} alt="link" />}
          startIcondisable={<Image src={linkdisabled} alt="link" />}
-        Highlight={false}
+        highlight={false}
       />
-       <DsKpl
+       <DsKpi
          quantity={<DsCurrency format={"IND"} id={"netval"} amount={totalNetValueSum} type={"short"} />}
         title={"Net Value"}
         startIcon={<Image src={rupees} alt="link" />}
         startIconwhite={<Image src={whiterupee} alt="link" />}  
         startIcondisable={<Image src={rupeedisabled} alt="link" />}
-        Highlight={true}
+        highlight={true}
       />
-        <DsKpl
+        <DsKpi
           quantity={<DsCurrency format={"IND"} id={"marginsum"} amount={totalMarginProductSum} type={"short"} />}
           // quantity={"45000Cr"}
           title={"Margin"}
-          Subquantity={isNaN(totalMarginPercentage) ? "0%" : `${totalMarginPercentage.toFixed(2)}%`}
+          subQuantity={isNaN(totalMarginPercentage) ? "0%" : `${totalMarginPercentage.toFixed(2)}%`}
           startIcon={<Image src={profit} alt="link" />}
           startIconwhite={<Image src={whiteprofit} alt="link" />}
           startIcondisable={<Image src={profitdisabled} alt="link" />}
-          Highlight={false}
+          highlight={false}
         />
-        <DsKpl
+        <DsKpi
       
          quantity={<DsCurrency format={"IND"} id={"stockitssum"} amount={totalStockistDiscountSum} type={"short"} />}
           title={"Stocklist Discount"}
-          Subquantity={isNaN(totalStockistPercentage) ? "0%" : `${totalStockistPercentage.toFixed(2)}%`}
+          subQuantity={isNaN(totalStockistPercentage) ? "0%" : `${totalStockistPercentage.toFixed(2)}%`}
           startIcon={<Image src={profile} alt="link" />}
           startIconwhite={<Image src={whiteprofile} alt="link" />}
           startIcondisable={<Image src={profiledisabled} alt="link" />}
-          Highlight={false}    
+          highlight={false}    
         />
  
  

@@ -370,6 +370,7 @@ a.secondary {
 {
   flex:1;
   max-height: 100%;
+  font-size: var(--font-12);
 }
 .cellgenericname
 {
@@ -526,6 +527,9 @@ a.secondary {
 }
 .tendertable{
   font-size:var(--font-12) !important;
+}
+.tender-product-table{
+  font-size:var(--font-13);
 }
 .productContext {
   /* background-color: black !important; */
