@@ -314,3 +314,6 @@ gap: 1em ;
   box-shadow:2px 2px 4px  #0000000F!important;
   }
 
+  .toaster-message {
+    padding: 0.2em;
+  }
