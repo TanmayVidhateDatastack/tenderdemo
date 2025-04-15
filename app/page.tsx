@@ -104,7 +104,6 @@ export default function Home() {
     userId: 3,
     metaDataTypes: [],
   });
-  console.log(isFilterActive, tenderMetadataFilters);
   const [fetchedMetadata, setFetchedMetadata] = useState<Metadata>({});
   // console.log(isFilterActive);
   const [isAddWhite, setIsAddWhite] = useState<boolean>(false);
@@ -346,7 +345,6 @@ export default function Home() {
     })
       .then((res) => {
         // console.log("objevct to be send", tenderFilters);
-        console.log("Response RESULT:", res.result);
 
         if (res?.code === 200 && Array.isArray(res?.result)) {
           const formattedData = formatTenders(res?.result);
@@ -415,7 +413,6 @@ export default function Home() {
   >([]);
   const [applierDetails, setApplierDetails] = useState<string[]>([]);
   const [supplierDetails, setSupplierDetails] = useState<string[]>([]);
-  console.log(uniqueAppliers, supplierDetails);
 
   useEffect(() => {
     if (Array.isArray(data) && data.length > 0) {
@@ -429,9 +426,6 @@ export default function Home() {
     }
   }, [data]);
 
-  useEffect(() => {
-    console.log("applier details  : ", applierDetails);
-  }, [applierDetails]);
 
   useEffect(() => {
     const filteredMetaData = metaDataTypes.filter(
@@ -461,7 +455,6 @@ export default function Home() {
       },
     })
       .then((res) => {
-        console.log("Meta Fetched Response:", res); // Log the fetched response
 
         if (res?.code === 200 && res?.result) {
           // if(res?.c)
@@ -482,7 +475,6 @@ export default function Home() {
       url: getAllDepots,
     })
       .then((res) => {
-        console.log("depot fetched response :", res); // Log the fetched response
 
         if (res?.code === 200 && res?.result) {
           // if(res?.c)
@@ -502,12 +494,10 @@ export default function Home() {
       url: getApplierSupplierDetails,
     })
       .then((res) => {
-        console.log("aplier supplier  fetched response :", res); // Log the fetched response
 
         if (res?.code === 200 && res?.result) {
           // if(res?.c)
           setApplierSupplier(res.result?.appliedBySuppliedBy);
-          console.log("stored applier supplier  result:", res.result);
         } else {
           console.error("Error: Invalid data format or empty depot");
         }
@@ -543,8 +533,7 @@ export default function Home() {
     if (matchedItem) {
       // console.log("Selected Tender Type:", matchedItem.codeDescription);
       return matchedItem.codeDescription;
-    } else {
-      console.log("No matching tender type found.");
+    
     }
   };
   function formatDate(isoString) {

@@ -62,12 +62,12 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
      const onStockistSelect = (selectedOption: datalistOptions) => {
       // updateTenderData("appliedBy", "Stockist");
       // updateTenderData("applierId", selectedOption.value);   
-      console.log("selected option ",selectedOption);  
+      // console.log("selected option ",selectedOption);  
     };
     const onStockistSelects = (selectedOption: datalistOptions) => {
       // updateTenderData("appliedBy", "Stockist");
       // updateTenderData("applierId", selectedOption.value);   
-      console.log("selected option ",selectedOption);  
+      // console.log("selected option ",selectedOption);  
     };
  
   const handleAppliedSuppliedFetch = async () => { 
@@ -128,7 +128,6 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
       url: getAllDepots
     })
       .then((res) => {
-        console.log("depot fetched response :", res); 
         const result = res.result; 
         const formatedDepot = result.map((item: any) => ({ 
           value: item.id + "_" + item.type,

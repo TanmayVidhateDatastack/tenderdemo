@@ -32,7 +32,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
     "success" | "bonus" | "info" | "error"
   >("info");
   const [showNotification, setShowNotification] = useState<boolean>(false);
-  const { updateTenderData } = useTenderData();
+  const { updateTenderData ,tenderData} = useTenderData();
   const [customerLocations, setCustomerLocations] = useState<location[]>([]); 
   // const [customerIdName, setCustomerIdName] = useState<string>("");
 
@@ -77,7 +77,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
       <div className={styles.inputDetails}>
         <div className={deptStyle.fields}>
           <CustomerSearch
-            customer={""}
+            customer={tenderData.tenderDetails.customerName}
             orderData={undefined} 
             setCustomerLocations={setCustomerLocations}
             updateTenderData={updateTenderData}

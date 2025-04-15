@@ -841,7 +841,6 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   const saveTender = useCallback(
     async (status: dsStatus) => {
       if (!tenderData) return;
-      console.log("sAVEEEE", tenderData);
       const tenderSaveData = {
         customerId: tenderData.customerId,
         customerAddressId: tenderData.customerAddressId,
@@ -923,7 +922,6 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           method: "POST",
           dataObject: dataToSend,
         }).then((res) => {
-          console.log("res = ", res);
           if (res.code === 200) {
             setActionStatus({
               notiMsg: "Tender Created Successfully",
@@ -991,7 +989,6 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           method: "PATCH",
           dataObject: patchDocument,
         }).then((res) => {
-          console.log("res = ", res);
           if (res.code === 200) {
             setActionStatus({
               notiMsg: "Tender Updated Successfully",
@@ -1025,7 +1022,6 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           url: getTenderByTenderId + tenderId,
         });
         const tenderData = response.result;
-        console.log("tenderData= ", tenderData);
         if (
           tenderData.tenderRevisions.length == 0 ||
           tenderData.tenderRevisions == null
