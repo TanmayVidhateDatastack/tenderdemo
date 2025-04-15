@@ -41,6 +41,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
     setActionStatusValues,
     actionStatus,
     saveTender,
+    fetchAndSetOriginalTender
   } = useTenderData();
   const [isCsvWhite, setIsCsvWhite] = useState(false);
   const [orderId] = useState<string>(paramOrderId?.toString());
@@ -64,6 +65,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
     "Existing"
   );
   useEffect(() => {
+    fetchAndSetOriginalTender(9163)
     if (
       tenderData.status == "AWARDED" ||
       tenderData.status == "PARTIALLY_AWARDED" ||
