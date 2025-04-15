@@ -944,108 +944,62 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     },
     [tenderData, tenderDataCopy, fetchData]
   );
-  const updateTender = useCallback(
-    async (status: string) => {
-      try {
-        const dataToSendTenderCopy = stripReadOnlyProperties({
-          ...tenderDataCopy,
-          supplyConditions: {
-            ...tenderDataCopy.supplyConditions,
-            applicableConditions: JSON.stringify(
-              tenderDataCopy.supplyConditions.applicableConditions
-            ),
-          },
-        });
-        const dataToSendOriginalTender = stripReadOnlyProperties({
-          ...tenderData,
-          supplyConditions: {
-            ...tenderData.supplyConditions,
-            applicableConditions: JSON.stringify(
-              tenderData.supplyConditions.applicableConditions
-            ),
-          },
-        });
-        const patchDocument = generatePatchDocument(
-          dataToSendTenderCopy,
-          dataToSendOriginalTender
-        );
-        let url = saveTenderurl;
-        if (
-          status.toLowerCase() == DsStatus.AWRD ||
-          status == DsStatus.PAWRD ||
-          status == DsStatus.LOST ||
-          status == DsStatus.CNCL
-        )
-          url = getTenderByTenderId + tenderData.id + "/contract";
-        await fetchData({
-          url: url,
-          method: "PATCH",
-          dataObject: patchDocument,
-        }).then((res) => {
-          console.log("res = ", res);
-          if (res.code === 200) {
-            setActionStatus({
-              notiMsg: "Tender Updated Successfully",
-              notiType: "success",
-              showNotification: true,
-            });
-            showToaster("create-order-toaster");
-            setTimeout(() => {
-              goBack();
-            }, closeTimeForTender);
-          } else {
-            setActionStatus({
-              notiMsg: "Tender could not be updated",
-              notiType: "error",
-              showNotification: true,
-            });
-            showToaster("create-order-toaster");
-          }
-        });
-      } catch (error) {
-        console.error("Error saving order:", error);
-      }
-    },
-    [tenderData, tenderDataCopy, fetchData, generatePatchDocument]
-  );
+  // const fetchAndSetOriginalTender= useCallback(
+  //   async (tenderId: number) => {
+  //     try {
 
-  const fetchAndSetOriginalTender = useCallback(
-    async (tenderId: number) => {
-      try {
-        const response = await fetchData({
-          url: getTenderByTenderId + tenderId,
-        });
-        const tenderData = response.result;
-        console.log("tenderData= ", tenderData);
-        const newTenderData: TenderData = {
-          ...tenderData.tenders,
-          tenderFees: tenderData.tenderFees.map((fee) => ({
-            ...fee,
-            status: "ACTV",
-          })),
-          supplyConditions: {
-            ...tenderData.supplyConditions,
-            applicableCondition:
-              tenderData.supplyConditions.applicableCondition.map((ac) => ({
-                ...ac,
-                status: "ACTV",
-              })),
-          },
-        };
-        setTenderData(newTenderData);
-        setTenderDataCopy({
-          ...newTenderData,
-          status: "",
-          lastUpdatedBy: -1,
-        });
-        return response;
-      } catch (error) {
-        console.error("Error fetching order:", error);
-      }
-    },
-    [fetchData]
-  );
+  //       const response = await fetchData({ url: getTenderByTenderId }); 
+  //       const tenderData = response.result as TenderData 
+  //       console.log("tenderData= ", tenderData);
 
+  //       setTenderData((prev) => {
+  //         return {
+  //           ...prev,
+  //           ...tenderData ,
+  //           transporter:
+  //           tenderData?.transporter !== null &&
+  //           tenderData ?.transporter !== undefined
+  //               ? tenderData ?.transporter
+  //               : {
+  //                 type: "read-only",
+  //                 id: 0,
+  //                 name: "",
+  //                 code: "",
+  //               },
+  //           purchaseOrderDate: tenderData ?.purchaseOrderDate,
+  //           status:tenderData ?.status,
+  //           lastUpdatedBy: -1,
+  //           ewayBillStatus: "NAVL",
+  //         };
+  //       });
+
+  //       setOrderDataCopy((prev) => {
+  //         return {
+  //           ...prev,
+  //           ...tenderData ,
+  //           purchaseOrderDate: tenderData ?.purchaseOrderDate,
+  //           transporter:
+  //           tenderData ?.transporter !== null &&
+  //           tenderData ?.transporter !== undefined
+  //               ? tenderData ?.transporter
+  //               : {
+  //                 type: "read-only",
+  //                 id: 0,
+  //                 name: "",
+  //                 code: "",
+  //               },
+  //           ewayBillStatus: "NAVL",
+  //         };
+  //       });
+  //       return response;
+  //     } catch (error) {
+  //       console.error("Error fetching order:", error); 
+  //     }
+  //   },
+  //   [fetchData]
+  // );
+ 
+ 
   return (
     <TenderDataContext.Provider
       value={{
