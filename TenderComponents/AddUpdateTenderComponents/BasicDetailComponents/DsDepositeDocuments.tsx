@@ -35,14 +35,12 @@ export interface DepositeDocumentsProps {
   depositeDocument: DepositDocument[] | null;
   applicableDeposits: DsSelectOption[] | [];
   role: string;
-  type: string;
 }
 
 const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   depositeDocument,
   applicableDeposits,
   role,
-  type,
 }) => {
   const contextMenuId = "context-display-10";
   const {
