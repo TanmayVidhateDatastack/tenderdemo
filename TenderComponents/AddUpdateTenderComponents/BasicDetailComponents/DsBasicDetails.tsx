@@ -184,12 +184,11 @@ const DsBasicDetails = () => {
       <div>
         <DsDepositeDocuments
           setDepositeDocuments={(docs) => {
-            setDepositeDocuments(docs); 
-          }}
+            setDepositeDocuments(docs);
+          } }
           depositeDocument={depositeDocument}
-          applicableDeposits={applicableDocuments} 
-          role={role}
-        />
+          applicableDeposits={applicableDocuments}
+          role={role}         />
       </div>
       <span className={styles.Seperator}></span>
       <div>
