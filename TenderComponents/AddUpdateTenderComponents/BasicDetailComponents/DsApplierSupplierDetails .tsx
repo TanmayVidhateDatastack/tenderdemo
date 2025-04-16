@@ -128,7 +128,6 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
       url: getAllDepots
     })
       .then((res) => {
-        // console.log("depot fetched response :", res); 
         const result = res.result; 
         const formatedDepot = result.map((item: any) => ({ 
           value: item.id + "_" + item.type,

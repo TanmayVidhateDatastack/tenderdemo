@@ -85,6 +85,7 @@ const DsAddProduct: React.FC<addProductProps> = ({
           initialValue={qtyInputVal}
           onChange={(e) => setQtyInputVal(e.target.value)}
           id="qty"
+          containerClasses={styles.qtyinproductContainer}
           disable={orderStatus === DsStatus.APRV ? true : false}
           className={styles.qtyinproduct}
         ></DsTextField>

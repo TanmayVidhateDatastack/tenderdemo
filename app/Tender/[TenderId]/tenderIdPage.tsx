@@ -29,8 +29,8 @@ import IconFactory from "@/Elements/IconComponent";
 import DsStatusIndicator, {
   formatStatus,
 } from "@/Elements/DsComponents/dsStatus/dsStatusIndicator";
-// import ContractView from "@/TenderComponents/AddUpdateTenderComponents/CustomTabViews/ContractView";
- 
+import ContractView from "@/TenderComponents/AddUpdateTenderComponents/CustomTabViews/ContractView";
+
 const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
   paramOrderId,
 }) => {
@@ -48,13 +48,14 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
   const appTitle = useRef<string>("New");
  
   const version = 1;
- 
+
   const [tabs, setTabs] = useState([
     { tabId: "0", tabName: "Basic Details" },
     { tabId: "v1", tabName: "Products ₹ (V1)" },
+    { tabId: "v1", tabName: "Products ₹ (V1)" },
     { tabId: "2", tabName: "Documents" },
   ]);
- 
+
   const [displayFlag, setDisplayFlag] = useState<"New" | "Existing">(
     "Existing"
   );
@@ -103,55 +104,15 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
   }, [orderId]);
  
   const [message, setMessage] = useState<string>("");
- 
 
-  // const handleUpload = (file: File | null) => {
-  //   if (!file) {
-  //     console.log("Please select a file first.");
-  //     return;
-  //   }
- 
-  //   const reader = new FileReader();
-  //   reader.onload = (event) => {
-  //     const fileContent = event.target?.result;
-  //     console.log("File content :", fileContent);
-  //     setMessage("The File has been  attached successfully!");
-  //     const text = event.target?.result as string;
-  //     const rows = text
-  //       .trim()
-  //       .split("\n")
-  //       .map((row) => row.split(","));
-  //     const prd: TenderProduct[] = rows.map((x) => {
-  //       return {
-  //         requestedGenericName: x[0],
-  //         requestedQuantity: Number(x[1]),
-  //         requestedPackingSize: x[2],
-  //         competitorId: 0,
-  //         product: {
-  //           dataSource: "csv",
-  //         },
-  //       };
-  //     });
-  //     prd.forEach((x) => {
-  //       addTenderProduct(version, x);
-  //     });
-  //   };
-  //   reader.onerror = () => {
-  //     console.error("Error reading the file");
-  //   };
-  //   reader.readAsText(file);
-  // };
-  
   const handleUpload = (file: File | null) => {
     if (!file) {
-      console.log("Please select a file first.");
       return;
     }
   
     const reader = new FileReader();
     reader.onload = (event) => {
       const fileContent = event.target?.result;
- 
       setMessage("The File has been  attached successfully!");
   
       const text = event.target?.result as string;
@@ -242,7 +203,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
                   <div>
                   <CsvPopup onUpload={handleUpload} />
                   </div>
- 
+
                   <DsButton
                     label="Download Pricing"
                     buttonSize="btnMedium"
@@ -366,7 +327,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
                 <DsBasicDetails />
               </div>
             </TabView>
- 
+
             {tenderData.tenderRevisions.map((rev) => (
               <TabView key={rev.version} tabId={`v${rev.version}`}>
                 <DsTenderProduct
@@ -377,7 +338,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
                 />
               </TabView>
             ))}
- 
+
             <TabView tabId="2">
               <DocumentContext.Consumer>
                 {(context) => {
@@ -415,14 +376,14 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
                 }}
               </DocumentContext.Consumer>
             </TabView>
-            {/* <TabView tabId="Contract">
+            <TabView tabId="Contract">
               {(tenderData.status == "AWARDED" ||
                 tenderData.status == "PARTIALLY_AWARDED" ||
                 tenderData.status == "LOST" ||
                 tenderData.status == "CANCELLED") && (
-                 <ContractView status={tenderData.status} />
+                <ContractView status={tenderData.status} />
               )}
-            </TabView> */}
+            </TabView>
           </div>
           <DSTendrFooter
             setActionStatus={setActionStatusValues}
