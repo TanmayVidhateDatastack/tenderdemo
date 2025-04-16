@@ -27,7 +27,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
   const [depotList, setDepotList] = useState<Depot[]>([]);
   const [formatedDepot, setFormatedDepot] = useState<DsSelectOption[]>([]);
 
-  const { updateTenderData, tenderData } = useTenderData();
+  const { updateTenderData, tenderData,tenderDataCopy } = useTenderData();
   const [selected, setSelected] = useState<datalistOptions>();
   const [selecteds, setSelecteds] = useState<datalistOptions>();
   const [appliedBy, setAppliedBy] = useState<DsMultiLevelSelectOption[]>([]);
@@ -183,8 +183,9 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
   };
   const [selectedDepo, setSelectedDepo] = useState<DsSelectOption[]>([]);
   useEffect(() => {
-    const loc = [...tenderData.shippingLocations];
-    console.log(loc)
+    const loc = [...tenderDataCopy.shippingLocations];
+    console.log(loc);
+    console.log(formatedDepot);
     const depo=loc.map((x) => {
       return (
         formatedDepot.find((d) => Number(d.value) == x) || {
@@ -194,7 +195,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
       );
     });
     setSelectedDepo(depo);
-  }, [formatedDepot, tenderData.shippingLocations]);
+  }, [formatedDepot,tenderDataCopy.shippingLocations]);
 
   return (
     <>
@@ -243,7 +244,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
             id={"suppliedBy"}
             onSelect={handleSuppliedBySelects}
             setSelectOption={(isDataListOptions, option) => {
-              setSelected(option);
+              // setSelected(option);
               console.log("applieridoption", option);
               if (isDataListOptions) {
                 updateTenderData("supplierId", Number(option.id));
@@ -273,6 +274,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
             placeholder={"Please search or select here"}
             id={"depot"}
             setSelectOptions={(options) => {
+              setSelectedDepo(options)
               updateTenderData(
                 "shippingLocations",
                 options.reduce<number[]>((acc, option) => {
