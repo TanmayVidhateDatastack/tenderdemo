@@ -8,7 +8,7 @@ import {
   saveTenderurl,
 } from "@/Common/helpers/constant";
 import fetchData from "@/Common/helpers/Method/fetchData";
- 
+
 import { useRouter } from "next/navigation";
 import React, {
   createContext,
@@ -40,7 +40,7 @@ export type TenderDocument = {
   documentStorageId?: number;
   // documents: Document[];
 };
- 
+
 export type TenderProduct = {
   id?: number;
   requestedGenericName?: string;
@@ -51,17 +51,17 @@ export type TenderProduct = {
   competitorId?: number;
   proposedRate?: number;
   ptrPercent?: number;
-  supplierDiscount?: number;
+  stockistDiscountValue?: number;
   product: {
     type?: "read-only";
-    name?: string;
+    productName?: string;
     productPackingSize?: string;
     mrp?: string | number;
     ptr?: string | number;
     directCost?: string | number;
     lqr?: number;
     competitorName?: string;
- 
+
     totalCost?: number;
     marginValue?: number;
     marginPercent?: number;
@@ -74,6 +74,7 @@ export type TenderProduct = {
 //   name: string;
 // };
 export type tenderSupplyCondition = {
+  id?: number;
   supplyPoint: string;
   consigneesCount: number;
   testReportRequired: string;
@@ -249,6 +250,7 @@ export function updateDocuments(
 }
 interface TenderDataContextType {
   tenderData: TenderData;
+  tenderDataCopy: TenderData;
   actionStatus: ActionStatus;
   setActionStatusValues: (actionStatus: ActionStatus) => void;
   updateTenderData: (
@@ -310,15 +312,15 @@ interface TenderDataContextType {
     id: number,
     value: string | number
   ) => void;
-  saveTender: (status: dsStatus) => Promise<void>;
-  updateTender: (status: dsStatus) => Promise<void>;
+  saveTender: (status: string) => Promise<void>;
+  updateTender: (status: string) => Promise<void>;
   fetchAndSetOriginalTender: (tenderId: number) => Promise<void>;
 }
- 
+
 const TenderDataContext = createContext<TenderDataContextType | undefined>(
   undefined
 );
- 
+
 export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
@@ -404,7 +406,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     notiType: "success",
     showNotification: false,
   });
- 
+
   // ✅ Update top-level tender fields
   const updateTenderData = (
     key:
@@ -596,9 +598,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   // };
   // ✅ Add a new tender product
   const addTenderProduct = (version: number, product: TenderProduct) => {
-
     setTenderData((prev) => ({
-   
       ...prev,
       tenderRevisions: prev.tenderRevisions.map((revision) =>
         revision.version === version
@@ -656,7 +656,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 ptrPercent: x.ptrPercent,
                 lpr: x.lpr,
                 competitorId: x.competitorId,
-                supplierDiscount: x.supplierDiscount,
+                stockistDiscountValue: x.stockistDiscountValue,
               } as TenderProduct;
             }),
           ],
@@ -677,24 +677,27 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         revision.version === version
           ? {
               ...revision,
-              tenderItems: revision.tenderItems.map((item) =>
-                item.id === id || item.productId === id
-                  ? key.startsWith("product.")
-                    ? {
-                        ...item,
-                        product: {
-                          ...item.product,
-                          [key.split(".")[1]]: value, // Update the nested product field
-                        },
-                      }
-                    : { ...item, [key]: value } // Update the top-level field
-                  : item
-              ),
+              tenderItems: revision.tenderItems.map((item) => {
+                const obj =
+                  item.id === id || item.productId === id
+                    ? key.startsWith("product.")
+                      ? {
+                          ...item,
+                          product: {
+                            ...item.product,
+                            [key.split(".")[1]]: value, // Update the nested product field
+                          },
+                        }
+                      : { ...item, [key]: value } // Update the top-level field
+                    : item;
+                return obj;
+              }),
             }
           : revision
       ),
     }));
   };
+
   const updateContractDetails = (
     key: keyof TenderContract,
     value: string | { id: number; tenderItems: ContractItems[] }
@@ -740,7 +743,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   const addApplicableCondition = (type: string) => {
     // setTenderData((prev) => ({
     //   ...prev,
- 
+
     //   supplyConditions: {
     //     ...prev.supplyConditions,
     //     applicableConditions: [
@@ -756,7 +759,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     setTenderData((prev) => {
       let updated = false; // Flag to track if we updated an existing entry
       const active: "ACTV" | "INAC" = "ACTV";
- 
+
       const updatedTenderApplicableConditions =
         prev.supplyConditions.applicableConditions.map((ac) => {
           if (ac.type == type) {
@@ -784,12 +787,12 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       };
     });
   };
- 
+
   // ✅ Remove an applicable condition by type
   const removeApplicableCondition = (conditionType: string) => {
     setTenderData((prev) => ({
       ...prev,
- 
+
       supplyConditions: {
         ...prev.supplyConditions,
         applicableConditions: prev.supplyConditions.applicableConditions.filter(
@@ -798,35 +801,35 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       },
     }));
   };
- 
+
   const setActionStatusValues = useCallback(
     (actionStatus: ActionStatus) => {
       setActionStatus(actionStatus);
     },
     [tenderData]
   );
- 
+
   const tenderDataCopyRef = useRef(tenderData);
- 
+
   const router = useRouter();
   const goBack = () => {
     router.back();
   };
- 
+
   // Update the ref whenever orderDataCopy changes
   useEffect(() => {
     tenderDataCopyRef.current = tenderData;
   }, [tenderData]);
- 
+
   const stripReadOnlyProperties = (obj: any): any => {
     if (Array.isArray(obj)) {
       return obj.map((item) => stripReadOnlyProperties(item));
     }
- 
+
     if (typeof obj !== "object" || obj === null) {
       return obj;
     }
- 
+
     const newObj: any = {};
     for (const key in obj) {
       if (obj[key] && typeof obj[key] === "object") {
@@ -840,6 +843,8 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     return newObj;
   };
   // Save Order API Call
+  // Save Order API Call
+
   const saveTender = useCallback(
     async (status: dsStatus) => {
       if (!tenderData) return;
@@ -897,6 +902,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           }),
         supplyConditions: {
           ...tenderData.supplyConditions,
+          eligibility: tenderData.supplyConditions.eligibility.join(","),
           applicableConditions: JSON.stringify(
             tenderData.supplyConditions.applicableConditions
           ),
@@ -910,14 +916,15 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               category: x.category,
             };
           }) || [],
+        comments: null,
       };
+      delete tenderSaveData.supplyConditions.id;
       const dataToSend = stripReadOnlyProperties({
         ...tenderSaveData,
         status: status.toUpperCase(),
         lastUpdatedBy: 3,
       });
-
-      // console.log("sAVEEEE", dataToSend);
+      console.log("sAVEEEE", dataToSend);
       try {
         await fetchData({
           url: saveTenderurl,
@@ -956,29 +963,47 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   const updateTender = useCallback(
     async (status: string) => {
       try {
+        const copylatestTenderRevision = tenderDataCopy.tenderRevisions.reduce(
+          (max, obj) => (obj.version > max.version ? obj : max),
+          tenderDataCopy.tenderRevisions[0]
+        );
+        const latestTenderRevision = tenderData.tenderRevisions.reduce(
+          (max, obj) => (obj.version > max.version ? obj : max),
+          tenderData.tenderRevisions[0]
+        );
         const dataToSendTenderCopy = stripReadOnlyProperties({
           ...tenderDataCopy,
+          shippingLocations: tenderDataCopy.shippingLocations.join(","),
           supplyConditions: {
             ...tenderDataCopy.supplyConditions,
+            eligibility: tenderDataCopy.supplyConditions.eligibility.join(","),
             applicableConditions: JSON.stringify(
               tenderDataCopy.supplyConditions.applicableConditions
             ),
           },
+          tenderRevisions:[copylatestTenderRevision],
         });
         const dataToSendOriginalTender = stripReadOnlyProperties({
           ...tenderData,
+          tenderFees: tenderData.tenderFees.filter(
+            (x) => x.status == "ACTV" || (x.id && x.status == "INAC")
+          ),
+          shippingLocations: tenderData.shippingLocations.join(","),
           supplyConditions: {
             ...tenderData.supplyConditions,
+            eligibility: tenderData.supplyConditions.eligibility.join(","),
             applicableConditions: JSON.stringify(
               tenderData.supplyConditions.applicableConditions
             ),
           },
+          tenderRevisions:[latestTenderRevision],
+
         });
         const patchDocument = generatePatchDocument(
           dataToSendTenderCopy,
           dataToSendOriginalTender
         );
-        let url = saveTenderurl;
+        let url = saveTenderurl+"/"+tenderData.id;
         if (
           status.toLowerCase() == DsStatus.AWRD ||
           status == DsStatus.PAWRD ||
@@ -1035,20 +1060,36 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               tenderItems: [],
             },
           ];
+        else
+          tenderData.tenderRevisions = tenderData.tenderRevisions.map((rev) => {
+            return {
+              ...rev,
+              tenderItems: rev.tenderItems.map((item) => {
+                return {
+                  ...item,
+                  product: {
+                    ...item.product,
+                    dataSource: "saved",
+                  },
+                };
+              }),
+            };
+          });
+
         tenderData.tenders.tenderDetails =
           tenderData.tenders.tenderDetailsReadOnly;
         delete tenderData.tenders.tenderDetailsReadOnly;
         const newTenderData: TenderData = {
           ...tenderData.tenders,
-          tenderRevisions:tenderData.tenderRevisions,
+          tenderRevisions: tenderData.tenderRevisions,
           tenderFees: tenderData.tenderFees.map((fee) => ({
             ...fee,
             status: "ACTV",
           })),
           supplyConditions: {
-            ...tenderData.supplyCondition,
+            ...tenderData.supplyConditions,
             applicableConditions:
-              tenderData.supplyCondition.applicableConditions?.map((ac) => ({
+              tenderData.supplyConditions.applicableConditions?.map((ac) => ({
                 ...ac,
                 status: "ACTV",
               })),
@@ -1067,11 +1108,12 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     },
     [fetchData]
   );
- 
+
   return (
     <TenderDataContext.Provider
       value={{
         tenderData,
+        tenderDataCopy,
         actionStatus,
         updateTenderData,
         updateTenderFee,
@@ -1100,14 +1142,12 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     </TenderDataContext.Provider>
   );
 };
- 
+
 // ✅ Custom hook to access context
 export const useTenderData = () => {
   const context = useContext(TenderDataContext);
   if (!context) {
-    throw new Error("useTenderData must be used within a TenderDataProvider");
+    throw new Error("TenderDataContextProvider must be used");
   }
   return context;
 };
- 
- 

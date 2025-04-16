@@ -11,7 +11,8 @@ import { version } from "os";
 const DsTenderProduct: React.FC<{
   productList: TenderProduct[];
   setProductList: (product: TenderProduct) => void;
-}> = ({ productList, setProductList }) => {
+  version:number;
+}> = ({ productList, setProductList,version }) => {
     const [fetchdata, setfetchdata] = useState<TenderProduct[] | null>(null);
  
     const handleFetch = async () => {
@@ -42,7 +43,7 @@ const DsTenderProduct: React.FC<{
   <DsProductKpis productData={productList || fetchdata} />
 </div>
 
-      <DsProductTable version={1}  />
+      <DsProductTable version={version}  />
     </>
   );
 

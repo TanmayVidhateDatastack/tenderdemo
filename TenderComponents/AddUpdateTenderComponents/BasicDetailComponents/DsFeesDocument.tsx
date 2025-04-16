@@ -154,8 +154,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           <div className={styles.fieldColors}>
             <DsTextField
               maxLength={10}
-              initialValue=""
-              // className={styles.fieldColors}
+              initialValue={tenderData.tenderFees.find((x)=>x.feesType==type)?.amount.toString()||"0"}
               label={"Amount"}
               inputType="positive" 
               onBlur={(e) =>
@@ -169,6 +168,10 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           <div className={styles.fieldColors}>
             <DsSingleSelect
               id={id + "_paidType1"}
+              selectedOption={{
+                value:tenderData.tenderFees.find((x)=>x.feesType==type)?.paidBy||"",
+                label:tenderData.tenderFees.find((x)=>x.feesType==type)?.paidBy||"",
+              }}
               options={depositeDocuments}
               label="Paid by"
               placeholder={"Please select here"}
@@ -181,7 +184,10 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           </div>
           <div className={styles.fieldColors}>
             <DsSingleSelect
-              // className={styles.fieldColors}
+              selectedOption={{
+                value:tenderData.tenderFees.find((x)=>x.feesType==type)?.paymentMode||"",
+                label:tenderData.tenderFees.find((x)=>x.feesType==type)?.paymentMode||"",
+              }}
               id={id + "_modes1"}
               options={mode}
               label="Modes"
@@ -197,7 +203,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             <DatePicker
               id={id + "dueDate"}
               minDate={new Date()}
-              initialDate={""}
+              initialDate={new Date(tenderData.tenderFees.find((x)=>x.feesType==type)?.paymentDueDate||"").toLocaleDateString("en-GB")}
               placeholder="DD/MM/YYYY"
               label="Due Date"
               setDateValue={(date) => {
@@ -213,6 +219,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           <h4>Notes</h4>
           <div className={styles.fieldColors}>
             <TextArea
+              initialValue={tenderData.tenderFees.find((x)=>x.feesType==type)?.instructionNotes||""}
               placeholder="Please type here"
               disable={false}
               minRows={2}

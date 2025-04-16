@@ -553,6 +553,7 @@ export default function Home() {
       if (t.type == "INSTITUTION") rowIcon = "instituitional";
       return {
         rowIndex: index,
+        customAttributes:{tenderId:t.tenderId},
         rowIcon: (
           <div
             style={{
@@ -750,7 +751,7 @@ export default function Home() {
   ) => {
     const row = tempTableData?.rows?.find((row) => row.rowIndex === rowIndex);
 
-    const tenderId = row?.content?.[0]?.customAttributes;
+    const tenderId = row?.content?.[0]?.customAttributes?.tenderId||"New";
 
     if (tenderId) {
       goTo(Number(tenderId));

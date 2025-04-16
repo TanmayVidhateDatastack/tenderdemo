@@ -492,8 +492,8 @@ a.secondary {
 .celltotalcost
 {
   max-width:100% ;
-  min-width: 7em !important;
-  width: 7em !important;
+  min-width: 11em !important;
+  width: 11em !important;
   white-space:nowrap;
   text-overflow: ellipsis; 
   padding: 0rem 1rem!important;
@@ -519,8 +519,8 @@ a.secondary {
 .cellnetvalue
 {
   max-width:100% ;
-  min-width: 7em !important;
-  width: 7em !important;
+  min-width: 11em !important;
+  width: 11em !important;
   white-space:nowrap;
   text-overflow: ellipsis; 
   padding: 0rem 1rem!important;

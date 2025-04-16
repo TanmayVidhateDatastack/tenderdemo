@@ -21,6 +21,7 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
     tenderData,
     removeTenderDocument,
   } = useTenderData();
+
   return (
     <>
       <div className={styles.emdContainer}>
@@ -31,6 +32,7 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
           <h4>Notes</h4>
           <div className={styles.fieldColors}>
             <TextArea
+             initialValue={tenderData.supplyConditions.applicableConditions.find((x)=>x.type==type)?.notes||""}
               id="embossmentNotes"
               placeholder="Please type here"
               minRows={2}

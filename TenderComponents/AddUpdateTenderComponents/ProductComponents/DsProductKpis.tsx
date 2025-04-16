@@ -100,7 +100,7 @@ const totalMarginPercentage =
    const totalStockistDiscountSum = Array.isArray(data)
     ? data.reduce((sum, item) => {
         const qty = item?.requestedQuantity?? null;
-        const stockistDiscount = item?.supplierDiscount?? null;
+        const stockistDiscount = item?.stockistDiscountValue?? null;
  
         // If both qty and netValue are null, skip this row
         if (qty === null && stockistDiscount === null) {

@@ -3,12 +3,12 @@ import { TenderDataProvider } from "@/TenderComponents/AddUpdateTenderComponents
 import DsTenderIdPage from "./tenderIdPage";
  export type ParamType = {
   params: {
-    orderId: string | number;
+    TenderId: string | number;
   };
 };
 export default function Home(param:ParamType) {
 
-const paramOrderId: string | number = param?.params?.orderId;
+const paramOrderId: string | number = param?.params?.TenderId;
  
   return (
     <> 

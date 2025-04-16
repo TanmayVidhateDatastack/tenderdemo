@@ -2,17 +2,45 @@ import DsSingleSelect from "@/Elements/DsComponents/dsSelect/dsSingleSelect";
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import DsMultiSelect from "@/Elements/DsComponents/dsSelect/dsMultiSelect";
 import DsSelectMultiLevel from "@/Elements/DsComponents/dsSelect/dsSelectMultiLevel";
-import { datalistOptions, supplyDetailsProps } from "@/Common/helpers/types";
+import {
+  datalistOptions,
+  DsSelectOption,
+  supplyDetailsProps,
+} from "@/Common/helpers/types";
 // import { datalistOptions, supplyDetailsProps } from "@/Common/helpers/types";
 import { useTenderData } from "../TenderDataContextProvider";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
+import { useEffect, useState } from "react";
 const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
-  const { updateSupplyCondition } = useTenderData();
+  const { updateSupplyCondition, tenderData } = useTenderData();
+  const [selectedEligibility, setSelectedEligibility] = useState<
+    DsSelectOption[]
+  >([]);
+  useEffect(() => {
+    const eligibility = [...tenderData.supplyConditions.eligibility];
+    const selectedEl = eligibility.map((x) => {
+      return {
+        value: x,
+        label: x,
+      };
+    });
+    setSelectedEligibility(selectedEl);
+  }, [tenderData.supplyConditions.eligibility]);
+  tenderData.supplyConditions.eligibility.map((x) => {
+    return {
+      value: x,
+      label: x,
+    };
+  });
   return (
     <>
       <div>Supply Conditions </div>
       <div className={styles.inputDetails}>
-        <DsSingleSelect  
+        <DsSingleSelect
+          selectedOption={{
+            value: tenderData.supplyConditions.supplyPoint,
+            label: tenderData.supplyConditions.supplyPoint,
+          }}
           options={supplyDetails.supplyPoints}
           label="Supply point"
           placeholder={"Please select here"}
@@ -24,16 +52,23 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
         ></DsSingleSelect>
         <DsTextField
           maxLength={10}
-          initialValue=""
-          inputType="positive" 
+          initialValue={tenderData.supplyConditions.consigneesCount.toString()}
+          inputType="positive"
           label="Provide no. of consignees"
-          // placeholder="Please type here" 
+          // placeholder="Please type here"
           onBlur={(e) =>
-            updateSupplyCondition("consigneesCount",Number((e.target as HTMLInputElement).value))
+            updateSupplyCondition(
+              "consigneesCount",
+              Number((e.target as HTMLInputElement).value)
+            )
           }
         ></DsTextField>
 
         <DsSingleSelect
+          selectedOption={{
+            value: tenderData.supplyConditions.testReportRequired,
+            label: tenderData.supplyConditions.testReportRequired,
+          }}
           options={supplyDetails.reportRequirements}
           label="Test report requirement"
           placeholder={"Please select here"}
@@ -46,6 +81,17 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
         ></DsSingleSelect>
 
         <DsMultiSelect
+          //  const selectedDepo=useMemo(()=>{
+          //    return tenderData.shippingLocations.map((x) => {
+          //       return (
+          //         formatedDepot.find((d) => Number(d.value) == x) || {
+          //           value: "",
+          //           label: "",
+          //         }
+          //       );
+          //     })
+          //   },[formatedDepot,tenderData.shippingLocations]);
+          selectedOptions={selectedEligibility}
           options={supplyDetails.eligibility}
           label="Eligibility"
           placeholder={"Please search and select here"}
@@ -53,9 +99,9 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
           setSelectOptions={(options) => {
             updateSupplyCondition(
               "eligibility",
-              options.reduce<string[]>((acc, option) => { 
-                if (typeof option.value === "string") {   
-                  acc.push(option.value);    
+              options.reduce<string[]>((acc, option) => {
+                if (typeof option.value === "string") {
+                  acc.push(option.value);
                 }
                 return acc;
               }, [])

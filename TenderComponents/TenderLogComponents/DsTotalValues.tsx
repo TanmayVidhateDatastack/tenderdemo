@@ -51,7 +51,7 @@ setFormattedValues(formattedValues)
     }
   }, [data]);
 
-  console.log("total values", data); 
+  // console.log("total values", data); 
 
   return (
     <div

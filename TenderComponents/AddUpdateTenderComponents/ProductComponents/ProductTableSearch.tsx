@@ -10,11 +10,13 @@ interface TableSearchProps {
   tableRowIndex: number;
   setLocalProducts: React.Dispatch<React.SetStateAction<TenderProduct[]>>;
   setHasChanges: React.Dispatch<React.SetStateAction<boolean>>;
+  initialValue:string;
 }
 const ProductTableSearch: React.FC<TableSearchProps> = ({
   tableRowIndex,
   setLocalProducts,
   setHasChanges,
+  initialValue
 }) => {
   const handleProductSelect = (
     index: number,
@@ -69,6 +71,7 @@ const ProductTableSearch: React.FC<TableSearchProps> = ({
       setSearchUrl={function (searchTerm: string): string {
         return searchProductsURL + searchTerm;
       }}
+      initialValue={initialValue}
     />
   );
 };

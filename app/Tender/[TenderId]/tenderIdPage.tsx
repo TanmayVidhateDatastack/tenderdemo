@@ -37,6 +37,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
   const [selectedTabId, setTabId] = useTabState("tenderPage");
   const {
     tenderData,
+    tenderDataCopy,
     addTenderProduct,
     setActionStatusValues,
     actionStatus,
@@ -44,14 +45,13 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
     fetchAndSetOriginalTender,
   } = useTenderData();
   const [isCsvWhite, setIsCsvWhite] = useState(false);
-  const [orderId] = useState<string>(paramOrderId?.toString());
+  const [orderId, setOrderId] = useState<string>(paramOrderId?.toString());
   const appTitle = useRef<string>("New");
- 
+
   const version = 1;
 
   const [tabs, setTabs] = useState([
     { tabId: "0", tabName: "Basic Details" },
-    { tabId: "v1", tabName: "Products ₹ (V1)" },
     { tabId: "v1", tabName: "Products ₹ (V1)" },
     { tabId: "2", tabName: "Documents" },
   ]);
@@ -59,9 +59,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
   const [displayFlag, setDisplayFlag] = useState<"New" | "Existing">(
     "Existing"
   );
-  useEffect(() => {
-    fetchAndSetOriginalTender(9163);
-  }, []);
+
   useEffect(() => {
     const revisionTabs = tenderData.tenderRevisions.map((rev) => ({
       tabId: `v${rev.version}`,
@@ -94,44 +92,56 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
     }, 0);
   }, [tenderData]);
   useEffect(() => {
+    console.log("orderId", orderId);
+
     if (orderId?.toString().toLowerCase() == "new") {
       setDisplayFlag("New");
       appTitle.current = "New Order";
     } else if (Number(orderId) > 0) {
       setDisplayFlag("Existing");
+      console.log("orderId", orderId);
+      fetchAndSetOriginalTender(Number(orderId));
     } else {
     }
   }, [orderId]);
- 
+
+  useEffect(() => {
+    if (tenderDataCopy.id)
+      appTitle.current =
+        tenderDataCopy.tenderNumber +
+        " ( " +
+        tenderDataCopy.tenderDetails.customerName +
+        " )";
+  }, [tenderDataCopy.id]);
   const [message, setMessage] = useState<string>("");
 
   const handleUpload = (file: File | null) => {
     if (!file) {
       return;
     }
-  
+
     const reader = new FileReader();
     reader.onload = (event) => {
       const fileContent = event.target?.result;
       setMessage("The File has been  attached successfully!");
-  
+
       const text = event.target?.result as string;
       const rows = text
         .trim()
         .split("\n")
         .map((row) => row.split(","));
-  
+
       // Get existing products from the current version (v1)
       const currentRevision = tenderData.tenderRevisions.find(
         (rev) => rev.version === version
       );
-  
+
       const existingGenericNames = new Set(
         (currentRevision?.tenderItems || [])
           .map((p) => p.requestedGenericName?.trim().toLowerCase())
           .filter(Boolean)
       );
-  
+
       const prd: TenderProduct[] = rows.map((x) => {
         return {
           requestedGenericName: x[0],
@@ -143,7 +153,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
           },
         };
       });
-  
+
       prd.forEach((x) => {
         const name = x.requestedGenericName?.trim().toLowerCase();
         if (name && !existingGenericNames.has(name)) {
@@ -152,14 +162,14 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
         }
       });
     };
-  
+
     reader.onerror = () => {
       console.error("Error reading the file");
     };
-  
+
     reader.readAsText(file);
   };
-  
+
   return (
     <>
       <DocumentProvider>
@@ -205,6 +215,11 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
                   </div>
 
                   <DsButton
+                    label="Download Pricing"
+                    buttonSize="btnMedium"
+                    className={style.downloadPricing}
+                    startIcon={
+                      <div
                     label="Download Pricing"
                     buttonSize="btnMedium"
                     className={style.downloadPricing}
@@ -261,11 +276,11 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
                           >
                             CSV file
                           </DsButton>
- 
+
                           <div>
                             <CsvPopup onUpload={handleUpload} />
                           </div>
- 
+
                           <DsButton
                             label="Download Pricing"
                             buttonSize="btnMedium"
@@ -287,7 +302,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
                     )}
                 </div>
               )}
- 
+
               <div>
                 {
                   <>
@@ -330,11 +345,24 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
 
             {tenderData.tenderRevisions.map((rev) => (
               <TabView key={rev.version} tabId={`v${rev.version}`}>
-                <DsTenderProduct
+                {/* <DsTenderProduct
                   productList={[...(rev.tenderItems ?? [])]}
                   setProductList={(product) =>
                     addTenderProduct(rev.version, product)
                   }
+                /> */}
+                <DsTenderProduct
+                  productList={[...(rev.tenderItems ?? [])]}
+                  setProductList={(product) => {
+                    const isDuplicate = rev.tenderItems?.some(
+                      (item) => item.productId === product.productId
+                    );
+
+                    if (!isDuplicate) {
+                      addTenderProduct(rev.version, product);
+                    }
+                  }}
+                  version={rev.version}
                 />
               </TabView>
             ))}
@@ -346,7 +374,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
                     return <div>Error: Document context is not available</div>;
                   }
                   const { totalSelectedDocuments } = context;
- 
+
                   return (
                     <div className={style.documentContainer}>
                       <div className={style.docPane}>
@@ -369,7 +397,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
                           label="Add Documents"
                         />
                       </div>
- 
+
                       <DocumentSelectorArea />
                     </div>
                   );
@@ -413,5 +441,3 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
   );
 };
 export default DsTenderIdPage;
- 
- 

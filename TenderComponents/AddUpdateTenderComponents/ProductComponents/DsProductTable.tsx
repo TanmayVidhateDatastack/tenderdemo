@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import TableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableComponent";
 import { tableData, tcolumn, DsTableRow } from "@/Common/helpers/types";
 import { TenderProduct, useTenderData } from "../TenderDataContextProvider";
@@ -20,6 +20,7 @@ import ContextMenu, {
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import whitetrashbtn from "@/Common/TenderIcons/smallIcons/whitetrash.svg";
 import trashbtn from "@/Common/TenderIcons/smallIcons/trashbtn.svg";
+import { TenderProductDiscountPercentage } from "@/Common/helpers/constant";
 
 interface DsProductTableProps {
   version: number;
@@ -27,15 +28,17 @@ interface DsProductTableProps {
 }
 
 const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
-  const { tenderData, updateTenderProduct, removeTenderProduct } =
-    useTenderData();
+  const {
+    tenderData,
+    updateTenderProduct,
+    removeTenderProduct,
+    saveTender,
+    tenderDataCopy,
+  } = useTenderData();
   const [tenderProductTable, setTenderProductTable] = useState<
     tableData | undefined
   >();
-  const [localProducts, setLocalProducts] = useState<TenderProduct[]>(
-    tenderData.tenderRevisions?.filter((x) => x.version == version)[0]
-      ?.tenderItems || []
-  );
+  const [localProducts, setLocalProducts] = useState<TenderProduct[]>([]);
   const [hasChanges, setHasChanges] = useState(false);
   const [productIds, setProductIds] = useState<number[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<number | undefined>();
@@ -44,30 +47,36 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
   >();
   const [selectedRowIndices, setSelectedRowIndices] = useState<number[]>([]);
 
-
   const calculatedProducts = useMemo(() => {
     return localProducts.map((tenderproduct) => {
       const calculated: TenderProduct = { ...tenderproduct };
-      if (tenderproduct.proposedRate && tenderproduct.requestedQuantity)
+      if (tenderproduct.product.directCost) {
+        const ptrTemp = tenderproduct.product.ptr;
+        const ptr =
+          ptrTemp !== undefined
+            ? typeof ptrTemp == "number"
+              ? ptrTemp
+              : Number(ptrTemp)
+            : 1;
+        calculated.ptrPercent = 100 - ((tenderproduct.proposedRate || 0) / ptr) * 100;
+        const discount = tenderproduct.stockistDiscountValue
+          ? tenderproduct.stockistDiscountValue
+          : ((tenderproduct.proposedRate || 0) *
+              TenderProductDiscountPercentage) /
+            100;
+
         calculated.product.totalCost =
-          tenderproduct.requestedQuantity * tenderproduct.proposedRate;
-      if (tenderproduct.proposedRate && tenderproduct.product.directCost) {
+          Number(tenderproduct.product.directCost) + Number(discount);
         calculated.product.marginValue =
-          Number(tenderproduct.proposedRate) -
-          Number(tenderproduct.product.directCost);
+          Number(tenderproduct.proposedRate) - calculated.product.totalCost;
         calculated.product.marginPercent =
           (calculated.product.marginValue /
-            Number(tenderproduct.product.directCost)) *
+            Number(tenderproduct.proposedRate)) *
             100 || 0;
-      }
-      if (tenderproduct.ptrPercent && tenderproduct.product.ptr)
-        calculated.supplierDiscount =
-          Number(tenderproduct.product.ptr) * (tenderproduct.ptrPercent / 100);
-      if (calculated.product)
         calculated.product.netValue =
-          (calculated.product?.totalCost || 0) +
-          (calculated.product?.marginValue || 0);
-     
+          (calculated.proposedRate || 0) * (calculated.requestedQuantity || 0);
+      }
+
       return calculated;
     });
   }, [localProducts]);
@@ -93,53 +102,71 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
       )
     );
     setHasChanges(true);
+    // setTimeout(() => handleSave(), 2);
   };
-
 
   const handleSave = () => {
     calculatedProducts.forEach((product) => {
       if (product.id) {
         updateTenderProduct(
-          1,
+          version,
           product.id,
-          "product.name",
-          product.product.name || ""
+          "product.productName",
+          product.product.productName || ""
         );
         updateTenderProduct(
-          1,
+          version,
           product.id,
           "requestedQuantity",
           product.requestedQuantity || 0
         );
         updateTenderProduct(
-          1,
+          version,
           product.id,
           "requestedPackingSize",
           product.requestedPackingSize || ""
         );
         updateTenderProduct(
-          1,
+          version,
           product.id,
           "product.totalCost",
           product.product.totalCost || 0
         );
         updateTenderProduct(
-          1,
+          version,
           product.id,
           "product.marginValue",
           product.product.marginValue || 0
         );
         updateTenderProduct(
-          1,
+          version,
           product.id,
           "product.marginPercent",
           product.product.marginPercent || 0
         );
         updateTenderProduct(
-          1,
+          version,
           product.id,
           "product.netValue",
           product.product.netValue || 0
+        );
+        updateTenderProduct(
+          version,
+          product.id,
+          "proposedRate",
+          product.proposedRate || 0
+        );
+        updateTenderProduct(
+          version,
+          product.id,
+          "ptrPercent",
+          product.ptrPercent || 0
+        );
+        updateTenderProduct(
+          version,
+          product.id,
+          "stockistDiscountValue",
+          product.stockistDiscountValue || 0
         );
       }
     });
@@ -221,13 +248,11 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
     () =>
       calculatedProducts.map((tenderproduct, index) => ({
         rowIndex: index + 1,
-         customAttributes:
-        
-        {
-            genericName: tenderproduct.requestedGenericName || "",
-            productId: tenderproduct.productId || 0,
-            productName: tenderproduct.product.name || "",
-          },
+        customAttributes: {
+          genericName: tenderproduct.requestedGenericName || "",
+          productId: tenderproduct.productId || 0,
+          productName: tenderproduct.product.productName || "",
+        },
 
         content: [
           {
@@ -236,11 +261,11 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
               tenderproduct.product?.dataSource === "fetch" ? (
                 <DsTextField
                   initialValue={tenderproduct.requestedGenericName || ""}
-                  onChange={(e) =>
+                  onBlur={(e) =>
                     handleFieldChange(
                       index,
                       "requestedGenericName",
-                      e.target.value
+                      (e.target as HTMLInputElement).value
                     )
                   }
                 />
@@ -248,7 +273,6 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
                 tenderproduct.requestedGenericName || "-"
               ),
             className: styles.cellgenericname,
-        
           },
 
           {
@@ -280,11 +304,11 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
               tenderproduct.product?.dataSource === "fetch" ? (
                 <DsTextField
                   initialValue={tenderproduct.requestedPackingSize || ""}
-                  onChange={(e) =>
+                  onBlur={(e) =>
                     handleFieldChange(
                       index,
                       "requestedPackingSize",
-                      e.target.value
+                      (e.target as HTMLInputElement).value
                     )
                   }
                 />
@@ -302,9 +326,10 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
                   tableRowIndex={index + 1}
                   setLocalProducts={setLocalProducts}
                   setHasChanges={setHasChanges}
+                  initialValue={tenderproduct.product.productName || ""}
                 />
               ) : (
-                tenderproduct.product?.name || "-"
+                tenderproduct.product?.productName || "-"
               ),
 
             className: styles.cellproductname,
@@ -317,11 +342,11 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
               ) : (
                 <DsTextField
                   initialValue={tenderproduct.product?.productPackingSize || ""}
-                  onChange={(e) =>
+                  onBlur={(e) =>
                     handleFieldChange(
                       index,
                       "product.productPackingSize",
-                      e.target.value
+                      (e.target as HTMLInputElement).value
                     )
                   }
                 />
@@ -396,13 +421,33 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
                 <DsTextField
                   inputType="number"
                   initialValue={tenderproduct.proposedRate?.toString() || ""}
-                  onChange={(e) =>
-                    handleFieldChange(
-                      index,
-                      "proposedRate",
-                      Number(e.target.value)
-                    )
-                  }
+                  onBlur={(e) => {
+                    const proposedRate = Number(
+                      (e.target as HTMLInputElement).value
+                    );
+                    if (tenderproduct.proposedRate !== proposedRate) {
+                      const ptrTemp = tenderproduct.product.ptr;
+                      const ptr =
+                        ptrTemp !== undefined
+                          ? typeof ptrTemp == "number"
+                            ? ptrTemp
+                            : Number(ptrTemp)
+                          : 1;
+                      const ptrPer = 100 - (proposedRate / ptr) * 100;
+                      const discount =
+                        (proposedRate * TenderProductDiscountPercentage) / 100;
+                      console.log(proposedRate);
+                      console.log(ptrPer);
+                      console.log(discount);
+                      handleFieldChange(index, "proposedRate", proposedRate);
+                      handleFieldChange(index, "ptrPercent", ptrPer);
+                      handleFieldChange(
+                        index,
+                        "stockistDiscountValue",
+                        discount
+                      );
+                    }
+                  }}
                 />
               ) : (
                 "-"
@@ -416,13 +461,32 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
                 <DsTextField
                   inputType="number"
                   initialValue={tenderproduct.ptrPercent?.toString() || ""}
-                  onChange={(e) =>
-                    handleFieldChange(
-                      index,
-                      "ptrPercent",
-                      Number(e.target.value)
-                    )
-                  }
+                  onBlur={(e) => {
+                    const ptrPer = Number((e.target as HTMLInputElement).value);
+                    if (tenderproduct.ptrPercent !== ptrPer) {
+                      const ptrTemp = tenderproduct.product.ptr;
+                      const ptr =
+                        ptrTemp !== undefined
+                          ? typeof ptrTemp == "number"
+                            ? ptrTemp
+                            : Number(ptrTemp)
+                          : 1;
+                      const proposedRate = ((100 - ptrPer) * ptr) / 100;
+
+                      const discount =
+                        (proposedRate * TenderProductDiscountPercentage) / 100;
+                      console.log(proposedRate);
+                      console.log(ptrPer);
+                      console.log(discount);
+                      handleFieldChange(index, "ptrPercent", ptrPer);
+                      handleFieldChange(index, "proposedRate", proposedRate);
+                      handleFieldChange(
+                        index,
+                        "stockistDiscountValue",
+                        discount
+                      );
+                    }
+                  }}
                 />
               ) : (
                 "-"
@@ -436,15 +500,39 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
                 <DsTextField
                   inputType="number"
                   initialValue={
-                    tenderproduct.supplierDiscount?.toFixed(2) || ""
+                    (
+                      ((tenderproduct.proposedRate || 0) *
+                        TenderProductDiscountPercentage) /
+                      100
+                    ).toFixed(2) || ""
                   }
-                  onChange={(e) =>
-                    handleFieldChange(
-                      index,
-                      "supplierDiscount",
-                      Number(e.target.value)
-                    )
-                  }
+                  onBlur={(e) => {
+                    const discount = Number(
+                      (e.target as HTMLInputElement).value
+                    );
+                    if (tenderproduct.stockistDiscountValue !== discount) {
+                      const proposedRate =
+                        (discount * 100) / TenderProductDiscountPercentage;
+                      const ptrTemp = tenderproduct.product.ptr;
+                      const ptr =
+                        ptrTemp !== undefined
+                          ? typeof ptrTemp == "number"
+                            ? ptrTemp
+                            : Number(ptrTemp)
+                          : 1;
+                      const ptrPer = 100 - (proposedRate / ptr) * 100;
+                      console.log(proposedRate);
+                      console.log(ptrPer);
+                      console.log(discount);
+                      handleFieldChange(
+                        index,
+                        "stockistDiscountValue",
+                        discount
+                      );
+                      handleFieldChange(index, "proposedRate", proposedRate);
+                      handleFieldChange(index, "ptrPercent", ptrPer);
+                    }
+                  }}
                 />
               ) : (
                 "-"
@@ -471,7 +559,8 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
             columnIndex: 16,
             content:
               tenderproduct.product?.dataSource == "saved"
-                ? tenderproduct.product.marginPercent?.toFixed(2) + "%" || "-"
+                ? (tenderproduct.product.marginPercent || 0).toFixed(2) + "%" ||
+                  "-"
                 : "-",
             className: styles.cellmarginper,
           },
@@ -489,13 +578,10 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
   );
   useEffect(() => {
     setLocalProducts(
-      tenderData.tenderRevisions.filter((x) => x.version == version)[0]
+      tenderData.tenderRevisions.find((x) => x.version == version)
         ?.tenderItems || []
     );
-  }, [
-    tenderData.tenderRevisions.filter((x) => x.version == version)[0]
-      ?.tenderItems || [],
-  ]);
+  }, [tenderDataCopy.tenderRevisions, version]);
 
   // useEffect(() => {
   //   const revision = tenderData.tenderRevisions.find(
@@ -505,7 +591,9 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
   //     setLocalProducts(revision.tenderItems);
   //   }
   // }, [version, tenderData]);
-
+  useEffect(() => {
+    handleSave();
+  }, [calculatedProducts]);
   useEffect(() => {
     setTenderProductTable({
       className: styles["tender-product-table"],
@@ -536,21 +624,19 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
         (row) => row.rowIndex === rowIndex
       );
       if (row) {
-
         const productId = row?.customAttributes?.productId;
-
-        
 
         if (isChecked === true) {
           setSelectedRowIndices((prev) => [...prev, rowIndex]);
           if (!productIds.includes(Number(productId))) {
             const products = productIds.length + 1;
-          //   const productName =
-          // row?.customAttributes?.productName?.toString();
-          const productName = String(
-            row.customAttributes?.productName || row.customAttributes?.genericName || "-"
-          );
-             
+            //   const productName =
+            // row?.customAttributes?.productName?.toString();
+            const productName = String(
+              row.customAttributes?.productName ||
+                row.customAttributes?.genericName ||
+                "-"
+            );
 
             setProductIds((prev) => [...prev, Number(productId)]);
             setSelectedProductName(productName);
@@ -609,6 +695,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
             <div className={styles.noDataBorders}></div>
           </div>
         )}
+
         <FloatingMenu
           selected={productIds.length}
           id={"sales-product"}
@@ -689,24 +776,26 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
                     onClick={() => {
                       if (productIds.length > 0) {
                         productIds.forEach((id) => {
-                          removeTenderProduct(version, id,undefined);
+                          removeTenderProduct(version, id, undefined);
                         });
                       }
                       if (selectedRowIndices.length > 0) {
                         selectedRowIndices.forEach((rowIndex) => {
-                          const row = tenderProductTable?.rows?.find((r) => r.rowIndex === rowIndex);
+                          const row = tenderProductTable?.rows?.find(
+                            (r) => r.rowIndex === rowIndex
+                          );
 
-                          const genericName = String(row?.customAttributes?.genericName);
-                    
-                    
-                            removeTenderProduct(version, undefined,genericName);
-                          
+                          const genericName = String(
+                            row?.customAttributes?.genericName
+                          );
+
+                          removeTenderProduct(version, undefined, genericName);
                         });
                       }
 
                       // console.log(productIds.length);
                       setProductIds([]);
-                      setSelectedRowIndices([]) // clear selected IDs
+                      setSelectedRowIndices([]); // clear selected IDs
                       closeContext("sales-product");
                       closeContext("delete-menu");
                     }}

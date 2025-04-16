@@ -29,22 +29,12 @@ class ActionStatus {
   notiMsg: string = "";
   showNotification: boolean = false;
 }
-interface dsTenderfooter {
-  setActionStatus: (actionStatus: ActionStatus) => void; 
-  saveTender?: (status: dsStatus) => Promise<void>;
-  tenderData:TenderData | null;
-  // originalData: TenderData | null | undefined;
-}
 
-export const DSTendrFooter: React.FC<dsTenderfooter> = ({
-  setActionStatus,
-  saveTender,
-  tenderData,
-}) => {
+export const DSTendrFooter: React.FC = () => {
   const dispatch = useAppDispatch<AppDispatch>();  
   const role = useAppSelector((state: RootState) => state.user.role);
   const [toasterVisible, setToasterVisible] = useState<boolean>(false);
-
+const {saveTender,updateTender,tenderData,tenderDataCopy,setActionStatusValues}=useTenderData();
   const handleFetch = async () => {
     try {
       const res = await fetchData({ url: getTenderUserRoles });
@@ -310,7 +300,9 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
         <DsSplitButton
           buttonViewStyle="btnContained"
           onClick={() => {
-            if (saveTender) saveTender("Draft");
+            if(tenderDataCopy.id)
+              updateTender(tenderDataCopy.status||"Draft")
+            else saveTender("Draft");
           }}
           onSplitClick={(e) =>
             displayContext(e, "contextMenuId4", "top", "center")
@@ -334,7 +326,7 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
             ? "The Tender has been successfully moved to under approval state"
             : "The action was successful!"
         }
-        setActionStatus={setActionStatus}
+        setActionStatus={setActionStatusValues}
       />
 
       <DsApprovalPopup
@@ -344,7 +336,7 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
         buttonColor="btnPrimary"
         position="center"
         toasterMessage={"The Tender has been sent for Revision "}
-        setActionStatus={setActionStatus}
+        setActionStatus={setActionStatusValues}
       />
       <DsApprovalPopup
         id="popup3"
@@ -353,7 +345,7 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
         buttonColor="btnDanger"
         position="center"
         toasterMessage={"The Tender has been Rejected & also note has sent "}
-        setActionStatus={setActionStatus}
+        setActionStatus={setActionStatusValues}
       />
       <Toaster
         id={"toaster1"}
