@@ -9,11 +9,12 @@ import DsTenderIdPage from "./tenderIdPage";
 export default function Home(param:ParamType) {
 
 const paramOrderId: string | number = param?.params?.TenderId;
+const storedStatus = sessionStorage.getItem("tenderStatus")||"";
  
   return (
     <> 
       <TenderDataProvider>
-        <DsTenderIdPage paramOrderId={paramOrderId} />    
+        <DsTenderIdPage paramOrderId={paramOrderId} tenderStatus={storedStatus}/>    
       </TenderDataProvider>
     </>
   );

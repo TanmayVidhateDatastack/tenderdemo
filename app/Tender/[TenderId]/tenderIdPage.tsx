@@ -31,8 +31,9 @@ import DsStatusIndicator, {
 } from "@/Elements/DsComponents/dsStatus/dsStatusIndicator";
 import ContractView from "@/TenderComponents/AddUpdateTenderComponents/CustomTabViews/ContractView";
 
-const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
+const DsTenderIdPage: React.FC<{ paramOrderId: string | number, tenderStatus?:string }> = ({
   paramOrderId,
+  tenderStatus
 }) => {
   const [selectedTabId, setTabId] = useTabState("tenderPage");
   const {
@@ -100,7 +101,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
     } else if (Number(orderId) > 0) {
       setDisplayFlag("Existing");
       console.log("orderId", orderId);
-      fetchAndSetOriginalTender(Number(orderId));
+      fetchAndSetOriginalTender(Number(orderId),tenderStatus);
     } else {
     }
   }, [orderId]);

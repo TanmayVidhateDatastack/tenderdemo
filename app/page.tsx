@@ -537,14 +537,7 @@ export default function Home() {
     
     }
   };
-  function formatDate(isoString) {
-    if (!isoString) return "-"; // Handle empty or undefined values
-    const date = new Date(isoString);
-    const day = date.getDate();
-    const month = date.getMonth() + 1; // Months are zero-based
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
-  }
+
 
   const addTableData = (tender: Tender[]) => {
     // console.log("Adding table data:", tender);
@@ -588,7 +581,7 @@ export default function Home() {
             content: (
               <DsName
                 id={t.tenderId + "submittionDate"}
-                name={formatDate(t.submissionDate)}
+                name={new Date(t.submissionDate).toLocaleDateString("en-GB")}
               />
             ),
             filterValue: t.submissionDate,
@@ -713,7 +706,7 @@ export default function Home() {
                 status={t.status.tenderStatus}
                 label={t.status.tenderStatus}
                 status_icon={
-                  <div style={{ width: "10px" }}>
+                  <div style={{ width: "0.7em" }}>
                     <IconFactory name={"comment"}></IconFactory>
                   </div>
                 }
@@ -738,8 +731,10 @@ export default function Home() {
   };
 
   const router = useRouter();
-  const goTo = (tenderId: number) => {
+  const goTo = (tenderId: number,status?:string) => {
     const location = `/Tender/${tenderId}`;
+    if(status)
+    sessionStorage.setItem("tenderStatus", status);
     if (location) {
       router.push(location); // Navigate to the dynamic route
     }
@@ -771,6 +766,7 @@ export default function Home() {
     e: React.MouseEvent<HTMLElement>;
     rowIndex: number;
     statuscell: string;
+    tenderId:number;
   } | null>(null);
 
   return (
@@ -853,19 +849,24 @@ export default function Home() {
                   row?.content?.find((cell) => cell?.columnIndex === 10)
                     ?.filterValue ?? ""
                 );
+                const tenderId=Number(row?.content?.[0]?.customAttributes?.tenderId||0)
 
                 // console.log("statuscellintable", statuscell);
 
                 // Store selected row data
-                setSelectedRow({ e, rowIndex, statuscell });
+                setSelectedRow({ e, rowIndex, statuscell,tenderId });
               }}
             />
           </div>
           {selectedRow && (
             <DsTenderTableFloatingMenu
               e={selectedRow.e}
+
               rowIndex={selectedRow.rowIndex}
               statuscell={selectedRow.statuscell}
+              handleFetch={handleFetch} 
+              tenderId={selectedRow.tenderId}
+              goTo={goTo}
             />
           )}
         </div>

@@ -140,8 +140,8 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
       return false;
     });
   };
-  console.log("searchhhhh", searchText);
-  console.log("searchinobject", searchInObject);
+
+
 
   return (
     <>
