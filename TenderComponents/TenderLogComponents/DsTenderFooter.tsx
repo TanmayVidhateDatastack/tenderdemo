@@ -63,7 +63,7 @@ const {
       const validateFields = () => {
         const errors: string[] = []; 
  
-        if (tenderData?.customerId == null || tenderData?.customerId == undefined) {
+        if (tenderData?.customerId == null || tenderData?.customerId == undefined||tenderData.customerId==0) {
           errors.push("Please select a customer.");
         }
         if (tenderData?.customerAddressId == 0 ) { 
@@ -173,15 +173,16 @@ const {
         if (tenderData?.supplyConditions?.eligibility.length == 0) {
           errors.push("Please select a eligibility field.");
         }
+        console.log(tenderData);
 
+        
         const applicableConditions =tenderData?.supplyConditions?.applicableConditions ?? [];
-
         applicableConditions.forEach((condition, index) => {
           if(condition.status == "ACTV"){
-            if (!condition.type?.toString().trim()) {
+            if (condition.type?.toString().trim()=="") {
               errors.push(`Applicable Condition ${index + 1}: Type is required.`);
             }
-            if (!condition.notes?.trim()) {
+            if (condition.notes?.trim()=="") {
               errors.push(`Applicable Condition ${index + 1}: Notes are required.`);
             }
           }
