@@ -44,7 +44,7 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
     fetchAndSetOriginalTender,
   } = useTenderData();
   const [isCsvWhite, setIsCsvWhite] = useState(false);
-  const [orderId] = useState<string>(paramOrderId?.toString());
+  const [orderId,setOrderId] = useState<string>(paramOrderId?.toString());
   const appTitle = useRef<string>("New");
  
   const version = 1;
@@ -52,16 +52,13 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
   const [tabs, setTabs] = useState([
     { tabId: "0", tabName: "Basic Details" },
     { tabId: "v1", tabName: "Products ₹ (V1)" },
-    { tabId: "v1", tabName: "Products ₹ (V1)" },
     { tabId: "2", tabName: "Documents" },
   ]);
 
   const [displayFlag, setDisplayFlag] = useState<"New" | "Existing">(
     "Existing"
   );
-  useEffect(() => {
-    fetchAndSetOriginalTender(9163);
-  }, []);
+
   useEffect(() => {
     const revisionTabs = tenderData.tenderRevisions.map((rev) => ({
       tabId: `v${rev.version}`,
@@ -99,6 +96,8 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number }> = ({
       appTitle.current = "New Order";
     } else if (Number(orderId) > 0) {
       setDisplayFlag("Existing");
+      fetchAndSetOriginalTender(Number(orderId));
+
     } else {
     }
   }, [orderId]);

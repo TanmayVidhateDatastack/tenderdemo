@@ -56,7 +56,7 @@ const DsAddProduct: React.FC<addProductProps> = ({
           productId: product.result.id,
           requestedQuantity:Number(qtyInputVal),
           product: {
-            name: product.result.name,
+            productName: product.result.name,
             productPackingSize: product.result.cartonSize,
             dataSource :"fetch",
 

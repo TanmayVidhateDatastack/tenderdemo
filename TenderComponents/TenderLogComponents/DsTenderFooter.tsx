@@ -44,7 +44,7 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
   const dispatch = useAppDispatch<AppDispatch>();  
   const role = useAppSelector((state: RootState) => state.user.role);
   const [toasterVisible, setToasterVisible] = useState<boolean>(false);
-
+const {updateTender}=useTenderData();
   const handleFetch = async () => {
     try {
       const res = await fetchData({ url: getTenderUserRoles });
@@ -310,7 +310,7 @@ export const DSTendrFooter: React.FC<dsTenderfooter> = ({
         <DsSplitButton
           buttonViewStyle="btnContained"
           onClick={() => {
-            if (saveTender) saveTender("Draft");
+            updateTender("DRAFT");
           }}
           onSplitClick={(e) =>
             displayContext(e, "contextMenuId4", "top", "center")

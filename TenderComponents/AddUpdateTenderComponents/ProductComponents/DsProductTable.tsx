@@ -61,7 +61,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
             100 || 0;
       }
       if (tenderproduct.ptrPercent && tenderproduct.product.ptr)
-        calculated.supplierDiscount =
+        calculated.stockiestDiscountValue =
           Number(tenderproduct.product.ptr) * (tenderproduct.ptrPercent / 100);
       if (calculated.product)
         calculated.product.netValue =
@@ -103,7 +103,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
           1,
           product.id,
           "product.name",
-          product.product.name || ""
+          product.product.productName || ""
         );
         updateTenderProduct(
           1,
@@ -226,7 +226,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
         {
             genericName: tenderproduct.requestedGenericName || "",
             productId: tenderproduct.productId || 0,
-            productName: tenderproduct.product.name || "",
+            productName: tenderproduct.product.productName || "",
           },
 
         content: [
@@ -304,7 +304,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
                   setHasChanges={setHasChanges}
                 />
               ) : (
-                tenderproduct.product?.name || "-"
+                tenderproduct.product?.productName || "-"
               ),
 
             className: styles.cellproductname,
@@ -436,7 +436,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
                 <DsTextField
                   inputType="number"
                   initialValue={
-                    tenderproduct.supplierDiscount?.toFixed(2) || ""
+                    tenderproduct.stockiestDiscountValue?.toFixed(2) || ""
                   }
                   onChange={(e) =>
                     handleFieldChange(
