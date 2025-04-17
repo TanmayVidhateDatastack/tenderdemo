@@ -160,7 +160,6 @@ const DsBasicDetails = () => {
     handleFetch();
     handleRoleFetch();
   }, []);
- 
   useEffect(() => {
     console.log("metadata : ", metadata);
     if (metadata.length > 0 && metadata[0]?.depositeDocument) {

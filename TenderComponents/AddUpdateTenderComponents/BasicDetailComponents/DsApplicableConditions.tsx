@@ -78,9 +78,9 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
       >((acc, opt) => { 
         const val = opt.value;  
         if (typeof val === "string") {
-          acc[val] = tenderDataCopy.supplyConditions.applicableConditions.some(
+          acc[val] = tenderDataCopy.id?tenderDataCopy.supplyConditions.applicableConditions.some(
             (ac) => ac.type == opt.value && ac.status == "ACTV"
-          ); // Add string keys directly to the object
+          ):true; // Add string keys directly to the object
         }
 
         return acc;
@@ -165,9 +165,9 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
               name={checkbox.label}
               value={checkbox.value.toString()}
               label={checkbox.label}
-              defaultChecked={tenderDataCopy?.supplyConditions.applicableConditions?.some(
-                (fee) => fee.type == checkbox.value
-              )}
+              defaultChecked={tenderDataCopy.id? tenderDataCopy?.supplyConditions.applicableConditions?.some(
+                (ac) => ac.type == checkbox.value
+              ):true}
             />
           ))}
         <DsButton

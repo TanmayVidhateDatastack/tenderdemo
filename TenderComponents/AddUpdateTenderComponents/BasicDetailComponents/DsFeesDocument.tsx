@@ -194,7 +194,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               placeholder={"Please search and select here"}
               setSelectOption={(option) => {
                 if (typeof option.value == "string") {
-                  updateTenderFee(type, "paymentMode", option.label);
+                  updateTenderFee(type, "paymentMode", option.value);
                 }
               }}
             ></DsSingleSelect>
