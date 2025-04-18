@@ -132,31 +132,31 @@ const {
         fees.forEach((fee, index) => {
           if (fee.status == "ACTV") {
             if (!fee.feesType?.toString().trim()) {
-              errors.push(`Fee ${index + 1}: Please select a fee type.`);
+              errors.push(`${fee.feesType}: Please select a fee type.`);
             }
 
             if (fee.amount == null || fee.amount === 0) {
-              errors.push(`Fee ${index + 1}: Please enter a valid amount.`);
+              errors.push(`${fee.feesType}: Please enter a amount.`);
             }
 
             if (!fee.currency?.trim()) {
-              errors.push(`Fee ${index + 1}: Currency is required.`);
+              errors.push(`${fee.feesType}: Currency is required.`);
             }
 
             if (!fee.paidBy?.trim()) {
-              errors.push(`Fee ${index + 1}: Please select who paid the fee.`);
+              errors.push(`${fee.feesType}: Please select who paid the fee.`);
             }
 
             if (!fee.paymentDueDate?.trim()) {
-              errors.push(`Fee ${index + 1}: Payment due date is required.`);
+              errors.push(`${fee.feesType}: Payment due date is required.`);
             } else if (new Date(fee.paymentDueDate) < todaysDate) {
               errors.push(
-                `Fee ${index + 1}: Payment due date should not be in the past.`
+                `${fee.feesType}: Payment due date should not be in the past.`
               );
             }
 
             if (!fee.instructionNotes?.trim()) {
-              errors.push(`Fee ${index + 1}: Please enter instruction notes.`);
+              errors.push(`${fee.feesType} ${index + 1}: Please enter instruction notes.`);
             }
           }
         });
@@ -172,18 +172,16 @@ const {
         }
         if (tenderData?.supplyConditions?.eligibility.length == 0) {
           errors.push("Please select a eligibility field.");
-        }
-        console.log(tenderData);
-
+        } 
         
         const applicableConditions =tenderData?.supplyConditions?.applicableConditions ?? [];
         applicableConditions.forEach((condition, index) => {
           if(condition.status == "ACTV"){
             if (condition.type?.toString().trim()=="") {
-              errors.push(`Applicable Condition ${index + 1}: Type is required.`);
+              errors.push(`${condition.type} : Type is required.`);
             }
             if (condition.notes?.trim()=="") {
-              errors.push(`Applicable Condition ${index + 1}: Notes are required.`);
+              errors.push(`${condition.type}: Notes are required.`);
             }
           }
         }); 
@@ -195,10 +193,10 @@ const {
       if (validate.length === 0) {
         saveTender("Draft");
       } else {  
-        const message = (
+        const message = ( 
           <> 
             <div className={styles["toaster-message-grid"]}>
-              {validate.map((ms, index) => ( 
+              {validate.map((ms, index) => (  
                 <div key={index} className={styles["toaster-item"]}>
                   {ms} 
                 </div>
@@ -331,7 +329,7 @@ const {
       <div className={styles.footer}>
         <DsNavTo
           id="closeBtn"
-          location=""
+          location="" 
           label="Close"
           buttonSize="btnLarge"
           className={btnStyles.btnOutlined}

@@ -141,8 +141,8 @@ export type TenderData = {
   submissionDate: string;
   rateContractValidity: string;
   submissionMode: string;
-  deliveryPeriod: number;
-  extendedDeliveryPeriod: number;
+  deliveryPeriod: number |null;
+  extendedDeliveryPeriod: number |null;
   lateDeliveryPenalty: number;
   tenderUrl: string;
   shippingLocations: number[];
@@ -336,9 +336,9 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     submissionDate: "",
     rateContractValidity: "",
     submissionMode: "",
-    deliveryPeriod: 0,
-    extendedDeliveryPeriod: 0,
-    lateDeliveryPenalty: 0,
+    deliveryPeriod: null,
+    extendedDeliveryPeriod: null,
+    lateDeliveryPenalty: 0, 
     tenderUrl: "",
     shippingLocations: [ ],
     applierType: "",
@@ -1106,7 +1106,6 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     </TenderDataContext.Provider>
   );
 };
-
 // ✅ Custom hook to access context
 export const useTenderData = () => {
   const context = useContext(TenderDataContext);

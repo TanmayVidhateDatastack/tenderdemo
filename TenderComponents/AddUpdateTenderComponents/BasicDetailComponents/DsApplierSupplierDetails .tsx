@@ -204,7 +204,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
           <DsSelectMultiLevel
             isSearchable={true}
             options={appliedBy}
-            label="Applied By"
+            label="Applied by"
             {...(tenderDataCopy.id
               ? {
                   selectedOption: {
@@ -246,7 +246,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
                   },
                 }
               : {})}
-            label="Supplied By"
+            label="Supplied by"
             placeholder={"Please search or select here"}
             id={"suppliedBy"}
             onSelect={handleSuppliedBySelects}
