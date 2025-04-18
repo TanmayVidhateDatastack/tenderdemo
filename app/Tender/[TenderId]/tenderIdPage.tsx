@@ -9,7 +9,7 @@ import {
 import { useTabState } from "@/Redux/hook/tabHook"; // Import the custom hook
 import DSTendrFooter from "@/TenderComponents/TenderLogComponents/DsTenderFooter";
 import style from "./tenderOrder.module.css";
-import Toaster from "@/Elements/DsComponents/DsToaster/DsToaster";
+import Toaster, { hideToaster } from "@/Elements/DsComponents/DsToaster/DsToaster";
 import { closeTimeForTender, DsStatus } from "@/Common/helpers/constant";
 import pagestyles from "@/app/page.module.css";
 import { closeAllContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
@@ -44,6 +44,7 @@ const DsTenderIdPage: React.FC<{
     setActionStatusValues,
     actionStatus,
     saveTender,
+    updateTender,
     fetchAndSetOriginalTender,
   } = useTenderData();
   const [isCsvWhite, setIsCsvWhite] = useState(false);
@@ -59,9 +60,11 @@ const DsTenderIdPage: React.FC<{
   ]);
 
   const [displayFlag, setDisplayFlag] = useState<"New" | "Existing">(
-    "Existing"
+    "Existing" 
   );
-
+  useEffect(() => {
+    // fetchAndSetOriginalTender(9917); 
+  }, []);
   useEffect(() => {
     const revisionTabs = tenderData.tenderRevisions.map((rev) => ({
       tabId: `v${rev.version}`,
@@ -72,7 +75,7 @@ const DsTenderIdPage: React.FC<{
       ...revisionTabs,
       { tabId: "2", tabName: "Documents" },
     ]);
-    setTimeout(() => {
+    setTimeout(() => {  
       if (
         tenderData.status == "AWARDED" ||
         tenderData.status == "PARTIALLY_AWARDED" ||
@@ -411,7 +414,6 @@ const DsTenderIdPage: React.FC<{
                           label="Add Documents"
                         />
                       </div>
-
                       <DocumentSelectorArea />
                     </div>
                   );
@@ -428,9 +430,6 @@ const DsTenderIdPage: React.FC<{
             </TabView>
           </div>
           <DSTendrFooter
-            setActionStatus={setActionStatusValues}
-            saveTender={saveTender}
-            tenderData={null}
           />
         </DsApplication>
         <DsPane
@@ -442,14 +441,34 @@ const DsTenderIdPage: React.FC<{
         >
           <DsAddTenderDocumentPane />
         </DsPane>
-        <Toaster
+        {/* <Toaster
           handleClose={() => {}}
-          id={"create-order-toaster"}
-          type={actionStatus?.notiType}
-          message={actionStatus?.notiMsg}
-          position={"top"}
-          duration={closeTimeForTender}
-        />
+          id={"create-order-toaster"} 
+          type={actionStatus?.notiType} 
+          message={actionStatus?.notiMsg} 
+          position={"top"} 
+          duration={closeTimeForTender} 
+        /> */}
+
+         <Toaster
+        handleClose={() => {
+          hideToaster("create-order-toaster");
+          // setShowNotification(false);
+          // if (actionStatus?.notiType == "success")
+          // window.location.reload();
+        }}
+        id={"create-order-toaster"}
+        type={actionStatus?.notiType}
+        message={actionStatus?.notiMsg}
+        position={"top"}
+        duration={
+          actionStatus?.isOkayButtonVisible === true
+            ? undefined
+            : closeTimeForTender
+        }
+        isOkayButton={actionStatus?.isOkayButtonVisible}
+      />
+
       </DocumentProvider>
     </>
   );

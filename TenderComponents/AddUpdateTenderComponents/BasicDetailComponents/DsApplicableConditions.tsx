@@ -32,7 +32,7 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
     DsSelectOption[]
   >([]);
   
-  const { addApplicableCondition, removeApplicableCondition } = useTenderData();
+  const { addApplicableCondition, removeApplicableCondition,tenderDataCopy,tenderData,updateApplicableCondition } = useTenderData();
   const [conditionsVisibility, setConditionsVisibility] = useState<
     Record<string, boolean>
   >({});
@@ -51,11 +51,13 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
       if (checkbox?.checked) { 
         selectedConditions.add(id); // 🔥 Add to Set (prevents duplicates)
         conditionsVisibility[id] = true;
-        addApplicableCondition(id);
+        if (tenderData.supplyConditions.applicableConditions.some((ac) => ac.type == id))
+          updateApplicableCondition(id, "status", "ACTV");
+        else addApplicableCondition(id);
       } else {
         selectedConditions.delete(id); // 🔥 Remove if unchecked
         conditionsVisibility[id] = false;
-        removeApplicableCondition(id);
+        updateApplicableCondition(id, "status", "INAC");
       }
     });
     closeAllContext();
@@ -73,11 +75,12 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
 
       const options: Record<string, boolean> = mappedConditions.reduce<
         Record<string, boolean>
-      >((acc, opt) => {
-        const val = opt.value;
-
+      >((acc, opt) => { 
+        const val = opt.value;  
         if (typeof val === "string") {
-          acc[val] = true; // Add string keys directly to the object
+          acc[val] = tenderDataCopy.id?tenderDataCopy.supplyConditions.applicableConditions.some(
+            (ac) => ac.type == opt.value && ac.status == "ACTV"
+          ):true; // Add string keys directly to the object
         }
 
         return acc;
@@ -85,40 +88,48 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
 
       setConditionsVisibility(options);
     }
+  }, [applicableConditions,tenderDataCopy]);
+
+useEffect(() => {
+    applicableConditions.forEach((opt) => {
+      const id = opt.value.toString(); 
+      // if(tenderData.tenderFees.find((x)=> x.feesType==id)?.status=="INAC"){ 
+      //   console.log("Inactive ",id);
+      // }
+      // else if (tenderData.tenderFees.find((x)=> x.feesType==id)?.status=="ACTV"){
+      //   console.log("active ",id);
+      // }
+      const checkbox = document.getElementById(id) as HTMLInputElement;
+      selectedConditions.add(id);
+      conditionsVisibility[id] = true;
+      // addTenderFee(id);
+      if (checkbox?.checked) {
+        selectedConditions.add(id);
+        conditionsVisibility[id] = true;
+        console.log(id);
+        if (tenderData.tenderFees.some((fee) => fee.feesType == id))
+          updateApplicableCondition(id, "status", "ACTV");
+        else addApplicableCondition(id);
+      } else if (checkbox) {
+        selectedConditions.add(id);
+        conditionsVisibility[id] = true;
+        console.log(id);
+        if (tenderData.tenderFees.some((fee) => fee.feesType == id))
+          updateApplicableCondition(id, "status", "ACTV");
+        else addApplicableCondition(id);
+      } else {
+        selectedConditions.delete(id);
+        conditionsVisibility[id] = false;
+        updateApplicableCondition(id, "status", "INAC");
+      }
+    });
   }, [applicableConditions]);
-
-
   useEffect(() => {
-    // createContext(
-    //   contextMenuId,
-    //   <>
-    //     <div>
-    //       {applicableCheckboxes.map((checkbox, index) => (
-    //         <Ds_checkbox
-    //           key={index} // Unique key
-    //           id={checkbox.value.toString()}
-    //           name={checkbox.label}
-    //           value={checkbox.value.toString()}
-    //           label={checkbox.label}
-    //           defaultChecked={true}
-    //         />
-    //       ))}
-    //     </div>
-    //     <DsButton
-    //       label="Add"
-    //       buttonViewStyle="btnContained"
-    //       className={styles.addBtn}
-    //       buttonSize="btnLarge"
-    //       onClick={() => handleAdd()}
-    //     />{" "}
-    //   </>,
-    //   true
-    // ); 
+    
     window.addEventListener("click", (e) => {
       const target = (e.target as HTMLElement).closest(
         `.${styles["depositsBtn"]}`
       );
-
       const target2 = (e.target as HTMLElement).closest(`#${contextMenuId}`);
 
       if (!target && !target2) {
@@ -159,7 +170,6 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
             >
               <IconFactory name="dropDownArrow" />
             </div>
-        
         }
           onClick={(e) => handleonclick(e)}
         />
@@ -179,7 +189,7 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
           );   
       })} 
       <ContextMenu id={contextMenuId} content={
-        <>
+        <> 
         <div className={styles.applicableDeposit}>
           {applicableCheckboxes.map((checkbox, index) => (  
             <Ds_checkbox
@@ -188,7 +198,9 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
               name={checkbox.label}
               value={checkbox.value.toString()}
               label={checkbox.label}
-              defaultChecked={true} 
+              defaultChecked={tenderDataCopy.id? tenderDataCopy?.supplyConditions.applicableConditions?.some(
+                (ac) => ac.type == checkbox.value
+              ):true}
             />
           ))}
         <DsButton

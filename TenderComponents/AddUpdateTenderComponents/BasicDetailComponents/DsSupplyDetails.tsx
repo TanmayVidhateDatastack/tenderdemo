@@ -32,15 +32,33 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
       label: x,
     };
   });
+   const [selectedSupplyPoint, setSelectedSupplyPoint] =
+    useState<DsSelectOption>();
+  useEffect(() => {
+    const supplyPoint =tenderData.supplyConditions.supplyPoint
+    if (supplyPoint) {
+      const option =supplyDetails.supplyPoints.find((x) => x.value == supplyPoint);
+      if (option) setSelectedSupplyPoint(option);
+    }
+  }, [tenderData.supplyConditions.supplyPoint]);
+
+  const [selectedtTestReportRequired, setSelectedtTestReportRequired] =
+  useState<DsSelectOption>();
+useEffect(() => {
+  const testReportRequired =tenderData.supplyConditions.testReportRequired
+  if (testReportRequired) {
+    const option =supplyDetails.reportRequirements.find((x) => x.value == testReportRequired);
+    if (option) setSelectedtTestReportRequired(option);
+  }
+}, [tenderData.supplyConditions.testReportRequired]);
+
+
   return (
     <>
       <div>Supply Conditions </div>
       <div className={styles.inputDetails}>
         <DsSingleSelect
-          selectedOption={{
-            value: tenderData.supplyConditions.supplyPoint,
-            label: tenderData.supplyConditions.supplyPoint,
-          }}
+          selectedOption={selectedSupplyPoint}
           options={supplyDetails.supplyPoints}
           label="Supply point"
           placeholder={"Please select here"}
@@ -65,10 +83,7 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
         ></DsTextField>
 
         <DsSingleSelect
-          selectedOption={{
-            value: tenderData.supplyConditions.testReportRequired,
-            label: tenderData.supplyConditions.testReportRequired,
-          }}
+          selectedOption={selectedtTestReportRequired}
           options={supplyDetails.reportRequirements}
           label="Test report requirement"
           placeholder={"Please select here"}

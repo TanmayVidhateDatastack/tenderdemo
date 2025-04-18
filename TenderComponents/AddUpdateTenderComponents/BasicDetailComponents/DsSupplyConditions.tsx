@@ -48,29 +48,6 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
           </div>
         </div>
         <div className={styles.attachFileBtn}>
-          {/* <DsCsvUpload
-            id="upload1"
-            label="Attach File"
-            buttonViewStyle="btnText" 
-            buttonSize="btnSmall"
-            startIcon={<IconFactory name="fileAttach" /> }
-          // onSetFiles={(id) => {
-          //   getFilesFromLocalStorage(id).then((files) => {
-          //     if (files && files.length > 0) {
-          //       const documentArray = files.map((file) => ({ 
-          //         name: file.attributes.name,
-          //         document: file.file
-          //       }));
- 
-          //       updateApplicableCondition(
-          //         id.replace("conditionsView", ""),
-          //         "documents",
-          //         documentArray    
-          //       );
-          //     }
-          //   });
-          // }}
-          ></DsCsvUpload> */}
 
           <DsCsvUpload
             id={id + "UploadedDocuments"}

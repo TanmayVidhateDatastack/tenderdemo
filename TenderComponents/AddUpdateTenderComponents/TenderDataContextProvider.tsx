@@ -20,11 +20,13 @@ import React, {
 } from "react";
 import { generatePatchDocument } from "@/Common/helpers/Method/UpdatePatchObjectCreation";
 import DsSupplyConditions from "./BasicDetailComponents/DsSupplyConditions";
-class ActionStatus {
-  notiType: "success" | "bonus" | "info" | "error" | "cross" = "success";
-  notiMsg: string = "";
-  showNotification: boolean = false;
-}
+
+  class ActionStatus {
+    notiType: "success" | "bonus" | "info" | "error" | "cross" = "success";
+    notiMsg: string | React.ReactNode = "";
+    showNotification: boolean = false;
+    isOkayButtonVisible?: boolean = false;
+  }
 export type Document = {
   name: string;
   document: File;
@@ -48,7 +50,7 @@ export type TenderProduct = {
   requestedPackingSize?: string;
   productId?: number;
   lpr?: number;
-  competitorId?: number;
+  lastPurchasedFrom?: number;
   proposedRate?: number;
   ptrPercentage?: number;
   stockistDiscountValue?: number;
@@ -139,8 +141,8 @@ export type TenderData = {
   submissionDate: string;
   rateContractValidity: string;
   submissionMode: string;
-  deliveryPeriod: number;
-  extendedDeliveryPeriod: number;
+  deliveryPeriod: number |null;
+  extendedDeliveryPeriod: number |null;
   lateDeliveryPenalty: number;
   tenderUrl: string;
   shippingLocations: number[];
@@ -334,11 +336,11 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     submissionDate: "",
     rateContractValidity: "",
     submissionMode: "",
-    deliveryPeriod: 0,
-    extendedDeliveryPeriod: 0,
-    lateDeliveryPenalty: 0,
+    deliveryPeriod: null,
+    extendedDeliveryPeriod: null,
+    lateDeliveryPenalty: 0, 
     tenderUrl: "",
-    shippingLocations: [1, 2],
+    shippingLocations: [ ],
     applierType: "",
     applierId: 0,
     supplierType: "",
@@ -484,7 +486,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         updatedTenderFees.push({
           feesType: type,
           amount: 0,
-          currency: "",
+          currency: "INR",
           paidBy: "",
           paymentMode: "",
           paymentDueDate: "",
@@ -703,7 +705,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 proposedRate: x.proposedRate,
                 ptrPercentage: x.ptrPercentage,
                 lpr: x.lpr,
-                competitorId: x.competitorId,
+                lastPurchasedFrom: x.lastPurchasedFrom,
                 stockistDiscountValue: x.stockistDiscountValue,
               } as TenderProduct;
             }),
@@ -894,7 +896,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   // Save Order API Call
 
   const saveTender = useCallback(
-    async (status: dsStatus) => {
+    async (status: string) => {
       if (!tenderData) return;
       const tenderSaveData = {
         customerId: tenderData.customerId,
@@ -972,6 +974,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         status: status.toUpperCase(),
         lastUpdatedBy: 3,
       });
+
       console.log("sAVEEEE", dataToSend);
       try {
         await fetchData({
@@ -1109,9 +1112,9 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             setActionStatus({
               notiMsg: "Tender Updated Successfully",
               notiType: "success",
-              showNotification: true,
+              showNotification: true, 
             });
-            showToaster("create-order-toaster");
+            showToaster("create-order-toaster"); 
             setTimeout(() => {
               goBack();
             }, closeTimeForTender);
@@ -1334,7 +1337,6 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     </TenderDataContext.Provider>
   );
 };
-
 // ✅ Custom hook to access context
 export const useTenderData = () => {
   const context = useContext(TenderDataContext);
