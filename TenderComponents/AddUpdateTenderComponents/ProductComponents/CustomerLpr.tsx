@@ -4,7 +4,10 @@ import lprSVG from "@/Common/TenderIcons/smallIcons/lpr.svg";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Company, datalistOptions } from "@/Common/helpers/types";
-import ContextMenu, { createContext, displayContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
+import ContextMenu, {
+  createContext,
+  displayContext,
+} from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import CompanySearch from "./companySearch";
 import styles from "../../AddUpdateTenderComponents/BasicDetailComponents/tender.module.css";
 import DsIconButton from "@/Elements/DsComponents/DsButtons/dsIconButton";
@@ -17,6 +20,7 @@ export interface CustomerLPRProps {
   lprTo?: Company;
   onValueChange?: (value: string) => void;
   onCompanyChange?: (company: Company) => void;
+  disable: boolean;
 }
 const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
   index,
@@ -24,6 +28,7 @@ const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
   lprTo,
   onValueChange,
   onCompanyChange,
+  disable,
 }) => {
   const [isLPR, setIsLpr] = useState<boolean>(false);
 
@@ -54,68 +59,82 @@ const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
   }, [lprTo]);
   return (
     <div className={styles.LPR} id={"Lpr" + index}>
-      <DsTextField
-        id={"LprValue" + index}
-        initialValue={lprValue ? lprValue.toString() : ""}
-        onChange={(e) => {
-          if (e.target.value && onValueChange) onValueChange(e.target.value);
+      {!disable ? (
+        <DsTextField
+          id={"LprValue" + index}
+          initialValue={lprValue ? lprValue.toString() : ""}
+          onChange={(e) => {
+            if (e.target.value && onValueChange) onValueChange(e.target.value);
+          }}
+        />
+      ) : lprValue ? (
+        lprValue.toString()
+      ) : (
+        ""
+      )}
+
+      <div
+        style={{
+          position: "relative",
+          height: "0.23em",
+          width: "0.5.5em",
         }}
-      />
+      >
+        {isLPR ? (
+          <>
+            <div
+              className={styles.lprwitharrow}
+              onClick={(e) => {
+                if (!disable) {
+                  displayContext(e, "customerLpr", "horizontal", "right");
+                }
+              }}
+            >
+              <Image src={lprSelectedSVG} alt="LPR To" />
+              <div style={{ height: "0.5em", width: "0.5em" }}>
+                <IconFactory name="dropDownArrow" />
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            <div
+              className={styles.lprwitharrow}
+              onClick={(e) =>
+                displayContext(e, "customerLpr", "horizontal", "right")
+              }
+            >
+              <Image src={lprSVG} alt="LPR To" />
+              <div style={{ height: "1em", width: "1em" }}>
+                <IconFactory name="dropDownArrow" />
+              </div>
+            </div>
+          </>
+        )}{" "}
+      </div>
+      <ContextMenu
+        id="customerLpr"
+        showArrow={true}
+        content={
           <div
             style={{
-              position: "relative",
-              height: "0.23em",
-              width: "0.5.5em",
+              display: "flex",
+              padding: "0.5em",
+              flexDirection: "column",
             }}
           >
-            {isLPR ? (
-              <>
-                <div className={styles.lprwitharrow}
-                onClick={(e) =>
-                                displayContext(e, "customerLpr", "horizontal", "right")
-                              }
-                              >
-                  <Image src={lprSelectedSVG} alt="LPR To" />
-                  <div style={{ height: "0.5em", width: "0.5em" }}>
-                    <IconFactory name="dropDownArrow" />
-                  </div>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className={styles.lprwitharrow}
-                      onClick={(e) =>
-                        displayContext(e, "customerLpr", "horizontal", "right")
-                      }>
-                  <Image src={lprSVG} alt="LPR To" />
-                  <div style={{ height: "1em", width: "1em" }}>
-                    <IconFactory name="dropDownArrow" />
-                  </div>
-                </div>
-              </>
-            )}{" "}
-          </div>
-          <ContextMenu
-  id="customerLpr"
-  showArrow={true}
-  content={
-    <div style={{display:"flex", padding:"0.5em", flexDirection:"column"}}>
-      <DsTextField
-        id="customerlpr"
-        label="Write Competiter name"
-      />
+            <DsTextField id="customerlpr" label="Write Competiter name" />
 
-      <DsButton
-        id="approveButton"
-        label="Save"
-        buttonViewStyle="btnContained"
-        buttonColor="btnPrimary"
-        buttonSize="btnSmall"
+            <DsButton
+              id="approveButton"
+              label="Save"
+              buttonViewStyle="btnContained"
+              buttonColor="btnPrimary"
+              buttonSize="btnSmall"
+            />
+          </div>
+        }
       />
-   
-    </div>
-  }
-/>
     </div>
   );
 };

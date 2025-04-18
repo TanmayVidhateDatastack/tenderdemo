@@ -17,7 +17,7 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
     DsSelectOption[]
   >([]);
   useEffect(() => {
-    const eligibility = [...tenderData.supplyConditions.eligibility];
+    const eligibility = [...tenderData.tenderSupplyConditions[0].eligibility];
     const selectedEl = eligibility.map((x) => {
       return {
         value: x,
@@ -25,33 +25,36 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
       };
     });
     setSelectedEligibility(selectedEl);
-  }, [tenderData.supplyConditions.eligibility]);
-  tenderData.supplyConditions.eligibility.map((x) => {
+  }, [tenderData.tenderSupplyConditions[0].eligibility]);
+  tenderData.tenderSupplyConditions[0].eligibility.map((x) => {
     return {
       value: x,
       label: x,
     };
   });
-   const [selectedSupplyPoint, setSelectedSupplyPoint] =
+  const [selectedSupplyPoint, setSelectedSupplyPoint] =
     useState<DsSelectOption>();
   useEffect(() => {
-    const supplyPoint =tenderData.supplyConditions.supplyPoint
+    const supplyPoint = tenderData.tenderSupplyConditions[0].supplyPoint;
     if (supplyPoint) {
-      const option =supplyDetails.supplyPoints.find((x) => x.value == supplyPoint);
+      const option = supplyDetails.supplyPoints.find(
+        (x) => x.value == supplyPoint
+      );
       if (option) setSelectedSupplyPoint(option);
     }
-  }, [tenderData.supplyConditions.supplyPoint]);
+  }, [tenderData.tenderSupplyConditions[0].supplyPoint]);
 
   const [selectedtTestReportRequired, setSelectedtTestReportRequired] =
-  useState<DsSelectOption>();
-useEffect(() => {
-  const testReportRequired =tenderData.supplyConditions.testReportRequired
-  if (testReportRequired) {
-    const option =supplyDetails.reportRequirements.find((x) => x.value == testReportRequired);
-    if (option) setSelectedtTestReportRequired(option);
-  }
-}, [tenderData.supplyConditions.testReportRequired]);
-
+    useState<DsSelectOption>();
+  useEffect(() => {
+    const testReportRequired = tenderData.tenderSupplyConditions[0].testReportRequired;
+    if (testReportRequired) {
+      const option = supplyDetails.reportRequirements.find(
+        (x) => x.value == testReportRequired
+      );
+      if (option) setSelectedtTestReportRequired(option);
+    }
+  }, [tenderData.tenderSupplyConditions[0].testReportRequired]);
 
   return (
     <>
@@ -70,7 +73,7 @@ useEffect(() => {
         ></DsSingleSelect>
         <DsTextField
           maxLength={10}
-          initialValue={tenderData.supplyConditions.consigneesCount.toString()}
+          initialValue={tenderData.tenderSupplyConditions[0].consigneesCount.toString()}
           inputType="positive"
           label="Provide no. of consignees"
           // placeholder="Please type here"
