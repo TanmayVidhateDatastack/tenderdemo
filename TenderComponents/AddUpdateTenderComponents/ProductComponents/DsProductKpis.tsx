@@ -23,9 +23,9 @@ interface ProductKpiProps {
 }
  
 const DsProductKpis: React.FC<ProductKpiProps> = ({ productData: data }) => {
-  console.log("product table data ", data);
+ 
     if (!Array.isArray(data)) {
-        console.error("Invalid data format:", data);
+      
         return ;
     }
  
@@ -35,17 +35,17 @@ const DsProductKpis: React.FC<ProductKpiProps> = ({ productData: data }) => {
 
     const marginCount = data.filter(item => {
       const margin = Number(item?.product?.marginValue ?? NaN);
-      console.log(`Checking margin: ${margin}, Condition: ${margin < marginPercentLimit}`);
+    
       return !isNaN(margin) && margin < marginPercentLimit;
     }).length;
     
    
-    console.log("Final Margin Count:", marginCount);
+   
    
  
  
-    console.log("Total Products:", totalProducts);
-    console.log("Products with Margin < 30:", marginCount);
+    // console.log("Total Products:", totalProducts);
+    // console.log("Products with Margin < 30:", marginCount);
  
     const totalNetValueSum = Array.isArray(data)
     ? data.reduce((sum, item) => {
@@ -66,7 +66,7 @@ const DsProductKpis: React.FC<ProductKpiProps> = ({ productData: data }) => {
       }, 0)
     : NaN;
    
-    console.log("totalNetValueSum",totalNetValueSum);
+    // console.log("totalNetValueSum",totalNetValueSum);
  
     const totalMarginProductSum = Array.isArray(data)
   ? data.reduce((sum, item) => {
@@ -86,7 +86,7 @@ const DsProductKpis: React.FC<ProductKpiProps> = ({ productData: data }) => {
     }, 0)
   : NaN;
  
-console.log("Total Margin Product Sum:", totalMarginProductSum);
+// console.log("Total Margin Product Sum:", totalMarginProductSum);
  
  
 const totalMarginPercentage =
@@ -94,13 +94,13 @@ const totalMarginPercentage =
     ? NaN
     : (totalMarginProductSum / totalNetValueSum) * 100;
  
-console.log("Total Margin Percentage:", totalMarginPercentage);
+// console.log("Total Margin Percentage:", totalMarginPercentage);
  
  
    const totalStockistDiscountSum = Array.isArray(data)
     ? data.reduce((sum, item) => {
         const qty = item?.requestedQuantity?? null;
-        const stockistDiscount = item?.supplierDiscount?? null;
+        const stockistDiscount = item?.stockistDiscountValue?? null;
  
         // If both qty and netValue are null, skip this row
         if (qty === null && stockistDiscount === null) {
@@ -116,14 +116,14 @@ console.log("Total Margin Percentage:", totalMarginPercentage);
     : NaN;
  
  
-    console.log("totalStockistDiscountSum",totalStockistDiscountSum)
+    // console.log("totalStockistDiscountSum",totalStockistDiscountSum)
    
     const totalStockistPercentage =
     isNaN(totalStockistDiscountSum) || isNaN(totalNetValueSum) || totalNetValueSum === 0
       ? NaN
       : (totalStockistDiscountSum / totalNetValueSum) * 100;
  
-  console.log("Total Stockist Percentage:", totalStockistPercentage);
+  // console.log("Total Stockist Percentage:", totalStockistPercentage);
    
  
     return (

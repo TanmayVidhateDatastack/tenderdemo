@@ -3,17 +3,18 @@ import { TenderDataProvider } from "@/TenderComponents/AddUpdateTenderComponents
 import DsTenderIdPage from "./tenderIdPage";
  export type ParamType = {
   params: {
-    orderId: string | number;
+    TenderId: string | number;
   };
 };
 export default function Home(param:ParamType) {
 
-const paramOrderId: string | number = param?.params?.orderId;
+const paramOrderId: string | number = param?.params?.TenderId;
+const storedStatus = sessionStorage.getItem("tenderStatus")||undefined;
  
   return (
     <> 
       <TenderDataProvider>
-        <DsTenderIdPage paramOrderId={paramOrderId} />    
+        <DsTenderIdPage paramOrderId={paramOrderId} tenderStatus={storedStatus}/>    
       </TenderDataProvider>
     </>
   );

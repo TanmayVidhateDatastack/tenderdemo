@@ -117,7 +117,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
         setAllSuppliedBy(suppliedBys);
         setSuppliedBy(suppliedBys);
       } else {
-        console.error("Error fetching data: ", res.message || "Unknown error");
+        // console.error("Error fetching data: ", res.message || "Unknown error");
       }
     } catch (error) {
       console.error("Fetch error: ", error);
@@ -140,7 +140,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
         }));
         setFormatedDepot(formatedDepot);
         if (res?.code === 200 && res?.result) {
-          console.log("stored depot result:", res.result);
+          // console.log("stored depot result:", res.result);
         } else {
           console.error("Error: Invalid data format or empty depot");
         }
@@ -219,7 +219,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
             onSelect={handleAppliedBySelect}
             setSelectOption={(isDataListOptions, option) => {
               setSelected(option);
-              console.log("applieridoption", option);
+              // console.log("applieridoption", option);
               if (isDataListOptions) {
                 updateTenderData("applierId", Number(option.id));
                 updateTenderData("applierType", option.attributes.type);

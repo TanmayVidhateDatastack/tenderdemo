@@ -11,22 +11,23 @@ import { version } from "os";
 const DsTenderProduct: React.FC<{
   productList: TenderProduct[];
   setProductList: (product: TenderProduct) => void;
-}> = ({ productList, setProductList }) => {
+  version:number;
+}> = ({ productList, setProductList,version }) => {
     const [fetchdata, setfetchdata] = useState<TenderProduct[] | null>(null);
  
     const handleFetch = async () => {
         try {
             const res = await fetchData({ url:  getProductURL});
-            console.log("Fetched Response:", res);
+            // console.log("Fetched Response:", res);
  
             if (res?.code === 200 && Array.isArray(res?.result)) {
                 setfetchdata(res.result);
             } else {
-                console.error("Invalid data format or empty result");
+                // console.error("Invalid data format or empty result");
                 setfetchdata([]);
             }
         } catch (error) {
-            console.error("Error fetching data:", error);
+            // console.error("Error fetching data:", error);
             setfetchdata([]);
         }
     };
@@ -42,7 +43,7 @@ const DsTenderProduct: React.FC<{
   <DsProductKpis productData={productList || fetchdata} />
 </div>
 
-      <DsProductTable version={1}  />
+      <DsProductTable version={version}  />
     </>
   );
 

@@ -147,7 +147,7 @@ const DsBasicDetails = () => {
       if (res.code === 200) {
         const result = res.result;
         setRole(result.roleName);
-        console.log("result teder role : ", result);
+        // console.log("result teder role : ", result);
       } else {
         console.error("Error fetching data: ", res.message || "Unknown error");
       }
@@ -161,7 +161,7 @@ const DsBasicDetails = () => {
     handleRoleFetch();
   }, []);
   useEffect(() => {
-    console.log("metadata : ", metadata);
+    // console.log("metadata : ", metadata);
     if (metadata.length > 0 && metadata[0]?.depositeDocument) {
       setDepositeDocuments(metadata[0].depositeDocument);
       setApplicableDocuments(metadata[0].applicableDeposits);
