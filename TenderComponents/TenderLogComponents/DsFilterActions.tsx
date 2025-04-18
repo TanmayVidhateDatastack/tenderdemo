@@ -171,7 +171,6 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
             buttonViewStyle={
               isFiltered["nearSubmission"] ? "btnContained" : "btnOutlined"
             }
-
             onClick={() => handleFilter("NEAR_SUBMISSION")}
             label="Near Submission"
           />

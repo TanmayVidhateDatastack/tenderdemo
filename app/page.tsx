@@ -347,6 +347,7 @@ export default function Home() {
         // console.log("objevct to be send", tenderFilters);
 
         if (res?.code === 200 && Array.isArray(res?.result)) {
+          console.log("getAllTenders:",res)
           const formattedData = formatTenders(res?.result);
           // console.log("formatted data:", formattedData);
           setData(formattedData);
@@ -382,6 +383,7 @@ export default function Home() {
       status: {
         tenderStatus: item.status?.tenderStatus ?? "-",
         message: item.status?.message ?? "-",
+        statusDescription:item.status?.tenderStatusDescription??"-"
       },
     }));
   };
@@ -695,18 +697,18 @@ export default function Home() {
               <DsStatusIndicator
                 type="user_defined"
                 className={`${
-                  t?.status?.tenderStatus
+                  t?.status?.statusDescription
                     ? styles[
-                        t?.status?.tenderStatus
+                        t?.status?.statusDescription
                           ?.replaceAll(" ", "_")
                           .toLowerCase()
                       ]
                     : ""
                 }`}
-                status={t.status.tenderStatus}
-                label={t.status.tenderStatus}
+                status={t.status.statusDescription}
+                label={t.status.statusDescription}
                 status_icon={
-                  <div style={{ width: "0.7em" }}>
+                  <div style={{ width: "0.7em",height:"0.5em" }}>
                     <IconFactory name={"comment"}></IconFactory>
                   </div>
                 }
@@ -734,7 +736,13 @@ export default function Home() {
   const goTo = (tenderId: number,status?:string) => {
     const location = `/Tender/${tenderId}`;
     if(status)
-    sessionStorage.setItem("tenderStatus", status);
+      sessionStorage.setItem("tenderStatus", status);
+    else{
+      const storedStatus= sessionStorage.getItem("tenderStatus");
+      if(storedStatus){
+        sessionStorage.removeItem("tenderStatus")
+      }
+    }
     if (location) {
       router.push(location); // Navigate to the dynamic route
     }

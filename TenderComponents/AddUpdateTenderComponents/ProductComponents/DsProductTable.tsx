@@ -58,7 +58,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
               ? ptrTemp
               : Number(ptrTemp)
             : 1;
-        calculated.ptrPercent = 100 - ((tenderproduct.proposedRate || 0) / ptr) * 100;
+        calculated.ptrPercentage = 100 - ((tenderproduct.proposedRate || 0) / ptr) * 100;
         const discount = tenderproduct.stockistDiscountValue
           ? tenderproduct.stockistDiscountValue
           : ((tenderproduct.proposedRate || 0) *
@@ -159,8 +159,8 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
         updateTenderProduct(
           version,
           product.id,
-          "ptrPercent",
-          product.ptrPercent || 0
+          "ptrPercentage",
+          product.ptrPercentage || 0
         );
         updateTenderProduct(
           version,
@@ -440,7 +440,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
                       console.log(ptrPer);
                       console.log(discount);
                       handleFieldChange(index, "proposedRate", proposedRate);
-                      handleFieldChange(index, "ptrPercent", ptrPer);
+                      handleFieldChange(index, "ptrPercentage", ptrPer);
                       handleFieldChange(
                         index,
                         "stockistDiscountValue",
@@ -460,10 +460,10 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
               tenderproduct.product?.dataSource == "saved" ? (
                 <DsTextField
                   inputType="number"
-                  initialValue={tenderproduct.ptrPercent?.toString() || ""}
+                  initialValue={tenderproduct.ptrPercentage?.toString() || ""}
                   onBlur={(e) => {
                     const ptrPer = Number((e.target as HTMLInputElement).value);
-                    if (tenderproduct.ptrPercent !== ptrPer) {
+                    if (tenderproduct.ptrPercentage !== ptrPer) {
                       const ptrTemp = tenderproduct.product.ptr;
                       const ptr =
                         ptrTemp !== undefined
@@ -478,7 +478,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
                       console.log(proposedRate);
                       console.log(ptrPer);
                       console.log(discount);
-                      handleFieldChange(index, "ptrPercent", ptrPer);
+                      handleFieldChange(index, "ptrPercentage", ptrPer);
                       handleFieldChange(index, "proposedRate", proposedRate);
                       handleFieldChange(
                         index,
@@ -530,7 +530,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
                         discount
                       );
                       handleFieldChange(index, "proposedRate", proposedRate);
-                      handleFieldChange(index, "ptrPercent", ptrPer);
+                      handleFieldChange(index, "ptrPercentage", ptrPer);
                     }
                   }}
                 />

@@ -47,7 +47,7 @@ const CompanySearch: React.FC<CompanySearchProps> = ({
       );
       setCompanys(company);
     } else {
-      console.log("company values are = ", values);
+      // console.log("company values are = ", values);
     }
   };
  

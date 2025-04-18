@@ -31,15 +31,16 @@ import DsStatusIndicator, {
 } from "@/Elements/DsComponents/dsStatus/dsStatusIndicator";
 import ContractView from "@/TenderComponents/AddUpdateTenderComponents/CustomTabViews/ContractView";
 
-const DsTenderIdPage: React.FC<{ paramOrderId: string | number, tenderStatus?:string }> = ({
-  paramOrderId,
-  tenderStatus
-}) => {
+const DsTenderIdPage: React.FC<{
+  paramOrderId: string | number;
+  tenderStatus?: string;
+}> = ({ paramOrderId, tenderStatus }) => {
   const [selectedTabId, setTabId] = useTabState("tenderPage");
   const {
     tenderData,
     tenderDataCopy,
     addTenderProduct,
+    createTenderVersion,
     setActionStatusValues,
     actionStatus,
     saveTender,
@@ -101,18 +102,30 @@ const DsTenderIdPage: React.FC<{ paramOrderId: string | number, tenderStatus?:st
     } else if (Number(orderId) > 0) {
       setDisplayFlag("Existing");
       console.log("orderId", orderId);
-      fetchAndSetOriginalTender(Number(orderId),tenderStatus);
-    } else {
+      if (
+        tenderStatus == "AWARDED" ||
+        tenderStatus == "PARTIALLY_AWARDED" ||
+        tenderStatus == "LOST" ||
+        tenderStatus == "CANCELLED"
+      )
+        fetchAndSetOriginalTender(Number(orderId), tenderStatus);
+      else {
+        fetchAndSetOriginalTender(Number(orderId));
+      }
     }
   }, [orderId]);
 
   useEffect(() => {
-    if (tenderDataCopy.id)
+    if (tenderDataCopy.id) {
       appTitle.current =
         tenderDataCopy.tenderNumber +
         " ( " +
         tenderDataCopy.tenderDetails.customerName +
         " )";
+      if (tenderStatus == "newPricingVersion") {
+        createTenderVersion();
+      }
+    }
   }, [tenderDataCopy.id]);
   const [message, setMessage] = useState<string>("");
 

@@ -24,7 +24,7 @@ interface DsTenderTableFloatingMenuProps {
   statuscell: string;
   handleFetch:()=>Promise<void>;
   tenderId:number;
-  goTo:(tenderId:number,status:string)=>void;
+  goTo:(tenderId:number,status?:string)=>void;
 }
 
 export const DsTenderTableFloatingMenu: React.FC<DsTenderTableFloatingMenuProps> = ({ e, rowIndex, statuscell ,handleFetch,tenderId,goTo}) => {
@@ -45,6 +45,7 @@ export const DsTenderTableFloatingMenu: React.FC<DsTenderTableFloatingMenuProps>
   const[isLostWhite,setIsLostWhite]=useState<boolean>(false);
   const[isCancleWhite,setIsCancletWhite]=useState<boolean>(false);
   const[isVersionWhite,setIsVersionWhite]=useState<boolean>(false);
+  const [IsSubmissionWhite,setIsSubmissionWhite]=useState<boolean>(false);
 
 
 
@@ -121,11 +122,12 @@ export const DsTenderTableFloatingMenu: React.FC<DsTenderTableFloatingMenuProps>
           ]
             )
     }
-
+    const submitUrl= getCustomerSubmissionDoneByTenderId+tenderId+"/submit"
+    const submissionDoc=customerSubmission();
     await fetchData({
-      url: getCustomerSubmissionDoneByTenderId,
+      url:submitUrl,
       method: "PATCH",	
-      dataObject: JSON.stringify(customerSubmission),
+      dataObject: submissionDoc,
 
     })
       .then((res) => {
@@ -140,26 +142,7 @@ export const DsTenderTableFloatingMenu: React.FC<DsTenderTableFloatingMenuProps>
       });
   };
 
-  // const handlefetchgetTenderByTenderId = async (status:string) => {
-  
-  //     await fetchData({
-  //       url: getTenderByTenderId,
-  //       method: "PATCH",	
-  //       headers: {
-  //         "x-contract-type": status,
-  //       },
-  //     })
-  //       .then((res) => {
-  //         if (res?.code === 200 && res?.result) {
-        
-  //         } else {
-  //           console.error("Error");
-  //         }
-  //       })
-  //       .catch((err) => {
-  //         console.error("Error fetching data:", err);
-  //       });
-  //   };
+
 
 
     
@@ -172,6 +155,14 @@ export const DsTenderTableFloatingMenu: React.FC<DsTenderTableFloatingMenuProps>
       console.warn("TenderId not found on double-clicked row");
     }
   };
+
+
+ const  handleCreateNewVersion=(tenderId:number)=>
+ {
+  const Id=tenderId;
+  goTo(Number(Id),"newPricingVersion");
+
+ }
   
   return (
     <FloatingMenu selected={1} id={"tenderfloatingmenu"} onCloseClick={handleClose}>
@@ -193,8 +184,10 @@ export const DsTenderTableFloatingMenu: React.FC<DsTenderTableFloatingMenuProps>
             setIsCancletWhite (false);
           
           }}
+          
           label="Tender Cancelled" 
-        />
+          onClick={() => handleFloatingMenuBtnClick("CANCELLED")}/>
+      
           
         )}
         {isLostBtnVisible && (
@@ -272,7 +265,9 @@ export const DsTenderTableFloatingMenu: React.FC<DsTenderTableFloatingMenuProps>
         buttonViewStyle="btnContained" 
         className={style.awardedbtn}
           startIcon={
-            <div style={{width:"1em",height:"0.5em"}}>
+            <div style={{width:"1.2em",height:"1em",display:"flex",alignItems:"center",marginTop:"0.2em"
+              
+              }}>
            <IconFactory name={"version"} isWhite={isVersionWhite}></IconFactory>
             </div>
           }
@@ -286,34 +281,34 @@ export const DsTenderTableFloatingMenu: React.FC<DsTenderTableFloatingMenuProps>
   
             // changeImage(e, addIcon);
           }}
-          label="Create New Version" />
+          label="Create New Version" 
+          onClick={()=>handleCreateNewVersion(tenderId)}
+          
+          />
         )}
         {isSubmitVisible && (
           <DsButton id="submit"     buttonColor="btnPrimary"
         buttonViewStyle="btnContained" 
         className={style.awardedbtn}
-          // startIcon={
-          //   <div
-          //     style={{
-          //       width: "1.125em",
-          //       height: "1.125em",
-          //       position: "relative",
-          //     }}
-          //   >
-          //     <Image
-          //       src={lost}
-          //       alt="Add Icon"
-          //       layout="fill"
-          //       objectFit="cover"
-          //     />
-          //   </div>
-          // }
-      
-          // onMouseLeave={(e) => {
-          //   changeImage(e, lost);
+        startIcon={
+          <div style={{width:"1em",height:"0.5em", display:"flex",
+            alignItems:"center",marginTop:"0.2em"
+          }}>
+         <IconFactory name={"tick"} isWhite={IsSubmissionWhite}></IconFactory>
+          </div>
+        }
+        onHover={() => {
+          setIsSubmissionWhite(true);
+       
+        }}
+        onMouseLeave={() => {
+          setIsSubmissionWhite(false);
+
+          // changeImage(e, addIcon);
+        }}
         
           label="Customer Submission Done" 
-          onClick={(e)=>handlefetchUpdateTender}
+          onClick={handlefetchUpdateTender}
           
           
           />
