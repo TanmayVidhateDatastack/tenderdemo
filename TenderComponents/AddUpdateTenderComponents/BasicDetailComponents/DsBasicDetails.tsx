@@ -127,7 +127,7 @@ const DsBasicDetails = () => {
         const depositDocData = [
           {
             modes: result.paymentMode.map((item: any) => ({
-              value: item.codeValue.toLowerCase(), // Optional: Lowercase if needed
+              value: item.codeValue, // Optional: Lowercase if needed
               label: item.codeDescription,
             })),
           },
@@ -160,7 +160,6 @@ const DsBasicDetails = () => {
     handleFetch();
     handleRoleFetch();
   }, []);
- 
   useEffect(() => {
     console.log("metadata : ", metadata);
     if (metadata.length > 0 && metadata[0]?.depositeDocument) {

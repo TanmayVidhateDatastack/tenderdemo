@@ -78,9 +78,9 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
       >((acc, opt) => { 
         const val = opt.value;  
         if (typeof val === "string") {
-          acc[val] = tenderDataCopy.supplyConditions.applicableConditions.some(
+          acc[val] = tenderDataCopy.id?tenderDataCopy.supplyConditions.applicableConditions.some(
             (ac) => ac.type == opt.value && ac.status == "ACTV"
-          ); // Add string keys directly to the object
+          ):true; // Add string keys directly to the object
         }
 
         return acc;
@@ -90,7 +90,40 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
     }
   }, [applicableConditions,tenderDataCopy]);
 
-
+useEffect(() => {
+    applicableConditions.forEach((opt) => {
+      const id = opt.value.toString(); 
+      // if(tenderData.tenderFees.find((x)=> x.feesType==id)?.status=="INAC"){ 
+      //   console.log("Inactive ",id);
+      // }
+      // else if (tenderData.tenderFees.find((x)=> x.feesType==id)?.status=="ACTV"){
+      //   console.log("active ",id);
+      // }
+      const checkbox = document.getElementById(id) as HTMLInputElement;
+      selectedConditions.add(id);
+      conditionsVisibility[id] = true;
+      // addTenderFee(id);
+      if (checkbox?.checked) {
+        selectedConditions.add(id);
+        conditionsVisibility[id] = true;
+        console.log(id);
+        if (tenderData.tenderFees.some((fee) => fee.feesType == id))
+          updateApplicableCondition(id, "status", "ACTV");
+        else addApplicableCondition(id);
+      } else if (checkbox) {
+        selectedConditions.add(id);
+        conditionsVisibility[id] = true;
+        console.log(id);
+        if (tenderData.tenderFees.some((fee) => fee.feesType == id))
+          updateApplicableCondition(id, "status", "ACTV");
+        else addApplicableCondition(id);
+      } else {
+        selectedConditions.delete(id);
+        conditionsVisibility[id] = false;
+        updateApplicableCondition(id, "status", "INAC");
+      }
+    });
+  }, [applicableConditions]);
   useEffect(() => {
     
     window.addEventListener("click", (e) => {
@@ -165,9 +198,9 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
               name={checkbox.label}
               value={checkbox.value.toString()}
               label={checkbox.label}
-              defaultChecked={tenderDataCopy?.supplyConditions.applicableConditions?.some(
-                (fee) => fee.type == checkbox.value
-              )}
+              defaultChecked={tenderDataCopy.id? tenderDataCopy?.supplyConditions.applicableConditions?.some(
+                (ac) => ac.type == checkbox.value
+              ):true}
             />
           ))}
         <DsButton

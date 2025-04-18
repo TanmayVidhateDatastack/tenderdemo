@@ -27,7 +27,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
   const [depotList, setDepotList] = useState<Depot[]>([]);
   const [formatedDepot, setFormatedDepot] = useState<DsSelectOption[]>([]);
 
-  const { updateTenderData, tenderData,tenderDataCopy } = useTenderData();
+  const { updateTenderData, tenderData, tenderDataCopy } = useTenderData();
   const [selected, setSelected] = useState<datalistOptions>();
   const [selecteds, setSelecteds] = useState<datalistOptions>();
   const [appliedBy, setAppliedBy] = useState<DsMultiLevelSelectOption[]>([]);
@@ -135,7 +135,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
       .then((res) => {
         const result = res.result;
         const formatedDepot = result.map((item: any) => ({
-          value: item.id,
+          value: item.id.toString(),
           label: item.name,
         }));
         setFormatedDepot(formatedDepot);
@@ -186,7 +186,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
     const loc = [...tenderDataCopy.shippingLocations];
     console.log(loc);
     console.log(formatedDepot);
-    const depo=loc.map((x) => {
+    const depo = loc.map((x) => {
       return (
         formatedDepot.find((d) => Number(d.value) == x) || {
           value: "",
@@ -195,7 +195,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
       );
     });
     setSelectedDepo(depo);
-  }, [formatedDepot,tenderDataCopy.shippingLocations]);
+  }, [formatedDepot, tenderDataCopy.shippingLocations]);
 
   return (
     <>
@@ -204,12 +204,16 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
           <DsSelectMultiLevel
             isSearchable={true}
             options={appliedBy}
-            label="Applied By"
-            selectedOption={{
-              attributes: { type: tenderData.applierType },
-              id: "",
-              label: tenderData.tenderDetails.appliedBy,
-            }}
+            label="Applied by"
+            {...(tenderDataCopy.id
+              ? {
+                  selectedOption: {
+                    attributes: { type: tenderData.applierType },
+                    id: "",
+                    label: tenderData.tenderDetails.appliedBy,
+                  },
+                }
+              : {})}
             placeholder={"Please search or select here"}
             id={"appliedBy"}
             onSelect={handleAppliedBySelect}
@@ -233,13 +237,16 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
           <DsSelectMultiLevel
             isSearchable={true}
             options={suppliedBy}
-            // selectedOption={selecteds}
-            selectedOption={{
-              attributes: { type: tenderData.supplierType },
-              id: "",
-              label: tenderData.tenderDetails.suppliedBy,
-            }}
-            label="Supplied By"
+            {...(tenderDataCopy.id
+              ? {
+                  selectedOption: {
+                    attributes: { type: tenderData.supplierType },
+                    id: "",
+                    label: tenderData.tenderDetails.suppliedBy,
+                  },
+                }
+              : {})}
+            label="Supplied by"
             placeholder={"Please search or select here"}
             id={"suppliedBy"}
             onSelect={handleSuppliedBySelects}
@@ -274,16 +281,17 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
             placeholder={"Please search or select here"}
             id={"depot"}
             setSelectOptions={(options) => {
-              setSelectedDepo(options)
+              const shipIds=options.reduce<number[]>((acc, option) => { 
+                if (typeof option.value === "string") { 
+                  acc.push(parseInt(option.value)); 
+                }
+                return acc;
+              }, [])
               updateTenderData(
                 "shippingLocations",
-                options.reduce<number[]>((acc, option) => {
-                  if (typeof option.value === "string") {
-                    acc.push(parseInt(option.value));
-                  }
-                  return acc;
-                }, [])
+                shipIds
               );
+              setSelectedDepo(options);
             }}
           ></DsMultiSelect>
         </div>

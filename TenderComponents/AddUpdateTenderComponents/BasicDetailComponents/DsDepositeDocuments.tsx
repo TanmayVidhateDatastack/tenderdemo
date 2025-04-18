@@ -29,7 +29,6 @@ export interface DepositDocument {
 export interface FeesDocument {
   applicableDeposits: DsSelectOption[];
 }
-
 export interface DepositeDocumentsProps {
   setDepositeDocuments: (depositeDocuments: DepositDocument[]) => void;
   depositeDocument: DepositDocument[] | null;
@@ -40,7 +39,7 @@ export interface DepositeDocumentsProps {
 const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   depositeDocument,
   applicableDeposits,
-  role,
+  role, 
 }) => {
   const contextMenuId = "context-display-10";
   const {
@@ -84,16 +83,15 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
 
       SetApplicablefees(mappedDeposits);
       const options: Record<string, boolean> = mappedDeposits.reduce<
-        Record<string, boolean>
+        Record<string, boolean> 
       >((acc, opt) => {
         const val = opt.value;
 
         if (typeof val === "string") {
-          acc[val] = tenderData.tenderFees.some(
+          acc[val] = tenderData.tenderFees.some( 
             (fee) => fee.feesType == opt.value && fee.status == "ACTV"
           );
         }
-
         return acc;
       }, {});
 
@@ -101,11 +99,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
     }
   }, [depositeDocument, applicableDeposits, tenderDataCopy.tenderFees]);
 
-  useEffect(() => {
-    if (applicablefees) {
-      console.log("applicable fees : ", applicablefees);
-    }
-  }, [applicablefees]);
+
 
   function handleonclick(
     e:
@@ -140,9 +134,8 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
 
   useEffect(() => {
     applicablefees.forEach((opt) => {
-      const id = opt.value.toString();
-
-      // if(tenderData.tenderFees.find((x)=> x.feesType==id)?.status=="INAC"){
+      const id = opt.value.toString(); 
+      // if(tenderData.tenderFees.find((x)=> x.feesType==id)?.status=="INAC"){ 
       //   console.log("Inactive ",id);
       // }
       // else if (tenderData.tenderFees.find((x)=> x.feesType==id)?.status=="ACTV"){
@@ -210,7 +203,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
       const excludedElement = document.getElementById("optionBtn");
       if (excludedElement && excludedElement.contains(event.target)) {
         closeContext(contextMenuId);
-        return;
+        return; 
       }
     };
     window.addEventListener("scroll", handleScroll, true);
@@ -230,7 +223,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
             className={styles.optionBtn + " " + styles.depositsBtn}
             onClick={(e) => handleonclick(e)}
             endIcon={
-              <div
+              <div 
                 style={{
                   position: "relative",
                   width: "0.8375em",
@@ -241,21 +234,21 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
                 <IconFactory name="dropDownArrow" />
               </div>
             }
-          />
+          /> 
         </div>
       </div>
-      {applicableDeposits.map((deposit) => {
+      {applicableDeposits.map((deposit) =>  {
         if (typeof deposit.value == "string")
           return (
             feeVisibility[deposit.value] && (
               <div className={styles.emdContainer2}>
-                <DsFeesDocument
+                <DsFeesDocument 
                   type={deposit.value.toString()}
                   title={deposit.label}
                   id={deposit.value + "DocumentView"}
                   mode={mode}
                   paidBy={paidBy}
-                  downloadVisible={true}
+                  downloadVisible={true} 
                   paymentCompletedVisible={paymentCheckVisible}
                 />
               </div>
@@ -275,9 +268,9 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
                     name={checkbox.label}
                     value={checkbox.value.toString()}
                     label={checkbox.label}
-                    defaultChecked={tenderDataCopy?.tenderFees?.some(
+                    defaultChecked={tenderDataCopy.id?tenderDataCopy?.tenderFees?.some(
                       (fee) => fee.feesType == checkbox.value
-                    )}
+                    ):true}
                   />
                 ))}
               </div>

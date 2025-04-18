@@ -14,6 +14,7 @@ import fetchData from "@/Common/helpers/Method/fetchData";
 import DsAddressSelect from "@/Elements/DsComponents/dsSelect/dsAddressSelect";
 import CustomerSearch from "./customerSearch";
 import IconFactory from "@/Elements/IconComponent";
+import { getYesterdayDate } from "@/Common/helpers/Method/conversion";
 const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
   const [fetchVisible, setFetchVisible] = useState(true);
   const [role, setRole] = useState("checker"); 
@@ -71,15 +72,33 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
     return `${year}-${month}-${day}`;
   }; 
 
-  const urlRegex = /^(https?:\/\/)?([\w-]+(\.[\w-]+)+)(:\d+)?(\/[^\s]*)?$/; 
-  
+  const [selectedTenderType, setSelectedTenderType] =
+  useState<DsSelectOption>();
+useEffect(() => {
+  const tenderType =tenderData.tenderType;
+  if (tenderType) {
+    const option =tenderDetails.tenderType.find((x) => x.value == tenderType);
+    if (option) setSelectedTenderType(option);
+  }
+}, [tenderData.tenderType]);
+
+  const [selectedSubmissionMode, setSelectedSubmissionMode] =
+  useState<DsSelectOption>();
+useEffect(() => {
+  const submissionMode =tenderData.submissionMode
+  if (submissionMode) {
+    const option =tenderDetails.submissionMode.find((x) => x.value == submissionMode);
+    if (option) setSelectedSubmissionMode(option);
+  }
+}, [tenderData.submissionMode]);
+
   return (
     <>
       <div className={styles.inputDetails}>
         <div className={deptStyle.fields}>
           <CustomerSearch
             customer={tenderData.tenderDetails.customerName}
-            orderData={undefined} 
+            orderData={undefined}
             setCustomerLocations={setCustomerLocations}
             updateTenderData={updateTenderData}
           />
@@ -87,72 +106,75 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
 
         <div className={deptStyle.fields}>
           {fetchVisible && (
-            <DsButton 
+            <DsButton
               id="copyBtn"
               label="Fetch Information"
-              buttonViewStyle="btnText" 
+              buttonViewStyle="btnText"
               buttonSize="btnSmall"
               className={deptStyle.copyBtn}
-              startIcon={<div style={{width:"0.95625em",height:"1.125em"}}>
-                <IconFactory name="copy"/>
+              startIcon={
+                <div style={{ width: "0.95625em", height: "1.125em" }}>
+                  <IconFactory name="copy" />
                 </div>
               }
               // disable
-              onClick={() => { 
-                setShowNotification(true); 
+              onClick={() => {
+                setShowNotification(true);
                 setPos("top");
-                setNotiType("info"); 
-              }} 
+                setNotiType("info");
+              }}
             ></DsButton>
           )}
         </div>
         <div className={deptStyle.fields}>
-          <DsSingleSelect 
+          <DsSingleSelect
             id="CustomerAddress"
-            placeholder="Select Customer Location" 
+            placeholder="Select Customer Location"
             options={customerLocations.map((addr) => ({
-              value: addr.id.toString(), 
-              
-              label: `${addr.city}, ${addr.state}, ${addr.pinCode}`, 
+              value: addr.id.toString(),
+
+              label: `${addr.city}, ${addr.state}, ${addr.pinCode}`,
               key: addr.id.toString(),
             }))}
             selectedOption={{
-              label:tenderData.tenderDetails.customerAddressName,
-              value:tenderData.customerAddressId.toString()
+              label: tenderData.tenderDetails.customerAddressName,
+              value: tenderData.customerAddressId.toString(),
             }}
             setSelectOption={(option) => {
               if (typeof option.value == "string") {
                 updateTenderData("customerAddressId", Number(option.value));
-                updateTenderData("tenderDetails.customerAddressName", option.label
+                updateTenderData(
+                  "tenderDetails.customerAddressName",
+                  option.label
+                );
 
-                ); 
-                
                 // console.log("customerLocationId",option.value)
               }
-            }}           
-          /> 
+            }}
+          />
         </div>
         <div className={deptStyle.fields}>
           <DsTextField
             initialValue={tenderData.tenderNumber}
             maxLength={50}
             label="Tender number"
-            // placeholder="Please Type Here"  
-            onBlur={(e) => updateTenderData("tenderNumber", (e.target as HTMLInputElement).value)}
+            // placeholder="Please Type Here"
+            onBlur={(e) =>
+              updateTenderData(
+                "tenderNumber",
+                (e.target as HTMLInputElement).value
+              )
+            }
           ></DsTextField>
-        </div> 
+        </div>
         <div className={deptStyle.fields}>
           <DsSingleSelect
-            options={tenderDetails.tenderType} 
+            options={tenderDetails.tenderType}
             label="Tender type"
             // placeholder={"Tender type"}
             id={"tenderType"}
-            selectedOption={{
-              value:tenderData.tenderType,
-              label:tenderData.tenderType,
-            }}
+            selectedOption={selectedTenderType}
             setSelectOption={(option) => {
-              
               if (typeof option.value == "string") {
                 updateTenderData("tenderType", option.value);
                 console.log("tendertype", option.value);
@@ -162,7 +184,9 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         </div>
         <div className={deptStyle.fields}>
           <DsDatePicker
-           initialDate={new Date(tenderData.issueDate).toLocaleDateString("en-GB",)}
+            initialDate={new Date(tenderData.issueDate).toLocaleDateString(
+              "en-GB"
+            )}
             maxDate={new Date()}
             id={"issueDate"}
             setDateValue={(date) => {
@@ -177,8 +201,10 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         </div>
         <div className={deptStyle.fields}>
           <DsDatePicker
-            initialDate={new Date(tenderData.lastPurchaseDate).toLocaleDateString("en-GB")}
-            minDate={new Date()}
+            initialDate={new Date(
+              tenderData.lastPurchaseDate
+            ).toLocaleDateString("en-GB")}
+            minDate={getYesterdayDate()}
             id={"lastPurchaseDate"}
             setDateValue={(date) => {
               if (date instanceof Date) {
@@ -192,10 +218,12 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         </div>
         <div className={deptStyle.fields}>
           <DsDatePicker
-            initialDate={new Date(tenderData.submissionDate).toLocaleDateString("en-GB")}
-            minDate={new Date()}
+            initialDate={new Date(tenderData.submissionDate).toLocaleDateString(
+              "en-GB"
+            )}
+            minDate={getYesterdayDate()}
             id={"submissionDate"}
-             setDateValue={(date) => {
+            setDateValue={(date) => {
               if (date instanceof Date) {
                 updateTenderData("submissionDate", getTodayDate(date));
               }
@@ -212,19 +240,19 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
             inputType="positive"
             label="Rate contract validity"
             onBlur={(e) =>
-              updateTenderData("rateContractValidity", (e.target as HTMLInputElement).value)
+              updateTenderData(
+                "rateContractValidity",
+                (e.target as HTMLInputElement).value
+              )
             }
           ></DsTextField>
         </div>
         <div className={deptStyle.fields}>
           <DsSingleSelect
-            selectedOption={{
-              value:tenderData.submissionMode,
-              label:tenderData.submissionMode,
-            }}
+            selectedOption={selectedSubmissionMode}
             options={tenderDetails.submissionMode}
             // type={"single"}
-            label="Submission Mode"
+            label="Submission mode"
             id={"submissionMode"}
             setSelectOption={(option) => {
               if (typeof option.value == "string") {
@@ -234,35 +262,64 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
           ></DsSingleSelect>
         </div>
         <div className={deptStyle.fields}>
-          <DsTextField
-            initialValue={tenderData.deliveryPeriod.toString()}
-            maxLength={5}
-            inputType="positive"
-            label={"Delivery period (In days)"}  
-            // placeholder={"Please type or select"}
-            onBlur={(e) => updateTenderData("deliveryPeriod",Number((e.target as HTMLInputElement).value))}
-          ></DsTextField>
+          <div className={deptStyle.fields}>
+            <div className={deptStyle.fields}>
+              <DsTextField
+                initialValue={tenderData.deliveryPeriod?.toString()}
+                maxLength={5}
+                inputType="positive"
+                label={"Delivery period (In days)"}
+                onChange={(e) => {
+                  const input = e.target as HTMLInputElement;
+                  let value = input.value;
+
+                  // Prevent multiple leading zeros
+                  if (/^0{2,}/.test(value)) {
+                    value = "0";
+                    input.value = value; // update input field manually
+                  } else if (/^0\d+/.test(value)) {
+                    // Remove leading zero before digits
+                    value = value.replace(/^0+/, "");
+                    input.value = value; // update input field manually
+                  }
+                }}
+                onBlur={(e) =>
+                  updateTenderData(
+                    "deliveryPeriod",
+                    Number((e.target as HTMLInputElement).value)
+                  )
+                }
+              />
+            </div>
+          </div>
         </div>
         <div className={deptStyle.fields}>
           <DsTextField
-            initialValue={tenderData.extendedDeliveryPeriod.toString()}
+            initialValue={tenderData.extendedDeliveryPeriod?.toString()}
             maxLength={5}
             inputType="positive"
             label={"Extended delivery period (In days)"}
             // placeholder={"Please type or select"}
             onBlur={(e) =>
-              updateTenderData("extendedDeliveryPeriod",Number((e.target as HTMLInputElement).value))}
+              updateTenderData(
+                "extendedDeliveryPeriod",
+                Number((e.target as HTMLInputElement).value)
+              )
+            }
           ></DsTextField>
         </div>
         <div className={deptStyle.fields}>
           <DsTextField
-             minimumNumber={100} 
-             initialValue={tenderData.lateDeliveryPenalty.toString()}
-             label="Penalty for late delivery %"
-             inputType="positive"
+            minimumNumber={100}
+            initialValue={tenderData.lateDeliveryPenalty.toString()}
+            label="Penalty for late delivery %"
+            inputType="positive"
             // placeholder="Please type here"
             onBlur={(e) =>
-              updateTenderData("lateDeliveryPenalty", Number((e.target as HTMLInputElement).value))
+              updateTenderData(
+                "lateDeliveryPenalty",
+                Number((e.target as HTMLInputElement).value)
+              )
             }
           ></DsTextField>
         </div>
@@ -270,8 +327,13 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
           <DsTextField
             maxLength={2000}
             initialValue={tenderData.tenderUrl}
-            label="Tender site/url" 
-            onBlur={(e) => updateTenderData("tenderUrl", (e.target as HTMLInputElement).value)}
+            label="Tender site/url"
+            onBlur={(e) =>
+              updateTenderData(
+                "tenderUrl",
+                (e.target as HTMLInputElement).value
+              )
+            }
           ></DsTextField>
         </div>
       </div>
