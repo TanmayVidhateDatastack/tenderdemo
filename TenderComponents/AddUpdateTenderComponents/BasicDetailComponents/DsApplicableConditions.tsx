@@ -90,10 +90,10 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
     }
   }, [applicableConditions,tenderDataCopy]);
 
-useEffect(() => {
+  useEffect(() => {
     applicableConditions.forEach((opt) => {
-      const id = opt.value.toString(); 
-      // if(tenderData.tenderFees.find((x)=> x.feesType==id)?.status=="INAC"){ 
+      const id = opt.value.toString();
+      // if(tenderData.tenderFees.find((x)=> x.feesType==id)?.status=="INAC"){
       //   console.log("Inactive ",id);
       // }
       // else if (tenderData.tenderFees.find((x)=> x.feesType==id)?.status=="ACTV"){
@@ -114,16 +114,19 @@ useEffect(() => {
         selectedConditions.add(id);
         conditionsVisibility[id] = true;
         console.log(id);
-        if (tenderData.tenderFees.some((fee) => fee.feesType == id))
+        if (tenderData.tenderFees.some((fee) => fee.feesType == id)) 
           updateApplicableCondition(id, "status", "ACTV");
-        else addApplicableCondition(id);
+        // else addApplicableCondition(id);
       } else {
         selectedConditions.delete(id);
         conditionsVisibility[id] = false;
-        updateApplicableCondition(id, "status", "INAC");
+        if (tenderData.tenderFees.some((fee) => fee.feesType == id))
+          updateApplicableCondition(id, "status", "INAC");
+ 
       }
     });
-  }, [applicableConditions]);
+  }, [applicableConditions,tenderDataCopy.id]);
+ 
   useEffect(() => {
     
     window.addEventListener("click", (e) => {

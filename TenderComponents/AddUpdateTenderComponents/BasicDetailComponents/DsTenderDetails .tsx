@@ -73,14 +73,16 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
   }; 
 
   const [selectedTenderType, setSelectedTenderType] =
-  useState<DsSelectOption>();
-useEffect(() => {
-  const tenderType =tenderData.tenderType;
-  if (tenderType) {
-    const option =tenderDetails.tenderType.find((x) => x.value == tenderType);
-    if (option) setSelectedTenderType(option);
-  }
-}, [tenderData.tenderType]);
+    useState<DsSelectOption>();
+  useEffect(() => {
+    const tenderType = tenderData.tenderType;
+    if (tenderType) { 
+      const option = tenderDetails.tenderType.find(
+        (x) => x.value == tenderType
+      );
+      if (option) setSelectedTenderType(option);
+    }
+  }, [tenderData.tenderType,tenderDetails.tenderType]);
 
   const [selectedSubmissionMode, setSelectedSubmissionMode] =
   useState<DsSelectOption>();
@@ -88,9 +90,9 @@ useEffect(() => {
   const submissionMode =tenderData.submissionMode
   if (submissionMode) {
     const option =tenderDetails.submissionMode.find((x) => x.value == submissionMode);
-    if (option) setSelectedSubmissionMode(option);
+    if (option) setSelectedSubmissionMode(option); 
   }
-}, [tenderData.submissionMode]);
+}, [tenderData.submissionMode,tenderDetails.submissionMode]);
 
   return (
     <>
@@ -171,14 +173,14 @@ useEffect(() => {
           <DsSingleSelect
             options={tenderDetails.tenderType}
             label="Tender type"
-            // placeholder={"Tender type"}
-            id={"tenderType"}
+            // placeholder={"Tender type"} 
+            id={"tenderType"} 
             selectedOption={selectedTenderType}
             setSelectOption={(option) => {
-              if (typeof option.value == "string") {
-                updateTenderData("tenderType", option.value);
-                console.log("tendertype", option.value);
-              }
+              if (typeof option.value == "string") {   
+                updateTenderData("tenderType", option.value);  
+                console.log("tendertype", option.label);
+              } 
             }}
           ></DsSingleSelect>
         </div>
@@ -271,8 +273,8 @@ useEffect(() => {
                 label={"Delivery period (In days)"}
                 onChange={(e) => {
                   const input = e.target as HTMLInputElement;
-                  let value = input.value;
-
+                  let value = input.value; 
+ 
                   // Prevent multiple leading zeros
                   if (/^0{2,}/.test(value)) {
                     value = "0";
