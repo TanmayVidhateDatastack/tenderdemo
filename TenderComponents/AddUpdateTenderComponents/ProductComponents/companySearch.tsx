@@ -1,4 +1,4 @@
-import { DsStatus } from "@/Common/helpers/constant";
+import { DsStatus, getCompetitorsURL } from "@/Common/helpers/constant";
 import { Company, datalistOptions } from "@/Common/helpers/types";
 import DsSearchComponent from "@/Elements/DsComponents/DsSearch/searchComponent";
 import { useState } from "react";
@@ -28,7 +28,7 @@ const CompanySearch: React.FC<CompanySearchProps> = ({
 }) => {
   const [company, setCompanys] = useState<datalistOptions[]>([]);
  
-  const searchCompanysURL = "";
+ 
  
  
  
@@ -67,13 +67,13 @@ const CompanySearch: React.FC<CompanySearchProps> = ({
     <DsSearchComponent
       id="companySearch"
       dataListId="companySearchDatalist"
-      label={"Company"}
+      // label={"Company"}
       initialValue={lprTo}
-      placeholder={"Search Company"}
+      placeholder={"Write Competitor Name"}
       options={company ? company : undefined}
       setOptions={setOptions}
       setSearchUrl={(searchTerm: string) => {
-        return searchCompanysURL  + searchTerm;
+        return getCompetitorsURL  + searchTerm;
       }}
     
       setSelectedOption={setSelectedOption}

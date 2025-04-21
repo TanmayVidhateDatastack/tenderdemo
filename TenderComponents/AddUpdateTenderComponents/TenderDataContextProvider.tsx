@@ -299,9 +299,11 @@ interface TenderDataContextType {
   createTenderVersion: () => void;
   updateTenderProduct: (
     version: number,
-    id: number,
     key: keyof TenderProduct | `product.${keyof TenderProduct["product"]}`,
-    value: string | number
+    value: string | number,
+    id?: number,
+    productId?: number,
+    requestedGenericName?:string,
   ) => void;
   addApplicableCondition: (type: string) => void;
   removeApplicableCondition: (conditionType: string) => void;
@@ -726,9 +728,11 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   // ✅ Update a tender product field
   const updateTenderProduct = (
     version: number,
-    id: number,
     key: keyof TenderProduct | `product.${keyof TenderProduct["product"]}`,
-    value: string | number
+    value: string | number,
+    id?: number,
+    productId?: number,
+    requestedGenericName?:string,
   ) => {
     setTenderData((prev) => ({
       ...prev,
@@ -738,7 +742,9 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               ...revision,
               tenderItems: revision.tenderItems.map((item) => {
                 const obj =
-                  item.id === id || item.productId === id
+                  (id && item.id === id) ||
+                  (productId && item.productId === productId)||
+                  (requestedGenericName && item.requestedGenericName === requestedGenericName)
                     ? key.startsWith("product.")
                       ? {
                           ...item,
@@ -1135,7 +1141,8 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             });
             showToaster("create-order-toaster");
             setTimeout(() => {
-              goBack();
+              if (tenderData.id)
+                fetchAndSetOriginalTender(tenderData.id, status);
             }, closeTimeForTender);
           } else {
             setActionStatus({
@@ -1245,7 +1252,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     // },
     [tenderData, tenderDataCopy, fetchData, generatePatchDocument]
   );
- 
+
   const fetchAndSetOriginalTender = useCallback(
     async (tenderId: number, tenderStatus?: string) => {
       try {
@@ -1331,16 +1338,15 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     },
     [fetchData]
   );
-  const fetchPreviousTenderData = useCallback(async(customerId:number) => {
+  const fetchPreviousTenderData = useCallback(async (customerId: number) => {
     try {
-      const res= await fetchData({
-        url:""
-      })
-      if(res.code=200){
-
+      const res = await fetchData({
+        url: "",
+      });
+      if ((res.code = 200)) {
       }
-    }catch(e){
-      console.error("fetchPreviousTenderData",e);
+    } catch (e) {
+      console.error("fetchPreviousTenderData", e);
     }
   }, []);
   return (

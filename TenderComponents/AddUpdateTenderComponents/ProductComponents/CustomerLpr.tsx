@@ -5,11 +5,13 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Company, datalistOptions } from "@/Common/helpers/types";
 import ContextMenu, {
+  closeContext,
   createContext,
   displayContext,
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import CompanySearch from "./companySearch";
 import styles from "../../AddUpdateTenderComponents/BasicDetailComponents/tender.module.css";
+
 import DsIconButton from "@/Elements/DsComponents/DsButtons/dsIconButton";
 import IconFactory from "@/Elements/IconComponent";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
@@ -41,17 +43,9 @@ const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
     }
   };
 
-  useEffect(() => {
-    createContext(
-      "LprTo" + index,
-      <div>
-        <CompanySearch
-          lprTo={lprTo?.name}
-          setSelectedCompany={setSelectedCompany}
-        />
-      </div>
-    );
-  }, [index, lprTo]);
+  // useEffect(() => {
+  //   createContext("LprTo" + index);
+  // }, [index, lprTo]);
   useEffect(() => {
     if (lprTo?.name) {
       setIsLpr(true);
@@ -63,8 +57,8 @@ const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
         <DsTextField
           id={"LprValue" + index}
           initialValue={lprValue ? lprValue.toString() : ""}
-          onChange={(e) => {
-            if (e.target.value && onValueChange) onValueChange(e.target.value);
+          onBlur={(e) => {
+            if ((e.target as HTMLInputElement).value && onValueChange) onValueChange((e.target as HTMLInputElement).value);
           }}
         />
       ) : lprValue ? (
@@ -76,8 +70,11 @@ const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
       <div
         style={{
           position: "relative",
-          height: "0.23em",
-          width: "0.5.5em",
+          display: "flex",
+          alignItems: "center",
+
+          // height: "1em"
+          // width: "1em",
         }}
       >
         {isLPR ? (
@@ -86,12 +83,14 @@ const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
               className={styles.lprwitharrow}
               onClick={(e) => {
                 if (!disable) {
-                  displayContext(e, "customerLpr", "horizontal", "right");
+                  displayContext(e, "LprTo" + index, "horizontal", "right");
                 }
               }}
             >
-              <Image src={lprSelectedSVG} alt="LPR To" />
-              <div style={{ height: "0.5em", width: "0.5em" }}>
+              <div style={{ height: "1em", width: "1em" }}>
+                <IconFactory name="personSearch" />
+              </div>
+              <div style={{ height: "1em", width: "1em" }}>
                 <IconFactory name="dropDownArrow" />
               </div>
             </div>
@@ -101,11 +100,13 @@ const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
             <div
               className={styles.lprwitharrow}
               onClick={(e) =>
-                displayContext(e, "customerLpr", "horizontal", "right")
+                displayContext(e, "LprTo" + index, "horizontal", "right")
               }
             >
-              <Image src={lprSVG} alt="LPR To" />
-              <div style={{ height: "1em", width: "1em" }}>
+              <div style={{ height: "1.225em", width: "1.225em" }}>
+                <IconFactory name="person1" />
+              </div>
+              <div style={{ height: "0.875em", width: "0.875em" }}>
                 <IconFactory name="dropDownArrow" />
               </div>
             </div>
@@ -113,25 +114,49 @@ const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
         )}{" "}
       </div>
       <ContextMenu
-        id="customerLpr"
+        id={"LprTo" + index}
         showArrow={true}
         content={
-          <div
-            style={{
-              display: "flex",
-              padding: "0.5em",
-              flexDirection: "column",
-            }}
-          >
-            <DsTextField id="customerlpr" label="Write Competiter name" />
+          // <div
+          //   style={{
+          //     display: "flex",
+          //     padding: "0.5em",
+          //     flexDirection: "column",
+          //     // gap: "0.5em",
+          //   }}
+          // >
+          //   <DsTextField id="customerlpr" label="Write Competiter name" />
 
-            <DsButton
-              id="approveButton"
-              label="Save"
-              buttonViewStyle="btnContained"
-              buttonColor="btnPrimary"
-              buttonSize="btnSmall"
+          //   <DsButton
+          //     id="competitorSave"
+          //     label="Save"
+          //     buttonViewStyle="btnContained"
+          //     buttonColor="btnPrimary"
+          //     buttonSize="btnSmall"
+          //     className={styles.competitorSave}
+          //   />
+          // </div>
+          <div className={styles.competitorContainer}>
+            <CompanySearch
+              lprTo={lprTo?.name}
+              setSelectedCompany={setSelectedCompany}
             />
+            <div className={styles.competitorSaveContainer}>
+              <DsButton
+                id="competitorSave"
+                label="Save"
+                buttonViewStyle="btnContained"
+                buttonColor="btnPrimary"
+                buttonSize="btnSmall"
+                className={styles.competitorSave}
+                onClick={() => {
+                  closeContext("LprTo" + index);
+                  // if(onCompanyChange) {
+                  //   onCompanyChange(lprTo as Company);
+                  // setIsLpr(true);
+                }}
+              />
+            </div>
           </div>
         }
       />

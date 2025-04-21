@@ -319,7 +319,7 @@ const {
         );
       }
       if (contextContent) {
-        createContext("contextMenuId4", <div>{contextContent}</div>, true);
+        createContext("SubmissionContext", <div>{contextContent}</div>, true);
       }
     }
   }, [role]);
@@ -353,7 +353,7 @@ const {
             }
           }}
           onSplitClick={(e) =>
-            displayContext(e, "contextMenuId4", "top", "center")
+            displayContext(e, "SubmissionContext", "top", "right")
           }
           buttonSize="btnLarge"
         >
@@ -409,7 +409,7 @@ const {
         duration={4000}
         handleClose={() => setToasterVisible(false)}
       /> 
-      {/* <ContextMenu id={"contextMenuId4"} showArrow={true} content={<div>{contextContent}</div>}/> */}
+      {/* <ContextMenu id={"SubmissionContext"} showArrow={true} content={<div>{contextContent}</div>}/> */}
     </>
   );
 };
