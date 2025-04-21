@@ -76,22 +76,14 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
     useState<DsSelectOption>();
   useEffect(() => {
     const tenderType = tenderData.tenderType;
-<<<<<<< HEAD
     if (tenderType) {
-=======
-    if (tenderType) { 
->>>>>>> da3a09e99e1ca2677fb0cce4dc38b22f23caa929
       const option = tenderDetails.tenderType.find(
         (x) => x.value == tenderType
       );
       if (option) setSelectedTenderType(option);
     }
   }, [tenderData.tenderType,tenderDetails.tenderType]);
-<<<<<<< HEAD
  
-=======
-
->>>>>>> da3a09e99e1ca2677fb0cce4dc38b22f23caa929
   const [selectedSubmissionMode, setSelectedSubmissionMode] =
   useState<DsSelectOption>();
 useEffect(() => {
@@ -101,11 +93,7 @@ useEffect(() => {
     if (option) setSelectedSubmissionMode(option); 
   }
 }, [tenderData.submissionMode,tenderDetails.submissionMode]);
-<<<<<<< HEAD
  
-=======
-
->>>>>>> da3a09e99e1ca2677fb0cce4dc38b22f23caa929
   return (
     <>
       <div className={styles.inputDetails}>
@@ -189,17 +177,10 @@ useEffect(() => {
             id={"tenderType"} 
             selectedOption={selectedTenderType}
             setSelectOption={(option) => {
-<<<<<<< HEAD
               if (typeof option.value == "string") {  
                 updateTenderData("tenderType", option.value);  
                 console.log("tendertype", option.label);
               }
-=======
-              if (typeof option.value == "string") {   
-                updateTenderData("tenderType", option.value);  
-                console.log("tendertype", option.label);
-              } 
->>>>>>> da3a09e99e1ca2677fb0cce4dc38b22f23caa929
             }}
           ></DsSingleSelect>
         </div>
@@ -292,11 +273,7 @@ useEffect(() => {
                 label={"Delivery period (In days)"}
                 onChange={(e) => {
                   const input = e.target as HTMLInputElement;
-<<<<<<< HEAD
                   let value = input.value;
-=======
-                  let value = input.value; 
->>>>>>> da3a09e99e1ca2677fb0cce4dc38b22f23caa929
  
                   // Prevent multiple leading zeros
                   if (/^0{2,}/.test(value)) {
