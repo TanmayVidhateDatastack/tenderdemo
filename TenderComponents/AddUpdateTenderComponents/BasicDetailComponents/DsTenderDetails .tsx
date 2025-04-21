@@ -15,6 +15,10 @@ import DsAddressSelect from "@/Elements/DsComponents/dsSelect/dsAddressSelect";
 import CustomerSearch from "./customerSearch";
 import IconFactory from "@/Elements/IconComponent";
 import { getYesterdayDate } from "@/Common/helpers/Method/conversion";
+import ContextMenu, { displayContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
+import fetchCustomer from "./fetchcustomerComponent";
+import DsNavTo from "@/Elements/ERPComponents/DsNavigationComponent/DsNavTo";
+import FetchCustomer from "./fetchcustomerComponent";
 const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
   const [fetchVisible, setFetchVisible] = useState(true);
   const [role, setRole] = useState("checker"); 
@@ -31,7 +35,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
   const [notiType, setNotiType] = useState<
     "success" | "bonus" | "info" | "error"
   >("info");
-  const [showNotification, setShowNotification] = useState<boolean>(false);
+  const [showNotification, setShowNotification] = useState<boolean>(true);
   const { updateTenderData,tenderData } = useTenderData();
   const [customerLocations, setCustomerLocations] = useState<location[]>([]); 
   
@@ -96,6 +100,18 @@ useEffect(() => {
 
   return (
     <>
+    <ContextMenu
+        id="contextMenuId5"
+        content={
+          <div className={styles.ContextCreateNew}>
+           <FetchCustomer
+           customerName="(Directorate of Health Services)"
+           ></FetchCustomer>
+          </div>
+        }
+        showArrow={true}
+      />
+
       <div className={styles.inputDetails}>
         <div className={deptStyle.fields}>
           <CustomerSearch
@@ -120,10 +136,16 @@ useEffect(() => {
                 </div>
               }
               // disable
-              onClick={() => {
-                setShowNotification(true);
-                setPos("top");
-                setNotiType("info");
+              onClick={(e) => {
+                // setShowNotification(true);
+                // setPos("top");
+                // setNotiType("info");
+                 displayContext(
+                              e,
+                              "contextMenuId5",
+                              "vertical",
+                              "center",
+                            );
               }}
             ></DsButton>
           )}

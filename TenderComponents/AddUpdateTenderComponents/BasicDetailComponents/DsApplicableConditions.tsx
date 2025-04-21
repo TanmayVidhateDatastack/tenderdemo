@@ -114,7 +114,7 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
         selectedConditions.add(id);
         conditionsVisibility[id] = true;
         console.log(id);
-        if (tenderData.tenderFees.some((fee) => fee.feesType == id)) 
+        if (tenderData.tenderFees.some((fee) => fee.feesType == id))
           updateApplicableCondition(id, "status", "ACTV");
         // else addApplicableCondition(id);
       } else {
@@ -126,6 +126,7 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
       }
     });
   }, [applicableConditions,tenderDataCopy.id]);
+ 
  
   useEffect(() => {
     
