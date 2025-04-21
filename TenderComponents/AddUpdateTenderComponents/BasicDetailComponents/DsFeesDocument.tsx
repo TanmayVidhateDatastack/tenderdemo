@@ -91,7 +91,6 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
   const [selectedPaidBy, setSelectedPaidBy] =
     useState<DsSelectOption>();
   useEffect(() => {
-    ///PaymentMode
     const paidByvalue = tenderData.tenderFees.find(
       (x) => x.feesType == type
     )?.paidBy;
@@ -100,10 +99,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
       if (option) setSelectedPaidBy(option);
     }
   }, [tenderData.tenderFees.find((x) => x.feesType == type)]);
-
-
-
-      
+  
   const handleAppliedSuppliedFetch = async () => {
     try {
       const res = await fetchData({ url: paidBys });

@@ -90,10 +90,10 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
     }
   }, [applicableConditions,tenderDataCopy]);
 
-useEffect(() => {
+  useEffect(() => {
     applicableConditions.forEach((opt) => {
-      const id = opt.value.toString(); 
-      // if(tenderData.tenderFees.find((x)=> x.feesType==id)?.status=="INAC"){ 
+      const id = opt.value.toString();
+      // if(tenderData.tenderFees.find((x)=> x.feesType==id)?.status=="INAC"){
       //   console.log("Inactive ",id);
       // }
       // else if (tenderData.tenderFees.find((x)=> x.feesType==id)?.status=="ACTV"){
@@ -114,7 +114,7 @@ useEffect(() => {
         selectedConditions.add(id);
         conditionsVisibility[id] = true;
         console.log(id);
-        if (tenderData.tenderFees.some((fee) => fee.feesType == id))
+        if (tenderData.tenderFees.some((fee) => fee.feesType == id)) 
           updateApplicableCondition(id, "status", "ACTV");
         // else addApplicableCondition(id);
       } else {
@@ -122,10 +122,18 @@ useEffect(() => {
         conditionsVisibility[id] = false;
         if (tenderData.tenderFees.some((fee) => fee.feesType == id))
           updateApplicableCondition(id, "status", "INAC");
+<<<<<<< HEAD
 
       }
     });
   }, [applicableConditions,tenderDataCopy.id]);
+=======
+ 
+      }
+    });
+  }, [applicableConditions,tenderDataCopy.id]);
+ 
+>>>>>>> da3a09e99e1ca2677fb0cce4dc38b22f23caa929
   useEffect(() => {
     
     window.addEventListener("click", (e) => {
