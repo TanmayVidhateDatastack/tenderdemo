@@ -6,6 +6,7 @@ import React, { useRef, useState } from "react";
 import DsPopup, { ClosePopup } from "@/Elements/DsComponents/dsPopup/dsPopup";
 import DSButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import Toaster from "@/Elements/DsComponents/DsToaster/DsToaster";
+import IconFactory from "@/Elements/IconComponent";
 
 
 interface CsvPopupProps {
@@ -131,10 +132,11 @@ export default function CsvPopup({ onUpload }: CsvPopupProps) {
               ref={fileInputRef}
             />
              {file && (
-                <span onClick={handleRemoveFile}>
-                ❌
-              </span>
+                <div style={{width:"1em",height:"1em"}}  onClick={handleRemoveFile} >
+              <IconFactory name={"crossSmall"}></IconFactory>
+               </div>
                  
+           
               )}
           </div>
           <Toaster 

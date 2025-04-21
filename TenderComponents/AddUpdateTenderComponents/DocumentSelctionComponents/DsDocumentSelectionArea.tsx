@@ -28,7 +28,7 @@ const DocumentSelectorArea: React.FC = () => {
     // ✅ Remove from selectedDocuments & force update
     documentContext.setSelectedDocuments((prev) => {
       const updatedSelection = prev.filter((d) => d.documentName !== documentName);
-      console.log("Updated selectedDocuments:", updatedSelection); // Debugging Log
+      // console.log("Updated selectedDocuments:", updatedSelection); // Debugging Log
       return updatedSelection;
     });
   };
@@ -41,7 +41,7 @@ const DocumentSelectorArea: React.FC = () => {
   }, [documentData]); // Runs whenever documentData changes
 
   useEffect(() => {
-    console.log("total selected documents : ", totalSelectedDocuments);
+    // console.log("total selected documents : ", totalSelectedDocuments);
   }, [totalSelectedDocuments]);
 
 

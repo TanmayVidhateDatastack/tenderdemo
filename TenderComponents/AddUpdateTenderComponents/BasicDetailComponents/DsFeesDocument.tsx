@@ -16,8 +16,9 @@ import fetchData from "@/Common/helpers/Method/fetchData";
 import { useEffect, useState } from "react";
 import IconFactory from "@/Elements/IconComponent";
 import DsMultiSelect from "@/Elements/DsComponents/dsSelect/dsMultiSelect";
+import { getYesterdayDate } from "@/Common/helpers/Method/conversion";
 
-export type tenderDocument = { 
+export type tenderDocument = {
   name: string;
   document: File;
 };
@@ -61,7 +62,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
   mode,
   paidBy,
   downloadVisible,
-  paymentCompletedVisible, 
+  paymentCompletedVisible,
 }) => {
   const {
     updateTenderFee,
@@ -74,6 +75,31 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     []
   );
 
+  const [selectedPaymentMode, setSelectedPaymentMode] =
+    useState<DsSelectOption>();
+  useEffect(() => {
+    ///PaymentMode
+    const modeValue = tenderData.tenderFees.find(
+      (x) => x.feesType == type
+    )?.paymentMode;
+    if (modeValue) {
+      const option = mode.find((x) => x.value == modeValue);
+      if (option) setSelectedPaymentMode(option);
+    } 
+  }, [tenderData.tenderFees.find((x) => x.feesType == type)]);
+
+  const [selectedPaidBy, setSelectedPaidBy] =
+    useState<DsSelectOption>();
+  useEffect(() => {
+    const paidByvalue = tenderData.tenderFees.find(
+      (x) => x.feesType == type
+    )?.paidBy;
+    if (paidByvalue) {  
+      const option = mode.find((x) => x.value == paidByvalue);
+      if (option) setSelectedPaidBy(option);
+    }
+  }, [tenderData.tenderFees.find((x) => x.feesType == type)]);
+  
   const handleAppliedSuppliedFetch = async () => {
     try {
       const res = await fetchData({ url: paidBys });
@@ -99,7 +125,6 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     handleAppliedSuppliedFetch();
   }, []);
 
-  
   return (
     <>
       <div>
@@ -115,8 +140,8 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           {/* // { )} } */}
         </div>
         <div>
-          {paymentCompletedVisible && ( 
-            <> 
+          {paymentCompletedVisible && (
+            <>
               <div>
                 <Ds_checkbox
                   id={"payment"}
@@ -125,43 +150,55 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   label={"Payment Completed"}
                 />
               </div>
-               <div className={eleStyles.inputDetails}>
-                  <DsMultiSelect 
-                   label="Add document type"
-                   id={"Documents"}
-                   options={[
-                    { label: "EMD Acknowledgement Receipt", value: "EMD_Acknowledgement_Receipt" },
-                    { label: "EMD Fund Transfer Confirmation", value: "EMD_Fund_Transfer_Confirmation" },
+              <div className={eleStyles.inputDetails}>
+                <DsMultiSelect
+                  label="Add document type"
+                  id={"Documents"}
+                  options={[
+                    {
+                      label: "EMD Acknowledgement Receipt",
+                      value: "EMD_Acknowledgement_Receipt",
+                    },
+                    {
+                      label: "EMD Fund Transfer Confirmation",
+                      value: "EMD_Fund_Transfer_Confirmation",
+                    },
                     { label: "EMD Transaction", value: "EMD_Transaction" },
-                    { label: "EMD Payment Receipt", value: "EMD_Payment_Receipt" }]}
-                   >
-                  </DsMultiSelect>
-                  <div> 
-                    <DsButton
-                      label="Add"
-                      buttonViewStyle="btnContained"
-                      buttonSize="btnSmall"
-                      className={styles.addBtn}
-                      onClick={()=>{}}
-                      />
-                    </div> 
+                    {
+                      label: "EMD Payment Receipt",
+                      value: "EMD_Payment_Receipt",
+                    },
+                  ]}
+                ></DsMultiSelect>
+                <div>
+                  <DsButton
+                    label="Add"
+                    buttonViewStyle="btnContained"
+                    buttonSize="btnSmall"
+                    className={styles.addBtn}
+                    onClick={() => {}}
+                  />
+                </div>
               </div>
             </>
           )}
-
         </div>
         <div className={eleStyles.inputDetails}>
           <div className={styles.fieldColors}>
             <DsTextField
               maxLength={10}
-              initialValue=""
-              // className={styles.fieldColors}
+              initialValue={
+                tenderData.tenderFees
+                  .find((x) => x.feesType == type)
+                  ?.amount.toString() || ""
+              }
               label={"Amount"}
-              inputType="positive" 
+              inputType="positive"
               onBlur={(e) =>
                 updateTenderFee(
                   type,
-                  "amount",Number((e.target as HTMLInputElement).value)
+                  "amount",
+                  Number((e.target as HTMLInputElement).value)
                 )
               }
             ></DsTextField>
@@ -169,26 +206,27 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           <div className={styles.fieldColors}>
             <DsSingleSelect
               id={id + "_paidType1"}
+              selectedOption={selectedPaidBy}
               options={depositeDocuments}
               label="Paid by"
               placeholder={"Please select here"}
               setSelectOption={(option) => {
-                if (typeof option.value == "string") {
+                if (typeof option.value == "string") { 
                   updateTenderFee(type, "paidBy", option.value);
-                } 
+                }
               }}
             ></DsSingleSelect>
           </div>
           <div className={styles.fieldColors}>
             <DsSingleSelect
-              // className={styles.fieldColors}
+              selectedOption={selectedPaymentMode}
               id={id + "_modes1"}
               options={mode}
               label="Modes"
               placeholder={"Please search and select here"}
               setSelectOption={(option) => {
                 if (typeof option.value == "string") {
-                  updateTenderFee(type, "paymentMode", option.label);
+                  updateTenderFee(type, "paymentMode", option.value);
                 }
               }}
             ></DsSingleSelect>
@@ -196,8 +234,11 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           <div className={styles.fieldColors}>
             <DatePicker
               id={id + "dueDate"}
-              minDate={new Date()}
-              initialDate={""}
+              minDate={getYesterdayDate()}
+              initialDate={new Date(
+                tenderData.tenderFees.find((x) => x.feesType == type)
+                  ?.paymentDueDate || ""
+              ).toLocaleDateString("en-GB")}
               placeholder="DD/MM/YYYY"
               label="Due Date"
               setDateValue={(date) => {
@@ -213,6 +254,10 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           <h4>Notes</h4>
           <div className={styles.fieldColors}>
             <TextArea
+              initialValue={
+                tenderData.tenderFees.find((x) => x.feesType == type)
+                  ?.instructionNotes || ""
+              }
               placeholder="Please type here"
               disable={false}
               minRows={2}
@@ -228,14 +273,14 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
         </div>
         <div>
           <DsCsvUpload
-            id={id + "UploadedDocuments"} 
+            id={id + "UploadedDocuments"}
             label="Attach File"
             buttonViewStyle="btnText"
             buttonSize="btnSmall"
             startIcon={<IconFactory name="fileAttach" />}
-            onSelectedFileChange={(files) => { 
+            onSelectedFileChange={(files) => {
               const typeDocuments =
-                tenderData.documents?.filter(
+                tenderData.tenderDocuments?.filter(
                   (x) =>
                     x.documentType == type &&
                     x.category == type + "_INSTRUCTION"

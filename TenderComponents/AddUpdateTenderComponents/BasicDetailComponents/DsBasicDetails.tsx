@@ -71,7 +71,7 @@ const DsBasicDetails = () => {
       }});
       if (res.code === 200) {
         const result = res.result;
-        console.log("GetAllMetaData",result);
+        console.log("GetAllMetaData",result); 
         setMetadata(result);
        
         // Tender Details
@@ -127,7 +127,7 @@ const DsBasicDetails = () => {
         const depositDocData = [
           {
             modes: result.paymentMode.map((item: any) => ({
-              value: item.codeValue.toLowerCase(), // Optional: Lowercase if needed
+              value: item.codeValue, // Optional: Lowercase if needed
               label: item.codeDescription,
             })),
           },
@@ -147,7 +147,7 @@ const DsBasicDetails = () => {
       if (res.code === 200) {
         const result = res.result;
         setRole(result.roleName);
-        console.log("result teder role : ", result);
+        // console.log("result teder role : ", result);
       } else {
         console.error("Error fetching data: ", res.message || "Unknown error");
       }
@@ -160,9 +160,8 @@ const DsBasicDetails = () => {
     handleFetch();
     handleRoleFetch();
   }, []);
- 
   useEffect(() => {
-    console.log("metadata : ", metadata);
+    // console.log("metadata : ", metadata);
     if (metadata.length > 0 && metadata[0]?.depositeDocument) {
       setDepositeDocuments(metadata[0].depositeDocument);
       setApplicableDocuments(metadata[0].applicableDeposits);
@@ -184,12 +183,11 @@ const DsBasicDetails = () => {
       <div>
         <DsDepositeDocuments
           setDepositeDocuments={(docs) => {
-            setDepositeDocuments(docs); 
-          }}
+            setDepositeDocuments(docs);
+          } }
           depositeDocument={depositeDocument}
-          applicableDeposits={applicableDocuments} 
-          role={role}
-        />
+          applicableDeposits={applicableDocuments}
+          role={role}         />
       </div>
       <span className={styles.Seperator}></span>
       <div>

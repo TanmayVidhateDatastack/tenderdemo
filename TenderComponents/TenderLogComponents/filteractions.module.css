@@ -132,6 +132,42 @@ gap:0px;
   display: flex;
   gap: 0px;
 }
+.awardedbtn
+{
+  background-color:var(--tender-green-hover) !important;
+  color:var(--tender-green)!important;
+
+
+}
+.awardedbtn:hover
+{
+  background-color:var(--tender-green) !important;
+  color:white!important;
+
+}
+.tenderlost
+{
+  background-color:#8909151a !important;
+  color:#890915!important;
+}
+
+
+.tenderlost:hover
+{
+  background-color:#890915 !important;
+  color:white!important;
+}
+
+.crosscircle
+{
+
+  fill:#890915 !important;
+}
+.crosscirclered
+{
+
+  fill:#D20C0C !important;
+}
 
 
 /* @media screen  and (max-width: 1450px) {

@@ -140,8 +140,8 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
       return false;
     });
   };
-  console.log("searchhhhh", searchText);
-  console.log("searchinobject", searchInObject);
+
+
 
   return (
     <>
@@ -171,7 +171,6 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
             buttonViewStyle={
               isFiltered["nearSubmission"] ? "btnContained" : "btnOutlined"
             }
-
             onClick={() => handleFilter("NEAR_SUBMISSION")}
             label="Near Submission"
           />

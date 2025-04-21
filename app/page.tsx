@@ -347,6 +347,7 @@ export default function Home() {
         // console.log("objevct to be send", tenderFilters);
 
         if (res?.code === 200 && Array.isArray(res?.result)) {
+          console.log("getAllTenders:",res)
           const formattedData = formatTenders(res?.result);
           // console.log("formatted data:", formattedData);
           setData(formattedData);
@@ -356,7 +357,7 @@ export default function Home() {
         }
       })
       .catch((error) => {
-        console.error("Error fetching orders:", error);
+        // console.error("Error fetching orders:", error);
       });
   };
 
@@ -382,6 +383,7 @@ export default function Home() {
       status: {
         tenderStatus: item.status?.tenderStatus ?? "-",
         message: item.status?.message ?? "-",
+        statusDescription:item.status?.tenderStatusDescription??"-"
       },
     }));
   };
@@ -498,12 +500,13 @@ export default function Home() {
         if (res?.code === 200 && res?.result) {
           // if(res?.c)
           setApplierSupplier(res.result?.appliedBySuppliedBy);
+          // console.log("stored applier supplier  result:", res.result);
         } else {
-          console.error("Error: Invalid data format or empty depot");
+          // console.error("Error: Invalid data format or empty depot");
         }
       })
       .catch((err) => {
-        console.error("Error fetching data:", err);
+        // console.error("Error fetching data:", err);
       });
   };
 
@@ -536,14 +539,7 @@ export default function Home() {
     
     }
   };
-  function formatDate(isoString) {
-    if (!isoString) return "-"; // Handle empty or undefined values
-    const date = new Date(isoString);
-    const day = date.getDate();
-    const month = date.getMonth() + 1; // Months are zero-based
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
-  }
+
 
   const addTableData = (tender: Tender[]) => {
     // console.log("Adding table data:", tender);
@@ -587,7 +583,7 @@ export default function Home() {
             content: (
               <DsName
                 id={t.tenderId + "submittionDate"}
-                name={formatDate(t.submissionDate)}
+                name={new Date(t.submissionDate).toLocaleDateString("en-GB")}
               />
             ),
             filterValue: t.submissionDate,
@@ -701,18 +697,18 @@ export default function Home() {
               <DsStatusIndicator
                 type="user_defined"
                 className={`${
-                  t?.status?.tenderStatus
+                  t?.status?.statusDescription
                     ? styles[
-                        t?.status?.tenderStatus
+                        t?.status?.statusDescription
                           ?.replaceAll(" ", "_")
                           .toLowerCase()
                       ]
                     : ""
                 }`}
-                status={t.status.tenderStatus}
-                label={t.status.tenderStatus}
+                status={t.status.statusDescription}
+                label={t.status.statusDescription}
                 status_icon={
-                  <div style={{ width: "10px" }}>
+                  <div style={{ width: "0.7em",height:"0.5em" }}>
                     <IconFactory name={"comment"}></IconFactory>
                   </div>
                 }
@@ -737,8 +733,16 @@ export default function Home() {
   };
 
   const router = useRouter();
-  const goTo = (tenderId: number) => {
+  const goTo = (tenderId: number,status?:string) => {
     const location = `/Tender/${tenderId}`;
+    if(status)
+      sessionStorage.setItem("tenderStatus", status);
+    else{
+      const storedStatus= sessionStorage.getItem("tenderStatus");
+      if(storedStatus){
+        sessionStorage.removeItem("tenderStatus")
+      }
+    }
     if (location) {
       router.push(location); // Navigate to the dynamic route
     }
@@ -770,6 +774,7 @@ export default function Home() {
     e: React.MouseEvent<HTMLElement>;
     rowIndex: number;
     statuscell: string;
+    tenderId:number;
   } | null>(null);
 
   return (
@@ -852,19 +857,24 @@ export default function Home() {
                   row?.content?.find((cell) => cell?.columnIndex === 10)
                     ?.filterValue ?? ""
                 );
+                const tenderId=Number(row?.content?.[0]?.customAttributes?.tenderId||0)
 
                 // console.log("statuscellintable", statuscell);
 
                 // Store selected row data
-                setSelectedRow({ e, rowIndex, statuscell });
+                setSelectedRow({ e, rowIndex, statuscell,tenderId });
               }}
             />
           </div>
           {selectedRow && (
             <DsTenderTableFloatingMenu
               e={selectedRow.e}
+
               rowIndex={selectedRow.rowIndex}
               statuscell={selectedRow.statuscell}
+              handleFetch={handleFetch} 
+              tenderId={selectedRow.tenderId}
+              goTo={goTo}
             />
           )}
         </div>

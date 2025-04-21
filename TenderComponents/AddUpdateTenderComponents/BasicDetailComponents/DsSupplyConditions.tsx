@@ -21,6 +21,7 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
     tenderData,
     removeTenderDocument,
   } = useTenderData();
+
   return (
     <>
       <div className={styles.emdContainer}>
@@ -31,6 +32,7 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
           <h4>Notes</h4>
           <div className={styles.fieldColors}>
             <TextArea
+             initialValue={tenderData.tenderSupplyConditions[0].applicableConditions.find((x)=>x.type==type)?.notes||""}
               id="embossmentNotes"
               placeholder="Please type here"
               minRows={2}
@@ -46,29 +48,6 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
           </div>
         </div>
         <div className={styles.attachFileBtn}>
-          {/* <DsCsvUpload
-            id="upload1"
-            label="Attach File"
-            buttonViewStyle="btnText" 
-            buttonSize="btnSmall"
-            startIcon={<IconFactory name="fileAttach" /> }
-          // onSetFiles={(id) => {
-          //   getFilesFromLocalStorage(id).then((files) => {
-          //     if (files && files.length > 0) {
-          //       const documentArray = files.map((file) => ({ 
-          //         name: file.attributes.name,
-          //         document: file.file
-          //       }));
- 
-          //       updateApplicableCondition(
-          //         id.replace("conditionsView", ""),
-          //         "documents",
-          //         documentArray    
-          //       );
-          //     }
-          //   });
-          // }}
-          ></DsCsvUpload> */}
 
           <DsCsvUpload
             id={id + "UploadedDocuments"}
@@ -77,12 +56,12 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
             buttonSize="btnSmall"
             startIcon={<IconFactory name="fileAttach" />}
             onSelectedFileChange={(files) => { 
-              const typeDocuments = tenderData.documents?.filter(
+              const typeDocuments = tenderData.tenderDocuments?.filter(
                 (x) =>
                   x.documentType == "TENDER_SUPPLY_CONDITION" &&
                   x.category == type
               )||[];
-              console.log("updateDocuments",files);
+              // console.log("updateDocuments",files);
               updateDocuments(
                 files,
                 typeDocuments, 

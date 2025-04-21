@@ -7,7 +7,7 @@ import {
   getTenderByTenderId,
   saveTenderurl,
 } from "@/Common/helpers/constant";
-import fetchData from "@/Common/helpers/Method/fetchData";
+import fetchData, { fileToBase64 } from "@/Common/helpers/Method/fetchData";
 
 import { useRouter } from "next/navigation";
 import React, {
@@ -20,11 +20,12 @@ import React, {
 } from "react";
 import { generatePatchDocument } from "@/Common/helpers/Method/UpdatePatchObjectCreation";
 import DsSupplyConditions from "./BasicDetailComponents/DsSupplyConditions";
-import { headers } from "next/headers";
+
 class ActionStatus {
   notiType: "success" | "bonus" | "info" | "error" | "cross" = "success";
-  notiMsg: string = "";
+  notiMsg: string | React.ReactNode = "";
   showNotification: boolean = false;
+  isOkayButtonVisible?: boolean = false;
 }
 export type Document = {
   name: string;
@@ -75,6 +76,7 @@ export type TenderProduct = {
 //   name: string;
 // };
 export type tenderSupplyCondition = {
+  id?: number;
   supplyPoint: string;
   consigneesCount: number;
   testReportRequired: string;
@@ -139,8 +141,8 @@ export type TenderData = {
   submissionDate: string;
   rateContractValidity: string;
   submissionMode: string;
-  deliveryPeriod: number;
-  extendedDeliveryPeriod: number;
+  deliveryPeriod: number | null;
+  extendedDeliveryPeriod: number | null;
   lateDeliveryPenalty: number;
   tenderUrl: string;
   shippingLocations: number[];
@@ -167,7 +169,7 @@ export type TenderData = {
   };
   // comments: string;
   tenderFees: tenderFee[];
-  supplyConditions: tenderSupplyCondition;
+  tenderSupplyConditions: tenderSupplyCondition[];
   tenderRevisions: {
     id?: number;
     status?: string;
@@ -175,7 +177,7 @@ export type TenderData = {
     tenderItems: TenderProduct[];
   }[];
   tenderContract?: TenderContract;
-  documents?: TenderDocument[];
+  tenderDocuments?: TenderDocument[];
 };
 export function updateDocuments(
   files: File[],
@@ -250,6 +252,7 @@ export function updateDocuments(
 }
 interface TenderDataContextType {
   tenderData: TenderData;
+  tenderDataCopy: TenderData;
   actionStatus: ActionStatus;
   setActionStatusValues: (actionStatus: ActionStatus) => void;
   updateTenderData: (
@@ -311,7 +314,7 @@ interface TenderDataContextType {
     id: number,
     value: string | number
   ) => void;
-  saveTender: (status: dsStatus) => Promise<void>;
+  saveTender: (status: string) => Promise<void>;
   updateTender: (status: string) => Promise<void>;
   fetchAndSetOriginalTender: (
     tenderId: number,
@@ -326,6 +329,7 @@ const TenderDataContext = createContext<TenderDataContextType | undefined>(
 export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const reader = new FileReader();
   const [tenderData, setTenderData] = useState<TenderData>({
     customerId: 0,
     customerAddressId: 0,
@@ -336,11 +340,11 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     submissionDate: "",
     rateContractValidity: "",
     submissionMode: "",
-    deliveryPeriod: 0,
-    extendedDeliveryPeriod: 0,
+    deliveryPeriod: null,
+    extendedDeliveryPeriod: null,
     lateDeliveryPenalty: 0,
     tenderUrl: "",
-    shippingLocations: [1, 2],
+    shippingLocations: [],
     applierType: "",
     applierId: 0,
     supplierType: "",
@@ -360,13 +364,15 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       statusDescription: "Draft",
     },
     tenderFees: [],
-    supplyConditions: {
-      supplyPoint: "",
-      consigneesCount: 0,
-      testReportRequired: "",
-      eligibility: [],
-      applicableConditions: [],
-    },
+    tenderSupplyConditions: [
+      {
+        supplyPoint: "",
+        consigneesCount: 0,
+        testReportRequired: "",
+        eligibility: [],
+        applicableConditions: [],
+      },
+    ],
     tenderRevisions: [
       {
         version: 1,
@@ -374,7 +380,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         tenderItems: [],
       },
     ],
-    documents: [],
+    tenderDocuments: [],
     tenderContract: {
       contractStatus: "AWARDED",
       contractJustification: "test",
@@ -486,7 +492,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         updatedTenderFees.push({
           feesType: type,
           amount: 0,
-          currency: "",
+          currency: "INR",
           paidBy: "",
           paymentMode: "",
           paymentDueDate: "",
@@ -515,8 +521,8 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   ) => {
     setTenderData((prev) => ({
       ...prev,
-      supplyConditions: {
-        ...prev.supplyConditions,
+      tenderSupplyConditions: {
+        ...prev.tenderSupplyConditions,
         [key]: value,
       },
     }));
@@ -529,15 +535,18 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   ) => {
     setTenderData((prev) => ({
       ...prev,
-      supplyConditions: {
-        ...prev.supplyConditions,
-        applicableConditions: prev.supplyConditions.applicableConditions.map(
-          (condition) =>
-            condition.type === conditionType
-              ? { ...condition, [key]: value }
-              : condition
-        ),
-      },
+      tenderSupplyConditions: [
+        {
+          ...prev.tenderSupplyConditions[0],
+          applicableConditions:
+            prev.tenderSupplyConditions[0].applicableConditions.map(
+              (condition) =>
+                condition.type === conditionType
+                  ? { ...condition, [key]: value }
+                  : condition
+            ),
+        },
+      ],
     }));
   };
   // ✅ Add a document to the tender-level document list
@@ -552,8 +561,8 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   ) => {
     setTenderData((prev) => ({
       ...prev,
-      documents: [
-        ...(prev.documents || []),
+      tenderDocuments: [
+        ...(prev.tenderDocuments || []),
         {
           documentType: documentType,
           category: documentCategory,
@@ -575,8 +584,8 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     setTenderData((prev) => ({
       ...prev,
 
-      documents: [
-        ...(prev.documents?.filter(
+      tenderDocuments: [
+        ...(prev.tenderDocuments?.filter(
           (document) =>
             !(
               document.name == documentName &&
@@ -635,50 +644,59 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       ),
     }));
   };
-  // const createTenderVersion = () => {
-  //   const createTenderVersion = () => {
-  //   const latestRevision = tenderData.tenderRevisions.reduce(
-  //     (maxObj, currentObj) =>
+  // const createTenderVersion = useCallback(() => {
+  //   const latestRevision = {
+  //     ...[...tenderData.tenderRevisions].reduce((maxObj, currentObj) =>
   //       currentObj.version > maxObj.version ? currentObj : maxObj
+  //     ),
+  //   };
+  //   console.log(latestRevision);
+  //   console.log(tenderData.tenderRevisions);
+  //   delete latestRevision.id;
+
+  //   const newTenderRevision = [...tenderData.tenderRevisions];
+  //   const newRevisedIndex = newTenderRevision.findIndex(
+  //     (x) => x.version == latestRevision.version
   //   );
-  //   setTenderData((prev) => ({
-  //     ...prev,
-  //     tenderRevisions: [
-  //       ...prev.tenderRevisions,
-  //       {
-  //         version: latestRevision.version + 1,
-  //         status:"DRAFT",
-  //         tenderItems: [
-  //           ...latestRevision.tenderItems.map((x) => {
-  //             return {
-  //               requestedGenericName: x.requestedGenericName,
-  //               requestedQuantity: x.requestedQuantity,
-  //               requestedPackingSize: x.requestedPackingSize,
-  //               productId: x.productId,
-  //               product: x.product,
-  //               proposedRate: x.proposedRate,
-  //               ptrPercent: x.ptrPercent,
-  //               lpr: x.lpr,
-  //               competitorId: x.competitorId,
-  //               stockiestDiscountValue: x.stockiestDiscountValue,
-  //             } as TenderProduct;
-  //           }),
-  //         ],
-  //       },
-  //     ],
-  //   }));
-  // };
+  //   latestRevision.version = latestRevision.version + 1;
+  //   if (newRevisedIndex) {
+  //     // newTenderRevision[newRevisedIndex].status = "REVISE";
+  //     newTenderRevision.push({
+  //       ...latestRevision,
+  //       tenderItems: [
+  //         ...latestRevision.tenderItems.map((x) => {
+  //           return {
+  //             requestedGenericName: x.requestedGenericName,
+  //             requestedQuantity: x.requestedQuantity,
+  //             requestedPackingSize: x.requestedPackingSize,
+  //             productId: x.productId,
+  //             product: x.product,
+  //             proposedRate: x.proposedRate,
+  //             ptrPercentage: x.ptrPercentage,
+  //             lpr: x.lpr,
+  //             competitorId: x.competitorId,
+  //             stockistDiscountValue: x.stockistDiscountValue,
+  //           } as TenderProduct;
+  //         }),
+  //       ],
+  //     });
+  //     setTenderData((prev) => ({
+  //       ...prev,
+  //       tenderRevisions: [...newTenderRevision],
+  //     }));
+  //   }
+  // }, [tenderDataCopy, tenderData]);
   const createTenderVersion = useCallback(() => {
-    const latestRevision = {...[...tenderData.tenderRevisions].reduce(
-      (maxObj, currentObj) =>
+    const latestRevision = {
+      ...[...tenderData.tenderRevisions].reduce((maxObj, currentObj) =>
         currentObj.version > maxObj.version ? currentObj : maxObj
-    )};
+      ),
+    };
     console.log(latestRevision);
     console.log(tenderData.tenderRevisions);
     delete latestRevision.id;
-    latestRevision.version=latestRevision.version + 1;
- 
-   
+    latestRevision.version = latestRevision.version + 1;
+
     setTenderData((prev) => ({
       ...prev,
       tenderRevisions: [
@@ -704,8 +722,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         },
       ],
     }));
-  },[tenderDataCopy,tenderData]);
- 
+  }, [tenderDataCopy, tenderData]);
   // ✅ Update a tender product field
   const updateTenderProduct = (
     version: number,
@@ -719,24 +736,27 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         revision.version === version
           ? {
               ...revision,
-              tenderItems: revision.tenderItems.map((item) =>
-                item.id === id || item.productId === id
-                  ? key.startsWith("product.")
-                    ? {
-                        ...item,
-                        product: {
-                          ...item.product,
-                          [key.split(".")[1]]: value, // Update the nested product field
-                        },
-                      }
-                    : { ...item, [key]: value } // Update the top-level field
-                  : item
-              ),
+              tenderItems: revision.tenderItems.map((item) => {
+                const obj =
+                  item.id === id || item.productId === id
+                    ? key.startsWith("product.")
+                      ? {
+                          ...item,
+                          product: {
+                            ...item.product,
+                            [key.split(".")[1]]: value, // Update the nested product field
+                          },
+                        }
+                      : { ...item, [key]: value } // Update the top-level field
+                    : item;
+                return obj;
+              }),
             }
           : revision
       ),
     }));
   };
+
   const updateContractDetails = (
     key: keyof TenderContract,
     value: string | { id: number; tenderItems: ContractItems[] }
@@ -800,7 +820,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       const active: "ACTV" | "INAC" = "ACTV";
 
       const updatedTenderApplicableConditions =
-        prev.supplyConditions.applicableConditions.map((ac) => {
+        prev.tenderSupplyConditions[0].applicableConditions.map((ac) => {
           if (ac.type == type) {
             updated = true;
             return {
@@ -819,8 +839,8 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       }
       return {
         ...prev,
-        supplyConditions: {
-          ...prev.supplyConditions,
+        tenderSupplyConditions: {
+          ...prev.tenderSupplyConditions,
           applicableConditions: updatedTenderApplicableConditions,
         },
       };
@@ -832,11 +852,12 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     setTenderData((prev) => ({
       ...prev,
 
-      supplyConditions: {
-        ...prev.supplyConditions,
-        applicableConditions: prev.supplyConditions.applicableConditions.filter(
-          (condition) => condition.type !== conditionType
-        ),
+      tenderSupplyConditions: {
+        ...prev.tenderSupplyConditions,
+        applicableConditions:
+          prev.tenderSupplyConditions[0].applicableConditions.filter(
+            (condition) => condition.type !== conditionType
+          ),
       },
     }));
   };
@@ -882,8 +903,10 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     return newObj;
   };
   // Save Order API Call
+  // Save Order API Call
+
   const saveTender = useCallback(
-    async (status: dsStatus) => {
+    async (status: string) => {
       if (!tenderData) return;
       const tenderSaveData = {
         customerId: tenderData.customerId,
@@ -937,30 +960,36 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               instructionNotes: x.instructionNotes,
             };
           }),
-        supplyConditions: {
-          ...tenderData.supplyConditions,
-          eligibility: tenderData.supplyConditions.eligibility.join(","),
-          applicableConditions: JSON.stringify(
-            tenderData.supplyConditions.applicableConditions
-          ),
-        },
-        documents:
-          tenderData.documents?.map((x) => {
+        tenderSupplyConditions: [
+          {
+            ...tenderData.tenderSupplyConditions[0],
+            eligibility:
+              tenderData.tenderSupplyConditions[0].eligibility.join(","),
+            applicableConditions: JSON.stringify(
+              tenderData.tenderSupplyConditions[0].applicableConditions
+            ),
+          },
+        ],
+        tenderDocuments:
+          tenderData.tenderDocuments?.map(async (x) => {
+            const base64String = x.data ? await fileToBase64(x.data) : "";
             return {
               name: x.name,
-              data: x.data,
+              data: base64String,
               documentType: x.documentType,
               category: x.category,
             };
           }) || [],
+        comments: null,
       };
+      delete tenderSaveData.tenderSupplyConditions[0].id;
       const dataToSend = stripReadOnlyProperties({
         ...tenderSaveData,
         status: status.toUpperCase(),
         lastUpdatedBy: 3,
       });
 
-      // console.log("sAVEEEE", dataToSend);
+      console.log("sAVEEEE", dataToSend);
       try {
         await fetchData({
           url: saveTenderurl,
@@ -996,6 +1025,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     },
     [tenderData, tenderDataCopy, fetchData]
   );
+
   const updateTender = useCallback(
     async (status: string) => {
       try {
@@ -1030,15 +1060,18 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             tenderDataCopy.supplierType.toLowerCase() == "organization"
               ? null
               : tenderDataCopy.supplierId,
-          supplyConditions: {
-            ...tenderDataCopy.supplyConditions,
-            eligibility: tenderDataCopy.supplyConditions.eligibility.join(","),
-            applicableConditions: JSON.stringify(
-              tenderDataCopy.supplyConditions.applicableConditions
-            ),
-          },
+          tenderSupplyConditions: [
+            {
+              ...tenderDataCopy.tenderSupplyConditions[0],
+              eligibility:
+                tenderDataCopy.tenderSupplyConditions[0].eligibility.join(","),
+              applicableConditions: JSON.stringify(
+                tenderDataCopy.tenderSupplyConditions[0].applicableConditions
+              ),
+            },
+          ],
           // tenderRevisions: copylatestTenderRevision,
-          tenderRevisions:tenderDataCopy.tenderRevisions
+          tenderRevisions: tenderDataCopy.tenderRevisions,
         });
         delete dataToSendTenderCopy.applierType;
         delete dataToSendTenderCopy.supplierType;
@@ -1061,17 +1094,19 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             tenderData.supplierType.toLowerCase() == "organization"
               ? null
               : tenderData.supplierId,
-          supplyConditions: {
-            ...tenderData.supplyConditions,
-            eligibility: tenderData.supplyConditions.eligibility.join(","),
- 
-            applicableConditions: JSON.stringify(
-              tenderData.supplyConditions.applicableConditions
-            ),
-          },
+          tenderSupplyConditions: [
+            {
+              ...tenderData.tenderSupplyConditions[0],
+              eligibility:
+                tenderData.tenderSupplyConditions[0].eligibility.join(","),
+
+              applicableConditions: JSON.stringify(
+                tenderData.tenderSupplyConditions[0].applicableConditions
+              ),
+            },
+          ],
           // tenderRevisions: latestTenderRevision,
-          tenderRevisions:tenderData.tenderRevisions
- 
+          tenderRevisions: tenderData.tenderRevisions,
         });
         delete dataToSendOriginalTender.applierType;
         delete dataToSendOriginalTender.supplierType;
@@ -1115,7 +1150,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         console.error("Error saving order:", error);
       }
     },
- 
+
     // async(status:string)=>{
     //   const obj1={
     //     abc:"abc",
@@ -1173,7 +1208,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     //               }
     //             ]
     //           },
- 
+
     //         ],
     //         label:[
     //           {
@@ -1223,7 +1258,9 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             }),
           },
         });
+
         const tenderData = response.result;
+        console.log(response.result);
         if (
           tenderData.tenderRevisions.length == 0 ||
           tenderData.tenderRevisions == null
@@ -1250,12 +1287,16 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               }),
             };
           });
+        console.log("sv", tenderData);
         if (tenderStatus) {
           tenderData.tenders.status = tenderStatus;
         }
+
         tenderData.tenders.tenderDetails =
           tenderData.tenders.tenderDetailsReadOnly;
         delete tenderData.tenders.tenderDetailsReadOnly;
+        console.log("swgev", tenderData);
+
         const newTenderData: TenderData = {
           ...tenderData.tenders,
           tenderRevisions: tenderData.tenderRevisions,
@@ -1263,15 +1304,20 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             ...fee,
             status: "ACTV",
           })),
-          supplyConditions: {
-            ...tenderData.supplyCondition,
-            applicableConditions:
-              tenderData.supplyCondition.applicableConditions?.map((ac) => ({
-                ...ac,
-                status: "ACTV",
-              })),
-          },
+          tenderSupplyConditions: [
+            {
+              ...tenderData.tenderSupplyConditions[0],
+              applicableConditions:
+                tenderData.tenderSupplyConditions[0].applicableConditions?.map(
+                  (ac) => ({
+                    ...ac,
+                    status: "ACTV",
+                  })
+                ),
+            },
+          ],
         };
+        console.log("km", newTenderData);
         setTenderData(newTenderData);
         setTenderDataCopy({
           ...newTenderData,
@@ -1301,6 +1347,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     <TenderDataContext.Provider
       value={{
         tenderData,
+        tenderDataCopy,
         actionStatus,
         updateTenderData,
         updateTenderFee,
@@ -1329,12 +1376,11 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     </TenderDataContext.Provider>
   );
 };
-
 // ✅ Custom hook to access context
 export const useTenderData = () => {
   const context = useContext(TenderDataContext);
   if (!context) {
-    throw new Error("useTenderData must be used within a TenderDataProvider");
+    throw new Error("TenderDataContextProvider must be used");
   }
   return context;
 };

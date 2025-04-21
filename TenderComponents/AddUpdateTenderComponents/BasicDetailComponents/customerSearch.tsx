@@ -105,7 +105,7 @@ const CustomerSearch: React.FC<{
       id="customerSearch"
       initialValue={customer}
       dataListId="customerSearchDatalist" 
-      label={"Customer ID and Name"}
+      label={"Search Customer"}
       options={customers || undefined}
       setOptions={setOptions}
       setSearchUrl={(searchTerm: string) => searchCustomerURL + searchTerm}

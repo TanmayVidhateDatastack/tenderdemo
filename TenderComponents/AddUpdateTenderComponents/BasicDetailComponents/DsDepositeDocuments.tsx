@@ -3,7 +3,7 @@ import Image from "next/image";
 import downarrow from "@/Common/TenderIcons/smallIcons/verticleArrow.svg";
 import { useEffect, useState } from "react";
 import ContextMenu, {
-  closeAllContext, 
+  closeAllContext,
   createContext,
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import React from "react";
@@ -15,9 +15,8 @@ import {
 import { DsSelectOption } from "@/Common/helpers/types";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import DsFeesDocument from "./DsFeesDocument";
-import { useTenderData } from "../TenderDataContextProvider"; 
+import { useTenderData } from "../TenderDataContextProvider";
 
-import { paidBys } from "@/Common/helpers/constant";
 import IconFactory from "@/Elements/IconComponent";
 export interface DepositDocument {
   modes: DsSelectOption[];
@@ -30,7 +29,6 @@ export interface DepositDocument {
 export interface FeesDocument {
   applicableDeposits: DsSelectOption[];
 }
-
 export interface DepositeDocumentsProps {
   setDepositeDocuments: (depositeDocuments: DepositDocument[]) => void;
   depositeDocument: DepositDocument[] | null;
@@ -41,10 +39,16 @@ export interface DepositeDocumentsProps {
 const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   depositeDocument,
   applicableDeposits,
-  role,
+  role, 
 }) => {
   const contextMenuId = "context-display-10";
-  const { addTenderFee, removeTenderFeeByType } = useTenderData();
+  const {
+    addTenderFee,
+    removeTenderFeeByType,
+    tenderData,
+    tenderDataCopy,
+    updateTenderFee,
+  } = useTenderData();
   const [mode, setMode] = useState<DsSelectOption[]>([]);
   const [paidBy, setPaidBy] = useState<DsSelectOption[]>([]);
   const [applicablefees, SetApplicablefees] = useState<DsSelectOption[]>([]);
@@ -55,7 +59,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   });
 
   useEffect(() => {
-    if (role == "MAKER" || role == "CHECKER" ) {
+    if (role == "MAKER" || role == "CHECKER") {
       setPaymentCheckVisible(false);
     } else {
       setPaymentCheckVisible(true);
@@ -79,26 +83,23 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
 
       SetApplicablefees(mappedDeposits);
       const options: Record<string, boolean> = mappedDeposits.reduce<
-        Record<string, boolean>
+        Record<string, boolean> 
       >((acc, opt) => {
         const val = opt.value;
 
         if (typeof val === "string") {
-          acc[val] = true;
+          acc[val] = tenderData.tenderFees.some( 
+            (fee) => fee.feesType == opt.value && fee.status == "ACTV"
+          );
         }
-
         return acc;
       }, {});
 
       setFeeVisibility(options);
     }
-  }, [depositeDocument, applicableDeposits]);
+  }, [depositeDocument, applicableDeposits, tenderDataCopy.tenderFees]);
 
-  useEffect(() => {
-    if (applicablefees) {
-      console.log("applicable fees : ", applicablefees);
-    }
-  }, [applicablefees]);
+
 
   function handleonclick(
     e:
@@ -118,11 +119,13 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
       if (checkbox?.checked) {
         selectedFees.add(id);
         feeVisibility[id] = true;
-        addTenderFee(id);
+        if (tenderData.tenderFees.some((fee) => fee.feesType == id))
+          updateTenderFee(id, "status", "ACTV");
+        else addTenderFee(id);
       } else {
         selectedFees.delete(id);
         feeVisibility[id] = false;
-        removeTenderFeeByType(id);
+        updateTenderFee(id, "status", "INAC");
       }
     });
     closeAllContext();
@@ -131,61 +134,48 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
 
   useEffect(() => {
     applicablefees.forEach((opt) => {
-      const id = opt.value.toString();
+      const id = opt.value.toString(); 
+      // if(tenderData.tenderFees.find((x)=> x.feesType==id)?.status=="INAC"){ 
+      //   console.log("Inactive ",id);
+      // }
+      // else if (tenderData.tenderFees.find((x)=> x.feesType==id)?.status=="ACTV"){
+      //   console.log("active ",id);
+      // }
       const checkbox = document.getElementById(id) as HTMLInputElement;
       selectedFees.add(id);
       feeVisibility[id] = true;
-      addTenderFee(id);
+      // addTenderFee(id);
       if (checkbox?.checked) {
         selectedFees.add(id);
         feeVisibility[id] = true;
-        addTenderFee(id);
+        console.log(id);
+        if (tenderData.tenderFees.some((fee) => fee.feesType == id))
+          updateTenderFee(id, "status", "ACTV");
+        else addTenderFee(id);
       } else if (checkbox) {
         selectedFees.add(id);
         feeVisibility[id] = true;
-        addTenderFee(id);
+        console.log(id);
+        if (tenderData.tenderFees.some((fee) => fee.feesType == id))
+          updateTenderFee(id, "status", "ACTV");
+        else addTenderFee(id);
       } else {
         selectedFees.delete(id);
         feeVisibility[id] = false;
-        removeTenderFeeByType(id); 
+        updateTenderFee(id, "status", "INAC");
       }
-    })
-  }, [applicablefees])
+    });
+  }, [applicablefees,tenderDataCopy.id]);
 
   // useEffect(() => {
   //   console.log("feevisibility : ", feeVisibility);
   // }, [feeVisibility]);
 
   useEffect(() => {
-    // createContext(
-    //   contextMenuId,
-    //   <>
-    //     <div className={styles.feesCheckboxes}>
-    //       {applicablefees.map((checkbox, index) => (
-    //         <Ds_checkbox
-    //           key={index}
-    //           id={checkbox.value.toString()}
-    //           name={checkbox.label}
-    //           value={checkbox.value.toString()}
-    //           label={checkbox.label}
-    //           defaultChecked={true}
-    //         />
-    //       ))}
-    //     </div>
-    //     <DsButton
-    //       label="Add"
-    //       buttonViewStyle="btnContained"
-    //       buttonSize="btnLarge"
-    //       className={styles.addBtn}
-    //       onClick={handleAdd}
-    //     />
-    //   </>,
-    //   true
-    // );
     window.addEventListener("click", (e) => {
       const target = (e.target as HTMLElement).closest(
-        `.${styles["depositsBtn"]}`  
-      ); 
+        `.${styles["depositsBtn"]}`
+      );
 
       const target2 = (e.target as HTMLElement).closest(`#${contextMenuId}`);
 
@@ -213,7 +203,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
       const excludedElement = document.getElementById("optionBtn");
       if (excludedElement && excludedElement.contains(event.target)) {
         closeContext(contextMenuId);
-        return;
+        return; 
       }
     };
     window.addEventListener("scroll", handleScroll, true);
@@ -221,7 +211,6 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
       window.removeEventListener("scroll", handleScroll, true);
     };
   }, []);
-
 
   return (
     <div className={styles.container}>
@@ -232,35 +221,34 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
             id="optionBtn"
             label="Applicable Deposits"
             className={styles.optionBtn + " " + styles.depositsBtn}
-            onClick={(e) => handleonclick(e)} 
+            onClick={(e) => handleonclick(e)}
             endIcon={
-                <div
-                  style={{
-                    position: "relative",
-                    width: "0.8375em",
-                    height: "0.491875em",
-                  }}
-                  className={styles.DownArrow}
-                >
-                  <IconFactory name="dropDownArrow" />
-                </div>
-            
+              <div 
+                style={{
+                  position: "relative",
+                  width: "0.8375em",
+                  height: "0.491875em",
+                }}
+                className={styles.DownArrow}
+              >
+                <IconFactory name="dropDownArrow" />
+              </div>
             }
-          />
+          /> 
         </div>
       </div>
-      {applicableDeposits.map((deposit) => {
-        if (typeof deposit.value == "string") 
+      {applicableDeposits.map((deposit) =>  {
+        if (typeof deposit.value == "string")
           return (
             feeVisibility[deposit.value] && (
               <div className={styles.emdContainer2}>
-                <DsFeesDocument
-                  type={deposit.value.toString()}  
+                <DsFeesDocument 
+                  type={deposit.value.toString()}
                   title={deposit.label}
                   id={deposit.value + "DocumentView"}
                   mode={mode}
                   paidBy={paidBy}
-                  downloadVisible={true}
+                  downloadVisible={true} 
                   paymentCompletedVisible={paymentCheckVisible}
                 />
               </div>
@@ -270,19 +258,21 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
       <ContextMenu
         id={contextMenuId}
         content={
-          <>  
-          <div className={styles.applicableDeposit}> 
-            <div className={styles.feesCheckboxes}>
-              {applicablefees.map((checkbox, index) => (
-                <Ds_checkbox
-                key={index} 
-                id={checkbox.value.toString()}
-                name={checkbox.label}
-                value={checkbox.value.toString()}
-                label={checkbox.label}
-                defaultChecked={true}
-                />
-              ))}
+          <>
+            <div className={styles.applicableDeposit}>
+              <div className={styles.feesCheckboxes}>
+                {applicablefees.map((checkbox, index) => (
+                  <Ds_checkbox
+                    key={index}
+                    id={checkbox.value.toString()}
+                    name={checkbox.label}
+                    value={checkbox.value.toString()}
+                    label={checkbox.label}
+                    defaultChecked={tenderDataCopy.id?tenderDataCopy?.tenderFees?.some(
+                      (fee) => fee.feesType == checkbox.value
+                    ):true}
+                  />
+                ))}
               </div>
               <DsButton
                 label="Add"
@@ -290,8 +280,8 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
                 buttonSize="btnSmall"
                 className={styles.addBtn}
                 onClick={handleAdd}
-                />
-             </div>
+              />
+            </div>
           </>
         }
         showArrow={true}
@@ -300,4 +290,3 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   );
 };
 export default DsDepositeDocuments;
- 
