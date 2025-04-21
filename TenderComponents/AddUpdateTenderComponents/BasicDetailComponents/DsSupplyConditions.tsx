@@ -32,7 +32,7 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
           <h4>Notes</h4>
           <div className={styles.fieldColors}>
             <TextArea
-             initialValue={tenderData.supplyConditions.applicableConditions.find((x)=>x.type==type)?.notes||""}
+             initialValue={tenderData.tenderSupplyConditions[0].applicableConditions.find((x)=>x.type==type)?.notes||""}
               id="embossmentNotes"
               placeholder="Please type here"
               minRows={2}
@@ -56,7 +56,7 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
             buttonSize="btnSmall"
             startIcon={<IconFactory name="fileAttach" />}
             onSelectedFileChange={(files) => { 
-              const typeDocuments = tenderData.documents?.filter(
+              const typeDocuments = tenderData.tenderDocuments?.filter(
                 (x) =>
                   x.documentType == "TENDER_SUPPLY_CONDITION" &&
                   x.category == type

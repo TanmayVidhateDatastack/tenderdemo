@@ -161,20 +161,20 @@ const {
           }
         });
 
-        if (tenderData?.supplyConditions?.supplyPoint?.trim() === "") {
+        if (tenderData?.tenderSupplyConditions[0]?.supplyPoint?.trim() === "") {
           errors.push("Please select a supplyPoint ");
         }
-        if (tenderData?.supplyConditions?.consigneesCount === 0) {
+        if (tenderData?.tenderSupplyConditions[0]?.consigneesCount === 0) {
           errors.push("Please enter a consigneesCount.");
         }
-        if (tenderData?.supplyConditions?.testReportRequired?.trim() === "") {
+        if (tenderData?.tenderSupplyConditions[0]?.testReportRequired?.trim() === "") {
           errors.push("Please select a test Report Required field.");
         }
-        if (tenderData?.supplyConditions?.eligibility.length == 0) {
+        if (tenderData?.tenderSupplyConditions[0]?.eligibility.length == 0) {
           errors.push("Please select a eligibility field.");
         } 
         
-        const applicableConditions =tenderData?.supplyConditions?.applicableConditions ?? [];
+        const applicableConditions =tenderData?.tenderSupplyConditions[0]?.applicableConditions ?? [];
         applicableConditions.forEach((condition, index) => {
           if(condition.status == "ACTV"){
             if (condition.type?.toString().trim()=="") {

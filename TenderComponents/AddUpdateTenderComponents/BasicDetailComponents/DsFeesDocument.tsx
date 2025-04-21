@@ -280,7 +280,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             startIcon={<IconFactory name="fileAttach" />}
             onSelectedFileChange={(files) => {
               const typeDocuments =
-                tenderData.documents?.filter(
+                tenderData.tenderDocuments?.filter(
                   (x) =>
                     x.documentType == type &&
                     x.category == type + "_INSTRUCTION"
