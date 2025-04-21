@@ -122,18 +122,10 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
         conditionsVisibility[id] = false;
         if (tenderData.tenderFees.some((fee) => fee.feesType == id))
           updateApplicableCondition(id, "status", "INAC");
-<<<<<<< HEAD
 
       }
     });
   }, [applicableConditions,tenderDataCopy.id]);
-=======
- 
-      }
-    });
-  }, [applicableConditions,tenderDataCopy.id]);
- 
->>>>>>> da3a09e99e1ca2677fb0cce4dc38b22f23caa929
   useEffect(() => {
     
     window.addEventListener("click", (e) => {
