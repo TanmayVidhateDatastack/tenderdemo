@@ -78,10 +78,14 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
           (calculated.product.marginValue /
             Number(tenderproduct.proposedRate)) *
             100 || 0;
+      }
+      if (tenderproduct.ptrPercentage && tenderproduct.product.ptr)
+        calculated.stockistDiscountValue =
+          Number(tenderproduct.product.ptr) *
+          (tenderproduct.ptrPercentage / 100);
+      if (calculated.product)
         calculated.product.netValue =
           (calculated.proposedRate || 0) * (calculated.requestedQuantity || 0);
-      }
-
       return calculated;
     });
   }, [localProducts]);

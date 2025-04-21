@@ -1245,7 +1245,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     // },
     [tenderData, tenderDataCopy, fetchData, generatePatchDocument]
   );
-
+ 
   const fetchAndSetOriginalTender = useCallback(
     async (tenderId: number, tenderStatus?: string) => {
       try {
@@ -1331,7 +1331,18 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     },
     [fetchData]
   );
+  const fetchPreviousTenderData = useCallback(async(customerId:number) => {
+    try {
+      const res= await fetchData({
+        url:""
+      })
+      if(res.code=200){
 
+      }
+    }catch(e){
+      console.error("fetchPreviousTenderData",e);
+    }
+  }, []);
   return (
     <TenderDataContext.Provider
       value={{

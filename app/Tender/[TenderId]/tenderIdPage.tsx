@@ -48,7 +48,7 @@ const DsTenderIdPage: React.FC<{
     fetchAndSetOriginalTender,
   } = useTenderData();
   const [isCsvWhite, setIsCsvWhite] = useState(false);
-  const [orderId, setOrderId] = useState<string>(paramOrderId?.toString());
+  const [orderId,setOrderId] = useState<string>(paramOrderId?.toString());
   const appTitle = useRef<string>("New");
 
   const version = 1;
