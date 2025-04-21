@@ -60,9 +60,9 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
             Number(tenderproduct.product.directCost)) *
             100 || 0;
       }
-      if (tenderproduct.ptrPercent && tenderproduct.product.ptr)
-        calculated.stockiestDiscountValue =
-          Number(tenderproduct.product.ptr) * (tenderproduct.ptrPercent / 100);
+      if (tenderproduct.ptrPercentage && tenderproduct.product.ptr)
+        calculated.stockistDiscountValue =
+          Number(tenderproduct.product.ptr) * (tenderproduct.ptrPercentage / 100);
       if (calculated.product)
         calculated.product.netValue =
           (calculated.product?.totalCost || 0) +
@@ -369,7 +369,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
                   index={index + 1}
                   lprValue={tenderproduct.lpr}
                   lprTo={{
-                    id: tenderproduct.competitorId || 0,
+                    id: tenderproduct.lastPurchasedFrom || 0,
                     name: tenderproduct.product.competitorName || "",
                   }}
                   onValueChange={(value) =>
@@ -415,7 +415,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
               tenderproduct.product?.dataSource == "saved" ? (
                 <DsTextField
                   inputType="number"
-                  initialValue={tenderproduct.ptrPercent?.toString() || ""}
+                  initialValue={tenderproduct.ptrPercentage?.toString() || ""}
                   onChange={(e) =>
                     handleFieldChange(
                       index,
@@ -436,7 +436,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({ version }) => {
                 <DsTextField
                   inputType="number"
                   initialValue={
-                    tenderproduct.stockiestDiscountValue?.toFixed(2) || ""
+                    tenderproduct.stockistDiscountValue?.toFixed(2) || ""
                   }
                   onChange={(e) =>
                     handleFieldChange(
