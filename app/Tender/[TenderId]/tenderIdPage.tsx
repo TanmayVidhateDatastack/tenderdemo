@@ -9,7 +9,9 @@ import {
 import { useTabState } from "@/Redux/hook/tabHook"; // Import the custom hook
 import DSTendrFooter from "@/TenderComponents/TenderLogComponents/DsTenderFooter";
 import style from "./tenderOrder.module.css";
-import Toaster, { hideToaster } from "@/Elements/DsComponents/DsToaster/DsToaster";
+import Toaster, {
+  hideToaster,
+} from "@/Elements/DsComponents/DsToaster/DsToaster";
 import { closeTimeForTender, DsStatus } from "@/Common/helpers/constant";
 import pagestyles from "@/app/page.module.css";
 import { closeAllContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
@@ -48,7 +50,7 @@ const DsTenderIdPage: React.FC<{
     fetchAndSetOriginalTender,
   } = useTenderData();
   const [isCsvWhite, setIsCsvWhite] = useState(false);
-  const [orderId,setOrderId] = useState<string>(paramOrderId?.toString());
+  const [orderId, setOrderId] = useState<string>(paramOrderId?.toString());
   const appTitle = useRef<string>("New");
 
   const version = 1;
@@ -60,10 +62,10 @@ const DsTenderIdPage: React.FC<{
   ]);
 
   const [displayFlag, setDisplayFlag] = useState<"New" | "Existing">(
-    "Existing" 
+    "Existing"
   );
   useEffect(() => {
-    // fetchAndSetOriginalTender(9917); 
+    // fetchAndSetOriginalTender(9917);
   }, []);
   useEffect(() => {
     const revisionTabs = tenderData.tenderRevisions.map((rev) => ({
@@ -75,7 +77,7 @@ const DsTenderIdPage: React.FC<{
       ...revisionTabs,
       { tabId: "2", tabName: "Documents" },
     ]);
-    setTimeout(() => {  
+    setTimeout(() => {
       if (
         tenderData.status == "AWARDED" ||
         tenderData.status == "PARTIALLY_AWARDED" ||
@@ -144,11 +146,13 @@ const DsTenderIdPage: React.FC<{
 
       const text = event.target?.result as string;
       const rows = text
+        .replace("\r\n", "\n")
         .trim()
         .split("\n")
         .map((row) => row.split(","));
 
       // Get existing products from the current version (v1)
+      const version = Number(selectedTabId.split("v")[1]);
       const currentRevision = tenderData.tenderRevisions.find(
         (rev) => rev.version === version
       );
@@ -369,7 +373,7 @@ const DsTenderIdPage: React.FC<{
                   }
                 /> */}
                 <DsTenderProduct
-                  productList={[...(rev.tenderItems ?? [])]}
+                  productList={rev.tenderItems || []}
                   setProductList={(product) => {
                     const isDuplicate = rev.tenderItems?.some(
                       (item) => item.productId === product.productId
@@ -429,8 +433,7 @@ const DsTenderIdPage: React.FC<{
               )}
             </TabView>
           </div>
-          <DSTendrFooter
-          />
+          <DSTendrFooter />
         </DsApplication>
         <DsPane
           id="documentPane"
@@ -450,25 +453,24 @@ const DsTenderIdPage: React.FC<{
           duration={closeTimeForTender} 
         /> */}
 
-         <Toaster
-        handleClose={() => {
-          hideToaster("create-order-toaster");
-          // setShowNotification(false);
-          // if (actionStatus?.notiType == "success")
-          // window.location.reload();
-        }}
-        id={"create-order-toaster"}
-        type={actionStatus?.notiType}
-        message={actionStatus?.notiMsg}
-        position={"top"}
-        duration={
-          actionStatus?.isOkayButtonVisible === true
-            ? undefined
-            : closeTimeForTender
-        }
-        isOkayButton={actionStatus?.isOkayButtonVisible}
-      />
-
+        <Toaster
+          handleClose={() => {
+            hideToaster("create-order-toaster");
+            // setShowNotification(false);
+            // if (actionStatus?.notiType == "success")
+            // window.location.reload();
+          }}
+          id={"create-order-toaster"}
+          type={actionStatus?.notiType}
+          message={actionStatus?.notiMsg}
+          position={"top"}
+          duration={
+            actionStatus?.isOkayButtonVisible === true
+              ? undefined
+              : closeTimeForTender
+          }
+          isOkayButton={actionStatus?.isOkayButtonVisible}
+        />
       </DocumentProvider>
     </>
   );

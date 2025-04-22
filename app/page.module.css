@@ -15,13 +15,13 @@
   gap: 64px;
   font-family: var(--font-geist-sans);
 }
- /* .container {
+/* .container {
   flex:1;
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;  */
-  /* padding:0.5rem; */
+/* padding:0.5rem; */
 /* 
   overflow-x:hidden;
   background-color:var(--background);
@@ -34,22 +34,22 @@
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
-  background-color:var(--background);
+  background-color: var(--background);
 }
 .ContextCreateNew {
   border-radius: var(--ds-border-radius);
 }
-.flex-column{
+.flex-column {
   flex-direction: column;
 }
-.fluidContainer{
-  flex:1;
+.fluidContainer {
+  flex: 1;
   display: flex;
   flex-direction: row;
   width: 100%;
   height: 100%;
 }
-.table-container{
+.table-container {
   display: flex;
 }
 .row {
@@ -67,26 +67,26 @@
 .right_separator {
   border-left: 1px solid grey;
 }
-.demoContainer{
+.demoContainer {
   display: flex;
   flex-direction: column;
   padding: 0.5rem;
-  margin-bottom:1rem;
+  margin-bottom: 1rem;
   border-bottom: #1a1a1a solid 2px;
 }
-.demoTitle{
-  font-size:var(--heading2);
+.demoTitle {
+  font-size: var(--heading2);
   padding-bottom: 1rem;
 }
 
-.table{
+.table {
   padding: 2px !important;
 }
-.demo{
-  display:flex;
+.demo {
+  display: flex;
   flex-direction: row;
 }
-.tenderHeader{
+.tenderHeader {
   display: flex;
   justify-content: end;
   align-items: center;
@@ -95,18 +95,18 @@
   background-color: var(--application-background);
 }
 
-.datalist{
+.datalist {
   /* border: 1px solid var(--secondary); */
   /* min-width: fit-content; */
   color: var(--secondary);
 }
-.flex-column{
+.flex-column {
   flex-direction: column;
 }
-.pad-0{
-  padding:0 !important;
+.pad-0 {
+  padding: 0 !important;
 }
-.pad-l{
+.pad-l {
   padding-left: var(--ds-padding);
 }
 @media (prefers-color-scheme: dark) {
@@ -198,7 +198,7 @@ a.secondary {
   flex-shrink: 0;
 }
 
-.filterNavBar{
+.filterNavBar {
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -263,8 +263,8 @@ a.secondary {
   }
 }
 
-.tableContainer{
-  flex:1;
+.tableContainer {
+  flex: 1;
 }
 /* .totalCal {
   display: flex!important;
@@ -276,31 +276,29 @@ a.secondary {
   display: flex;
   flex-direction: flex-end;
   justify-content: flex-end;
-  gap:1rem;
+  gap: 1rem;
   font-size: 1.3rem !important;
   margin: 1rem !important;
 }
-.MenuBtn
-{
-  flex:1;
-  width:100%;
+.MenuBtn {
+  flex: 1;
+  width: 100%;
   justify-content: flex-start;
-  color:var(--tender-green) !important;
-  font-weight:bold!important;
+  color: var(--tender-green) !important;
+  font-weight: bold !important;
 }
-.MenuBtn:hover
-{
-  background-color:var(--tender-green-hover)!important;
+.MenuBtn:hover {
+  background-color: var(--tender-green-hover) !important;
 }
-.newbutton:hover  {
- background-color: white; /* Makes the image white */
+.newbutton:hover {
+  background-color: white; /* Makes the image white */
 }
 .blackText {
-  color: var(--grey-700) ;
+  color: var(--grey-700);
 }
 
 .orangeText {
-  color:var( --under-emd-pending);
+  color: var(--under-emd-pending);
 }
 
 .zeroText {
@@ -311,25 +309,23 @@ a.secondary {
    padding: 0rem !important;
 } */
 
-
 .ContextCreateNew {
   border-radius: var(--ds-border-radius);
 }
 
 .ContextCreateNew .MenuBtn:first-child {
   border-radius: var(--ds-border-radius) var(--ds-border-radius) 0 0;
-  margin:0px;
+  margin: 0px;
 }
 
 .ContextCreateNew .MenuBtn:last-child {
   border-radius: 0 0 var(--ds-border-radius) var(--ds-border-radius);
-  margin:0px;
-
+  margin: 0px;
 }
-.kpi{
+.kpi {
   display: flex;
-  flex-direction: row; 
-  justify-content: flex-start; 
+  flex-direction: row;
+  justify-content: flex-start;
   padding: 10px;
 }
 .noDataFound {
@@ -341,13 +337,13 @@ a.secondary {
   align-items: center;
   background: var(--grey-50);
 }
- 
+
 .noDataBorders {
   min-height: 2rem;
   min-width: 100%;
   background: var(--grey-100);
 }
- 
+
 .noData {
   display: flex;
   flex-direction: column;
@@ -366,170 +362,158 @@ a.secondary {
   color: var(--primary) !important;
   background-color: var(--btngroup-primary-hover) !important;
 }
-.tenderTable
-{
-  flex:1;
+.tenderTable {
+  flex: 1;
   max-height: 100%;
   font-size: var(--font-12);
 }
-.cellgenericname
-{
-  max-width:100% ;
+.cellgenericname {
+  max-width: 100%;
   min-width: 15em !important;
   width: 15em !important;
-  white-space:nowrap;
-  text-overflow: ellipsis; 
-  padding: 0rem 1rem!important;
-
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 0rem 1rem !important;
 }
-.cellquantity
-{
-  max-width:100% ;
+.cellquantity {
+  max-width: 100%;
   min-width: 12em !important;
   width: 12em !important;
-  white-space:nowrap;
-  text-overflow: ellipsis; 
-  padding: 0rem 1rem!important;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 0rem 1rem !important;
 }
-.cellpackingsize
-{
-  max-width:100% ;
+.cellpackingsize {
+  max-width: 100%;
   min-width: 10em !important;
-  width:10em !important;
-  white-space:nowrap;
-  text-overflow: ellipsis; 
-  padding: 0rem 1rem!important;
-}
-.cellproductname
-{
-  max-width:100% ;
-  min-width: 15em !important;
-  width: 15em !important;
-  white-space:nowrap;
-  text-overflow: ellipsis; 
-  padding: 0rem 1rem!important;
-}
-.cellproductpakingsize
-{
-  max-width:100% ;
-  min-width: 15em !important;
-  width: 15em !important;
-  white-space:nowrap;
-  text-overflow: ellipsis; 
-  padding: 0rem 1rem!important;
-}
-.cellmrp
-{
-  max-width:100% ;
-  min-width: 7em !important;
-  width: 7em !important;
-  white-space:nowrap;
-  text-overflow: ellipsis; 
-  padding: 0rem 1rem!important;
-}
-.cellptr
-{
-  max-width:100% ;
-  min-width: 7em !important;
-  width: 7em !important;
-  white-space:nowrap;
-  text-overflow: ellipsis; 
-  padding: 0rem 1rem!important;
-}
-.celldirectcost
-{
-  max-width:100% ;
-  min-width: 8em!important;
-  width: 8em !important;
-  white-space:nowrap;
-  text-overflow: ellipsis; 
-  padding: 0rem 1rem!important;
-}
-.celllqr
-{
-  max-width:100% ;
-  min-width: 7em !important;
-  width: 7em!important;
-  white-space:nowrap;
-  text-overflow: ellipsis; 
-  padding: 0rem 1rem!important;
-}
-.celllpr
-{
-  max-width:100% ;
-  min-width: 15em !important;
-  width: 15em!important;
-  white-space:nowrap;
-  text-overflow: ellipsis; 
-  padding: 0rem 1rem!important;
-}
-.cellproposedrate
-{
-  max-width:100% ;
-  min-width: 10em!important;
   width: 10em !important;
-  white-space:nowrap;
-  text-overflow: ellipsis; 
-  padding: 0rem 1rem!important;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 0rem 1rem !important;
 }
-.cellptr{
-  max-width:100% ;
+.cellproductname {
+  max-width: 100%;
+  min-width: 15em !important;
+  width: 15em !important;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 0rem 1rem !important;
+}
+.cellproductpakingsize {
+  max-width: 100%;
+  min-width: 15em !important;
+  width: 15em !important;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 0rem 1rem !important;
+}
+.cellmrp {
+  max-width: 100%;
   min-width: 7em !important;
   width: 7em !important;
-  white-space:nowrap;
-  text-overflow: ellipsis; 
-  padding: 0rem 1rem!important;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 0rem 1rem !important;
 }
-.celldiscount
-{
-  max-width:100% ;
+.cellptr {
+  max-width: 100%;
+  min-width: 7em !important;
+  width: 7em !important;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 0rem 1rem !important;
+}
+.celldirectcost {
+  max-width: 100%;
   min-width: 8em !important;
   width: 8em !important;
-  white-space:nowrap;
-  text-overflow: ellipsis; 
-  padding: 0rem 1rem!important;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 0rem 1rem !important;
 }
-.celltotalcost
-{
-  max-width:100% ;
-  min-width: 11em !important;
-  width: 11em !important;
-  white-space:nowrap;
-  text-overflow: ellipsis; 
-  padding: 0rem 1rem!important;
-}
-.cellmargin
-{
-  max-width:100% ;
-  min-width: 6em!important;
-  width: 6em !important;
-  white-space:nowrap;
-  text-overflow: ellipsis; 
-  padding: 0rem 1rem!important;
-}
-.cellmarginper
-{
-  max-width:100% ;
+.celllqr {
+  max-width: 100%;
   min-width: 7em !important;
   width: 7em !important;
-  white-space:nowrap;
-  text-overflow: ellipsis; 
-  padding: 0rem 1rem!important;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 0rem 1rem !important;
 }
-.cellnetvalue
-{
-  max-width:100% ;
+.celllpr {
+  max-width: 100%;
+  min-width: 15em !important;
+  width: 15em !important;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 0rem 1rem !important;
+}
+.cellproposedrate {
+  max-width: 100%;
+  min-width: 10em !important;
+  width: 10em !important;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 0rem 1rem !important;
+}
+.cellptr {
+  max-width: 100%;
+  min-width: 7em !important;
+  width: 7em !important;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 0rem 1rem !important;
+}
+.celldiscount {
+  max-width: 100%;
+  min-width: 8em !important;
+  width: 8em !important;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 0rem 1rem !important;
+}
+.celltotalcost {
+  max-width: 100%;
   min-width: 11em !important;
   width: 11em !important;
-  white-space:nowrap;
-  text-overflow: ellipsis; 
-  padding: 0rem 1rem!important;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 0rem 1rem !important;
 }
-.tendertable{
-  font-size:var(--font-12) !important;
+.cellmargin {
+  max-width: 100%;
+  min-width: 6em !important;
+  width: 6em !important;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 0rem 1rem !important;
 }
-.tender-product-table{
-  font-size:var(--font-13);
+.cellmarginper {
+  max-width: 100%;
+  min-width: 7em !important;
+  width: 7em !important;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 0rem 1rem !important;
+}
+.cellnetvalue {
+  max-width: 100%;
+  min-width: 11em !important;
+  width: 11em !important;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 0rem 1rem !important;
+}
+.tendertable {
+  font-size: var(--font-12) !important;
+}
+.tender-product-table {
+  font-size: var(--font-13);
+}
+.tender-product-table tbody tr{
+  min-height: 3em !important;
+}
+.tender-product-table thead tr{
+  min-height: 2.5em !important;
 }
 .productContext {
   /* background-color: black !important; */
@@ -596,4 +580,10 @@ a.secondary {
   /* margin-left: -31px; */
   /* padding-top: 1.2rem !important; */
   padding: 0.1rem 1.2rem 0rem 1.2rem;
+}
+.red {
+  color: var(--error-text) !important;
+}
+.warningAlert {
+  color: var(--readytodispatch) !important;
 }

@@ -11,6 +11,7 @@ export interface ProductSearchProps {
   orderStatus?: string;
   setSelectedProductId: Dispatch<SetStateAction<number | undefined>>;
   setSelectedProductBatchId: Dispatch<SetStateAction<number | undefined>>;
+  disabled?: boolean;
 }
 export type searchProduct={
   id:number;
@@ -36,6 +37,7 @@ export function areSearchProduct(value: unknown): value is searchProduct[] {
 }
 const ProductSearch: React.FC<ProductSearchProps> = ({
   orderStatus,
+  disabled,
   setSelectedProductId,
   setSelectedProductBatchId,
 }) => {
@@ -109,12 +111,12 @@ const ProductSearch: React.FC<ProductSearchProps> = ({
      
      
       }}
-    
+      
  
       setSelectedOption={setSelectedOption}
 
     
-      disable={orderStatus === DsStatus.APRV ? true : false}
+      disable={disabled}
     />
     </div>
  
