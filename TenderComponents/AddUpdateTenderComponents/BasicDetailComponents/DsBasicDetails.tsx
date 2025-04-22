@@ -3,7 +3,6 @@ import { getAllMetaData, getTenderUserRoles } from "@/Common/helpers/constant";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import {
   tenderDetails,
-  // applierSupplierDetsails,
   supplyDetails,
   DsSelectOption,
 } from "@/Common/helpers/types";
@@ -12,9 +11,9 @@ import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import DsApplierSupplierDetails from "./DsApplierSupplierDetails ";
 import DsTenderDetails from "./DsTenderDetails ";
 import DsSupplyDetails from "./DsSupplyDetails";
-import DsApplicableConditions from "./DsApplicableConditions";
+import DsApplicableConditions from "./DsApplicableConditions"; 
 
-const metaDataTypes = [
+const metaDataTypes = [ 
   "TENDER_TYPE",
   "SUBMISSION_MODE",
   "SUPPLY_POINT",
@@ -197,8 +196,8 @@ const DsBasicDetails = () => {
       <div>
         <DsApplicableConditions applicableConditions={applicableSupplyConditions}
         />
-      </div>
-    </>
+      </div> 
+    </> 
   );
 };
 export default DsBasicDetails;

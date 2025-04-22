@@ -12,15 +12,15 @@ import fetchData, { fileToBase64 } from "@/Common/helpers/Method/fetchData";
 import { useRouter } from "next/navigation";
 import React, {
   createContext,
-  useCallback,
+  useCallback,  
   useContext,
   useEffect,
-  useRef,
+  useRef, 
   useState,
-} from "react";
+} from "react"; 
 import { generatePatchDocument } from "@/Common/helpers/Method/UpdatePatchObjectCreation";
 import DsSupplyConditions from "./BasicDetailComponents/DsSupplyConditions";
-
+ 
 class ActionStatus {
   notiType: "success" | "bonus" | "info" | "error" | "cross" = "success";
   notiMsg: string | React.ReactNode = "";
@@ -354,7 +354,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     supplierName: "",
     supplierDiscount: 0,
     lastUpdatedBy: 0,
-    status: "AWARDED",
+    status: "Draft",
     tenderDetails: {
       type: "read-only",
       customerName: "",
@@ -518,15 +518,15 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   };
   // ✅ Update supply condition fields
   const updateSupplyCondition = (
-    key: keyof tenderSupplyCondition,
+    key: keyof tenderSupplyCondition, 
     value: string | number | string[] | Document[]
   ) => {
     setTenderData((prev) => ({
       ...prev,
-      tenderSupplyConditions: {
-        ...prev.tenderSupplyConditions,
+      tenderSupplyConditions: [{
+        ...prev.tenderSupplyConditions[0],
         [key]: value,
-      },
+      }],
     }));
   };
   // ✅ Update applicable condition fields

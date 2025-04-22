@@ -71,7 +71,6 @@ const DsTotalTenders: React.FC<TotalTendersProps> = React.memo(({ data }) => {
 
       onMouseOut={(e) => {
         closeContext("TotalTenders")
-
       }}
 
     >

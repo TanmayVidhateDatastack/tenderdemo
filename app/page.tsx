@@ -817,11 +817,10 @@ export default function Home() {
                 onHover={() => {
                   setIsAddWhite(true);
                   // changeImage(e, addIconWhite);
-                }}
+                }}  
                 onMouseLeave={() => {
-                  setIsAddWhite(false);
-
-                  // changeImage(e, addIcon);
+                  setIsAddWhite(false);    
+                  // changeImage(e, addIcon);  
                 }}
                 tooltip="variants : btnPrimary, btnOutlined, btnMedium"
                 label="New"
