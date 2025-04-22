@@ -4,9 +4,14 @@ import lprSVG from "@/Common/TenderIcons/smallIcons/lpr.svg";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Company, datalistOptions } from "@/Common/helpers/types";
-import ContextMenu, { createContext, displayContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
+import ContextMenu, {
+  closeContext,
+  createContext,
+  displayContext,
+} from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import CompanySearch from "./companySearch";
 import styles from "../../AddUpdateTenderComponents/BasicDetailComponents/tender.module.css";
+
 import DsIconButton from "@/Elements/DsComponents/DsButtons/dsIconButton";
 import IconFactory from "@/Elements/IconComponent";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
@@ -17,6 +22,7 @@ export interface CustomerLPRProps {
   lprTo?: Company;
   onValueChange?: (value: string) => void;
   onCompanyChange?: (company: Company) => void;
+  disable: boolean;
 }
 const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
   index,
@@ -24,6 +30,7 @@ const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
   lprTo,
   onValueChange,
   onCompanyChange,
+  disable,
 }) => {
   const [isLPR, setIsLpr] = useState<boolean>(false);
 
@@ -36,17 +43,9 @@ const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
     }
   };
 
-  useEffect(() => {
-    createContext(
-      "LprTo" + index,
-      <div>
-        <CompanySearch
-          lprTo={lprTo?.name}
-          setSelectedCompany={setSelectedCompany}
-        />
-      </div>
-    );
-  }, [index, lprTo]);
+  // useEffect(() => {
+  //   createContext("LprTo" + index);
+  // }, [index, lprTo]);
   useEffect(() => {
     if (lprTo?.name) {
       setIsLpr(true);
@@ -54,68 +53,113 @@ const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
   }, [lprTo]);
   return (
     <div className={styles.LPR} id={"Lpr" + index}>
-      <DsTextField
-        id={"LprValue" + index}
-        initialValue={lprValue ? lprValue.toString() : ""}
-        onChange={(e) => {
-          if (e.target.value && onValueChange) onValueChange(e.target.value);
-        }}
-      />
-          <div
-            style={{
-              position: "relative",
-              height: "0.23em",
-              width: "0.5.5em",
-            }}
-          >
-            {isLPR ? (
-              <>
-                <div className={styles.lprwitharrow}
-                onClick={(e) =>
-                                displayContext(e, "customerLpr", "horizontal", "right")
-                              }
-                              >
-                  <Image src={lprSelectedSVG} alt="LPR To" />
-                  <div style={{ height: "0.5em", width: "0.5em" }}>
-                    <IconFactory name="dropDownArrow" />
-                  </div>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className={styles.lprwitharrow}
-                      onClick={(e) =>
-                        displayContext(e, "customerLpr", "horizontal", "right")
-                      }>
-                  <Image src={lprSVG} alt="LPR To" />
-                  <div style={{ height: "1em", width: "1em" }}>
-                    <IconFactory name="dropDownArrow" />
-                  </div>
-                </div>
-              </>
-            )}{" "}
-          </div>
-          <ContextMenu
-  id="customerLpr"
-  showArrow={true}
-  content={
-    <div style={{display:"flex", padding:"0.5em", flexDirection:"column"}}>
-      <DsTextField
-        id="customerlpr"
-        label="Write Competiter name"
-      />
+      {!disable ? (
+        <DsTextField
+          id={"LprValue" + index}
+          initialValue={lprValue ? lprValue.toString() : ""}
+          onBlur={(e) => {
+            if ((e.target as HTMLInputElement).value && onValueChange) onValueChange((e.target as HTMLInputElement).value);
+          }}
+        />
+      ) : lprValue ? (
+        lprValue.toString()
+      ) : (
+        ""
+      )}
 
-      <DsButton
-        id="approveButton"
-        label="Save"
-        buttonViewStyle="btnContained"
-        buttonColor="btnPrimary"
-        buttonSize="btnSmall"
+      <div
+        style={{
+          position: "relative",
+          display: "flex",
+          alignItems: "center",
+
+          // height: "1em"
+          // width: "1em",
+        }}
+      >
+        {isLPR ? (
+          <>
+            <div
+              className={styles.lprwitharrow}
+              onClick={(e) => {
+                if (!disable) {
+                  displayContext(e, "LprTo" + index, "horizontal", "right");
+                }
+              }}
+            >
+              <div style={{ height: "1em", width: "1em" }}>
+                <IconFactory name="personSearch" />
+              </div>
+              <div style={{ height: "1em", width: "1em" }}>
+                <IconFactory name="dropDownArrow" />
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            <div
+              className={styles.lprwitharrow}
+              onClick={(e) =>
+                displayContext(e, "LprTo" + index, "horizontal", "right")
+              }
+            >
+              <div style={{ height: "1.225em", width: "1.225em" }}>
+                <IconFactory name="person1" />
+              </div>
+              <div style={{ height: "0.875em", width: "0.875em" }}>
+                <IconFactory name="dropDownArrow" />
+              </div>
+            </div>
+          </>
+        )}{" "}
+      </div>
+      <ContextMenu
+        id={"LprTo" + index}
+        showArrow={true}
+        content={
+          // <div
+          //   style={{
+          //     display: "flex",
+          //     padding: "0.5em",
+          //     flexDirection: "column",
+          //     // gap: "0.5em",
+          //   }}
+          // >
+          //   <DsTextField id="customerlpr" label="Write Competiter name" />
+
+          //   <DsButton
+          //     id="competitorSave"
+          //     label="Save"
+          //     buttonViewStyle="btnContained"
+          //     buttonColor="btnPrimary"
+          //     buttonSize="btnSmall"
+          //     className={styles.competitorSave}
+          //   />
+          // </div>
+          <div className={styles.competitorContainer}>
+            <CompanySearch
+              lprTo={lprTo?.name}
+              setSelectedCompany={setSelectedCompany}
+            />
+            <div className={styles.competitorSaveContainer}>
+              <DsButton
+                id="competitorSave"
+                label="Save"
+                buttonViewStyle="btnContained"
+                buttonColor="btnPrimary"
+                buttonSize="btnSmall"
+                className={styles.competitorSave}
+                onClick={() => {
+                  closeContext("LprTo" + index);
+                  // if(onCompanyChange) {
+                  //   onCompanyChange(lprTo as Company);
+                  // setIsLpr(true);
+                }}
+              />
+            </div>
+          </div>
+        }
       />
-   
-    </div>
-  }
-/>
     </div>
   );
 };

@@ -21,24 +21,24 @@ import DsNavTo from "@/Elements/ERPComponents/DsNavigationComponent/DsNavTo";
 import FetchCustomer from "./fetchcustomerComponent";
 const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
   const [fetchVisible, setFetchVisible] = useState(true);
-  const [role, setRole] = useState("checker"); 
+  const [role, setRole] = useState("checker");
   const [pos, setPos] = useState<
-    | "top" 
+    | "top"
     | "topleft"  
     | "topright"  
     | "middle"
-    | "bottom" 
+    | "bottom"
     | "bottomleft"
     | "bottomright"
   >("bottom");
-  
+ 
   const [notiType, setNotiType] = useState<
     "success" | "bonus" | "info" | "error"
   >("info");
   const [showNotification, setShowNotification] = useState<boolean>(true);
   const { updateTenderData,tenderData } = useTenderData();
-  const [customerLocations, setCustomerLocations] = useState<location[]>([]); 
-  
+  const [customerLocations, setCustomerLocations] = useState<location[]>([]);
+ 
   // const [cust, setCust] = useState<DsSelectOption>();
   //     value:
   //     label:
@@ -50,9 +50,9 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         if (result) {
           setRole(result.roleName);
         }
-      } else { 
+      } else {
         console.error("Error fetching data: ", res.message || "Unknown error");
-      } 
+      }
     } catch (error) {
       console.error("Fetch error: ", error);
     }
@@ -63,31 +63,31 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
   useEffect(() => {
     if (role == "MAKER") {
       setFetchVisible(true);
-    } else { 
+    } else {
       setFetchVisible(false);
     }
   }, [role]);
-
+ 
   const getTodayDate = (date: Date) => {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
     const day = date.getDate().toString().padStart(2, "0");
-
+ 
     return `${year}-${month}-${day}`;
-  }; 
-
+  };
+ 
   const [selectedTenderType, setSelectedTenderType] =
     useState<DsSelectOption>();
   useEffect(() => {
     const tenderType = tenderData.tenderType;
-    if (tenderType) { 
+    if (tenderType) {
       const option = tenderDetails.tenderType.find(
         (x) => x.value == tenderType
       );
       if (option) setSelectedTenderType(option);
     }
   }, [tenderData.tenderType,tenderDetails.tenderType]);
-
+ 
   const [selectedSubmissionMode, setSelectedSubmissionMode] =
   useState<DsSelectOption>();
 useEffect(() => {
@@ -97,7 +97,7 @@ useEffect(() => {
     if (option) setSelectedSubmissionMode(option); 
   }
 }, [tenderData.submissionMode,tenderDetails.submissionMode]);
-
+ 
   return (
     <>
     <ContextMenu
@@ -121,7 +121,7 @@ useEffect(() => {
             updateTenderData={updateTenderData}
           />
         </div>
-
+ 
         <div className={deptStyle.fields}>
           {fetchVisible && (
             <DsButton
@@ -156,7 +156,7 @@ useEffect(() => {
             placeholder="Select Customer Location"
             options={customerLocations.map((addr) => ({
               value: addr.id.toString(),
-
+ 
               label: `${addr.city}, ${addr.state}, ${addr.pinCode}`,
               key: addr.id.toString(),
             }))}
@@ -171,7 +171,7 @@ useEffect(() => {
                   "tenderDetails.customerAddressName",
                   option.label
                 );
-
+ 
                 // console.log("customerLocationId",option.value)
               }
             }}
@@ -199,10 +199,10 @@ useEffect(() => {
             id={"tenderType"} 
             selectedOption={selectedTenderType}
             setSelectOption={(option) => {
-              if (typeof option.value == "string") {   
+              if (typeof option.value == "string") {  
                 updateTenderData("tenderType", option.value);  
                 console.log("tendertype", option.label);
-              } 
+              }
             }}
           ></DsSingleSelect>
         </div>
@@ -295,7 +295,7 @@ useEffect(() => {
                 label={"Delivery period (In days)"}
                 onChange={(e) => {
                   const input = e.target as HTMLInputElement;
-                  let value = input.value; 
+                  let value = input.value;
  
                   // Prevent multiple leading zeros
                   if (/^0{2,}/.test(value)) {
@@ -365,3 +365,5 @@ useEffect(() => {
   );
 };
 export default DsTenderDetails;
+ 
+ 

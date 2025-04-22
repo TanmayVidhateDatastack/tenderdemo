@@ -76,7 +76,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
     }
     if (applicableDeposits && applicableDeposits.length > 0) {
       // console.log("000 : ", applicableDeposits);
-      let mappedDeposits = applicableDeposits.map((deposit) => ({
+      const mappedDeposits = applicableDeposits.map((deposit) => ({
         label: deposit.label,
         value: deposit.value,
       }));
@@ -165,7 +165,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
         updateTenderFee(id, "status", "INAC");
       }
     });
-  }, [applicablefees]);
+  }, [applicablefees,tenderDataCopy.id]);
 
   // useEffect(() => {
   //   console.log("feevisibility : ", feeVisibility);

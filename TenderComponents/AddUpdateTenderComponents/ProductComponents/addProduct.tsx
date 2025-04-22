@@ -5,23 +5,26 @@ import { getProductURL, DsStatus } from "@/Common/helpers/constant";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import DsButton from "../../../Elements/DsComponents/DsButtons/dsButton";
 import DsTextField from "../../../Elements/DsComponents/DsInputs/dsTextField";
-import { useState } from "react";
-import { TenderProduct } from "../TenderDataContextProvider";
+import { useEffect, useState } from "react";
+import { TenderProduct, useTenderData } from "../TenderDataContextProvider";
 
 export interface addProductProps {
+  version?:number;
   orderStatus?: string;
   setProductList: (product: TenderProduct) => void;
 }
 
 const DsAddProduct: React.FC<addProductProps> = ({
+  version,
   orderStatus,
   setProductList,
 }) => {
   // console.log("Add product ", orderStatus);
   const [selectedProductId, setSelectedProductId] = useState<number>();
-
+  const [disabled, setDisabled] = useState<boolean>(false);
+  const{tenderData}=useTenderData();
   const [qtyInputVal, setQtyInputVal] = useState<string>("");
-
+ 
   const selectProduct = async () => {
     // console.log("Quantity entered:", qtyInputVal);
     const quantity = (document.querySelector("#qty") as HTMLInputElement)
@@ -70,7 +73,13 @@ const DsAddProduct: React.FC<addProductProps> = ({
       // console.log("product ", product);
     }
   };
-
+  useEffect(()=>{
+    const latestVersion =
+    tenderData.tenderRevisions.reduce((maxObj, currentObj) =>
+      currentObj.version > maxObj.version ? currentObj : maxObj
+    )?.version || 1;
+    setDisabled(latestVersion !== version);
+  },[version,tenderData.tenderRevisions]);
   return (
     <div className={styles.input}>
       <>
@@ -78,6 +87,7 @@ const DsAddProduct: React.FC<addProductProps> = ({
           orderStatus={orderStatus}
           setSelectedProductId={(id) => setSelectedProductId(id)}
           setSelectedProductBatchId={(id) => setSelectedProductId(id)}
+          // disabled={disabled}
         ></ProductSearch>
 
         <DsTextField
@@ -86,7 +96,8 @@ const DsAddProduct: React.FC<addProductProps> = ({
           onChange={(e) => setQtyInputVal(e.target.value)}
           id="qty"
           containerClasses={styles.qtyinproductContainer}
-          disable={orderStatus === DsStatus.APRV ? true : false}
+          // disable={disabled}
+
           className={styles.qtyinproduct}
         ></DsTextField>
 
@@ -94,7 +105,7 @@ const DsAddProduct: React.FC<addProductProps> = ({
           buttonSize="btnMedium"
           onClick={selectProduct}
           disable={
-            orderStatus === DsStatus.APRV || !selectedProductId || !qtyInputVal
+          orderStatus === DsStatus.APRV || !selectedProductId || !qtyInputVal
           }
         >
           Add

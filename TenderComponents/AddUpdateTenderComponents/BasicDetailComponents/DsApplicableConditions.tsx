@@ -51,7 +51,7 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
       if (checkbox?.checked) { 
         selectedConditions.add(id); // 🔥 Add to Set (prevents duplicates)
         conditionsVisibility[id] = true;
-        if (tenderData.supplyConditions.applicableConditions.some((ac) => ac.type == id))
+        if (tenderData.tenderSupplyConditions[0].applicableConditions.some((ac) => ac.type == id))
           updateApplicableCondition(id, "status", "ACTV");
         else addApplicableCondition(id);
       } else {
@@ -63,7 +63,7 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
     closeAllContext();
     // console.log("Currently Selected:", Array.from(selectedConditions)); // Debugging output
   };
-  useEffect(() =>{},[handleAdd]);
+  // useEffect(() =>{},[handleAdd]);
   
   useEffect(() => {
     if (applicableConditions && applicableConditions.length > 0) {
@@ -78,7 +78,7 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
       >((acc, opt) => { 
         const val = opt.value;  
         if (typeof val === "string") {
-          acc[val] = tenderDataCopy.id?tenderDataCopy.supplyConditions.applicableConditions.some(
+          acc[val] = tenderDataCopy.id?tenderDataCopy.tenderSupplyConditions[0].applicableConditions.some(
             (ac) => ac.type == opt.value && ac.status == "ACTV"
           ):true; // Add string keys directly to the object
         }
@@ -122,12 +122,10 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
         conditionsVisibility[id] = false;
         if (tenderData.tenderFees.some((fee) => fee.feesType == id))
           updateApplicableCondition(id, "status", "INAC");
- 
+
       }
     });
   }, [applicableConditions,tenderDataCopy.id]);
- 
- 
   useEffect(() => {
     
     window.addEventListener("click", (e) => {
@@ -202,7 +200,7 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
               name={checkbox.label}
               value={checkbox.value.toString()}
               label={checkbox.label}
-              defaultChecked={tenderDataCopy.id? tenderDataCopy?.supplyConditions.applicableConditions?.some(
+              defaultChecked={tenderDataCopy.id? tenderDataCopy?.tenderSupplyConditions[0].applicableConditions?.some(
                 (ac) => ac.type == checkbox.value
               ):true}
             />

@@ -161,20 +161,20 @@ const {
           }
         });
 
-        if (tenderData?.supplyConditions?.supplyPoint?.trim() === "") {
+        if (tenderData?.tenderSupplyConditions[0]?.supplyPoint?.trim() === "") {
           errors.push("Please select a supplyPoint ");
         }
-        if (tenderData?.supplyConditions?.consigneesCount === 0) {
+        if (tenderData?.tenderSupplyConditions[0]?.consigneesCount === 0) {
           errors.push("Please enter a consigneesCount.");
         }
-        if (tenderData?.supplyConditions?.testReportRequired?.trim() === "") {
+        if (tenderData?.tenderSupplyConditions[0]?.testReportRequired?.trim() === "") {
           errors.push("Please select a test Report Required field.");
         }
-        if (tenderData?.supplyConditions?.eligibility.length == 0) {
+        if (tenderData?.tenderSupplyConditions[0]?.eligibility.length == 0) {
           errors.push("Please select a eligibility field.");
         } 
         
-        const applicableConditions =tenderData?.supplyConditions?.applicableConditions ?? [];
+        const applicableConditions =tenderData?.tenderSupplyConditions[0]?.applicableConditions ?? [];
         applicableConditions.forEach((condition, index) => {
           if(condition.status == "ACTV"){
             if (condition.type?.toString().trim()=="") {
@@ -319,7 +319,7 @@ const {
         );
       }
       if (contextContent) {
-        createContext("contextMenuId4", <div>{contextContent}</div>, true);
+        createContext("SubmissionContext", <div>{contextContent}</div>, true);
       }
     }
   }, [role]);
@@ -353,7 +353,7 @@ const {
             }
           }}
           onSplitClick={(e) =>
-            displayContext(e, "contextMenuId4", "top", "center")
+            displayContext(e, "SubmissionContext", "top", "right")
           }
           buttonSize="btnLarge"
         >
@@ -409,7 +409,7 @@ const {
         duration={4000}
         handleClose={() => setToasterVisible(false)}
       /> 
-      {/* <ContextMenu id={"contextMenuId4"} showArrow={true} content={<div>{contextContent}</div>}/> */}
+      {/* <ContextMenu id={"SubmissionContext"} showArrow={true} content={<div>{contextContent}</div>}/> */}
     </>
   );
 };

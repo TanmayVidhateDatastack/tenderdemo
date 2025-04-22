@@ -77,29 +77,12 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
 
   const [selectedPaymentMode, setSelectedPaymentMode] =
     useState<DsSelectOption>();
-  useEffect(() => {
-    ///PaymentMode
-    const modeValue = tenderData.tenderFees.find(
-      (x) => x.feesType == type
-    )?.paymentMode;
-    if (modeValue) {
-      const option = mode.find((x) => x.value == modeValue);
-      if (option) setSelectedPaymentMode(option);
-    } 
-  }, [tenderData.tenderFees.find((x) => x.feesType == type)]);
+  // useEffect(() => {
 
-  const [selectedPaidBy, setSelectedPaidBy] =
-    useState<DsSelectOption>();
-  useEffect(() => {
-    const paidByvalue = tenderData.tenderFees.find(
-      (x) => x.feesType == type
-    )?.paidBy;
-    if (paidByvalue) {  
-      const option = mode.find((x) => x.value == paidByvalue);
-      if (option) setSelectedPaidBy(option);
-    }
-  }, [tenderData.tenderFees.find((x) => x.feesType == type)]);
-  
+  // }, [tenderData.tenderFees.find((x) => x.feesType == type)]);
+
+  const [selectedPaidBy, setSelectedPaidBy] = useState<DsSelectOption>();
+
   const handleAppliedSuppliedFetch = async () => {
     try {
       const res = await fetchData({ url: paidBys });
@@ -124,7 +107,26 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
   useEffect(() => {
     handleAppliedSuppliedFetch();
   }, []);
-
+  useEffect(() => {
+    ///PaymentMode
+    const modeValue = tenderData.tenderFees.find(
+      (x) => x.feesType == type
+    )?.paymentMode;
+    if (modeValue) {
+      const option = mode.find((x) => x.value == modeValue);
+      if (option) setSelectedPaymentMode(option);
+    }
+    const paidByvalue = tenderData.tenderFees.find(
+      (x) => x.feesType == type
+    )?.paidBy;
+    if (paidByvalue) {
+      const option = depositeDocuments.find((x) => x.value == paidByvalue);
+      if (option) setSelectedPaidBy(option);
+    }
+  }, [
+    tenderData.tenderFees.find((x) => x.feesType == type),
+    depositeDocuments,
+  ]);
   return (
     <>
       <div>
@@ -211,7 +213,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               label="Paid by"
               placeholder={"Please select here"}
               setSelectOption={(option) => {
-                if (typeof option.value == "string") { 
+                if (typeof option.value == "string") {
                   updateTenderFee(type, "paidBy", option.value);
                 }
               }}
@@ -280,7 +282,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             startIcon={<IconFactory name="fileAttach" />}
             onSelectedFileChange={(files) => {
               const typeDocuments =
-                tenderData.documents?.filter(
+                tenderData.tenderDocuments?.filter(
                   (x) =>
                     x.documentType == type &&
                     x.category == type + "_INSTRUCTION"
