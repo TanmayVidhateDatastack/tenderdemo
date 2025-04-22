@@ -195,8 +195,7 @@ const DsBasicDetails = () => {
       </div>
       <span className={styles.Seperator}></span>
       <div>
-        <DsApplicableConditions
-          applicableConditions={applicableSupplyConditions}
+        <DsApplicableConditions applicableConditions={applicableSupplyConditions}
         />
       </div>
     </>

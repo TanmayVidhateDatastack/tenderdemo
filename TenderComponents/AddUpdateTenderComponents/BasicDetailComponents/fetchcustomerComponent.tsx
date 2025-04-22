@@ -3,10 +3,6 @@ import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import style from "./deposite.module.css";
 import { DsTableRow, tableData, tcolumn } from "@/Common/helpers/types";
 import DsTableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableComponent";
-import DsLocation from "@/Elements/DsComponents/dsLocation/dsLocation";
-import DsCurrency from "@/Elements/DsComponents/dsCurrency/dsCurrency";
-import DsStatusIndicator from "@/Elements/DsComponents/dsStatus/dsStatusIndicator";
-import { DsStatus } from "@/Common/helpers/constant";
 import { closeContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import btnStyles from "@/Elements/DsComponents/DsButtons/dsButton.module.css";
 
@@ -23,7 +19,7 @@ const FetchCustomer: React.FC<FetchCustomerProps> = ({ customerName }) => {
 
         type: "InterActive",
     
-        id: "sales-order",
+        id: "Tender",
     
         isSortable: true,
     
