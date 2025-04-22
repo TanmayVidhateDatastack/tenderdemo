@@ -523,10 +523,10 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   ) => {
     setTenderData((prev) => ({
       ...prev,
-      tenderSupplyConditions: {
-        ...prev.tenderSupplyConditions,
+      tenderSupplyConditions: [{
+        ...prev.tenderSupplyConditions[0],
         [key]: value,
-      },
+      }],
     }));
   };
   // ✅ Update applicable condition fields
@@ -1035,18 +1035,18 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   const updateTender = useCallback(
     async (status: string) => {
       try {
-        // const copylatestTenderRevision = [
-        //   tenderDataCopy.tenderRevisions.reduce(
-        //     (max, obj) => (obj.version > max.version ? obj : max),
-        //     tenderDataCopy.tenderRevisions[0]
-        //   ),
-        // ];
-        // const latestTenderRevision = [
-        //   tenderData.tenderRevisions.reduce(
-        //     (max, obj) => (obj.version > max.version ? obj : max),
-        //     tenderData.tenderRevisions[0]
-        //   ),
-        // ];
+        const copylatestTenderRevision = [
+          tenderDataCopy.tenderRevisions.reduce(
+            (max, obj) => (obj.version > max.version ? obj : max),
+            tenderDataCopy.tenderRevisions[0]
+          ),
+        ];
+        const latestTenderRevision = [
+          tenderData.tenderRevisions.reduce(
+            (max, obj) => (obj.version > max.version ? obj : max),
+            tenderData.tenderRevisions[0]
+          ),
+        ];
         const dataToSendTenderCopy = stripReadOnlyProperties({
           ...tenderDataCopy,
           shippingLocations: tenderDataCopy.shippingLocations.join(","),
@@ -1076,8 +1076,13 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               ),
             },
           ],
-          // tenderRevisions: copylatestTenderRevision,
-          tenderRevisions: tenderDataCopy.tenderRevisions,
+            // tenderRevisions: copylatestTenderRevision,
+            tenderRevisions: copylatestTenderRevision.map((x) => {
+              if(x.id)
+              return {id:x.id, tenderItems:x.tenderItems}
+            return{tenderItems:x.tenderItems}
+            }),
+   
         });
         delete dataToSendTenderCopy.applierType;
         delete dataToSendTenderCopy.supplierType;
@@ -1105,14 +1110,19 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               ...tenderData.tenderSupplyConditions[0],
               eligibility:
                 tenderData.tenderSupplyConditions[0].eligibility.join(","),
-
+ 
               applicableConditions: JSON.stringify(
                 tenderData.tenderSupplyConditions[0].applicableConditions
               ),
             },
           ],
           // tenderRevisions: latestTenderRevision,
-          tenderRevisions: tenderData.tenderRevisions,
+            tenderRevisions: latestTenderRevision.map((x) => {
+              if(x.id)
+              return {id:x.id, tenderItems:x.tenderItems}
+            return{tenderItems:x.tenderItems}
+            }),
+   
         });
         delete dataToSendOriginalTender.applierType;
         delete dataToSendOriginalTender.supplierType;
@@ -1141,8 +1151,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             });
             showToaster("create-order-toaster");
             setTimeout(() => {
-              if (tenderData.id)
-                fetchAndSetOriginalTender(tenderData.id, status);
+              goBack();
             }, closeTimeForTender);
           } else {
             setActionStatus({
@@ -1157,7 +1166,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         console.error("Error saving order:", error);
       }
     },
-
+ 
     // async(status:string)=>{
     //   const obj1={
     //     abc:"abc",
@@ -1215,7 +1224,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     //               }
     //             ]
     //           },
-
+ 
     //         ],
     //         label:[
     //           {
@@ -1261,7 +1270,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           headers: {
             "Content-Type": "application/json",
             ...(tenderStatus && {
-              "x-contract-type": `{"tenderStatus":"${tenderStatus}"}`,
+              "x-contract-status": `{"tenderStatus":"${tenderStatus}"}`,
             }),
           },
         });
