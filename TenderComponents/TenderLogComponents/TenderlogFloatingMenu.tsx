@@ -16,8 +16,6 @@ import { getCustomerSubmissionDoneByTenderId, getTenderByTenderId } from "@/Comm
 import path from "path";
 import style from "./filteractions.module.css";
 
-
-
 interface DsTenderTableFloatingMenuProps {
   e: React.MouseEvent<HTMLElement>;
   rowIndex: number;

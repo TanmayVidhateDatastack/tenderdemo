@@ -340,7 +340,7 @@ export default function Home() {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Tenders-Filters": JSON.stringify(tenderFilters),
+        "x-tender-filters": JSON.stringify(tenderFilters),
       },
     })
       .then((res) => {
@@ -453,7 +453,7 @@ export default function Home() {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Tender-Codes": JSON.stringify(metaDataTypes),
+        "x-tender-codes": JSON.stringify(metaDataTypes),
       },
     })
       .then((res) => {

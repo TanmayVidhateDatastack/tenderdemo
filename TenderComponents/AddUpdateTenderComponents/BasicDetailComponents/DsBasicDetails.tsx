@@ -66,7 +66,7 @@ const DsBasicDetails = () => {
     try {   
       const res = await fetchData({ url:getAllMetaData,method:"GET",headers:{
         "Content-Type": "application/json",
-        "Tender-Codes": JSON.stringify(metaDataTypes), 
+        "x-tender-codes": JSON.stringify(metaDataTypes), 
       }});
       if (res.code === 200) {
         const result = res.result;

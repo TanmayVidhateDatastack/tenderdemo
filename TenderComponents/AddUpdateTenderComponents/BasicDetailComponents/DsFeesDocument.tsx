@@ -127,7 +127,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
       // const option = mode.find((x) => x.value == paidByvalue);
       if (option) setSelectedPaidBy(option);
     }
-  }, [tenderData.tenderFees.find((x) => x.feesType == type)]);
+  }, [tenderData.tenderFees.find((x) => x.feesType == type),depositeDocuments,mode]);
 
 
   return (
@@ -213,8 +213,8 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               id={id + "_paidType1"}
               selectedOption={selectedPaidBy}
               options={depositeDocuments}
-              label="Paid by"
-              placeholder={"Please select here"}
+              label="Paid by" 
+              placeholder={"Please select here"} 
               setSelectOption={(option) => {
                 if (typeof option.value == "string") {
                   updateTenderFee(type, "paidBy", option.value);

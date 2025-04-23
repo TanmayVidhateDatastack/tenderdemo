@@ -5,7 +5,7 @@ import { DsTableRow, tableData, tcolumn } from "@/Common/helpers/types";
 import DsTableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableComponent";
 import { closeContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import btnStyles from "@/Elements/DsComponents/DsButtons/dsButton.module.css";
-
+import RadioButton from "@/Elements/DsComponents/DsRadioButton/dsRadioButton";
 
 export interface FetchCustomerProps {
   customerName: string;
@@ -17,13 +17,14 @@ const FetchCustomer: React.FC<FetchCustomerProps> = ({ customerName }) => {
 
        className:"",
 
-        type: "InterActive",
+        type: "InterActive", 
     
         id: "Tender",
     
         isSortable: true,
     
         hasSearch: false,
+
     
         columns: [
     
@@ -41,10 +42,10 @@ const FetchCustomer: React.FC<FetchCustomerProps> = ({ customerName }) => {
     
           ],
     
-         rows: [
-    
+         rows: 
+         [   
           {
-    
+            tag:[ <RadioButton id={""} label={""} value={""}  ></RadioButton>],
             rowIndex: 0,
     
             className: "row",
@@ -102,6 +103,7 @@ const FetchCustomer: React.FC<FetchCustomerProps> = ({ customerName }) => {
               {
     
             rowIndex: 1,
+            tag:[ <RadioButton id={""} label={""} value={""}></RadioButton>],
     
             className: "row",
     
@@ -138,7 +140,6 @@ const FetchCustomer: React.FC<FetchCustomerProps> = ({ customerName }) => {
               },
     
               {
-    
                 columnIndex: 3,
     
                 className: "cell",
@@ -162,36 +163,40 @@ const FetchCustomer: React.FC<FetchCustomerProps> = ({ customerName }) => {
    
   return (
     <>
-    <div className={style.fetcustomerContainer}>
-        
-      <div className={style.fetchInfo}>
-        <strong>Fetch Information:</strong> {customerName}
-      </div>
-      <div className={style.fetchMessage}>
-         Do you want to fetch information from previous tender.Please select below <br>
-         </br>to copy the information.
-      </div>
-      <DsTableComponent 
-      className={style.fetchTable} id={""} columns={fetchTenderData.columns} rows={fetchTenderData.rows}>
-        
-      </DsTableComponent>
- 
-      <div className={style.fetchButtons}>
-        <DsButton label="Cancel" 
-          className={btnStyles.btnOutlined}
-          buttonColor="btnDark"
-          buttonViewStyle="btnOutlined"
-          disable={false}
+      <div className={style.fetcustomerContainer}>
+        <div className={style.fetchInfo}>
+          <strong>Fetch Information:</strong> {customerName}
+        </div>
+        <div className={style.fetchMessage}>
+          Do you want to fetch information from previous tender.Please select
+          below <br></br>to copy the information.
+        </div>
 
-        // className={style.}
-        onClick={()=>{closeContext("contextMenuId5")} }/>
+        <DsTableComponent
+          className={style.fetchTable}
+          id={""} 
+          columns={fetchTenderData.columns} 
+          rows={fetchTenderData.rows}  
+          
+        ></DsTableComponent>
 
-        <DsButton label="Fetch" 
-        />
+       
+        <div className={style.fetchButtons}>
+          <DsButton
+            label="Cancel"
+            className={btnStyles.btnOutlined}
+            buttonColor="btnDark"
+            buttonViewStyle="btnOutlined"
+            disable={false}
+            // className={style.}
+            onClick={() => { 
+              closeContext("contextMenuId5");
+            }}
+          />
+
+          <DsButton label="Fetch" />
+        </div>
       </div>
-      
-
-    </div>
     </>
   );
 };

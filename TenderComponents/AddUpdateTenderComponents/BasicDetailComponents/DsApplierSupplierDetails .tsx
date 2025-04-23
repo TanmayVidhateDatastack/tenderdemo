@@ -281,7 +281,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
             // type="multi"
             label="Depot"
             placeholder={"Please search or select here"}
-            id={"depot"}
+            id={"depot"} 
             setSelectOptions={(options) => {
               const shipIds=options.reduce<number[]>((acc, option) => { 
                 if (typeof option.value === "string") { 
