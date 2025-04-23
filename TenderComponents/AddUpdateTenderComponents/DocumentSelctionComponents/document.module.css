@@ -96,36 +96,6 @@ bottom:0;
 .documentsDivs {
   margin-bottom: 15px !important;
 }
-@media (max-width: 1200px) {
-  .details > div,
-  .transportDetails {
-    grid-template-columns: repeat(
-      3,
-      minmax(150px, 1fr)
-    ); /* 3 columns on medium screens */
-  }
-}
-
-@media (max-width: 800px) {
-  .details > div,
-  .transportDetails {
-    grid-template-columns: repeat(
-      2,
-      minmax(150px, 1fr)
-    ); /* 2 columns on smaller screens */
-  }
-  .ToFrom {
-    grid-template-columns: 1fr; /* 1 column on very small screens */
-  }
-}
-
-@media (max-width: 500px) {
-  .details > div,
-  .ToFrom,
-  .transportDetails {
-    grid-template-columns: 1fr; /* 1 column on very small screens */
-  }
-}
 .documentsCkechS {
   margin-bottom: 0.5rem !important;
   font-size: var(--font-13);
