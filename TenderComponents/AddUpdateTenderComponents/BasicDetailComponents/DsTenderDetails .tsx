@@ -3,8 +3,12 @@ import DsSingleSelect from "@/Elements/DsComponents/dsSelect/dsSingleSelect";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import deptStyle from "./deposite.module.css";
 import { useEffect, useState } from "react";
-import {getTenderUserRoles} from "@/Common/helpers/constant";
-import {tenderDetailsProps,location, DsSelectOption} from "@/Common/helpers/types";
+import { getTenderUserRoles } from "@/Common/helpers/constant";
+import {
+  tenderDetailsProps,
+  location,
+  DsSelectOption,
+} from "@/Common/helpers/types";
 import { useTenderData } from "../TenderDataContextProvider";
 import DsDatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
@@ -15,7 +19,9 @@ import DsAddressSelect from "@/Elements/DsComponents/dsSelect/dsAddressSelect";
 import CustomerSearch from "./customerSearch";
 import IconFactory from "@/Elements/IconComponent";
 import { getYesterdayDate } from "@/Common/helpers/Method/conversion";
-import ContextMenu, { displayContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
+import ContextMenu, {
+  displayContext,
+} from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import fetchCustomer from "./fetchcustomerComponent";
 import DsNavTo from "@/Elements/ERPComponents/DsNavigationComponent/DsNavTo";
 import FetchCustomer from "./fetchcustomerComponent";
@@ -24,21 +30,21 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
   const [role, setRole] = useState("checker");
   const [pos, setPos] = useState<
     | "top"
-    | "topleft"  
-    | "topright"  
+    | "topleft"
+    | "topright"
     | "middle"
     | "bottom"
     | "bottomleft"
     | "bottomright"
   >("bottom");
- 
+
   const [notiType, setNotiType] = useState<
     "success" | "bonus" | "info" | "error"
   >("info");
   const [showNotification, setShowNotification] = useState<boolean>(true);
-  const { updateTenderData,tenderData } = useTenderData();
+  const { updateTenderData, tenderData } = useTenderData();
   const [customerLocations, setCustomerLocations] = useState<location[]>([]);
- 
+
   // const [cust, setCust] = useState<DsSelectOption>();
   //     value:
   //     label:
@@ -67,15 +73,15 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
       setFetchVisible(false);
     }
   }, [role]);
- 
+
   const getTodayDate = (date: Date) => {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
     const day = date.getDate().toString().padStart(2, "0");
- 
+
     return `${year}-${month}-${day}`;
   };
- 
+
   const [selectedTenderType, setSelectedTenderType] =
     useState<DsSelectOption>();
   useEffect(() => {
@@ -86,27 +92,27 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
       );
       if (option) setSelectedTenderType(option);
     }
-  }, [tenderData.tenderType,tenderDetails.tenderType]);
- 
+  }, [tenderData.tenderType, tenderDetails.tenderType]);
+
   const [selectedSubmissionMode, setSelectedSubmissionMode] =
-  useState<DsSelectOption>();
-useEffect(() => {
-  const submissionMode =tenderData.submissionMode
-  if (submissionMode) {
-    const option =tenderDetails.submissionMode.find((x) => x.value == submissionMode);
-    if (option) setSelectedSubmissionMode(option); 
-  }
-}, [tenderData.submissionMode,tenderDetails.submissionMode]);
- 
+    useState<DsSelectOption>();
+  useEffect(() => {
+    const submissionMode = tenderData.submissionMode;
+    if (submissionMode) {
+      const option = tenderDetails.submissionMode.find(
+        (x) => x.value == submissionMode
+      );
+      if (option) setSelectedSubmissionMode(option);
+    }
+  }, [tenderData.submissionMode, tenderDetails.submissionMode]);
+
   return (
     <>
-    <ContextMenu
+      <ContextMenu
         id="contextMenuId5"
         content={
           <div className={styles.ContextCreateNew}>
-           <FetchCustomer
-           customerName="(Directorate of Health Services)"
-           ></FetchCustomer>
+            <FetchCustomer customerName="(Directorate of Health Services)"></FetchCustomer>
           </div>
         }
         showArrow={true}
@@ -121,7 +127,7 @@ useEffect(() => {
             updateTenderData={updateTenderData}
           />
         </div>
- 
+
         <div className={deptStyle.fields}>
           {fetchVisible && (
             <DsButton
@@ -140,12 +146,7 @@ useEffect(() => {
                 // setShowNotification(true);
                 // setPos("top");
                 // setNotiType("info");
-                 displayContext(
-                              e,
-                              "contextMenuId5",
-                              "horizontal",
-                              "center",
-                            );
+                displayContext(e, "contextMenuId5", "horizontal", "center");
               }}
             ></DsButton>
           )}
@@ -156,7 +157,7 @@ useEffect(() => {
             placeholder="Select Customer Location"
             options={customerLocations.map((addr) => ({
               value: addr.id.toString(),
- 
+
               label: `${addr.city}, ${addr.state}, ${addr.pinCode}`,
               key: addr.id.toString(),
             }))}
@@ -171,17 +172,18 @@ useEffect(() => {
                   "tenderDetails.customerAddressName",
                   option.label
                 );
- 
+
                 // console.log("customerLocationId",option.value)
               }
             }}
           />
         </div>
         <div className={deptStyle.fields}>
-          <DsTextField
+        <DsTextField
             initialValue={tenderData.tenderNumber}
             maxLength={50}
             label="Tender number"
+            inputType="alphaNumeric"
             // placeholder="Please Type Here"
             onBlur={(e) =>
               updateTenderData(
@@ -195,12 +197,12 @@ useEffect(() => {
           <DsSingleSelect
             options={tenderDetails.tenderType}
             label="Tender type"
-            // placeholder={"Tender type"} 
-            id={"tenderType"} 
+            // placeholder={"Tender type"}
+            id={"tenderType"}
             selectedOption={selectedTenderType}
             setSelectOption={(option) => {
-              if (typeof option.value == "string") {  
-                updateTenderData("tenderType", option.value);  
+              if (typeof option.value == "string") {
+                updateTenderData("tenderType", option.value);
                 console.log("tendertype", option.label);
               }
             }}
@@ -258,10 +260,10 @@ useEffect(() => {
           />
         </div>
         <div className={deptStyle.fields}>
-          <DsTextField
+        <DsTextField
             maxLength={6}
             initialValue={tenderData.rateContractValidity}
-            inputType="positive"
+            inputType="positiveInteger"
             label="Rate contract validity"
             onBlur={(e) =>
               updateTenderData(
@@ -288,25 +290,11 @@ useEffect(() => {
         <div className={deptStyle.fields}>
           <div className={deptStyle.fields}>
             <div className={deptStyle.fields}>
-              <DsTextField
+            <DsTextField
                 initialValue={tenderData.deliveryPeriod?.toString()}
                 maxLength={5}
-                inputType="positive"
+                inputType="positiveInteger"
                 label={"Delivery period (In days)"}
-                onChange={(e) => {
-                  const input = e.target as HTMLInputElement;
-                  let value = input.value;
- 
-                  // Prevent multiple leading zeros
-                  if (/^0{2,}/.test(value)) {
-                    value = "0";
-                    input.value = value; // update input field manually
-                  } else if (/^0\d+/.test(value)) {
-                    // Remove leading zero before digits
-                    value = value.replace(/^0+/, "");
-                    input.value = value; // update input field manually
-                  }
-                }}
                 onBlur={(e) =>
                   updateTenderData(
                     "deliveryPeriod",
@@ -321,24 +309,24 @@ useEffect(() => {
           <DsTextField
             initialValue={tenderData.extendedDeliveryPeriod?.toString()}
             maxLength={5}
-            inputType="positive"
+            inputType="positiveInteger"
             label={"Extended delivery period (In days)"}
-            // placeholder={"Please type or select"}
             onBlur={(e) =>
               updateTenderData(
                 "extendedDeliveryPeriod",
-                Number((e.target as HTMLInputElement).value)
+                Number((e.target as HTMLInputElement).value)   
               )
             }
           ></DsTextField>
         </div>
         <div className={deptStyle.fields}>
-          <DsTextField
+        <DsTextField
             minimumNumber={100}
-            initialValue={tenderData.lateDeliveryPenalty.toString()}
+            maxLength={5}
+            initialValue={tenderData.lateDeliveryPenalty?.toString()}
             label="Penalty for late delivery %"
             inputType="positive"
-            // placeholder="Please type here"
+            iconEnd={<>%</>}
             onBlur={(e) =>
               updateTenderData(
                 "lateDeliveryPenalty",
@@ -365,5 +353,3 @@ useEffect(() => {
   );
 };
 export default DsTenderDetails;
- 
- 

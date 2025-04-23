@@ -35,15 +35,15 @@
 
 .inputDetails {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 equal columns */
+  grid-template-columns: repeat(5, 1fr); /* 4 equal columns */
   /* gap: var(--ds-margin); */
   /* spacing between items */
   gap: 1.5rem;
-  border-bottom: 0.5px solid var(--grey-100);
-  padding: var(--ds-padding);
+  /* border-bottom: 0.5px solid var(--grey-100); */
+  padding: var(--ds-padding); 
   background: inherit;
 }
-
+ 
 .inputDetails > div {
   margin: 0; /* Remove margin if you want exact grid alignment */
 }
@@ -52,6 +52,7 @@
   border-bottom: 1px solid var(--grey-100);
   padding: 2px;
 }
+
 @media (max-width: 1200px) {
   .details > div,
   .transportDetails {

@@ -79,7 +79,7 @@ const {
           errors.push("Please enter a tender issue date."); 
         }
         const todaysdate = new Date(); 
-        todaysdate.setHours(0, 0, 0, 0); 
+        // todaysdate.setHours(0, 0, 0, 0); 
         if (tenderData?.issueDate && new Date(tenderData.issueDate) > todaysdate) { 
           errors.push("Tender issue date should not be greater than today's date.");
         } 

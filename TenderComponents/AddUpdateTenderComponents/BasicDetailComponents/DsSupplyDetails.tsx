@@ -33,8 +33,8 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
     };
   });
   const [selectedSupplyPoint, setSelectedSupplyPoint] =
-    useState<DsSelectOption>();
-  useEffect(() => {
+    useState<DsSelectOption>();  
+  useEffect(() => { 
     const supplyPoint = tenderData.tenderSupplyConditions[0].supplyPoint;
     if (supplyPoint) {
       const option = supplyDetails.supplyPoints.find(
@@ -71,10 +71,10 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
               updateSupplyCondition("supplyPoint", option.value);
           }}
         ></DsSingleSelect>
-        <DsTextField
+         <DsTextField
           maxLength={10}
-          initialValue={tenderData.tenderSupplyConditions[0].consigneesCount.toString()}
-          inputType="positive"
+          initialValue={tenderData.tenderSupplyConditions[0].consigneesCount?.toString()}
+          inputType="positiveInteger"
           label="Provide no. of consignees"
           // placeholder="Please type here"
           onBlur={(e) =>
