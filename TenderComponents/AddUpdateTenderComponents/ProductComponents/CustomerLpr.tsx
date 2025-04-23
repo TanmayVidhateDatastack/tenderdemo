@@ -52,14 +52,21 @@ const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
     }
   }, [lprTo]);
   return (
-    <div className={styles.LPR} id={"Lpr" + index}>
+    <div
+      className={styles.LPR}
+      id={"Lpr" + index}
+      onClick={(e) => e.stopPropagation()}
+    >
       {!disable ? (
         <DsTextField
           id={"LprValue" + index}
+          inputType="positive"
           initialValue={lprValue ? lprValue.toString() : ""}
           onBlur={(e) => {
-            if ((e.target as HTMLInputElement).value && onValueChange) onValueChange((e.target as HTMLInputElement).value);
+            if ((e.target as HTMLInputElement).value && onValueChange)
+              onValueChange((e.target as HTMLInputElement).value);
           }}
+          onClick={(e) => e.stopPropagation()}
         />
       ) : lprValue ? (
         lprValue.toString()
@@ -82,6 +89,8 @@ const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
             <div
               className={styles.lprwitharrow}
               onClick={(e) => {
+                e.stopPropagation();
+
                 if (!disable) {
                   displayContext(e, "LprTo" + index, "horizontal", "right");
                 }
@@ -99,9 +108,10 @@ const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
           <>
             <div
               className={styles.lprwitharrow}
-              onClick={(e) =>
-                displayContext(e, "LprTo" + index, "horizontal", "right")
-              }
+              onClick={(e) => {
+                e.stopPropagation();
+                displayContext(e, "LprTo" + index, "horizontal", "right");
+              }}
             >
               <div style={{ height: "1.225em", width: "1.225em" }}>
                 <IconFactory name="person1" />
