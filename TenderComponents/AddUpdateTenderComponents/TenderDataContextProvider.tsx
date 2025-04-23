@@ -303,7 +303,7 @@ interface TenderDataContextType {
     value: string | number,
     id?: number,
     productId?: number,
-    requestedGenericName?:string,
+    requestedGenericName?: string
   ) => void;
   addApplicableCondition: (type: string) => void;
   removeApplicableCondition: (conditionType: string) => void;
@@ -523,10 +523,12 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   ) => {
     setTenderData((prev) => ({
       ...prev,
-      tenderSupplyConditions: {
-        ...prev.tenderSupplyConditions,
-        [key]: value,
-      },
+      tenderSupplyConditions: [
+        {
+          ...prev.tenderSupplyConditions[0],
+          [key]: value,
+        },
+      ],
     }));
   };
   // ✅ Update applicable condition fields
@@ -732,7 +734,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     value: string | number,
     id?: number,
     productId?: number,
-    requestedGenericName?:string,
+    requestedGenericName?: string
   ) => {
     setTenderData((prev) => ({
       ...prev,
@@ -743,8 +745,9 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               tenderItems: revision.tenderItems.map((item) => {
                 const obj =
                   (id && item.id === id) ||
-                  (productId && item.productId === productId)||
-                  (requestedGenericName && item.requestedGenericName === requestedGenericName)
+                  (productId && item.productId === productId) ||
+                  (requestedGenericName &&
+                    item.requestedGenericName === requestedGenericName)
                     ? key.startsWith("product.")
                       ? {
                           ...item,
@@ -1035,18 +1038,21 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   const updateTender = useCallback(
     async (status: string) => {
       try {
-        // const copylatestTenderRevision = [
-        //   tenderDataCopy.tenderRevisions.reduce(
-        //     (max, obj) => (obj.version > max.version ? obj : max),
-        //     tenderDataCopy.tenderRevisions[0]
-        //   ),
-        // ];
-        // const latestTenderRevision = [
-        //   tenderData.tenderRevisions.reduce(
-        //     (max, obj) => (obj.version > max.version ? obj : max),
-        //     tenderData.tenderRevisions[0]
-        //   ),
-        // ];
+        const copylatestTenderRevision =
+          tenderDataCopy.tenderRevisions?.length > 0
+            ? [
+                tenderDataCopy.tenderRevisions.reduce(
+                  (max, obj) => (obj.version > max.version ? obj : max),
+                  tenderDataCopy.tenderRevisions[0]
+                ),
+              ]
+            : [];
+        const latestTenderRevision = [
+          tenderData.tenderRevisions.reduce(
+            (max, obj) => (obj.version > max.version ? obj : max),
+            tenderData.tenderRevisions[0]
+          ),
+        ];
         const dataToSendTenderCopy = stripReadOnlyProperties({
           ...tenderDataCopy,
           shippingLocations: tenderDataCopy.shippingLocations.join(","),
@@ -1077,7 +1083,10 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             },
           ],
           // tenderRevisions: copylatestTenderRevision,
-          tenderRevisions: tenderDataCopy.tenderRevisions,
+          tenderRevisions: copylatestTenderRevision.map((x) => {
+            if (x.id) return { id: x.id, tenderItems: x.tenderItems };
+            return { tenderItems: x.tenderItems };
+          }),
         });
         delete dataToSendTenderCopy.applierType;
         delete dataToSendTenderCopy.supplierType;
@@ -1112,7 +1121,10 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             },
           ],
           // tenderRevisions: latestTenderRevision,
-          tenderRevisions: tenderData.tenderRevisions,
+          tenderRevisions: latestTenderRevision.map((x) => {
+            if (x.id) return { id: x.id, tenderItems: x.tenderItems };
+            return { tenderItems: x.tenderItems };
+          }),
         });
         delete dataToSendOriginalTender.applierType;
         delete dataToSendOriginalTender.supplierType;
@@ -1141,8 +1153,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             });
             showToaster("create-order-toaster");
             setTimeout(() => {
-              if (tenderData.id)
-                fetchAndSetOriginalTender(tenderData.id, status);
+              goBack();
             }, closeTimeForTender);
           } else {
             setActionStatus({
@@ -1261,7 +1272,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           headers: {
             "Content-Type": "application/json",
             ...(tenderStatus && {
-              "x-contract-type": `{"tenderStatus":"${tenderStatus}"}`,
+              "x-contract-status": `{"tenderStatus":"${tenderStatus}"}`,
             }),
           },
         });
@@ -1328,6 +1339,9 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         setTenderData(newTenderData);
         setTenderDataCopy({
           ...newTenderData,
+          tenderRevisions: newTenderData.tenderRevisions.filter(
+            (x) => x.id != undefined
+          ),
           status: "",
           lastUpdatedBy: -1,
         });
