@@ -714,6 +714,8 @@ export default function Home() {
                   </div>
                 }
                 comment={t.status?.message}
+                handleOnClick={(e) => e.stopPropagation()}
+                handleClickableOnClick={(e) => e.stopPropagation()}
               />
             ) : (
               "No Status"

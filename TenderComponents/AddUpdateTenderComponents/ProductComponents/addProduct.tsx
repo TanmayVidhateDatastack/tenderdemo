@@ -96,6 +96,7 @@ const DsAddProduct: React.FC<addProductProps> = ({
           initialValue={qtyInputVal}
           onChange={(e) => setQtyInputVal(e.target.value)}
           id="qty"
+          inputType="positiveInteger"
           containerClasses={styles.qtyinproductContainer}
           disable={disabled}
           className={styles.qtyinproduct}

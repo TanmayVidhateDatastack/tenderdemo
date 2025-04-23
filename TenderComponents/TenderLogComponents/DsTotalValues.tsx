@@ -7,16 +7,20 @@ import ContextMenu, {
   displayContext,
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import DsInfoDisplay from "@/Elements/ERPComponents/DsInfoDisplay/DsInfoDisplay";
-import styles from "./filteractions.module.css"
-import DsCurrency from "@/Elements/DsComponents/dsCurrency/dsCurrency";
+import styles from "./filteractions.module.css";
+import DsCurrency, {
+  getFormatCurrency,
+} from "@/Elements/DsComponents/dsCurrency/dsCurrency";
 
 interface TotalValuesProps {
-  data: Tender[]; 
+  data: Tender[];
 }
 
 const DsTotalValues: React.FC<TotalValuesProps> = React.memo(({ data }) => {
   const [totalValue, setTotalValue] = useState<string>("0.00");
-  const [formattedValues,setFormattedValues]=useState<{status:string,value:string|number}[]>([]);
+  const [formattedValues, setFormattedValues] = useState<
+    { status: string; value: string | number }[]
+  >([]);
 
   useEffect(() => {
     if (Array.isArray(data)) {
@@ -25,8 +29,8 @@ const DsTotalValues: React.FC<TotalValuesProps> = React.memo(({ data }) => {
       data.forEach((tender: Tender) => {
         const statusValue = tender.status?.tenderStatus ?? "Unknown";
 
-        const rawValue = tender.value ?? "0"; 
-        const cleanedValue = Number(rawValue.toString().replace(/,/g, "")); 
+        const rawValue = tender.value ?? "0";
+        const cleanedValue = Number(rawValue.toString().replace(/,/g, ""));
 
         if (!isNaN(cleanedValue)) { 
           netValues[statusValue] = (netValues[statusValue] || 0) + cleanedValue; 
@@ -40,18 +44,16 @@ const DsTotalValues: React.FC<TotalValuesProps> = React.memo(({ data }) => {
           //  value:<DsCurrency format={"IND"} id={""} amount={value} type={"short"}/>,
         })
       );
-setFormattedValues(formattedValues)
+      setFormattedValues(formattedValues);
       const total = formattedValues
-        .reduce((sum, item) => sum + parseFloat(item.value ), 0)
+        .reduce((sum, item) => sum + parseFloat(item.value), 0)
         .toFixed(2);
 
       setTotalValue(total);
-
- 
     }
   }, [data]);
 
-  // console.log("total values", data); 
+  // console.log("total values", data);
 
   return (
     <div
@@ -63,17 +65,25 @@ setFormattedValues(formattedValues)
         closeContext("TotalValues");
       }}
     >
-    
       <DsInfoDisplay detailOf="Total Values (₹)" className={styles.totalorder}>
-      
-        <DsCurrency format={"IND"} id={""} amount={Number(totalValue)} type={"short"}/> 
-      </DsInfoDisplay>  
-      <ContextMenu id={"TotalValues"} showArrow={false} content={<Ds_SummaryCount
-        title="Total Values"
-        value={<DsCurrency format={"IND"} id={""} amount={Number(totalValue)} type={"short"}/>}
-        // statusValues={formattedValues.map(item => ({ ...item, value: Number(item.value).toFixed(0) }))}
-        statusValue={formattedValues.map(item => ({ ...item, value:<DsCurrency format={"IND"} id={""} amount={Number(item.value)} type={"short"}/> }))}
-      />}/>
+        {/* <DsCurrency format={"IND"} id={""} amount={Number(totalValue)} type={"short"}/> */}
+        {getFormatCurrency(Number(totalValue), "short", "IND")}
+      </DsInfoDisplay>
+      <ContextMenu
+        id={"TotalValues"}
+        showArrow={false}
+        content={
+          <Ds_SummaryCount
+            title="Total Values"
+            value={getFormatCurrency(Number(totalValue), "short", "IND")}
+            // statusValues={formattedValues.map(item => ({ ...item, value: Number(item.value).toFixed(0) }))}
+            statusValue={formattedValues.map((item) => ({
+              ...item,
+              value: getFormatCurrency(Number(totalValue), "short", "IND"),
+            }))}
+          />
+        }
+      />
     </div>
   );
 });
