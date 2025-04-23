@@ -182,6 +182,7 @@ useEffect(() => {
             initialValue={tenderData.tenderNumber}
             maxLength={50}
             label="Tender number"
+            inputType="alphaNumeric"
             // placeholder="Please Type Here"
             onBlur={(e) =>
               updateTenderData(

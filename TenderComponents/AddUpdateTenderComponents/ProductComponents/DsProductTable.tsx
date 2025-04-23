@@ -85,7 +85,9 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         calculated.product.marginValue =
           Number(tenderproduct.proposedRate) - calculated.product.totalCost;
         calculated.product.marginPercent =
-          tenderproduct.proposedRate !== 0
+          tenderproduct.proposedRate !== 0 &&
+          tenderproduct.proposedRate !== undefined &&
+          tenderproduct.proposedRate !== null
             ? (calculated.product.marginValue /
                 Number(tenderproduct.proposedRate)) *
                 100 || 0
@@ -342,6 +344,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                       (e.target as HTMLInputElement).value
                     )
                   }
+                  onClick={(e) => e.stopPropagation()}
                 />
               ) : (
                 tenderproduct.requestedGenericName || "-"
@@ -361,6 +364,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                   initialValue={
                     tenderproduct.requestedQuantity?.toString() || ""
                   }
+                  inputType="positiveInteger"
                   onBlur={(e) =>
                     handleFieldChange(
                       index,
@@ -368,6 +372,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                       Number((e.target as HTMLInputElement).value)
                     )
                   }
+                  onClick={(e) => e.stopPropagation()}
                 />
               ),
 
@@ -388,6 +393,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                       (e.target as HTMLInputElement).value
                     )
                   }
+                  onClick={(e) => e.stopPropagation()}
                 />
               ) : (
                 tenderproduct.requestedPackingSize || "-"
@@ -415,22 +421,22 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
           {
             columnIndex: 5,
             content:
-              tenderproduct.product?.dataSource === "csv" ? (
-                tenderproduct.product.productPackingSize || "-"
-              ) : latestVersion != version ? (
-                tenderproduct.product.productPackingSize || "-"
-              ) : (
-                <DsTextField
-                  initialValue={tenderproduct.product?.productPackingSize || ""}
-                  onBlur={(e) =>
-                    handleFieldChange(
-                      index,
-                      "product.productPackingSize",
-                      (e.target as HTMLInputElement).value
-                    )
-                  }
-                />
-              ),
+              // tenderproduct.product?.dataSource === "csv" ? (
+              tenderproduct.product.productPackingSize || "-",
+            // ) : latestVersion != version ? (
+            //   tenderproduct.product.productPackingSize || "-"
+            // ) : (
+            //   <DsTextField
+            //     initialValue={tenderproduct.product?.productPackingSize || ""}
+            //     onBlur={(e) =>
+            //       handleFieldChange(
+            //         index,
+            //         "product.productPackingSize",
+            //         (e.target as HTMLInputElement).value
+            //       )
+            //     }
+            //   />
+            // ),
             className: styles.cellproductpakingsize,
           },
 
@@ -532,13 +538,14 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
               tenderproduct.product?.dataSource == "saved" &&
               latestVersion == version ? (
                 <DsTextField
-                  inputType="number"
+                  inputType="positive"
                   initialValue={tenderproduct.proposedRate?.toString() || ""}
                   onKeyUp={(e) => {
                     if (e.key === "Enter") {
                       (e.target as HTMLElement).blur();
                     }
                   }}
+                  onClick={(e) => e.stopPropagation()}
                   onBlur={(e) => {
                     const proposedRate = Number(
                       (e.target as HTMLInputElement).value
@@ -580,12 +587,18 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
               latestVersion == version ? (
                 <DsTextField
                   inputType="number"
-                  initialValue={tenderproduct.ptrPercentage?.toFixed(2) || ""}
+                  maximumNumber={100.0}
+                  initialValue={
+                    Number(
+                      tenderproduct.ptrPercentage?.toFixed(2)
+                    ).toString() || ""
+                  }
                   onKeyUp={(e) => {
                     if (e.key === "Enter") {
                       (e.target as HTMLElement).blur();
                     }
                   }}
+                  onClick={(e) => e.stopPropagation()}
                   onBlur={(e) => {
                     const ptrPer = Number((e.target as HTMLInputElement).value);
                     if (tenderproduct.ptrPercentage !== ptrPer) {
@@ -604,7 +617,11 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                       // console.log(proposedRate);
                       // console.log(ptrPer);
                       // console.log(discount);
-                      handleFieldChange(index, "ptrPercentage", ptrPer);
+                      handleFieldChange(
+                        index,
+                        "ptrPercentage",
+                        parseFloat(ptrPer.toFixed(2))
+                      );
                       handleFieldChange(index, "proposedRate", proposedRate);
                       handleFieldChange(
                         index,
@@ -612,6 +629,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                         discount
                       );
                     }
+                    (e.target as HTMLInputElement).value = ptrPer.toFixed(2);
                   }}
                   className={`${
                     (tenderproduct.ptrPercentage || 0) <= 0
@@ -643,6 +661,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                       (e.target as HTMLElement).blur();
                     }
                   }}
+                  onClick={(e) => e.stopPropagation()}
                   onBlur={(e) => {
                     const discount = Number(
                       (e.target as HTMLInputElement).value
@@ -828,7 +847,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
   }, [columns, rows]);
   return (
     <>
-      <div className="tender-product-container" style={{overflowY:"hidden"}}>
+      <div className="tender-product-container" style={{ overflowY: "hidden" }}>
         {tenderProductTable && (
           <TableComponent
             className={tenderProductTable.className}

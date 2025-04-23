@@ -83,6 +83,7 @@ const ProductTableSearch: React.FC<TableSearchProps> = ({
       setSearchUrl={function (searchTerm: string): string {
         return searchProductsURL + searchTerm;
       }}
+      onClick={(e)=>e.stopPropagation()}
       initialValue={initialValue}
     />
   );

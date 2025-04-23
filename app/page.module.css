@@ -505,6 +505,7 @@ a.secondary {
 }
 .tendertable {
   font-size: var(--font-12) !important;
+  min-width:100% !important;
 }
 .tender-product-table {
   font-size: var(--font-13);

@@ -389,10 +389,10 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       contractStatusNotes: "test",
       tenderRevisions: {
         id: 0,
-        tenderItems: [ 
+        tenderItems: [
           {
             awardedQuantity: 1,
-            awardedRate: 2, 
+            awardedRate: 2,
             awardedTo: 1,
             id: 2,
             productId: 1,
@@ -648,7 +648,48 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       ),
     }));
   };
+  // const createTenderVersion = useCallback(() => {
+  //   const latestRevision = {
+  //     ...[...tenderData.tenderRevisions].reduce((maxObj, currentObj) =>
+  //       currentObj.version > maxObj.version ? currentObj : maxObj
+  //     ),
+  //   };
+  //   console.log(latestRevision);
+  //   console.log(tenderData.tenderRevisions);
+  //   delete latestRevision.id;
 
+  //   const newTenderRevision = [...tenderData.tenderRevisions];
+  //   const newRevisedIndex = newTenderRevision.findIndex(
+  //     (x) => x.version == latestRevision.version
+  //   );
+  //   latestRevision.version = latestRevision.version + 1;
+  //   if (newRevisedIndex) {
+  //     // newTenderRevision[newRevisedIndex].status = "REVISE";
+  //     newTenderRevision.push({
+  //       ...latestRevision,
+  //       tenderItems: [
+  //         ...latestRevision.tenderItems.map((x) => {
+  //           return {
+  //             requestedGenericName: x.requestedGenericName,
+  //             requestedQuantity: x.requestedQuantity,
+  //             requestedPackingSize: x.requestedPackingSize,
+  //             productId: x.productId,
+  //             product: x.product,
+  //             proposedRate: x.proposedRate,
+  //             ptrPercentage: x.ptrPercentage,
+  //             lpr: x.lpr,
+  //             competitorId: x.competitorId,
+  //             stockistDiscountValue: x.stockistDiscountValue,
+  //           } as TenderProduct;
+  //         }),
+  //       ],
+  //     });
+  //     setTenderData((prev) => ({
+  //       ...prev,
+  //       tenderRevisions: [...newTenderRevision],
+  //     }));
+  //   }
+  // }, [tenderDataCopy, tenderData]);
   const createTenderVersion = useCallback(() => {
     const latestRevision = {
       ...[...tenderData.tenderRevisions].reduce((maxObj, currentObj) =>
@@ -768,6 +809,21 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   };
   // ✅ Add a new applicable condition
   const addApplicableCondition = (type: string) => {
+     // setTenderData((prev) => ({
+    //   ...prev,
+
+    //   supplyConditions: {
+    //     ...prev.supplyConditions,
+    //     applicableConditions: [
+    //       ...prev.supplyConditions.applicableConditions,
+    //       {
+    //         type,
+    //         notes: "",
+    //         status: "ACTV",
+    //       },
+    //     ],
+    //   },
+    // }));
     setTenderData((prev) => {
       let updated = false; // Flag to track if we updated an existing entry
       const active: "ACTV" | "INAC" = "ACTV";
@@ -1033,7 +1089,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         delete dataToSendTenderCopy.applierType;
         delete dataToSendTenderCopy.supplierType;
         const dataToSendOriginalTender = stripReadOnlyProperties({
-          ...tenderData, 
+          ...tenderData,
           shippingLocations: tenderData.shippingLocations.join(","),
           appliedBy:
             tenderData.applierType.toLowerCase() == "organization"
