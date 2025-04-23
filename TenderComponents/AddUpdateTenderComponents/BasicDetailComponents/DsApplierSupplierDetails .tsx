@@ -322,7 +322,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
             onBlur={(e) =>
               updateTenderData( 
                 "supplierDiscount", 
-                (e.target as HTMLInputElement).value 
+                Number((e.target as HTMLInputElement).value )
               ) 
             }
           ></DsTextField>

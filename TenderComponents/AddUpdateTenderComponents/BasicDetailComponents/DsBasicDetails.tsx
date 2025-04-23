@@ -39,16 +39,16 @@ const DsBasicDetails = () => {
   //     appliedBy: [],
   //     suppliedBy: [],
   //     depot: [],
-  //   });
-  const [supplyDetails, setSupplyDetails] = useState<supplyDetails>({
-    supplyPoints: [],
+  //   }); 
+  const [supplyDetails, setSupplyDetails] = useState<supplyDetails>({ 
+    supplyPoints: [],  
     reportRequirements: [],
     eligibility: [],
   });
   //Arun
-  interface MetadataItem {
+  interface MetadataItem { 
     depositeDocument: DepositDocument[];
-    applicableDeposits: DsSelectOption[];
+    applicableDeposits: DsSelectOption[]; 
     applicableSupplyConditions: DsSelectOption[];
   }
  
@@ -58,7 +58,7 @@ const DsBasicDetails = () => {
   >([]);
   const [applicableSupplyConditions, setApplicableSupplyConditions] = useState<
     DsSelectOption[]
-  >([]);
+  >([]); 
   const [metadata, setMetadata] = useState<MetadataItem[]>([]);
   const [role, setRole] = useState<string>("");
  
