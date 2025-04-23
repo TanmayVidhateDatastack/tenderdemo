@@ -16,7 +16,7 @@ import { setUserRole } from "@/Redux/slice/UserSlice/userSlice";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import { dsStatus, getTenderUserRoles } from "@/Common/helpers/constant";
 import DsNavTo from "@/Elements/ERPComponents/DsNavigationComponent/DsNavTo";
-import DsSplitButton from "@/Elements/DsComponents/DsButtons/dsSplitButton";
+import DsSplitButton from "@/Elements/DsComponents/DsButtons/dsSplitButton"; 
 import DsApprovalPopup from "@/Elements/ERPComponents/DsApprovalPopups/DsApprovalPopups";
 import Toaster from "@/Elements/DsComponents/DsToaster/DsToaster";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
@@ -52,54 +52,52 @@ export const DSTendrFooter: React.FC = ({}) => {
   useEffect(() => {
     handleFetch();
   }, []);
+ 
+      const validateFields = () => {
+        const errors: string[] = []; 
+ 
+        if (tenderData?.customerId == null || tenderData?.customerId == undefined||tenderData.customerId==0) {
+          errors.push("Please select a customer.");
+        }
+        if (tenderData?.customerAddressId == 0 ) { 
+          errors.push("Please select a customer address.");
+        }
+        if (tenderData?.tenderNumber?.trim() === "") { 
+          errors.push("Please enter a tender no.");
+        }
+        if (tenderData?.tenderType === "") {
+          errors.push("Please enter a tendr type.");
+        } 
+        if (tenderData?.issueDate === "") {
+          errors.push("Please enter a tender issue date."); 
+        }
+        const todaysdate = new Date(); 
+        todaysdate.setHours(0, 0, 0, 0); 
 
-  const validateFields = () => {
-    const errors: string[] = [];
-
-    if (
-      tenderData?.customerId == null ||
-      tenderData?.customerId == undefined ||
-      tenderData.customerId == 0
-    ) {
-      errors.push("Please select a customer.");
-    }
-    if (tenderData?.customerAddressId == 0) {
-      errors.push("Please select a customer address.");
-    }
-    if (tenderData?.tenderNumber?.trim() === "") {
-      errors.push("Please enter a tender no.");
-    }
-    if (tenderData?.tenderType === "") {
-      errors.push("Please enter a tendr type.");
-    }
-    if (tenderData?.issueDate === "") {
-      errors.push("Please enter a tender issue date.");
-    }
-    const todaysdate = new Date();
-    if (tenderData?.issueDate && new Date(tenderData.issueDate) > todaysdate) {
-      errors.push("Tender issue date should not be greater than today's date.");
-    }
-    if (tenderData?.lastPurchaseDate === "") {
-      errors.push("Please enter a last purchase date.");
-    }
-    if (
-      tenderData?.lastPurchaseDate &&
-      new Date(tenderData.lastPurchaseDate) < todaysdate
-    ) {
-      errors.push("Last Purchase date should not be less than today's date.");
-    }
-    if (tenderData?.submissionDate === "") {
-      errors.push("Please enter a submission date.");
-    }
-    if (
-      tenderData?.submissionDate &&
-      new Date(tenderData.submissionDate) < todaysdate
-    ) {
-      errors.push("Submission  date should not be less than today's date.");
-    }
-    if (tenderData?.submissionMode?.trim() === "") {
-      errors.push("Please select a submission Mode.");
-    }
+        if (tenderData?.issueDate && new Date(tenderData.issueDate) > todaysdate) { 
+          errors.push("Tender issue date should not be greater than today's date.");
+        } 
+        if (tenderData?.lastPurchaseDate === "") { 
+          errors.push("Please enter a last purchase date.");
+        }
+        if (
+          tenderData?.lastPurchaseDate &&
+          new Date(tenderData.lastPurchaseDate) < todaysdate
+        ) {
+          errors.push("Last Purchase date should not be less than today's date.");
+        }
+        if (tenderData?.submissionDate === "") {
+          errors.push("Please enter a submission date.");
+        }
+        if (
+          tenderData?.submissionDate &&
+          new Date(tenderData.submissionDate) < todaysdate
+        ) {
+          errors.push("Submission  date should not be less than today's date.");
+        }
+        if (tenderData?.submissionMode?.trim() === "") {
+          errors.push("Please select a submission Mode.");
+        }
 
     const urlPattern =
       /^(https?:\/\/)?([\w\-]+\.)+[\w\-]+(\/[\w\-._~:/?#[\]@!$&'()*+,;=]*)?$/;

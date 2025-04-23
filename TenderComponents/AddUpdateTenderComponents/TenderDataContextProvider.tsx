@@ -354,7 +354,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     supplierName: "",
     supplierDiscount: 0,
     lastUpdatedBy: 0,
-    status: "AWARDED",
+    status: "Draft",
     tenderDetails: {
       type: "read-only",
       customerName: "",
@@ -809,7 +809,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   };
   // ✅ Add a new applicable condition
   const addApplicableCondition = (type: string) => {
-    // setTenderData((prev) => ({
+     // setTenderData((prev) => ({
     //   ...prev,
 
     //   supplyConditions: {
@@ -894,7 +894,6 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     if (Array.isArray(obj)) {
       return obj.map((item) => stripReadOnlyProperties(item));
     }
-
     if (typeof obj !== "object" || obj === null) {
       return obj;
     }
@@ -984,7 +983,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             const base64String = x.data ? await fileToBase64(x.data) : "";
             return {
               name: x.name,
-              data: base64String,
+              data: x.data,
               documentType: x.documentType,
               category: x.category,
             };
@@ -1024,7 +1023,6 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             showToaster("create-order-toaster");
           }
         });
-
         // console.log("result  = ", result);
         //console.log("Order saved successfully");
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -1128,6 +1126,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         });
         delete dataToSendOriginalTender.applierType;
         delete dataToSendOriginalTender.supplierType;
+
         const patchDocument = generatePatchDocument(
           dataToSendTenderCopy,
           dataToSendOriginalTender
@@ -1396,7 +1395,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     </TenderDataContext.Provider>
   );
 };
-// ✅ Custom hook to access context
+// Custom hook to access context
 export const useTenderData = () => {
   const context = useContext(TenderDataContext);
   if (!context) {

@@ -130,3 +130,31 @@
   .downloadreciept{
     background-color: inherit !important;
   }
+  .fetchButtons{
+    display: flex;
+    justify-content: flex-end;
+    padding: 5px;
+    
+  }
+  .fetcustomerContainer{
+    padding: 15px;
+  }
+  .fetchMessage {
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.5;
+    font-size: var(--font-12);
+    color:#555555;
+    text-align: left;
+    margin: 10px 10px 10px 0px; 
+
+    /* padding:px; */ 
+  }
+  .fetchInfo{
+    text-align: left;
+    /* font-size: var(--font-14); */
+  }
+  .fetchTable{
+    margin: 10px 10px 10px 0px; 
+  }
+  
