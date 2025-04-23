@@ -5,162 +5,92 @@ import { DsTableRow, tableData, tcolumn } from "@/Common/helpers/types";
 import DsTableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableComponent";
 import { closeContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import btnStyles from "@/Elements/DsComponents/DsButtons/dsButton.module.css";
-import RadioButton from "@/Elements/DsComponents/DsRadioButton/dsRadioButton";
+import RadioButton from "./dsRadioButton";
 
 export interface FetchCustomerProps {
   customerName: string;
 }
 
 const FetchCustomer: React.FC<FetchCustomerProps> = ({ customerName }) => {
-    
-    const [fetchTenderData, setFetchTenderData] = useState<tableData>({
+  const [fetchTenderData, setFetchTenderData] = useState<tableData>({
+    className: "",
+    type: "InterActive",
+    id: "Tender",
+    isSortable: true,
+    hasSearch: false,
+    columns: [
+      { columnIndex: 1, columnHeader: "Tender ID" },
+      {
+        columnIndex: 2,
+        columnHeader: "Supplier Name",
+      },
 
-       className:"",
+      { columnIndex: 3, columnHeader: "Delivery Date" },
+    ],
 
-        type: "InterActive", 
-    
-        id: "Tender",
-    
-        isSortable: true,
-    
-        hasSearch: false,
-
-    
-        columns: [
-    
-            { columnIndex: 1, columnHeader: "Tender ID"},
-    
-            {
-    
-              columnIndex: 2,
-    
-              columnHeader: "Supplier Name",
-    
-            },
-    
-            { columnIndex: 3, columnHeader: "Delivery Date", },
-    
-          ],
-    
-         rows: 
-         [   
+    rows: [
+      {
+        tag: [<RadioButton id={""} label={""} value={""}></RadioButton>],
+        rowIndex: 0,
+        className: "row",
+        content: [
           {
-            tag:[ <RadioButton id={""} label={""} value={""}  ></RadioButton>],
-            rowIndex: 0,
-    
-            className: "row",
-    
-            content: [
-    
-              {
-    
-                columnIndex: 1,
-    
-                className: "cell",
-    
-                content: "20240199900001",
-    
-                rowSpan: 2,
-    
-                filterValue: 20240199900001,
-    
-                contentType: "number",
-    
-              },
-    
-              {
-    
-                columnIndex: 2,
-    
-                className: "cell",
-    
-                content: "Spare India",
-    
-                filterValue: "DF09 - DR Distributer",
-    
-                contentType: "string",
-    
-              },
-    
-              {
-    
-                columnIndex: 3,
-    
-                className: "cell",
-    
-                content:"22/07/2020",
-    
-                filterValue: "MUMBAI",
-    
-                contentType: "reactNode",
-    
-              },
-    
-            ],
-    
+            columnIndex: 1,
+            className: "cell",
+            content: "20240199900001",
+            rowSpan: 2,
+            filterValue: 20240199900001,
+            contentType: "number",
           },
-    
-              {
-    
-            rowIndex: 1,
-            tag:[ <RadioButton id={""} label={""} value={""}></RadioButton>],
-    
-            className: "row",
-    
-            content: [
-    
-              {
-    
-                columnIndex: 1,
-    
-                className: "cell",
-    
-                content: 300165852100004,
-    
-                rowSpan: 2,
-    
-                filterValue: 20240199900001,
-    
-                contentType: "number",
-    
-              },
-    
-              {
-    
-                columnIndex: 2,
-    
-                className: "cell",
-    
-                content: "S.S.P PTV.LTD",
-    
-                filterValue: "DF09 - DR Distributer",
-    
-                contentType: "string",
-    
-              },
-    
-              {
-                columnIndex: 3,
-    
-                className: "cell",
-    
-                content:"18/06/2023",
-    
-                filterValue: "MUMBAI",
-    
-                contentType: "reactNode",
-    
-              },
-    
-            ],
-    
+          {
+            columnIndex: 2,
+            className: "cell",
+            content: "Spare India",
+            filterValue: "DF09 - DR Distributer",
+            contentType: "string",
           },
-    
+          {
+            columnIndex: 3,
+            className: "cell",
+            content: "22/07/2020",
+            filterValue: "MUMBAI",
+            contentType: "reactNode",
+          },
         ],
-    
-      });
-     
-   
+      },
+
+      {
+        rowIndex: 1,
+        tag: [<RadioButton id={""} label={""} value={""}></RadioButton>],
+        className: "row",
+        content: [
+          {
+            columnIndex: 1,
+            className: "cell",
+            content: 300165852100004,
+            rowSpan: 2,
+            filterValue: 20240199900001,
+            contentType: "number",
+          },
+          {
+            columnIndex: 2,
+            className: "cell",
+            content: "S.S.P PTV.LTD",
+            filterValue: "DF09 - DR Distributer",
+            contentType: "string",
+          },
+          {
+            columnIndex: 3,
+            className: "cell",
+            content: "18/06/2023",
+            filterValue: "MUMBAI",
+            contentType: "reactNode",
+          },
+        ],
+      },
+    ],
+  });
+
   return (
     <>
       <div className={style.fetcustomerContainer}>
@@ -174,13 +104,11 @@ const FetchCustomer: React.FC<FetchCustomerProps> = ({ customerName }) => {
 
         <DsTableComponent
           className={style.fetchTable}
-          id={""} 
-          columns={fetchTenderData.columns} 
-          rows={fetchTenderData.rows}  
-          
+          id={""}
+          columns={fetchTenderData.columns}
+          rows={fetchTenderData.rows}
         ></DsTableComponent>
 
-       
         <div className={style.fetchButtons}>
           <DsButton
             label="Cancel"
@@ -189,7 +117,7 @@ const FetchCustomer: React.FC<FetchCustomerProps> = ({ customerName }) => {
             buttonViewStyle="btnOutlined"
             disable={false}
             // className={style.}
-            onClick={() => { 
+            onClick={() => {
               closeContext("contextMenuId5");
             }}
           />
