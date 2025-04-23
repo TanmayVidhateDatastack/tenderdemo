@@ -5,7 +5,7 @@ import DsNavTo from "@/Elements/ERPComponents/DsNavigationComponent/DsNavTo";
 import styles from "./page.module.css";
 import DsFilterActions from "@/TenderComponents/TenderLogComponents/DsFilterActions";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   CodeItem,
   datalistOptions,
@@ -347,7 +347,7 @@ export default function Home() {
         // console.log("objevct to be send", tenderFilters);
 
         if (res?.code === 200 && Array.isArray(res?.result)) {
-          console.log("getAllTenders:",res)
+          console.log("getAllTenders:", res);
           const formattedData = formatTenders(res?.result);
           // console.log("formatted data:", formattedData);
           setData(formattedData);
@@ -383,7 +383,7 @@ export default function Home() {
       status: {
         tenderStatus: item.status?.tenderStatus ?? "-",
         message: item.status?.message ?? "-",
-        statusDescription:item.status?.tenderStatusDescription??"-"
+        statusDescription: item.status?.tenderStatusDescription ?? "-",
       },
     }));
   };
@@ -415,6 +415,12 @@ export default function Home() {
   >([]);
   const [applierDetails, setApplierDetails] = useState<string[]>([]);
   const [supplierDetails, setSupplierDetails] = useState<string[]>([]);
+  const [selectedRow, setSelectedRow] = useState<{
+    e?: React.MouseEvent<HTMLElement>;
+    rowIndex?: number;
+    statuscell?: string;
+    tenderId?: number;
+  } | null>(null);
 
   useEffect(() => {
     if (Array.isArray(data) && data.length > 0) {
@@ -427,7 +433,6 @@ export default function Home() {
       setUniqueAppliers([]);
     }
   }, [data]);
-
 
   useEffect(() => {
     const filteredMetaData = metaDataTypes.filter(
@@ -457,7 +462,6 @@ export default function Home() {
       },
     })
       .then((res) => {
-
         if (res?.code === 200 && res?.result) {
           // if(res?.c)
 
@@ -477,7 +481,6 @@ export default function Home() {
       url: getAllDepots,
     })
       .then((res) => {
-
         if (res?.code === 200 && res?.result) {
           // if(res?.c)
           setDepotList(res.result);
@@ -496,7 +499,6 @@ export default function Home() {
       url: getApplierSupplierDetails,
     })
       .then((res) => {
-
         if (res?.code === 200 && res?.result) {
           // if(res?.c)
           setApplierSupplier(res.result?.appliedBySuppliedBy);
@@ -536,10 +538,8 @@ export default function Home() {
     if (matchedItem) {
       // console.log("Selected Tender Type:", matchedItem.codeDescription);
       return matchedItem.codeDescription;
-    
     }
   };
-
 
   const addTableData = (tender: Tender[]) => {
     // console.log("Adding table data:", tender);
@@ -548,7 +548,8 @@ export default function Home() {
       if (t.type == "INSTITUTION") rowIcon = "instituitional";
       return {
         rowIndex: index,
-        customAttributes:{tenderId:t.tenderId},
+        customAttributes: { tenderId: t.tenderId },
+        className: "cellRow",
         rowIcon: (
           <div
             style={{
@@ -708,7 +709,7 @@ export default function Home() {
                 status={t.status.statusDescription}
                 label={t.status.statusDescription}
                 status_icon={
-                  <div style={{ width: "0.7em",height:"0.5em" }}>
+                  <div style={{ width: "0.7em", height: "0.5em" }}>
                     <IconFactory name={"comment"}></IconFactory>
                   </div>
                 }
@@ -733,28 +734,56 @@ export default function Home() {
   };
 
   const router = useRouter();
-  const goTo = (tenderId: number,status?:string) => {
+  const goTo = (tenderId: number, status?: string) => {
     const location = `/Tender/${tenderId}`;
-    if(status)
-      sessionStorage.setItem("tenderStatus", status);
-    else{
-      const storedStatus= sessionStorage.getItem("tenderStatus");
-      if(storedStatus){
-        sessionStorage.removeItem("tenderStatus")
+    if (status) sessionStorage.setItem("tenderStatus", status);
+    else {
+      const storedStatus = sessionStorage.getItem("tenderStatus");
+      if (storedStatus) {
+        sessionStorage.removeItem("tenderStatus");
       }
     }
     if (location) {
       router.push(location); // Navigate to the dynamic route
     }
   };
+  const handelRowClick = (
+    e: React.MouseEvent<HTMLElement>,
+    rowIndex: number
+  ) => {
+    const row = tempTableData.rows[rowIndex];
 
+    // Convert statuscell to string if it's not already one
+    const statuscell = String(
+      row?.content?.find((cell) => cell?.columnIndex === 10)?.filterValue ?? ""
+    );
+    const tenderId = Number(row?.content?.[0]?.customAttributes?.tenderId || 0);
+
+    // console.log("statuscellintable", statuscell);
+
+    // Store selected row data
+    setSelectedRow((prev) => {
+      if (prev?.tenderId === tenderId) {
+        // Reset if the same row is clicked
+        return {
+          e: undefined,
+          rowIndex: undefined,
+          statuscell: undefined,
+          tenderId: undefined,
+        };
+      } else {
+        // Set new row data
+        return { e, rowIndex, statuscell, tenderId };
+      }
+    });
+  };
   const handleRowDoubleClick = (
     e: React.MouseEvent<HTMLElement>,
     rowIndex: number
   ) => {
     const row = tempTableData?.rows?.find((row) => row.rowIndex === rowIndex);
 
-    const tenderId = row?.content?.[0]?.customAttributes?.tenderId||"New";
+    const tenderId = row?.content?.[0]?.customAttributes?.tenderId || "New";
 
     if (tenderId) {
       goTo(Number(tenderId));
@@ -769,13 +798,6 @@ export default function Home() {
     addTableData(data);
     // }
   }, [data]);
-
-  const [selectedRow, setSelectedRow] = useState<{
-    e: React.MouseEvent<HTMLElement>;
-    rowIndex: number;
-    statuscell: string;
-    tenderId:number;
-  } | null>(null);
 
   return (
     <>
@@ -849,29 +871,16 @@ export default function Home() {
               isSortable={true}
               handleRowDoubleClick={handleRowDoubleClick}
               handleRowClick={(e, rowIndex) => {
-                const row = tempTableData.rows[rowIndex];
-
-                // Convert statuscell to string if it's not already one
-                const statuscell = String(
-                  row?.content?.find((cell) => cell?.columnIndex === 10)
-                    ?.filterValue ?? ""
-                );
-                const tenderId=Number(row?.content?.[0]?.customAttributes?.tenderId||0)
-
-                // console.log("statuscellintable", statuscell);
-
-                // Store selected row data
-                setSelectedRow({ e, rowIndex, statuscell,tenderId });
+                handelRowClick(e, rowIndex);
               }}
             />
           </div>
           {selectedRow && (
             <DsTenderTableFloatingMenu
               e={selectedRow.e}
-
               rowIndex={selectedRow.rowIndex}
               statuscell={selectedRow.statuscell}
-              handleFetch={handleFetch} 
+              handleFetch={handleFetch}
               tenderId={selectedRow.tenderId}
               goTo={goTo}
             />

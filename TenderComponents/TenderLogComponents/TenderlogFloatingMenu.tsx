@@ -1,64 +1,68 @@
 "use client";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
-import { FloatingMenu, displayTableMenu } from "@/Elements/DsComponents/FloatingMenu/dsFloatingMenu";
+import {
+  FloatingMenu,
+  displayTableMenu,
+} from "@/Elements/DsComponents/FloatingMenu/dsFloatingMenu";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import cancle from "@/Common/TenderIcons/smallIcons/cancle.svg";
 import lost from "@/Common/TenderIcons/smallIcons/lost.svg";
 import awarded from "@/Common/TenderIcons/smallIcons/awarded.svg";
- import version  from "@/Common/TenderIcons/smallIcons/V.svg";
+import version from "@/Common/TenderIcons/smallIcons/V.svg";
 import { changeImage } from "@/Common/helpers/Method/conversion";
 import IconFactory from "@/Elements/IconComponent";
 import { closeContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import { useTenderData } from "../AddUpdateTenderComponents/TenderDataContextProvider";
 import fetchData from "@/Common/helpers/Method/fetchData";
-import { getCustomerSubmissionDoneByTenderId, getTenderByTenderId } from "@/Common/helpers/constant";
+import {
+  getCustomerSubmissionDoneByTenderId,
+  getTenderByTenderId,
+} from "@/Common/helpers/constant";
 import path from "path";
 import style from "./filteractions.module.css";
+import { stat } from "fs";
 
 interface DsTenderTableFloatingMenuProps {
-  e: React.MouseEvent<HTMLElement>;
-  rowIndex: number;
-  statuscell: string;
-  handleFetch:()=>Promise<void>;
-  tenderId:number;
-  goTo:(tenderId:number,status?:string)=>void;
+  e?: React.MouseEvent<HTMLElement>;
+  rowIndex?: number;
+  statuscell?: string;
+  handleFetch: () => Promise<void>;
+  tenderId?: number;
+  goTo: (tenderId: number, status?: string) => void;
 }
 
-export const DsTenderTableFloatingMenu: React.FC<DsTenderTableFloatingMenuProps> = ({ e, rowIndex, statuscell ,handleFetch,tenderId,goTo}) => {
-
-    
+export const DsTenderTableFloatingMenu: React.FC<
+  DsTenderTableFloatingMenuProps
+> = ({ e, rowIndex, statuscell, handleFetch, tenderId, goTo }) => {
   console.log("statuscell", statuscell);
-  
+
   const [isFloatingMenuVisible, setIsFloatingMenuVisible] = useState(false);
   const [isCancelBtnVisible, setIsCancelBtnVisible] = useState(false);
   const [isLostBtnVisible, setLostBtnVisible] = useState(false);
-  const [isPartiallyAwardedBtnVisible, setIsPartiallyAwardedBtnVisible] = useState(false);
+  const [isPartiallyAwardedBtnVisible, setIsPartiallyAwardedBtnVisible] =
+    useState(false);
   const [isAwardedBtnVisible, setIsAwardedBtnVisible] = useState(false);
   const [isNewVersionBtnVisible, setIsNewVersionBtnVisible] = useState(false);
   const [isSubmitVisible, setIsSubmitVisible] = useState(false);
-  const[customerSubmission , setcustomerSubmission ]=useState<[]>([])
+  const [customerSubmission, setcustomerSubmission] = useState<[]>([]);
   const [isAwardedWhite, setIsAwardedWhite] = useState<boolean>(false);
   const [isParAwardedWhite, setIsParAwardedWhite] = useState<boolean>(false);
-  const[isLostWhite,setIsLostWhite]=useState<boolean>(false);
-  const[isCancleWhite,setIsCancletWhite]=useState<boolean>(false);
-  const[isVersionWhite,setIsVersionWhite]=useState<boolean>(false);
-  const [IsSubmissionWhite,setIsSubmissionWhite]=useState<boolean>(false);
-
-
-
+  const [isLostWhite, setIsLostWhite] = useState<boolean>(false);
+  const [isCancleWhite, setIsCancletWhite] = useState<boolean>(false);
+  const [isVersionWhite, setIsVersionWhite] = useState<boolean>(false);
+  const [IsSubmissionWhite, setIsSubmissionWhite] = useState<boolean>(false);
 
   useEffect(() => {
     console.log("statuscell on load:", statuscell); // Debugging
-  
+
     if (statuscell === "CANCELLED" || statuscell === "LOST") {
       setIsFloatingMenuVisible(false);
-  
     } else {
       setIsFloatingMenuVisible(true);
       setIsCancelBtnVisible(true);
     }
-  
+
     if (statuscell === "TENDER_SUBMITTED") {
       setIsCancelBtnVisible(true);
       setLostBtnVisible(true);
@@ -66,7 +70,6 @@ export const DsTenderTableFloatingMenu: React.FC<DsTenderTableFloatingMenuProps>
       setIsAwardedBtnVisible(true);
       setIsNewVersionBtnVisible(true);
       setIsSubmitVisible(false);
-
     } else if (statuscell === "APPROVED") {
       setIsCancelBtnVisible(true);
       setIsPartiallyAwardedBtnVisible(true);
@@ -74,7 +77,6 @@ export const DsTenderTableFloatingMenu: React.FC<DsTenderTableFloatingMenuProps>
       setLostBtnVisible(false);
       setIsAwardedBtnVisible(false);
       setIsNewVersionBtnVisible(false);
-   
     } else {
       setIsCancelBtnVisible(true);
       setLostBtnVisible(false);
@@ -84,53 +86,47 @@ export const DsTenderTableFloatingMenu: React.FC<DsTenderTableFloatingMenuProps>
       setIsSubmitVisible(false);
     }
   }, [statuscell]);
-  
-  
+
   useEffect(() => {
     if (isFloatingMenuVisible) {
-      
-      displayTableMenu(e, "tenderfloatingmenu", "bottom", "center");
-    }
-    else{
-
+      if (e && tenderId)
+        displayTableMenu(e, "tenderfloatingmenu", "bottom", "center");
+      else closeContext("tenderfloatingmenu");
+    } else {
       closeContext("tenderfloatingmenu");
     }
-  }, [isFloatingMenuVisible, e, rowIndex]);
+  }, [isFloatingMenuVisible, e, rowIndex, tenderId]);
   const handleClose = () => {
     console.log("close");
     setIsFloatingMenuVisible(false);
   };
 
-
   const handlefetchUpdateTender = async () => {
-  const customerSubmission=(userId?:number)=>
-    {
-          return(
-              [
-              {
-                  op: "replace",
-                  path: "/status",
-                  value: "TENDER_SUBMITTED"
-              },
-              {
-                  op: "replace",
-                  path: "/lastUpdatedBy",
-                  value: userId||3
-              }
-          ]
-            )
-    }
-    const submitUrl= getCustomerSubmissionDoneByTenderId+tenderId+"/submit"
-    const submissionDoc=customerSubmission();
+    const customerSubmission = (userId?: number) => {
+      return [
+        {
+          op: "replace",
+          path: "/status",
+          value: "TENDER_SUBMITTED",
+        },
+        {
+          op: "replace",
+          path: "/lastUpdatedBy",
+          value: userId || 3,
+        },
+      ];
+    };
+    const submitUrl =
+      getCustomerSubmissionDoneByTenderId + tenderId + "/submit";
+    const submissionDoc = customerSubmission();
     await fetchData({
-      url:submitUrl,
-      method: "PATCH",	
+      url: submitUrl,
+      method: "PATCH",
       dataObject: submissionDoc,
-
     })
       .then((res) => {
         if (res?.code === 200 && res?.result) {
-       handleFetch();
+          handleFetch();
         } else {
           console.error("Error");
         }
@@ -140,175 +136,199 @@ export const DsTenderTableFloatingMenu: React.FC<DsTenderTableFloatingMenuProps>
       });
   };
 
-
-
-
-    
-  const handleFloatingMenuBtnClick = (status:string) => {
- 
-   const Id= tenderId;
+  const handleFloatingMenuBtnClick = (status: string) => {
+    const Id = tenderId;
     if (tenderId) {
-      goTo(Number(tenderId),status);
+      goTo(Number(tenderId), status);
     } else {
       console.warn("TenderId not found on double-clicked row");
     }
   };
 
+  const handleCreateNewVersion = (tenderId?: number) => {
+    if (tenderId != undefined) {
+      const Id = tenderId;
+      goTo(Number(Id), "newPricingVersion");
+    }
+  };
 
- const  handleCreateNewVersion=(tenderId:number)=>
- {
-  const Id=tenderId;
-  goTo(Number(Id),"newPricingVersion");
-
- }
-  
   return (
-    <FloatingMenu selected={1} id={"tenderfloatingmenu"} onCloseClick={handleClose}>
-
+    <FloatingMenu
+      selected={1}
+      id={"tenderfloatingmenu"}
+      onCloseClick={handleClose}
+    >
       <>
         {isCancelBtnVisible && (
-          <DsButton id="deleteBtn" buttonColor="btnWarning" buttonViewStyle="btnContained" 
-          startIcon={
-            <div style={{ width:"1em",height:"1em" }}>
-             
-             <IconFactory name={"crossCircle"} isWhite={isCancleWhite} className={style.crosscirclered} ></IconFactory>
-            </div>
-          }
-          onHover={() => {
-            setIsCancletWhite(true);
-           
-          }}
-          onMouseLeave={() => {
-            setIsCancletWhite (false);
-          
-          }}
-          
-          label="Tender Cancelled" 
-          onClick={() => handleFloatingMenuBtnClick("CANCELLED")}/>
-      
-          
+          <DsButton
+            id="deleteBtn"
+            buttonColor="btnWarning"
+            buttonViewStyle="btnContained"
+            startIcon={
+              <div style={{ width: "1em", height: "1em" }}>
+                <IconFactory
+                  name={"crossCircle"}
+                  isWhite={isCancleWhite}
+                  className={style.crosscirclered}
+                ></IconFactory>
+              </div>
+            }
+            onHover={() => {
+              setIsCancletWhite(true);
+            }}
+            onMouseLeave={() => {
+              setIsCancletWhite(false);
+            }}
+            label="Tender Cancelled"
+            onClick={() => handleFloatingMenuBtnClick("CANCELLED")}
+          />
         )}
         {isLostBtnVisible && (
-          <DsButton id="Signbtn" buttonColor="btnPrimary" buttonViewStyle="btnContained"
-          className={style.tenderlost}
-          startIcon={
-            <div style={{ width:"1em",height:"1em" }}>
-             
-             <IconFactory name={"crossCircle"} isWhite={isLostWhite} className={style.crosscircle} ></IconFactory>
-            </div>
-          }
-          onHover={() => {
-            setIsLostWhite(true);
-           
-          }}
-          onMouseLeave={() => {
-            setIsLostWhite(false);
-          
-          }}
-          label="Tender Lost" 
-          onClick={() => handleFloatingMenuBtnClick("LOST")}
-/>
+          <DsButton
+            id="Signbtn"
+            buttonColor="btnPrimary"
+            buttonViewStyle="btnContained"
+            className={style.tenderlost}
+            startIcon={
+              <div style={{ width: "1em", height: "1em" }}>
+                <IconFactory
+                  name={"crossCircle"}
+                  isWhite={isLostWhite}
+                  className={style.crosscircle}
+                ></IconFactory>
+              </div>
+            }
+            onHover={() => {
+              setIsLostWhite(true);
+            }}
+            onMouseLeave={() => {
+              setIsLostWhite(false);
+            }}
+            label="Tender Lost"
+            onClick={() => handleFloatingMenuBtnClick("LOST")}
+          />
         )}
         {isPartiallyAwardedBtnVisible && (
-   
-          <DsButton id="InvoiceBtn"  
-           buttonColor= "btnPrimary"
-           className={style.awardedbtn}
-        buttonViewStyle="btnContained" 
-          startIcon={
-            <div style={{ width:"1em",height:"1em"}}>
-             
-             <IconFactory name={"awarded"} isWhite={isParAwardedWhite} ></IconFactory>
-            </div>
-          }
-          onHover={() => {
-            setIsParAwardedWhite(true);
-            // changeImage(e, addIconWhite);
-          }}
-          onMouseLeave={() => {
-            setIsParAwardedWhite(false);
+          <DsButton
+            id="InvoiceBtn"
+            buttonColor="btnPrimary"
+            className={style.awardedbtn}
+            buttonViewStyle="btnContained"
+            startIcon={
+              <div style={{ width: "1em", height: "1em" }}>
+                <IconFactory
+                  name={"awarded"}
+                  isWhite={isParAwardedWhite}
+                ></IconFactory>
+              </div>
+            }
+            onHover={() => {
+              setIsParAwardedWhite(true);
+              // changeImage(e, addIconWhite);
+            }}
+            onMouseLeave={() => {
+              setIsParAwardedWhite(false);
 
-            // changeImage(e, addIcon);
-          }}
-      
-          label="Partially Awarded"
-          onClick={() => handleFloatingMenuBtnClick("PARTIALLY_AWARDED")}/>
+              // changeImage(e, addIcon);
+            }}
+            label="Partially Awarded"
+            onClick={() => handleFloatingMenuBtnClick("PARTIALLY_AWARDED")}
+          />
         )}
         {isAwardedBtnVisible && (
-          <DsButton id="packinglistBtn"     
-          buttonColor="btnPrimary"
-        buttonViewStyle="btnContained" 
-        className={style.awardedbtn}
-        startIcon={
-          <div style={{ width:"1em",height:"1em"}}>
-           
-           <IconFactory name={"awarded"} isWhite={isAwardedWhite} ></IconFactory>
-          </div>
-        }
-        onHover={() => {
-          setIsAwardedWhite(true);
-          // changeImage(e, addIconWhite);
-        }}
-        onMouseLeave={() => {
-          setIsAwardedWhite(false);
+          <DsButton
+            id="packinglistBtn"
+            buttonColor="btnPrimary"
+            buttonViewStyle="btnContained"
+            className={style.awardedbtn}
+            startIcon={
+              <div style={{ width: "1em", height: "1em" }}>
+                <IconFactory
+                  name={"awarded"}
+                  isWhite={isAwardedWhite}
+                ></IconFactory>
+              </div>
+            }
+            onHover={() => {
+              setIsAwardedWhite(true);
+              // changeImage(e, addIconWhite);
+            }}
+            onMouseLeave={() => {
+              setIsAwardedWhite(false);
 
-          // changeImage(e, addIcon);
-        }}
-    
-          label="Awarded" 
-          onClick={() => handleFloatingMenuBtnClick("AWARDED")}/>
+              // changeImage(e, addIcon);
+            }}
+            label="Awarded"
+            onClick={() => handleFloatingMenuBtnClick("AWARDED")}
+          />
         )}
         {isNewVersionBtnVisible && (
-          <DsButton id="BillBtn"     buttonColor="btnPrimary"
-        buttonViewStyle="btnContained" 
-        className={style.awardedbtn}
-          startIcon={
-            <div style={{width:"1.2em",height:"1em",display:"flex",alignItems:"center",marginTop:"0.2em"
-              
-              }}>
-           <IconFactory name={"version"} isWhite={isVersionWhite}></IconFactory>
-            </div>
-          }
-       
-          onHover={() => {
-            setIsVersionWhite(true);
-            // changeImage(e, addIconWhite);
-          }}
-          onMouseLeave={() => {
-            setIsVersionWhite(false);
-  
-            // changeImage(e, addIcon);
-          }}
-          label="Create New Version" 
-          onClick={()=>handleCreateNewVersion(tenderId)}
-          
+          <DsButton
+            id="BillBtn"
+            buttonColor="btnPrimary"
+            buttonViewStyle="btnContained"
+            className={style.awardedbtn}
+            startIcon={
+              <div
+                style={{
+                  width: "1.2em",
+                  height: "1em",
+                  display: "flex",
+                  alignItems: "center",
+                  marginTop: "0.2em",
+                }}
+              >
+                <IconFactory
+                  name={"version"}
+                  isWhite={isVersionWhite}
+                ></IconFactory>
+              </div>
+            }
+            onHover={() => {
+              setIsVersionWhite(true);
+              // changeImage(e, addIconWhite);
+            }}
+            onMouseLeave={() => {
+              setIsVersionWhite(false);
+
+              // changeImage(e, addIcon);
+            }}
+            label="Create New Version"
+            onClick={() => handleCreateNewVersion(tenderId)}
           />
         )}
         {isSubmitVisible && (
-          <DsButton id="submit"     buttonColor="btnPrimary"
-        buttonViewStyle="btnContained" 
-        className={style.awardedbtn}
-        startIcon={
-          <div style={{width:"1em",height:"0.5em", display:"flex",
-            alignItems:"center",marginTop:"0.2em"
-          }}>
-         <IconFactory name={"tick"} isWhite={IsSubmissionWhite}></IconFactory>
-          </div>
-        }
-        onHover={() => {
-          setIsSubmissionWhite(true);
-       
-        }}
-        onMouseLeave={() => {
-          setIsSubmissionWhite(false);
+          <DsButton
+            id="submit"
+            buttonColor="btnPrimary"
+            buttonViewStyle="btnContained"
+            className={style.awardedbtn}
+            startIcon={
+              <div
+                style={{
+                  width: "1em",
+                  height: "0.5em",
+                  display: "flex",
+                  alignItems: "center",
+                  marginTop: "0.2em",
+                }}
+              >
+                <IconFactory
+                  name={"tick"}
+                  isWhite={IsSubmissionWhite}
+                ></IconFactory>
+              </div>
+            }
+            onHover={() => {
+              setIsSubmissionWhite(true);
+            }}
+            onMouseLeave={() => {
+              setIsSubmissionWhite(false);
 
-          // changeImage(e, addIcon);
-        }}
-        
-          label="Customer Submission Done" 
-          onClick={handlefetchUpdateTender}
-          
-          
+              // changeImage(e, addIcon);
+            }}
+            label="Customer Submission Done"
+            onClick={handlefetchUpdateTender}
           />
         )}
       </>

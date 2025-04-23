@@ -46,7 +46,7 @@ const DsTenderProduct: React.FC<{
           margin: "20px",
         }}
       >
-        <DsAddProduct setProductList={setProductList} />
+        <DsAddProduct setProductList={setProductList} version={version}/>
         <DsProductKpis version={version} />
       </div>
 

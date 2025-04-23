@@ -50,6 +50,7 @@ const DsTenderIdPage: React.FC<{
     fetchAndSetOriginalTender,
   } = useTenderData();
   const [isCsvWhite, setIsCsvWhite] = useState(false);
+  const [isLatestVersion, setIsLatestVersion] = useState(false);
   const [orderId, setOrderId] = useState<string>(paramOrderId?.toString());
   const appTitle = useRef<string>("New");
 
@@ -190,7 +191,16 @@ const DsTenderIdPage: React.FC<{
 
     reader.readAsText(file);
   };
+  useEffect(() => {
+    const version = Number(selectedTabId.split("v")[1]);
 
+    const latestVersion =
+      tenderData.tenderRevisions.reduce((maxObj, currentObj) =>
+        currentObj.version > maxObj.version ? currentObj : maxObj
+      )?.version || 1;
+    console.log(latestVersion, version);
+    setIsLatestVersion(latestVersion == version);
+  }, [selectedTabId, tenderData.tenderRevisions]);
   return (
     <>
       <DocumentProvider>
@@ -285,12 +295,14 @@ const DsTenderIdPage: React.FC<{
                                 <IconFactory
                                   name="upload"
                                   isWhite={isCsvWhite}
+                                  disabled={!isLatestVersion}
                                 />
                               </div>
                             }
-                            buttonSize="btnMedium"
+                            buttonSize="btnSmall"
                             buttonViewStyle="btnText"
                             id="CSV"
+                            disable={!isLatestVersion}
                             onClick={() => OpenPopup("csvpopup")}
                             onMouseEnter={() => setIsCsvWhite(true)}
                             onMouseLeave={() => setIsCsvWhite(false)}
@@ -304,7 +316,11 @@ const DsTenderIdPage: React.FC<{
 
                           <DsButton
                             label="Download Pricing"
-                            buttonSize="btnMedium"
+                            buttonSize="btnSmall"
+                            buttonViewStyle="btnText"
+                            // disable={!isLatestVersion}
+
+                            disable={true}
                             className={style.downloadPricing}
                             startIcon={
                               <div
@@ -314,6 +330,7 @@ const DsTenderIdPage: React.FC<{
                                   position: "relative",
                                 }}
                               >
+                                {/* <IconFactory name="download" disabled={!isLatestVersion} /> */}
                                 <IconFactory name="download" disabled={true} />
                               </div>
                             }
