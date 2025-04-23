@@ -64,7 +64,7 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
           selectedOption={selectedSupplyPoint}
           options={supplyDetails.supplyPoints}
           label="Supply point"
-          placeholder={"Please select here"}
+          placeholder={"Please select here"} 
           id={"supplyPoints"}
           setSelectOption={(option) => {
             if (typeof option.value == "string")

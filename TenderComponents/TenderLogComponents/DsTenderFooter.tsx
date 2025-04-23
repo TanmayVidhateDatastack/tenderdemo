@@ -16,7 +16,7 @@ import { setUserRole } from "@/Redux/slice/UserSlice/userSlice";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import { dsStatus, getTenderUserRoles } from "@/Common/helpers/constant";
 import DsNavTo from "@/Elements/ERPComponents/DsNavigationComponent/DsNavTo";
-import DsSplitButton from "@/Elements/DsComponents/DsButtons/dsSplitButton";
+import DsSplitButton from "@/Elements/DsComponents/DsButtons/dsSplitButton"; 
 import DsApprovalPopup from "@/Elements/ERPComponents/DsApprovalPopups/DsApprovalPopups";
 import Toaster from "@/Elements/DsComponents/DsToaster/DsToaster";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css"
@@ -79,6 +79,7 @@ const {
           errors.push("Please enter a tender issue date."); 
         }
         const todaysdate = new Date(); 
+        todaysdate.setHours(0, 0, 0, 0); 
         if (tenderData?.issueDate && new Date(tenderData.issueDate) > todaysdate) { 
           errors.push("Tender issue date should not be greater than today's date.");
         } 

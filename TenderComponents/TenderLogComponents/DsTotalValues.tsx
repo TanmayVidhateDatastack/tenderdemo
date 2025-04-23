@@ -28,8 +28,8 @@ const DsTotalValues: React.FC<TotalValuesProps> = React.memo(({ data }) => {
         const rawValue = tender.value ?? "0"; 
         const cleanedValue = Number(rawValue.toString().replace(/,/g, "")); 
 
-        if (!isNaN(cleanedValue)) {
-          netValues[statusValue] = (netValues[statusValue] || 0) + cleanedValue;
+        if (!isNaN(cleanedValue)) { 
+          netValues[statusValue] = (netValues[statusValue] || 0) + cleanedValue; 
         }
       });
 
@@ -66,11 +66,10 @@ setFormattedValues(formattedValues)
     
       <DsInfoDisplay detailOf="Total Values (₹)" className={styles.totalorder}>
       
-        <DsCurrency format={"IND"} id={""} amount={Number(totalValue)} type={"short"}/>
-      </DsInfoDisplay>
+        <DsCurrency format={"IND"} id={""} amount={Number(totalValue)} type={"short"}/> 
+      </DsInfoDisplay>  
       <ContextMenu id={"TotalValues"} showArrow={false} content={<Ds_SummaryCount
         title="Total Values"
-      
         value={<DsCurrency format={"IND"} id={""} amount={Number(totalValue)} type={"short"}/>}
         // statusValues={formattedValues.map(item => ({ ...item, value: Number(item.value).toFixed(0) }))}
         statusValue={formattedValues.map(item => ({ ...item, value:<DsCurrency format={"IND"} id={""} amount={Number(item.value)} type={"short"}/> }))}

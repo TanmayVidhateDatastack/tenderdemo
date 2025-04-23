@@ -77,11 +77,11 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
 
   const [selectedPaymentMode, setSelectedPaymentMode] =
     useState<DsSelectOption>();
-  // useEffect(() => {
 
-  // }, [tenderData.tenderFees.find((x) => x.feesType == type)]);
 
-  const [selectedPaidBy, setSelectedPaidBy] = useState<DsSelectOption>();
+  const [selectedPaidBy, setSelectedPaidBy] =
+    useState<DsSelectOption>();
+
 
   const handleAppliedSuppliedFetch = async () => {
     try {
@@ -103,30 +103,33 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
       console.error("Fetch error: ", error);
     }
   };
-
   useEffect(() => {
     handleAppliedSuppliedFetch();
   }, []);
+
   useEffect(() => {
-    ///PaymentMode
-    const modeValue = tenderData.tenderFees.find(
-      (x) => x.feesType == type
-    )?.paymentMode;
-    if (modeValue) {
-      const option = mode.find((x) => x.value == modeValue);
-      if (option) setSelectedPaymentMode(option);
+    if (mode) {
+      const modeValue = tenderData.tenderFees.find(
+        (x) => x.feesType == type
+      )?.paymentMode;
+      if (modeValue) {
+        const option = mode.find((x) => x.value == modeValue);
+        if (option) setSelectedPaymentMode(option);
+        console.log("Fetched Notes Values are", tenderData.tenderFees.find((x) => x.feesType == type)?.instructionNotes);
+      } 
     }
+    
     const paidByvalue = tenderData.tenderFees.find(
       (x) => x.feesType == type
     )?.paidBy;
-    if (paidByvalue) {
+    if (paidByvalue) {  
       const option = depositeDocuments.find((x) => x.value == paidByvalue);
+      // const option = mode.find((x) => x.value == paidByvalue);
       if (option) setSelectedPaidBy(option);
     }
-  }, [
-    tenderData.tenderFees.find((x) => x.feesType == type),
-    depositeDocuments,
-  ]);
+  }, [tenderData.tenderFees.find((x) => x.feesType == type),depositeDocuments,mode]);
+
+
   return (
     <>
       <div>
@@ -210,8 +213,8 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               id={id + "_paidType1"}
               selectedOption={selectedPaidBy}
               options={depositeDocuments}
-              label="Paid by"
-              placeholder={"Please select here"}
+              label="Paid by" 
+              placeholder={"Please select here"} 
               setSelectOption={(option) => {
                 if (typeof option.value == "string") {
                   updateTenderFee(type, "paidBy", option.value);

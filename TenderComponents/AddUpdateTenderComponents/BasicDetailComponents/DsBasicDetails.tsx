@@ -3,7 +3,6 @@ import { getAllMetaData, getTenderUserRoles } from "@/Common/helpers/constant";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import {
   tenderDetails,
-  // applierSupplierDetsails,
   supplyDetails,
   DsSelectOption,
 } from "@/Common/helpers/types";
@@ -12,9 +11,9 @@ import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import DsApplierSupplierDetails from "./DsApplierSupplierDetails ";
 import DsTenderDetails from "./DsTenderDetails ";
 import DsSupplyDetails from "./DsSupplyDetails";
-import DsApplicableConditions from "./DsApplicableConditions";
+import DsApplicableConditions from "./DsApplicableConditions"; 
 
-const metaDataTypes = [
+const metaDataTypes = [ 
   "TENDER_TYPE",
   "SUBMISSION_MODE",
   "SUPPLY_POINT",
@@ -40,16 +39,16 @@ const DsBasicDetails = () => {
   //     appliedBy: [],
   //     suppliedBy: [],
   //     depot: [],
-  //   });
-  const [supplyDetails, setSupplyDetails] = useState<supplyDetails>({
-    supplyPoints: [],
+  //   }); 
+  const [supplyDetails, setSupplyDetails] = useState<supplyDetails>({ 
+    supplyPoints: [],  
     reportRequirements: [],
     eligibility: [],
   });
   //Arun
-  interface MetadataItem {
+  interface MetadataItem { 
     depositeDocument: DepositDocument[];
-    applicableDeposits: DsSelectOption[];
+    applicableDeposits: DsSelectOption[]; 
     applicableSupplyConditions: DsSelectOption[];
   }
  
@@ -59,7 +58,7 @@ const DsBasicDetails = () => {
   >([]);
   const [applicableSupplyConditions, setApplicableSupplyConditions] = useState<
     DsSelectOption[]
-  >([]);
+  >([]); 
   const [metadata, setMetadata] = useState<MetadataItem[]>([]);
   const [role, setRole] = useState<string>("");
  
@@ -67,7 +66,7 @@ const DsBasicDetails = () => {
     try {   
       const res = await fetchData({ url:getAllMetaData,method:"GET",headers:{
         "Content-Type": "application/json",
-        "Tender-Codes": JSON.stringify(metaDataTypes), 
+        "x-tender-codes": JSON.stringify(metaDataTypes), 
       }});
       if (res.code === 200) {
         const result = res.result;
@@ -195,11 +194,10 @@ const DsBasicDetails = () => {
       </div>
       <span className={styles.Seperator}></span>
       <div>
-        <DsApplicableConditions
-          applicableConditions={applicableSupplyConditions}
+        <DsApplicableConditions applicableConditions={applicableSupplyConditions}
         />
-      </div>
-    </>
+      </div> 
+    </> 
   );
 };
 export default DsBasicDetails;
