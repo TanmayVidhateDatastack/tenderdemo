@@ -3,8 +3,12 @@ import DsSingleSelect from "@/Elements/DsComponents/dsSelect/dsSingleSelect";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import deptStyle from "./deposite.module.css";
 import { useEffect, useState } from "react";
-import {getTenderUserRoles} from "@/Common/helpers/constant";
-import {tenderDetailsProps,location, DsSelectOption} from "@/Common/helpers/types";
+import { getTenderUserRoles } from "@/Common/helpers/constant";
+import {
+  tenderDetailsProps,
+  location,
+  DsSelectOption,
+} from "@/Common/helpers/types";
 import { useTenderData } from "../TenderDataContextProvider";
 import DsDatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
@@ -15,7 +19,9 @@ import DsAddressSelect from "@/Elements/DsComponents/dsSelect/dsAddressSelect";
 import CustomerSearch from "./customerSearch";
 import IconFactory from "@/Elements/IconComponent";
 import { getYesterdayDate } from "@/Common/helpers/Method/conversion";
-import ContextMenu, { displayContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
+import ContextMenu, {
+  displayContext,
+} from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import fetchCustomer, { handleFetchcustumers } from "./fetchcustomerComponent";
 import DsNavTo from "@/Elements/ERPComponents/DsNavigationComponent/DsNavTo";
 import FetchCustomer from "./fetchcustomerComponent";
@@ -24,22 +30,21 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
   const [role, setRole] = useState("checker");
   const [pos, setPos] = useState<
     | "top"
-    | "topleft"  
-    | "topright"  
+    | "topleft"
+    | "topright"
     | "middle"
     | "bottom"
     | "bottomleft"
     | "bottomright"
   >("bottom");
- 
+
   const [notiType, setNotiType] = useState<
     "success" | "bonus" | "info" | "error"
   >("info");
   const [showNotification, setShowNotification] = useState<boolean>(true);
-  const { updateTenderData,tenderData,tenderDataCopy } = useTenderData();
+  const { updateTenderData, tenderData, tenderDataCopy } = useTenderData();
   const [customerLocations, setCustomerLocations] = useState<location[]>([]);
 
- 
   // const [cust, setCust] = useState<DsSelectOption>();
   //     value:
   //     label:
@@ -62,22 +67,21 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
     handleRoleFetch();
   }, []);
   useEffect(() => {
-    if (role == "MAKER" && tenderDataCopy.id==undefined) {
+    if (role == "MAKER" && tenderDataCopy.id == undefined) {
       setFetchVisible(true);
-
     } else {
       setFetchVisible(false);
     }
-  }, [role,tenderDataCopy.id]);
- 
+  }, [role, tenderDataCopy.id]);
+
   const getTodayDate = (date: Date) => {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
     const day = date.getDate().toString().padStart(2, "0");
- 
+
     return `${year}-${month}-${day}`;
   };
- 
+
   const [selectedTenderType, setSelectedTenderType] =
     useState<DsSelectOption>();
   useEffect(() => {
@@ -88,30 +92,30 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
       );
       if (option) setSelectedTenderType(option);
     }
-  }, [tenderData.tenderType,tenderDetails.tenderType]);
- 
+  }, [tenderData.tenderType, tenderDetails.tenderType]);
+
   const [selectedSubmissionMode, setSelectedSubmissionMode] =
-  useState<DsSelectOption>();
-useEffect(() => {
-  const submissionMode =tenderData.submissionMode
-  if (submissionMode) {
-    const option =tenderDetails.submissionMode.find((x) => x.value == submissionMode);
-    if (option) setSelectedSubmissionMode(option); 
-  }
-}, [tenderData.submissionMode,tenderDetails.submissionMode]);
- 
+    useState<DsSelectOption>();
+  useEffect(() => {
+    const submissionMode = tenderData.submissionMode;
+    if (submissionMode) {
+      const option = tenderDetails.submissionMode.find(
+        (x) => x.value == submissionMode
+      );
+      if (option) setSelectedSubmissionMode(option);
+    }
+  }, [tenderData.submissionMode, tenderDetails.submissionMode]);
+
   return (
     <>
-    <ContextMenu
+      <ContextMenu
         id="contextMenuId5"
         content={
           <div className={styles.ContextCreateNew}>
-
-          <FetchCustomer
-            customerId={tenderData.customerId}
-            customerName="(Directorate of Health Services)"
-           
-          />
+            <FetchCustomer
+              customerId={tenderData.customerId}
+              customerName="(Directorate of Health Services)"
+            />
           </div>
         }
         showArrow={true}
@@ -126,16 +130,15 @@ useEffect(() => {
             updateTenderData={updateTenderData}
           />
         </div>
- 
-          {fetchVisible && (
-        <div className={deptStyle.fields}>
-            
-           <DsButton
+
+        {fetchVisible && (
+          <div className={deptStyle.fields}>
+            <DsButton
               id="copyBtn"
               label="Fetch Information"
               buttonViewStyle="btnText"
               buttonSize="btnSmall"
-              disable={tenderData.customerId ? false: true}
+              disable={tenderData.customerId ? false : true}
               className={deptStyle.copyBtn}
               startIcon={
                 <div style={{ width: "0.95625em", height: "1.125em" }}>
@@ -147,23 +150,18 @@ useEffect(() => {
                 // setShowNotification(true);
                 // setPos("top");
                 // setNotiType("info");
-                 displayContext(
-                              e,
-                              "contextMenuId5",
-                              "horizontal",
-                              "center",
-                            );
+                displayContext(e, "contextMenuId5", "horizontal", "center");
               }}
             ></DsButton>
-        </div>
-          )}
+          </div>
+        )}
         <div className={deptStyle.fields}>
           <DsSingleSelect
             id="CustomerAddress"
             placeholder="Select Customer Location"
             options={customerLocations.map((addr) => ({
               value: addr.id.toString(),
- 
+
               label: `${addr.city}, ${addr.state}, ${addr.pinCode}`,
               key: addr.id.toString(),
             }))}
@@ -178,7 +176,7 @@ useEffect(() => {
                   "tenderDetails.customerAddressName",
                   option.label
                 );
- 
+
                 // console.log("customerLocationId",option.value)
               }
             }}
@@ -191,7 +189,6 @@ useEffect(() => {
             label="Tender number"
             // placeholder="Please Type Here"
             onBlur={(e) =>
-              
               updateTenderData(
                 "tenderNumber",
                 (e.target as HTMLInputElement).value
@@ -203,12 +200,12 @@ useEffect(() => {
           <DsSingleSelect
             options={tenderDetails.tenderType}
             label="Tender type"
-            // placeholder={"Tender type"} 
-            id={"tenderType"} 
+            // placeholder={"Tender type"}
+            id={"tenderType"}
             selectedOption={selectedTenderType}
             setSelectOption={(option) => {
-              if (typeof option.value == "string") {  
-                updateTenderData("tenderType", option.value);  
+              if (typeof option.value == "string") {
+                updateTenderData("tenderType", option.value);
                 console.log("tendertype", option.label);
               }
             }}
@@ -304,7 +301,7 @@ useEffect(() => {
                 onChange={(e) => {
                   const input = e.target as HTMLInputElement;
                   let value = input.value;
- 
+
                   // Prevent multiple leading zeros
                   if (/^0{2,}/.test(value)) {
                     value = "0";
@@ -373,5 +370,3 @@ useEffect(() => {
   );
 };
 export default DsTenderDetails;
- 
- 
