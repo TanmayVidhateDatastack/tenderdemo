@@ -182,7 +182,7 @@ export const DSTendrFooter: React.FC = ({}) => {
     applicableConditions.forEach((condition, index) => {
       if (condition.status == "ACTV") {
         if (condition.type?.toString().trim() == "") {
-          errors.push(`${condition.type} :Please enter a type.`);
+          errors.push(`${condition.type} :Please select a type.`);
         }
         if (condition.notes?.trim() == "") {
           errors.push(`${condition.type}: Please enter notes.`);

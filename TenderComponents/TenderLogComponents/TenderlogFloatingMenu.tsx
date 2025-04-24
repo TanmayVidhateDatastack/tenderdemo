@@ -164,7 +164,7 @@ export const DsTenderTableFloatingMenu: React.FC<
             buttonColor="btnWarning"
             buttonViewStyle="btnContained"
             startIcon={
-              <div style={{ width: "1em", height: "1em" }}>
+              <div style={{ width: "1em", height: "1em" }}> 
                 <IconFactory
                   name={"crossCircle"}
                   isWhite={isCancleWhite}
