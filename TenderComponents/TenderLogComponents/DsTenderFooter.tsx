@@ -148,7 +148,8 @@ export const DSTendrFooter: React.FC = ({}) => {
 
         if (!fee.paymentDueDate?.trim()) {
           errors.push(`${fee.feesType}: Payment due date is required.`);
-        } else if (new Date(fee.paymentDueDate) < getYesterdayDate()) {
+        }
+         else if (new Date(fee.paymentDueDate) < getYesterdayDate()) {
           errors.push(
             `${fee.feesType}: Payment due date should not be in the past.`
           );
