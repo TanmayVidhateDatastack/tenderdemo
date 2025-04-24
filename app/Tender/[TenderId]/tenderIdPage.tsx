@@ -42,7 +42,6 @@ const DsTenderIdPage: React.FC<{
     tenderData,
     tenderDataCopy,
     addTenderProduct,
-    createTenderVersion,
     setActionStatusValues,
     actionStatus,
     saveTender,
