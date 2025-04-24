@@ -587,7 +587,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
               latestVersion == version ? (
                 <DsTextField
                   inputType="number"
-                  maximumNumber={100.0}
+                  maximumNumber={100.00}
                   initialValue={
                     Number(
                       tenderproduct.ptrPercentage?.toFixed(2)

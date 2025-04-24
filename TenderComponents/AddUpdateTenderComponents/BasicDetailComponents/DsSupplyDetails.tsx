@@ -16,6 +16,38 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
   const [selectedEligibility, setSelectedEligibility] = useState<
     DsSelectOption[]
   >([]);
+  const [selectedSupplyPoint, setSelectedSupplyPoint] =
+    useState<DsSelectOption>();
+  const [selectedtTestReportRequired, setSelectedtTestReportRequired] =
+    useState<DsSelectOption>();
+
+  // tenderData.tenderSupplyConditions[0].eligibility.map((x) => {
+  //   return {
+  //     value: x,
+  //     label: x,
+  //   };
+  // },[tenderData.tenderSupplyConditions[0].eligibility]);
+
+  useEffect(() => {
+    const supplyPoint = tenderData.tenderSupplyConditions[0].supplyPoint;
+    // if (supplyPoint) {
+    const option = supplyDetails.supplyPoints.find(
+      (x) => x.value == supplyPoint
+    );
+    setSelectedSupplyPoint(option);
+    // }
+  }, [tenderData.tenderSupplyConditions[0].supplyPoint,tenderData.id,supplyDetails.supplyPoints]);
+
+  useEffect(() => {
+    const testReportRequired =
+      tenderData.tenderSupplyConditions[0].testReportRequired;
+    // if (testReportRequired) {
+    const option = supplyDetails.reportRequirements.find(
+      (x) => x.value == testReportRequired
+    );
+    setSelectedtTestReportRequired(option);
+    // }
+  }, [tenderData.tenderSupplyConditions[0].testReportRequired,tenderData.id,supplyDetails.reportRequirements]);
   useEffect(() => {
     const eligibility = [...tenderData.tenderSupplyConditions[0].eligibility];
     const selectedEl = eligibility.map((x) => {
@@ -25,36 +57,7 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
       };
     });
     setSelectedEligibility(selectedEl);
-  }, [tenderData.tenderSupplyConditions[0].eligibility]);
-  tenderData.tenderSupplyConditions[0].eligibility.map((x) => {
-    return {
-      value: x,
-      label: x,
-    };
-  });
-  const [selectedSupplyPoint, setSelectedSupplyPoint] = 
-    useState<DsSelectOption>();  
-  useEffect(() => { 
-    const supplyPoint = tenderData.tenderSupplyConditions[0].supplyPoint;   
-    if (supplyPoint) {
-      const option = supplyDetails.supplyPoints.find(
-        (x) => x.value == supplyPoint  
-      );    
-      if (option) setSelectedSupplyPoint(option);
-    }
-  }, [tenderData.tenderSupplyConditions[0].supplyPoint]);
-
-  const [selectedtTestReportRequired, setSelectedtTestReportRequired] =
-    useState<DsSelectOption>();
-  useEffect(() => {
-    const testReportRequired = tenderData.tenderSupplyConditions[0].testReportRequired;
-    if (testReportRequired) {
-      const option = supplyDetails.reportRequirements.find(
-        (x) => x.value == testReportRequired
-      );
-      if (option) setSelectedtTestReportRequired(option);
-    }
-  }, [tenderData.tenderSupplyConditions[0].testReportRequired]);
+  }, [tenderData.tenderSupplyConditions[0].eligibility,tenderData.id]);
 
   return (
     <>
@@ -64,8 +67,8 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
           selectedOption={selectedSupplyPoint}
           options={supplyDetails.supplyPoints}
           label="Supply point"
-          placeholder={"Please select here"} 
-          id={"supplyPoints"} 
+          placeholder={"Please select here"}
+          id={"supplyPoints"}
           setSelectOption={(option) => {
             if (typeof option.value == "string")
               updateSupplyCondition("supplyPoint", option.value);

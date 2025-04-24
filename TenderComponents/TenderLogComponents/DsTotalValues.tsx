@@ -79,7 +79,7 @@ const DsTotalValues: React.FC<TotalValuesProps> = React.memo(({ data }) => {
             // statusValues={formattedValues.map(item => ({ ...item, value: Number(item.value).toFixed(0) }))}
             statusValue={formattedValues.map((item) => ({
               ...item,
-              value: getFormatCurrency(Number(totalValue), "short", "IND"),
+              value: getFormatCurrency(Number(item.value), "short", "IND"),
             }))}
           />
         }
