@@ -230,7 +230,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               label="Modes"
               placeholder={"Please search and select here"}
               setSelectOption={(option) => {
-                if (typeof option.value == "string") {
+                if (typeof option.value == "string") { 
                   updateTenderFee(type, "paymentMode", option.value);
                 }
               }}
