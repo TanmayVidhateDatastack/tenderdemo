@@ -3,7 +3,7 @@ import TextArea from "@/Elements/DsComponents/DsInputs/dsTextArea";
 import DsSingleSelect from "@/Elements/DsComponents/dsSelect/dsSingleSelect";
 import TableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableOld";
 import DsInfoDisplay from "@/Elements/ERPComponents/DsInfoDisplay/DsInfoDisplay";
-import { ContractItems, useTenderData } from "../TenderDataContextProvider";
+import { ContractItems, updateDocuments, useTenderData } from "../TenderDataContextProvider";
 import {
   datalistOptions,
   DsSelectOption,
@@ -16,6 +16,7 @@ import fetchData from "@/Common/helpers/Method/fetchData";
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import DsSearchComponent from "@/Elements/DsComponents/DsSearch/searchComponent";
 import AwardedToSearch from "./AwardedToSearch";
+import IconFactory from "@/Elements/IconComponent";
 
 export interface ContractViewProps {
   status: "AWARDED" | "PARTIALLY_AWARDED" | "LOST" | "CANCELLED";
@@ -30,7 +31,14 @@ const ContractView: React.FC<ContractViewProps> = ({
   //   contractRevision,
   //   lastUpdatedBy,
 }) => {
-  const { tenderData, updateContractDetails, updateContractItems } =
+  const ContractStatuses = {
+    AWARDED: "Awarded",
+    PARTIALLY_AWARDED: "Partially Awarded",
+    LOST: "Lost",
+    CANCELLED: "Cancellation",
+  };
+  const { tenderData, updateContractDetails, updateContractItems,removeTenderDocument,
+    addNewTenderDocument } =
     useTenderData();
   const [justificationOptions, setJustificationOptions] = useState<
     DsSelectOption[]
@@ -232,7 +240,9 @@ const ContractView: React.FC<ContractViewProps> = ({
   return (
     <>
       <div>
-        <div>Tender ______ Justification </div>
+        <div>
+          Tender{status ? ` ${ContractStatuses[status]} ` : " "}Justification{" "}
+        </div>
         <DsSingleSelect
           id={"contractJustification"}
           options={justificationOptions}
@@ -254,7 +264,29 @@ const ContractView: React.FC<ContractViewProps> = ({
             );
           }}
         />
-        <DsCsvUpload />
+         <DsCsvUpload
+            id={"ContractUploadedDocuments"}
+            label="Attach File"
+            buttonViewStyle="btnText"
+            buttonSize="btnSmall"
+            startIcon={<IconFactory name="fileAttach" />}
+            onSelectedFileChange={(files) => {
+              const typeDocuments =
+                tenderData.tenderDocuments?.filter(
+                  (x) =>
+                    x.documentType == "TENDER_CONTRACT_DOCUMENT"
+                  && x.category == status+"_DOCUMENTS"
+                ) || [];
+              updateDocuments(
+                files,
+                typeDocuments,
+                removeTenderDocument,
+                addNewTenderDocument,
+                "TENDER_CONTRACT_DOCUMENT",
+                status+"_DOCUMENTS"
+              );
+            }}
+          ></DsCsvUpload>
       </div>
       <div>
         <TableComponent

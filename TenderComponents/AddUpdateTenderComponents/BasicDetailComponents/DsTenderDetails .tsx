@@ -335,7 +335,7 @@ useEffect(() => {
         </div>
         <div className={deptStyle.fields}>
           <DsTextField
-            minimumNumber={100}
+            maximumNumber={100}
             initialValue={tenderData.lateDeliveryPenalty.toString()}
             label="Penalty for late delivery %"
             inputType="positive"

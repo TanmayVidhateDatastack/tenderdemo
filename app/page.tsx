@@ -364,14 +364,13 @@ export default function Home() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const formatTenders = (tenders: any[]): Tender[] => {
     return tenders.map((item) => ({
-      ...tenders,
 
       customerName: item.customerName,
       submissionDate: item.submissionDate,
       daysToSubmit: item.daysToSubmit ?? "N/A",
       tenderId: item.tenderId.toString(),
       tenderNumber: item.tenderNumber.toString(),
-      type: item.customerType,
+      customerType: item.customerType,
       tenderType: item.tenderType,
       depot: item.shippingLocations
         .map((loc: { name: string; id: number }) => loc.name)
@@ -767,12 +766,13 @@ export default function Home() {
     setSelectedRow((prev) => {
       if (prev?.tenderId === tenderId) {
         // Reset if the same row is clicked
-        return {
-          e: undefined,
-          rowIndex: undefined,
-          statuscell: undefined,
-          tenderId: undefined,
-        };
+        return null;
+        // {
+        //   e: undefined,
+        //   rowIndex: undefined,
+        //   statuscell: undefined,
+        //   tenderId: undefined,
+        // };
       } else {
         // Set new row data
         return { e, rowIndex, statuscell, tenderId };
@@ -877,16 +877,16 @@ export default function Home() {
               }}
             />
           </div>
-          {selectedRow && (
+          {/* {selectedRow && ( */}
             <DsTenderTableFloatingMenu
-              e={selectedRow.e}
-              rowIndex={selectedRow.rowIndex}
-              statuscell={selectedRow.statuscell}
+              e={selectedRow?.e}
+              rowIndex={selectedRow?.rowIndex}
+              statuscell={selectedRow?.statuscell}
               handleFetch={handleFetch}
-              tenderId={selectedRow.tenderId}
+              tenderId={selectedRow?.tenderId}
               goTo={goTo}
             />
-          )}
+          {/* )} */}
         </div>
       </DsApplication>
 
