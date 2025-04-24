@@ -8,7 +8,7 @@ import {
   supplyDetailsProps,
 } from "@/Common/helpers/types";
 // import { datalistOptions, supplyDetailsProps } from "@/Common/helpers/types";
-import { useTenderData } from "../TenderDataContextProvider";
+import { useTenderData } from "../TenderDataContextProvider"; 
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import { useEffect, useState } from "react";
 const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
@@ -32,14 +32,14 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
       label: x,
     };
   });
-  const [selectedSupplyPoint, setSelectedSupplyPoint] =
+  const [selectedSupplyPoint, setSelectedSupplyPoint] = 
     useState<DsSelectOption>();  
   useEffect(() => { 
-    const supplyPoint = tenderData.tenderSupplyConditions[0].supplyPoint;
+    const supplyPoint = tenderData.tenderSupplyConditions[0].supplyPoint;   
     if (supplyPoint) {
       const option = supplyDetails.supplyPoints.find(
-        (x) => x.value == supplyPoint
-      );
+        (x) => x.value == supplyPoint  
+      );    
       if (option) setSelectedSupplyPoint(option);
     }
   }, [tenderData.tenderSupplyConditions[0].supplyPoint]);
@@ -65,11 +65,11 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
           options={supplyDetails.supplyPoints}
           label="Supply point"
           placeholder={"Please select here"} 
-          id={"supplyPoints"}
+          id={"supplyPoints"} 
           setSelectOption={(option) => {
             if (typeof option.value == "string")
               updateSupplyCondition("supplyPoint", option.value);
-          }}
+          }} 
         ></DsSingleSelect>
          <DsTextField
           maxLength={10}

@@ -110,7 +110,7 @@ const DsTenderIdPage: React.FC<{
       console.log("orderId", orderId);
       if (
         tenderStatus == "AWARDED" ||
-        tenderStatus == "PARTIALLY_AWARDED" ||
+        tenderStatus == "PARTIALLY_AWARDED" || 
         tenderStatus == "LOST" ||
         tenderStatus == "CANCELLED"
       )

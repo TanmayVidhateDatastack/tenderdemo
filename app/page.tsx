@@ -69,6 +69,7 @@ interface Metadata {
   eligibility?: CodeItem[];
   feesType?: CodeItem[];
   paymentMode?: CodeItem[];
+  refundEligibility?:CodeItem[];
   submissionMode?: CodeItem[];
   supplyPoint?: CodeItem[];
   tenderSupplyCondition?: CodeItem[];

@@ -96,6 +96,7 @@ export type tenderFee = {
   currency: string;
   paidBy: string;
   paymentMode: string;
+  refundEligibility:string;
   paymentDueDate: string;
   instructionNotes: string;
   paymentStatus?: string;
@@ -193,7 +194,7 @@ export function updateDocuments(
     documentCategory: string,
     document: {
       name: string;
-      document: File;
+      document: File;  
     },
     documentSubCategory?: string
   ) => void,
@@ -321,7 +322,7 @@ interface TenderDataContextType {
   fetchAndSetOriginalTender: (
     tenderId: number,
     tenderStatus?: string
-  ) => Promise<void>;
+  ) => Promise<void>; 
 }
 
 const TenderDataContext = createContext<TenderDataContextType | undefined>(
@@ -391,16 +392,16 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         id: 0,
         tenderItems: [
           {
-            awardedQuantity: 1,
+            awardedQuantity: 1, 
             awardedRate: 2,
             awardedTo: 1,
-            id: 2,
+            id: 2,  
             productId: 1,
-            product: {
-              awardedToName: "Testor",
-              productName: "Zer",
-              requestedGenericName: "Zept",
-              requestedPackingSize: "15ml vail",
+            product: { 
+              awardedToName: "Testor", 
+              productName: "Zer", 
+              requestedGenericName: "Zept", 
+              requestedPackingSize: "15ml vail", 
               type: "read-only",
             },
           },
@@ -946,7 +947,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             : "STOCKIST",
         supplierId:
           tenderData.supplierType.toLowerCase() == "organization"
-            ? null
+            ? null 
             : tenderData.supplierId,
         // supplierType: ,
         // supplierName: ,
@@ -967,7 +968,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               paymentDueDate: x.paymentDueDate,
               instructionNotes: x.instructionNotes,
             };
-          }),
+          }),  
         tenderSupplyConditions: [
           {
             ...tenderData.tenderSupplyConditions[0],
@@ -996,22 +997,22 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         status: status.toUpperCase(),
         lastUpdatedBy: 3,
       });
-
-      console.log("sAVEEEE", dataToSend);
-      try {
-        await fetchData({
+ 
+      console.log("sAVEEEE", dataToSend); 
+      try { 
+        await fetchData({ 
           url: saveTenderurl,
           method: "POST",
-          dataObject: dataToSend,
+          dataObject: dataToSend, 
         }).then((res) => {
-          if (res.code === 200) {
-            setActionStatus({
+          if (res.code === 200) { 
+            setActionStatus({ 
               notiMsg: "Tender Created Successfully",
-              notiType: "success",
-              showNotification: true,
-            });
-            showToaster("create-order-toaster");
-            setTimeout(() => {
+              notiType: "success", 
+              showNotification: true, 
+            }); 
+            showToaster("create-order-toaster"); 
+            setTimeout(() => { 
               goBack();
             }, closeTimeForTender);
           } else {
@@ -1265,31 +1266,30 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const fetchAndSetOriginalTender = useCallback(
     async (tenderId: number, tenderStatus?: string) => {
-      try {
+      try { 
         const response = await fetchData({
           url: getTenderByTenderId + tenderId,
           headers: {
             "Content-Type": "application/json",
             ...(tenderStatus && {
               "x-contract-status": `{"tenderStatus":"${tenderStatus}"}`,
-            }),
-          },
-        });
-
+            }), 
+          }, 
+        }); 
         const tenderData = response.result;
         console.log(response.result);
         if (
           tenderData.tenderRevisions.length == 0 ||
-          tenderData.tenderRevisions == null
-        )
-          tenderData.tenderRevisions = [
+          tenderData.tenderRevisions == null 
+        )   
+          tenderData.tenderRevisions = [ 
             {
               version: 1,
               status: DsStatus.DRFT.toUpperCase(),
               tenderItems: [],
             },
           ];
-        else
+        else 
           tenderData.tenderRevisions = tenderData.tenderRevisions.map((rev) => {
             return {
               ...rev,

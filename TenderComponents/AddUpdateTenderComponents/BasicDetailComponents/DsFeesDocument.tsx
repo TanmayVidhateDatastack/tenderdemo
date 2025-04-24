@@ -29,6 +29,7 @@ export type tenderFee = {
   currency: string;
   paidBy: string;
   paymentMode: string;
+  refundEligibility: string;
   paymentDueDate: string;
   notes: string;
   documents: tenderDocument[];
@@ -38,17 +39,19 @@ export interface DsFeesProps {
   title: string;
   id: string;
   mode: DsSelectOption[];
+  refund:DsSelectOption[];
   paidBy: DsSelectOption[];
   downloadVisible: boolean;
   paymentCompletedVisible: boolean;
   type: string;
+
 }
 export interface Deposit {
   paidBy: DsSelectOption[];
 }
 
 const getTodayDate = (date: Date) => {
-  const year = date.getFullYear();
+  const year = date.getFullYear();   
   const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Ensure two digits
   const day = date.getDate().toString().padStart(2, "0"); // Ensure two digits
 
@@ -60,6 +63,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
   type,
   id,
   mode,
+  refund,
   paidBy,
   downloadVisible,
   paymentCompletedVisible,
@@ -77,7 +81,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
 
   const [selectedPaymentMode, setSelectedPaymentMode] =
     useState<DsSelectOption>();
-
+  const [selectedRefund,setSelectedRefund]=useState<DsSelectOption>();
 
   const [selectedPaidBy, setSelectedPaidBy] =
     useState<DsSelectOption>();
@@ -118,7 +122,17 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
         console.log("Fetched Notes Values are", tenderData.tenderFees.find((x) => x.feesType == type)?.instructionNotes);
       } 
     }
-    
+    if (refund) {
+      const refundValue = tenderData.tenderFees.find(
+        (x) => x.feesType == type
+      )?.refundEligibility;
+      if (refundValue) {
+        const option = refund.find((x) => x.value == refundValue);
+        if (option) setSelectedRefund(option);
+        // console.log("Fetched Notes Values are", tenderData.tenderFees.find((x) => x.feesType == type)?.instructionNotes);
+      } 
+    }
+
     const paidByvalue = tenderData.tenderFees.find(
       (x) => x.feesType == type
     )?.paidBy;
@@ -127,7 +141,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
       // const option = mode.find((x) => x.value == paidByvalue);
       if (option) setSelectedPaidBy(option);
     }
-  }, [tenderData.tenderFees.find((x) => x.feesType == type),depositeDocuments,mode]);
+  }, [tenderData.tenderFees.find((x) => x.feesType == type),depositeDocuments,mode,refund]);
 
 
   return (
@@ -225,11 +239,11 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           <div className={styles.fieldColors}>
             <DsSingleSelect
               selectedOption={selectedPaymentMode}
-              id={id + "_modes1"}
-              options={mode}
-              label="Modes"
+              id={id + "_modes1"} 
+              options={mode}  
+              label="Modes" 
               placeholder={"Please search and select here"}
-              setSelectOption={(option) => {
+              setSelectOption={(option) => { 
                 if (typeof option.value == "string") { 
                   updateTenderFee(type, "paymentMode", option.value);
                 }
@@ -237,17 +251,16 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             ></DsSingleSelect>
           </div>
           <div className={styles.fieldColors}>
-            <DsSingleSelect
-              selectedOption={selectedPaymentMode}
-              id={id + "_modes1"}
-              options={mode}
+            <DsSingleSelect 
+              selectedOption={selectedRefund} 
+              id={id +"_refund"} 
+              options={refund} 
               label="Refund Eligibility"
-              // placeholder={"Please search and select here"}
-              // setSelectOption={(option) => {
-              //   if (typeof option.value == "string") {
-              //     updateTenderFee(type, "paymentMode", option.value);
-              //   }
-              // }}
+              setSelectOption={(option) => { 
+                if (typeof option.value == "string") {
+                  updateTenderFee(type, "refundEligibility", option.value);
+                } 
+              }}
             ></DsSingleSelect>
           </div>
           
