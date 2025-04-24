@@ -43,6 +43,7 @@ import DsAdvanceFilterPane from "@/TenderComponents/TenderLogComponents/DsAdvanc
 import style from "./page.module.css";
 import IconFactory from "@/Elements/IconComponent";
 import { areSearchCustomers } from "@/TenderComponents/AddUpdateTenderComponents/BasicDetailComponents/customerSearch";
+import Toaster from "@/Elements/DsComponents/DsToaster/DsToaster";
 
 const metaDataTypes = ["TENDER_TYPE", "CUSTOMER_TYPE", "TENDER_STATUS"];
 
@@ -789,6 +790,7 @@ export default function Home() {
 
     if (tenderId) {
       goTo(Number(tenderId));
+      console.log("TenderId:", tenderId);
     } else {
       console.warn("TenderId not found on double-clicked row");
     }
@@ -1018,6 +1020,15 @@ export default function Home() {
           </div>
         }
       ></ContextMenu>
+
+<Toaster
+            id="fetchCustomer"
+            type="success"
+            message="The information has been fetched"
+            duration={2000}
+            position={"top"}
+            handleClose={() => {}}
+          />
     </>
   );
 }

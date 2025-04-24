@@ -132,6 +132,7 @@ export type TenderContract = {
   };
 };
 export type TenderData = {
+  // tenderId: string;
   id?: number;
   customerId: number;
   customerAddressId: number;
@@ -323,9 +324,7 @@ interface TenderDataContextType {
     tenderId: number,
     tenderStatus?: string
   ) => Promise<void>;
-  fetchAndSetPreviousTender:(
-    tenderId: number,
-  ) => Promise<void>;
+  fetchAndSetPreviousTender: (tenderId: number) => Promise<void>;
 }
 
 const TenderDataContext = createContext<TenderDataContextType | undefined>(
