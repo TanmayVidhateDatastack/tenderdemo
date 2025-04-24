@@ -78,7 +78,7 @@ const DsTenderIdPage: React.FC<{
       ...revisionTabs,
       { tabId: "2", tabName: "Documents" },
     ]);
-    setTimeout(() => {
+    // setTimeout(() => {
       if (
         tenderData.status == "AWARDED" ||
         tenderData.status == "PARTIALLY_AWARDED" ||
@@ -97,7 +97,7 @@ const DsTenderIdPage: React.FC<{
           return prev;
         });
       }
-    }, 0);
+    // };
   }, [tenderData]);
   useEffect(() => {
     console.log("orderId", orderId);
@@ -112,27 +112,17 @@ const DsTenderIdPage: React.FC<{
         tenderStatus == "AWARDED" ||
         tenderStatus == "PARTIALLY_AWARDED" ||
         tenderStatus == "LOST" ||
-        tenderStatus == "CANCELLED"
+        tenderStatus == "CANCELLED"||
+        tenderStatus == "newPricingVersion"
       )
-        fetchAndSetOriginalTender(Number(orderId), tenderStatus);
+        fetchAndSetOriginalTender(Number(orderId), tenderStatus)
       else {
         fetchAndSetOriginalTender(Number(orderId));
       }
     }
   }, [orderId]);
 
-  useEffect(() => {
-    if (tenderDataCopy.id) {
-      appTitle.current =
-        tenderDataCopy.tenderNumber +
-        " ( " +
-        tenderDataCopy.tenderDetails.customerName +
-        " )";
-      if (tenderStatus == "newPricingVersion") {
-        createTenderVersion();
-      }
-    }
-  }, [tenderDataCopy.id]);
+
   const [message, setMessage] = useState<string>("");
 
   const handleUpload = (file: File | null) => {
@@ -191,6 +181,17 @@ const DsTenderIdPage: React.FC<{
 
     reader.readAsText(file);
   };
+  
+  useEffect(() => {
+    if (tenderDataCopy.id) {
+      appTitle.current =
+        tenderDataCopy.tenderNumber +
+        " ( " +
+        tenderDataCopy.tenderDetails.customerName +
+        " )";
+     
+    }
+  }, [tenderDataCopy.id]);
   useEffect(() => {
     const version = Number(selectedTabId.split("v")[1]);
 

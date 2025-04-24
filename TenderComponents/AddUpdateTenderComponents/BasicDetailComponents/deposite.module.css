@@ -138,6 +138,8 @@
   }
   .fetcustomerContainer{
     padding: 15px;
+    overflow-y: scroll;
+    
   }
   .fetchMessage {
     white-space: normal;
@@ -156,5 +158,14 @@
   }
   .fetchTable{
     margin: 10px 10px 10px 0px; 
+    
+    max-height: 150px;
+    /* overflow-y: auto;      
+    overflow-x: hidden;    
+    scroll-behavior: smooth;  */
+    padding-right: 10px;   
   }
-  
+  .disbaled
+{
+  color :yellow !important
+}

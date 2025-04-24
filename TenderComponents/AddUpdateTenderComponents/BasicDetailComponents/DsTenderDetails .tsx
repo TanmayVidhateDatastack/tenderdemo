@@ -42,7 +42,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
     "success" | "bonus" | "info" | "error"
   >("info");
   const [showNotification, setShowNotification] = useState<boolean>(true);
-  const { updateTenderData, tenderData } = useTenderData();
+  const { updateTenderData,tenderData,tenderDataCopy } = useTenderData();
   const [customerLocations, setCustomerLocations] = useState<location[]>([]);
 
   // const [cust, setCust] = useState<DsSelectOption>();
@@ -67,13 +67,14 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
     handleRoleFetch();
   }, []);
   useEffect(() => {
-    if (role == "MAKER") {
+    if (role == "MAKER" && tenderDataCopy.id==undefined) {
       setFetchVisible(true);
+
     } else {
       setFetchVisible(false);
     }
-  }, [role]);
-
+  }, [role,tenderDataCopy.id]);
+ 
   const getTodayDate = (date: Date) => {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -112,7 +113,12 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         id="contextMenuId5"
         content={
           <div className={styles.ContextCreateNew}>
-            <FetchCustomer customerName="(Directorate of Health Services)"></FetchCustomer>
+
+          <FetchCustomer
+            customerId={tenderData.customerId}
+            customerName="(Directorate of Health Services)"
+           
+          />
           </div>
         }
         showArrow={true}
@@ -127,14 +133,16 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
             updateTenderData={updateTenderData}
           />
         </div>
-
-        <div className={deptStyle.fields}>
+ 
           {fetchVisible && (
-            <DsButton
+        <div className={deptStyle.fields}>
+            
+           <DsButton
               id="copyBtn"
               label="Fetch Information"
               buttonViewStyle="btnText"
               buttonSize="btnSmall"
+              disable={tenderData.customerId ? false: true}
               className={deptStyle.copyBtn}
               startIcon={
                 <div style={{ width: "0.95625em", height: "1.125em" }}>
@@ -149,8 +157,8 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
                 displayContext(e, "contextMenuId5", "horizontal", "center");
               }}
             ></DsButton>
-          )}
         </div>
+          )}
         <div className={deptStyle.fields}>
           <DsSingleSelect
             id="CustomerAddress"
@@ -186,6 +194,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
             inputType="alphaNumeric"
             // placeholder="Please Type Here"
             onBlur={(e) =>
+              
               updateTenderData(
                 "tenderNumber",
                 (e.target as HTMLInputElement).value
