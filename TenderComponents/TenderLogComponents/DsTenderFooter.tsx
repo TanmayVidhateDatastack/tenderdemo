@@ -61,43 +61,43 @@ export const DSTendrFooter: React.FC = ({}) => {
           errors.push("Please select a customer.");
         }
         if (tenderData?.customerAddressId == 0 ) { 
-          errors.push("Please select a customer address.");
+          errors.push("Please select a customer address."); 
         }
         if (tenderData?.tenderNumber?.trim() === "") { 
-          errors.push("Please enter a tender no.");
+          errors.push("Please enter a tender number."); 
         }
         if (tenderData?.tenderType === "") {
-          errors.push("Please enter a tendr type.");
+          errors.push("Please enter a tender type.");
         } 
         if (tenderData?.issueDate === "") {
-          errors.push("Please enter a tender issue date."); 
+          errors.push("Please enter the tender issue date."); 
         }
         const todaysdate = new Date(); 
         // todaysdate.setHours(0, 0, 0, 0); 
 
         if (tenderData?.issueDate && new Date(tenderData.issueDate) > todaysdate ) { 
-          errors.push("Tender issue date should not be greater than today's date.");
+          errors.push("The tender issue date should not be later than today's date.");
         } 
         if (tenderData?.lastPurchaseDate === "") { 
-          errors.push("Please enter a last purchase date.");
+          errors.push("Please enter the last purchase date.");
         }
         if (
           tenderData?.lastPurchaseDate &&
           new Date(tenderData.lastPurchaseDate) < getYesterdayDate()
         ) {
-          errors.push("Last Purchase date should not be less than today's date.");
+          errors.push("The last purchase date should not be earlier than today's date.");
         }
         if (tenderData?.submissionDate === "") {
-          errors.push("Please enter a submission date.");
+          errors.push("Please enter the submission date.");
         }
         if (
           tenderData?.submissionDate &&
           new Date(tenderData.submissionDate) < getYesterdayDate()
         ) {
-          errors.push("Submission  date should not be less than today's date.");
+          errors.push("The submission date should not be earlier than today's date.");
         }
         if (tenderData?.submissionMode?.trim() === "") {
-          errors.push("Please select a submission Mode.");
+          errors.push("Please select a submission mode.");
         }
 
     const urlPattern =
@@ -106,27 +106,26 @@ export const DSTendrFooter: React.FC = ({}) => {
     if (tenderURL === "") {
       errors.push("Please enter the tender URL.");
     } else if (!urlPattern.test(tenderURL)) {
-      errors.push("Please enter a valid URL.");
+      errors.push("Please enter a valid tender URL.");
     }
     if (tenderData?.applierType?.trim() === "") {
-      errors.push("Please select a applier Type.");
+      errors.push("Please select an applier type.");
     }
     if (tenderData?.supplierType?.trim() === "") {
-      errors.push("Please select a supplierType Type.");
+      errors.push("Please select a supplier type.");
     }
     if (tenderData?.shippingLocations?.length === 0) {
       console.log(tenderData);
-      errors.push("Please select a shippingLocations");
+      errors.push("Please select at least one shipping location.");
     }
 
     if (tenderData?.supplierDiscount === 0) {
-      errors.push("Please enter a supplierDiscount.");
+      errors.push("Please enter the supplier discount.");
     }
 
     const fees = tenderData?.tenderFees ?? [];
     const todaysDate = new Date();
     // todaysdate.setHours(0, 0, 0, 0); 
-
 
     fees.forEach((fee, index) => {
       if (fee.status == "ACTV") {
@@ -135,15 +134,15 @@ export const DSTendrFooter: React.FC = ({}) => {
         }
 
         if (fee.amount == null || fee.amount === 0) {
-          errors.push(`${fee.feesType}: Please enter a amount.`);
+          errors.push(`${fee.feesType}: Please enter an amount.`);
         }
 
         if (!fee.currency?.trim()) {
-          errors.push(`${fee.feesType}: Currency is required.`);
+          errors.push(`${fee.feesType}:  Please select a currency.`);
         }
 
         if (!fee.paidBy?.trim()) {
-          errors.push(`${fee.feesType}: Please select who paid the fee.`);
+          errors.push(`${fee.feesType}: Please specify who paid the fee.`);
         }
 
         if (!fee.paymentDueDate?.trim()) {
@@ -151,31 +150,31 @@ export const DSTendrFooter: React.FC = ({}) => {
         }
          else if (new Date(fee.paymentDueDate) < getYesterdayDate()) {
           errors.push(
-            `${fee.feesType}: Payment due date should not be in the past.`
+            `${fee.feesType}:  The payment due date cannot be in the past.`
           );
         }
  
         if (!fee.instructionNotes?.trim()) {
           errors.push(
-            `${fee.feesType} ${index + 1}: Please enter instruction notes.`
+            `${fee.feesType} ${index + 1}:  Please enter instruction notes.`
           );
         }
       }
     });
 
     if (tenderData?.tenderSupplyConditions[0]?.supplyPoint?.trim() === "") {
-      errors.push("Please select a supplyPoint ");
+      errors.push("Please select a supply point.");
     }
     if (tenderData?.tenderSupplyConditions[0]?.consigneesCount === 0) {
-      errors.push("Please enter a consigneesCount.");
+      errors.push("Please enter the number of consignees.");
     }
     if (
       tenderData?.tenderSupplyConditions[0]?.testReportRequired?.trim() === ""
     ) { 
-      errors.push("Please select a test Report Required field.");
+      errors.push("Please specify whether a test report is required.");
     }
     if (tenderData?.tenderSupplyConditions[0]?.eligibility.length == 0) {
-      errors.push("Please select a eligibility field.");
+      errors.push("Please select at least one eligibility criterion.");
     }
 
     const applicableConditions =
@@ -183,10 +182,10 @@ export const DSTendrFooter: React.FC = ({}) => {
     applicableConditions.forEach((condition, index) => {
       if (condition.status == "ACTV") {
         if (condition.type?.toString().trim() == "") {
-          errors.push(`${condition.type} : Type is required.`);
+          errors.push(`${condition.type} :Please enter a type.`);
         }
         if (condition.notes?.trim() == "") {
-          errors.push(`${condition.type}: Notes are required.`);
+          errors.push(`${condition.type}: Please enter notes.`);
         }
       }
     });
