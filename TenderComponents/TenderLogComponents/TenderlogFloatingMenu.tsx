@@ -16,7 +16,7 @@ import { closeContext } from "@/Elements/DsComponents/dsContextHolder/dsContextH
 import { useTenderData } from "../AddUpdateTenderComponents/TenderDataContextProvider";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import {
-  getCustomerSubmissionDoneByTenderId,
+  tenderSubmissionUrl,
   getTenderByTenderId,
 } from "@/Common/helpers/constant";
 import path from "path";
@@ -116,8 +116,7 @@ export const DsTenderTableFloatingMenu: React.FC<
         },
       ];
     };
-    const submitUrl =
-      getCustomerSubmissionDoneByTenderId + tenderId + "/submit";
+    const submitUrl = tenderSubmissionUrl(tenderId);
     const submissionDoc = customerSubmission();
     await fetchData({
       url: submitUrl,

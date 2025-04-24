@@ -202,7 +202,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
       <div className={styles.inputDetails}>
         <div className={deptStyles.fields}>
           <DsSelectMultiLevel
-            isSearchable={true}
+            isSearchable={true}  
             options={appliedBy}
             label="Applied by"
             {...(tenderDataCopy.id
@@ -230,7 +230,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
                 updateTenderData("tenderDetails.appliedBy", option.label || "");
               }
             }}
-            isOpen={false}
+            isOpen={true}
           ></DsSelectMultiLevel>
         </div>
         <div className={deptStyles.fields}>
@@ -299,7 +299,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
             label="Stockist / Liasioner name"
             inputType="alphaNumeric"
             // placeholder="Please type here"
-            onBlur={(e) =>
+            onBlur={(e) =>  
               updateTenderData(
                 "supplierName",
                 (e.target as HTMLInputElement).value

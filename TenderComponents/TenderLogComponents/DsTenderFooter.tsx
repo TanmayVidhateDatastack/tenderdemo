@@ -22,6 +22,7 @@ import Toaster from "@/Elements/DsComponents/DsToaster/DsToaster";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import { useTenderData } from "../AddUpdateTenderComponents/TenderDataContextProvider";
 import { TenderData } from "@/TenderComponents/AddUpdateTenderComponents/TenderDataContextProvider";
+import { getYesterdayDate } from "@/Common/helpers/Method/conversion";
 
 class ActionStatus {
   notiType: "success" | "bonus" | "info" | "error" | "cross" = "success";
@@ -72,9 +73,9 @@ export const DSTendrFooter: React.FC = ({}) => {
           errors.push("Please enter a tender issue date."); 
         }
         const todaysdate = new Date(); 
-        todaysdate.setHours(0, 0, 0, 0); 
+        // todaysdate.setHours(0, 0, 0, 0); 
 
-        if (tenderData?.issueDate && new Date(tenderData.issueDate) > todaysdate) { 
+        if (tenderData?.issueDate && new Date(tenderData.issueDate) > todaysdate ) { 
           errors.push("Tender issue date should not be greater than today's date.");
         } 
         if (tenderData?.lastPurchaseDate === "") { 
@@ -82,7 +83,7 @@ export const DSTendrFooter: React.FC = ({}) => {
         }
         if (
           tenderData?.lastPurchaseDate &&
-          new Date(tenderData.lastPurchaseDate) < todaysdate
+          new Date(tenderData.lastPurchaseDate) < getYesterdayDate()
         ) {
           errors.push("Last Purchase date should not be less than today's date.");
         }
@@ -91,7 +92,7 @@ export const DSTendrFooter: React.FC = ({}) => {
         }
         if (
           tenderData?.submissionDate &&
-          new Date(tenderData.submissionDate) < todaysdate
+          new Date(tenderData.submissionDate) < getYesterdayDate()
         ) {
           errors.push("Submission  date should not be less than today's date.");
         }
@@ -124,6 +125,8 @@ export const DSTendrFooter: React.FC = ({}) => {
 
     const fees = tenderData?.tenderFees ?? [];
     const todaysDate = new Date();
+    // todaysdate.setHours(0, 0, 0, 0); 
+
 
     fees.forEach((fee, index) => {
       if (fee.status == "ACTV") {
@@ -145,12 +148,13 @@ export const DSTendrFooter: React.FC = ({}) => {
 
         if (!fee.paymentDueDate?.trim()) {
           errors.push(`${fee.feesType}: Payment due date is required.`);
-        } else if (new Date(fee.paymentDueDate) < todaysDate) {
+        }
+         else if (new Date(fee.paymentDueDate) < getYesterdayDate()) {
           errors.push(
             `${fee.feesType}: Payment due date should not be in the past.`
           );
         }
-
+ 
         if (!fee.instructionNotes?.trim()) {
           errors.push(
             `${fee.feesType} ${index + 1}: Please enter instruction notes.`
@@ -167,7 +171,7 @@ export const DSTendrFooter: React.FC = ({}) => {
     }
     if (
       tenderData?.tenderSupplyConditions[0]?.testReportRequired?.trim() === ""
-    ) {
+    ) { 
       errors.push("Please select a test Report Required field.");
     }
     if (tenderData?.tenderSupplyConditions[0]?.eligibility.length == 0) {
@@ -271,7 +275,7 @@ export const DSTendrFooter: React.FC = ({}) => {
       saveTender("Draft");
     } else {
       const message = (
-        <>
+        <> 
           <div className={styles["toaster-message-grid"]}>
             {validate.map((ms, index) => (
               <div key={index} className={styles["toaster-item"]}>
