@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import style from "./deposite.module.css";
 import { DsTableRow, tableData, tcolumn } from "@/Common/helpers/types";
@@ -6,12 +6,22 @@ import DsTableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableCo
 import { closeContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import btnStyles from "@/Elements/DsComponents/DsButtons/dsButton.module.css";
 import RadioButton from "./dsRadioButton";
+import fetchData from "@/Common/helpers/Method/fetchData";
+import { getTenderByTenderId, getTendersByCustomerId } from "@/Common/helpers/constant";
+import Toaster, {
+  hideToaster,
+  showToaster,
+} from "@/Elements/DsComponents/DsToaster/DsToaster";
+import { useTenderData } from "../TenderDataContextProvider";
 
 export interface FetchCustomerProps {
   customerName: string;
+  customerId: number;
 }
-
-const FetchCustomer: React.FC<FetchCustomerProps> = ({ customerName }) => {
+const FetchCustomer: React.FC<FetchCustomerProps> = ({
+  customerName,
+  customerId,
+}) => {
   const [fetchTenderData, setFetchTenderData] = useState<tableData>({
     className: "",
     type: "InterActive",
@@ -20,85 +30,79 @@ const FetchCustomer: React.FC<FetchCustomerProps> = ({ customerName }) => {
     hasSearch: false,
     columns: [
       { columnIndex: 1, columnHeader: "Tender ID" },
-      {
-        columnIndex: 2,
-        columnHeader: "Supplier Name",
-      },
-
+      { columnIndex: 2, columnHeader: "Supplier Name" },
       { columnIndex: 3, columnHeader: "Delivery Date" },
     ],
-
-    rows: [
-      {
-        tag: [<RadioButton id={""} label={""} value={""}></RadioButton>],
-        rowIndex: 0,
-        className: "row",
-        content: [
-          {
-            columnIndex: 1,
-            className: "cell",
-            content: "20240199900001",
-            rowSpan: 2,
-            filterValue: 20240199900001,
-            contentType: "number",
-          },
-          {
-            columnIndex: 2,
-            className: "cell",
-            content: "Spare India",
-            filterValue: "DF09 - DR Distributer",
-            contentType: "string",
-          },
-          {
-            columnIndex: 3,
-            className: "cell",
-            content: "22/07/2020",
-            filterValue: "MUMBAI",
-            contentType: "reactNode",
-          },
-        ],
-      },
-
-      {
-        rowIndex: 1,
-        tag: [<RadioButton id={""} label={""} value={""}></RadioButton>],
-        className: "row",
-        content: [
-          {
-            columnIndex: 1,
-            className: "cell",
-            content: 300165852100004,
-            rowSpan: 2,
-            filterValue: 20240199900001,
-            contentType: "number",
-          },
-          {
-            columnIndex: 2,
-            className: "cell",
-            content: "S.S.P PTV.LTD",
-            filterValue: "DF09 - DR Distributer",
-            contentType: "string",
-          },
-          {
-            columnIndex: 3,
-            className: "cell",
-            content: "18/06/2023",
-            filterValue: "MUMBAI",
-            contentType: "reactNode",
-          },
-        ],
-      },
-    ],
+    rows: [],
   });
+
+  const [selectedTender, setSelectedTender] = useState<any>(null);
+  const handleFetch = useCallback(async () => {
+    try {
+      const response = await fetchData({
+        // url: `http://172.145.1.102:7005/api/tenders/${customerId}/pastTenders`,
+        url: getTendersByCustomerId(customerId.toString()),
+        method: "GET",
+      });
+      if (response.code === 200) {
+        const rows = response.result.map((tender: any, index: number) => ({
+          tag: [
+            <RadioButton
+              id={tender.tenderNumber}
+              label=""
+              value=""
+              onSelectedRadioButton={() => setSelectedTender(tender)}
+            />,
+          ],
+          rowIndex: index,
+          className: "row",
+          content: [
+            {
+              columnIndex: 1,
+              className: "cell",
+              content: tender.tenderNumber,
+              filterValue: tender.tenderNumber,
+              contentType: "number",
+            },
+            {
+              columnIndex: 2,
+              className: "cell",
+              content: tender.supplierName,
+              filterValue: tender.supplierName,
+              contentType: "string",
+            },
+            {
+              columnIndex: 3,
+              className: "cell",
+              content: tender.submissionDate,
+              filterValue: tender.submissionDate,
+              contentType: "reactNode",
+            },
+          ],
+        }));
+        setFetchTenderData((prev) => ({ ...prev, rows }));
+      } else {
+        console.error("Error fetching data", response.message);
+      }
+    } catch (error) {
+      console.error("Error fetching data", error);
+    }
+  }, [customerId]);
+
+  const {fetchAndSetPreviousTender}=useTenderData();
+  useEffect(() => {
+    handleFetch();
+  }, [handleFetch]);
+
 
   return (
     <>
       <div className={style.fetcustomerContainer}>
         <div className={style.fetchInfo}>
-          <strong>Fetch Information:</strong> {customerName}
+          <div>Fetch Information:</div> {customerName}
         </div>
         <div className={style.fetchMessage}>
-          Do you want to fetch information from previous tender.Please select
+          Do you want to fetch information from previous tender. Please select
           below <br></br>to copy the information.
         </div>
 
@@ -110,21 +114,30 @@ const FetchCustomer: React.FC<FetchCustomerProps> = ({ customerName }) => {
         ></DsTableComponent>
 
         <div className={style.fetchButtons}>
-          <DsButton
+         <DsButton
             label="Cancel"
             className={btnStyles.btnOutlined}
             buttonColor="btnDark"
             buttonViewStyle="btnOutlined"
             disable={false}
-            // className={style.}
             onClick={() => {
               closeContext("contextMenuId5");
             }}
+            />
+          
+          <DsButton
+            label="Fetch"
+            onClick={() => {
+              
+              fetchAndSetPreviousTender(selectedTender.tenderId);
+              closeContext("contextMenuId5");
+              showToaster("fetchCustomer");
+            }}
           />
-
-          <DsButton label="Fetch" />
+       
         </div>
       </div>
+     
     </>
   );
 };

@@ -184,7 +184,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
   };
   const [selectedDepo, setSelectedDepo] = useState<DsSelectOption[]>([]);
   useEffect(() => {
-    const loc = [...tenderDataCopy.shippingLocations];
+    const loc = [...tenderData.shippingLocations];
     console.log(loc);
     console.log(formatedDepot);
     const depo = loc.map((x) => {
@@ -196,7 +196,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
       );
     });
     setSelectedDepo(depo);
-  }, [formatedDepot, tenderDataCopy.shippingLocations]);
+  }, [formatedDepot, tenderDataCopy.shippingLocations,tenderData.id]);
 
   return (
     <>
@@ -206,7 +206,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
             isSearchable={true}
             options={appliedBy}
             label="Applied by"
-            {...(tenderDataCopy.id
+            {...(tenderData.id
               ? {
                   selectedOption: {
                     attributes: { type: tenderData.applierType },
@@ -239,7 +239,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
           <DsSelectMultiLevel
             isSearchable={true} 
             options={suppliedBy}
-            {...(tenderDataCopy.id
+            {...(tenderData.id
               ? {
                   selectedOption: {
                     attributes: { type: tenderData.supplierType },

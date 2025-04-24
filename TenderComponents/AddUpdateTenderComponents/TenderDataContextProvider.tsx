@@ -131,6 +131,7 @@ export type TenderContract = {
   };
 };
 export type TenderData = {
+  // tenderId: string;
   id?: number;
   customerId: number;
   customerAddressId: number;
@@ -322,6 +323,7 @@ interface TenderDataContextType {
     tenderId: number,
     tenderStatus?: string
   ) => Promise<void>;
+  fetchAndSetPreviousTender: (tenderId: number) => Promise<void>;
 }
 
 const TenderDataContext = createContext<TenderDataContextType | undefined>(
@@ -389,10 +391,10 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       contractStatusNotes: "test",
       tenderRevisions: {
         id: 0,
-        tenderItems: [ 
+        tenderItems: [
           {
             awardedQuantity: 1,
-            awardedRate: 2, 
+            awardedRate: 2,
             awardedTo: 1,
             id: 2,
             productId: 1,
@@ -1033,7 +1035,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         delete dataToSendTenderCopy.applierType;
         delete dataToSendTenderCopy.supplierType;
         const dataToSendOriginalTender = stripReadOnlyProperties({
-          ...tenderData, 
+          ...tenderData,
           shippingLocations: tenderData.shippingLocations.join(","),
           appliedBy:
             tenderData.applierType.toLowerCase() == "organization"
@@ -1295,6 +1297,97 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     },
     [fetchData]
   );
+
+  const fetchAndSetPreviousTender = useCallback(
+    async (tenderId: number) => {
+      try {
+        const response = await fetchData({
+          url: getTenderByTenderId + tenderId,
+        });
+
+        const tenderData = response.result;
+        console.log(response.result);
+        if (
+          tenderData.tenderRevisions.length == 0 ||
+          tenderData.tenderRevisions == null
+        )
+          tenderData.tenderRevisions = [
+            {
+              version: 1,
+              status: DsStatus.DRFT.toUpperCase(),
+              tenderItems: [],
+            },
+          ];
+        else
+          tenderData.tenderRevisions = tenderData.tenderRevisions.map((rev) => {
+            return {
+              ...rev,
+              tenderItems: rev.tenderItems.map((item) => {
+                return {
+                  ...item,
+                  product: {
+                    ...item.product,
+                    dataSource: "saved",
+                  },
+                };
+              }),
+            };
+          });
+        console.log("sv", tenderData);
+
+        tenderData.tenders.tenderDetails =
+          tenderData.tenders.tenderDetailsReadOnly;
+        delete tenderData.tenders.tenderDetailsReadOnly;
+        // delete tenderData.tenders.id;
+
+        console.log("swgev", tenderData);
+
+        const newTenderData: TenderData = {
+          ...tenderData.tenders,
+          tenderRevisions: [
+            {
+              version: 1,
+              status: DsStatus.DRFT.toUpperCase(),
+              tenderItems: [],
+            },
+          ],
+          tenderFees: tenderData.tenderFees.map((fee) => ({
+            ...fee,
+            paymentStatus: undefined,
+            paymentDate: undefined,
+            paymentTransactionId: undefined,
+            paymentReceiptId: undefined,
+            acknowledgmentReceiptId: undefined,
+            fundTransferConfirmationId: undefined,
+            status: "ACTV",
+          })),
+          tenderSupplyConditions: [
+            {
+              ...tenderData.tenderSupplyConditions[0],
+              applicableConditions:
+                tenderData.tenderSupplyConditions[0].applicableConditions?.map(
+                  (ac) => ({
+                    ...ac,
+                    status: "ACTV",
+                  })
+                ),
+            },
+          ],
+          status: "Draft",
+          lastUpdatedBy: 0,
+          tenderContract: undefined,
+          tenderDocuments: [],
+        };
+        setTenderData(newTenderData);
+
+        return response;
+      } catch (error) {
+        console.error("Error fetching order:", error);
+      }
+    },
+    [fetchData]
+  );
+
   const fetchPreviousTenderData = useCallback(async (customerId: number) => {
     try {
       const res = await fetchData({
@@ -1329,6 +1422,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         removeApplicableCondition,
         setActionStatusValues,
         fetchAndSetOriginalTender,
+        fetchAndSetPreviousTender,
         updateContractDetails,
         updateContractItems,
         saveTender,

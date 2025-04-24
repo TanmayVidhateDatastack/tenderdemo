@@ -1,6 +1,7 @@
 "use client";
 import { TenderDataProvider } from "@/TenderComponents/AddUpdateTenderComponents/TenderDataContextProvider";
 import DsTenderIdPage from "./tenderIdPage";
+import Toaster from "@/Elements/DsComponents/DsToaster/DsToaster";
  export type ParamType = {
   params: {
     TenderId: string | number;
@@ -15,7 +16,16 @@ const storedStatus = sessionStorage?.getItem("tenderStatus")||undefined;
     <> 
       <TenderDataProvider>
         <DsTenderIdPage paramOrderId={paramOrderId} tenderStatus={storedStatus}/>    
+        <Toaster
+            id="fetchCustomer"
+            type="success"
+            message="The information has been fetched"
+            duration={2000}
+            position={"top"}
+            handleClose={() => {}}
+          />
       </TenderDataProvider>
+
     </>
   );
 } 
