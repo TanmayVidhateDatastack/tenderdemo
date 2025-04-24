@@ -42,7 +42,6 @@ const DsTenderIdPage: React.FC<{
     tenderData,
     tenderDataCopy,
     addTenderProduct,
-    createTenderVersion,
     setActionStatusValues,
     actionStatus,
     saveTender,
@@ -110,7 +109,7 @@ const DsTenderIdPage: React.FC<{
       console.log("orderId", orderId);
       if (
         tenderStatus == "AWARDED" ||
-        tenderStatus == "PARTIALLY_AWARDED" ||
+        tenderStatus == "PARTIALLY_AWARDED" || 
         tenderStatus == "LOST" ||
         tenderStatus == "CANCELLED"||
         tenderStatus == "newPricingVersion"

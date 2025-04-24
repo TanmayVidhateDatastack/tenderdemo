@@ -35,12 +35,12 @@
 
 .inputDetails {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* 4 equal columns */
+  grid-template-columns: repeat(4, 1fr); /* 4 equal columns */
   /* gap: var(--ds-margin); */
   /* spacing between items */
   gap: 1.5rem;
   /* border-bottom: 0.5px solid var(--grey-100); */
-  padding: var(--ds-padding); 
+  /* padding: var(--ds-padding);  */
   background: inherit;
 }
  

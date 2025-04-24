@@ -252,7 +252,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
             onSelect={handleSuppliedBySelects}
             setSelectOption={(isDataListOptions, option) => {
               // setSelected(option);
-              console.log("applieridoption", option);
+              console.log("applieridoption", option); 
               if (isDataListOptions) {
                 updateTenderData("supplierId", Number(option.id));
                 updateTenderData("supplierType", option.attributes.type);
@@ -309,11 +309,11 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
         </div>
         <div className={deptStyles.fields}>
         <DsTextField
-            minimumNumber={100}
+            maximumNumber={100}
             initialValue={tenderData.supplierDiscount?.toString()} 
             inputType="positive"
             maxLength={5}
-            label="Stockist / Liasioner discount %" 
+            label="Stockist / Liasioner discount %"  
             iconEnd={<>%</>}
             // placeholder="Please type here"
             onBlur={(e) =>

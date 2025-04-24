@@ -70,6 +70,7 @@ interface Metadata {
   eligibility?: CodeItem[];
   feesType?: CodeItem[];
   paymentMode?: CodeItem[];
+  refundEligibility?:CodeItem[];
   submissionMode?: CodeItem[];
   supplyPoint?: CodeItem[];
   tenderSupplyCondition?: CodeItem[];
@@ -545,7 +546,7 @@ export default function Home() {
     // console.log("Adding table data:", tender);
     const newRows: DsTableRow[] = tender.map((t, index) => {
       let rowIcon: "instituitional" | "corporate" = "corporate";
-      if (t.type == "INSTITUTION") rowIcon = "instituitional";
+      if (t.customerType == "Instituitional") rowIcon = "instituitional";
       return {
         rowIndex: index,
         customAttributes: { tenderId: t.tenderId },

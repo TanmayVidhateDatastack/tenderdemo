@@ -8,7 +8,7 @@ import {
   supplyDetailsProps,
 } from "@/Common/helpers/types";
 // import { datalistOptions, supplyDetailsProps } from "@/Common/helpers/types";
-import { useTenderData } from "../TenderDataContextProvider";
+import { useTenderData } from "../TenderDataContextProvider"; 
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import { useEffect, useState } from "react";
 const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
@@ -72,7 +72,7 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
           setSelectOption={(option) => {
             if (typeof option.value == "string")
               updateSupplyCondition("supplyPoint", option.value);
-          }}
+          }} 
         ></DsSingleSelect>
          <DsTextField
           maxLength={10}

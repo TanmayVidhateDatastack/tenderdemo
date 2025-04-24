@@ -482,7 +482,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                       index={index + 1}
                       lprValue={tenderproduct.lpr}
                       lprTo={{
-                        id: tenderproduct.lastPurchasedFrom || 0,
+                        id: tenderproduct.competitorId || 0,
                         name: tenderproduct.product.competitorName || "",
                       }}
                       onValueChange={(value) =>
@@ -491,7 +491,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                       onCompanyChange={(company) => {
                         handleFieldChange(
                           index,
-                          "lastPurchasedFrom",
+                          "competitorId",
                           company.id
                         );
                         handleFieldChange(
@@ -510,14 +510,14 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                     index={index + 1}
                     lprValue={tenderproduct.lpr}
                     lprTo={{
-                      id: tenderproduct.lastPurchasedFrom || 0,
+                      id: tenderproduct.competitorId || 0,
                       name: tenderproduct.product.competitorName || "",
                     }}
                     onValueChange={(value) =>
                       handleFieldChange(index, "lpr", Number(value))
                     }
                     onCompanyChange={(company) => {
-                      handleFieldChange(index, "lastPurchasedFrom", company.id);
+                      handleFieldChange(index, "competitorId", company.id);
                       handleFieldChange(
                         index,
                         "product.competitorName",

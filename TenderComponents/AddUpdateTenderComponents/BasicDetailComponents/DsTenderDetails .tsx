@@ -10,23 +10,18 @@ import {
   DsSelectOption,
 } from "@/Common/helpers/types";
 import { useTenderData } from "../TenderDataContextProvider";
-import DsDatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker";
+import DsDatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker"; 
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
-import Image from "next/image";
 import fetchData from "@/Common/helpers/Method/fetchData";
-// import copybtnenabled from "@/Common/TenderIcons/smallIcons/copyEnabled.svg";
-import DsAddressSelect from "@/Elements/DsComponents/dsSelect/dsAddressSelect";
 import CustomerSearch from "./customerSearch";
 import IconFactory from "@/Elements/IconComponent";
 import { getYesterdayDate } from "@/Common/helpers/Method/conversion";
 import ContextMenu, {
   displayContext,
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
-import fetchCustomer from "./fetchcustomerComponent";
-import DsNavTo from "@/Elements/ERPComponents/DsNavigationComponent/DsNavTo";
 import FetchCustomer from "./fetchcustomerComponent";
 const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
-  const [fetchVisible, setFetchVisible] = useState(true);
+  const [fetchVisible, setFetchVisible] = useState(true); 
   const [role, setRole] = useState("checker");
   const [pos, setPos] = useState<
     | "top"
@@ -139,7 +134,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
             
            <DsButton
               id="copyBtn"
-              label="Fetch Information"
+              label="Fetch Information" 
               buttonViewStyle="btnText"
               buttonSize="btnSmall"
               disable={tenderData.customerId ? false: true}
@@ -330,7 +325,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         </div>
         <div className={deptStyle.fields}>
         <DsTextField
-            minimumNumber={100}
+            maximumNumber={100}
             maxLength={5}
             initialValue={tenderData.lateDeliveryPenalty?.toString()}
             label="Penalty for late delivery %"
