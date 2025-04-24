@@ -49,6 +49,7 @@ const FetchCustomer: React.FC<FetchCustomerProps> = ({
           tag: [
             <RadioButton
               id={tender.tenderNumber}
+              key=""
               label=""
               value=""
               onSelectedRadioButton={() => setSelectedTender(tender)}
