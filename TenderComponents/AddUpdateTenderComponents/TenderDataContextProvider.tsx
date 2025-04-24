@@ -78,7 +78,7 @@ export type TenderProduct = {
 export type tenderSupplyCondition = {
   id?: number;
   supplyPoint: string;
-  consigneesCount: number;
+  consigneesCount: number |null;
   testReportRequired: string;
   eligibility: string[];
   applicableConditions: applicableSupplyConditions[];
@@ -92,7 +92,7 @@ export type applicableSupplyConditions = {
 export type tenderFee = {
   id?: number;
   feesType: string | number;
-  amount: number;
+  amount: number |null;
   currency: string;
   paidBy: string;
   paymentMode: string;
@@ -145,7 +145,7 @@ export type TenderData = {
   submissionMode: string;
   deliveryPeriod: number | null;
   extendedDeliveryPeriod: number | null;
-  lateDeliveryPenalty: number;
+  lateDeliveryPenalty: number |null;
   tenderUrl: string;
   shippingLocations: number[];
   // appliedBy: string;
@@ -155,7 +155,7 @@ export type TenderData = {
   supplierId: number;
   supplierType: string;
   supplierName: string;
-  supplierDiscount: number;
+  supplierDiscount: number | null;
   // createdBy: number;
   lastUpdatedBy: number;
   status: string;
@@ -347,7 +347,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     submissionMode: "",
     deliveryPeriod: null,
     extendedDeliveryPeriod: null,
-    lateDeliveryPenalty: 0,
+    lateDeliveryPenalty: null,
     tenderUrl: "",
     shippingLocations: [],
     applierType: "",
@@ -355,7 +355,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     supplierType: "",
     supplierId: 0,
     supplierName: "",
-    supplierDiscount: 0,
+    supplierDiscount: null,
     lastUpdatedBy: 0,
     status: "Draft",
     tenderDetails: {
@@ -372,7 +372,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     tenderSupplyConditions: [
       {
         supplyPoint: "",
-        consigneesCount: 0,
+        consigneesCount: null,
         testReportRequired: "",
         eligibility: [],
         applicableConditions: [],
@@ -500,19 +500,20 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           return fee; // Keep existing entries unchanged
         });
 
-        // If no update was made, add a new entry
-        if (!updated) {
-          updatedTenderFees.push({
-            feesType: type,
-            amount: 0,
-            currency: "INR",
-            paidBy: "",
-            paymentMode: "",
-            paymentDueDate: "",
-            instructionNotes: "",
-            status: active,
-          });
-        }
+      // If no update was made, add a new entry
+      if (!updated) {
+        updatedTenderFees.push({
+          feesType: type,
+          amount: null,
+          refundEligibility:"",
+          currency: "INR",
+          paidBy: "",
+          paymentMode: "",
+          paymentDueDate: "",
+          instructionNotes: "",
+          status: active,
+        });
+      }
 
         return {
           ...prev,

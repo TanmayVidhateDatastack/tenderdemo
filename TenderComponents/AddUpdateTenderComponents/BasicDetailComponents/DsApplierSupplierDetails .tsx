@@ -28,7 +28,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
   const [formatedDepot, setFormatedDepot] = useState<DsSelectOption[]>([]);
 
   const { updateTenderData, tenderData, tenderDataCopy } = useTenderData();
-  const [selected, setSelected] = useState<datalistOptions>(); 
+  const [selected, setSelected] = useState<datalistOptions>();
   const [selecteds, setSelecteds] = useState<datalistOptions>();
   const [appliedBy, setAppliedBy] = useState<DsMultiLevelSelectOption[]>([]);
   const [suppliedBy, setSuppliedBy] = useState<DsMultiLevelSelectOption[]>([]);
@@ -47,13 +47,13 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
   }
 
   function setStockistSearchOptionss(values: unknown) {
-    let customers: datalistOptions[] = []; 
+    let customers: datalistOptions[] = [];
     if (Array.isArray(values) && values.every((val) => val.id && val.name)) {
       customers = values.map((x) => ({
         id: x?.id?.toString(),
         value: `${x.name}`,
         label: `${x.name}`,
-        attributes: { type: "STOCKIST" },  
+        attributes: { type: "STOCKIST" },
       }));
     }
     return customers;
@@ -79,38 +79,38 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
         const appliedBys: DsMultiLevelSelectOption[] = result.organization.map(
           (item: any) => ({
             value: item.id + "_" + item.type,
-            label: item.name, 
+            label: item.name,
           })
         );
-        appliedBys.push({  
+        appliedBys.push({
           value: {
-            setOptions: setStockistSearchOptions, 
-            setSearchUrl: (searchTerm: string) => 
-              searchCustomerURL + searchTerm, 
+            setOptions: setStockistSearchOptions,
+            setSearchUrl: (searchTerm: string) =>
+              searchCustomerURL + searchTerm,
             onSelect: onStockistSelect,
             id: "AppliedBy",
             selectedOption: selected,
-            label: "Search Stockist", 
+            label: "Search Stockist",
           },
           label: "Stockist",
-        }); 
+        });
         setAppliedBy(appliedBys);
- 
-        const suppliedBys: DsMultiLevelSelectOption[] = result.organization.map( 
-          (item: any) => ({ 
+
+        const suppliedBys: DsMultiLevelSelectOption[] = result.organization.map(
+          (item: any) => ({
             value: item.id + "_" + item.type,
             label: item.name,
-          }) 
+          })
         );
-        suppliedBys.push({ 
-          value: { 
-            setOptions: setStockistSearchOptionss,  
+        suppliedBys.push({
+          value: {
+            setOptions: setStockistSearchOptionss,
             setSearchUrl: (searchTerm: string) =>
               searchCustomerURL + searchTerm,
             onSelect: onStockistSelects,
             id: "SuppliedBy",
             selectedOption: selecteds,
-            label: "Search Stockist", 
+            label: "Search Stockist",
           },
           label: "Stockist",
         });
@@ -134,9 +134,9 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
     })
       .then((res) => {
         const result = res.result;
-        const formatedDepot = result.map((item: any) => ({  
+        const formatedDepot = result.map((item: any) => ({
           value: item.id.toString(),
-          label: item.name, 
+          label: item.name,
         }));
         setFormatedDepot(formatedDepot);
         if (res?.code === 200 && res?.result) {
@@ -168,7 +168,6 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
       const type = option.value.split("_")[1];
       if (type === "ORGANIZATION") {
         setSuppliedBy(allSuppliedBy);
-        
       } else {
         setSuppliedBy(allSuppliedBy);
       }
@@ -203,7 +202,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
       <div className={styles.inputDetails}>
         <div className={deptStyles.fields}>
           <DsSelectMultiLevel
-            isSearchable={true}
+            isSearchable={true}  
             options={appliedBy}
             label="Applied by"
             {...(tenderData.id
@@ -212,46 +211,45 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
                     attributes: { type: tenderData.applierType },
                     id: "",
                     label: tenderData.tenderDetails.appliedBy,
-                  }, 
+                  },
                 }
               : {})}
-             
             placeholder={"Please search or select here"}
             id={"appliedBy"}
-            onSelect={handleAppliedBySelect} 
-            setSelectOption={(isDataListOptions, option) => {  
-              setSelected(option); 
-              // console.log("applieridoption", option); 
-              if (isDataListOptions) { 
+            onSelect={handleAppliedBySelect}
+            setSelectOption={(isDataListOptions, option) => {
+              setSelected(option);
+              // console.log("applieridoption", option);
+              if (isDataListOptions) {
                 updateTenderData("applierId", Number(option.id));
                 updateTenderData("applierType", option.attributes.type);
                 updateTenderData("tenderDetails.appliedBy", option.value || "");
               } else if (typeof option.value == "string") {
-                updateTenderData("applierId", option.value.split("_")[0]); 
+                updateTenderData("applierId", option.value.split("_")[0]);
                 updateTenderData("applierType", option.value.split("_")[1]);
                 updateTenderData("tenderDetails.appliedBy", option.label || "");
               }
             }}
-            isOpen={false}
+            isOpen={true}
           ></DsSelectMultiLevel>
         </div>
         <div className={deptStyles.fields}>
           <DsSelectMultiLevel
-            isSearchable={true} 
+            isSearchable={true}
             options={suppliedBy}
             {...(tenderData.id
               ? {
                   selectedOption: {
                     attributes: { type: tenderData.supplierType },
                     id: "",
-                    label: tenderData.tenderDetails.suppliedBy, 
+                    label: tenderData.tenderDetails.suppliedBy,
                   },
                 }
               : {})}
-            label="Supplied by" 
-            placeholder={"Please search or select here"} 
+            label="Supplied by"
+            placeholder={"Please search or select here"}
             id={"suppliedBy"}
-            onSelect={handleSuppliedBySelects} 
+            onSelect={handleSuppliedBySelects}
             setSelectOption={(isDataListOptions, option) => {
               // setSelected(option);
               console.log("applieridoption", option);
@@ -260,8 +258,8 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
                 updateTenderData("supplierType", option.attributes.type);
                 updateTenderData(
                   "tenderDetails.suppliedBy",
-                  option.value || ""  
-                ); 
+                  option.value || ""
+                );
               } else if (typeof option.value == "string") {
                 updateTenderData("supplierId", option.value.split("_")[0]);
                 updateTenderData("supplierType", option.value.split("_")[1]);
@@ -281,30 +279,27 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
             // type="multi"
             label="Depot"
             placeholder={"Please search or select here"}
-            id={"depot"} 
+            id={"depot"}
             setSelectOptions={(options) => {
-              const shipIds=options.reduce<number[]>((acc, option) => { 
-                if (typeof option.value === "string") { 
-                  acc.push(parseInt(option.value)); 
+              const shipIds = options.reduce<number[]>((acc, option) => {
+                if (typeof option.value === "string") {
+                  acc.push(parseInt(option.value));
                 }
                 return acc;
-              }, [])
-              updateTenderData(
-                "shippingLocations",
-                shipIds
-              );
+              }, []);
+              updateTenderData("shippingLocations", shipIds);
               setSelectedDepo(options);
             }}
           ></DsMultiSelect>
         </div>
         <div></div>
         <div className={deptStyles.fields}>
-          <DsTextField
+        <DsTextField
             initialValue={tenderData.supplierName}
             label="Stockist / Liasioner name"
-            inputType="text"
+            inputType="alphaNumeric"
             // placeholder="Please type here"
-            onBlur={(e) =>
+            onBlur={(e) =>  
               updateTenderData(
                 "supplierName",
                 (e.target as HTMLInputElement).value
@@ -312,12 +307,14 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
             }
           ></DsTextField>
         </div>
-        <div className={deptStyles.fields}> 
-          <DsTextField
+        <div className={deptStyles.fields}>
+        <DsTextField
             minimumNumber={100}
-            initialValue={tenderData.supplierDiscount.toString()} 
+            initialValue={tenderData.supplierDiscount?.toString()} 
             inputType="positive"
+            maxLength={5}
             label="Stockist / Liasioner discount %" 
+            iconEnd={<>%</>}
             // placeholder="Please type here"
             onBlur={(e) =>
               updateTenderData( 

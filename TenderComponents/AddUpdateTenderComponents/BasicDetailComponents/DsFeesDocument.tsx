@@ -195,10 +195,10 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               initialValue={
                 tenderData.tenderFees
                   .find((x) => x.feesType == type)
-                  ?.amount.toString() || ""
+                  ?.amount?.toString() || ""
               }
               label={"Amount"}
-              inputType="positive"
+              inputType="positiveInteger"
               onBlur={(e) =>
                 updateTenderFee(
                   type,
@@ -207,13 +207,13 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 )
               }
             ></DsTextField>
-          </div>
+          </div> 
           <div className={styles.fieldColors}>
             <DsSingleSelect
               id={id + "_paidType1"}
               selectedOption={selectedPaidBy}
               options={depositeDocuments}
-              label="Paid by" 
+              label="Paid by"  
               placeholder={"Please select here"} 
               setSelectOption={(option) => {
                 if (typeof option.value == "string") {
@@ -230,12 +230,27 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               label="Modes"
               placeholder={"Please search and select here"}
               setSelectOption={(option) => {
-                if (typeof option.value == "string") {
+                if (typeof option.value == "string") { 
                   updateTenderFee(type, "paymentMode", option.value);
                 }
               }}
             ></DsSingleSelect>
           </div>
+          <div className={styles.fieldColors}>
+            <DsSingleSelect
+              selectedOption={selectedPaymentMode}
+              id={id + "_modes1"}
+              options={mode}
+              label="Refund Eligibility"
+              // placeholder={"Please search and select here"}
+              // setSelectOption={(option) => {
+              //   if (typeof option.value == "string") {
+              //     updateTenderFee(type, "paymentMode", option.value);
+              //   }
+              // }}
+            ></DsSingleSelect>
+          </div>
+          
           <div className={styles.fieldColors}>
             <DatePicker
               id={id + "dueDate"}
