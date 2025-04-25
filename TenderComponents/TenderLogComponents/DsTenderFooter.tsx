@@ -178,7 +178,7 @@ export const DSTendrFooter: React.FC = ({}) => {
       errors.push("Please enter the number of consignees.");
     }
     if (
-      tenderData?.tenderSupplyConditions[0]?.testReportRequired?.trim() === ""
+      tenderData?.tenderSupplyConditions[0]?.testReportRequired?.trim() === "" 
     ) {
       errors.push("Please specify whether a test report is required.");
     }

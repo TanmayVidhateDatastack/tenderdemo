@@ -292,8 +292,6 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
           ></DsSingleSelect>
         </div>
         <div className={deptStyle.fields}>
-          <div className={deptStyle.fields}>
-            <div className={deptStyle.fields}>
             <DsTextField
                 initialValue={tenderData.deliveryPeriod?.toString()}
                 maxLength={5}
@@ -306,8 +304,6 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
                   )
                 }
               />
-            </div>
-          </div>
         </div>
         <div className={deptStyle.fields}>
           <DsTextField

@@ -125,7 +125,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     if (refund) {
       const refundValue = tenderData.tenderFees.find(
         (x) => x.feesType == type
-      )?.refundEligibility;
+      )?.refundEligibility;   
       if (refundValue) {
         const option = refund.find((x) => x.value == refundValue);
         if (option) setSelectedRefund(option);
@@ -135,7 +135,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
 
     const paidByvalue = tenderData.tenderFees.find(
       (x) => x.feesType == type
-    )?.paidBy;
+    )?.paidBy; 
     if (paidByvalue) {  
       const option = depositeDocuments.find((x) => x.value == paidByvalue);
       // const option = mode.find((x) => x.value == paidByvalue);
@@ -187,7 +187,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                       label: "EMD Payment Receipt",
                       value: "EMD_Payment_Receipt",
                     },
-                  ]}
+                  ]} 
                 ></DsMultiSelect>
                 <div>
                   <DsButton
@@ -264,7 +264,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             ></DsSingleSelect>
           </div>
           
-          <div className={styles.fieldColors}>
+          <div className={styles.fieldColors}> 
             <DatePicker
               id={id + "dueDate"}
               minDate={getYesterdayDate()}

@@ -18,6 +18,7 @@ import DsFeesDocument from "./DsFeesDocument";
 import { useTenderData } from "../TenderDataContextProvider";
 
 import IconFactory from "@/Elements/IconComponent";
+import DsTenderDetails from "./DsTenderDetails ";
 export interface DepositDocument {
   modes: DsSelectOption[];
   refunds:DsSelectOption[];
@@ -267,10 +268,10 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
                 {applicablefees.map((checkbox, index) => (
                   <Ds_checkbox
                     key={index}
-                    id={checkbox.value.toString()}
+                    id={checkbox.value.toString()} 
                     name={checkbox.label}
-                    value={checkbox.value.toString()}
-                    label={checkbox.label}
+                    value={checkbox.value.toString()} 
+                    label={checkbox.label} 
                     defaultChecked={tenderDataCopy.id?tenderDataCopy?.tenderFees?.some(
                       (fee) => fee.feesType == checkbox.value
                     ):true}
