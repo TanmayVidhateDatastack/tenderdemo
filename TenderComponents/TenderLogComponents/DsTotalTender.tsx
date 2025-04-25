@@ -20,8 +20,8 @@ interface TotalTendersProps {
 
 const DsTotalTenders: React.FC<TotalTendersProps> = React.memo(({ data }) => {
   const [totalTenders, setTotalTenders] = useState<number>(0);
-  const [institutionalCount, setInstitutionalCount] = useState<number>(0);
-  const [corporateCount, setCorporateCount] = useState<number>(0);
+  // const [institutionalCount, setInstitutionalCount] = useState<number>(0);
+  // const [corporateCount, setCorporateCount] = useState<number>(0);
 
   useEffect(() => {
 
@@ -31,21 +31,21 @@ const DsTotalTenders: React.FC<TotalTendersProps> = React.memo(({ data }) => {
       return;
     }
 
-    let institutional = 0;
-    let corporate = 0;
+    // let institutional = 0;
+    // let corporate = 0;
 
-    data.forEach((tender) => {
-      if (!tender.type) {
-        // console.warn("Missing type for tender:", tender);
-        return;
-      }
+    // data.forEach((tender) => {
+    //   if (!tender.type) {
+    //     // console.warn("Missing type for tender:", tender);
+    //     return;
+    //   }
 
-      if (tender.type === "INSTITUTION") {
-        institutional++;
-      } else if (tender.type === "CORPORATE") {
-        corporate++;
-      }
-    });
+    //   if (tender.type === "INSTITUTION") {
+    //     institutional++;
+    //   } else if (tender.type === "CORPORATE") {
+    //     corporate++;
+    //   }
+    // });
 
     // console.log(
     //   "Institutional Count:",
@@ -55,9 +55,9 @@ const DsTotalTenders: React.FC<TotalTendersProps> = React.memo(({ data }) => {
     // );
 
     setTotalTenders(data.length);
-    setInstitutionalCount(institutional);
-    setCorporateCount(corporate);
-
+    // setInstitutionalCount(institutional);
+    // setCorporateCount(corporate);
+    console.log(data);
 
   }, [data]);
 
@@ -97,7 +97,7 @@ const DsTotalTenders: React.FC<TotalTendersProps> = React.memo(({ data }) => {
 
             ),
             status: "Institutional",
-            value: institutionalCount.toString(),
+            value: data.filter((x)=>x.customerType=== "Institutional").length.toString().padStart(2, "0"),
           },
           {
             addimage: (
@@ -114,7 +114,7 @@ const DsTotalTenders: React.FC<TotalTendersProps> = React.memo(({ data }) => {
 
             ),
             status: "Corporate",
-            value: corporateCount.toString().padStart(2, "0"),
+            value: data.filter((x)=>x.customerType=== "Corporate").length.toString().padStart(2, "0"),
           },
         ]}
       />} />

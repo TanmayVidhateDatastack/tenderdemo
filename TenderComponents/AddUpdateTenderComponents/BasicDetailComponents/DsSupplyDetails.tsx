@@ -36,7 +36,11 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
     );
     setSelectedSupplyPoint(option);
     // }
-  }, [tenderData.tenderSupplyConditions[0].supplyPoint,tenderData.id,supplyDetails.supplyPoints]);
+  }, [
+    tenderData.tenderSupplyConditions[0].supplyPoint,
+    tenderData.id,
+    supplyDetails.supplyPoints,
+  ]);
 
   useEffect(() => {
     const testReportRequired =
@@ -47,7 +51,11 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
     );
     setSelectedtTestReportRequired(option);
     // }
-  }, [tenderData.tenderSupplyConditions[0].testReportRequired,tenderData.id,supplyDetails.reportRequirements]);
+  }, [
+    tenderData.tenderSupplyConditions[0].testReportRequired,
+    tenderData.id,
+    supplyDetails.reportRequirements,
+  ]);
   useEffect(() => {
     const eligibility = [...tenderData.tenderSupplyConditions[0].eligibility];
     const selectedEl = eligibility.map((x) => {
@@ -57,78 +65,84 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
       };
     });
     setSelectedEligibility(selectedEl);
-  }, [tenderData.tenderSupplyConditions[0].eligibility,tenderData.id]);
+  }, [tenderData.tenderSupplyConditions[0].eligibility, tenderData.id]);
 
   return (
     <>
       <div>Supply Conditions </div>
-      <div className={styles.inputDetails}>
-        <DsSingleSelect
-          selectedOption={selectedSupplyPoint}
-          options={supplyDetails.supplyPoints}
-          label="Supply point"
-          placeholder={"Please select here"}
-          id={"supplyPoints"}
-          setSelectOption={(option) => {
-            if (typeof option.value == "string")
-              updateSupplyCondition("supplyPoint", option.value);
-          }}
-        ></DsSingleSelect>
-        <DsTextField
-          maxLength={10}
-          initialValue={tenderData.tenderSupplyConditions[0].consigneesCount.toString()}
-          inputType="positive"
-          label="Provide no. of consignees"
-          // placeholder="Please type here"
-          onBlur={(e) =>
-            updateSupplyCondition(
-              "consigneesCount",
-              Number((e.target as HTMLInputElement).value)
-            )
-          }
-        ></DsTextField>
-
-        <DsSingleSelect
-          selectedOption={selectedtTestReportRequired}
-          options={supplyDetails.reportRequirements}
-          label="Test report requirement"
-          placeholder={"Please select here"}
-          id={"reportReq"}
-          setSelectOption={(option) => {
-            if (typeof option.value == "string") {
-              updateSupplyCondition("testReportRequired", option.value);
+      <div className={styles.my1}>
+        <div className={styles.inputDetails}>
+          <DsSingleSelect
+            containerClasses={styles.fields}
+            selectedOption={selectedSupplyPoint}
+            options={supplyDetails.supplyPoints}
+            label="Supply point"
+            placeholder={"Please select here"}
+            id={"supplyPoints"}
+            setSelectOption={(option) => {
+              if (typeof option.value == "string")
+                updateSupplyCondition("supplyPoint", option.value);
+            }}
+          ></DsSingleSelect>
+          <DsTextField
+            containerClasses={styles.fields}
+            maxLength={10}
+            initialValue={tenderData.tenderSupplyConditions[0].consigneesCount?.toString()}
+            inputType="positiveInteger"
+            label="Provide no. of consignees"
+            // placeholder="Please type here"
+            onBlur={(e) =>
+              updateSupplyCondition(
+                "consigneesCount",
+                Number((e.target as HTMLInputElement).value)
+              )
             }
-          }}
-        ></DsSingleSelect>
+          ></DsTextField>
 
-        <DsMultiSelect
-          //  const selectedDepo=useMemo(()=>{
-          //    return tenderData.shippingLocations.map((x) => {
-          //       return (
-          //         formatedDepot.find((d) => Number(d.value) == x) || {
-          //           value: "",
-          //           label: "",
-          //         }
-          //       );
-          //     })
-          //   },[formatedDepot,tenderData.shippingLocations]);
-          selectedOptions={selectedEligibility}
-          options={supplyDetails.eligibility}
-          label="Eligibility"
-          placeholder={"Please search and select here"}
-          id={"eligibility"}
-          setSelectOptions={(options) => {
-            updateSupplyCondition(
-              "eligibility",
-              options.reduce<string[]>((acc, option) => {
-                if (typeof option.value === "string") {
-                  acc.push(option.value);
-                }
-                return acc;
-              }, [])
-            );
-          }}
-        ></DsMultiSelect>
+          <DsSingleSelect
+            containerClasses={styles.fields}
+            selectedOption={selectedtTestReportRequired}
+            options={supplyDetails.reportRequirements}
+            label="Test report requirement"
+            placeholder={"Please select here"}
+            id={"reportReq"}
+            setSelectOption={(option) => {
+              if (typeof option.value == "string") {
+                updateSupplyCondition("testReportRequired", option.value);
+              }
+            }}
+          ></DsSingleSelect>
+
+          <DsMultiSelect
+            //  const selectedDepo=useMemo(()=>{
+            //    return tenderData.shippingLocations.map((x) => {
+            //       return (
+            //         formatedDepot.find((d) => Number(d.value) == x) || {
+            //           value: "",
+            //           label: "",
+            //         }
+            //       );
+            //     })
+            //   },[formatedDepot,tenderData.shippingLocations]);
+            containerClasses={styles.fields}
+            selectedOptions={selectedEligibility}
+            options={supplyDetails.eligibility}
+            label="Eligibility"
+            placeholder={"Please search and select here"}
+            id={"eligibility"}
+            setSelectOptions={(options) => {
+              updateSupplyCondition(
+                "eligibility",
+                options.reduce<string[]>((acc, option) => {
+                  if (typeof option.value === "string") {
+                    acc.push(option.value);
+                  }
+                  return acc;
+                }, [])
+              );
+            }}
+          ></DsMultiSelect>
+        </div>
       </div>
     </>
   );

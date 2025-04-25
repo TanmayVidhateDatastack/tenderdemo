@@ -4,7 +4,7 @@ import Ds_checkbox from "@/Elements/DsComponents/DsCheckbox/dsCheckbox";
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import DsSingleSelect from "@/Elements/DsComponents/dsSelect/dsSingleSelect";
 import Image from "next/image";
-// import downloadReciept from "@/Common/TenderIcons/smallIcons/downloadReciept.svg";
+// import downloadReceipt from "@/Common/TenderIcons/smallIcons/downloadReceipt.svg";
 import styles from "./deposite.module.css";
 import eleStyles from "./tender.module.css";
 import { DsSelectOption } from "@/Common/helpers/types";
@@ -29,6 +29,7 @@ export type tenderFee = {
   currency: string;
   paidBy: string;
   paymentMode: string;
+  refundEligibility: string;
   paymentDueDate: string;
   notes: string;
   documents: tenderDocument[];
@@ -38,6 +39,7 @@ export interface DsFeesProps {
   title: string;
   id: string;
   mode: DsSelectOption[];
+  refund: DsSelectOption[];
   paidBy: DsSelectOption[];
   downloadVisible: boolean;
   paymentCompletedVisible: boolean;
@@ -60,6 +62,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
   type,
   id,
   mode,
+  refund,
   paidBy,
   downloadVisible,
   paymentCompletedVisible,
@@ -77,11 +80,9 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
 
   const [selectedPaymentMode, setSelectedPaymentMode] =
     useState<DsSelectOption>();
+  const [selectedRefund, setSelectedRefund] = useState<DsSelectOption>();
 
-
-  const [selectedPaidBy, setSelectedPaidBy] =
-    useState<DsSelectOption>();
-
+  const [selectedPaidBy, setSelectedPaidBy] = useState<DsSelectOption>();
 
   const handleAppliedSuppliedFetch = async () => {
     try {
@@ -115,193 +116,249 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
       if (modeValue) {
         const option = mode.find((x) => x.value == modeValue);
         if (option) setSelectedPaymentMode(option);
-        console.log("Fetched Notes Values are", tenderData.tenderFees.find((x) => x.feesType == type)?.instructionNotes);
-      } 
+        console.log(
+          "Fetched Notes Values are",
+          tenderData.tenderFees.find((x) => x.feesType == type)
+            ?.instructionNotes
+        );
+      }
     }
-    
+    if (refund) {
+      const refundValue = tenderData.tenderFees.find(
+        (x) => x.feesType == type
+      )?.refundEligibility;   
+      if (refundValue) {
+        const option = refund.find((x) => x.value == refundValue);
+        if (option) setSelectedRefund(option);
+        // console.log("Fetched Notes Values are", tenderData.tenderFees.find((x) => x.feesType == type)?.instructionNotes);
+      }
+    }
+
     const paidByvalue = tenderData.tenderFees.find(
       (x) => x.feesType == type
     )?.paidBy;
-    if (paidByvalue) {  
+    if (paidByvalue) {
       const option = depositeDocuments.find((x) => x.value == paidByvalue);
       // const option = mode.find((x) => x.value == paidByvalue);
       if (option) setSelectedPaidBy(option);
     }
-  }, [tenderData.tenderFees.find((x) => x.feesType == type),depositeDocuments,mode]);
-
+  }, [
+    tenderData.tenderFees.find((x) => x.feesType == type),
+    depositeDocuments,
+    mode,
+    refund,
+  ]);
 
   return (
     <>
-      <div>
-        <div className={styles.emdContainerHead} id={id}>
-          <div>{title}</div>
+      {/* <div> */}
+      <div className={styles.feeContainer} id={id}>
+        <div className={styles.headContainer}>
+          <div className={styles.headTitle}>{title}</div>
           {/* {downloadVisible && ( */}
           <DsButton
-            className={styles.downloadreciept}
-            label="Download Reciept"
+            className={styles.downloadReceipt}
+            buttonViewStyle="btnText"
+            label="Download Receipt"
             disable={true}
-            startIcon={<IconFactory name="downloadReciept" />}
+            startIcon={
+              <div
+                style={{
+                  width: "0.8em",
+                  height: "0.8em",
+                }}
+              >
+                <IconFactory name="downloadReceipt" disabled />
+              </div>
+            }
           />
-          {/* // { )} } */}
-        </div>
-        <div>
-          {paymentCompletedVisible && (
-            <>
-              <div>
-                <Ds_checkbox
-                  id={"payment"}
-                  name={"Payment Completed"}
-                  value={"Payment Completed"}
-                  label={"Payment Completed"}
-                />
-              </div>
-              <div className={eleStyles.inputDetails}>
-                <DsMultiSelect
-                  label="Add document type"
-                  id={"Documents"}
-                  options={[
-                    {
-                      label: "EMD Acknowledgement Receipt",
-                      value: "EMD_Acknowledgement_Receipt",
-                    },
-                    {
-                      label: "EMD Fund Transfer Confirmation",
-                      value: "EMD_Fund_Transfer_Confirmation",
-                    },
-                    { label: "EMD Transaction", value: "EMD_Transaction" },
-                    {
-                      label: "EMD Payment Receipt",
-                      value: "EMD_Payment_Receipt",
-                    },
-                  ]}
-                ></DsMultiSelect>
-                <div>
-                  <DsButton
-                    label="Add"
-                    buttonViewStyle="btnContained"
-                    buttonSize="btnSmall"
-                    className={styles.addBtn}
-                    onClick={() => {}}
-                  />
-                </div>
-              </div>
-            </>
-          )}
-        </div>
-        <div className={eleStyles.inputDetails}>
-          <div className={styles.fieldColors}>
-            <DsTextField
-              maxLength={10}
-              initialValue={
-                tenderData.tenderFees
-                  .find((x) => x.feesType == type)
-                  ?.amount.toString() || ""
-              }
-              label={"Amount"}
-              inputType="positive"
-              onBlur={(e) =>
-                updateTenderFee(
-                  type,
-                  "amount",
-                  Number((e.target as HTMLInputElement).value)
-                )
-              }
-            ></DsTextField>
-          </div>
-          <div className={styles.fieldColors}>
-            <DsSingleSelect
-              id={id + "_paidType1"}
-              selectedOption={selectedPaidBy}
-              options={depositeDocuments}
-              label="Paid by" 
-              placeholder={"Please select here"} 
-              setSelectOption={(option) => {
-                if (typeof option.value == "string") {
-                  updateTenderFee(type, "paidBy", option.value);
-                }
-              }}
-            ></DsSingleSelect>
-          </div>
-          <div className={styles.fieldColors}>
-            <DsSingleSelect
-              selectedOption={selectedPaymentMode}
-              id={id + "_modes1"}
-              options={mode}
-              label="Modes"
-              placeholder={"Please search and select here"}
-              setSelectOption={(option) => {
-                if (typeof option.value == "string") {
-                  updateTenderFee(type, "paymentMode", option.value);
-                }
-              }}
-            ></DsSingleSelect>
-          </div>
-          <div className={styles.fieldColors}>
-            <DatePicker
-              id={id + "dueDate"}
-              minDate={getYesterdayDate()}
-              initialDate={new Date(
-                tenderData.tenderFees.find((x) => x.feesType == type)
-                  ?.paymentDueDate || ""
-              ).toLocaleDateString("en-GB")}
-              placeholder="DD/MM/YYYY"
-              label="Due Date"
-              setDateValue={(date) => {
-                if (date instanceof Date) {
-                  updateTenderFee(type, "paymentDueDate", getTodayDate(date));
-                }
-              }}
-            />
-          </div>
         </div>
 
-        <div className={styles.notes}>
-          <h4>Notes</h4>
-          <div className={styles.fieldColors}>
-            <TextArea
-              initialValue={
-                tenderData.tenderFees.find((x) => x.feesType == type)
-                  ?.instructionNotes || ""
-              }
-              placeholder="Please type here"
-              disable={false}
-              minRows={2}
-              onBlur={(e) => {
-                updateTenderFee(
-                  type,
-                  "instructionNotes",
-                  (e.target as HTMLInputElement).value
-                );
-              }}
-            />
-          </div>
-        </div>
-        <div>
-          <DsCsvUpload
-            id={id + "UploadedDocuments"}
-            label="Attach File"
-            buttonViewStyle="btnText"
-            buttonSize="btnSmall"
-            startIcon={<IconFactory name="fileAttach" />}
-            onSelectedFileChange={(files) => {
-              const typeDocuments =
-                tenderData.tenderDocuments?.filter(
-                  (x) =>
-                    x.documentType == type &&
-                    x.category == type + "_INSTRUCTION"
-                ) || [];
-              updateDocuments(
-                files,
-                typeDocuments,
-                removeTenderDocument,
-                addNewTenderDocument,
-                type,
-                type + "_INSTRUCTION"
-              );
-            }}
-          ></DsCsvUpload>
-        </div>
+        {/* // { )} } */}
       </div>
+      <div>
+        {paymentCompletedVisible && (
+          <>
+            <div>
+              <Ds_checkbox
+                id={"payment"}
+                name={"Payment Completed"}
+                value={"Payment Completed"}
+                label={"Payment Completed"}
+              />
+            </div>
+            <div className={eleStyles.inputDetails}>
+              <DsMultiSelect
+                label="Add document type"
+                id={"Documents"}
+                options={[
+                  {
+                    label: "EMD Acknowledgement Receipt",
+                    value: "EMD_Acknowledgement_Receipt",
+                  },
+                  {
+                    label: "EMD Fund Transfer Confirmation",
+                    value: "EMD_Fund_Transfer_Confirmation",
+                  },
+                  { label: "EMD Transaction", value: "EMD_Transaction" },
+                  {
+                    label: "EMD Payment Receipt",
+                    value: "EMD_Payment_Receipt",
+                  },
+                ]}
+              ></DsMultiSelect>
+              <div>
+                <DsButton
+                  label="Add"
+                  buttonViewStyle="btnContained"
+                  buttonSize="btnSmall"
+                  className={styles.addBtn}
+                  onClick={() => {}}
+                />
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+      <div className={eleStyles.inputDetails}>
+        {/* <div className={styles.fieldColors}> */}
+        <DsTextField
+          containerClasses={styles.feeFields}
+          maxLength={10}
+          initialValue={
+            tenderData.tenderFees
+              .find((x) => x.feesType == type)
+              ?.amount?.toString() || ""
+          }
+          label={"Amount"}
+          inputType="positiveInteger"
+          onBlur={(e) =>
+            updateTenderFee(
+              type,
+              "amount",
+              Number((e.target as HTMLInputElement).value)
+            )
+          }
+        ></DsTextField>
+        {/* </div> */}
+        {/* <div className={styles.fieldColors}> */}
+        <DsSingleSelect
+          containerClasses={styles.feeFields}
+          id={id + "_paidType1"}
+          selectedOption={selectedPaidBy}
+          options={depositeDocuments}
+          label="Paid by"
+          placeholder={"Please select here"}
+          setSelectOption={(option) => {
+            if (typeof option.value == "string") {
+              updateTenderFee(type, "paidBy", option.value);
+            }
+          }}
+        ></DsSingleSelect>
+        {/* </div> */}
+        {/* <div className={styles.fieldColors}> */}
+        <DsSingleSelect
+          containerClasses={styles.feeFields}
+          selectedOption={selectedPaymentMode}
+          id={id + "_modes1"}
+          options={mode}
+          label="Modes"
+          placeholder={"Please search and select here"}
+          setSelectOption={(option) => {
+            if (typeof option.value == "string") {
+              updateTenderFee(type, "paymentMode", option.value);
+            }
+          }}
+        ></DsSingleSelect>
+        {/* </div> */}
+        {/* <div className={styles.fieldColors}> */}
+        <DsSingleSelect
+          containerClasses={styles.feeFields}
+          selectedOption={selectedRefund}
+          id={id + "_refund"}
+          options={refund}
+          label="Refund Eligibility"
+          setSelectOption={(option) => {
+            if (typeof option.value == "string") {
+              updateTenderFee(type, "refundEligibility", option.value);
+            }
+          }}
+        ></DsSingleSelect>
+        {/* </div> */}
+
+        {/* <div className={styles.fieldColors}> */}
+        <DatePicker
+          containerClasses={styles.feeFields}
+          id={id + "dueDate"}
+          minDate={getYesterdayDate()}
+          initialDate={
+            tenderData.tenderFees.find((x) => x.feesType == type)
+              ?.paymentDueDate
+              ? new Date(
+                  tenderData.tenderFees.find((x) => x.feesType == type)
+                    ?.paymentDueDate || ""
+                ).toLocaleDateString("en-GB")
+              : undefined
+          }
+          placeholder="DD/MM/YYYY"
+          label="Due Date"
+          setDateValue={(date) => {
+            if (date instanceof Date) {
+              updateTenderFee(type, "paymentDueDate", getTodayDate(date));
+            }
+          }}
+        />
+        {/* </div> */}
+      </div>
+
+      <div className={styles.notes}>
+        <span className={styles.notesTitle}>Notes</span>
+        {/* <div className={styles.fieldColors}> */}
+        <TextArea
+          containerClasses={styles.feeFields}
+          className={styles.notesField}
+          initialValue={
+            tenderData.tenderFees.find((x) => x.feesType == type)
+              ?.instructionNotes || ""
+          }
+          placeholder="Please type here"
+          disable={false}
+          minRows={2}
+          onBlur={(e) => {
+            updateTenderFee(
+              type,
+              "instructionNotes",
+              (e.target as HTMLInputElement).value
+            );
+          }}
+        />
+        {/* </div> */}
+      </div>
+      <div>
+        <DsCsvUpload
+          id={id + "UploadedDocuments"}
+          label="Attach File"
+          buttonViewStyle="btnText"
+          buttonSize="btnSmall"
+          startIcon={<IconFactory name="fileAttach" />}
+          onSelectedFileChange={(files) => {
+            const typeDocuments =
+              tenderData.tenderDocuments?.filter(
+                (x) =>
+                  x.documentType == type && x.category == type + "_INSTRUCTION"
+              ) || [];
+            updateDocuments(
+              files,
+              typeDocuments,
+              removeTenderDocument,
+              addNewTenderDocument,
+              type,
+              type + "_INSTRUCTION"
+            );
+          }}
+        ></DsCsvUpload>
+      </div>
+      {/* </div> */}
     </>
   );
 };

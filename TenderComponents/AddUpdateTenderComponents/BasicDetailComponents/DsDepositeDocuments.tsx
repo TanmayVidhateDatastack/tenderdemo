@@ -18,8 +18,10 @@ import DsFeesDocument from "./DsFeesDocument";
 import { useTenderData } from "../TenderDataContextProvider";
 
 import IconFactory from "@/Elements/IconComponent";
+import DsTenderDetails from "./DsTenderDetails ";
 export interface DepositDocument {
   modes: DsSelectOption[];
+  refunds:DsSelectOption[];
   // paidBy: DsSelectOption[];
 }
 // export interface Deposit {
@@ -50,6 +52,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
     updateTenderFee,
   } = useTenderData();
   const [mode, setMode] = useState<DsSelectOption[]>([]);
+  const [refund,setRefund]=useState<DsSelectOption[]>([]);
   const [paidBy, setPaidBy] = useState<DsSelectOption[]>([]);
   const [applicablefees, SetApplicablefees] = useState<DsSelectOption[]>([]);
   const [paymentCheckVisible, setPaymentCheckVisible] =
@@ -61,7 +64,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   useEffect(() => {
     if (role == "MAKER" || role == "CHECKER") {
       setPaymentCheckVisible(false);
-    } else {
+    } else { 
       setPaymentCheckVisible(true);
     }
   }, [role]);
@@ -70,8 +73,9 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
     if (depositeDocument) {
       const modesData = depositeDocument[0]?.modes || [];
       // const paidByData = depositeDocument[0]?.paidBy || [];
-
+      const refundData = depositeDocument[0]?.refunds || [];
       setMode(modesData);
+      setRefund(refundData); 
       // setPaidBy(paidByData);
     }
     if (applicableDeposits && applicableDeposits.length > 0) {
@@ -133,7 +137,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   };
 
   useEffect(() => {
-    applicablefees.forEach((opt) => {
+    applicablefees.forEach((opt) => { 
       const id = opt.value.toString(); 
       // if(tenderData.tenderFees.find((x)=> x.feesType==id)?.status=="INAC"){ 
       //   console.log("Inactive ",id);
@@ -248,9 +252,9 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
                   id={deposit.value + "DocumentView"}
                   mode={mode}
                   paidBy={paidBy}
-                  downloadVisible={true} 
-                  paymentCompletedVisible={paymentCheckVisible}
-                />
+                  downloadVisible={true}
+                  paymentCompletedVisible={paymentCheckVisible} 
+                  refund={refund} />
               </div>
             )
           );
@@ -264,10 +268,10 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
                 {applicablefees.map((checkbox, index) => (
                   <Ds_checkbox
                     key={index}
-                    id={checkbox.value.toString()}
+                    id={checkbox.value.toString()} 
                     name={checkbox.label}
-                    value={checkbox.value.toString()}
-                    label={checkbox.label}
+                    value={checkbox.value.toString()} 
+                    label={checkbox.label} 
                     defaultChecked={tenderDataCopy.id?tenderDataCopy?.tenderFees?.some(
                       (fee) => fee.feesType == checkbox.value
                     ):true}

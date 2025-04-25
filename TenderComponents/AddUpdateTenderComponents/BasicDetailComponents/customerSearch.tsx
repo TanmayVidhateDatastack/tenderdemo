@@ -12,6 +12,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import React from "react";
 import DsSearchComponent from "@/Elements/DsComponents/DsSearch/searchComponent";
 import { TenderData } from "../TenderDataContextProvider";
+import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 
 //  interface CustomerSearchProps {
 //   orderData: TenderData | null;
@@ -102,6 +103,7 @@ const CustomerSearch: React.FC<{
 
   return (
     <DsSearchComponent
+    containerClasses={styles.fields}
       id="customerSearch"
       initialValue={customer}
       dataListId="customerSearchDatalist" 

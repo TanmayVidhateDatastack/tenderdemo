@@ -41,7 +41,7 @@ const FetchCustomer: React.FC<FetchCustomerProps> = ({
     try {
       const response = await fetchData({
         // url: `http://172.145.1.102:7005/api/tenders/${customerId}/pastTenders`,
-        url: getTendersByCustomerId(customerId.toString()),
+        url: getTendersByCustomerId(customerId),
         method: "GET",
       });
       if (response.code === 200) {
@@ -49,6 +49,7 @@ const FetchCustomer: React.FC<FetchCustomerProps> = ({
           tag: [
             <RadioButton
               id={tender.tenderNumber}
+              key=""
               label=""
               value=""
               onSelectedRadioButton={() => setSelectedTender(tender)}

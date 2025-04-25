@@ -1,19 +1,19 @@
 "use client";
 import { TenderDataProvider } from "@/TenderComponents/AddUpdateTenderComponents/TenderDataContextProvider";
 import DsTenderIdPage from "./tenderIdPage";
+import { closeAllContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import Toaster from "@/Elements/DsComponents/DsToaster/DsToaster";
- export type ParamType = {
+export type ParamType = {
   params: {
     TenderId: string | number;
   };
 };
-export default function Home(param:ParamType) {
-
-const paramOrderId: string | number = param?.params?.TenderId;
-const storedStatus = sessionStorage?.getItem("tenderStatus")||undefined;
- 
+export default function Home(param: ParamType) {
+  const paramOrderId: string | number = param?.params?.TenderId;
+  const storedStatus = sessionStorage?.getItem("tenderStatus") || undefined;
+  closeAllContext();
   return (
-    <> 
+    <>
       <TenderDataProvider>
         <DsTenderIdPage paramOrderId={paramOrderId} tenderStatus={storedStatus}/>    
         <Toaster
@@ -28,4 +28,4 @@ const storedStatus = sessionStorage?.getItem("tenderStatus")||undefined;
 
     </>
   );
-} 
+}

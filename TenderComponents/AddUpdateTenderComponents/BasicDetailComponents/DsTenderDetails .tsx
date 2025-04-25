@@ -136,7 +136,10 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
               className={deptStyle.copyBtn}
               startIcon={
                 <div style={{ width: "0.95625em", height: "1.125em" }}>
-                  <IconFactory name="copy" />
+                  <IconFactory
+                    name="copy"
+                    disabled={tenderData.customerId ? false : true}
+                  />
                 </div>
               }
               // disable
@@ -146,221 +149,200 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
                 // setNotiType("info");
                 displayContext(e, "contextMenuId5", "horizontal", "center");
               }}
-            ></DsButton>
+            />
           </div>
         )}
-        <div className={deptStyle.fields}>
-          <DsSingleSelect
-            id="CustomerAddress"
-            placeholder="Select Customer Location"
-            options={customerLocations.map((addr) => ({
-              value: addr.id.toString(),
+        <DsSingleSelect
+          containerClasses={styles.fields}
+          id="CustomerAddress"
+          placeholder="Select Customer Location"
+          options={customerLocations.map((addr) => ({
+            value: addr.id.toString(),
 
-              label: `${addr.city}, ${addr.state}, ${addr.pinCode}`,
-              key: addr.id.toString(),
-            }))}
-            selectedOption={{
-              label: tenderData.tenderDetails.customerAddressName,
-              value: tenderData.customerAddressId.toString(),
-            }}
-            setSelectOption={(option) => {
-              if (typeof option.value == "string") {
-                updateTenderData("customerAddressId", Number(option.value));
-                updateTenderData(
-                  "tenderDetails.customerAddressName",
-                  option.label
-                );
-
-                // console.log("customerLocationId",option.value)
-              }
-            }}
-          />
-        </div>
-        <div className={deptStyle.fields}>
-          <DsTextField
-            initialValue={tenderData.tenderNumber}
-            maxLength={50}
-            label="Tender number"
-            // placeholder="Please Type Here"
-            onBlur={(e) =>
-              updateTenderData(
-                "tenderNumber",
-                (e.target as HTMLInputElement).value
-              )
-            }
-          ></DsTextField>
-        </div>
-        <div className={deptStyle.fields}>
-          <DsSingleSelect
-            options={tenderDetails.tenderType}
-            label="Tender type"
-            // placeholder={"Tender type"}
-            id={"tenderType"}
-            selectedOption={selectedTenderType}
-            setSelectOption={(option) => {
-              if (typeof option.value == "string") {
-                updateTenderData("tenderType", option.value);
-                console.log("tendertype", option.label);
-              }
-            }}
-          ></DsSingleSelect>
-        </div>
-        <div className={deptStyle.fields}>
-          <DsDatePicker
-            initialDate={new Date(tenderData.issueDate).toLocaleDateString(
-              "en-GB"
-            )}
-            maxDate={new Date()}
-            id={"issueDate"}
-            setDateValue={(date) => {
-              if (date instanceof Date) {
-                updateTenderData("issueDate", getTodayDate(date));
-              }
-            }}
-            // disable={true}
-            placeholder="DD/MM/YYYY"
-            label="Tender issue date"
-          />
-        </div>
-        <div className={deptStyle.fields}>
-          <DsDatePicker
-            initialDate={new Date(
-              tenderData.lastPurchaseDate
-            ).toLocaleDateString("en-GB")}
-            minDate={getYesterdayDate()}
-            id={"lastPurchaseDate"}
-            setDateValue={(date) => {
-              if (date instanceof Date) {
-                updateTenderData("lastPurchaseDate", getTodayDate(date));
-              }
-            }}
-            // disable={true}
-            placeholder="DD/MM/YYYY"
-            label="Last date of purchasing"
-          />
-        </div>
-        <div className={deptStyle.fields}>
-          <DsDatePicker
-            initialDate={new Date(tenderData.submissionDate).toLocaleDateString(
-              "en-GB"
-            )}
-            minDate={getYesterdayDate()}
-            id={"submissionDate"}
-            setDateValue={(date) => {
-              if (date instanceof Date) {
-                updateTenderData("submissionDate", getTodayDate(date));
-              }
-            }}
-            // disable={true}
-            placeholder="DD/MM/YYYY"
-            label="Submission date"
-          />
-        </div>
-        <div className={deptStyle.fields}>
-          <DsTextField
-            maxLength={6}
-            initialValue={tenderData.rateContractValidity}
-            inputType="positive"
-            label="Rate contract validity"
-            onBlur={(e) =>
-              updateTenderData(
-                "rateContractValidity",
-                (e.target as HTMLInputElement).value
-              )
-            }
-          ></DsTextField>
-        </div>
-        <div className={deptStyle.fields}>
-          <DsSingleSelect
-            selectedOption={selectedSubmissionMode}
-            options={tenderDetails.submissionMode}
-            // type={"single"}
-            label="Submission mode"
-            id={"submissionMode"}
-            setSelectOption={(option) => {
-              if (typeof option.value == "string") {
-                updateTenderData("submissionMode", option.value);
-              }
-            }}
-          ></DsSingleSelect>
-        </div>
-        <div className={deptStyle.fields}>
-          <div className={deptStyle.fields}>
-            <div className={deptStyle.fields}>
-              <DsTextField
-                initialValue={tenderData.deliveryPeriod?.toString()}
-                maxLength={5}
-                inputType="positive"
-                label={"Delivery period (In days)"}
-                onChange={(e) => {
-                  const input = e.target as HTMLInputElement;
-                  let value = input.value;
-
-                  // Prevent multiple leading zeros
-                  if (/^0{2,}/.test(value)) {
-                    value = "0";
-                    input.value = value; // update input field manually
-                  } else if (/^0\d+/.test(value)) {
-                    // Remove leading zero before digits
-                    value = value.replace(/^0+/, "");
-                    input.value = value; // update input field manually
-                  }
-                }}
-                onBlur={(e) =>
-                  updateTenderData(
-                    "deliveryPeriod",
-                    Number((e.target as HTMLInputElement).value)
-                  )
+            label: `${addr.city}, ${addr.state}, ${addr.pinCode}`,
+            key: addr.id.toString(),
+          }))}
+          selectedOption={
+            tenderData.customerAddressId &&
+            tenderData.tenderDetails.customerAddressName
+              ? {
+                  label: tenderData.tenderDetails.customerAddressName,
+                  value: tenderData.customerAddressId.toString(),
                 }
-              />
-            </div>
-          </div>
-        </div>
-        <div className={deptStyle.fields}>
-          <DsTextField
-            initialValue={tenderData.extendedDeliveryPeriod?.toString()}
-            maxLength={5}
-            inputType="positive"
-            label={"Extended delivery period (In days)"}
-            // placeholder={"Please type or select"}
-            onBlur={(e) =>
+              : undefined
+          }
+          setSelectOption={(option) => {
+            if (typeof option.value == "string") {
+              updateTenderData("customerAddressId", Number(option.value));
               updateTenderData(
-                "extendedDeliveryPeriod",
-                Number((e.target as HTMLInputElement).value)
-              )
-            }
-          ></DsTextField>
-        </div>
-        <div className={deptStyle.fields}>
-          <DsTextField
-            minimumNumber={100}
-            initialValue={tenderData.lateDeliveryPenalty.toString()}
-            label="Penalty for late delivery %"
-            inputType="positive"
-            // placeholder="Please type here"
-            onBlur={(e) =>
-              updateTenderData(
-                "lateDeliveryPenalty",
-                Number((e.target as HTMLInputElement).value)
-              )
-            }
-          ></DsTextField>
-        </div>
-        <div className={deptStyle.fields}>
+                "tenderDetails.customerAddressName",
+                option.label
+              );
 
-          <DsTextField
-            maxLength={2000}
-            initialValue={tenderData.tenderUrl}
-            label="Tender site/url"
-            onBlur={(e) =>
-              updateTenderData(
-                "tenderUrl",
-                (e.target as HTMLInputElement).value
-              )
+              // console.log("customerLocationId",option.value)
             }
-          ></DsTextField>
-
-        </div>
+          }}
+        />
+        <DsTextField
+          containerClasses={styles.fields}
+          initialValue={tenderData.tenderNumber}
+          maxLength={50}
+          label="Tender number"
+          inputType="alphaNumeric"
+          // placeholder="Please Type Here"
+          onBlur={(e) =>
+            updateTenderData(
+              "tenderNumber",
+              (e.target as HTMLInputElement).value
+            )
+          }
+        ></DsTextField>
+        <DsSingleSelect
+          containerClasses={styles.fields}
+          options={tenderDetails.tenderType}
+          label="Tender type"
+          // placeholder={"Tender type"}
+          id={"tenderType"}
+          selectedOption={selectedTenderType}
+          setSelectOption={(option) => {
+            if (typeof option.value == "string") {
+              updateTenderData("tenderType", option.value);
+              console.log("tendertype", option.label);
+            }
+          }}
+        ></DsSingleSelect>
+        <DsDatePicker
+          containerClasses={styles.fields}
+          initialDate={
+            tenderData.issueDate
+              ? new Date(tenderData.issueDate).toLocaleDateString("en-GB")
+              : undefined
+          }
+          maxDate={new Date()}
+          id={"issueDate"}
+          setDateValue={(date) => {
+            if (date instanceof Date) {
+              updateTenderData("issueDate", getTodayDate(date));
+            }
+          }}
+          // disable={true}
+          placeholder="DD/MM/YYYY"
+          label="Tender issue date"
+        />
+        <DsDatePicker
+          containerClasses={styles.fields}
+          initialDate={
+            tenderData.lastPurchaseDate
+              ? new Date(tenderData.lastPurchaseDate).toLocaleDateString(
+                  "en-GB"
+                )
+              : undefined
+          }
+          minDate={getYesterdayDate()}
+          id={"lastPurchaseDate"}
+          setDateValue={(date) => {
+            if (date instanceof Date) {
+              updateTenderData("lastPurchaseDate", getTodayDate(date));
+            }
+          }}
+          // disable={true}
+          placeholder="DD/MM/YYYY"
+          label="Last date of purchasing"
+        />
+        <DsDatePicker
+          containerClasses={styles.fields}
+          initialDate={
+            tenderData.submissionDate
+              ? new Date(tenderData.submissionDate).toLocaleDateString("en-GB")
+              : undefined
+          }
+          minDate={getYesterdayDate()}
+          id={"submissionDate"}
+          setDateValue={(date) => {
+            if (date instanceof Date) {
+              updateTenderData("submissionDate", getTodayDate(date));
+            }
+          }}
+          // disable={true}
+          placeholder="DD/MM/YYYY"
+          label="Submission date"
+        />
+        <DsTextField
+          containerClasses={styles.fields}
+          maxLength={6}
+          initialValue={tenderData.rateContractValidity}
+          inputType="positiveInteger"
+          label="Rate contract validity"
+          onBlur={(e) =>
+            updateTenderData(
+              "rateContractValidity",
+              (e.target as HTMLInputElement).value
+            )
+          }
+        ></DsTextField>
+        <DsSingleSelect
+          containerClasses={styles.fields}
+          selectedOption={selectedSubmissionMode}
+          options={tenderDetails.submissionMode}
+          // type={"single"}
+          label="Submission mode"
+          id={"submissionMode"}
+          setSelectOption={(option) => {
+            if (typeof option.value == "string") {
+              updateTenderData("submissionMode", option.value);
+            }
+          }}
+        ></DsSingleSelect>
+        <DsTextField
+          containerClasses={styles.fields}
+          initialValue={tenderData.deliveryPeriod?.toString()}
+          maxLength={5}
+          inputType="positiveInteger"
+          label={"Delivery period (In days)"}
+          onBlur={(e) =>
+            updateTenderData(
+              "deliveryPeriod",
+              Number((e.target as HTMLInputElement).value)
+            )
+          }
+        />
+        <DsTextField
+          containerClasses={styles.fields}
+          initialValue={tenderData.extendedDeliveryPeriod?.toString()}
+          maxLength={5}
+          inputType="positiveInteger"
+          label={"Extended delivery period (In days)"}
+          onBlur={(e) =>
+            updateTenderData(
+              "extendedDeliveryPeriod",
+              Number((e.target as HTMLInputElement).value)
+            )
+          }
+        ></DsTextField>
+        <DsTextField
+          maximumNumber={100}
+          containerClasses={styles.fields}
+          maxLength={5}
+          initialValue={tenderData.lateDeliveryPenalty?.toString()}
+          label="Penalty for late delivery %"
+          inputType="positive"
+          iconEnd={<pre>{" %"}</pre>}
+          onBlur={(e) =>
+            updateTenderData(
+              "lateDeliveryPenalty",
+              Number((e.target as HTMLInputElement).value)
+            )
+          }
+        ></DsTextField>
+        <DsTextField
+          containerClasses={styles.fields}
+          maxLength={2000}
+          initialValue={tenderData.tenderUrl}
+          label="Tender site/url"
+          onBlur={(e) =>
+            updateTenderData("tenderUrl", (e.target as HTMLInputElement).value)
+          }
+        ></DsTextField>
       </div>
     </>
   );
