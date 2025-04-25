@@ -43,8 +43,6 @@ import DsAdvanceFilterPane from "@/TenderComponents/TenderLogComponents/DsAdvanc
 import style from "./page.module.css";
 import IconFactory from "@/Elements/IconComponent";
 import { areSearchCustomers } from "@/TenderComponents/AddUpdateTenderComponents/BasicDetailComponents/customerSearch";
-import Toaster from "@/Elements/DsComponents/DsToaster/DsToaster";
-
 const metaDataTypes = ["TENDER_TYPE", "CUSTOMER_TYPE", "TENDER_STATUS"];
 
 //valid code types for metadata
@@ -65,7 +63,7 @@ const metaDataTypes = ["TENDER_TYPE", "CUSTOMER_TYPE", "TENDER_STATUS"];
 //   "JUSTIFICATION_REJECT_TYPE"
 // ];
 
-interface Metadata {
+ export interface Metadata {
   documentType?: CodeItem[];
   eligibility?: CodeItem[];
   feesType?: CodeItem[];
@@ -81,13 +79,11 @@ interface Metadata {
   justificationRejectType?: CodeItem[];
   customerType?: CodeItem[];
 }
-
 type Depot = {
   id: number;
   name: string;
   code: string;
 };
-
 export default function Home() {
   const [data, setData] = useState<Tender[]>([]); //for table data
   const [searchQuery, setSearchQuery] = useState(""); //for search query
@@ -96,8 +92,7 @@ export default function Home() {
     {}
   );
   const [isFilterActive, setIsFilterActive] = useState(true);
-  // const [enrichedTenders, setEnrichedTenders] = useState<Tender[]>([]);
-  // const [filteredData, setFilteredData] = useState<Tender[]>([]); //for filtered table data
+
   const [tenderMetadataFilters, setTenderMetadataFilters] = useState<{
     userId: number;
     metaDataTypes: string[];
@@ -108,19 +103,14 @@ export default function Home() {
   const [fetchedMetadata, setFetchedMetadata] = useState<Metadata>({});
   // console.log(isFilterActive);
   const [isAddWhite, setIsAddWhite] = useState<boolean>(false);
-
   const [tenderType, setTenderType] = useState<CodeItem[]>([]);
   const [customerType, setCustomerType] = useState<CodeItem[]>([]);
-
   const [tenderStatus, setTenderStatus] = useState<CodeItem[]>([]);
   const [applierSupplier, setApplierSupplier] = useState<CodeItem[]>([]);
   const [depotList, setDepotList] = useState<Depot[]>([]);
   // const [uniqueAppliers, setUniqueAppliers] = useState<{ label: string; value: string }[]>([]);
-
   const permissions = useAppSelector((state: RootState) => state.permissions);
-
   const { newButtonVisible } = permissions;
-
   const [tempTableData, setTempTableData] = useState<tableData>({
     className: style.tenderTable,
     type: "InterActive",
@@ -230,7 +220,6 @@ export default function Home() {
     ],
     rows: [],
   });
-
   const calculateDueStatus = (submittionDate: string) => {
     if (!submittionDate) return "-"; // Handle empty values
 
@@ -841,10 +830,10 @@ export default function Home() {
                 onHover={() => {
                   setIsAddWhite(true);
                   // changeImage(e, addIconWhite);
-                }}  
+                }}
                 onMouseLeave={() => {
-                  setIsAddWhite(false);    
-                  // changeImage(e, addIcon);  
+                  setIsAddWhite(false);
+                  // changeImage(e, addIcon);
                 }}
                 tooltip="variants : btnPrimary, btnOutlined, btnMedium"
                 label="New"
@@ -920,8 +909,10 @@ export default function Home() {
             filterFor: "Customer Types",
             filterType: "MultiSelection",
             multiSelectOptions: customerType.map((item) => ({
+            
               label: item.codeDescription,
               value: item.codeValue,
+        
             })),
           },
           {
@@ -1018,15 +1009,6 @@ export default function Home() {
           </div>
         }
       ></ContextMenu>
-
-<Toaster
-            id="fetchCustomer"
-            type="success"
-            message="The information has been fetched"
-            duration={2000}
-            position={"top"}
-            handleClose={() => {}}
-          />
     </>
   );
 }

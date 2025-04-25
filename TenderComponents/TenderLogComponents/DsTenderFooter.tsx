@@ -283,7 +283,7 @@ const {
             />
           </>
         );
-      } else if (role === "CHECKER") {
+      } else if (role === "MAKER") {
         contextContent = (
           <>
            <PopupOpenButton
@@ -308,7 +308,7 @@ const {
           />
           </>
         );
-      } else if (role === "MAKER") {
+      } else if (role === "CHECKER") {
         contextContent = (
           <DsButton
             label="Submit for Review"

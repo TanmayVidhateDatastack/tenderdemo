@@ -12,18 +12,13 @@ import {
 import { useTenderData } from "../TenderDataContextProvider";
 import DsDatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
-import Image from "next/image";
 import fetchData from "@/Common/helpers/Method/fetchData";
-// import copybtnenabled from "@/Common/TenderIcons/smallIcons/copyEnabled.svg";
-import DsAddressSelect from "@/Elements/DsComponents/dsSelect/dsAddressSelect";
 import CustomerSearch from "./customerSearch";
 import IconFactory from "@/Elements/IconComponent";
 import { getYesterdayDate } from "@/Common/helpers/Method/conversion";
 import ContextMenu, {
   displayContext,
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
-import fetchCustomer, { handleFetchcustumers } from "./fetchcustomerComponent";
-import DsNavTo from "@/Elements/ERPComponents/DsNavigationComponent/DsNavTo";
 import FetchCustomer from "./fetchcustomerComponent";
 const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
   const [fetchVisible, setFetchVisible] = useState(true);
@@ -120,7 +115,6 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         }
         showArrow={true}
       />
-
       <div className={styles.inputDetails}>
         <div className={deptStyle.fields}>
           <CustomerSearch
@@ -353,6 +347,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
           ></DsTextField>
         </div>
         <div className={deptStyle.fields}>
+
           <DsTextField
             maxLength={2000}
             initialValue={tenderData.tenderUrl}
@@ -364,6 +359,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
               )
             }
           ></DsTextField>
+
         </div>
       </div>
     </>

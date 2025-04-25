@@ -68,7 +68,8 @@ const DsBasicDetails = () => {
         "Content-Type": "application/json",
         "x-tender-codes": JSON.stringify(metaDataTypes), 
       }});
-      if (res.code === 200) {
+      if (res.code === 200)
+         {
         const result = res.result;
         console.log("GetAllMetaData",result); 
         setMetadata(result);

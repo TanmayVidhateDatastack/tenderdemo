@@ -88,13 +88,11 @@ const FetchCustomer: React.FC<FetchCustomerProps> = ({
       console.error("Error fetching data", error);
     }
   }, [customerId]);
-
   const {fetchAndSetPreviousTender}=useTenderData();
+
   useEffect(() => {
     handleFetch();
   }, [handleFetch]);
-
-
   return (
     <>
       <div className={style.fetcustomerContainer}>
@@ -127,8 +125,7 @@ const FetchCustomer: React.FC<FetchCustomerProps> = ({
           
           <DsButton
             label="Fetch"
-            onClick={() => {
-              
+            onClick={() => {    
               fetchAndSetPreviousTender(selectedTender.tenderId);
               closeContext("contextMenuId5");
               showToaster("fetchCustomer");
