@@ -107,13 +107,13 @@ const DsBasicDetails = () => {
             label: item.codeDescription,
           })),
           reportRequirements: result.testReportRequirement.map((item: any) => ({
-            value: item.codeValue,
+            value: item.codeValue, 
             label: item.codeDescription,
           })),
           eligibility: result.eligibility.map((item: any) => ({
-            value: item.codeValue,
+            value: item.codeValue, 
             label: item.codeDescription,
-          })),
+          })), 
         };
         setSupplyDetails(supplyDetailsData);
 

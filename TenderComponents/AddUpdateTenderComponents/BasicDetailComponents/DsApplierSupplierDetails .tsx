@@ -110,7 +110,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
             onSelect: onStockistSelects,
             id: "SuppliedBy",
             selectedOption: selecteds,
-            label: "Search Stockist",
+            label: "Search Stockist", 
           },
           label: "Stockist",
         });

@@ -126,7 +126,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     if (refund) {
       const refundValue = tenderData.tenderFees.find(
         (x) => x.feesType == type
-      )?.refundEligibility;
+      )?.refundEligibility;   
       if (refundValue) {
         const option = refund.find((x) => x.value == refundValue);
         if (option) setSelectedRefund(option);
