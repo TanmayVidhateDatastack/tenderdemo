@@ -101,7 +101,6 @@ const DsTenderIdPage: React.FC<{
   }, [tenderData]);
   useEffect(() => {
     console.log("orderId", orderId);
-
     if (orderId?.toString().toLowerCase() == "new") {
       setDisplayFlag("New");
       appTitle.current = "New Order";
@@ -121,6 +120,7 @@ const DsTenderIdPage: React.FC<{
     }
   }, [orderId]);
 
+  
   useEffect(() => {
     if (tenderDataCopy.id) {
       appTitle.current =
