@@ -192,15 +192,17 @@ const DsBasicDetails = () => {
 
   return (
     <>
-      <div>
+      <div className={styles.container}>
         <DsTenderDetails tenderDetails={tenderDetails} />
       </div>
       <span className={styles.Seperator}></span>
-      <div>
+      <div className={styles.container}>
+
         <DsApplierSupplierDetails />
       </div>
       <span className={styles.Seperator}></span>
-      <div>
+      <div className={styles.container}>
+
         <DsDepositeDocuments
           setDepositeDocuments={(docs) => {
             setDepositeDocuments(docs);
@@ -211,11 +213,12 @@ const DsBasicDetails = () => {
         />
       </div>
       <span className={styles.Seperator}></span>
-      <div>
+      <div className={styles.container}>
+
         <DsSupplyDetails supplyDetails={supplyDetails} />
-      </div>
+      {/* </div>
       <span className={styles.Seperator}></span>
-      <div>
+      <div> */}
         <DsApplicableConditions
           applicableConditions={applicableSupplyConditions}
         />

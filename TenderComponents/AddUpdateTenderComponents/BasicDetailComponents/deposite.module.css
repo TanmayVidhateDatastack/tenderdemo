@@ -1,6 +1,6 @@
 .container{
     width: 100%;
-    padding: var(--ds-padding);
+    padding-top: var(--ds-padding);
     background: inherit;
   }
   
@@ -20,13 +20,30 @@
   }
   .emdContainer2{
     margin-top: 10px;
-    border: 1px solid var(--secondary);
+    border: 1px solid var(--grey-200);
     background: inherit;
     background-color: #D9D9D91A;
     padding: 5px;
     width: 100%;
+    border-radius: 0.25em;
+    padding:0.5em;
+    position: relative;
+min-height: fit-content;
     }
-  
+    .conditionHolder{
+      min-width: 100%;
+      display: flex;
+      justify-content: end;
+    }
+    .conditions{
+      margin-top:-2.4em;
+    }
+  .headContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.6em;
+  }
   .emdContainer{
     background-color: transparent;
     padding: 5px;
@@ -39,29 +56,20 @@
       align-items: center; 
     }
   
-  .emdContainerHead{
-    display: flex;
-    justify-content: space-between;
-    /* justify-content: end; */
-    background: inherit !important;
-  } 
-  .emdContainerHead2{
-    display: flex;
-    /* justify-content: space-between; */
-    justify-content: end;
-    background: inherit;
-  } 
-   
-  .fields{
-    background-color: var(--background);
-    color: var(--dark);
-    font-size: var(--subtitle2);
-    background: inherit;
-  } 
 
-  .fieldColors{
+  .headTitle{
+    font-size: var(--font-14);
+    color: var(--grey-800);
+    /* font-weight: 600; */
+    /* margin-left: 10px; */
+    /* margin-top: 5px; */
+  }
+  
+
+  .feeFields{
     background-color: var(--background) !important;
     border-radius: 4px;
+    margin:0;
   }
   
   .notes{
@@ -69,7 +77,15 @@
     padding-top: 20px;
     background-color:transparent;
   }
-  
+  .notesTitle{
+    font-size:var(--font-13);
+    color: var(--grey-700);
+    margin-bottom:0.5em;
+  }
+  .notesField{
+    resize:vertical;
+    min-height: 4em;
+  }
   .optionBtn{
     background-color: transparent !important;
     color: var(--text-primary) !important;
@@ -80,18 +96,21 @@
     /* color: var(--text-white) !important; */
     border-radius: 25px !important;
   }
-  .copyBtn{
-    background-color: transparent !important;
-    color: var(--text-primary) !important;
-    max-height: 2.25em !important;
-    height: 2.25em !important;
-    border: 0px !important;
+  .copyBtnDiv{
+    /* background-color: transparent !important; */
+    /* color: var(--text-primary) !important; */
+    /* max-height: 2.25em !important; */
+    /* height: 2.25em !important; */
+    /* border: 0px !important; */
     display: flex;
     justify-content: flex-start;
+    margin: 0;
     align-items: center;
     text-align: left;
   }
-  
+  .copyBtn{
+    padding: var(--ds-padding);
+  }
  
  
   .copyBtn:hover{
@@ -103,18 +122,14 @@
     /* border-radius: 25px !important; */
   }
 
-  .fields{
-    margin-bottom: 1.3rem !important;
-    margin-left: 0.1rem !important;
-    margin-right: 0.1rem !important;
-    /* gap: 1.3rem !important; */
-  }
-  
   .addBtn{
-    min-width: 80% !important;
+    min-width: 100% !important;
     max-width: fit-content !important;
     background-color: var(--primary) !important;
     color: var(--background) !important;
+    margin-right: 0;
+    margin-left: 0;
+    margin-top:1em;
   }
   .addBtn:hover{
     background-color: var(--primary);
@@ -127,8 +142,9 @@
   .applicableDeposit{
     padding: 8px;
   }
-  .downloadreciept{
+  .downloadReceipt{
     background-color: inherit !important;
+    margin-top:0;
   }
   .fetchButtons{
     display: flex;

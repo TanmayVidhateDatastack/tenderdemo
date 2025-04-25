@@ -195,137 +195,126 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
       );
     });
     setSelectedDepo(depo);
-  }, [formatedDepot, tenderDataCopy.shippingLocations,tenderData.id]);
+  }, [formatedDepot, tenderDataCopy.shippingLocations, tenderData.id]);
 
   return (
-    <>
+    <div className={deptStyles.container}>
       <div className={styles.inputDetails}>
-        <div className={deptStyles.fields}>
-          <DsSelectMultiLevel
-            isSearchable={true}  
-            options={appliedBy}
-            label="Applied by"
-            {...(tenderData.id
-              ? {
-                  selectedOption: {
-                    attributes: { type: tenderData.applierType },
-                    id: "",
-                    label: tenderData.tenderDetails.appliedBy,
-                  },
-                }
-              : {})}
-            placeholder={"Please search or select here"}
-            id={"appliedBy"}
-            onSelect={handleAppliedBySelect}
-            setSelectOption={(isDataListOptions, option) => {
-              setSelected(option);
-              // console.log("applieridoption", option);
-              if (isDataListOptions) {
-                updateTenderData("applierId", Number(option.id));
-                updateTenderData("applierType", option.attributes.type);
-                updateTenderData("tenderDetails.appliedBy", option.value || "");
-              } else if (typeof option.value == "string") {
-                updateTenderData("applierId", option.value.split("_")[0]);
-                updateTenderData("applierType", option.value.split("_")[1]);
-                updateTenderData("tenderDetails.appliedBy", option.label || "");
+        <DsSelectMultiLevel
+          containerClasses={styles.fields}
+          isSearchable={true}
+          options={appliedBy}
+          label="Applied by"
+          {...(tenderData.id
+            ? {
+                selectedOption: {
+                  attributes: { type: tenderData.applierType },
+                  id: "",
+                  label: tenderData.tenderDetails.appliedBy,
+                },
               }
-            }}
-            isOpen={true}
-          ></DsSelectMultiLevel>
-        </div>
-        <div className={deptStyles.fields}>
-          <DsSelectMultiLevel
-            isSearchable={true}
-            options={suppliedBy}
-            {...(tenderData.id
-              ? {
-                  selectedOption: {
-                    attributes: { type: tenderData.supplierType },
-                    id: "",
-                    label: tenderData.tenderDetails.suppliedBy,
-                  },
-                }
-              : {})}
-            label="Supplied by"
-            placeholder={"Please search or select here"}
-            id={"suppliedBy"}
-            onSelect={handleSuppliedBySelects}
-            setSelectOption={(isDataListOptions, option) => {
-              // setSelected(option);
-              console.log("applieridoption", option); 
-              if (isDataListOptions) {
-                updateTenderData("supplierId", Number(option.id));
-                updateTenderData("supplierType", option.attributes.type);
-                updateTenderData(
-                  "tenderDetails.suppliedBy",
-                  option.value || ""
-                );
-              } else if (typeof option.value == "string") {
-                updateTenderData("supplierId", option.value.split("_")[0]);
-                updateTenderData("supplierType", option.value.split("_")[1]);
-                updateTenderData(
-                  "tenderDetails.suppliedBy",
-                  option.label || ""
-                );
+            : {})}
+          placeholder={"Please search or select here"}
+          id={"appliedBy"}
+          onSelect={handleAppliedBySelect}
+          setSelectOption={(isDataListOptions, option) => {
+            setSelected(option);
+            // console.log("applieridoption", option);
+            if (isDataListOptions) {
+              updateTenderData("applierId", Number(option.id));
+              updateTenderData("applierType", option.attributes.type);
+              updateTenderData("tenderDetails.appliedBy", option.value || "");
+            } else if (typeof option.value == "string") {
+              updateTenderData("applierId", option.value.split("_")[0]);
+              updateTenderData("applierType", option.value.split("_")[1]);
+              updateTenderData("tenderDetails.appliedBy", option.label || "");
+            }
+          }}
+          isOpen={true}
+        ></DsSelectMultiLevel>
+        <DsSelectMultiLevel
+          containerClasses={styles.fields}
+          isSearchable={true}
+          options={suppliedBy}
+          {...(tenderData.id
+            ? {
+                selectedOption: {
+                  attributes: { type: tenderData.supplierType },
+                  id: "",
+                  label: tenderData.tenderDetails.suppliedBy,
+                },
               }
-            }}
-            isOpen={false}
-          ></DsSelectMultiLevel>
-        </div>
-        <div className={deptStyles.fields}>
-          <DsMultiSelect
-            selectedOptions={selectedDepo}
-            options={formatedDepot}
-            // type="multi"
-            label="Depot"
-            placeholder={"Please search or select here"}
-            id={"depot"}
-            setSelectOptions={(options) => {
-              const shipIds = options.reduce<number[]>((acc, option) => {
-                if (typeof option.value === "string") {
-                  acc.push(parseInt(option.value));
-                }
-                return acc;
-              }, []);
-              updateTenderData("shippingLocations", shipIds);
-              setSelectedDepo(options);
-            }}
-          ></DsMultiSelect>
-        </div> 
+            : {})}
+          label="Supplied by"
+          placeholder={"Please search or select here"}
+          id={"suppliedBy"}
+          onSelect={handleSuppliedBySelects}
+          setSelectOption={(isDataListOptions, option) => {
+            // setSelected(option);
+            console.log("applieridoption", option);
+            if (isDataListOptions) {
+              updateTenderData("supplierId", Number(option.id));
+              updateTenderData("supplierType", option.attributes.type);
+              updateTenderData("tenderDetails.suppliedBy", option.value || "");
+            } else if (typeof option.value == "string") {
+              updateTenderData("supplierId", option.value.split("_")[0]);
+              updateTenderData("supplierType", option.value.split("_")[1]);
+              updateTenderData("tenderDetails.suppliedBy", option.label || "");
+            }
+          }}
+          isOpen={false}
+        ></DsSelectMultiLevel>
+        <DsMultiSelect
+          containerClasses={styles.fields}
+          selectedOptions={selectedDepo}
+          options={formatedDepot}
+          // type="multi"
+          label="Depot"
+          placeholder={"Please search or select here"}
+          id={"depot"}
+          setSelectOptions={(options) => {
+            const shipIds = options.reduce<number[]>((acc, option) => {
+              if (typeof option.value === "string") {
+                acc.push(parseInt(option.value));
+              }
+              return acc;
+            }, []);
+            updateTenderData("shippingLocations", shipIds);
+            setSelectedDepo(options);
+          }}
+        ></DsMultiSelect>
         <div></div>
-        <div className={deptStyles.fields}>
         <DsTextField
-            initialValue={tenderData.supplierName}
-            label="Stockist / Liasioner name"
-            inputType="alphaNumeric"
-            // placeholder="Please type here"
-            onBlur={(e) =>  
-              updateTenderData(
-                "supplierName",
-                (e.target as HTMLInputElement).value
-              )
-            }
-          ></DsTextField>
-        </div>
-        <div className={deptStyles.fields}>
+          containerClasses={styles.fields}
+          initialValue={tenderData.supplierName}
+          label="Stockist / Liasioner name"
+          inputType="alphaNumeric"
+          // placeholder="Please type here"
+          onBlur={(e) =>
+            updateTenderData(
+              "supplierName",
+              (e.target as HTMLInputElement).value
+            )
+          }
+        ></DsTextField>
         <DsTextField
-            maximumNumber={100}
-            initialValue={tenderData.supplierDiscount?.toString()} 
-            inputType="positive"
-            maxLength={5}
-            label="Stockist / Liasioner discount %"  
-            iconEnd={<>%</>}
-            // placeholder="Please type here"
-            onBlur={(e) =>
-              updateTenderData( 
-                "supplierDiscount", 
-                Number((e.target as HTMLInputElement).value )
-              ) 
-            }
-          ></DsTextField>
-        </div>
+          containerClasses={styles.fields}
+          maximumNumber={100}
+          initialValue={tenderData.supplierDiscount?.toString()}
+          inputType="positive"
+          maxLength={5}
+          label="Stockist / Liasioner discount %"
+          iconEnd={<pre>{" %"}</pre>}
+          // placeholder="Please type here"
+          onBlur={(e) =>
+            updateTenderData(
+              "supplierDiscount",
+              Number((e.target as HTMLInputElement).value)
+            )
+          }
+        ></DsTextField>
       </div>
-    </>
+    </div>
   );
 };
 export default DsApplierSupplierDetails;
