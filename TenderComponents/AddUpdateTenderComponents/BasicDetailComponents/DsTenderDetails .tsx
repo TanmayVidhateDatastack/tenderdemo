@@ -115,17 +115,18 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         }
         showArrow={true}
       />
-
       <div className={styles.inputDetails}>
-        <CustomerSearch
-          customer={tenderData.tenderDetails.customerName}
-          orderData={undefined}
-          setCustomerLocations={setCustomerLocations}
-          updateTenderData={updateTenderData}
-        />
+        <div className={deptStyle.fields}>
+          <CustomerSearch
+            customer={tenderData.tenderDetails.customerName}
+            orderData={undefined}
+            setCustomerLocations={setCustomerLocations}
+            updateTenderData={updateTenderData}
+          />
+        </div>
 
         {fetchVisible && (
-          <div className={deptStyle.copyBtnDiv}>
+          <div className={deptStyle.fields}>
             <DsButton
               id="copyBtn"
               label="Fetch Information"

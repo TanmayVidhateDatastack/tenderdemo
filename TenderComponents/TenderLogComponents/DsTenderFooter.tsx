@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 
 import btnStyles from "@/Elements/DsComponents/DsButtons/dsButton.module.css";
 import ContextMenu, {
+  closeContext,
   createContext,
   displayContext,
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
@@ -374,7 +375,7 @@ export const DSTendrFooter: React.FC = ({}) => {
             />
           </>
         );
-      } else if (role === "CHECKER") {
+      } else if (role === "MAKER") {
         contextContent = (
           <>
             <PopupOpenButton
@@ -383,6 +384,7 @@ export const DSTendrFooter: React.FC = ({}) => {
               buttonText="Approve"
               buttonViewStyle="btnText"
               className={btnStyles.btnTextPrimary}
+              onClick={() =>closeContext("SubmissionContext")}
             />
             <PopupOpenButton
               popupId="popup2"
@@ -390,6 +392,7 @@ export const DSTendrFooter: React.FC = ({}) => {
               buttonText="Revise"
               buttonViewStyle="btnText"
               className={btnStyles.btnTextPrimary}
+              onClick={() =>closeContext("SubmissionContext")}
             />
             <PopupOpenButton
               popupId="popup3"
@@ -397,10 +400,11 @@ export const DSTendrFooter: React.FC = ({}) => {
               buttonText="Reject"
               buttonViewStyle="btnText"
               className={btnStyles.btnTextPrimary}
+              onClick={() =>closeContext("SubmissionContext")}
             />
           </>
         );
-      } else if (role === "MAKER") {
+      } else if (role === "CHECKER") {
         contextContent = (
           <DsButton
             label="Submit for Review"
