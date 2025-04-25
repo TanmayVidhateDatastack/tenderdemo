@@ -32,6 +32,7 @@ import DsStatusIndicator, {
   formatStatus,
 } from "@/Elements/DsComponents/dsStatus/dsStatusIndicator";
 import ContractView from "@/TenderComponents/AddUpdateTenderComponents/CustomTabViews/ContractView";
+import { tab } from "@/Common/helpers/types";
 
 const DsTenderIdPage: React.FC<{
   paramOrderId: string | number;
@@ -55,73 +56,13 @@ const DsTenderIdPage: React.FC<{
 
   const version = 1;
 
-  const [tabs, setTabs] = useState([
+  const [tabs, setTabs] = useState<tab[]>([
     { tabId: "0", tabName: "Basic Details" },
-    { tabId: "v1", tabName: "Products ₹ (V1)" },
-    { tabId: "2", tabName: "Documents" },
   ]);
 
   const [displayFlag, setDisplayFlag] = useState<"New" | "Existing">(
     "Existing"
   );
-  useEffect(() => {
-    // fetchAndSetOriginalTender(9917);
-  }, []);
-  useEffect(() => {
-    const revisionTabs = tenderData.tenderRevisions.map((rev) => ({
-      tabId: `v${rev.version}`,
-      tabName: `Products ₹ (V${rev.version})`,
-    }));
-    setTabs([
-      { tabId: "0", tabName: "Basic Details" },
-      ...revisionTabs,
-      { tabId: "2", tabName: "Documents" },
-    ]);
-    // setTimeout(() => {
-      if (
-        tenderData.status == "AWARDED" ||
-        tenderData.status == "PARTIALLY_AWARDED" ||
-        tenderData.status == "LOST" ||
-        tenderData.status == "CANCELLED"
-      ) {
-        setTabs((prev) => {
-          if (prev.find((x) => x.tabId == "Contract") == undefined)
-            return [
-              ...prev,
-              {
-                tabId: "Contract",
-                tabName: "Tender " + formatStatus(tenderData.status),
-              },
-            ];
-          return prev;
-        });
-      }
-    // };
-  }, [tenderData]);
-  useEffect(() => {
-    console.log("orderId", orderId);
-
-    if (orderId?.toString().toLowerCase() == "new") {
-      setDisplayFlag("New");
-      appTitle.current = "New Order";
-    } else if (Number(orderId) > 0) {
-      setDisplayFlag("Existing");
-      console.log("orderId", orderId);
-      if (
-        tenderStatus == "AWARDED" ||
-        tenderStatus == "PARTIALLY_AWARDED" || 
-        tenderStatus == "LOST" ||
-        tenderStatus == "CANCELLED"||
-        tenderStatus == "newPricingVersion"
-      )
-        fetchAndSetOriginalTender(Number(orderId), tenderStatus)
-      else {
-        fetchAndSetOriginalTender(Number(orderId));
-      }
-    }
-  }, [orderId]);
-
-
   const [message, setMessage] = useState<string>("");
 
   const handleUpload = (file: File | null) => {
@@ -180,17 +121,74 @@ const DsTenderIdPage: React.FC<{
 
     reader.readAsText(file);
   };
-  
   useEffect(() => {
+    // fetchAndSetOriginalTender(9917);
+  }, []);
+
+  useEffect(() => {
+    // console.log("orderId", orderId);
+
+    if (orderId?.toString().toLowerCase() == "new") {
+      setDisplayFlag("New");
+      appTitle.current = "New Tender";
+    } else if (Number(orderId) > 0) {
+      setDisplayFlag("Existing");
+      // console.log("orderId", orderId);
+      if (
+        tenderStatus == "AWARDED" ||
+        tenderStatus == "PARTIALLY_AWARDED" ||
+        tenderStatus == "LOST" ||
+        tenderStatus == "CANCELLED" ||
+        tenderStatus == "newPricingVersion"
+      )
+        fetchAndSetOriginalTender(Number(orderId), tenderStatus);
+      else {
+        fetchAndSetOriginalTender(Number(orderId));
+      }
+    }
+  }, [orderId]);
+
+
+  useEffect(() => {
+    console.log(displayFlag, "displayFlag");
+    const revisionTabs = tenderData.tenderRevisions.map((rev) => ({
+      tabId: `v${rev.version}`,
+      tabName: `Products ₹ (V${rev.version})`,
+      disable: displayFlag == "New",
+    }));
+    setTabs([
+      { tabId: "0", tabName: "Basic Details" },
+      ...revisionTabs,
+      { tabId: "2", tabName: "Documents", disable: displayFlag == "New" },
+    ]);
+    // setTimeout(() => {
+    if (
+      tenderData.status == "AWARDED" ||
+      tenderData.status == "PARTIALLY_AWARDED" ||
+      tenderData.status == "LOST" ||
+      tenderData.status == "CANCELLED"
+    ) {
+      setTabs((prev) => {
+        if (prev?.find((x) => x.tabId == "Contract") == undefined)
+          return [
+            ...prev,
+            {
+              tabId: "Contract",
+              tabName: "Tender " + formatStatus(tenderData.status),
+            },
+          ];
+        return prev;
+      });
+    }
     if (tenderDataCopy.id) {
       appTitle.current =
         tenderDataCopy.tenderNumber +
         " ( " +
         tenderDataCopy.tenderDetails.customerName +
         " )";
-     
     }
-  }, [tenderDataCopy.id]);
+    // };
+  }, [tenderDataCopy, displayFlag]);
   useEffect(() => {
     const version = Number(selectedTabId.split("v")[1]);
 
@@ -201,6 +199,18 @@ const DsTenderIdPage: React.FC<{
     console.log(latestVersion, version);
     setIsLatestVersion(latestVersion == version);
   }, [selectedTabId, tenderData.tenderRevisions]);
+  // useEffect(()=>{
+  //   if(displayFlag=="New"){
+  //     setTabs(
+  //       [
+  //         { tabId: "0", tabName: "Basic Details" },
+  //         { tabId: "v1", tabName: "Products ₹ (V1)",disable:true },
+  //         { tabId: "2", tabName: "Documents",disable:true },
+  //       ]
+  //     )
+
+  //   }
+  // },[displayFlag])
   return (
     <>
       <DocumentProvider>

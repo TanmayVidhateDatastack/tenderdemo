@@ -26,12 +26,13 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
     <>
       <div className={styles.emdContainer}>
         <div className={styles.emdContainerHead} id={id}>
-          <div>{title}</div>
+          <div className={styles.headTitle}>{title}</div>
         </div>
         <div className={styles.notes}>
-          <h4>Notes</h4>
-          <div className={styles.fieldColors}>
+          <span className={styles.notesTitle}>Notes</span>
             <TextArea
+             containerClasses={styles.feeFields}
+             className={styles.notesField}
              initialValue={tenderData.tenderSupplyConditions[0].applicableConditions.find((x)=>x.type==type)?.notes||""}
               id="embossmentNotes"
               placeholder="Please type here"
@@ -45,7 +46,6 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
                 );
               }}
             />
-          </div>
         </div>
         <div className={styles.attachFileBtn}>
 

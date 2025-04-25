@@ -135,12 +135,12 @@ export type TenderData = {
   // tenderId: string;
   id?: number;
   customerId: number;
-  customerAddressId: number;
+  customerAddressId: number|undefined;
   tenderNumber: string;
   tenderType: string;
-  issueDate: string;
-  lastPurchaseDate: string;
-  submissionDate: string;
+  issueDate: string|undefined;
+  lastPurchaseDate: string|undefined;
+  submissionDate: string|undefined;
   rateContractValidity: string;
   submissionMode: string;
   deliveryPeriod: number | null;
@@ -337,7 +337,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   const reader = new FileReader();
   const [tenderData, setTenderData] = useState<TenderData>({
     customerId: 0,
-    customerAddressId: 0,
+    customerAddressId: undefined,
     tenderNumber: "",
     tenderType: "",
     issueDate: "",
