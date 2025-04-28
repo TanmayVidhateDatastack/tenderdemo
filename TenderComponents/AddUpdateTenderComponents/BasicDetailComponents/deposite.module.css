@@ -102,7 +102,7 @@ min-height: fit-content;
     /* max-height: 2.25em !important; */
     /* height: 2.25em !important; */
     /* border: 0px !important; */
-    display: flex;
+    display: flex; 
     justify-content: flex-start;
     margin: 0;
     align-items: center;
@@ -114,10 +114,10 @@ min-height: fit-content;
  
  
   .copyBtn:hover{
-    background-color: var(--primary-hover-text) !important;
+    background-color: var(--background) !important;
     max-height: 2.25em !important;
     height: 2.25em !important;
-
+  color: var(--primary) !important;
     /* color: var(--text-white) !important; */
     /* border-radius: 25px !important; */
   }

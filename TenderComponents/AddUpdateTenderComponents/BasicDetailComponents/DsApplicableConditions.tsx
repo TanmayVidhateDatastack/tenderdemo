@@ -20,7 +20,7 @@ import { useTenderData } from "../TenderDataContextProvider";
 import IconFactory from "@/Elements/IconComponent";
 
 export interface ApplicableConditionsProps {
-  applicableConditions: DsSelectOption[] | [];
+  applicableConditions: DsSelectOption[] | []; 
 }
 
 const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
@@ -93,8 +93,8 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
       >((acc, opt) => {
         const val = opt.value;
         if (typeof val === "string") {
-          acc[val] = tenderDataCopy.id
-            ? tenderDataCopy.tenderSupplyConditions[0].applicableConditions.some(
+          acc[val] = tenderData.id
+            ? tenderData.tenderSupplyConditions[0].applicableConditions.some(
                 (ac) => ac.type == opt.value && ac.status == "ACTV"
               )
             : true; // Add string keys directly to the object
@@ -105,7 +105,7 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
 
       setConditionsVisibility(options);
     }
-  }, [applicableConditions, tenderDataCopy]);
+  }, [applicableConditions, tenderDataCopy,tenderData.id]);
 
   useEffect(() => {
     applicableConditions.forEach((opt) => {
@@ -139,9 +139,9 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
         conditionsVisibility[id] = false;
         if (tenderData.tenderFees.some((fee) => fee.feesType == id))
           updateApplicableCondition(id, "status", "INAC");
-      }
+      }  
     });
-  }, [applicableConditions, tenderDataCopy.id]);
+  }, [applicableConditions, tenderData.id]); 
   useEffect(() => {
     window.addEventListener("click", (e) => {
       const target = (e.target as HTMLElement).closest(
@@ -222,8 +222,8 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
                   value={checkbox.value.toString()}
                   label={checkbox.label}
                   defaultChecked={
-                    tenderDataCopy.id
-                      ? tenderDataCopy?.tenderSupplyConditions[0].applicableConditions?.some(
+                    tenderData.id
+                      ? tenderData?.tenderSupplyConditions[0].applicableConditions?.some(
                           (ac) => ac.type == checkbox.value
                         )
                       : true
