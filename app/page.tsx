@@ -744,7 +744,9 @@ export default function Home() {
     rowIndex: number
   ) => {
     const row = tempTableData.rows[rowIndex];
-
+    const currentRow=e.currentTarget;
+    document.querySelector("."+styles.selectedRow)?.classList.remove(styles.selectedRow);
+    currentRow.classList.add(styles.selectedRow);
     // Convert statuscell to string if it's not already one
     const statuscell = String(
       row?.content?.find((cell) => cell?.columnIndex === 10)?.filterValue ?? ""

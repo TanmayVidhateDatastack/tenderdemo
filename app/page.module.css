@@ -588,3 +588,6 @@ a.secondary {
 .warningAlert {
   color: var(--readytodispatch) !important;
 }
+.selectedRow{
+  background-color: var(--tableRowSelect) !important;
+}

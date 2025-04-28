@@ -12,7 +12,7 @@ import { useTenderData } from "../TenderDataContextProvider";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import { useEffect, useState } from "react";
 const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
-  const { updateSupplyCondition, tenderData ,tenderDataCopy} = useTenderData();
+  const { updateSupplyCondition, tenderData,tenderDataCopy } = useTenderData();
   const [selectedEligibility, setSelectedEligibility] = useState<
     DsSelectOption[] 
   >([]);
@@ -58,17 +58,16 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
   ]);
   useEffect(() => {
     if(tenderData.tenderSupplyCondition.eligibility){
-
-      const eligibility = [...tenderData.tenderSupplyCondition.eligibility];    
-      const selectedEl = eligibility.map((x) => { 
-        return { 
-          value: x,  
-          label: x, 
-        }; 
-      });  
-      setSelectedEligibility(selectedEl);  
-    }
-  }, [tenderDataCopy.tenderSupplyCondition.eligibility, tenderData.id]); 
+    const eligibility = [...tenderData.tenderSupplyCondition.eligibility];
+    const selectedEl = eligibility.map((x) => {
+      return {
+        value: x,
+        label: x,
+      };
+    });
+    setSelectedEligibility(selectedEl);
+  }
+  }, [tenderDataCopy.tenderSupplyCondition.eligibility, tenderData.id]);
 
   return (
     <>
