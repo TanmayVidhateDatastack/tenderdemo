@@ -101,6 +101,7 @@ export type tenderFee = {
   instructionNotes: string;
   paymentStatus?: string;
   paymentDate?: string;
+  refundNotes?:string;
   paymentTransactionId?: string;
   paymentReceiptId?: string;
   acknowledgmentReceiptId?: string;
@@ -171,7 +172,7 @@ export type TenderData = {
   };
   // comments: string;
   tenderFees: tenderFee[];
-  tenderSupplyConditions: tenderSupplyCondition[];
+  tenderSupplyCondition: tenderSupplyCondition;
   tenderRevisions: {
     id?: number;
     status?: string;
@@ -369,7 +370,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       statusDescription: "Draft",
     },
     tenderFees: [],
-    tenderSupplyConditions: [
+    tenderSupplyCondition: 
       {
         supplyPoint: "",
         consigneesCount: null,
@@ -377,7 +378,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         eligibility: [],
         applicableConditions: [],
       },
-    ],
+    
     tenderRevisions: [
       {
         version: 1,
@@ -543,12 +544,12 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     ) => {
       setTenderData((prev) => ({
         ...prev,
-        tenderSupplyConditions: [
+        tenderSupplyCondition: 
           {
-            ...prev.tenderSupplyConditions[0],
+            ...prev.tenderSupplyCondition,
             [key]: value,
           },
-        ],
+        
       }));
     },
     [tenderData, tenderDataCopy, setTenderData]
@@ -563,18 +564,18 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     ) => {
       setTenderData((prev) => ({
         ...prev,
-        tenderSupplyConditions: [
+        tenderSupplyCondition:
           {
-            ...prev.tenderSupplyConditions[0],
+            ...prev.tenderSupplyCondition,
             applicableConditions:
-              prev.tenderSupplyConditions[0].applicableConditions.map(
+              prev.tenderSupplyCondition.applicableConditions.map(
                 (condition) =>
                   condition.type === conditionType
                     ? { ...condition, [key]: value }
                     : condition
               ),
           },
-        ],
+        
       }));
     },
     [tenderData, tenderDataCopy, setTenderData]
@@ -887,7 +888,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         const active: "ACTV" | "INAC" = "ACTV";
 
         const updatedTenderApplicableConditions =
-          prev.tenderSupplyConditions[0].applicableConditions.map((ac) => {
+          prev.tenderSupplyCondition.applicableConditions.map((ac) => {
             if (ac.type == type) {
               updated = true;
               return {
@@ -906,8 +907,8 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         }
         return {
           ...prev,
-          tenderSupplyConditions: {
-            ...prev.tenderSupplyConditions,
+          tenderSupplyCondition: {
+            ...prev.tenderSupplyCondition,
             applicableConditions: updatedTenderApplicableConditions,
           },
         };
@@ -922,10 +923,10 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       setTenderData((prev) => ({
         ...prev,
 
-        tenderSupplyConditions: {
-          ...prev.tenderSupplyConditions,
+        tenderSupplyCondition: {
+          ...prev.tenderSupplyCondition,
           applicableConditions:
-            prev.tenderSupplyConditions[0].applicableConditions.filter(
+            prev.tenderSupplyCondition.applicableConditions.filter(
               (condition) => condition.type !== conditionType
             ),
         },
@@ -1031,16 +1032,15 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               instructionNotes: x.instructionNotes,
             };
           }),  
-        tenderSupplyConditions: [
+        tenderSupplyCondition: 
           {
-            ...tenderData.tenderSupplyConditions[0],
+            ...tenderData.tenderSupplyCondition,
             eligibility:
-              tenderData.tenderSupplyConditions[0].eligibility.join(","),
+              tenderData.tenderSupplyCondition.eligibility.join(","),
             applicableConditions: JSON.stringify(
-              tenderData.tenderSupplyConditions[0].applicableConditions
+              tenderData.tenderSupplyCondition.applicableConditions
             ),
           },
-        ],
         tenderDocuments:
           tenderData.tenderDocuments?.map(async (x) => {
             const base64String = x.data ? await fileToBase64(x.data) : "";
@@ -1053,7 +1053,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           }) || [],
         comments: null,
       };
-      delete tenderSaveData.tenderSupplyConditions[0].id;
+      delete tenderSaveData.tenderSupplyCondition.id;
       const dataToSend = stripReadOnlyProperties({
         ...tenderSaveData,
         status: status.toUpperCase(),
@@ -1097,232 +1097,236 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 
   const updateTender = useCallback(
-    async (status: string) => {
-      try {
-        const copylatestTenderRevision =
-          tenderDataCopy.tenderRevisions?.length > 0
-            ? [
-                tenderDataCopy.tenderRevisions.reduce(
-                  (max, obj) => (obj.version > max.version ? obj : max),
-                  tenderDataCopy.tenderRevisions[0]
-                ),
-              ]
-            : [];
-        const latestTenderRevision = [
-          tenderData.tenderRevisions.reduce(
-            (max, obj) => (obj.version > max.version ? obj : max),
-            tenderData.tenderRevisions[0]
-          ),
-        ];
-        const dataToSendTenderCopy = stripReadOnlyProperties({
-          ...tenderDataCopy,
-          shippingLocations: tenderDataCopy.shippingLocations.join(","),
-          appliedBy:
-            tenderDataCopy.applierType.toLowerCase() == "organization"
-              ? "IPCA"
-              : "STOCKIST",
-          applierId:
-            tenderDataCopy.applierType.toLowerCase() == "organization"
-              ? null
-              : tenderDataCopy.applierId,
-          suppliedBy:
-            tenderDataCopy.supplierType.toLowerCase() == "organization"
-              ? "IPCA"
-              : "STOCKIST",
-          supplierId:
-            tenderDataCopy.supplierType.toLowerCase() == "organization"
-              ? null
-              : tenderDataCopy.supplierId,
-          tenderSupplyConditions: [
-            {
-              ...tenderDataCopy.tenderSupplyConditions[0],
-              eligibility:
-                tenderDataCopy.tenderSupplyConditions[0].eligibility.join(","),
-              applicableConditions: JSON.stringify(
-                tenderDataCopy.tenderSupplyConditions[0].applicableConditions
-              ),
-            },
-          ],
-          // tenderRevisions: copylatestTenderRevision,
-          tenderRevisions: copylatestTenderRevision.map((x) => {
-            if (x.id) return { id: x.id, tenderItems: x.tenderItems };
-            return { tenderItems: x.tenderItems };
-          }),
-        });
-        delete dataToSendTenderCopy.applierType;
-        delete dataToSendTenderCopy.supplierType;
-        const dataToSendOriginalTender = stripReadOnlyProperties({
-          ...tenderData,
-          shippingLocations: tenderData.shippingLocations.join(","),
-          appliedBy:
-            tenderData.applierType.toLowerCase() == "organization"
-              ? "IPCA"
-              : "STOCKIST",
-          applierId:
-            tenderData.applierType.toLowerCase() == "organization"
-              ? null
-              : tenderData.applierId,
-          suppliedBy:
-            tenderData.supplierType.toLowerCase() == "organization"
-              ? "IPCA"
-              : "STOCKIST",
-          supplierId:
-            tenderData.supplierType.toLowerCase() == "organization"
-              ? null
-              : tenderData.supplierId,
-          tenderSupplyConditions: [
-            {
-              ...tenderData.tenderSupplyConditions[0],
-              eligibility:
-                tenderData.tenderSupplyConditions[0].eligibility.join(","),
-
-              applicableConditions: JSON.stringify(
-                tenderData.tenderSupplyConditions[0].applicableConditions
-              ),
-            },
-          ],
-          // tenderRevisions: latestTenderRevision,
-          tenderRevisions: latestTenderRevision.map((x) => {
-            if (x.id) return { id: x.id, tenderItems: x.tenderItems };
-            return { tenderItems: x.tenderItems };
-          }),
-        });
-        delete dataToSendOriginalTender.applierType;
-        delete dataToSendOriginalTender.supplierType;
-
-        const patchDocument = generatePatchDocument(
-          dataToSendTenderCopy,
-          dataToSendOriginalTender
-        );
-        let url = saveTenderurl + "/" + tenderData.id;
-        if (
-          status.toLowerCase() == DsStatus.AWRD ||
-          status == DsStatus.PAWRD ||
-          status == DsStatus.LOST ||
-          status == DsStatus.CNCL
-        )
-          url = getTenderByTenderId + tenderData.id + "/contract";
-        await fetchData({
-          url: url,
-          method: "PATCH",
-          dataObject: patchDocument,
-        }).then((res) => {
-          if (res.code === 200) {
-            setActionStatus({
-              notiMsg: "Tender Updated Successfully",
-              notiType: "success",
-              showNotification: true,
-            });
-            showToaster("create-order-toaster");
-            setTimeout(() => {
-              goBack();
-            }, closeTimeForTender);
-          } else {
-            setActionStatus({
-              notiMsg: "Tender could not be updated",
-              notiType: "error",
-              showNotification: true,
-            });
-            showToaster("create-order-toaster");
-          }
-        });
-      } catch (error) {
-        console.error("Error saving order:", error);
-      }
-    },
-
-    // async(status:string)=>{
-    //   const obj1={
-    //     abc:"abc",
-    //     mno:{
-    //       abc1:"abc",
-    //     },
-    //     xyz:[
-    //       {
-    //         id:1,
-    //         abcx:"abc",
-    //         mnox:{
-    //           abc1x:"abc",
+    // async (status: string) => {
+    //   try {
+    //     const copylatestTenderRevision =
+    //       tenderDataCopy.tenderRevisions?.length > 0
+    //         ? [
+    //             tenderDataCopy.tenderRevisions.reduce(
+    //               (max, obj) => (obj.version > max.version ? obj : max),
+    //               tenderDataCopy.tenderRevisions[0]
+    //             ),
+    //           ]
+    //         : [];
+    //     const latestTenderRevision = [
+    //       tenderData.tenderRevisions.reduce(
+    //         (max, obj) => (obj.version > max.version ? obj : max),
+    //         tenderData.tenderRevisions[0]
+    //       ),
+    //     ];
+    //     const dataToSendTenderCopy = stripReadOnlyProperties({
+    //       ...tenderDataCopy,
+    //       shippingLocations: tenderDataCopy.shippingLocations.join(","),
+    //       appliedBy:
+    //         tenderDataCopy.applierType.toLowerCase() == "organization"
+    //           ? "IPCA"
+    //           : "STOCKIST",
+    //       applierId:
+    //         tenderDataCopy.applierType.toLowerCase() == "organization"
+    //           ? null
+    //           : tenderDataCopy.applierId,
+    //       suppliedBy:
+    //         tenderDataCopy.supplierType.toLowerCase() == "organization"
+    //           ? "IPCA"
+    //           : "STOCKIST",
+    //       supplierId:
+    //         tenderDataCopy.supplierType.toLowerCase() == "organization"
+    //           ? null
+    //           : tenderDataCopy.supplierId,
+    //       tenderSupplyCondition: 
+    //         {
+    //           ...tenderDataCopy.tenderSupplyCondition,
+    //           eligibility:
+    //             tenderDataCopy.tenderSupplyCondition.eligibility.join(","),
+    //           applicableConditions: JSON.stringify(
+    //             tenderDataCopy.tenderSupplyCondition.applicableConditions
+    //           ),
     //         },
-    //         yz:[
-    //           {
-    //             id:2,
-    //             abcyz:"abc",
-    //             mnozy:{
-    //               abc1yz:"abc",
-    //             },
-    //           },
-    //         ],
-    //         label:[
-    //           {
-    //             id:1,
-    //             l1:"abc",
-    //             l2:"xtyz",
-    //           }
-    //         ]
+
+    //       // tenderRevisions: copylatestTenderRevision,
+    //       tenderRevisions: copylatestTenderRevision.map((x) => {
+    //         if (x.id) return { id: x.id, tenderItems: x.tenderItems };
+    //         return { tenderItems: x.tenderItems };
+    //       }),
+    //     });
+    //     delete dataToSendTenderCopy.applierType;
+    //     delete dataToSendTenderCopy.supplierType;
+    //     const dataToSendOriginalTender = stripReadOnlyProperties({
+    //       ...tenderData,
+    //       shippingLocations: tenderData.shippingLocations.join(","),
+    //       appliedBy:
+    //         tenderData.applierType.toLowerCase() == "organization"
+    //           ? "IPCA"
+    //           : "STOCKIST",
+    //       applierId:
+    //         tenderData.applierType.toLowerCase() == "organization"
+    //           ? null
+    //           : tenderData.applierId,
+    //       suppliedBy:
+    //         tenderData.supplierType.toLowerCase() == "organization"
+    //           ? "IPCA"
+    //           : "STOCKIST",
+    //       supplierId:
+    //         tenderData.supplierType.toLowerCase() == "organization"
+    //           ? null
+    //           : tenderData.supplierId,
+    //       tenderSupplyCondition:
+    //         {
+    //           ...tenderData.tenderSupplyCondition,
+    //           eligibility:
+    //             tenderData.tenderSupplyCondition.eligibility.join(","),
+
+    //           applicableConditions: JSON.stringify(
+    //             tenderData.tenderSupplyCondition.applicableConditions
+    //           ),
+    //         },
+     
+    //       // tenderRevisions: latestTenderRevision,
+    //       tenderRevisions: latestTenderRevision.map((x) => {
+    //         if (x.id) return { id: x.id, tenderItems: x.tenderItems };
+    //         return { tenderItems: x.tenderItems };
+    //       }),
+    //     });
+    //     delete dataToSendOriginalTender.applierType;
+    //     delete dataToSendOriginalTender.supplierType;
+
+    //     const patchDocument = generatePatchDocument(
+    //       dataToSendTenderCopy,
+    //       dataToSendOriginalTender
+    //     );
+    //     let url = saveTenderurl + "/" + tenderData.id;
+    //     if (
+    //       status.toLowerCase() == DsStatus.AWRD ||
+    //       status == DsStatus.PAWRD ||
+    //       status == DsStatus.LOST ||
+    //       status == DsStatus.CNCL
+    //     )
+    //       url = getTenderByTenderId + tenderData.id + "/contract";
+    //     await fetchData({
+    //       url: url,
+    //       method: "PATCH",
+    //       dataObject: patchDocument,
+    //     }).then((res) => {
+    //       if (res.code === 200) {
+    //         setActionStatus({
+    //           notiMsg: "Tender Updated Successfully",
+    //           notiType: "success",
+    //           showNotification: true,
+    //         });
+    //         showToaster("create-order-toaster");
+    //         setTimeout(() => {
+    //           goBack();
+    //         }, closeTimeForTender);
+    //       } else {
+    //         setActionStatus({
+    //           notiMsg: "Tender could not be updated",
+    //           notiType: "error",
+    //           showNotification: true,
+    //         });
+    //         showToaster("create-order-toaster");
     //       }
-    //     ]
+    //     });
+    //   } catch (error) {
+    //     console.error("Error saving order:", error);
     //   }
-    //   const obj2={
-    //     abc:"abc2",
-    //     mno:{
-    //       abc1:"abc4",
-    //     },
-    //     xyz:[
-    //       {
-    //         id:1,
-    //         abcx:"abc5",
-    //         mnox:{
-    //           abc1x:"abc7",
-    //         },
-    //         yz:[
-    //           {
-    //             abcyz:"abc0",
-    //             mnozy:{
-    //               abc1yz:"abc0",
-    //             },
-    //             laible:[
-    //               {
-    //               h1:"rest",
-    //               h2:"t",
-    //               }
-    //             ]
-    //           },
-
-    //         ],
-    //         label:[
-    //           {
-    //             id:1,
-    //             l1:"sky",
-    //             l2:"pat",
-    //           }
-    //         ]
-    //       },
-    //       {
-    //         abcx:"abc",
-    //         mnox:{
-    //           abc1x:"abc",
-    //         },
-    //         yz:[
-    //           {
-    //             abcyz:"abc",
-    //             mnozy:{
-    //               abc1yz:"abc",
-    //             },
-    //           },
-    //         ],
-    //         label:[
-    //           {
-    //             l1:"ab",
-    //             l2:"xt",
-    //           }
-    //         ]
-    //       }
-    //     ]
-    //   }
-    //   const patchDoc=generatePatchDocument(obj1,obj2);
-    //   console.log("patch",patchDoc);
     // },
+
+    async(status:string)=>{
+      const obj1={
+        abc:"abc",
+        mno:{
+          abc1:"abc",
+        },
+        xyz:[
+          {
+            id:1,
+            abcx:"abc",
+            mnox:{
+              abc1x:"abc",
+            },
+            yz:[
+              {
+                id:2,
+                abcyz:"abc",
+                mnozy:{
+                  abc1yz:"abc",
+                },
+              },
+            ],
+            label:[
+              {
+                id:1,
+                l1:"abc",
+                l2:"xtyz",
+              }
+            ]
+          }
+        ]
+        ,
+        // least:["sell","bell"],
+      }
+      const obj2={
+        abc:"abc2",
+        mno:{
+          abc1:"abc4",
+        },
+        xyz:[
+          {
+            id:1,
+            abcx:"abc5",
+            mnox:{
+              abc1x:"abc7",
+            },
+            yz:[
+              {
+                abcyz:"abc0",
+                mnozy:{
+                  abc1yz:"abc0",
+                },
+                laible:[
+                  {
+                  h1:"rest",
+                  h2:"t",
+                  }
+                ]
+              },
+
+            ],
+            label:[
+              {
+                id:1,
+                l1:"sky",
+                l2:"pat",
+              }
+            ]
+          },
+          {
+            abcx:"abc",
+            mnox:{
+              abc1x:"abc",
+            },
+            yz:[
+              {
+                abcyz:"abc",
+                mnozy:{
+                  abc1yz:"abc",
+                },
+              },
+            ],
+            label:[
+              {
+                l1:"ab",
+                l2:"xt",
+              }
+            ]
+          }
+        ],
+        // least:["sell","bell","hell"],
+
+      }
+      const patchDoc=generatePatchDocument(obj1,obj2);
+      console.log("patch",patchDoc);
+    },
     [tenderData, tenderDataCopy, fetchData, generatePatchDocument]
   );
 
@@ -1385,18 +1389,18 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             ...fee,
             status: "ACTV",
           })),
-          tenderSupplyConditions: [
+          tenderSupplyCondition: 
             {
-              ...tenderData.tenderSupplyConditions[0],
+              ...tenderData.tenderSupplyCondition,
               applicableConditions:
-                tenderData.tenderSupplyConditions[0].applicableConditions?.map(
+                tenderData.tenderSupplyCondition.applicableConditions?.map(
                   (ac) => ({
                     ...ac,
                     status: "ACTV",
                   })
                 ),
             },
-          ],
+        
         };
         // console.log("km", newTenderData);
         if (tenderStatus == "newPricingVersion") {
@@ -1485,11 +1489,11 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             fundTransferConfirmationId: undefined,
             status: "ACTV",
           })),
-          tenderSupplyConditions: [
+          tenderSupplyCondition: [
             {
-              ...tenderData.tenderSupplyConditions[0],
+              ...tenderData.tenderSupplyCondition,
               applicableConditions:
-                tenderData.tenderSupplyConditions[0].applicableConditions?.map(
+                tenderData.tenderSupplyCondition.applicableConditions?.map(
                   (ac) => ({
                     ...ac,
                     status: "ACTV",

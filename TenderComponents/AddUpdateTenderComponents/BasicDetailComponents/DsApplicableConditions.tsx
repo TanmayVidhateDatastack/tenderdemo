@@ -63,7 +63,7 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
         selectedConditions.add(id); // 🔥 Add to Set (prevents duplicates)
         conditionsVisibility[id] = true;
         if (
-          tenderData.tenderSupplyConditions[0].applicableConditions.some(
+          tenderData.tenderSupplyCondition.applicableConditions.some(
             (ac) => ac.type == id
           )
         )
@@ -94,7 +94,7 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
         const val = opt.value;
         if (typeof val === "string") {
           acc[val] = tenderData.id
-            ? tenderData.tenderSupplyConditions[0].applicableConditions.some(
+            ? tenderData.tenderSupplyCondition.applicableConditions.some(
                 (ac) => ac.type == opt.value && ac.status == "ACTV"
               )
             : true; // Add string keys directly to the object
@@ -223,7 +223,7 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
                   label={checkbox.label}
                   defaultChecked={
                     tenderData.id
-                      ? tenderData?.tenderSupplyConditions[0].applicableConditions?.some(
+                      ? tenderData?.tenderSupplyCondition.applicableConditions?.some(
                           (ac) => ac.type == checkbox.value
                         )
                       : true
