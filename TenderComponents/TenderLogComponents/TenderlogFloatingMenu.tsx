@@ -69,10 +69,11 @@ export const DsTenderTableFloatingMenu: React.FC<
     if (statuscell === "CANCELLED" || statuscell === "LOST") {
       setIsFloatingMenuVisible(false);
     } else {
-      if(statuscell!==undefined){
-      setIsFloatingMenuVisible(true);
-      setIsCancelBtnVisible(true);
-    }}
+      if (statuscell !== undefined) {
+        setIsFloatingMenuVisible(true);
+        setIsCancelBtnVisible(true);
+      }
+    }
 
     if (statuscell === "TENDER_SUBMITTED") {
       setIsCancelBtnVisible(true);
@@ -102,31 +103,34 @@ export const DsTenderTableFloatingMenu: React.FC<
     console.log("tenderId on load:", tenderId); // Debugging
     const row = document.querySelector(".tableRow-" + rowIndex) as HTMLElement;
     // if (isFloatingMenuVisible) {
-      if (e && tenderId){
-        displayTableMenu(e, "tenderfloatingmenu", "bottom", "center");
-        setIsFloatingMenuVisible(true);
-      }
-      else {
-        row?.click();
-        closeContext("tenderfloatingmenu");
-        setIsFloatingMenuVisible(false);
+    if (e && tenderId) {
+      displayTableMenu(e, "tenderfloatingmenu", "bottom", "center");
+      setIsFloatingMenuVisible(true);
+    } else {
+      row?.click();
+      closeContext("tenderfloatingmenu");
+      setIsFloatingMenuVisible(false);
       // }
-    // } else {
+      // } else {
       // if (row) {
-        // row?.click();
-        // setIsFloatingMenuVisible(true);
+      // row?.click();
+      // setIsFloatingMenuVisible(true);
       // }
     }
-  }, [ e, rowIndex, tenderId]);
+  }, [e, rowIndex, tenderId]);
   const handleClose = () => {
     console.log("close");
     const row = document.querySelector(".tableRow-" + rowIndex) as HTMLElement;
-    if (row) {
-      row.click();
-      closeContext("tenderfloatingmenu");
-
-      setIsFloatingMenuVisible(false);
-    }
+    const slectedClass = row.classList
+      .values()
+      ?.find((x) => x.includes("selectedRow"));
+      if (row) {
+        row.click();
+        closeContext("tenderfloatingmenu");
+        
+        setIsFloatingMenuVisible(false);
+      }
+      if (slectedClass) row.classList.remove(slectedClass);
     // setIsFloatingMenuVisible(false);
   };
 
@@ -173,12 +177,11 @@ export const DsTenderTableFloatingMenu: React.FC<
         console.error("Error fetching data:", err);
       });
     const row = document.querySelector(".tableRow-" + rowIndex) as HTMLElement;
-    
+
     if (row) {
       row.click();
       closeContext("tenderfloatingmenu");
       setIsFloatingMenuVisible(false);
-
     } // closeContext("tenderfloatingmenu");
   }, [handleFetch, rowIndex, tenderId]);
 

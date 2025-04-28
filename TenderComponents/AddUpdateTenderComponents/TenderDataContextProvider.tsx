@@ -1483,7 +1483,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             fundTransferConfirmationId: undefined,
             status: "ACTV",
           })),
-          tenderSupplyCondition: [
+          tenderSupplyCondition: 
             {
               ...tenderData.tenderSupplyCondition,
               applicableConditions:
@@ -1494,7 +1494,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                   })
                 ),
             },
-          ],
+          
           status: "Draft",
           lastUpdatedBy: 0,
           tenderContract: undefined,
