@@ -29,7 +29,7 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
   // },[tenderData.tenderSupplyConditions[0].eligibility]);
 
   useEffect(() => {
-    const supplyPoint = tenderData.tenderSupplyConditions[0].supplyPoint;
+    const supplyPoint = tenderData.tenderSupplyCondition.supplyPoint;
     // if (supplyPoint) {
     const option = supplyDetails.supplyPoints.find(
       (x) => x.value == supplyPoint
@@ -37,14 +37,14 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
     setSelectedSupplyPoint(option);
     // }
   }, [
-    tenderData.tenderSupplyConditions[0].supplyPoint,
+    tenderData.tenderSupplyCondition.supplyPoint,
     tenderData.id,
     supplyDetails.supplyPoints,
   ]);
 
   useEffect(() => {
     const testReportRequired =
-      tenderData.tenderSupplyConditions[0].testReportRequired;
+      tenderData.tenderSupplyCondition.testReportRequired;
     // if (testReportRequired) {
     const option = supplyDetails.reportRequirements.find(
       (x) => x.value == testReportRequired
@@ -52,12 +52,12 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
     setSelectedtTestReportRequired(option);
     // }
   }, [
-    tenderData.tenderSupplyConditions[0].testReportRequired,
+    tenderData.tenderSupplyCondition.testReportRequired,
     tenderData.id,
     supplyDetails.reportRequirements,
   ]);
   useEffect(() => {
-    const eligibility = [...tenderData.tenderSupplyConditions[0].eligibility];
+    const eligibility = [...tenderData.tenderSupplyCondition.eligibility];
     const selectedEl = eligibility.map((x) => {
       return {
         value: x,
@@ -65,7 +65,7 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
       };
     });
     setSelectedEligibility(selectedEl);
-  }, [tenderData.tenderSupplyConditions[0].eligibility, tenderData.id]);
+  }, [tenderData.tenderSupplyCondition.eligibility, tenderData.id]);
 
   return (
     <>
@@ -87,7 +87,7 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
           <DsTextField
             containerClasses={styles.fields}
             maxLength={10}
-            initialValue={tenderData.tenderSupplyConditions[0].consigneesCount?.toString()}
+            initialValue={tenderData.tenderSupplyCondition.consigneesCount?.toString()}
             inputType="positiveInteger"
             label="Provide no. of consignees"
             // placeholder="Please type here"

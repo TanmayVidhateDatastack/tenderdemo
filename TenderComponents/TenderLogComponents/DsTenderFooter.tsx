@@ -172,23 +172,23 @@ export const DSTendrFooter: React.FC = ({}) => {
       }
     });
 
-    if (tenderData?.tenderSupplyConditions[0]?.supplyPoint?.trim() === "") {
+    if (tenderData?.tenderSupplyCondition?.supplyPoint?.trim() === "") {
       errors.push("Please select a supply point.");
     }
-    if (tenderData?.tenderSupplyConditions[0]?.consigneesCount === 0) {
+    if (tenderData?.tenderSupplyCondition?.consigneesCount === 0) {
       errors.push("Please enter the number of consignees.");
     }
     if (
-      tenderData?.tenderSupplyConditions[0]?.testReportRequired?.trim() === "" 
+      tenderData?.tenderSupplyCondition?.testReportRequired?.trim() === "" 
     ) {
       errors.push("Please specify whether a test report is required.");
     }
-    if (tenderData?.tenderSupplyConditions[0]?.eligibility.length == 0) {
+    if (tenderData?.tenderSupplyCondition?.eligibility.length == 0) {
       errors.push("Please select at least one eligibility criterion.");
     }
 
     const applicableConditions =
-      tenderData?.tenderSupplyConditions[0]?.applicableConditions ?? [];
+      tenderData?.tenderSupplyCondition?.applicableConditions ?? [];
     applicableConditions.forEach((condition, index) => {
       if (condition.status == "ACTV") {
         if (condition.type?.toString().trim() == "") {
@@ -307,30 +307,31 @@ export const DSTendrFooter: React.FC = ({}) => {
   };
   const validateAndUpdateTender = () => {
     console.log(tenderData);
+    updateTender("Draft");
 
-    const validate = validateFields();
-    if (validate.length === 0) {
-      updateTender("Draft");
-    } else {
-      const message = (
-        <>
-          <div className={styles["toaster-message-grid"]}>
-            {validate.map((ms, index) => (
-              <div key={index} className={styles["toaster-item"]}>
-                {ms}
-              </div>
-            ))}
-          </div>
-        </>
-      );
-      setActionStatusValues({
-        notiMsg: message,
-        notiType: "info",
-        showNotification: true,
-        isOkayButtonVisible: true,
-      });
-      showToaster("create-order-toaster");
-    }
+    // const validate = validateFields();
+    // if (validate.length === 0) {
+      // updateTender("Draft");
+    // } else {
+    //   const message = (
+    //     <>
+    //       <div className={styles["toaster-message-grid"]}>
+    //         {validate.map((ms, index) => (
+    //           <div key={index} className={styles["toaster-item"]}>
+    //             {ms}
+    //           </div>
+    //         ))}
+    //       </div>
+    //     </>
+    //   );
+    //   setActionStatusValues({
+    //     notiMsg: message,
+    //     notiType: "info",
+    //     showNotification: true,
+    //     isOkayButtonVisible: true,
+    //   });
+    //   showToaster("create-order-toaster");
+    // }
   };
 
   useEffect(() => {
