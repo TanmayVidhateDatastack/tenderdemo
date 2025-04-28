@@ -12,9 +12,9 @@ import { useTenderData } from "../TenderDataContextProvider";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import { useEffect, useState } from "react";
 const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
-  const { updateSupplyCondition, tenderData } = useTenderData();
+  const { updateSupplyCondition, tenderData ,tenderDataCopy} = useTenderData();
   const [selectedEligibility, setSelectedEligibility] = useState<
-    DsSelectOption[]
+    DsSelectOption[] 
   >([]);
   const [selectedSupplyPoint, setSelectedSupplyPoint] =
     useState<DsSelectOption>();
@@ -53,19 +53,22 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
     // }
   }, [
     tenderData.tenderSupplyCondition.testReportRequired,
-    tenderData.id,
+    tenderData.id, 
     supplyDetails.reportRequirements,
   ]);
   useEffect(() => {
-    const eligibility = [...tenderData.tenderSupplyCondition.eligibility];
-    const selectedEl = eligibility.map((x) => {
-      return {
-        value: x,
-        label: x,
-      };
-    });
-    setSelectedEligibility(selectedEl);
-  }, [tenderData.tenderSupplyCondition.eligibility, tenderData.id]);
+    if(tenderData.tenderSupplyCondition.eligibility){
+
+      const eligibility = [...tenderData.tenderSupplyCondition.eligibility];    
+      const selectedEl = eligibility.map((x) => { 
+        return { 
+          value: x,  
+          label: x, 
+        }; 
+      });  
+      setSelectedEligibility(selectedEl);  
+    }
+  }, [tenderDataCopy.tenderSupplyCondition.eligibility, tenderData.id]); 
 
   return (
     <>
@@ -125,8 +128,8 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
             //     })
             //   },[formatedDepot,tenderData.shippingLocations]);
             containerClasses={styles.fields}
-            selectedOptions={selectedEligibility}
-            options={supplyDetails.eligibility}
+            selectedOptions={selectedEligibility} 
+            options={supplyDetails.eligibility}   
             label="Eligibility"
             placeholder={"Please search and select here"}
             id={"eligibility"}

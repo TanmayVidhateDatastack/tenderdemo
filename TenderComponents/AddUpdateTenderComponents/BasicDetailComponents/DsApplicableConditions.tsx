@@ -94,7 +94,7 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
         const val = opt.value;
         if (typeof val === "string") {
           acc[val] = tenderData.id
-            ? tenderData.tenderSupplyCondition.applicableConditions.some(
+            ? tenderData.tenderSupplyCondition.applicableConditions?.some(
                 (ac) => ac.type == opt.value && ac.status == "ACTV"
               )
             : true; // Add string keys directly to the object

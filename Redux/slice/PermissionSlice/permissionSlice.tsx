@@ -9,6 +9,8 @@ type PermissionState = {
   newButtonVisible: boolean;
   filterButtonVisible: boolean;
   myApprovalButtonVisible: boolean;
+  fetchCustomerButtonVisible:boolean,
+
   // myApprovalButtonVisible: boolean;
 };
 
@@ -20,6 +22,7 @@ const initialState: PermissionState = {
   newButtonVisible: false,
   filterButtonVisible: false,
   myApprovalButtonVisible: false,
+  fetchCustomerButtonVisible:false,
   // myApprovalButtonVisible: false,
 
 };
@@ -38,7 +41,7 @@ const permissionsSlice = createSlice({
       state.newButtonVisible = false;
       state.feesPendingButtonVisible = false;
       state.myApprovalButtonVisible = false;
-      state.myApprovalButtonVisible = false;
+      state.fetchCustomerButtonVisible = false;
 
       switch (role) {
         case "MAKER":
@@ -48,6 +51,8 @@ const permissionsSlice = createSlice({
           state.newButtonVisible = true;
           state.feesPendingButtonVisible = false;
           state.approvalButtonVisible = true;
+          state.fetchCustomerButtonVisible = true;
+          
           break;
 
         case "CHECKER":

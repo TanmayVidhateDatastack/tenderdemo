@@ -182,9 +182,8 @@ const DsBasicDetails = () => {
     handleRoleFetch();
   }, []);
   useEffect(() => {
-    // console.log("metadata : ", metadata);
     if (metadata.length > 0 && metadata[0]?.depositeDocument) {
-      setDepositeDocuments(metadata[0].depositeDocument);
+      // setDepositeDocuments(metadata[0].depositeDocument);
       setApplicableDocuments(metadata[0].applicableDeposits);
       setApplicableSupplyConditions(metadata[0].applicableSupplyConditions);
     }
@@ -197,16 +196,15 @@ const DsBasicDetails = () => {
       </div>
       <span className={styles.Seperator}></span>
       <div className={styles.container}>
-
         <DsApplierSupplierDetails />
       </div>
       <span className={styles.Seperator}></span>
       <div className={styles.container}>
 
         <DsDepositeDocuments
-          setDepositeDocuments={(docs) => {
-            setDepositeDocuments(docs);
-          }}
+          // setDepositeDocuments={(docs) => {
+          //   setDepositeDocuments(docs);
+          // }}
           depositeDocument={depositeDocument}
           applicableDeposits={applicableDocuments}
           role={role}

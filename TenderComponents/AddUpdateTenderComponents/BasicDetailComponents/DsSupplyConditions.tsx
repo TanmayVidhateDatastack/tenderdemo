@@ -32,8 +32,8 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
           <span className={styles.notesTitle}>Notes</span>
             <TextArea
              containerClasses={styles.feeFields}
-             className={styles.notesField}
-             initialValue={tenderData.tenderSupplyCondition.applicableConditions.find((x)=>x.type==type)?.notes||""}
+             className={styles.notesField} 
+             initialValue={tenderData.tenderSupplyCondition.applicableConditions?.find((x)=>x.type==type)?.notes||""}
               id="embossmentNotes"
               placeholder="Please type here"
               minRows={2}
@@ -42,9 +42,9 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
                 updateApplicableCondition(
                   type,
                   "notes",
-                  (e.target as HTMLInputElement).value
+                  (e.target as HTMLInputElement).value 
                 );
-              }}
+              }}  
             />
         </div>
         <div className={styles.attachFileBtn}>
