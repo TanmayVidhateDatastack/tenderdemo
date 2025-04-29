@@ -19,30 +19,28 @@ import { useTenderData } from "../TenderDataContextProvider";
 
 import IconFactory from "@/Elements/IconComponent";
 import DsTenderDetails from "./DsTenderDetails ";
-export interface DepositDocument {
-  modes: DsSelectOption[];
-  refunds:DsSelectOption[];
-  // paidBy: DsSelectOption[];
-}
+import { useAppSelector } from "@/Redux/hook/hook";
+import { RootState } from "@/Redux/store/store";
+//  interface DepositDocument {
+//   modes: DsSelectOption[];
+//   refunds:DsSelectOption[];
+//   // paidBy: DsSelectOption[];
+// }
 // export interface Deposit {
 //   paidBy: DsSelectOption[];
 // }
 
-export interface FeesDocument {
-  applicableDeposits: DsSelectOption[];
-}
-export interface DepositeDocumentsProps {
-  setDepositeDocuments: (depositeDocuments: DepositDocument[]) => void;
-  depositeDocument: DepositDocument[] | null;
-  applicableDeposits: DsSelectOption[] | [];
-  role: string;
-}
+//  interface FeesDocument {
+//   applicableDeposits: DsSelectOption[];
+// }
+//  interface DepositeDocumentsProps {
+//   setDepositeDocuments: (depositeDocuments: DepositDocument[]) => void;
+//   depositeDocument: DepositDocument[] | null;
+//   applicableDeposits: DsSelectOption[] | [];
+//   role: string;
+// }
 
-const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
-  depositeDocument,
-  applicableDeposits,
-  role, 
-}) => {
+const DsDepositeDocuments: React.FC=() => {
   const contextMenuId = "context-display-10";
   const {
     addTenderFee,
@@ -50,6 +48,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
     tenderData,
     tenderDataCopy,
     updateTenderFee,
+    metaData,
   } = useTenderData();
   const [mode, setMode] = useState<DsSelectOption[]>([]);
   const [refund,setRefund]=useState<DsSelectOption[]>([]);
@@ -60,7 +59,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   const [feeVisibility, setFeeVisibility] = useState<Record<string, boolean>>({
     "": true,
   });
-
+ const role = useAppSelector((state: RootState) => state.user.role);
   useEffect(() => {
     if (role == "MAKER" || role == "CHECKER") {
       setPaymentCheckVisible(false);
@@ -70,17 +69,17 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   }, [role]);
 
   useEffect(() => {
-    if (depositeDocument) {
-      const modesData = depositeDocument[0]?.modes || [];
+    if (metaData) {
+      const modesData = metaData.paymentModes || [];
       // const paidByData = depositeDocument[0]?.paidBy || [];
-      const refundData = depositeDocument[0]?.refunds || [];
+      const refundData = metaData.refundEligibility || [];
       setMode(modesData);
       setRefund(refundData); 
       // setPaidBy(paidByData);
     }
-    if (applicableDeposits && applicableDeposits.length > 0) {
+    if (metaData.feesType && metaData.feesType .length > 0) {
       // console.log("000 : ", applicableDeposits);
-      const mappedDeposits = applicableDeposits.map((deposit) => ({
+      const mappedDeposits = metaData.feesType .map((deposit) => ({
         label: deposit.label,
         value: deposit.value,
       }));
@@ -101,7 +100,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
 
       setFeeVisibility(options);
     }
-  }, [depositeDocument, applicableDeposits, tenderDataCopy.tenderFees]);
+  }, [metaData, tenderDataCopy.tenderFees]);
 
 
 
@@ -241,7 +240,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
           /> 
         </div>
       </div>
-      {applicableDeposits.map((deposit) =>  {
+      {(metaData.feesType||[]).map((deposit) =>  {
         if (typeof deposit.value == "string")
           return (
             feeVisibility[deposit.value] && (

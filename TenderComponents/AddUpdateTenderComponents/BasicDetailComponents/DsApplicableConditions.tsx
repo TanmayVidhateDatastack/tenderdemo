@@ -19,13 +19,11 @@ import DsSupplyConditions from "./DsSupplyConditions";
 import { useTenderData } from "../TenderDataContextProvider";
 import IconFactory from "@/Elements/IconComponent";
 
-export interface ApplicableConditionsProps {
-  applicableConditions: DsSelectOption[] | [];
-}
+//  interface ApplicableConditionsProps {
+//   applicableConditions: DsSelectOption[] | [];
+// }
 
-const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
-  applicableConditions,
-}) => {
+const DsApplicableConditions: React.FC=() => {
   const contextMenuId = "context-display-11";
   const [context, setContext] = useState(false);
   const [applicableCheckboxes, setApplicableCheckboxes] = useState<
@@ -38,6 +36,7 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
     tenderDataCopy,
     tenderData,
     updateApplicableCondition,
+    metaData,
   } = useTenderData();
   const [conditionsVisibility, setConditionsVisibility] = useState<
     Record<string, boolean>
@@ -81,12 +80,12 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
   // useEffect(() =>{},[handleAdd]);
 
   useEffect(() => {
-    if (applicableConditions && applicableConditions.length > 0) {
-      const mappedConditions = applicableConditions.map((conditions) => ({
+    if (metaData.applicableSupplyConditions && metaData.applicableSupplyConditions.length > 0) {
+      const mappedConditions = metaData.applicableSupplyConditions.map((conditions) => ({
         label: conditions.label,
         value: conditions.value,
       }));
-      setApplicableCheckboxes(mappedConditions);
+      setApplicableCheckboxes(mappedConditions||[]);
 
       const options: Record<string, boolean> = mappedConditions.reduce<
         Record<string, boolean>
@@ -105,10 +104,10 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
 
       setConditionsVisibility(options);
     }
-  }, [applicableConditions, tenderDataCopy, tenderData.id]);
+  }, [metaData?.applicableSupplyConditions, tenderDataCopy, tenderData.id]);
 
   useEffect(() => {
-    applicableConditions.forEach((opt) => {
+    (metaData.applicableSupplyConditions||[]).forEach((opt) => {
       const id = opt.value.toString();
       // if(tenderData.tenderFees.find((x)=> x.feesType==id)?.status=="INAC"){
       //   console.log("Inactive ",id);
@@ -141,7 +140,7 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
           updateApplicableCondition(id, "status", "INAC");
       }
     });
-  }, [applicableConditions, tenderData.id]);
+  }, [metaData.applicableSupplyConditions, tenderData.id]);
   useEffect(() => {
     window.addEventListener("click", (e) => {
       const target = (e.target as HTMLElement).closest(
@@ -194,7 +193,7 @@ const DsApplicableConditions: React.FC<ApplicableConditionsProps> = ({
         </div>
         {conditionsVisibility&&Object.values(conditionsVisibility).filter((x) => x).length > 0 && (
           <div className={styles.conditions}>
-            {applicableConditions.map((conditions) => {
+            {(metaData.applicableSupplyConditions||[]).map((conditions) => {
               if (typeof conditions.value == "string")
                 return (
                   conditionsVisibility[conditions.value] && (
