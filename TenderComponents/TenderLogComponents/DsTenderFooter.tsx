@@ -18,12 +18,13 @@ import fetchData from "@/Common/helpers/Method/fetchData";
 import { dsStatus, getTenderUserRoles } from "@/Common/helpers/constant";
 import DsNavTo from "@/Elements/ERPComponents/DsNavigationComponent/DsNavTo";
 import DsSplitButton from "@/Elements/DsComponents/DsButtons/dsSplitButton";
-import DsApprovalPopup from "@/Elements/ERPComponents/DsApprovalPopups/DsApprovalPopups";
+
 import Toaster from "@/Elements/DsComponents/DsToaster/DsToaster";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import { useTenderData } from "../AddUpdateTenderComponents/TenderDataContextProvider";
 import { TenderData } from "@/TenderComponents/AddUpdateTenderComponents/TenderDataContextProvider";
 import { getYesterdayDate } from "@/Common/helpers/Method/conversion";
+import ApprovalPopup from "../AddUpdateTenderComponents/Approvelpopup/ApprovelPopup";
 
 class ActionStatus {
   notiType: "success" | "bonus" | "info" | "error" | "cross" = "success";
@@ -457,7 +458,7 @@ export const DSTendrFooter: React.FC = ({}) => {
         </DsSplitButton>
       </div>
 
-      <DsApprovalPopup
+      <ApprovalPopup
         id="popup1"
         types={[]}
         popupType="Approve"
@@ -473,7 +474,7 @@ export const DSTendrFooter: React.FC = ({}) => {
         setActionStatus={setActionStatusValues}
       />
 
-      <DsApprovalPopup
+      <ApprovalPopup
         id="popup2"
         types={[]}
         popupType="Revise"
@@ -482,7 +483,7 @@ export const DSTendrFooter: React.FC = ({}) => {
         toasterMessage={"The Tender has been sent for Revision "}
         setActionStatus={setActionStatusValues}
       />
-      <DsApprovalPopup
+      <ApprovalPopup
         id="popup3"
         types={[]}
         popupType="Reject"

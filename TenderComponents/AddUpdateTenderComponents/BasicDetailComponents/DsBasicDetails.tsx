@@ -116,14 +116,12 @@ const DsBasicDetails = () => {
           })), 
         };
         setSupplyDetails(supplyDetailsData);
-
         // Applicable Deposits
         const applicableDeposits = result.feesType.map((item: any) => ({
           value: item.codeValue,
           label: item.codeDescription,
         }));
         setApplicableDocuments(applicableDeposits);
-
         // Applicable Supply Conditions
         const applicableSupplyCond = result.tenderSupplyCondition.map(
           (item: any) => ({
