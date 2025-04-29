@@ -34,7 +34,7 @@ export interface FeesDocument {
   applicableDeposits: DsSelectOption[];
 }
 export interface DepositeDocumentsProps {
-  setDepositeDocuments: (depositeDocuments: DepositDocument[]) => void;
+  // setDepositeDocuments: (depositeDocuments: DepositDocument[]) => void;
   depositeDocument: DepositDocument[] | null;
   applicableDeposits: DsSelectOption[] | [];
   role: string;
@@ -140,6 +140,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   useEffect(() => {
     if (depositeDocument) {
       const modesData = depositeDocument[0]?.modes || [];
+      console.log("TTTTTTTTTT",depositeDocument);
       // const paidByData = depositeDocument[0]?.paidBy || [];
       const refundData = depositeDocument[0]?.refunds || [];
       setMode(modesData);

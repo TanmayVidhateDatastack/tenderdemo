@@ -1,9 +1,9 @@
 import React, { createContext, useState, ReactNode, Dispatch, SetStateAction, useEffect } from "react";
+import { TenderDocument } from "../TenderDataContextProvider";
 
-interface Document {
-  documentName: string;
+export interface Document {
+  document: TenderDocument;
   isVisible: boolean;
-  documentPath: string;
 }
 
 interface DocumentType {
@@ -19,7 +19,12 @@ interface DocumentContextType {
   totalSelectedDocuments: number;
   toggleDocumentVisibility: (type: string, documentName: string) => void;
 }
-
+export interface DocumentSelectorProps {
+  headerTitle: string;
+  headerNumber: string;
+  initialDocuments: Document[];
+  handleOnRemoveClick?: (doc: string) => void;
+}
 export const DocumentContext = createContext<DocumentContextType | undefined>(undefined);
 
 interface DocumentProviderProps {
@@ -38,7 +43,7 @@ export const DocumentProvider: React.FC<DocumentProviderProps> = ({ children }) 
           ? {
             ...docType,
             documents: docType.documents.map((doc) =>
-              doc.documentName === documentName ? { ...doc, isVisible: !doc.isVisible } : doc
+              doc.document.name === documentName ? { ...doc, isVisible: !doc.isVisible } : doc
             ),
           }
           : docType
@@ -50,7 +55,7 @@ export const DocumentProvider: React.FC<DocumentProviderProps> = ({ children }) 
     setSelectedDocuments((prevSelected) =>
       prevSelected.filter((doc) =>
         documentData.some((group) =>
-          group.documents.some((d) => d.documentName === doc.documentName)
+          group.documents.some((d) => d.document.name === doc.document.name)
         )
       )
     );
