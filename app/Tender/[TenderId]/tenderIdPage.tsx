@@ -148,7 +148,6 @@ const DsTenderIdPage: React.FC<{
     }
   }, [orderId]);
 
-
   useEffect(() => {
     console.log(displayFlag, "displayFlag");
     const revisionTabs = tenderData.tenderRevisions.map((rev) => ({
@@ -390,75 +389,84 @@ const DsTenderIdPage: React.FC<{
                 <DsBasicDetails />
               </div>
             </TabView>
-
-            {tenderData.tenderRevisions.map((rev) => (
-              <TabView key={rev.version} tabId={`v${rev.version}`}>
-                {/* <DsTenderProduct
+            {tenderDataCopy.id !== undefined &&
+              tenderDataCopy.id !== null &&
+              tenderDataCopy.id !== 0 && (
+                <>
+                  {tenderData.tenderRevisions.map((rev) => (
+                    <TabView key={rev.version} tabId={`v${rev.version}`}>
+                      {/* <DsTenderProduct
                   productList={[...(rev.tenderItems ?? [])]}
                   setProductList={(product) =>
                     addTenderProduct(rev.version, product)
                   }
                 /> */}
-                <DsTenderProduct
-                  productList={rev.tenderItems || []}
-                  setProductList={(product) => {
-                    const isDuplicate = rev.tenderItems?.some(
-                      (item) => item.productId === product.productId
-                    );
+                      <DsTenderProduct
+                        productList={rev.tenderItems || []}
+                        setProductList={(product) => {
+                          const isDuplicate = rev.tenderItems?.some(
+                            (item) => item.productId === product.productId
+                          );
 
-                    if (!isDuplicate) {
-                      addTenderProduct(rev.version, product);
-                    }
-                  }}
-                  version={rev.version}
-                />
-              </TabView>
-            ))}
+                          if (!isDuplicate) {
+                            addTenderProduct(rev.version, product);
+                          }
+                        }}
+                        version={rev.version}
+                      />
+                    </TabView>
+                  ))}
 
-            <TabView tabId="2">
-              <DocumentContext.Consumer>
-                {(context) => {
-                  if (!context) {
-                    return <div>Error: Document context is not available</div>;
-                  }
-                  const { totalSelectedDocuments } = context;
+                  <TabView tabId="2">
+                    <DocumentContext.Consumer>
+                      {(context) => {
+                        if (!context) {
+                          return (
+                            <div>Error: Document context is not available</div>
+                          );
+                        }
+                        const { totalSelectedDocuments } = context;
 
-                  return (
-                    <div className={style.documentContainer}>
-                      <div className={style.docPane}>
-                        <div className={style.totalCount}>
-                          <div className={style.selectedDocsCount}>
-                            Selected Document
+                        return (
+                          <div className={style.documentContainer}>
+                            <div className={style.docPane}>
+                              <div className={style.totalCount}>
+                                <div className={style.selectedDocsCount}>
+                                  Selected Document
+                                </div>
+                                <div className={style.count}>
+                                  {Number(
+                                    totalSelectedDocuments
+                                  ).toLocaleString("en-US", {
+                                    minimumIntegerDigits: 2,
+                                    useGrouping: false,
+                                  })}
+                                </div>
+                              </div>
+                              <PaneOpenButton
+                                className={styles.docPaneBtn}
+                                buttonViewStyle="btnText"
+                                id="documentPaneOpenBtn"
+                                paneId="documentPane"
+                                label="Add Documents"
+                              />
+                            </div>
+                            <DocumentSelectorArea />
                           </div>
-                          <div className={style.count}>
-                            {Number(totalSelectedDocuments).toLocaleString(
-                              "en-US",
-                              { minimumIntegerDigits: 2, useGrouping: false }
-                            )}
-                          </div>
-                        </div>
-                        <PaneOpenButton
-                          className={styles.docPaneBtn}
-                          buttonViewStyle="btnText"
-                          id="documentPaneOpenBtn"
-                          paneId="documentPane"
-                          label="Add Documents"
-                        />
-                      </div>
-                      <DocumentSelectorArea />
-                    </div>
-                  );
-                }}
-              </DocumentContext.Consumer>
-            </TabView>
-            <TabView tabId="Contract">
-              {(tenderData.status == "AWARDED" ||
-                tenderData.status == "PARTIALLY_AWARDED" ||
-                tenderData.status == "LOST" ||
-                tenderData.status == "CANCELLED") && (
-                <ContractView status={tenderData.status} />
+                        );
+                      }}
+                    </DocumentContext.Consumer>
+                  </TabView>
+                  <TabView tabId="Contract">
+                    {(tenderData.status == "AWARDED" ||
+                      tenderData.status == "PARTIALLY_AWARDED" ||
+                      tenderData.status == "LOST" ||
+                      tenderData.status == "CANCELLED") && (
+                      <ContractView status={tenderData.status} />
+                    )}
+                  </TabView>
+                </>
               )}
-            </TabView>
           </div>
           <DSTendrFooter />
         </DsApplication>

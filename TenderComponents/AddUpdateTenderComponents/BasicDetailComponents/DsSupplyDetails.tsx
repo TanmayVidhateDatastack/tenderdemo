@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
   const { updateSupplyCondition, tenderData,tenderDataCopy } = useTenderData();
   const [selectedEligibility, setSelectedEligibility] = useState<
-    DsSelectOption[]
+    DsSelectOption[] 
   >([]);
   const [selectedSupplyPoint, setSelectedSupplyPoint] =
     useState<DsSelectOption>();
@@ -53,7 +53,7 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
     // }
   }, [
     tenderData.tenderSupplyCondition.testReportRequired,
-    tenderData.id,
+    tenderData.id, 
     supplyDetails.reportRequirements,
   ]);
   useEffect(() => {
@@ -127,8 +127,8 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
             //     })
             //   },[formatedDepot,tenderData.shippingLocations]);
             containerClasses={styles.fields}
-            selectedOptions={selectedEligibility}
-            options={supplyDetails.eligibility}
+            selectedOptions={selectedEligibility} 
+            options={supplyDetails.eligibility}   
             label="Eligibility"
             placeholder={"Please search and select here"}
             id={"eligibility"}

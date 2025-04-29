@@ -11,11 +11,12 @@ import { documents } from "@/Common/helpers/types";
 import { DocumentContext } from "./DocumentsContextProvider";
 import { getAllDocuments } from "@/Common/helpers/constant";
 import buttonstyle from "@/Elements/DsComponents/DsButtons/dsButton.module.css"
+import { TenderDocument } from "../TenderDataContextProvider";
 
 const DsAddTenderDocumentPane: React.FC = () => {
   const [openAccordion, setOpenAccordion] = useState<string | null |number>(null);
-  const [groupedDocuments, setGroupedDocuments] = useState<Record<string, documents[]>>({});
-  const [selectedDocuments, setSelectedDocuments] = useState<documents[]>([]);
+  const [groupedDocuments, setGroupedDocuments] = useState<Record<string, TenderDocument[]>>({});
+  const [selectedDocuments, setSelectedDocuments] = useState<TenderDocument[]>([]);
 
   const documentContext = useContext(DocumentContext);
 
@@ -55,7 +56,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
     setOpenAccordion((prevType) => (prevType === type ? null : type));
   };
 
-  const handleCheckboxChange = (doc: documents) => {
+  const handleCheckboxChange = (doc: TenderDocument) => {
     setSelectedDocuments((prev) => {
       const alreadySelected = prev.some((d) => d.id === doc.id);
 
@@ -76,7 +77,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
 
     const updatedSelectedDocuments = selectedDocuments.filter((doc) =>
       documentContext.documentData.some((contextDoc) =>
-        contextDoc.documents.some((d) => d.documentName === doc.documentName)
+        contextDoc.documents.some((d) => d.document.name === doc.name)
       )
     );
 
@@ -93,28 +94,26 @@ const DsAddTenderDocumentPane: React.FC = () => {
         let updatedData: {
           type: string;
           documents: {
-            documentName: string;
+            document: TenderDocument;
             isVisible: boolean;
-            documentPath: string;
           }[];
         }[] = [...prevData]; // Explicit type declaration
 
         selectedDocuments.forEach((doc) => {
-          const existingType = updatedData.find((group) => group.type === doc.type);
+          const existingType = updatedData.find((group) => group.type === doc.documentType);
 
           if (existingType) {
-            if (!existingType.documents.some((d) => d.documentName === doc.documentName)) {
+            if (!existingType.documents.some((d) => d.document.name === doc.name)) {
               existingType.documents.push({
-                documentName: doc.documentName,
+                document: doc,
                 isVisible: false,
-                documentPath: doc.documentPath || "",
               });
             }
           } else {
             updatedData.push({
-              type: doc.type,
+              type: doc.documentType,
               documents: [
-                { documentName: doc.documentName, isVisible: false, documentPath: doc.documentPath || "" },
+                { document: doc, isVisible: false },
               ],
             });
           }
@@ -126,7 +125,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
             ...group,
             documents: group.documents.filter((doc) =>
               selectedDocuments.some((selectedDoc) =>
-                selectedDoc.documentName === doc.documentName && selectedDoc.type === group.type
+                selectedDoc.name === doc.document.name && selectedDoc.documentType === group.type
               )
             ),
           };
@@ -163,10 +162,10 @@ const DsAddTenderDocumentPane: React.FC = () => {
                 <Ds_checkbox
                   className={styles.documentsCkechS}
                   key={doc.id}
-                  id={doc.id.toString()}
-                  name={doc.documentName} 
-                  value={doc.id.toString()}
-                  label={doc.documentName}
+                  id={doc.id?.toString()||doc.name}
+                  name={doc.name} 
+                  value={doc.id?.toString()||doc.name}
+                  label={doc.name}
                   onChange={() => handleCheckboxChange(doc)}
                   isChecked={selectedDocuments.some((d) => d.id === doc.id)} 
                 />

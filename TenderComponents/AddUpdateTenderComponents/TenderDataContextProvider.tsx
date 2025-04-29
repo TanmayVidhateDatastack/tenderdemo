@@ -80,7 +80,7 @@ export type tenderSupplyCondition = {
   supplyPoint: string;
   consigneesCount: number | null;
   testReportRequired: string;
-  eligibility: string[];
+  eligibility: string[]; 
   applicableConditions: applicableSupplyConditions[];
 };
 export type applicableSupplyConditions = {
@@ -553,7 +553,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 
   // ✅ Update applicable condition fields
-  const updateApplicableCondition = useCallback(
+  const updateApplicableCondition = useCallback( 
     (
       conditionType: string,
       key: keyof applicableSupplyConditions,
@@ -882,7 +882,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         const active: "ACTV" | "INAC" = "ACTV";
 
         const updatedTenderApplicableConditions =
-          prev.tenderSupplyCondition.applicableConditions.map((ac) => {
+          prev.tenderSupplyCondition.applicableConditions?.map((ac) => {
             if (ac.type == type) {
               updated = true;
               return {
@@ -893,7 +893,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             return ac;
           });
         if (!updated) {
-          updatedTenderApplicableConditions.push({
+          updatedTenderApplicableConditions?.push({
             type,
             status: active,
             notes: "",
@@ -1079,7 +1079,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           }
         });
         // console.log("result  = ", result);
-        //console.log("Order saved successfully");
+        //console.log("Order saved successfully"); 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         // console.error("Error saving order:", error);

@@ -19,7 +19,10 @@ import { getYesterdayDate } from "@/Common/helpers/Method/conversion";
 import ContextMenu, {
   displayContext,
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
+import { setVisibilityByRole } from "@/Redux/slice/PermissionSlice/permissionSlice";
 import FetchCustomer from "./fetchcustomerComponent";
+import { useAppSelector } from "@/Redux/hook/hook";
+import { RootState } from "@/Redux/store/store";
 const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
   const [fetchVisible, setFetchVisible] = useState(true);
   const [role, setRole] = useState("checker");
@@ -43,6 +46,10 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
   // const [cust, setCust] = useState<DsSelectOption>();
   //     value:
   //     label:
+  
+    const permissions = useAppSelector((state: RootState) => state.permissions);
+    const { fetchCustomerButtonVisible } = permissions;
+
   const handleRoleFetch = async () => {
     try {
       const res = await fetchData({ url: getTenderUserRoles });
@@ -61,13 +68,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
   useEffect(() => {
     handleRoleFetch();
   }, []);
-  useEffect(() => {
-    if (role == "MAKER" && tenderDataCopy.id == undefined) {
-      setFetchVisible(true);
-    } else {
-      setFetchVisible(false);
-    }
-  }, [role, tenderDataCopy.id]);
+
 
   const getTodayDate = (date: Date) => {
     const year = date.getFullYear();
@@ -125,8 +126,8 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
           />
         </div>
 
-        {fetchVisible && (
-          <div className={deptStyle.fields}>
+        {fetchCustomerButtonVisible &&  !(tenderDataCopy.id && tenderDataCopy.id !==0)  && ( 
+          <div className={deptStyle.fields}> 
             <DsButton
               id="copyBtn"
               label="Fetch Information"
