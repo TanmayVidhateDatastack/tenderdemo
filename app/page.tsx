@@ -905,7 +905,7 @@ export default function Home() {
             filterId: "1",
             filterFor: "Date",
             filterType: "DateRange",
-            minValue: new Date(2025, 9, 21).toLocaleDateString("en-GB"),
+            minValue: new Date(2025, 1, 21).toLocaleDateString("en-GB"),
             maxValue: new Date(2050, 11, 26).toLocaleDateString("en-GB"),
           },
 

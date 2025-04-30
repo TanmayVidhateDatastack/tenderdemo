@@ -181,7 +181,17 @@ min-height: fit-content;
     scroll-behavior: smooth;  */
     padding-right: 10px;   
   }
-  .disbaled
+  
+.fields
 {
-  color :yellow !important
+  margin-top: 20px;
 }
+.multipleSelect
+{
+  margin-top: 20px;
+  width: 365px;
+}
+
+
+
+

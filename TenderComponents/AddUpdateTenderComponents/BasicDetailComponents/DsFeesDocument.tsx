@@ -11,12 +11,15 @@ import { DsSelectOption } from "@/Common/helpers/types";
 import { updateDocuments, useTenderData } from "../TenderDataContextProvider";
 import TextArea from "@/Elements/DsComponents/DsInputs/dsTextArea";
 import DatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker";
-import { paidBys } from "@/Common/helpers/constant";
+import { getAllMetaData, paidBys } from "@/Common/helpers/constant";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import { useEffect, useState } from "react";
 import IconFactory from "@/Elements/IconComponent";
 import DsMultiSelect from "@/Elements/DsComponents/dsSelect/dsMultiSelect";
 import { getYesterdayDate } from "@/Common/helpers/Method/conversion";
+import UploadFile from "@/TenderComponents/TenderLogComponents/uploadfile";
+import Tryfolder from "@/app/Tender/tryfolder/tryfolder";
+import { closeAllContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 
 export type tenderDocument = {
   name: string;
@@ -42,8 +45,9 @@ export interface DsFeesProps {
   refund: DsSelectOption[];
   paidBy: DsSelectOption[];
   downloadVisible: boolean;
-  paymentCompletedVisible: boolean;
+  completedpayment:boolean
   type: string;
+  optionlist: DsSelectOption[];
 }
 export interface Deposit {
   paidBy: DsSelectOption[];
@@ -65,7 +69,9 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
   refund,
   paidBy,
   downloadVisible,
-  paymentCompletedVisible,
+ 
+  optionlist,
+  completedpayment=false,
 }) => {
   const {
     updateTenderFee,
@@ -73,16 +79,62 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     tenderData,
     removeTenderDocument,
   } = useTenderData();
-
+  const metaDataTypes = [
+    "TENDER_EMD_PAYMENT",
+    "TENDER_FEES_PAYMENT",
+    "TENDER_PSD_PAYMENT",
+    "FEES_TYPE",
+  ];
   const [depositeDocuments, setDepositeDocuments] = useState<DsSelectOption[]>(
     []
   );
-
   const [selectedPaymentMode, setSelectedPaymentMode] =
     useState<DsSelectOption>();
   const [selectedRefund, setSelectedRefund] = useState<DsSelectOption>();
-
   const [selectedPaidBy, setSelectedPaidBy] = useState<DsSelectOption>();
+  const [selectedcheckbox, setSelectedCheckbox] = useState(false);
+  const [selectedOptions, setSelectedOptions] = useState<DsSelectOption[]>([]);
+
+  // const handleFetchpayments = async () => {
+  //   try {
+  //     const metaData = await fetchData({
+  //       url: getAllMetaData,
+  //       method: "GET",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "x-tender-codes": JSON.stringify(metaDataTypes),
+  //       },
+  //     });
+  //     if (metaData.code === 200) {
+  //       const result = metaData.result;
+  //       console.log("MetaData ", result);
+
+  //       let tenderpayments = [];
+      
+  //       tenderpayments = result?.tenderEmdPayment || [];
+
+  //       tenderpayments = result?.tenderFeesPayment || [];
+
+  //       tenderpayments = result?.tenderPsdPayment || [];
+  //       let  feestype = result?.feesType || [];
+  //       console.log("feestype is ", feestype[0]);
+  //       console.log("tenderpayments", tenderpayments);
+
+  //       const formattedOptions = tenderpayments.map((item: any) => ({
+  //         value: item.codeValue,
+  //         label: item.codeDescription,
+  //       }));
+
+  //       setOptions(formattedOptions);
+  //     }
+  //   } catch (error) {
+  //     console.error("Fetch error: ", error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   handleFetchpayments();
+  // }, []);
 
   const handleAppliedSuppliedFetch = async () => {
     try {
@@ -126,8 +178,8 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     if (refund) {
       const refundValue = tenderData.tenderFees.find(
         (x) => x.feesType == type
-      )?.refundEligibility;   
-      if (refundValue) { 
+      )?.refundEligibility;
+      if (refundValue) {
         const option = refund.find((x) => x.value == refundValue);
         if (option) setSelectedRefund(option);
         // console.log("Fetched Notes Values are", tenderData.tenderFees.find((x) => x.feesType == type)?.instructionNotes);
@@ -176,52 +228,61 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
 
         {/* // { )} } */}
       </div>
-      <div>
-        {paymentCompletedVisible && (
-          <>
-            <div>
-              <Ds_checkbox
-                id={"payment"}
-                name={"Payment Completed"}
-                value={"Payment Completed"}
-                label={"Payment Completed"}
+    {completedpayment &&(
+      <>
+      <Ds_checkbox
+        id={"payment"}
+        name={"Payment Completed"}
+        value={"Payment Completed"}
+        label={"Payment Completed"}
+      />
+      <div className={styles.multipleSelect}>
+        <DsMultiSelect
+          label="Add document type"
+          id={id+"Documents"}
+          options={optionlist || []}
+          setSelectOptions={(options) => {
+            setSelectedOptions(options);
+            console.log("Selected options:", options);
+          }}
+        >
+          <div className={styles.addBtn}>
+            <DsButton
+              label="Add"
+              buttonViewStyle="btnContained"
+              buttonSize="btnSmall"
+              className={styles.addBtn}
+              onClick={() => {
+                closeAllContext();
+                setSelectedCheckbox(true);
+                console.log("Add button clicked");
+              }}
+            />
+          </div>
+        </DsMultiSelect>
+      </div>
+      {selectedcheckbox &&
+        selectedOptions.map((option, index) => (
+          <UploadFile
+            key={`upload-${index}`}
+            uploadLabel={`Upload ${option.label} here `}
+            id={typeof option.value === "string" ? option.value : ""}
+          />
+        ))}
+
+     
+        {selectedcheckbox &&
+          selectedOptions.map((option) => (
+            <div key="" className={styles.fields}>
+              <DsTextField
+                containerClasses={styles.feeFields}
+                label={`${option.label}  ID`}
               />
             </div>
-            <div className={eleStyles.inputDetails}>
-              <DsMultiSelect
-                label="Add document type"
-                id={"Documents"}
-                options={[
-                  {
-                    label: "EMD Acknowledgement Receipt",
-                    value: "EMD_Acknowledgement_Receipt",
-                  },
-                  {
-                    label: "EMD Fund Transfer Confirmation",
-                    value: "EMD_Fund_Transfer_Confirmation",
-                  },
-                  { label: "EMD Transaction", value: "EMD_Transaction" },
-                  {
-                    label: "EMD Payment Receipt",
-                    value: "EMD_Payment_Receipt",
-                  },
-                ]}
-              ></DsMultiSelect>
-              <div>
-                <DsButton
-                  label="Add"
-                  buttonViewStyle="btnContained"
-                  buttonSize="btnSmall"
-                  className={styles.addBtn}
-                  onClick={() => {}}
-                />
-              </div>
-            </div>
-          </>
-        )}
-      </div>
-      <div className={eleStyles.inputDetails}>
-        {/* <div className={styles.fieldColors}> */}
+          ))}
+</>
+)}
+ <div className={eleStyles.inputDetails}>
         <DsTextField
           containerClasses={styles.feeFields}
           maxLength={10}

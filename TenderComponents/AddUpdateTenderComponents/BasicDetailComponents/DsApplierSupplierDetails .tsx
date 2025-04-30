@@ -196,7 +196,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
     });
     setSelectedDepo(depo);
   }, [formatedDepot, tenderDataCopy.shippingLocations, tenderData.id]);
-
+  
   return (
     <div className={deptStyles.container}>
       <div className={styles.inputDetails}>
