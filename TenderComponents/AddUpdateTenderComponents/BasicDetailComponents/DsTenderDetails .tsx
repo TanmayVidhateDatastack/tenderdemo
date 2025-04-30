@@ -5,7 +5,7 @@ import deptStyle from "./deposite.module.css";
 import { useEffect, useState } from "react";
 import { getTenderUserRoles } from "@/Common/helpers/constant";
 import {
-  tenderDetailsProps,
+  // tenderDetailsProps,
   location,
   DsSelectOption,
 } from "@/Common/helpers/types";
@@ -40,7 +40,8 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
     "success" | "bonus" | "info" | "error"
   >("info");
   const [showNotification, setShowNotification] = useState<boolean>(true);
-  const { updateTenderData, tenderData, tenderDataCopy } = useTenderData();
+  const { updateTenderData, tenderData, tenderDataCopy, metaData } =
+    useTenderData();
   const [customerLocations, setCustomerLocations] = useState<location[]>([]);
 
   // const [cust, setCust] = useState<DsSelectOption>();
@@ -83,24 +84,22 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
   useEffect(() => {
     const tenderType = tenderData.tenderType;
     if (tenderType) {
-      const option = tenderDetails.tenderType.find(
-        (x) => x.value == tenderType
-      );
+      const option = metaData.tenderType.find((x) => x.value == tenderType);
       if (option) setSelectedTenderType(option);
     }
-  }, [tenderData.tenderType, tenderDetails.tenderType]);
+  }, [tenderData.tenderType, metaData.tenderType]);
 
   const [selectedSubmissionMode, setSelectedSubmissionMode] =
     useState<DsSelectOption>();
   useEffect(() => {
     const submissionMode = tenderData.submissionMode;
     if (submissionMode) {
-      const option = tenderDetails.submissionMode.find(
+      const option = metaData.submissionMode.find(
         (x) => x.value == submissionMode
       );
       if (option) setSelectedSubmissionMode(option);
     }
-  }, [tenderData.submissionMode, tenderDetails.submissionMode]);
+  }, [tenderData.submissionMode, metaData.submissionMode]);
 
   return (
     <>
@@ -200,7 +199,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         ></DsTextField>
         <DsSingleSelect
           containerClasses={styles.fields}
-          options={tenderDetails.tenderType}
+          options={metaData.tenderType||[]}
           label="Tender type"
           // placeholder={"Tender type"}
           id={"tenderType"}
@@ -284,7 +283,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         <DsSingleSelect
           containerClasses={styles.fields}
           selectedOption={selectedSubmissionMode}
-          options={tenderDetails.submissionMode}
+          options={metaData.submissionMode||[]}
           // type={"single"}
           label="Submission mode"
           id={"submissionMode"}

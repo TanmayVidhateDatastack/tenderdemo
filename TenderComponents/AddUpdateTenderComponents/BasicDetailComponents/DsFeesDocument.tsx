@@ -45,7 +45,6 @@ export interface DsFeesProps {
   refund: DsSelectOption[];
   paidBy: DsSelectOption[];
   downloadVisible: boolean;
-
   completedpayment:boolean
   type: string;
   optionlist: DsSelectOption[];
@@ -274,7 +273,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
      
         {selectedcheckbox &&
           selectedOptions.map((option) => (
-            <div className={styles.fields}>
+            <div key="" className={styles.fields}>
               <DsTextField
                 containerClasses={styles.feeFields}
                 label={`${option.label}  ID`}
