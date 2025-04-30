@@ -45,7 +45,8 @@ export interface DsFeesProps {
   refund: DsSelectOption[];
   paidBy: DsSelectOption[];
   downloadVisible: boolean;
-  paymentCompletedVisible: boolean;
+
+  completedpayment:boolean
   type: string;
   optionlist: DsSelectOption[];
 }
@@ -69,8 +70,9 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
   refund,
   paidBy,
   downloadVisible,
-  paymentCompletedVisible,
+ 
   optionlist,
+  completedpayment=false,
 }) => {
   const {
     updateTenderFee,
@@ -227,7 +229,8 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
 
         {/* // { )} } */}
       </div>
-      <div>{paymentCompletedVisible && <></>}</div>
+    {completedpayment &&(
+      <>
       <Ds_checkbox
         id={"payment"}
         name={"Payment Completed"}
@@ -268,7 +271,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           />
         ))}
 
-      <div className={eleStyles.inputDetails}>
+     
         {selectedcheckbox &&
           selectedOptions.map((option) => (
             <div className={styles.fields}>
@@ -278,7 +281,9 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               />
             </div>
           ))}
-
+</>
+)}
+ <div className={eleStyles.inputDetails}>
         <DsTextField
           containerClasses={styles.feeFields}
           maxLength={10}
