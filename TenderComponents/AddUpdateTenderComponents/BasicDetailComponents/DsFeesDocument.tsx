@@ -191,7 +191,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     )?.paidBy;
     if (paidByvalue) {
       const option = depositeDocuments.find((x) => x.value == paidByvalue);
-      // const option = mode.find((x) => x.value == paidByvalue);
+      // const option = mode.find((x) => x.value == paidByvalue); 
       if (option) setSelectedPaidBy(option);
     }
   }, [

@@ -184,8 +184,8 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
   const [selectedDepo, setSelectedDepo] = useState<DsSelectOption[]>([]);
   useEffect(() => {
     const loc = [...tenderData.shippingLocations];
-    console.log(loc);
-    console.log(formatedDepot);
+    // console.log("ffffffffffffffffffffff",loc);
+    // console.log("gggggggggggggggggggggg",formatedDepot);
     const depo = loc.map((x) => {
       return (
         formatedDepot.find((d) => Number(d.value) == x) || {
@@ -270,7 +270,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
           options={formatedDepot}
           // type="multi"
           label="Depot"
-          placeholder={"Please search or select here"}
+          placeholder={"Please search or select here"} 
           id={"depot"}
           setSelectOptions={(options) => {
             const shipIds = options.reduce<number[]>((acc, option) => {

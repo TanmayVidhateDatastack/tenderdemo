@@ -107,9 +107,9 @@ const DsSupplyDetails: React.FC = () => {
             placeholder={"Please select here"}
             id={"reportReq"}
             setSelectOption={(option) => {
-              if (typeof option.value == "string") {
+              if (typeof option.value == "string") { 
                 updateSupplyCondition("testReportRequired", option.value);
-              }
+              } 
             }}
           ></DsSingleSelect>
 
@@ -117,7 +117,7 @@ const DsSupplyDetails: React.FC = () => {
             //  const selectedDepo=useMemo(()=>{
             //    return tenderData.shippingLocations.map((x) => {
             //       return (
-            //         formatedDepot.find((d) => Number(d.value) == x) || {
+            //         formatedDepot.find((d) => Number(d.value) == x) || {  
             //           value: "",
             //           label: "",
             //         }

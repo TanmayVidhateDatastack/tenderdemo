@@ -1054,9 +1054,11 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               amount: x.amount,
               currency: x.currency,
               paidBy: x.paidBy,
-              paymentMode: x.paymentMode,
+              paymentMode: x.paymentMode, 
+              refundEligibility:x.refundEligibility,
               paymentDueDate: x.paymentDueDate,
               instructionNotes: x.instructionNotes,
+              
             };
           }),
         tenderSupplyCondition: {
