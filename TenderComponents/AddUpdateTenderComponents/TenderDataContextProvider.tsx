@@ -988,7 +988,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         extendedDeliveryPeriod: tenderData.extendedDeliveryPeriod,
         lateDeliveryPenalty: tenderData.lateDeliveryPenalty,
         tenderUrl: tenderData.tenderUrl,
-        shippingLocations: tenderData.shippingLocations.join(","),
+        shippingLocations: tenderData.shippingLocations,
         appliedBy:
           tenderData.applierType.toLowerCase() == "organization"
             ? "IPCA"
@@ -1028,10 +1028,9 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           }),
         tenderSupplyCondition: {
           ...tenderData.tenderSupplyCondition,
-          eligibility: tenderData.tenderSupplyCondition.eligibility.join(","),
-          applicableConditions: JSON.stringify(
+          eligibility: tenderData.tenderSupplyCondition.eligibility,
+          applicableConditions:
             tenderData.tenderSupplyCondition.applicableConditions
-          ),
         },
         tenderDocuments:
           tenderData.tenderDocuments?.map(async (x) => {

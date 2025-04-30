@@ -145,7 +145,6 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
 
   return (
     <>
-
       {tenderDatalistVisible && (
         <DsTextField
           placeholder="Search Tender by Id, Name & Value"
@@ -153,8 +152,19 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
           disable={false}
           initialValue=""
           iconEnd={
-            <div style={{ width: "1.125em", height: "1.125em", position: "relative" }}>
-              <Image src={searchicon} layout="fill" objectFit="cover" alt="searchicon" />
+            <div
+              style={{
+                width: "1.125em",
+                height: "1.125em",
+                position: "relative",
+              }}
+            >
+              <Image
+                src={searchicon}
+                layout="fill"
+                objectFit="cover"
+                alt="searchicon"
+              />
             </div>
           }
           containerClasses={styles.datalist}
@@ -169,13 +179,12 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
             buttonColor="btnPrimary"
             className={styles.dis}
             buttonViewStyle={
-              isFiltered["nearSubmission"] ? "btnContained" : "btnOutlined"
+              isFiltered["NEAR_SUBMISSION"] ? "btnContained" : "btnOutlined"
             }
             onClick={() => handleFilter("NEAR_SUBMISSION")}
             label="Near Submission"
           />
         )}
-
       </div>
       {/* {feesPendingButtonVisible && (
 
@@ -191,21 +200,14 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
         />
       )} */}
       {approvalButtonVisible && (
-
         <DsFilterButton
           id="dispatch"
           buttonColor="btnPrimary"
           className={styles.dis}
           buttonViewStyle={
-            isFiltered["approval"]
-              ? "btnContained"
-              : "btnOutlined"
+            isFiltered["APPROVAL"] ? "btnContained" : "btnOutlined"
           }
-
-          onClick={() =>
-            handleFilter
-              ("APPROVAL")
-          }
+          onClick={() => handleFilter("APPROVAL")}
           label="Approval"
         />
       )}
@@ -215,9 +217,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
           className={styles.dis}
           id="underApproval"
           buttonViewStyle={
-            isFiltered["underApproval"]
-              ? "btnContained"
-              : "btnOutlined"
+            isFiltered["UNDER_APPROVAL"] ? "btnContained" : "btnOutlined"
           }
           onClick={() => handleFilter("UNDER_APPROVAL")}
         />
@@ -229,15 +229,12 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
           className={styles.dis}
           id="underReview"
           buttonViewStyle={
-            isFiltered["underReview"]
-              ? "btnContained"
-              : "btnOutlined"
+            isFiltered["UNDER_REVIEW"] ? "btnContained" : "btnOutlined"
           }
           onClick={() => handleFilter("UNDER_REVIEW")}
         />
       )}
       {filterButtonVisible && (
-
         <DsButton
           id="iconfilterBtn"
           buttonColor="btnPrimary"
@@ -262,10 +259,8 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
           label="Filter"
           onClick={() => DisplayPane("AdvancedFilterComponent")}
           iconSize="iconMedium"
-
         />
       )}
-
     </>
   );
 };
