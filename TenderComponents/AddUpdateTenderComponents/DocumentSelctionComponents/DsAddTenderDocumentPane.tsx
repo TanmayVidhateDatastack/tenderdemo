@@ -13,6 +13,7 @@ import { getAllDocuments } from "@/Common/helpers/constant";
 import buttonstyle from "@/Elements/DsComponents/DsButtons/dsButton.module.css"
 import { TenderDocument } from "../TenderDataContextProvider";
 import { tenderDocument } from "../BasicDetailComponents/DsFeesDocument";
+import { closeContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 
 const DsAddTenderDocumentPane: React.FC = () => {
   const [openAccordion, setOpenAccordion] = useState<string | null |number>(null);
@@ -33,7 +34,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
           (doc: TenderDocument) => doc.category === "TenderDocument"
         );
 
-        const grouped = tenderDocuments.reduce(
+        const grouped = tenderDocuments.reduce( 
           (acc: Record<string, TenderDocument[]>, doc: TenderDocument) => {
             if (!acc[doc.documentType]) {
               acc[doc.documentType] = []; 
@@ -119,7 +120,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
             });
           }
         });
-
+              
         // Remove documents that are not in selectedDocuments
         updatedData = updatedData.map((group) => {
           return {
@@ -131,12 +132,11 @@ const DsAddTenderDocumentPane: React.FC = () => {
             ),
           };
         }).filter(group => group.documents.length > 0);
-
         // console.log("Updated Document Context:", updatedData); 
-
         return updatedData;
       });
     }
+    
   };
 
 
@@ -169,7 +169,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
                   label={doc.name}
                   onChange={() => handleCheckboxChange(doc)}  
                   isChecked={selectedDocuments.some((d) => d.id === doc.id)} 
-                />
+                /> 
               ))}
             </div>
           </Accordion>

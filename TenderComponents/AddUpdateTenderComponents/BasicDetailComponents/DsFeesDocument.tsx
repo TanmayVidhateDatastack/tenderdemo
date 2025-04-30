@@ -127,7 +127,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
       const refundValue = tenderData.tenderFees.find(
         (x) => x.feesType == type
       )?.refundEligibility;   
-      if (refundValue) {
+      if (refundValue) { 
         const option = refund.find((x) => x.value == refundValue);
         if (option) setSelectedRefund(option);
         // console.log("Fetched Notes Values are", tenderData.tenderFees.find((x) => x.feesType == type)?.instructionNotes);
@@ -139,7 +139,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     )?.paidBy;
     if (paidByvalue) {
       const option = depositeDocuments.find((x) => x.value == paidByvalue);
-      // const option = mode.find((x) => x.value == paidByvalue);
+      // const option = mode.find((x) => x.value == paidByvalue); 
       if (option) setSelectedPaidBy(option);
     }
   }, [
