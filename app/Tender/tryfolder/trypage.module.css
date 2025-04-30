@@ -1,0 +1,32 @@
+
+.paymentfields {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1.3em;
+    margin-bottom: 0.6em;
+  }
+  
+.addBtn{
+    min-width: 100% !important;
+    max-width: fit-content !important;
+    background-color: var(--primary) !important;
+    color: var(--background) !important;
+    margin-right: 0;
+    margin-left: 0;
+    margin-top:1em;
+  }
+  .addBtn:hover{
+    background-color: var(--primary);
+    color: var(--background);
+  }
+  .fields
+  {
+    width: 300px;
+  }
+  .multipleSelect
+  {
+    margin-top: 20px;
+    width: 365px;
+  }

@@ -1,0 +1,31 @@
+"use client";
+import { TenderDataProvider } from "@/TenderComponents/AddUpdateTenderComponents/TenderDataContextProvider";
+import DsTenderIdPage from "./tenderIdPage";
+import { closeAllContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
+import Toaster from "@/Elements/DsComponents/DsToaster/DsToaster";
+export type ParamType = {
+  params: {
+    TenderId: string | number;
+  };
+};
+export default function Home(param: ParamType) {
+  const paramOrderId: string | number = param?.params?.TenderId;
+  const storedStatus = sessionStorage?.getItem("tenderStatus") || undefined;
+  closeAllContext();
+  return (
+    <>
+      <TenderDataProvider>
+        <DsTenderIdPage paramOrderId={paramOrderId} tenderStatus={storedStatus}/>    
+        <Toaster
+            id="fetchCustomer"
+            type="success"
+            message="The information has been fetched"
+            duration={2000}
+            position={"top"}
+            handleClose={() => {}}
+          />
+      </TenderDataProvider>
+
+    </>
+  );
+}

@@ -1,0 +1,87 @@
+import { DsStatus, getCompetitorsURL } from "@/Common/helpers/constant";
+import { Company, datalistOptions } from "@/Common/helpers/types";
+import DsSearchComponent from "@/Elements/DsComponents/DsSearch/searchComponent";
+import { useState } from "react";
+export interface CompanySearchProps {
+  orderStatus?: string;
+  setSelectedCompany: (company:datalistOptions) => void;
+  lprTo?:string;
+}
+ 
+export function isSearchCompany(value: unknown): value is Company {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "id" in value &&
+    "name" in value &&
+    typeof (value as unknown as Company).id === "number" &&
+    typeof (value as unknown as Company).name === "string"
+  );
+}
+export function areSearchCompanys(value: unknown): value is Company[] {
+  return Array.isArray(value) && value.every(isSearchCompany);
+}
+const CompanySearch: React.FC<CompanySearchProps> = ({
+  orderStatus,
+  setSelectedCompany,
+  lprTo,
+}) => {
+  const [company, setCompanys] = useState<datalistOptions[]>([]);
+ 
+ 
+ 
+ 
+ 
+  const setOptions = (values: unknown[]) => {
+    if (areSearchCompanys(values)) {
+      const company: datalistOptions[] = values.map(
+        (x: { id: number|string; name?: string }) => {
+          return {
+            id: x.id.toString(),
+            value: x.name,
+            attributes: {
+              "company-id": x.id.toString(),
+            },
+          };
+        }
+      );
+      setCompanys(company);
+    } else {
+      // console.log("company values are = ", values);
+    }
+  };
+ 
+  const setSelectedOption = (option: datalistOptions) => {
+    {
+      const selectedCompanyId = option.attributes["company-id"];
+ 
+      if (selectedCompanyId) {
+        setSelectedCompany(option);
+      }
+    }
+  };
+ 
+ 
+ 
+  return (
+    <DsSearchComponent
+      id="companySearch"
+      dataListId="companySearchDatalist"
+      // label={"Company"}
+      initialValue={lprTo}
+      placeholder={"Write Competitor Name"}
+      options={company ? company : undefined}
+      setOptions={setOptions}
+      setSearchUrl={(searchTerm: string) => {
+        return getCompetitorsURL  + searchTerm;
+      }}
+    
+      setSelectedOption={setSelectedOption}
+      disable={orderStatus === DsStatus.APRV ? true : false}
+    />
+  );
+};
+ 
+export default CompanySearch;
+ 
+ 

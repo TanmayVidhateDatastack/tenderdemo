@@ -1,0 +1,113 @@
+.container {
+  width: 100%;
+}
+.checkHolder {
+  width: 100%;
+}
+.Customer > div,
+.Product > div,
+.shipping > div {
+  padding: var(--ds-padding);
+}
+
+.saveBtn,
+.saveBtnDiv {
+  width: 100% !important;
+  margin-bottom: 10px !important;
+  min-width: 100% !important;
+  min-height: 40px !important;
+  font-size: 20px !important;
+  margin-top: 140px;
+}
+
+.buttonDiv {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  padding-right: 1px;
+  margin-left: 600px;
+  min-width: 60%;
+}
+
+.datalist {
+  color: var(--secondary);
+}
+
+.inputDetails {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 equal columns */
+  /* gap: var(--ds-margin); */
+  /* spacing between items */
+  gap: 1.5rem;
+  /* border-bottom: 0.5px solid var(--grey-100); */
+  /* padding: var(--ds-padding);  */
+  /* background: inherit; */
+}
+ 
+.inputDetails > div {
+  margin: 0; /* Remove margin if you want exact grid alignment */
+}
+
+.inputComps {
+  border-bottom: 1px solid var(--grey-100);
+  padding: 2px;
+}
+
+@media (max-width: 1200px) {
+  .details > div,
+  .transportDetails {
+    grid-template-columns: repeat(
+      3,
+      minmax(150px, 1fr)
+    ); /* 3 columns on medium screens */
+  }
+}
+
+@media (max-width: 800px) {
+  .details > div,
+  .transportDetails {
+    grid-template-columns: repeat(
+      2,
+      minmax(150px, 1fr)
+    ); /* 2 columns on smaller screens */
+  }
+  .ToFrom {
+    grid-template-columns: 1fr; /* 1 column on very small screens */
+  }
+}
+
+@media (max-width: 500px) {
+  .details > div,
+  .ToFrom,
+  .transportDetails {
+    grid-template-columns: 1fr; /* 1 column on very small screens */
+  }
+}
+.LPR {
+  display: flex;
+  direction: row;
+}
+.lprwitharrow {
+  display: flex;
+  direction: column;
+  gap: 0.5em;
+  padding-left:0.5em ;
+}
+.competitorContainer{
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  padding:0.5em ;
+}
+.competitorSaveContainer{
+  justify-items: flex-end;
+}
+
+.addproduct {
+  min-width: 18.0625em !important;
+  max-width: 18.0625em !important;
+  min-height: 2.25em !important;
+  max-height: 2.25em !important;
+  box-shadow: 3px 3px 5px #0000000f !important;
+}

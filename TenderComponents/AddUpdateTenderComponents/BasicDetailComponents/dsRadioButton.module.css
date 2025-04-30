@@ -1,0 +1,43 @@
+
+.wrapper {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    cursor: pointer;
+    border: none;
+    cursor: pointer;
+  }
+  .wrapper :hover{
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    cursor: pointer;
+    border: none;
+    cursor: pointer;
+  }
+  .input {
+    /* margin-right: 10px; */
+    accent-color: var(--primary);
+    cursor: pointer;
+  }
+  .input:hover {
+    /* margin-right: 10px; */
+    accent-color: var(--primary);
+    cursor: pointer;
+  }
+  
+  
+  .label {
+    cursor: pointer;
+    color: var(--primary);
+  }
+  
+  .wrapper:hover .label {
+    color:var(--primary);
+  }
+  
+  .input:checked + .label {
+    color:var(--primary);;
+    font-weight: bold;
+  }
+  
