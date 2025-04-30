@@ -42,9 +42,9 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
                 updateApplicableCondition(
                   type,
                   "notes",
-                  (e.target as HTMLInputElement).value
+                  (e.target as HTMLInputElement).value 
                 );
-              }}
+              }}  
             />
         </div>
         <div className={styles.attachFileBtn}>

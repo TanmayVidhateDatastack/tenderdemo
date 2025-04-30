@@ -116,7 +116,6 @@ export default function CsvPopup({ onUpload }: CsvPopupProps) {
               </div>
             </div>
           </div>
-
           <div
             className={styles.footer + " " + styles.attachfile}
             onClick={() => document.getElementById("selectfile")?.click()}
@@ -135,8 +134,6 @@ export default function CsvPopup({ onUpload }: CsvPopupProps) {
                 <div style={{width:"1em",height:"1em"}}  onClick={handleRemoveFile} >
               <IconFactory name={"crossSmall"}></IconFactory>
                </div>
-                 
-           
               )}
           </div>
           <Toaster 

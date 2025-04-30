@@ -20,14 +20,14 @@ const DocumentSelectorArea: React.FC = () => {
       prevData
         .map((group) => ({
           ...group,
-          documents: group.documents.filter((d) => d.documentName !== documentName),
+          documents: group.documents.filter((d) => d.document.name !== documentName),
         }))
         .filter((group) => group.documents.length > 0)
     );
 
     // ✅ Remove from selectedDocuments & force update
     documentContext.setSelectedDocuments((prev) => {
-      const updatedSelection = prev.filter((d) => d.documentName !== documentName);
+      const updatedSelection = prev.filter((d) => d.document.name !== documentName);
       // console.log("Updated selectedDocuments:", updatedSelection); // Debugging Log
       return updatedSelection;
     });
@@ -53,7 +53,7 @@ const DocumentSelectorArea: React.FC = () => {
             <DocumentSelector
               headerTitle={type}
               headerNumber={documents.length.toString()}
-              initialDocuments={documents.map((doc) => doc.documentName)}
+              initialDocuments={documents}
               handleOnRemoveClick={(docName) => handleRemoveDocument(docName)}
             />
           </div>

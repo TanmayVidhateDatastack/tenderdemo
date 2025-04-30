@@ -350,6 +350,9 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       "TEST_REPORT_REQUIRED",
       "ELIGIBILITY",
       "FEES_TYPE",
+      "TENDER_EMD_PAYMENT",
+      "TENDER_FEES_PAYMENT",
+      "TENDER_PSD_PAYMENT",
       "TENDER_SUPPLY_CONDITION",
       "PAYMENT_MODE",
       "REFUND_ELIGIBILITY",
@@ -912,7 +915,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         const active: "ACTV" | "INAC" = "ACTV";
 
         const updatedTenderApplicableConditions =
-          prev.tenderSupplyCondition.applicableConditions.map((ac) => {
+          prev.tenderSupplyCondition.applicableConditions?.map((ac) => {
             if (ac.type == type) {
               updated = true;
               return {
@@ -923,7 +926,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             return ac;
           });
         if (!updated) {
-          updatedTenderApplicableConditions.push({
+          updatedTenderApplicableConditions?.push({
             type,
             status: active,
             notes: "",
@@ -1576,6 +1579,24 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               })
             ),
             feesType: (result.feesType || []).map(
+              (item: { codeValue: string; codeDescription: string }) => ({
+                value: item.codeValue,
+                label: item.codeDescription,
+              })
+            ),
+            tenderEmdPayment:(result.feesType || []).map(
+              (item: { codeValue: string; codeDescription: string }) => ({
+                value: item.codeValue,
+                label: item.codeDescription,
+              })
+            ),
+            tenderFeesPayment:(result.feesType || []).map(
+              (item: { codeValue: string; codeDescription: string }) => ({
+                value: item.codeValue,
+                label: item.codeDescription,
+              })
+            ),
+            tenderPsdPayment:(result.feesType || []).map(
               (item: { codeValue: string; codeDescription: string }) => ({
                 value: item.codeValue,
                 label: item.codeDescription,

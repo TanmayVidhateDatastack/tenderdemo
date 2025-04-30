@@ -14,7 +14,7 @@ const DsSupplyDetails: React.FC = () => {
   const { updateSupplyCondition, tenderData, tenderDataCopy, metaData } =
     useTenderData();
   const [selectedEligibility, setSelectedEligibility] = useState<
-    DsSelectOption[]
+    DsSelectOption[] 
   >([]);
   const [selectedSupplyPoint, setSelectedSupplyPoint] =
     useState<DsSelectOption>();
