@@ -274,7 +274,7 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
             });
             if (metaData.code === 200) {
                 const result = metaData.result;
-                console.log("MetaData ", result);
+                console.log("MetaData :-", result);
 
                 let justificationType = [];
                 if (popupType === "Approve") {

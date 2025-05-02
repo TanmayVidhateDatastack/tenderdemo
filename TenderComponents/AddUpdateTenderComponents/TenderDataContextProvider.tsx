@@ -1549,6 +1549,8 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       .then((res) => {
         if (res.code === 200) {
           const result = res.result;
+          console.log("AAAAAAAAAAAAAAAAAA",result);
+
           const metaData = {
             tenderType: (result.tenderType || []).map(
               (item: { codeValue: string; codeDescription: string }) => ({

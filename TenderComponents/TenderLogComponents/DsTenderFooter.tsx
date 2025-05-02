@@ -179,11 +179,11 @@ export const DSTendrFooter: React.FC = ({}) => {
     if (tenderData?.tenderSupplyCondition?.consigneesCount === 0) {
       errors.push("Please enter the number of consignees.");
     }
-    if (
-      tenderData?.tenderSupplyCondition?.testReportRequired?.trim() === "" 
-    ) {
-      errors.push("Please specify whether a test report is required.");
-    }
+    // if (
+    //   tenderData?.tenderSupplyCondition?.testReportRequired?.trim() === "" 
+    // ) {
+    //   errors.push("Please specify whether a test report is required.");
+    // }
     if (tenderData?.tenderSupplyCondition?.eligibility.length == 0) {
       errors.push("Please select at least one eligibility criterion.");
     }

@@ -30,7 +30,7 @@ const Tryfolder = () => {
         });
         if (metaData.code === 200) {
             const result = metaData.result;
-            console.log("MetaData ", result);
+            console.log("MetaData :+", result);
 
             let tenderpayments = [];
            
