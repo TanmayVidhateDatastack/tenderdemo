@@ -229,7 +229,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
 
         {/* // { )} } */}
       </div>
-    {completedpayment &&(
+    {completedpayment &&(<></>)}
       <>
       <Ds_checkbox
         id={"payment"}
@@ -282,7 +282,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             </div>
           ))}
 </>
-)}
+
  <div className={eleStyles.inputDetails}>
         <DsTextField
           containerClasses={styles.feeFields}

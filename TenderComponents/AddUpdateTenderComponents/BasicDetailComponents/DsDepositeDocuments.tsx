@@ -34,7 +34,7 @@ export interface FeesDocument {
   applicableDeposits: DsSelectOption[];
 }
 export interface DepositeDocumentsProps {
-  // setDepositeDocuments: (depositeDocuments: DepositDocument[]) => void;
+  setDepositeDocuments: (depositeDocuments: DepositDocument[]) => void;
   depositeDocument: DepositDocument[] | null;
   applicableDeposits: DsSelectOption[] | [];
   role: string;
@@ -113,22 +113,13 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
           }));
 
 
-        // console.log("formattedOptionsPsd",formattedOptionsPsd)
-        // console.log("formattedOptionsEMD",formattedOptionsEMD)
-        // console.log("formattedOptionsFees",formattedOptionsFees)
           
         setDocumentTypeOptions({"TENDER_EMD":formattedOptionsEMD,"TENDER_PSD":formattedOptionsPsd,"TENDER_FEES":formattedOptionsFees})
           // setEMDOptions(formattedOptionsEMD);
           // setFeesOptions(formattedOptionsFees);
           // setFeesOptions(formattedOptionsPsd);
 
-        //   console.log("ftypeeee  ormattedOptionsPsd", typeof formattedOptionsPsd)
-        // console.log("formattedOptionsEMD",formattedOptionsEMD)
-        // console.log("formattedOptionsFees",formattedOptionsFees)
-          
-        // console.log("after setting values",eMDoptions)
-        // console.log("after setting values",feesoptions)
-        // console.log("after setting values",psdoptions)
+
 
         }
       } catch (error) {
@@ -140,7 +131,6 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   useEffect(() => {
     if (depositeDocument) {
       const modesData = depositeDocument[0]?.modes || [];
-      console.log("TTTTTTTTTT",depositeDocument);
       // const paidByData = depositeDocument[0]?.paidBy || [];
       const refundData = depositeDocument[0]?.refunds || [];
       setMode(modesData);
@@ -326,7 +316,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
                   mode={mode}
                   paidBy={paidBy}
                   downloadVisible={true}
-                  paymentCompletedVisible={paymentCheckVisible}
+                  completedpayment={paymentCheckVisible}
                   refund={refund}
                 />
               </div>
