@@ -99,24 +99,23 @@ const DsSupplyDetails: React.FC = () => {
             }
           ></DsTextField>
 
-          <DsSingleSelect
+          <DsSingleSelect   
             containerClasses={styles.fields}
             selectedOption={selectedtTestReportRequired}
-            options={metaData.reportRequirements||[]}
+            options={metaData.reportRequirements ||[]}
             label="Test report requirement"
             placeholder={"Please select here"}
             id={"reportReq"}
-            setSelectOption={(option) => {
-              if (typeof option.value == "string") { 
+            setSelectOption={(option) => {  
+              if (typeof option.value == "string") {   
                 updateSupplyCondition("testReportRequired", option.value);
               } 
-            }}
+            }}   
           ></DsSingleSelect>
-
           <DsMultiSelect
             //  const selectedDepo=useMemo(()=>{
             //    return tenderData.shippingLocations.map((x) => {
-            //       return (
+            //       return ( 
             //         formatedDepot.find((d) => Number(d.value) == x) || {  
             //           value: "",
             //           label: "",
