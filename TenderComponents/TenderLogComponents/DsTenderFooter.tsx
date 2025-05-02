@@ -22,7 +22,7 @@ import DsSplitButton from "@/Elements/DsComponents/DsButtons/dsSplitButton";
 import Toaster from "@/Elements/DsComponents/DsToaster/DsToaster";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import { useTenderData } from "../AddUpdateTenderComponents/TenderDataContextProvider";
-import { TenderData } from "@/TenderComponents/AddUpdateTenderComponents/TenderDataContextProvider";
+import { TenderData} from "@/TenderComponents/AddUpdateTenderComponents/TenderDataContextProvider";
 import { getYesterdayDate } from "@/Common/helpers/Method/conversion";
 import ApprovalPopup from "../AddUpdateTenderComponents/Approvelpopup/ApprovelPopup";
 
@@ -37,7 +37,7 @@ export const DSTendrFooter: React.FC = ({}) => {
   const dispatch = useAppDispatch<AppDispatch>();
   const role = useAppSelector((state: RootState) => state.user.role);
   const [toasterVisible, setToasterVisible] = useState<boolean>(false);
-  const { setActionStatusValues, saveTender, tenderData, updateTender } =
+  const { setActionStatusValues, saveTender, tenderData,tenderDataCopy, updateTender } =
     useTenderData();
   const handleFetch = async () => {
     try {
@@ -179,11 +179,11 @@ export const DSTendrFooter: React.FC = ({}) => {
     if (tenderData?.tenderSupplyCondition?.consigneesCount === 0) {
       errors.push("Please enter the number of consignees.");
     }
-    // if (
-    //   tenderData?.tenderSupplyCondition?.testReportRequired?.trim() === "" 
-    // ) {
-    //   errors.push("Please specify whether a test report is required.");
-    // }
+    if (
+      tenderData?.tenderSupplyCondition?.testReportRequired?.trim() === "" 
+    ) {
+      errors.push("Please specify whether a test report is required.");
+    }
     if (tenderData?.tenderSupplyCondition?.eligibility.length == 0) {
       errors.push("Please select at least one eligibility criterion.");
     }
@@ -442,7 +442,7 @@ export const DSTendrFooter: React.FC = ({}) => {
           onClick={() => {
             // if (saveTender) validateAndSaveTender();
             // if (saveTender) saveTender("Draft");
-            if (tenderData?.id) {
+            if (tenderDataCopy?.id) {
               validateAndUpdateTender();
               // updateTender("Draft")
             } else {

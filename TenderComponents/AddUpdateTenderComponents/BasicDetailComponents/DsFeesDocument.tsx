@@ -18,7 +18,6 @@ import IconFactory from "@/Elements/IconComponent";
 import DsMultiSelect from "@/Elements/DsComponents/dsSelect/dsMultiSelect";
 import { getYesterdayDate } from "@/Common/helpers/Method/conversion";
 import UploadFile from "@/TenderComponents/TenderLogComponents/uploadfile";
-import Tryfolder from "@/app/Tender/tryfolder/tryfolder";
 import { closeAllContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 
 export type tenderDocument = {
@@ -409,7 +408,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   x.documentType == type && x.category == type + "_INSTRUCTION"
               ) || [];
             updateDocuments(
-              files,
+              files.map((x) => x.document),
               typeDocuments,
               removeTenderDocument,
               addNewTenderDocument,

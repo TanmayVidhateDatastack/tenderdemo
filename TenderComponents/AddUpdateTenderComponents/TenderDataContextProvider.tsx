@@ -1063,7 +1063,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           }),
         tenderSupplyCondition: {
           ...tenderData.tenderSupplyCondition,
-          eligibility: tenderData.tenderSupplyCondition,
+          eligibility: tenderData.tenderSupplyCondition.eligibility,
           applicableConditions:
             tenderData.tenderSupplyCondition.applicableConditions,
         },
@@ -1570,7 +1570,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 label: item.codeDescription,
               })
             ),
-            testReportRequired: (result.testReportRequirement || []).map(
+            testReportRequired: (result.testReportRequired || []).map(
               (item: { codeValue: string; codeDescription: string }) => ({
                 value: item.codeValue,
                 label: item.codeDescription,

@@ -8,6 +8,7 @@ import {
   // tenderDetailsProps,
   location,
   DsSelectOption,
+  tenderDetailsProps,
 } from "@/Common/helpers/types";
 import { useTenderData } from "../TenderDataContextProvider";
 import DsDatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker";
@@ -23,7 +24,7 @@ import { setVisibilityByRole } from "@/Redux/slice/PermissionSlice/permissionSli
 import FetchCustomer from "./fetchcustomerComponent";
 import { useAppSelector } from "@/Redux/hook/hook";
 import { RootState } from "@/Redux/store/store";
-const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
+const DsTenderDetails: React.FC = () => {
   const [fetchVisible, setFetchVisible] = useState(true);
   const [role, setRole] = useState("checker");
   const [pos, setPos] = useState<
@@ -84,7 +85,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
   useEffect(() => {
     const tenderType = tenderData.tenderType;
     if (tenderType) {
-      const option = metaData.tenderType.find((x) => x.value == tenderType);
+      const option =(metaData.tenderType ||[]).find((x) => x.value == tenderType);
       if (option) setSelectedTenderType(option);
     }
   }, [tenderData.tenderType, metaData.tenderType]);
@@ -94,7 +95,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
   useEffect(() => {
     const submissionMode = tenderData.submissionMode;
     if (submissionMode) {
-      const option = metaData.submissionMode.find(
+      const option = (metaData.submissionMode ||[]).find(
         (x) => x.value == submissionMode
       );
       if (option) setSelectedSubmissionMode(option);
