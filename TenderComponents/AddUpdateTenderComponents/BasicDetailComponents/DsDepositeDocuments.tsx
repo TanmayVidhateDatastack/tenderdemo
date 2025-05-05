@@ -174,7 +174,7 @@ const DsDepositeDocuments: React.FC = () => {
         if (tenderData.tenderFees.some((fee) => fee.feesType == id))
           updateTenderFee(id, "status", "ACTV");
         else addTenderFee(id);
-      } else if (tenderDataCopy.id==undefined) {
+      } else if (tenderData.id==undefined) {
         selectedFees.add(id);
         checkFeeVisible[id] = true;
         if (tenderData.tenderFees.some((fee) => fee.feesType == id))
@@ -188,7 +188,7 @@ const DsDepositeDocuments: React.FC = () => {
     });
     setFeeVisibility(checkFeeVisible);
 
-  }, [applicablefees, tenderDataCopy.id]);
+  }, [applicablefees, tenderData.id,]);
 
   // useEffect(() => {
   //   console.log("feevisibility : ", feeVisibility);

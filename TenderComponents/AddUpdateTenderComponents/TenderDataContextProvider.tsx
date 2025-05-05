@@ -1031,34 +1031,34 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         documentRequestId = documentRequestId - 1;
         return { ...x, requestId: documentRequestId };
       });
-      const formData = new FormData();
+      // const formData = new FormData();
 
-      tenderSaveDocuments?.forEach((doc, index) => {
-        console.log(
-          doc.data,
-          typeof doc.data,
-          doc.data instanceof File,
-          doc.data instanceof Blob
-        );
-        // const blob = new Blob([doc.data.arrayBuffer()], {
-        //   type: "application/pdf",
-        // });
-        if (doc.data) {
-          formData.append(
-            `tenderDocuments[${index}].requestId`,
-            doc.requestId.toString()
-          );
+      // tenderSaveDocuments?.forEach((doc, index) => {
+      //   console.log(
+      //     doc.data,
+      //     typeof doc.data,
+      //     doc.data instanceof File,
+      //     doc.data instanceof Blob
+      //   );
+      //   // const blob = new Blob([doc.data.arrayBuffer()], {
+      //   //   type: "application/pdf",
+      //   // });
+      //   if (doc.data) {
+      //     formData.append(
+      //       `tenderDocuments[${index}].requestId`,
+      //       doc.requestId.toString()
+      //     );
 
-          formData.append(`tenderDocuments[${index}].data`, doc.data, doc.name); // File/Blob object
-        }
-      });
+      //     formData.append(`tenderDocuments[${index}].data`, doc.data, doc.name); // File/Blob object
+      //   }
+      // });
       try {
-        await fetch(saveTenderurl, {
-          method: "POST",
-          body: formData,
-        }).then((result) => {
-          result.json().then(async (docRes) => {
-            if (docRes.code == 200) {
+      //   await fetch(saveTenderurl, {
+      //     method: "POST",
+      //     body: formData,
+      //   }).then((result) => {
+      //     result.json().then(async (docRes) => {
+      //       if (docRes.code == 200) {
               const tenderSaveData = {
                 customerId: tenderData.customerId,
                 customerAddressId: tenderData.customerAddressId,
@@ -1147,7 +1147,8 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               console.log("sAVEEEE", dataToSend);
               await fetch(saveTenderurl, {
                 method: "POST",
-                body: dataToSend,
+                headers:{"Content-Type": "application/json"},
+                body: JSON.stringify(dataToSend),
               }).then((result) => {
                 result.json().then((res) => {
                   if (res.code === 200) {
@@ -1173,9 +1174,9 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               // console.log("result  = ", result);
               //console.log("Order saved successfully");
               // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            }
-          });
-        });
+            // }
+          // });
+        // });
       } catch (error) {
         console.error("Error saving order:", error);
       }
