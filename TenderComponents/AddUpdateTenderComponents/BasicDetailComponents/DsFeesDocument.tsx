@@ -44,7 +44,7 @@ export interface DsFeesProps {
   refund: DsSelectOption[];
   paidBy: DsSelectOption[];
   downloadVisible: boolean;
-  completedpayment:boolean
+  completedpayment: boolean;
   type: string;
   optionlist: DsSelectOption[];
 }
@@ -68,9 +68,9 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
   refund,
   paidBy,
   downloadVisible,
- 
+
   optionlist,
-  completedpayment=false,
+  completedpayment = false,
 }) => {
   const {
     updateTenderFee,
@@ -109,7 +109,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
   //       console.log("MetaData ", result);
 
   //       let tenderpayments = [];
-      
+
   //       tenderpayments = result?.tenderEmdPayment || [];
 
   //       tenderpayments = result?.tenderFeesPayment || [];
@@ -190,7 +190,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     )?.paidBy;
     if (paidByvalue) {
       const option = depositeDocuments.find((x) => x.value == paidByvalue);
-      // const option = mode.find((x) => x.value == paidByvalue); 
+      // const option = mode.find((x) => x.value == paidByvalue);
       if (option) setSelectedPaidBy(option);
     }
   }, [
@@ -227,61 +227,60 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
 
         {/* // { )} } */}
       </div>
-    {completedpayment &&(
-      <>
-      <Ds_checkbox
-        id={"payment"}
-        name={"Payment Completed"}
-        value={"Payment Completed"}
-        label={"Payment Completed"}
-      />
-      <div className={styles.multipleSelect}>
-        <DsMultiSelect
-          label="Add document type"
-          id={id+"Documents"}
-          options={optionlist || []}
-          setSelectOptions={(options) => {
-            setSelectedOptions(options);
-            console.log("Selected options:", options);
-          }}
-        >
-          <div className={styles.addBtn}>
-            <DsButton
-              label="Add"
-              buttonViewStyle="btnContained"
-              buttonSize="btnSmall"
-              className={styles.addBtn}
-              onClick={() => {
-                closeAllContext();
-                setSelectedCheckbox(true);
-                console.log("Add button clicked");
-              }}
-            />
-          </div>
-        </DsMultiSelect>
-      </div>
-      {selectedcheckbox &&
-        selectedOptions.map((option, index) => (
-          <UploadFile
-            key={`upload-${index}`}
-            uploadLabel={`Upload ${option.label} here `}
-            id={typeof option.value === "string" ? option.value : ""}
+      {completedpayment && (
+        <>
+          <Ds_checkbox
+            id={"payment"}
+            name={"Payment Completed"}
+            value={"Payment Completed"}
+            label={"Payment Completed"}
           />
-        ))}
-
-     
-        {selectedcheckbox &&
-          selectedOptions.map((option) => (
-            <div key="" className={styles.fields}>
-              <DsTextField
-                containerClasses={styles.feeFields}
-                label={`${option.label}  ID`}
+          <div className={styles.multipleSelect}>
+            <DsMultiSelect
+              label="Add document type"
+              id={id + "Documents"}
+              options={optionlist || []}
+              setSelectOptions={(options) => {
+                setSelectedOptions(options);
+                console.log("Selected options:", options);
+              }}
+            >
+              <div className={styles.addBtn}>
+                <DsButton
+                  label="Add"
+                  buttonViewStyle="btnContained"
+                  buttonSize="btnSmall"
+                  className={styles.addBtn}
+                  onClick={() => {
+                    closeAllContext();
+                    setSelectedCheckbox(true);
+                    console.log("Add button clicked");
+                  }}
+                />
+              </div>
+            </DsMultiSelect>
+          </div>
+          {selectedcheckbox &&
+            selectedOptions.map((option, index) => (
+              <UploadFile
+                key={`upload-${index}`}
+                uploadLabel={`Upload ${option.label} here `}
+                id={typeof option.value === "string" ? option.value : ""}
               />
-            </div>
-          ))}
-</>
-)}
- <div className={eleStyles.inputDetails}>
+            ))}
+
+          {selectedcheckbox &&
+            selectedOptions.map((option) => (
+              <div key="" className={styles.fields}>
+                <DsTextField
+                  containerClasses={styles.feeFields}
+                  label={`${option.label}  ID`}
+                />
+              </div>
+            ))}
+        </>
+      )}
+      <div className={eleStyles.inputDetails}>
         <DsTextField
           containerClasses={styles.feeFields}
           maxLength={10}
@@ -401,6 +400,14 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           buttonViewStyle="btnText"
           buttonSize="btnSmall"
           startIcon={<IconFactory name="fileAttach" />}
+          previouslySelectedFile={
+            tenderData.tenderDocuments?.filter(
+              (x) =>
+                x.documentType == type &&
+                x.category == type + "_INSTRUCTION" &&
+                x.id !== undefined
+            ) || []
+          }
           onSelectedFileChange={(files) => {
             const typeDocuments =
               tenderData.tenderDocuments?.filter(
@@ -408,7 +415,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   x.documentType == type && x.category == type + "_INSTRUCTION"
               ) || [];
             updateDocuments(
-              files.map((x) => x.document),
+              files,
               typeDocuments,
               removeTenderDocument,
               addNewTenderDocument,
