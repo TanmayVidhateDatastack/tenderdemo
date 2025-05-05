@@ -305,7 +305,7 @@ const ContractView: React.FC<ContractViewProps> = ({
             );
           }}
         ></DsCsvUpload>
-      </div>
+      </div> 
       <div className={styles.table}>
         <TableComponent
           className={contractItemsTableData.className}

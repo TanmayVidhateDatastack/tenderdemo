@@ -63,7 +63,7 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
               )||[];
               // console.log("updateDocuments",files);
               updateDocuments(
-                files,
+                files.map((x) => x.document),
                 typeDocuments, 
                 removeTenderDocument, 
                 addNewTenderDocument,
