@@ -308,31 +308,30 @@ export const DSTendrFooter: React.FC = ({}) => {
   };
   const validateAndUpdateTender = () => {
     console.log(tenderData);
-    updateTender("Draft");
-
-    // const validate = validateFields();
-    // if (validate.length === 0) {
-      // updateTender("Draft");
-    // } else {
-    //   const message = (
-    //     <>
-    //       <div className={styles["toaster-message-grid"]}>
-    //         {validate.map((ms, index) => (
-    //           <div key={index} className={styles["toaster-item"]}>
-    //             {ms}
-    //           </div>
-    //         ))}
-    //       </div>
-    //     </>
-    //   );
-    //   setActionStatusValues({
-    //     notiMsg: message,
-    //     notiType: "info",
-    //     showNotification: true,
-    //     isOkayButtonVisible: true,
-    //   });
-    //   showToaster("create-order-toaster");
-    // }
+    // updateTender("Draft");
+    const validate = validateFields();
+    if (validate.length === 0) {
+      updateTender("Draft");
+    } else {
+      const message = (
+        <>
+          <div className={styles["toaster-message-grid"]}>
+            {validate.map((ms, index) => (
+              <div key={index} className={styles["toaster-item"]}>
+                {ms}
+              </div>
+            ))}
+          </div>
+        </>
+      );
+      setActionStatusValues({
+        notiMsg: message,
+        notiType: "info",
+        showNotification: true,
+        isOkayButtonVisible: true,
+      });
+      showToaster("create-order-toaster");
+    }
   };
 
   useEffect(() => {

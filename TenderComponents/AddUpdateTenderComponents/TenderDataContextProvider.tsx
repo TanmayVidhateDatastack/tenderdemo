@@ -86,6 +86,7 @@ export type tenderSupplyCondition = {
   applicableConditions: applicableSupplyConditions[];
 };
 export type applicableSupplyConditions = {
+  id?: number;
   type: string | number;
   notes: string;
   // documents: Document[];
@@ -99,15 +100,17 @@ export type tenderFee = {
   paidBy: string;
   paymentMode: string;
   refundEligibility: string;
-  paymentDueDate: string;
-  instructionNotes: string;
-  paymentStatus?: string;
   paymentDate?: string;
+  paymentDueDate: string;
+  paymentRefundDate?: string;
+  instructionNotes: string;
   refundNotes?: string;
   paymentTransactionId?: string;
   paymentReceiptId?: string;
-  acknowledgmentReceiptId?: string;
+  acknowledgementReceiptId?: string;
   fundTransferConfirmationId?: string;
+  paymentStatus?: string;
+  paymentRefundStatus?: string;
   status?: "ACTV" | "INAC";
   // documents: Document[];
 };
@@ -1054,11 +1057,10 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               amount: x.amount,
               currency: x.currency,
               paidBy: x.paidBy,
-              paymentMode: x.paymentMode, 
-              refundEligibility:x.refundEligibility,
+              paymentMode: x.paymentMode,
+              refundEligibility: x.refundEligibility,
               paymentDueDate: x.paymentDueDate,
               instructionNotes: x.instructionNotes,
-              
             };
           }),
         tenderSupplyCondition: {
@@ -1159,6 +1161,30 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             tenderDataCopy.supplierType.toLowerCase() == "organization"
               ? null
               : tenderDataCopy.supplierId,
+          tenderFees: tenderDataCopy.tenderFees
+            .filter((x) => x.status == "ACTV")
+            .map((x) => {
+              return {
+                id: x.id,
+                feesType: x.feesType,
+                amount: x.amount,
+                currency: x.currency,
+                paidBy: x.paidBy,
+                paymentMode: x.paymentMode,
+                refundEligibility: x.refundEligibility,
+                paymentDate: x.paymentDate,
+                paymentDueDate: x.paymentDueDate,
+                paymentRefundDate: x.paymentRefundDate,
+                paymentStatus: x.paymentStatus,
+                paymentRefundStatus: x.paymentRefundStatus,
+                instructionNotes: x.instructionNotes,
+                refundNotes: x.refundNotes,
+                paymentTransactionId: x.paymentTransactionId,
+                paymentReceiptId: x.paymentReceiptId,
+                acknowledgementReceiptId: x.acknowledgementReceiptId,
+                fundTransferConfirmationId: x.fundTransferConfirmationId,
+              };
+            }),
           tenderSupplyCondition: {
             ...tenderDataCopy.tenderSupplyCondition,
             eligibility: tenderDataCopy.tenderSupplyCondition.eligibility,
@@ -1171,6 +1197,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             if (x.id) return { id: x.id, tenderItems: x.tenderItems };
             return { tenderItems: x.tenderItems };
           }),
+          comments: null,
         });
         delete dataToSendTenderCopy.applierType;
         delete dataToSendTenderCopy.supplierType;
@@ -1193,19 +1220,58 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             tenderData.supplierType.toLowerCase() == "organization"
               ? null
               : tenderData.supplierId,
+
+          tenderFees: tenderData.tenderFees
+            .filter((x) => x.status == "ACTV")
+            .map((x) => {
+              return {
+                id: x.id,
+                feesType: x.feesType,
+                amount: x.amount,
+                currency: x.currency,
+                paidBy: x.paidBy,
+                paymentMode: x.paymentMode,
+                refundEligibility: x.refundEligibility,
+                paymentDate: x.paymentDate,
+                paymentDueDate: x.paymentDueDate,
+                paymentRefundDate: x.paymentRefundDate,
+                paymentStatus: x.paymentStatus,
+                paymentRefundStatus: x.paymentRefundStatus,
+                instructionNotes: x.instructionNotes,
+                refundNotes: x.refundNotes,
+                paymentTransactionId: x.paymentTransactionId,
+                paymentReceiptId: x.paymentReceiptId,
+                acknowledgementReceiptId: x.acknowledgementReceiptId,
+                fundTransferConfirmationId: x.fundTransferConfirmationId,
+              };
+            }),
           tenderSupplyCondition: {
             ...tenderData.tenderSupplyCondition,
             eligibility: tenderData.tenderSupplyCondition.eligibility,
 
             applicableConditions:
-              tenderData.tenderSupplyCondition.applicableConditions,
+              tenderData.tenderSupplyCondition.applicableConditions
+                .filter((x) => x.status == "ACTV")
+                .map((x) => {
+                  return {
+                    id: x.id,
+                    type: x.type,
+                    notes: x.notes,
+                    status: x.status,
+                  };
+                }),
           },
 
           // tenderRevisions: latestTenderRevision,
-          tenderRevisions: latestTenderRevision.map((x) => {
-            if (x.id) return { id: x.id, tenderItems: x.tenderItems };
-            return { tenderItems: x.tenderItems };
-          }),
+          tenderRevisions:
+            tenderDataCopy.tenderRevisions?.length > 0 &&
+            latestTenderRevision[0].tenderItems.length > 0
+              ? latestTenderRevision.map((x) => {
+                  if (x.id) return { id: x.id, tenderItems: x.tenderItems };
+                  return { tenderItems: x.tenderItems };
+                })
+              : [],
+          comments: "t",
         });
         delete dataToSendOriginalTender.applierType;
         delete dataToSendOriginalTender.supplierType;
@@ -1409,19 +1475,21 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         const newTenderData: TenderData = {
           ...tenderData.tenders,
           tenderRevisions: tenderData.tenderRevisions,
-          tenderFees: tenderData.tenderFees.map((fee) => ({
-            ...fee,
-            status: "ACTV",
-          })),
+          tenderFees: tenderData.tenderFees
+            .map((fee) => ({ 
+              ...fee,  
+              paymentReceiptId: fee.paymentRecieptId,
+              status: "ACTV",
+            })),
           tenderSupplyCondition: {
             ...tenderData.tenderSupplyCondition,
             applicableConditions:
-              tenderData.tenderSupplyCondition.applicableConditions?.map(
-                (ac) => ({
+              tenderData.tenderSupplyCondition.applicableConditions
+                ?.filter((x) => x.status == "ACTV")
+                .map((ac) => ({
                   ...ac,
                   status: "ACTV",
-                })
-              ),
+                })),
           },
           tenderContract: { ...tenderData.tenderContract },
         };
@@ -1432,11 +1500,11 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           else setTenderData(newTenderData);
         } else {
           setTenderData(newTenderData);
-        }
+        }   
         setTenderDataCopy({
           ...newTenderData,
           tenderRevisions: newTenderData.tenderRevisions.filter(
-            (x) => x.id != undefined
+            (x) => x.id != undefined  
           ),
           status: "",
           lastUpdatedBy: -1,
@@ -1549,7 +1617,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       .then((res) => {
         if (res.code === 200) {
           const result = res.result;
-          console.log("AAAAAAAAAAAAAAAAAA",result);
+          console.log("AAAAAAAAAAAAAAAAAA", result);
 
           const metaData = {
             tenderType: (result.tenderType || []).map(
@@ -1588,19 +1656,19 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 label: item.codeDescription,
               })
             ),
-            tenderEmdPayment:(result.feesType || []).map(
+            tenderEmdPayment: (result.feesType || []).map(
               (item: { codeValue: string; codeDescription: string }) => ({
                 value: item.codeValue,
                 label: item.codeDescription,
               })
             ),
-            tenderFeesPayment:(result.feesType || []).map(
+            tenderFeesPayment: (result.feesType || []).map(
               (item: { codeValue: string; codeDescription: string }) => ({
                 value: item.codeValue,
                 label: item.codeDescription,
               })
             ),
-            tenderPsdPayment:(result.feesType || []).map(
+            tenderPsdPayment: (result.feesType || []).map(
               (item: { codeValue: string; codeDescription: string }) => ({
                 value: item.codeValue,
                 label: item.codeDescription,
