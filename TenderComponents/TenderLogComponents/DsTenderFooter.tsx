@@ -21,8 +21,8 @@ import DsSplitButton from "@/Elements/DsComponents/DsButtons/dsSplitButton";
 
 import Toaster from "@/Elements/DsComponents/DsToaster/DsToaster";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
-import { useTenderData,} from "../AddUpdateTenderComponents/TenderDataContextProvider";
-import { TenderData } from "@/TenderComponents/AddUpdateTenderComponents/TenderDataContextProvider";
+import { useTenderData } from "../AddUpdateTenderComponents/TenderDataContextProvider";
+import { TenderData} from "@/TenderComponents/AddUpdateTenderComponents/TenderDataContextProvider";
 import { getYesterdayDate } from "@/Common/helpers/Method/conversion";
 import ApprovalPopup from "../AddUpdateTenderComponents/Approvelpopup/ApprovelPopup";
 
@@ -37,7 +37,7 @@ export const DSTendrFooter: React.FC = ({}) => {
   const dispatch = useAppDispatch<AppDispatch>();
   const role = useAppSelector((state: RootState) => state.user.role);
   const [toasterVisible, setToasterVisible] = useState<boolean>(false);
-  const { setActionStatusValues, saveTender, tenderData, updateTender,tenderDataCopy } =
+  const { setActionStatusValues, saveTender, tenderData,tenderDataCopy, updateTender } =
     useTenderData();
   const handleFetch = async () => {
     try {
