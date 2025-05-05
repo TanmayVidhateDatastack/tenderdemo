@@ -21,7 +21,7 @@ import DsSplitButton from "@/Elements/DsComponents/DsButtons/dsSplitButton";
 
 import Toaster from "@/Elements/DsComponents/DsToaster/DsToaster";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
-import { useTenderData } from "../AddUpdateTenderComponents/TenderDataContextProvider";
+import { useTenderData,} from "../AddUpdateTenderComponents/TenderDataContextProvider";
 import { TenderData } from "@/TenderComponents/AddUpdateTenderComponents/TenderDataContextProvider";
 import { getYesterdayDate } from "@/Common/helpers/Method/conversion";
 import ApprovalPopup from "../AddUpdateTenderComponents/Approvelpopup/ApprovelPopup";
@@ -37,7 +37,7 @@ export const DSTendrFooter: React.FC = ({}) => {
   const dispatch = useAppDispatch<AppDispatch>();
   const role = useAppSelector((state: RootState) => state.user.role);
   const [toasterVisible, setToasterVisible] = useState<boolean>(false);
-  const { setActionStatusValues, saveTender, tenderData, updateTender } =
+  const { setActionStatusValues, saveTender, tenderData, updateTender,tenderDataCopy } =
     useTenderData();
   const handleFetch = async () => {
     try {
@@ -442,7 +442,7 @@ export const DSTendrFooter: React.FC = ({}) => {
           onClick={() => {
             // if (saveTender) validateAndSaveTender();
             // if (saveTender) saveTender("Draft");
-            if (tenderData?.id) {
+            if (tenderDataCopy?.id) {
               validateAndUpdateTender();
               // updateTender("Draft")
             } else {

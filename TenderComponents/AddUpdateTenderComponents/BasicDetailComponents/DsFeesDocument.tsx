@@ -409,7 +409,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   x.documentType == type && x.category == type + "_INSTRUCTION"
               ) || [];
             updateDocuments(
-              files,
+              files.map((x)=>x.document),
               typeDocuments,
               removeTenderDocument,
               addNewTenderDocument,

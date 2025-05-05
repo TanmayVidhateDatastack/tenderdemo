@@ -982,6 +982,9 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [tenderData]);
 
   const stripReadOnlyProperties = (obj: any): any => {
+    if (obj instanceof File || obj instanceof Blob) {
+      return obj;
+    }
     if (Array.isArray(obj)) {
       return obj.map((item) => stripReadOnlyProperties(item));
     }
@@ -1003,7 +1006,10 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   };
   // Save Order API Call
   // Save Order API Call
-
+  async function fileToBlob(file) {
+    const arrayBuffer = await file.arrayBuffer();
+    return new Blob([new Uint8Array(arrayBuffer)], { type: file.type });
+  }
   const saveTender = useCallback(
     async (status: string) => {
       if (!tenderData) return;
@@ -1054,22 +1060,26 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               amount: x.amount,
               currency: x.currency,
               paidBy: x.paidBy,
-              paymentMode: x.paymentMode, 
-              refundEligibility:x.refundEligibility,
+              paymentMode: x.paymentMode,
+              refundEligibility: x.refundEligibility,
               paymentDueDate: x.paymentDueDate,
               instructionNotes: x.instructionNotes,
-              
             };
           }),
         tenderSupplyCondition: {
           ...tenderData.tenderSupplyCondition,
-          eligibility: tenderData.tenderSupplyCondition,
+          eligibility: tenderData.tenderSupplyCondition.eligibility,
           applicableConditions:
             tenderData.tenderSupplyCondition.applicableConditions,
         },
         tenderDocuments:
-          tenderData.tenderDocuments?.map(async (x) => {
-            const base64String = x.data ? await fileToBase64(x.data) : "";
+          tenderData.tenderDocuments?.map((x) => {
+            // const newDocs=new FormData();
+            // newDocs.append("name",x.name);
+            // newDocs.append("data",x.data as Blob);
+            // newDocs.append("documentType",x.name);
+            // newDocs.append("category",x.name);
+            // const base64String = x.data ? await fileToBase64(x.data) : "";
             return {
               name: x.name,
               data: x.data,
@@ -1082,41 +1092,129 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       delete tenderSaveData.tenderSupplyCondition.id;
       const dataToSend = stripReadOnlyProperties({
         ...tenderSaveData,
-        status: status.toUpperCase(),
+        // status: status.toUpperCase(),
         lastUpdatedBy: 3,
       });
+      const formData = new FormData();
+      // Append simple fields
+      formData.append("customerId", dataToSend.customerId);
+      formData.append("customerAddressId", dataToSend.customerAddressId);
+      formData.append("tenderNumber", dataToSend.tenderNumber);
+      formData.append("tenderType", dataToSend.tenderType);
+      formData.append("issueDate", dataToSend.issueDate);
+      formData.append("lastPurchaseDate", dataToSend.lastPurchaseDate);
+      formData.append("submissionDate", dataToSend.submissionDate);
+      formData.append("rateContractValidity", dataToSend.rateContractValidity);
+      formData.append("submissionMode", dataToSend.submissionMode);
+      formData.append("deliveryPeriod", dataToSend.deliveryPeriod);
+      formData.append(
+        "extendedDeliveryPeriod",
+        dataToSend.extendedDeliveryPeriod
+      );
+      formData.append("lateDeliveryPenalty", dataToSend.lateDeliveryPenalty);
+      formData.append("tenderUrl", dataToSend.tenderUrl);
+      formData.append("shippingLocations", dataToSend.shippingLocations);
+      formData.append("appliedBy", dataToSend.appliedBy);
+      formData.append("applierId", dataToSend.applierId);
+      formData.append("suppliedBy", dataToSend.suppliedBy);
+      formData.append("supplierId", dataToSend.supplierId);
+      formData.append("supplierDiscount", dataToSend.supplierDiscount);
+      formData.append("lastUpdatedBy", "3"); // Convert numbers to strings
 
-      console.log("sAVEEEE", dataToSend);
+      // Append nested objects
+      formData.append(
+        "tenderSupplyCondition.Eligibility",
+        dataToSend.tenderSupplyCondition.eligibility
+      );
+      formData.append(
+        "tenderSupplyCondition.SupplyPoint",
+        dataToSend.tenderSupplyCondition.supplyPoint
+      );
+      formData.append(
+        "tenderSupplyCondition.consigneesCount",
+        dataToSend.tenderSupplyCondition.consigneesCount
+      );
+      formData.append(
+        "tenderSupplyCondition.TestReportRequired",
+        dataToSend.tenderSupplyCondition.testReportRequired
+      );
+      formData.append(
+        "tenderSupplyCondition.ApplicableConditions",
+        dataToSend.tenderSupplyCondition.applicableConditions
+      );
+
+      // Append tenderFees array
+      dataToSend.tenderFees.forEach((fee, index) => {
+        formData.append(`tenderFees[${index}].FeesType`, fee.feesType);
+        formData.append(`tenderFees[${index}].Amount`, fee.amount.toString());
+        formData.append(`tenderFees[${index}].Currency`, fee.currency);
+        formData.append(`tenderFees[${index}].PaidBy`, fee.paidBy);
+        formData.append(`tenderFees[${index}].PaymentMode`, fee.paymentMode);
+        formData.append(
+          `tenderFees[${index}].RefundEligibility`,
+          fee.refundEligibility
+        );
+        formData.append(
+          `tenderFees[${index}].PaymentDueDate`,
+          fee.paymentDueDate
+        );
+        formData.append(
+          `tenderFees[${index}].InstructionNotes`,
+          fee.instructionNotes
+        );
+      });
+
+      // Append files (tenderDocuments)
+      dataToSend.tenderDocuments.forEach((doc, index) => {
+        console.log(
+          doc.data,
+          typeof doc.data,
+          doc.data instanceof File,
+          doc.data instanceof Blob
+        );
+        // const blob = new Blob([doc.data.arrayBuffer()], {
+        //   type: "application/pdf",
+        // });
+        formData.append(`tenderDocuments[${index}].Name`, doc.name);
+        formData.append(
+          `tenderDocuments[${index}].DocumentType`,
+          doc.documentType
+        );
+        formData.append(`tenderDocuments[${index}].Category`, doc.category);
+        formData.append(`tenderDocuments[${index}].Data`, doc.data, doc.name); // File/Blob object
+      });
+      console.log("sAVEEEE", formData);
       try {
-        await fetchData({
-          url: saveTenderurl,
+        await fetch(saveTenderurl, {
           method: "POST",
-          dataObject: dataToSend,
-        }).then((res) => {
-          if (res.code === 200) {
-            setActionStatus({
-              notiMsg: "Tender Created Successfully",
-              notiType: "success",
-              showNotification: true,
-            });
-            showToaster("create-order-toaster");
-            setTimeout(() => {
-              goBack();
-            }, closeTimeForTender);
-          } else {
-            setActionStatus({
-              notiMsg: "Tender could not be saved",
-              notiType: "error",
-              showNotification: true,
-            });
-            showToaster("create-order-toaster");
-          }
+          body: formData,
+        }).then((result) => {
+          result.json().then((res) => {
+            if (res.code === 200) {
+              setActionStatus({
+                notiMsg: "Tender Created Successfully",
+                notiType: "success",
+                showNotification: true,
+              });
+              showToaster("create-order-toaster");
+              setTimeout(() => {
+                goBack();
+              }, closeTimeForTender);
+            } else {
+              setActionStatus({
+                notiMsg: "Tender could not be saved",
+                notiType: "error",
+                showNotification: true,
+              });
+              showToaster("create-order-toaster");
+            }
+          });
         });
         // console.log("result  = ", result);
         //console.log("Order saved successfully");
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
-        // console.error("Error saving order:", error);
+        console.error("Error saving order:", error);
       }
     },
     [tenderData, tenderDataCopy, fetchData]
@@ -1568,7 +1666,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 label: item.codeDescription,
               })
             ),
-            testReportRequired: (result.testReportRequirement || []).map(
+            testReportRequired: (result.testReportRequired || []).map(
               (item: { codeValue: string; codeDescription: string }) => ({
                 value: item.codeValue,
                 label: item.codeDescription,
@@ -1586,19 +1684,19 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 label: item.codeDescription,
               })
             ),
-            tenderEmdPayment:(result.feesType || []).map(
+            tenderEmdPayment: (result.feesType || []).map(
               (item: { codeValue: string; codeDescription: string }) => ({
                 value: item.codeValue,
                 label: item.codeDescription,
               })
             ),
-            tenderFeesPayment:(result.feesType || []).map(
+            tenderFeesPayment: (result.feesType || []).map(
               (item: { codeValue: string; codeDescription: string }) => ({
                 value: item.codeValue,
                 label: item.codeDescription,
               })
             ),
-            tenderPsdPayment:(result.feesType || []).map(
+            tenderPsdPayment: (result.feesType || []).map(
               (item: { codeValue: string; codeDescription: string }) => ({
                 value: item.codeValue,
                 label: item.codeDescription,

@@ -102,7 +102,7 @@ const DsSupplyDetails: React.FC = () => {
           <DsSingleSelect
             containerClasses={styles.fields}
             selectedOption={selectedtTestReportRequired}
-            options={metaData.reportRequirements||[]}
+            options={metaData.testReportRequired||[]}
             label="Test report requirement"
             placeholder={"Please select here"}
             id={"reportReq"}
