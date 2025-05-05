@@ -456,7 +456,7 @@ export default function Home() {
           // if(res?.c)
 
           setFetchedMetadata(res.result); // Store only tenderType
-          // console.log("Stored Tender Type:", res.result);
+          console.log("Stored Tender Type:", res.result);
         } else {
           console.error("Error: Invalid data format or empty tenderType");
         }

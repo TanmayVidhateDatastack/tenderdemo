@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { getAllMetaData, getTenderUserRoles } from "@/Common/helpers/constant";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import {
   tenderDetails,
