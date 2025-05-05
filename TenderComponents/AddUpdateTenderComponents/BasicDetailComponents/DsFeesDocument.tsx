@@ -18,7 +18,6 @@ import IconFactory from "@/Elements/IconComponent";
 import DsMultiSelect from "@/Elements/DsComponents/dsSelect/dsMultiSelect";
 import { getYesterdayDate } from "@/Common/helpers/Method/conversion";
 import UploadFile from "@/TenderComponents/TenderLogComponents/uploadfile";
-import Tryfolder from "@/app/Tender/tryfolder/tryfolder";
 import { closeAllContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 
 export type tenderDocument = {
@@ -45,7 +44,6 @@ export interface DsFeesProps {
   refund: DsSelectOption[];
   paidBy: DsSelectOption[];
   downloadVisible: boolean;
-
   completedpayment:boolean
   type: string;
   optionlist: DsSelectOption[];
@@ -192,7 +190,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     )?.paidBy;
     if (paidByvalue) {
       const option = depositeDocuments.find((x) => x.value == paidByvalue);
-      // const option = mode.find((x) => x.value == paidByvalue);
+      // const option = mode.find((x) => x.value == paidByvalue); 
       if (option) setSelectedPaidBy(option);
     }
   }, [
@@ -274,7 +272,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
      
         {selectedcheckbox &&
           selectedOptions.map((option) => (
-            <div className={styles.fields}>
+            <div key="" className={styles.fields}>
               <DsTextField
                 containerClasses={styles.feeFields}
                 label={`${option.label}  ID`}
@@ -410,7 +408,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   x.documentType == type && x.category == type + "_INSTRUCTION"
               ) || [];
             updateDocuments(
-              files,
+              files.map((x) => x.document),
               typeDocuments,
               removeTenderDocument,
               addNewTenderDocument,

@@ -1,3 +1,9 @@
 .ContractTable{
     font-size: var(--font-13);
 }
+.justification,.notes,.table{
+    margin-top:0.5em;
+}
+.title{
+    margin-bottom:0.3em;
+}

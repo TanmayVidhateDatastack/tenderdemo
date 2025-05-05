@@ -124,9 +124,8 @@ gap:0px;
 /* .dis{
   margin: 0.3rem 0.2vw !important;
 } */
-.dis:hover
-{
- background-color: transparent !important;
+.dis:hover {
+  background-color: transparent !important;
 }
 .nav {
   display: flex;

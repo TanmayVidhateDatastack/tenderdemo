@@ -12,12 +12,14 @@ import { DocumentContext } from "./DocumentsContextProvider";
 import { getAllDocuments } from "@/Common/helpers/constant";
 import buttonstyle from "@/Elements/DsComponents/DsButtons/dsButton.module.css"
 import { TenderDocument } from "../TenderDataContextProvider";
+import { tenderDocument } from "../BasicDetailComponents/DsFeesDocument";
+import { closeContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 
 const DsAddTenderDocumentPane: React.FC = () => {
   const [openAccordion, setOpenAccordion] = useState<string | null |number>(null);
   const [groupedDocuments, setGroupedDocuments] = useState<Record<string, TenderDocument[]>>({});
   const [selectedDocuments, setSelectedDocuments] = useState<TenderDocument[]>([]);
-
+                                                                                       
   const documentContext = useContext(DocumentContext);
 
   useEffect(() => {
@@ -29,15 +31,15 @@ const DsAddTenderDocumentPane: React.FC = () => {
       const res = await fetchData({ url: getAllDocuments });
       if (res.code === 200) {
         const tenderDocuments = res.result.Documents.filter(
-          (doc: documents) => doc.category === "TenderDocument"
+          (doc: TenderDocument) => doc.category === "TenderDocument"
         );
 
-        const grouped = tenderDocuments.reduce(
-          (acc: Record<string, documents[]>, doc: documents) => {
-            if (!acc[doc.type]) {
-              acc[doc.type] = [];
+        const grouped = tenderDocuments.reduce( 
+          (acc: Record<string, TenderDocument[]>, doc: TenderDocument) => {
+            if (!acc[doc.documentType]) {
+              acc[doc.documentType] = []; 
             }
-            acc[doc.type].push(doc);
+            acc[doc.documentType].push(doc);
             return acc;
           },
           {}
@@ -118,7 +120,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
             });
           }
         });
-
+              
         // Remove documents that are not in selectedDocuments
         updatedData = updatedData.map((group) => {
           return {
@@ -130,12 +132,11 @@ const DsAddTenderDocumentPane: React.FC = () => {
             ),
           };
         }).filter(group => group.documents.length > 0);
-
         // console.log("Updated Document Context:", updatedData); 
-
         return updatedData;
       });
     }
+    
   };
 
 
@@ -158,17 +159,17 @@ const DsAddTenderDocumentPane: React.FC = () => {
             onToggle={handleAccordionToggle} 
           >
             <div className={styles.documents}>
-              {docs.map((doc) => (
-                <Ds_checkbox
+              {docs.map((doc) => (  
+                <Ds_checkbox  
                   className={styles.documentsCkechS}
-                  key={doc.id}
+                  key={doc.id} 
                   id={doc.id?.toString()||doc.name}
                   name={doc.name} 
                   value={doc.id?.toString()||doc.name}
                   label={doc.name}
-                  onChange={() => handleCheckboxChange(doc)}
+                  onChange={() => handleCheckboxChange(doc)}  
                   isChecked={selectedDocuments.some((d) => d.id === doc.id)} 
-                />
+                /> 
               ))}
             </div>
           </Accordion>
