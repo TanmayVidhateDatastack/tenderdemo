@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import {
-  tenderDetails,
+  // tenderDetails,
   supplyDetails,
   DsSelectOption,
 } from "@/Common/helpers/types";

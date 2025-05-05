@@ -288,6 +288,14 @@ const ContractView: React.FC<ContractViewProps> = ({
           buttonViewStyle="btnText"
           buttonSize="btnSmall"
           startIcon={<IconFactory name="fileAttach" />}
+          previouslySelectedFile={
+            tenderData.tenderDocuments?.filter(
+              (x) =>
+                x.documentType == "TENDER_CONTRACT_DOCUMENT" &&
+                x.category == status + "_DOCUMENTS" &&
+                x.id !== undefined
+            ) || []
+          }
           onSelectedFileChange={(files) => {
             const typeDocuments =
               tenderData.tenderDocuments?.filter(
@@ -296,7 +304,7 @@ const ContractView: React.FC<ContractViewProps> = ({
                   x.category == status + "_DOCUMENTS"
               ) || [];
             updateDocuments(
-              files.map((x) => x.document),
+              files,
               typeDocuments,
               removeTenderDocument,
               addNewTenderDocument,
@@ -305,7 +313,7 @@ const ContractView: React.FC<ContractViewProps> = ({
             );
           }}
         ></DsCsvUpload>
-      </div> 
+      </div>
       <div className={styles.table}>
         <TableComponent
           className={contractItemsTableData.className}
