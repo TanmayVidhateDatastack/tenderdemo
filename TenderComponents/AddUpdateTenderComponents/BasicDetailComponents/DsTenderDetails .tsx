@@ -8,7 +8,7 @@ import {
   // tenderDetailsProps,
   location,
   DsSelectOption,
-  tenderDetailsProps,
+  // tenderDetailsProps,
 } from "@/Common/helpers/types";
 import { useTenderData } from "../TenderDataContextProvider";
 import DsDatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker";
