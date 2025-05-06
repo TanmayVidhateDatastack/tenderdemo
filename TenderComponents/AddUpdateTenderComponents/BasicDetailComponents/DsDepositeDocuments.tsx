@@ -1,7 +1,7 @@
 import styles from "./deposite.module.css";
 import Image from "next/image";
 import downarrow from "@/Common/TenderIcons/smallIcons/verticleArrow.svg";
-import { useEffect, useState } from "react";
+import { useDebugValue, useEffect, useState } from "react";
 import ContextMenu, {
   closeAllContext,
   createContext,
@@ -62,6 +62,9 @@ const DsDepositeDocuments: React.FC = () => {
   const [feeVisibility, setFeeVisibility] = useState<Record<string, boolean>>({
     "": true,
   });
+
+  // const [feeVisibility1, setFeeVisibility1] = useState<Record<string, boolean>>({"": true,});
+
   const role = useAppSelector((state: RootState) => state.user.role);
 
   useEffect(() => {
@@ -126,27 +129,33 @@ const DsDepositeDocuments: React.FC = () => {
   }
   const selectedFees = new Set();
   const handleAdd = () => {
+    const checkFeeVisible = { ...feeVisibility };
+
     applicablefees.forEach((opt) => {
       const id = opt.value.toString();
       const checkbox = document.getElementById(id) as HTMLInputElement;
 
       if (checkbox?.checked) {
         selectedFees.add(id);
-        feeVisibility[id] = true;
+        checkFeeVisible[id] = true;
         if (tenderData.tenderFees.some((fee) => fee.feesType == id))
           updateTenderFee(id, "status", "ACTV");
         else addTenderFee(id);
       } else {
         selectedFees.delete(id);
-        feeVisibility[id] = false;
+        checkFeeVisible[id] = false;
         updateTenderFee(id, "status", "INAC");
       }
     });
+    setFeeVisibility(checkFeeVisible);
+
     closeAllContext();
     // console.log("Currently Selected:", Array.from(selectedFees));
   };
 
   useEffect(() => {
+    const checkFeeVisible = { ...feeVisibility };
+
     applicablefees.forEach((opt) => {
       const id = opt.value.toString();
       // if(tenderData.tenderFees.find((x)=> x.feesType==id)?.status=="INAC"){
@@ -157,29 +166,29 @@ const DsDepositeDocuments: React.FC = () => {
       // }
       const checkbox = document.getElementById(id) as HTMLInputElement;
       selectedFees.add(id);
-      feeVisibility[id] = true;
+      checkFeeVisible[id] = true;
       // addTenderFee(id);
       if (checkbox?.checked) {
         selectedFees.add(id);
-        feeVisibility[id] = true;
-        console.log(id);
+        checkFeeVisible[id] = true;
         if (tenderData.tenderFees.some((fee) => fee.feesType == id))
           updateTenderFee(id, "status", "ACTV");
         else addTenderFee(id);
-      } else if (checkbox) {
+      } else if (tenderData.id==undefined) {
         selectedFees.add(id);
-        feeVisibility[id] = true;
-        console.log(id);
+        checkFeeVisible[id] = true;
         if (tenderData.tenderFees.some((fee) => fee.feesType == id))
           updateTenderFee(id, "status", "ACTV");
         else addTenderFee(id);
       } else {
         selectedFees.delete(id);
-        feeVisibility[id] = false;
+        checkFeeVisible[id] = false;
         updateTenderFee(id, "status", "INAC");
       }
     });
-  }, [applicablefees, tenderDataCopy.id]);
+    setFeeVisibility(checkFeeVisible);
+
+  }, [applicablefees, tenderData.id,]);
 
   // useEffect(() => {
   //   console.log("feevisibility : ", feeVisibility);
