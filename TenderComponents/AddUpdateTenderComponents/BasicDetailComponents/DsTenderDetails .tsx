@@ -122,42 +122,42 @@ const DsTenderDetails: React.FC = () => {
         showArrow={true}
       />
       <div className={styles.inputDetails}>
-        <div className={deptStyle.fields}>
-          <CustomerSearch
-            customer={tenderData.tenderDetails.customerName}
-            orderData={undefined}
-            setCustomerLocations={setCustomerLocations}
-            updateTenderData={updateTenderData}
-          />
-        </div>
+        {/* <div className={deptStyle.fields}> */}
+        <CustomerSearch
+          customer={tenderData.tenderDetails.customerName}
+          orderData={undefined}
+          setCustomerLocations={setCustomerLocations}
+          updateTenderData={updateTenderData}
+        />
+        {/* </div> */}
 
         {fetchCustomerButtonVisible &&
           !(tenderDataCopy.id && tenderDataCopy.id !== 0) && (
-            <div className={deptStyle.fields}>
-              <DsButton
-                id="copyBtn"
-                label="Fetch Information"
-                buttonViewStyle="btnText"
-                buttonSize="btnSmall"
-                disable={tenderData.customerId ? false : true}
-                className={deptStyle.copyBtn}
-                startIcon={
-                  <div style={{ width: "0.95625em", height: "1.125em" }}>
-                    <IconFactory
-                      name="copy"
-                      disabled={tenderData.customerId ? false : true}
-                    />
-                  </div>
-                }
-                // disable
-                onClick={(e) => {
-                  // setShowNotification(true);
-                  // setPos("top");
-                  // setNotiType("info");
-                  displayContext(e, "contextMenuId5", "horizontal", "center");
-                }}
-              />
-            </div>
+            // <div className={deptStyle.fields}>
+            <DsButton
+              id="copyBtn"
+              label="Fetch Information"
+              buttonViewStyle="btnText"
+              buttonSize="btnSmall"
+              disable={tenderData.customerId ? false : true}
+              className={deptStyle.copyBtn}
+              startIcon={
+                <div style={{ width: "0.95625em", height: "1.125em" }}>
+                  <IconFactory
+                    name="copy"
+                    disabled={tenderData.customerId ? false : true}
+                  />
+                </div>
+              }
+              // disable
+              onClick={(e) => {
+                // setShowNotification(true);
+                // setPos("top");
+                // setNotiType("info");
+                displayContext(e, "contextMenuId5", "horizontal", "center");
+              }}
+            />
+            // </div>
           )}
         <DsSingleSelect
           containerClasses={styles.fields}

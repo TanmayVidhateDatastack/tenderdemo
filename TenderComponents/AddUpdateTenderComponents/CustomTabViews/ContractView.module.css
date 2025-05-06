@@ -1,9 +1,26 @@
+.ContractPage{
+    padding:0.9em;
+    padding-top:0;
+}
 .ContractTable{
     font-size: var(--font-13);
 }
 .justification,.notes,.table{
-    margin-top:0.5em;
+    margin-top:0.9em;
 }
 .title{
     margin-bottom:0.3em;
+    font-size:var(--font-13);
+    font-weight:600
+}
+.awardTableTitle{
+    margin-top:1em;
+    margin-bottom:1em;
+
+    font-size:var(--font-14);
+    font-weight:600
+
+}
+.cell-generic-name{
+    padding-left:0.25em !important;
 }
