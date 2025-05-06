@@ -210,12 +210,15 @@ const DsApplicableConditions: React.FC=() => {
       </div>
       <ContextMenu
         id={contextMenuId}
+        className={styles.applicableDeposite}
         content={
           <>
             <div className={styles.applicableDeposit}>
               {applicableCheckboxes.map((checkbox, index) => (
                 <Ds_checkbox
                   key={index} // Unique key
+                  containerClassName={styles.feesCheckboxContainer}
+
                   id={checkbox.value.toString()}
                   name={checkbox.label}
                   value={checkbox.value.toString()}
