@@ -20,9 +20,7 @@ import React, {
   useState,
 } from "react";
 import { generatePatchDocument } from "@/Common/helpers/Method/UpdatePatchObjectCreation";
-import DsSupplyConditions from "./BasicDetailComponents/DsSupplyConditions";
 import { DsSelectOption } from "@/Common/helpers/types";
-
 class ActionStatus {
   notiType: "success" | "bonus" | "info" | "error" | "cross" = "success";
   notiMsg: string | React.ReactNode = "";
@@ -102,8 +100,8 @@ export type tenderFee = {
   paymentDueDate: string;
   instructionNotes: string;
   paymentStatus?: string;
-  paymentDate?: string | undefined;
-  paymentrecoveryDate?: string | undefined;
+  paymentDate?: string;
+  recoverypaymentDate?:string;
   refundNotes?: string;
   paymentTransactionId?: string;
   paymentReceiptId?: string;
@@ -136,6 +134,7 @@ export type TenderContract = {
   };
 };
 export type TenderData = {
+  contractStatus: unknown;
   // tenderId: string;
   id?: number;
   customerId: number;

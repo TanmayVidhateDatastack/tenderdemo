@@ -13,8 +13,6 @@ import TextArea from "@/Elements/DsComponents/DsInputs/dsTextArea";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import { DisplayPane } from "@/Elements/DsComponents/DsPane/DsPane";
 
-
-
 class ActionStatus {
     notiType: "success" | "bonus" | "info" | "error" | "cross" = "success";
     notiMsg: string = "";

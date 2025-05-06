@@ -107,6 +107,7 @@ const DsApplicableConditions: React.FC=() => {
   }, [metaData?.applicableSupplyConditions, tenderDataCopy, tenderData.id]);
 
   useEffect(() => {
+    const checkConditionVisible = {...conditionsVisibility};
     (metaData.applicableSupplyConditions||[]).forEach((opt) => {
       const id = opt.value.toString();
       // if(tenderData.tenderFees.find((x)=> x.feesType==id)?.status=="INAC"){
@@ -117,31 +118,33 @@ const DsApplicableConditions: React.FC=() => {
       // }
       const checkbox = document.getElementById(id) as HTMLInputElement;
       selectedConditions.add(id);
-      conditionsVisibility[id] = true;
+      checkConditionVisible[id] = true;
       // addTenderFee(id);
       if (checkbox?.checked) {
         selectedConditions.add(id);
-        conditionsVisibility[id] = true;
+        checkConditionVisible[id] = true;
         console.log(id);
         if (tenderData.tenderFees.some((fee) => fee.feesType == id))
           updateApplicableCondition(id, "status", "ACTV");
         else addApplicableCondition(id);
       } else if (checkbox) {
         selectedConditions.add(id);
-        conditionsVisibility[id] = true;
-        console.log(id);
+        checkConditionVisible[id] = true;
+        console.log(id); 
         if (tenderData.tenderFees.some((fee) => fee.feesType == id))
-          updateApplicableCondition(id, "status", "ACTV");
+          updateApplicableCondition(id, "status", "ACTV"); 
         // else addApplicableCondition(id);
       } else {
         selectedConditions.delete(id);
-        conditionsVisibility[id] = false;
+        checkConditionVisible[id] = false;
         if (tenderData.tenderFees.some((fee) => fee.feesType == id))
           updateApplicableCondition(id, "status", "INAC");
       }
     });
+    setConditionsVisibility(checkConditionVisible);
+    
   }, [metaData.applicableSupplyConditions, tenderData.id]);
-  useEffect(() => {
+  useEffect(() => {   
     window.addEventListener("click", (e) => {
       const target = (e.target as HTMLElement).closest(
         `.${styles["depositsBtn"]}`
@@ -150,7 +153,7 @@ const DsApplicableConditions: React.FC=() => {
 
       if (!target && !target2) {
         closeContext(contextMenuId);
-        return;
+        return; 
       }
     });
 

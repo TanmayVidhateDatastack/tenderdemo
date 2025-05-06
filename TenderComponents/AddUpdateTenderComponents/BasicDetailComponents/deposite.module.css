@@ -191,7 +191,6 @@ min-height: fit-content;
 {
   margin-bottom: 20px;
 }
-
 .separator
 {
   border-bottom: 1px solid var(--grey-300) !important;
@@ -201,4 +200,8 @@ min-height: fit-content;
 .uploadfile
 {
   margin-top: 20px;
+}
+.disablefield
+{
+  color: yellow !important;
 }
