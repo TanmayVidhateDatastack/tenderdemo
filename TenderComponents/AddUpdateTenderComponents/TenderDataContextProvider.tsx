@@ -1490,7 +1490,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             ...(tenderStatus &&
               tenderStatus != "newPricingVersion" && {
                 "x-contract-status": `${tenderStatus}`,
-              }),
+              }), 
           },
         });
 

@@ -24,6 +24,7 @@ import { setVisibilityByRole } from "@/Redux/slice/PermissionSlice/permissionSli
 import FetchCustomer from "./fetchcustomerComponent";
 import { useAppSelector } from "@/Redux/hook/hook";
 import { RootState } from "@/Redux/store/store";
+import Toaster, { showToaster } from "@/Elements/DsComponents/DsToaster/DsToaster";
 const DsTenderDetails: React.FC = () => {
   const [fetchVisible, setFetchVisible] = useState(true);
   const [role, setRole] = useState("checker");
@@ -45,12 +46,15 @@ const DsTenderDetails: React.FC = () => {
     useTenderData();
   const [customerLocations, setCustomerLocations] = useState<location[]>([]);
 
+    const [toasterVisible, setToasterVisible] = useState<boolean>(false);
+  
+
   // const [cust, setCust] = useState<DsSelectOption>();
   //     value:
   //     label:
-  
-    const permissions = useAppSelector((state: RootState) => state.permissions);
-    const { fetchCustomerButtonVisible } = permissions;
+
+  const permissions = useAppSelector((state: RootState) => state.permissions);
+  const { fetchCustomerButtonVisible } = permissions;
 
   const handleRoleFetch = async () => {
     try {
@@ -71,7 +75,6 @@ const DsTenderDetails: React.FC = () => {
     handleRoleFetch();
   }, []);
 
-
   const getTodayDate = (date: Date) => {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -85,7 +88,9 @@ const DsTenderDetails: React.FC = () => {
   useEffect(() => {
     const tenderType = tenderData.tenderType;
     if (tenderType) {
-      const option =(metaData.tenderType ||[]).find((x) => x.value == tenderType);
+      const option = (metaData.tenderType || []).find(
+        (x) => x.value == tenderType
+      );
       if (option) setSelectedTenderType(option);
     }
   }, [tenderData.tenderType, metaData.tenderType]);
@@ -95,7 +100,7 @@ const DsTenderDetails: React.FC = () => {
   useEffect(() => {
     const submissionMode = tenderData.submissionMode;
     if (submissionMode) {
-      const option = (metaData.submissionMode ||[]).find(
+      const option = (metaData.submissionMode || []).find(
         (x) => x.value == submissionMode
       );
       if (option) setSelectedSubmissionMode(option);
@@ -126,33 +131,34 @@ const DsTenderDetails: React.FC = () => {
           />
         </div>
 
-        {fetchCustomerButtonVisible &&  !(tenderDataCopy.id && tenderDataCopy.id !==0)  && ( 
-          <div className={deptStyle.fields}> 
-            <DsButton
-              id="copyBtn"
-              label="Fetch Information"
-              buttonViewStyle="btnText"
-              buttonSize="btnSmall"
-              disable={tenderData.customerId ? false : true}
-              className={deptStyle.copyBtn}
-              startIcon={
-                <div style={{ width: "0.95625em", height: "1.125em" }}>
-                  <IconFactory
-                    name="copy"
-                    disabled={tenderData.customerId ? false : true}
-                  />
-                </div>
-              }
-              // disable
-              onClick={(e) => {
-                // setShowNotification(true);
-                // setPos("top");
-                // setNotiType("info");
-                displayContext(e, "contextMenuId5", "horizontal", "center");
-              }}
-            />
-          </div>
-        )}
+        {fetchCustomerButtonVisible &&
+          !(tenderDataCopy.id && tenderDataCopy.id !== 0) && (
+            <div className={deptStyle.fields}>
+              <DsButton
+                id="copyBtn"
+                label="Fetch Information"
+                buttonViewStyle="btnText"
+                buttonSize="btnSmall"
+                disable={tenderData.customerId ? false : true}
+                className={deptStyle.copyBtn}
+                startIcon={
+                  <div style={{ width: "0.95625em", height: "1.125em" }}>
+                    <IconFactory
+                      name="copy"
+                      disabled={tenderData.customerId ? false : true}
+                    />
+                  </div>
+                }
+                // disable
+                onClick={(e) => {
+                  // setShowNotification(true);
+                  // setPos("top");
+                  // setNotiType("info");
+                  displayContext(e, "contextMenuId5", "horizontal", "center");
+                }}
+              />
+            </div>
+          )}
         <DsSingleSelect
           containerClasses={styles.fields}
           id="CustomerAddress"
@@ -200,7 +206,7 @@ const DsTenderDetails: React.FC = () => {
         ></DsTextField>
         <DsSingleSelect
           containerClasses={styles.fields}
-          options={metaData.tenderType||[]}
+          options={metaData.tenderType || []}
           label="Tender type"
           // placeholder={"Tender type"}
           id={"tenderType"}
@@ -284,7 +290,7 @@ const DsTenderDetails: React.FC = () => {
         <DsSingleSelect
           containerClasses={styles.fields}
           selectedOption={selectedSubmissionMode}
-          options={metaData.submissionMode||[]}
+          options={metaData.submissionMode || []}
           // type={"single"}
           label="Submission mode"
           id={"submissionMode"}
@@ -344,6 +350,116 @@ const DsTenderDetails: React.FC = () => {
             updateTenderData("tenderUrl", (e.target as HTMLInputElement).value)
           }
         ></DsTextField>
+
+      {/* Gaurav Code  */}
+
+      {/* <div className={styles.inputDetails}>
+        <DsButton
+          label="Tender Lost "
+          onClick={() => showToaster("toaster1")}
+          buttonSize="btnSmall"
+        ></DsButton> 
+          <DsButton
+          label="Tender Awarded "
+          onClick={() => showToaster("toaster2")}
+          buttonSize="btnSmall"
+        ></DsButton>
+        <DsButton
+          label="Tender Partially"
+          onClick={() => showToaster("toaster3")}
+          buttonSize="btnSmall"
+        ></DsButton>
+        <DsButton
+          label="Tender Cancelled"
+          onClick={() => showToaster("toaster4")}
+          buttonSize="btnSmall"
+        ></DsButton>
+        <DsButton
+          label="Product Review"
+          onClick={() => showToaster("toaster5")}
+          buttonSize="btnSmall"
+        ></DsButton>
+        <DsButton
+          label="Tender Revision"
+          onClick={() => showToaster("toaster6")}
+          buttonSize="btnSmall"
+        ></DsButton>
+         <DsButton
+          label="Tender Rejected "
+          onClick={() => showToaster("toaster7")}
+          buttonSize="btnSmall"
+        ></DsButton>
+         <DsButton
+          label="Receipt submitted"
+          onClick={() => showToaster("toaster8")}
+          buttonSize="btnSmall"
+        ></DsButton>
+
+        <Toaster
+          id={"toaster1"}
+          message={"Tender Lost: Please capture communication details in the following form."}
+          type={"error"}
+          position={"top"}
+          duration={4000}
+          handleClose={() => setToasterVisible(false)}
+        />
+         <Toaster
+          id={"toaster2"}
+          message={"Tender Awarded: Please capture communication details in the following form."}
+          type={"success"}
+          position={"top"}
+          duration={4000}
+          handleClose={() => setToasterVisible(false)}
+        />
+         <Toaster
+          id={"toaster3"}
+          message={"Tender Partially_Awarded: Please capture communication details in the following form."}
+          type={"success"}
+          position={"top"}
+          duration={4000}
+          handleClose={() => setToasterVisible(false)}
+        />
+         <Toaster
+          id={"toaster4"}
+          message={"Tender Cancelled: Please capture communication details in the following form."}
+          type={"error"}
+          position={"top"}
+          duration={4000}
+          handleClose={() => setToasterVisible(false)}
+        />
+          <Toaster
+          id={"toaster5"}
+          message={"The product V2 data has been submitted for review."}
+          type={"success"}
+          position={"top"}
+          duration={4000}
+          handleClose={() => setToasterVisible(false)}
+        />
+          <Toaster
+          id={"toaster6"}
+          message={"The Tender has been sent for revision."}
+          type={"error"}
+          position={"top"}
+          duration={4000}
+          handleClose={() => setToasterVisible(false)}
+        />
+         <Toaster
+          id={"toaster7"}
+          message={"The tender has been rejected and also note has sent."}
+          type={"cross"}
+          position={"top"}
+          duration={4000}
+          handleClose={() => setToasterVisible(false)}
+        />
+         <Toaster
+          id={"toaster8"}
+          message={"The receipt has been submitted successfully."}
+          type={"success"}
+          position={"top"}
+          duration={4000}
+          handleClose={() => setToasterVisible(false)}
+        />
+        </div> */}
       </div>
     </>
   );
