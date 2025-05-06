@@ -29,18 +29,19 @@ export interface ContractViewProps {
   //     name: string;
   //   };
 }
+export const ContractStatuses = {
+  AWARDED: "Awarded",
+  PARTIALLY_AWARDED: "Partially Awarded",
+  LOST: "Lost",
+  CANCELLED: "Cancellation",
+};
 const ContractView: React.FC<ContractViewProps> = ({
   status,
   //   contractRevision,
   //   lastUpdatedBy,
 }) => {
-  const ContractStatuses = {
-    AWARDED: "Awarded",
-    PARTIALLY_AWARDED: "Partially Awarded",
-    LOST: "Lost",
-    CANCELLED: "Cancellation",
-  };
   const {
+    tenderDataCopy,
     tenderData,
     updateContractDetails,
     updateContractItems,
@@ -67,7 +68,7 @@ const ContractView: React.FC<ContractViewProps> = ({
       columns: [
         {
           columnIndex: 0,
-          className: "cell-generic-name",
+          className: `${styles["cell-generic-name"]}`,
           columnHeader: "GENERIC NAME",
           isHidden: false,
           sort: "ASC",
@@ -124,7 +125,7 @@ const ContractView: React.FC<ContractViewProps> = ({
       content: [
         {
           columnIndex: 0,
-          className: "cell cell-generic-name",
+          className: `cell ${styles["cell-generic-name"]}`,
           content: item.product.requestedGenericName,
           filterValue: item.product.requestedGenericName,
           contentType: "string",
@@ -149,6 +150,7 @@ const ContractView: React.FC<ContractViewProps> = ({
           content: (
             <DsTextField
               initialValue={item.awardedQuantity?.toString()}
+              inputType="positive"
               onBlur={(e) => {
                 if (item.id)
                   updateContractItems(
@@ -170,13 +172,17 @@ const ContractView: React.FC<ContractViewProps> = ({
           content: (
             <AwardedToSearch
               awardedTo={{
-                id: item.awardedTo || 0,
+                id: item.awardedToId || 0,
                 name: item.product.awardedToName,
               }}
               index={0}
               setAwardedTo={(option) => {
                 if (item.id && option.id && option.value) {
-                  updateContractItems("awardedTo", item.id, option.id);
+                  updateContractItems(
+                    "awardedToId",
+                    item.id,
+                    Number(option.id)
+                  );
                   updateContractItems(
                     "product.awardedToName",
                     item.id,
@@ -186,7 +192,7 @@ const ContractView: React.FC<ContractViewProps> = ({
               }}
             />
           ),
-          filterValue: item.awardedTo,
+          filterValue: item.awardedToId,
           contentType: "reactNode",
         },
 
@@ -197,6 +203,7 @@ const ContractView: React.FC<ContractViewProps> = ({
           content: (
             <DsTextField
               initialValue={item.awardedRate?.toString()}
+              inputType="positive"
               onBlur={(e) => {
                 if (item.id)
                   updateContractItems(
@@ -246,23 +253,25 @@ const ContractView: React.FC<ContractViewProps> = ({
     else if (status == "PARTIALLY_AWARDED")
       setJustificationOptions(metaData.tenderPartiallyAwardedJustification);
     else if (status == "CANCELLED")
-      setJustificationOptions(metaData.tenderCancelledJustification);
+      setJustificationOptions(metaData.tenderAwardedJustification);
     else if (status == "LOST")
       setJustificationOptions(metaData.tenderLostJustification);
-  }, [status, metaData]);
+  }, [status, metaData, tenderData.id, tenderDataCopy.id]);
   useEffect(() => {
     console.log(tenderData.tenderContract?.tenderRevisions);
-    addTableData(tenderData.tenderContract?.tenderRevisions?.tenderItems || []);
+    addTableData(
+      tenderData.tenderContract?.tenderRevisions?.[0].tenderItems || []
+    );
   }, [tenderData.tenderContract?.tenderRevisions]);
   return (
-    <>
+    <div className={styles.ContractPage}>
       <div className={styles.justification}>
         <div className={styles.title}>
           Tender{status ? ` ${ContractStatuses[status]} ` : " "}Justification{" "}
         </div>
         <DsSingleSelect
           id={"contractJustification"}
-          options={justificationOptions}
+          options={justificationOptions || []}
           selectedOption={selectedJustification}
           setSelectOption={(option) => {
             setSlectedJustification(option);
@@ -281,6 +290,7 @@ const ContractView: React.FC<ContractViewProps> = ({
             );
           }}
           minRows={status == "CANCELLED" ? 30 : 5}
+          initialValue={tenderData.tenderContract?.contractStatusNotes}
         />
         <DsCsvUpload
           id={"ContractUploadedDocuments"}
@@ -289,10 +299,10 @@ const ContractView: React.FC<ContractViewProps> = ({
           buttonSize="btnSmall"
           startIcon={<IconFactory name="fileAttach" />}
           previouslySelectedFile={
-            tenderData.tenderDocuments?.filter(
+            tenderDataCopy.tenderDocuments?.filter(
               (x) =>
                 x.documentType == "TENDER_CONTRACT_DOCUMENT" &&
-                x.category == status + "_DOCUMENTS" &&
+                x.documentCategory == status + "_DOCUMENTS" &&
                 x.id !== undefined
             ) || []
           }
@@ -301,7 +311,7 @@ const ContractView: React.FC<ContractViewProps> = ({
               tenderData.tenderDocuments?.filter(
                 (x) =>
                   x.documentType == "TENDER_CONTRACT_DOCUMENT" &&
-                  x.category == status + "_DOCUMENTS"
+                  x.documentCategory == status + "_DOCUMENTS"
               ) || [];
             updateDocuments(
               files,
@@ -314,18 +324,23 @@ const ContractView: React.FC<ContractViewProps> = ({
           }}
         ></DsCsvUpload>
       </div>
-      <div className={styles.table}>
-        <TableComponent
-          className={contractItemsTableData.className}
-          id={contractItemsTableData.id}
-          columns={contractItemsTableData.columns}
-          rows={contractItemsTableData.rows}
-        />
-      </div>
+      {status !== "CANCELLED" && (
+        <>
+          <div className={styles.awardTableTitle}>Product Award Details</div>
+          <div className={styles.table}>
+            <TableComponent
+              className={contractItemsTableData.className}
+              id={contractItemsTableData.id}
+              columns={contractItemsTableData.columns}
+              rows={contractItemsTableData.rows}
+            />
+          </div>
+        </>
+      )}
       <div>
         <DsInfoDisplay detailOf="Updated By" value={"Val"} />
       </div>
-    </>
+    </div>
   );
 };
 export default ContractView;

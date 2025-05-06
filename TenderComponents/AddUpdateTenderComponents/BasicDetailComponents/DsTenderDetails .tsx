@@ -48,9 +48,9 @@ const DsTenderDetails: React.FC = () => {
   // const [cust, setCust] = useState<DsSelectOption>();
   //     value:
   //     label:
-  
-    const permissions = useAppSelector((state: RootState) => state.permissions);
-    const { fetchCustomerButtonVisible } = permissions;
+
+  const permissions = useAppSelector((state: RootState) => state.permissions);
+  const { fetchCustomerButtonVisible } = permissions;
 
   const handleRoleFetch = async () => {
     try {
@@ -71,7 +71,6 @@ const DsTenderDetails: React.FC = () => {
     handleRoleFetch();
   }, []);
 
-
   const getTodayDate = (date: Date) => {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -85,7 +84,9 @@ const DsTenderDetails: React.FC = () => {
   useEffect(() => {
     const tenderType = tenderData.tenderType;
     if (tenderType) {
-      const option =(metaData.tenderType ||[]).find((x) => x.value == tenderType);
+      const option = (metaData.tenderType || []).find(
+        (x) => x.value == tenderType
+      );
       if (option) setSelectedTenderType(option);
     }
   }, [tenderData.tenderType, metaData.tenderType]);
@@ -95,7 +96,7 @@ const DsTenderDetails: React.FC = () => {
   useEffect(() => {
     const submissionMode = tenderData.submissionMode;
     if (submissionMode) {
-      const option = (metaData.submissionMode ||[]).find(
+      const option = (metaData.submissionMode || []).find(
         (x) => x.value == submissionMode
       );
       if (option) setSelectedSubmissionMode(option);
@@ -117,17 +118,18 @@ const DsTenderDetails: React.FC = () => {
         showArrow={true}
       />
       <div className={styles.inputDetails}>
-        <div className={deptStyle.fields}>
-          <CustomerSearch
-            customer={tenderData.tenderDetails.customerName}
-            orderData={undefined}
-            setCustomerLocations={setCustomerLocations}
-            updateTenderData={updateTenderData}
-          />
-        </div>
+        {/* <div className={deptStyle.fields}> */}
+        <CustomerSearch
+          customer={tenderData.tenderDetails.customerName}
+          orderData={undefined}
+          setCustomerLocations={setCustomerLocations}
+          updateTenderData={updateTenderData}
+        />
+        {/* </div> */}
 
-        {fetchCustomerButtonVisible &&  !(tenderDataCopy.id && tenderDataCopy.id !==0)  && ( 
-          <div className={deptStyle.fields}> 
+        {fetchCustomerButtonVisible &&
+          !(tenderDataCopy.id && tenderDataCopy.id !== 0) && (
+            // <div className={deptStyle.fields}>
             <DsButton
               id="copyBtn"
               label="Fetch Information"
@@ -151,8 +153,8 @@ const DsTenderDetails: React.FC = () => {
                 displayContext(e, "contextMenuId5", "horizontal", "center");
               }}
             />
-          </div>
-        )}
+            // </div>
+          )}
         <DsSingleSelect
           containerClasses={styles.fields}
           id="CustomerAddress"
@@ -200,7 +202,7 @@ const DsTenderDetails: React.FC = () => {
         ></DsTextField>
         <DsSingleSelect
           containerClasses={styles.fields}
-          options={metaData.tenderType||[]}
+          options={metaData.tenderType || []}
           label="Tender type"
           // placeholder={"Tender type"}
           id={"tenderType"}
@@ -284,7 +286,7 @@ const DsTenderDetails: React.FC = () => {
         <DsSingleSelect
           containerClasses={styles.fields}
           selectedOption={selectedSubmissionMode}
-          options={metaData.submissionMode||[]}
+          options={metaData.submissionMode || []}
           // type={"single"}
           label="Submission mode"
           id={"submissionMode"}

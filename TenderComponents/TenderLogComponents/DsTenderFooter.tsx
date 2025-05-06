@@ -15,16 +15,21 @@ import { useAppDispatch, useAppSelector } from "@/Redux/hook/hook";
 import { setVisibilityByRole } from "@/Redux/slice/PermissionSlice/permissionSlice";
 import { setUserRole } from "@/Redux/slice/UserSlice/userSlice";
 import fetchData from "@/Common/helpers/Method/fetchData";
-import { dsStatus, getTenderUserRoles } from "@/Common/helpers/constant";
+import {
+  dsStatus,
+  getTenderUserRoles,
+  DsStatus,
+} from "@/Common/helpers/constant";
 import DsNavTo from "@/Elements/ERPComponents/DsNavigationComponent/DsNavTo";
 import DsSplitButton from "@/Elements/DsComponents/DsButtons/dsSplitButton";
 
 import Toaster from "@/Elements/DsComponents/DsToaster/DsToaster";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import { useTenderData } from "../AddUpdateTenderComponents/TenderDataContextProvider";
-import { TenderData} from "@/TenderComponents/AddUpdateTenderComponents/TenderDataContextProvider";
+import { TenderData } from "@/TenderComponents/AddUpdateTenderComponents/TenderDataContextProvider";
 import { getYesterdayDate } from "@/Common/helpers/Method/conversion";
 import ApprovalPopup from "../AddUpdateTenderComponents/Approvelpopup/ApprovelPopup";
+import { ContractStatuses } from "../AddUpdateTenderComponents/CustomTabViews/ContractView";
 
 class ActionStatus {
   notiType: "success" | "bonus" | "info" | "error" | "cross" = "success";
@@ -37,8 +42,13 @@ export const DSTendrFooter: React.FC = ({}) => {
   const dispatch = useAppDispatch<AppDispatch>();
   const role = useAppSelector((state: RootState) => state.user.role);
   const [toasterVisible, setToasterVisible] = useState<boolean>(false);
-  const { setActionStatusValues, saveTender, tenderData,tenderDataCopy, updateTender } =
-    useTenderData();
+  const {
+    setActionStatusValues,
+    saveTender,
+    tenderData,
+    tenderDataCopy,
+    updateTender,
+  } = useTenderData();
   const handleFetch = async () => {
     try {
       const res = await fetchData({ url: getTenderUserRoles });
@@ -56,224 +66,270 @@ export const DSTendrFooter: React.FC = ({}) => {
     handleFetch();
   }, []);
 
-  const validateFields = () => {
+  const validateFields = (tenderData:TenderData) => {
     const errors: string[] = [];
-
     if (
-      tenderData?.customerId == null ||
-      tenderData?.customerId == undefined ||
-      tenderData.customerId == 0
+      tenderData.status.toLowerCase() == DsStatus.AWRD.toLowerCase() ||
+      tenderData.status.toLowerCase() == DsStatus.PAWRD.toLowerCase() ||
+      tenderData.status.toLowerCase() == DsStatus.LOST.toLowerCase() ||
+      tenderData.status.toLowerCase() == DsStatus.CNCL.toLowerCase()
     ) {
-      errors.push("Please select a customer.");
-    }
-    if (tenderData?.customerAddressId == 0) {
-      errors.push("Please select a customer address.");
-    }
-    if (tenderData?.tenderNumber?.trim() === "") {
-      errors.push("Please enter a tender number.");
-    }
-    if (tenderData?.tenderType === "") {
-      errors.push("Please enter a tender type.");
-    }
-    if (tenderData?.issueDate === "") {
-      errors.push("Please enter the tender issue date.");
-    }
-    const todaysdate = new Date();
-    // todaysdate.setHours(0, 0, 0, 0);
-
-    if (tenderData?.issueDate && new Date(tenderData.issueDate) > todaysdate) {
-      errors.push(
-        "The tender issue date should not be later than today's date."
-      );
-    }
-    if (tenderData?.lastPurchaseDate === "") {
-      errors.push("Please enter the last purchase date.");
-    }
-    if (
-      tenderData?.lastPurchaseDate &&
-      new Date(tenderData.lastPurchaseDate) < getYesterdayDate()
-    ) {
-      errors.push(
-        "The last purchase date should not be earlier than today's date."
-      );
-    }
-    if (tenderData?.submissionDate === "") {
-      errors.push("Please enter the submission date.");
-    }
-    if (
-      tenderData?.submissionDate &&
-      new Date(tenderData.submissionDate) < getYesterdayDate()
-    ) {
-      errors.push(
-        "The submission date should not be earlier than today's date."
-      );
-    }
-    if (tenderData?.submissionMode?.trim() === "") {
-      errors.push("Please select a submission mode.");
-    }
-
-    const urlPattern =
-      /^(https?:\/\/)?([\w\-]+\.)+[\w\-]+(\/[\w\-._~:/?#[\]@!$&'()*+,;=]*)?$/;
-    const tenderURL = tenderData?.tenderUrl?.trim() ?? "";
-    if (tenderURL === "") {
-      errors.push("Please enter the tender URL.");
-    } else if (!urlPattern.test(tenderURL)) {
-      errors.push("Please enter a valid tender URL.");
-    }
-    if (tenderData?.applierType?.trim() === "") {
-      errors.push("Please select an applier type.");
-    }
-    if (tenderData?.supplierType?.trim() === "") {
-      errors.push("Please select a supplier type.");
-    }
-    if (tenderData?.shippingLocations?.length === 0) {
-      console.log(tenderData);
-      errors.push("Please select at least one shipping location.");
-    }
-
-    if (tenderData?.supplierDiscount === 0) {
-      errors.push("Please enter the supplier discount.");
-    }
-
-    const fees = tenderData?.tenderFees ?? [];
-    const todaysDate = new Date();
-    // todaysdate.setHours(0, 0, 0, 0);
-
-    fees.forEach((fee, index) => {
-      if (fee.status == "ACTV") {
-        if (!fee.feesType?.toString().trim()) {
-          errors.push(`${fee.feesType}: Please select a fee type.`);
-        }
-
-        if (fee.amount == null || fee.amount === 0) {
-          errors.push(`${fee.feesType}: Please enter an amount.`);
-        }
-
-        if (!fee.currency?.trim()) {
-          errors.push(`${fee.feesType}:  Please select a currency.`);
-        }
-
-        if (!fee.paidBy?.trim()) {
-          errors.push(`${fee.feesType}: Please specify who paid the fee.`);
-        }
-
-        if (!fee.paymentDueDate?.trim()) {
-          errors.push(`${fee.feesType}: Payment due date is required.`);
-        } else if (new Date(fee.paymentDueDate) < getYesterdayDate()) {
-          errors.push(
-            `${fee.feesType}:  The payment due date cannot be in the past.`
-          );
-        }
-
-        if (!fee.instructionNotes?.trim()) {
-          errors.push(
-            `${fee.feesType} ${index + 1}:  Please enter instruction notes.`
-          );
-        }
+      if (tenderData?.tenderContract?.contractJustification == undefined) {
+        errors.push(
+          `Please select a Tender ${
+            tenderData.status ? ContractStatuses[tenderData.status] : " "
+          }Justification.`
+        );
       }
-    });
-
-    if (tenderData?.tenderSupplyCondition?.supplyPoint?.trim() === "") {
-      errors.push("Please select a supply point.");
-    }
-    if (tenderData?.tenderSupplyCondition?.consigneesCount === 0) {
-      errors.push("Please enter the number of consignees.");
-    }
-    if (
-      tenderData?.tenderSupplyCondition?.testReportRequired?.trim() === "" 
-    ) {
-      errors.push("Please specify whether a test report is required.");
-    }
-    if (tenderData?.tenderSupplyCondition?.eligibility.length == 0) {
-      errors.push("Please select at least one eligibility criterion.");
-    }
-
-    const applicableConditions =
-      tenderData?.tenderSupplyCondition?.applicableConditions ?? [];
-    applicableConditions.forEach((condition, index) => {
-      if (condition.status == "ACTV") {
-        if (condition.type?.toString().trim() == "") {
-          errors.push(`${condition.type} :Please select a type.`);
-        }
-        if (condition.notes?.trim() == "") {
-          errors.push(`${condition.type}: Please enter notes.`);
-        }
+      if (
+        tenderData?.tenderContract?.contractStatusNotes == undefined ||
+        tenderData?.tenderContract?.contractStatusNotes == ""
+      ) {
+        errors.push(`Please enter Supporting Notes.`);
       }
-    });
-    if (tenderData.tenderRevisions.length > 0) {
-      const latestRevision = tenderData.tenderRevisions.reduce(
-        (prev, current) => {
-          return prev.version > current.version ? prev : current;
+      if (
+        tenderData.tenderContract?.tenderRevisions?.[0].tenderItems?.find(
+          (x) =>
+            x.product.awardedToName == undefined ||
+            x.product.awardedToName == "" ||
+            x.awardedRate == undefined ||
+            x.awardedQuantity == undefined
+        )
+      ) {
+        errors.push(
+          `Please fill the every field in Product Award Details Table.`
+        );
+      }
+      if (
+        !(
+          tenderData.tenderDocuments &&
+          tenderData.tenderDocuments.filter(
+            (x) => x.documentType == "TENDER_CONTRACT_DOCUMENT"
+          ).length > 0
+        )
+      ) {
+        errors.push(`Please attach at least one file`);
+      }
+    } else {
+      if (
+        tenderData?.customerId == null ||
+        tenderData?.customerId == undefined ||
+        tenderData.customerId == 0
+      ) {
+        errors.push("Please select a customer.");
+      }
+      if (tenderData?.tenderContract?.contractJustification == undefined) {
+        errors.push("Please select a customer address.");
+      }
+      if (tenderData?.tenderNumber?.trim() === "") {
+        errors.push("Please enter a tender number.");
+      }
+      if (tenderData?.tenderType === "") {
+        errors.push("Please enter a tender type.");
+      }
+      if (tenderData?.issueDate === "") {
+        errors.push("Please enter the tender issue date.");
+      }
+      const todaysdate = new Date();
+      // todaysdate.setHours(0, 0, 0, 0);
+
+      if (
+        tenderData?.issueDate &&
+        new Date(tenderData.issueDate) > todaysdate
+      ) {
+        errors.push(
+          "The tender issue date should not be later than today's date."
+        );
+      }
+      if (tenderData?.lastPurchaseDate === "") {
+        errors.push("Please enter the last purchase date.");
+      }
+      if (
+        tenderData?.lastPurchaseDate &&
+        new Date(tenderData.lastPurchaseDate) < getYesterdayDate()
+      ) {
+        errors.push(
+          "The last purchase date should not be earlier than today's date."
+        );
+      }
+      if (tenderData?.submissionDate === "") {
+        errors.push("Please enter the submission date.");
+      }
+      if (
+        tenderData?.submissionDate &&
+        new Date(tenderData.submissionDate) < getYesterdayDate()
+      ) {
+        errors.push(
+          "The submission date should not be earlier than today's date."
+        );
+      }
+      if (tenderData?.submissionMode?.trim() === "") {
+        errors.push("Please select a submission mode.");
+      }
+
+      const urlPattern =
+        /^(https?:\/\/)?([\w\-]+\.)+[\w\-]+(\/[\w\-._~:/?#[\]@!$&'()*+,;=]*)?$/;
+      const tenderURL = tenderData?.tenderUrl?.trim() ?? "";
+      if (tenderURL === "") {
+        errors.push("Please enter the tender URL.");
+      } else if (!urlPattern.test(tenderURL)) {
+        errors.push("Please enter a valid tender URL.");
+      }
+      if (tenderData?.applierType?.trim() === "") {
+        errors.push("Please select an applier type.");
+      }
+      if (tenderData?.supplierType?.trim() === "") {
+        errors.push("Please select a supplier type.");
+      }
+      if (tenderData?.shippingLocations?.length === 0) {
+        console.log(tenderData);
+        errors.push("Please select at least one shipping location.");
+      }
+
+      if (tenderData?.supplierDiscount === 0) {
+        errors.push("Please enter the supplier discount.");
+      }
+
+      const fees = tenderData?.tenderFees ?? [];
+      const todaysDate = new Date();
+      // todaysdate.setHours(0, 0, 0, 0);
+
+      fees.forEach((fee, index) => {
+        if (fee.status == "ACTV") {
+          if (!fee.feesType?.toString().trim()) {
+            errors.push(`${fee.feesType}: Please select a fee type.`);
+          }
+
+          if (fee.amount == null || fee.amount === 0) {
+            errors.push(`${fee.feesType}: Please enter an amount.`);
+          }
+
+          if (!fee.currency?.trim()) {
+            errors.push(`${fee.feesType}:  Please select a currency.`);
+          }
+
+          if (!fee.paidBy?.trim()) {
+            errors.push(`${fee.feesType}: Please specify who paid the fee.`);
+          }
+
+          if (!fee.paymentDueDate?.trim()) {
+            errors.push(`${fee.feesType}: Payment due date is required.`);
+          } else if (new Date(fee.paymentDueDate) < getYesterdayDate()) {
+            errors.push(
+              `${fee.feesType}:  The payment due date cannot be in the past.`
+            );
+          }
+
+          if (!fee.instructionNotes?.trim()) {
+            errors.push(
+              `${fee.feesType} ${index + 1}:  Please enter instruction notes.`
+            );
+          }
         }
-      );
-      if (latestRevision.tenderItems.length > 0) {
-        latestRevision.tenderItems.forEach((item, index) => {
-          if (item.product.dataSource === "fetch") {
-            if (
-              item.requestedGenericName === "" ||
-              item.requestedGenericName === undefined ||
-              item.requestedGenericName === null
-            ) {
-              errors.push(
-                `Product ${item.product.productName}: Generic name is required.`
-              );
-            }
-            if (
-              item.requestedQuantity === null ||
-              item.requestedQuantity === undefined ||
-              item.requestedQuantity <= 0
-            ) {
-              errors.push(
-                `Product ${item.product.productName}: Product quantity is required and should be greater than 0.`
-              );
-            }
-            if (
-              item.requestedPackingSize === "" ||
-              item.requestedPackingSize === undefined ||
-              item.requestedPackingSize === null
-            ) {
-              errors.push(
-                `Product ${item.product.productName}: Packing size is required.`
-              );
-            }
+      });
+
+      if (tenderData?.tenderSupplyCondition?.supplyPoint?.trim() === "") {
+        errors.push("Please select a supply point.");
+      }
+      if (tenderData?.tenderSupplyCondition?.consigneesCount === 0) {
+        errors.push("Please enter the number of consignees.");
+      }
+      if (
+        tenderData?.tenderSupplyCondition?.testReportRequired?.trim() === ""
+      ) {
+        errors.push("Please specify whether a test report is required.");
+      }
+      if (tenderData?.tenderSupplyCondition?.eligibility.length == 0) {
+        errors.push("Please select at least one eligibility criterion.");
+      }
+
+      const applicableConditions =
+        tenderData?.tenderSupplyCondition?.applicableConditions ?? [];
+      applicableConditions.forEach((condition, index) => {
+        if (condition.status == "ACTV") {
+          if (condition.type?.toString().trim() == "") {
+            errors.push(`${condition.type} :Please select a type.`);
           }
-          if (item.product.dataSource === "csv") {
-            if (item.productId === undefined || item.productId === null) {
-              errors.push(
-                `Product ${item.requestedGenericName}: Please select corresponding product.`
-              );
-            }
+          if (condition.notes?.trim() == "") {
+            errors.push(`${condition.type}: Please enter notes.`);
           }
-          if (item.product.dataSource === "saved") {
-            if (
-              item.proposedRate === undefined ||
-              item.proposedRate <= 0 ||
-              item.proposedRate === null
-            ) {
-              errors.push(
-                `Product ${item.requestedGenericName}: Proposed rate is required and should be greater than 0.`
-              );
-            }
-            if (
-              item.ptrPercentage === undefined ||
-              // item.ptrPercentage <= 0 ||
-              item.ptrPercentage === null
-            ) {
-              errors.push(
-                `Product ${item.requestedGenericName}: PTR% is required.`
-              );
-            }
-            if (
-              item.stockistDiscountValue === undefined ||
-              item.stockistDiscountValue <= 0 ||
-              item.stockistDiscountValue === null
-            ) {
-              errors.push(
-                `Product ${item.requestedGenericName}: Discount is required.`
-              );
-            }
+        }
+      });
+      if (tenderData.tenderRevisions.length > 0) {
+        const latestRevision = tenderData.tenderRevisions.reduce(
+          (prev, current) => {
+            return prev.version > current.version ? prev : current;
           }
-        });
+        );
+        if (latestRevision.tenderItems.length > 0) {
+          latestRevision.tenderItems.forEach((item, index) => {
+            if (item.product.dataSource === "fetch") {
+              if (
+                item.requestedGenericName === "" ||
+                item.requestedGenericName === undefined ||
+                item.requestedGenericName === null
+              ) {
+                errors.push(
+                  `Product ${item.product.productName}: Generic name is required.`
+                );
+              }
+              if (
+                item.requestedQuantity === null ||
+                item.requestedQuantity === undefined ||
+                item.requestedQuantity <= 0
+              ) {
+                errors.push(
+                  `Product ${item.product.productName}: Product quantity is required and should be greater than 0.`
+                );
+              }
+              if (
+                item.requestedPackingSize === "" ||
+                item.requestedPackingSize === undefined ||
+                item.requestedPackingSize === null
+              ) {
+                errors.push(
+                  `Product ${item.product.productName}: Packing size is required.`
+                );
+              }
+            }
+            if (item.product.dataSource === "csv") {
+              if (item.productId === undefined || item.productId === null) {
+                errors.push(
+                  `Product ${item.requestedGenericName}: Please select corresponding product.`
+                );
+              }
+            }
+            if (item.product.dataSource === "saved") {
+              if (
+                item.proposedRate === undefined ||
+                item.proposedRate <= 0 ||
+                item.proposedRate === null
+              ) {
+                errors.push(
+                  `Product ${item.requestedGenericName}: Proposed rate is required and should be greater than 0.`
+                );
+              }
+              if (
+                item.ptrPercentage === undefined ||
+                // item.ptrPercentage <= 0 ||
+                item.ptrPercentage === null
+              ) {
+                errors.push(
+                  `Product ${item.requestedGenericName}: PTR% is required.`
+                );
+              }
+              if (
+                item.stockistDiscountValue === undefined ||
+                item.stockistDiscountValue <= 0 ||
+                item.stockistDiscountValue === null
+              ) {
+                errors.push(
+                  `Product ${item.requestedGenericName}: Discount is required.`
+                );
+              }
+            }
+          });
+        }
       }
     }
     return errors;
@@ -281,7 +337,7 @@ export const DSTendrFooter: React.FC = ({}) => {
 
   const validateAndSaveTender = () => {
     console.log(tenderData);
-    const validate = validateFields();
+    const validate = validateFields(tenderData);
     if (validate.length === 0) {
       saveTender("Draft");
     } else {
@@ -307,11 +363,12 @@ export const DSTendrFooter: React.FC = ({}) => {
     }
   };
   const validateAndUpdateTender = () => {
-    console.log(tenderData);
-    // updateTender("Draft");
-    const validate = validateFields();
+    // console.log(tenderData);
+    // updateTender(tenderData.status);
+
+    const validate = validateFields(tenderData);
     if (validate.length === 0) {
-      updateTender("Draft");
+      updateTender(tenderData.status);
     } else {
       const message = (
         <>
@@ -385,7 +442,7 @@ export const DSTendrFooter: React.FC = ({}) => {
               buttonText="Approve"
               buttonViewStyle="btnText"
               className={btnStyles.btnTextPrimary}
-              onClick={() =>closeContext("SubmissionContext")}
+              onClick={() => closeContext("SubmissionContext")}
             />
             <PopupOpenButton
               popupId="popup2"
@@ -393,7 +450,7 @@ export const DSTendrFooter: React.FC = ({}) => {
               buttonText="Revise"
               buttonViewStyle="btnText"
               className={btnStyles.btnTextPrimary}
-              onClick={() =>closeContext("SubmissionContext")}
+              onClick={() => closeContext("SubmissionContext")}
             />
             <PopupOpenButton
               popupId="popup3"
@@ -401,7 +458,7 @@ export const DSTendrFooter: React.FC = ({}) => {
               buttonText="Reject"
               buttonViewStyle="btnText"
               className={btnStyles.btnTextPrimary}
-              onClick={() =>closeContext("SubmissionContext")}
+              onClick={() => closeContext("SubmissionContext")}
             />
           </>
         );
@@ -512,3 +569,6 @@ export const DSTendrFooter: React.FC = ({}) => {
 };
 
 export default DSTendrFooter;
+function useCallBack(arg0: () => void, arg1: TenderData[]) {
+  throw new Error("Function not implemented.");
+}
