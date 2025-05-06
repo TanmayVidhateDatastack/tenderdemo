@@ -1177,7 +1177,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                       // const base64String = x.data ? await fileToBase64(x.data) : "";
                       return {
                         documentName: x.documentName,
-                        documentStorageId: docRes.result[x.requestId],
+                        documentStorageId: docRes.result.result[x.requestId],
                         documentType: x.documentType,
                         documentCategory: x.documentCategory,
                         documentSubCategory: x.documentSubCategory,
@@ -1521,7 +1521,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                       // const base64String = x.data ? await fileToBase64(x.data) : "";
                       return {
                         documentName: x.documentName,
-                        documentStorageId: docRes.result[x.requestId],
+                        documentStorageId: docRes.result.result[x.requestId],
                         documentType: x.documentType,
                         documentCategory: x.documentCategory,
                         documentSubCategory: x.documentSubCategory,
