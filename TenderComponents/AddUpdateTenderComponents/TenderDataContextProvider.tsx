@@ -1359,14 +1359,14 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               notiType: "success",
               showNotification: true,
             });
-            showToaster("create-order-toaster");
-            setTimeout(() => {
-              goBack();
+            showToaster("create-order-toaster");    
+            setTimeout(() => {  
+              goBack();                             
             }, closeTimeForTender);
           } else {
             setActionStatus({
               notiMsg: "Tender could not be updated",
-              notiType: "error",
+              notiType: "error", 
               showNotification: true,
             });
             showToaster("create-order-toaster");
@@ -1591,7 +1591,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           tenderData.tenderRevisions == null
         )
           tenderData.tenderRevisions = [
-            {
+            { 
               version: 1,
               status: DsStatus.DRFT.toUpperCase(),
               tenderItems: [],

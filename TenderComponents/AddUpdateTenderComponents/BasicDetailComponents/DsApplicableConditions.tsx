@@ -40,7 +40,7 @@ const DsApplicableConditions: React.FC=() => {
   } = useTenderData();
   const [conditionsVisibility, setConditionsVisibility] = useState<
     Record<string, boolean>
-  >({});
+  >({}); 
 
   function handleonclick(
     e:
@@ -156,7 +156,6 @@ const DsApplicableConditions: React.FC=() => {
         return; 
       }
     });
-
     return () => {
       window.removeEventListener("click", (e) => {
         const target = (e.target as HTMLElement).closest(

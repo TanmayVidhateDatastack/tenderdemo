@@ -61,7 +61,7 @@ const DocumentSelectorArea: React.FC = () => {
             <DocumentSelector
               headerTitle={type}
               headerNumber={documents.length.toString()}
-              initialDocuments={documents.map((x) => x.document.name)}
+              initialDocuments={documents}
               handleOnRemoveClick={(docName) => handleRemoveDocument(docName)}
             />
           </div>
