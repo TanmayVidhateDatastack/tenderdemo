@@ -51,7 +51,6 @@ export const DSTendrFooter: React.FC = ({}) => {
       console.error("Fetch error: ", error);
     }
   };
-
   useEffect(() => {
     handleFetch();
   }, []);
@@ -280,7 +279,7 @@ export const DSTendrFooter: React.FC = ({}) => {
   };
 
   const validateAndSaveTender = () => {
-    console.log(tenderData);
+    // console.log(tenderData);
     const validate = validateFields();
     if (validate.length === 0) {
       saveTender("Draft");
@@ -455,10 +454,9 @@ export const DSTendrFooter: React.FC = ({}) => {
           }
           buttonSize="btnLarge"
         >
-          Save
+       Save
         </DsSplitButton>
       </div>
-
       <ApprovalPopup
         id="popup1"
         types={[]}

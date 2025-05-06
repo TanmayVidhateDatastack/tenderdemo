@@ -149,7 +149,6 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
         const approvalObject = createApprovalObject(cId, textAreaValue, status, selectedValueString, deviationCode);
 
     };
-
     const handleSave = async () => {
         const resultObject = {
             text: textAreaValue,

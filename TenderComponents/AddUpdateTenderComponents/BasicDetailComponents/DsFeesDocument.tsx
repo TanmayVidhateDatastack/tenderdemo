@@ -18,7 +18,9 @@ import IconFactory from "@/Elements/IconComponent";
 import DsMultiSelect from "@/Elements/DsComponents/dsSelect/dsMultiSelect";
 import { getYesterdayDate } from "@/Common/helpers/Method/conversion";
 import UploadFile from "@/TenderComponents/TenderLogComponents/uploadfile";
+
 import { closeAllContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
+import DsDatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker";
 
 export type tenderDocument = {
   name: string;
@@ -44,6 +46,7 @@ export interface DsFeesProps {
   refund: DsSelectOption[];
   paidBy: DsSelectOption[];
   downloadVisible: boolean;
+
   completedpayment:boolean
   type: string;
   optionlist: DsSelectOption[];
@@ -74,6 +77,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
 }) => {
   const {
     updateTenderFee,
+    // updatePaymentFee,
     addNewTenderDocument,
     tenderData,
     removeTenderDocument,
@@ -93,6 +97,8 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
   const [selectedPaidBy, setSelectedPaidBy] = useState<DsSelectOption>();
   const [selectedcheckbox, setSelectedCheckbox] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState<DsSelectOption[]>([]);
+  const { updateTenderData} =
+  useTenderData();
 
   // const handleFetchpayments = async () => {
   //   try {
@@ -190,7 +196,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     )?.paidBy;
     if (paidByvalue) {
       const option = depositeDocuments.find((x) => x.value == paidByvalue);
-      // const option = mode.find((x) => x.value == paidByvalue); 
+      // const option = mode.find((x) => x.value == paidByvalue);
       if (option) setSelectedPaidBy(option);
     }
   }, [
@@ -200,9 +206,96 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     refund,
   ]);
 
+
+
+
+    // const handlePatchRequest = async () => {
+    //   try {
+    //     const patchData = [
+    //       { op: "replace", path: "/tenderFees/101/paymentStatus", value: "CMPL" },
+    //       { op: "replace", path: "/tenderFees/101/paymentDate", value: "2025-02-12" },
+    //       { op: "replace", path: "/tenderFees/101/paymentTransactionId", value: "PTI001" },
+    //       { op: "replace", path: "/tenderFees/101/acknowledgmentReceiptId", value: "ARI001" },
+    //       { op: "replace", path: "/tenderFees/101/fundTransferConfirmationId", value: "FTCI001" },
+    //       { op: "replace", path: "/tenderFees/102/paymentStatus", value: "CMPL" },
+    //       { op: "replace", path: "/tenderFees/102/paymentDate", value: "2025-02-12" },
+    //       { op: "replace", path: "/tenderFees/102/paymentTransactionId", value: "PTI002" },
+    //       { op: "replace", path: "/tenderFees/102/paymentReceiptId", value: "PRI002" },
+    //       { op: "replace", path: "/tenderFees/102/acknowledgmentReceiptId", value: "ARI002" },
+    //       { op: "replace", path: "/tenderFees/102/fundTransferConfirmationId", value: "FTCI002" },
+    //       { op: "replace", path: "/status", value: "DRAFT" },
+    //       {
+    //         op: "add",
+    //         path: "/documents",
+    //         value: {
+    //           documentName: "doc1",
+    //           data: "<IFORMFILE>",
+    //           type: "typ1",
+    //           category: "cat1",
+    //           subCategory: "scat1",
+    //         },
+    //       },
+    //       {
+    //         op: "add",
+    //         path: "/documents",
+    //         value: {
+    //           documentName: "doc2",
+    //           data: "<IFORMFILE>",
+    //           type: "typ1",
+    //           category: "cat1",
+    //           subCategory: "scat2",
+    //         },
+    //       },
+    //       {
+    //         op: "add",
+    //         path: "/documents",
+    //         value: {
+    //           documentName: "doc3",
+    //           data: "<IFORMFILE>",
+    //           type: "typ1",
+    //           category: "cat2",
+    //           subCategory: "scat1",
+    //         },
+    //       },
+    //       {
+    //         op: "add",
+    //         path: "/documents",
+    //         value: {
+    //           documentName: "doc4",
+    //           data: "<IFORMFILE>",
+    //           type: "typ1",
+    //           category: "cat2",
+    //           subCategory: "scat2",
+    //         },
+    //       },
+    //       {
+    //         op: "replace",
+    //         path: "/documents/201",
+    //         value: {
+    //           documentName: "doc5",
+    //           data: "<IFORMFILE>",
+    //           type: "typ1",
+    //           category: "cat2",
+    //           subCategory: "scat2",
+    //         },
+    //       },
+    //     ];
+
+    //     const response = await fetchData({
+    //       url: "",
+    //       method: "PATCH",
+    //       dataObject: patchData,
+    //       headers: { "Content-Type": "application/json-patch+json" },
+    //     });
+
+    //     console.log("Patch request successful:", response);
+    //   } catch (error) {
+    //     console.error("Error in patch request:", error);
+    //   }
+    // };
   return (
     <>
-      {/* <div> */}
+ 
       <div className={styles.feeContainer} id={id}>
         <div className={styles.headContainer}>
           <div className={styles.headTitle}>{title}</div>
@@ -229,15 +322,20 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
       </div>
     {completedpayment &&(<></>)}
       <>
+    <div className={styles.fields}>
       <Ds_checkbox
         id={"payment"}
         name={"Payment Completed"}
         value={"Payment Completed"}
         label={"Payment Completed"}
       />
-      <div className={styles.multipleSelect}>
+      </div>
+      
+   <div className={eleStyles.inputDetails}>
+
         <DsMultiSelect
           label="Add document type"
+          containerClasses={styles.feeFields}
           id={id+"Documents"}
           options={optionlist || []}
           setSelectOptions={(options) => {
@@ -259,7 +357,30 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             />
           </div>
         </DsMultiSelect>
+
+      
+   
+      
+      <DatePicker
+          containerClasses={styles.feeFields}
+          id={id + "paymentdate"}
+          initialDate={
+            tenderData.tenderFees
+              ? new Date(tenderData.tenderFees[0]?.paymentDate || "").toLocaleDateString("en-GB")
+              : undefined
+          }
+          maxDate={new Date()}
+          placeholder="DD/MM/YYYY"
+          label="payment Date"
+          setDateValue={(date) => {
+            if (date instanceof Date) {
+              updateTenderFee(type, "paymentDate", getTodayDate(date));
+            }
+          }}
+        />
       </div>
+      
+      
       {selectedcheckbox &&
         selectedOptions.map((option, index) => (
           <UploadFile
@@ -269,16 +390,20 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           />
         ))}
 
-     
+ <div className={eleStyles.inputDetails}>
         {selectedcheckbox &&
           selectedOptions.map((option) => (
-            <div key="" className={styles.fields}>
+            <div className={styles.fields}>
               <DsTextField
                 containerClasses={styles.feeFields}
                 label={`${option.label}  ID`}
               />
             </div>
           ))}
+          </div>
+          <div className={styles.separator}></div>
+      
+
 </>
 
  <div className={eleStyles.inputDetails}>
@@ -392,9 +517,9 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             );
           }}
         />
-        {/* </div> */}
+   
       </div>
-      <div>
+      <div className={styles.uploadfile}>
         <DsCsvUpload
           id={id + "UploadedDocuments"}
           label="Attach File"
@@ -408,7 +533,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   x.documentType == type && x.category == type + "_INSTRUCTION"
               ) || [];
             updateDocuments(
-              files.map((x) => x.document),
+              files,
               typeDocuments,
               removeTenderDocument,
               addNewTenderDocument,
@@ -418,7 +543,61 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           }}
         ></DsCsvUpload>
       </div>
-      {/* </div> */}
+      <div className={styles.separator}></div>
+      
+      <Ds_checkbox
+        id={"payment"}
+        name={"Payment Recovered "}
+        value={"Payment Recovered"}
+        label={"Payment Recovered"}
+      />
+            <div className={styles.notes}>
+        <span className={styles.notesTitle}>Notes</span>
+        
+        <TextArea
+          containerClasses={styles.feeFields}
+          className={styles.notesField}
+          initialValue={
+            tenderData.tenderFees.find((x) => x.feesType == type)
+              ?.instructionNotes || ""
+          }
+          placeholder="Please type here"
+          disable={false}
+          minRows={2}
+          onBlur={(e) => {
+            updateTenderFee(
+              type,
+              "instructionNotes",
+              (e.target as HTMLInputElement).value
+            );
+          }}
+        />
+      
+      </div>
+      <div className={styles.uploadfile}>
+        <DsCsvUpload
+          id={id + "Recoveredfiledoc"}
+          label="Attach File"
+          buttonViewStyle="btnText"
+          buttonSize="btnSmall"
+          startIcon={<IconFactory name="fileAttach" />}
+          onSelectedFileChange={(files) => {
+            const typeDocuments =
+              tenderData.tenderDocuments?.filter(
+                (x) =>
+                  x.documentType == type && x.category == type + "_INSTRUCTION"
+              ) || [];
+            updateDocuments(
+              files,
+              typeDocuments,
+              removeTenderDocument,
+              addNewTenderDocument,
+              type,
+              type + "_INSTRUCTION"
+            );
+          }}
+        ></DsCsvUpload>
+      </div>
     </>
   );
 };

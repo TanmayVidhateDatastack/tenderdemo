@@ -102,7 +102,8 @@ export type tenderFee = {
   paymentDueDate: string;
   instructionNotes: string;
   paymentStatus?: string;
-  paymentDate?: string;
+  paymentDate?: string | undefined;
+  paymentrecoveryDate?: string | undefined;
   refundNotes?: string;
   paymentTransactionId?: string;
   paymentReceiptId?: string;
@@ -1588,19 +1589,19 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 label: item.codeDescription,
               })
             ),
-            tenderEmdPayment:(result.feesType || []).map(
+            tenderEmdPayment:(result.tenderEmdPayment || []).map(
               (item: { codeValue: string; codeDescription: string }) => ({
                 value: item.codeValue,
                 label: item.codeDescription,
               })
             ),
-            tenderFeesPayment:(result.feesType || []).map(
+            tenderFeesPayment:(result.tenderFeesPayment || []).map(
               (item: { codeValue: string; codeDescription: string }) => ({
                 value: item.codeValue,
                 label: item.codeDescription,
               })
             ),
-            tenderPsdPayment:(result.feesType || []).map(
+            tenderPsdPayment:(result.tenderPsdPayment || []).map(
               (item: { codeValue: string; codeDescription: string }) => ({
                 value: item.codeValue,
                 label: item.codeDescription,
