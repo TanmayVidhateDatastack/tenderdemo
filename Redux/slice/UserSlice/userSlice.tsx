@@ -10,6 +10,13 @@ export type UserState = {
   role: string; // Single role or other status (depending on your use case)
 };
  
+export const ContractStatuses = {
+  AWARDED: "ContractStatuses",
+  PARTIALLY_AWARDED: "Partially Awarded",
+  LOST: "Lost",
+  CANCELLED: "Cancellation",
+};
+ 
 const initialState: UserState = {
   userRoles: [], // Initialize with an empty array
   role: "" // Initialize with an empty string
