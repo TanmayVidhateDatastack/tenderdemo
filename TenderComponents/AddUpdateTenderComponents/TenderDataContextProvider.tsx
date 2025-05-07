@@ -1509,7 +1509,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             }) || [],
           // tenderRevisions: latestTenderRevision,
           tenderRevisions:
-            tenderDataCopy.tenderRevisions?.length > 0 &&
+            tenderData.tenderRevisions?.length > 0 &&
             latestTenderRevision[0].tenderItems.length > 0
               ? latestTenderRevision.map((x) => {
                   if (x.id) return { id: x.id, tenderItems: x.tenderItems };
