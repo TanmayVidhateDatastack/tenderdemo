@@ -329,12 +329,15 @@ a.secondary {
   padding: 10px;
 }
 .noDataFound {
-  min-height: 42rem;
+  font-size:var(--font-48);
+  min-height: 4em;
   min-width: 100%;
   display: flex;
   flex-direction: column;
+  position:relative;
+
   justify-content: space-between;
-  align-items: center;
+  /* align-items: center; */
   background: var(--grey-50);
 }
 
@@ -345,12 +348,14 @@ a.secondary {
 }
 
 .noData {
+  /* position:absolute; */
+  margin-top:4em;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   color: var(--grey-300);
-  font-size: var(--custome-1);
+  font-size: var(--bodyText);
 }
 
 .csvpopupBtn {

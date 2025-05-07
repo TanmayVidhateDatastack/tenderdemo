@@ -8,14 +8,11 @@ import DSButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import Toaster from "@/Elements/DsComponents/DsToaster/DsToaster";
 import IconFactory from "@/Elements/IconComponent";
 
-
 interface CsvPopupProps {
   onUpload: (file: File | null) => void;
 }
 
-
 export default function CsvPopup({ onUpload }: CsvPopupProps) {
-
   const [fileName, setFileName] = useState<string>("Attach your File here");
   const [file, setFile] = useState<File | null>(null); // store the file
   const [message, setMessage] = useState<string>("");
@@ -24,25 +21,22 @@ export default function CsvPopup({ onUpload }: CsvPopupProps) {
   // Function to handle file selection through the file input
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
-  if (selectedFile) {
-    setFileName(selectedFile.name);
-    setFile(selectedFile); // Save the file
-    setMessage("The File has been  attached successfully!");
-
-  }
+    if (selectedFile) {
+      setFileName(selectedFile.name);
+      setFile(selectedFile); // Save the file
+      setMessage("The File has been  attached successfully!");
+    }
   };
 
   // Function to handle file drop when the user dragss a file
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
-  const droppedFile = event.dataTransfer.files?.[0];
-  if (droppedFile) {
-    setFileName(droppedFile.name);
-    setFile(droppedFile); // Save the file
-    setMessage("The File has been  attached successfully!");
-
-
-  }
+    const droppedFile = event.dataTransfer.files?.[0];
+    if (droppedFile) {
+      setFileName(droppedFile.name);
+      setFile(droppedFile); // Save the file
+      setMessage("The File has been  attached successfully!");
+    }
   };
 
   // Function to handle the drag over event to allow file drop
@@ -50,7 +44,8 @@ export default function CsvPopup({ onUpload }: CsvPopupProps) {
     event.preventDefault();
   };
 
-  const handleRemoveFile = () => {
+  const handleRemoveFile = (e:React.MouseEvent) => {
+    e.stopPropagation();
     setFile(null);
     setFileName("Attach your File here");
     if (fileInputRef.current) {
@@ -67,8 +62,7 @@ export default function CsvPopup({ onUpload }: CsvPopupProps) {
     handleUploadFile(e);
     ClosePopup("csvpopup");
   };
-  
-  
+
   return (
     <>
       <DsPopup
@@ -78,8 +72,6 @@ export default function CsvPopup({ onUpload }: CsvPopupProps) {
         position="center"
         size="large"
         className={styles.popup}
-        
-        
       >
         <div className={styles.container}>
           <div>
@@ -122,36 +114,39 @@ export default function CsvPopup({ onUpload }: CsvPopupProps) {
             onDrop={handleDrop}
             onDragOver={handleDragOver}
           >
-            {fileName} 
+            {fileName}
             <input
               type="file"
+              accept=".csv"
               id="selectfile"
               style={{ display: "none" }}
               onChange={handleFileChange}
               ref={fileInputRef}
             />
-             {file && (
-                <div style={{width:"1em",height:"1em"}}  onClick={handleRemoveFile} >
-              <IconFactory name={"crossSmall"}></IconFactory>
-               </div>
-              )}
+            {file && (
+              <div
+                style={{ width: "1em", height: "1em" }}
+                onClick={handleRemoveFile}
+                
+              >
+                <IconFactory name={"crossSmall"}></IconFactory>
+              </div>
+            )}
           </div>
-          <Toaster 
+          <Toaster
             message={message}
             type="success"
-            position="top" 
-             handleClose={() => {}}     
-             duration={3000}        
-           >
-
-           </Toaster>
+            position="top"
+            handleClose={() => {}}
+            duration={3000}
+          ></Toaster>
           <div className={styles.footer_menu}>
-            <DSButton 
-            label="Upload Now" 
-         buttonSize="btnSmall"
-         onClick={handleClick}
-            disable={file === null}
-          />
+            <DSButton
+              label="Upload Now"
+              buttonSize="btnSmall"
+              onClick={handleClick}
+              disable={file === null}
+            />
           </div>
         </div>
       </DsPopup>

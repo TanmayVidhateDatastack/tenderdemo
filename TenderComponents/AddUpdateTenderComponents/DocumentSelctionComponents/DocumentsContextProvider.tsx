@@ -43,7 +43,7 @@ export const DocumentProvider: React.FC<DocumentProviderProps> = ({ children }) 
           ? {
             ...docType,
             documents: docType.documents.map((doc) =>
-              doc.document.name === documentName ? { ...doc, isVisible: !doc.isVisible } : doc
+              doc.document.documentName === documentName ? { ...doc, isVisible: !doc.isVisible } : doc
             ),
           }
           : docType
@@ -55,7 +55,7 @@ export const DocumentProvider: React.FC<DocumentProviderProps> = ({ children }) 
     setSelectedDocuments((prevSelected) =>
       prevSelected.filter((doc) =>
         documentData.some((group) =>
-          group.documents.some((d) => d.document.name === doc.document.name)
+          group.documents.some((d) => d.document.documentName === doc.document.documentName)
         )
       )
     );

@@ -289,6 +289,7 @@ const DsDepositeDocuments: React.FC = () => {
       })}
       <ContextMenu
         id={contextMenuId}
+        className={styles.applicableDeposite}
         content={
           <>
             <div className={styles.applicableDeposit}>
@@ -296,6 +297,7 @@ const DsDepositeDocuments: React.FC = () => {
                 {applicablefees.map((checkbox, index) => (
                   <Ds_checkbox
                     key={index}
+                    containerClassName={styles.feesCheckboxContainer}
                     id={checkbox.value.toString()}
                     name={checkbox.label}
                     value={checkbox.value.toString()}

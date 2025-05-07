@@ -13,6 +13,8 @@ import React from "react";
 import DsSearchComponent from "@/Elements/DsComponents/DsSearch/searchComponent";
 import { TenderData } from "../TenderDataContextProvider";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
+import { useAppSelector } from "@/Redux/hook/hook";
+import { RootState } from "@/Redux/store/store";
 
 //  interface CustomerSearchProps {
 //   orderData: TenderData | null;
@@ -48,7 +50,10 @@ const CustomerSearch: React.FC<{
   const [customers, setCustomers] = useState<datalistOptions[]>();
   const [selectedCustomer, setSelectedCustomer] = useState<number>();
   const [selectedAddress, setSelectedAddress] = useState<string>(""); // Track selected address
-
+    const permissions = useAppSelector((state: RootState) => state.permissions);
+  const {
+  disable
+    } = permissions;
   async function setSelectedOptions(option: datalistOptions): Promise<void> {
     const selectedCustomerId = Number(option.id);
     setSelectedCustomer(selectedCustomerId);
@@ -103,7 +108,8 @@ const CustomerSearch: React.FC<{
 
   return (
     <DsSearchComponent
-    containerClasses={styles.fields}
+      containerClasses={styles.fields}
+      disable={disable}
       id="customerSearch"
       initialValue={customer}
       dataListId="customerSearchDatalist" 

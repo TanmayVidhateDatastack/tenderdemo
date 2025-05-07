@@ -31,7 +31,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
       const res = await fetchData({ url: getAllDocuments });
       if (res.code === 200) {
         const tenderDocuments = res.result.Documents.filter(
-          (doc: TenderDocument) => doc.category === "TenderDocument"
+          (doc: TenderDocument) => doc.documentCategory === "TenderDocument"
         );
 
         const grouped = tenderDocuments.reduce( 
@@ -79,7 +79,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
 
     const updatedSelectedDocuments = selectedDocuments.filter((doc) =>
       documentContext.documentData.some((contextDoc) =>
-        contextDoc.documents.some((d) => d.document.name === doc.name)
+        contextDoc.documents.some((d) => d.document.documentName === doc.documentName)
       )
     );
 
@@ -105,7 +105,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
           const existingType = updatedData.find((group) => group.type === doc.documentType);
 
           if (existingType) {
-            if (!existingType.documents.some((d) => d.document.name === doc.name)) {
+            if (!existingType.documents.some((d) => d.document.documentName === doc.documentName)) {
               existingType.documents.push({
                 document: doc,
                 isVisible: false,
@@ -127,7 +127,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
             ...group,
             documents: group.documents.filter((doc) =>
               selectedDocuments.some((selectedDoc) =>
-                selectedDoc.name === doc.document.name && selectedDoc.documentType === group.type
+                selectedDoc.documentName === doc.document.documentName && selectedDoc.documentType === group.type
               )
             ),
           };
@@ -163,10 +163,10 @@ const DsAddTenderDocumentPane: React.FC = () => {
                 <Ds_checkbox  
                   className={styles.documentsCkechS}
                   key={doc.id} 
-                  id={doc.id?.toString()||doc.name}
-                  name={doc.name} 
-                  value={doc.id?.toString()||doc.name}
-                  label={doc.name}
+                  id={doc.id?.toString()||doc.documentName}
+                  name={doc.documentName} 
+                  value={doc.id?.toString()||doc.documentName}
+                  label={doc.documentName}
                   onChange={() => handleCheckboxChange(doc)}  
                   isChecked={selectedDocuments.some((d) => d.id === doc.id)} 
                 /> 

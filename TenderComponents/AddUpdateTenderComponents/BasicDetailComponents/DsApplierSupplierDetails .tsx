@@ -21,9 +21,7 @@ type Depot = {
   name: string;
   code: string;
 };
-
 const DsApplierSupplierDetails: React.FC = ({}) => {
-
 const permissions = useAppSelector((state: RootState) => state.permissions);
 const {
 disable

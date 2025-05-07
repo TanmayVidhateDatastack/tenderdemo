@@ -461,7 +461,7 @@ disable
             tenderData.tenderDocuments?.filter(
               (x) =>
                 x.documentType == type &&
-                x.category == type + "_INSTRUCTION" &&
+                x.documentCategory == type + "_INSTRUCTION" &&
                 x.id !== undefined
             ) || []
           }
@@ -469,7 +469,7 @@ disable
             const typeDocuments =
               tenderData.tenderDocuments?.filter(
                 (x) =>
-                  x.documentType == type && x.category == type + "_INSTRUCTION"
+                  x.documentType == type && x.documentCategory == type + "_INSTRUCTION"
               ) || [];
             updateDocuments(
               files,
