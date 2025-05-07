@@ -198,6 +198,12 @@ const DsTenderIdPage: React.FC<{
     console.log(latestVersion, version);
     setIsLatestVersion(latestVersion == version);
   }, [selectedTabId, tenderData.tenderRevisions]);
+
+
+  useEffect(() => {
+    setTabId("0");
+  }, []);
+  
   // useEffect(()=>{
   //   if(displayFlag=="New"){
   //     setTabs(
