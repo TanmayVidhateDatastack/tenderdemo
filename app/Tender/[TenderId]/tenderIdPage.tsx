@@ -198,12 +198,9 @@ const DsTenderIdPage: React.FC<{
     console.log(latestVersion, version);
     setIsLatestVersion(latestVersion == version);
   }, [selectedTabId, tenderData.tenderRevisions]);
-
-
   useEffect(() => {
     setTabId("0");
   }, []);
-  
   // useEffect(()=>{
   //   if(displayFlag=="New"){
   //     setTabs(
@@ -464,16 +461,12 @@ const DsTenderIdPage: React.FC<{
                     </DocumentContext.Consumer>
                   </TabView>
                   <TabView tabId="Contract">
-                    {/* {(tenderData.status == "AWARDED" ||
+                    {(tenderData.status == "AWARDED" ||
                       tenderData.status == "PARTIALLY_AWARDED" ||
                       tenderData.status == "LOST" ||
-                      tenderData.status == "CANCELLED") && ( */}
-                      {/* <ContractView status={tenderData.status} /> */}
-                      {/*
-                      updated by gaurav
-                      */}
-                      <ContractView status={tenderData.status as "LOST" | "AWARDED" | "PARTIALLY_AWARDED" | "CANCELLED"} />
-                    {/* )} */}
+                      tenderData.status == "CANCELLED") && (
+                      <ContractView status={tenderData.status} />
+                    )}
                   </TabView>
                 </>
               )}

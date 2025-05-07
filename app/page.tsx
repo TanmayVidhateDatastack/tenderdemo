@@ -44,7 +44,7 @@ import style from "./page.module.css";
 import IconFactory from "@/Elements/IconComponent";
 import { areSearchCustomers } from "@/TenderComponents/AddUpdateTenderComponents/BasicDetailComponents/customerSearch";
 import DemoDocument from "@/Elements/DsComponents/dsDocumentSelector/dsDemoDocumentSelector";
-import DemoToaster from "@/Elements/DsComponents/DsToaster/dsDemoToaster";
+// import DemoToaster from "@/Elements/DsComponents/DsToaster/dsDemoToaster";
 const metaDataTypes = ["TENDER_TYPE", "CUSTOMER_TYPE", "TENDER_STATUS"];
 
 //valid code types for metadata
