@@ -11,7 +11,11 @@ import { DsSelectOption } from "@/Common/helpers/types";
 import { updateDocuments, useTenderData } from "../TenderDataContextProvider";
 import TextArea from "@/Elements/DsComponents/DsInputs/dsTextArea";
 import DatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker";
-import { getAllMetaData, paidBys } from "@/Common/helpers/constant";
+import {
+  downloadDocumentUrl,
+  getAllMetaData,
+  paidBys,
+} from "@/Common/helpers/constant";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import { useEffect, useState } from "react";
 import IconFactory from "@/Elements/IconComponent";
@@ -401,18 +405,26 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           buttonSize="btnSmall"
           startIcon={<IconFactory name="fileAttach" />}
           previouslySelectedFile={
-            tenderData.tenderDocuments?.filter(
-              (x) =>
-                x.documentType == type &&
-                x.documentCategory == type + "_INSTRUCTION" &&
-                x.id !== undefined
-            ) || []
+            tenderData.tenderDocuments
+              ?.filter(
+                (x) =>
+                  x.documentCategory == type &&
+                  x.documentType == type + "_INSTRUCTION" &&
+                  x.id !== undefined
+              )
+              .map((x) => {
+                return {
+                  ...x,
+                  fileDownloadHref: downloadDocumentUrl(tenderData.id, x.id),
+                };
+              }) || []
           }
           onSelectedFileChange={(files) => {
             const typeDocuments =
               tenderData.tenderDocuments?.filter(
                 (x) =>
-                  x.documentType == type && x.documentCategory == type + "_INSTRUCTION"
+                  x.documentCategory == type &&
+                  x.documentType == type + "_INSTRUCTION"
               ) || [];
             updateDocuments(
               files,
