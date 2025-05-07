@@ -52,7 +52,6 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
     myApprovalButtonVisible,
     // myApprovalButtonVisible
 
-
   } = permissions;
 
   const handleFetch = async () => {

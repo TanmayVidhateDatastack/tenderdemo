@@ -301,8 +301,8 @@ const ContractView: React.FC<ContractViewProps> = ({
           previouslySelectedFile={
             tenderDataCopy.tenderDocuments?.filter(
               (x) =>
-                x.documentType == "TENDER_CONTRACT_DOCUMENT" &&
-                x.documentCategory == status + "_DOCUMENTS" &&
+                x.documentCategory == "TENDER_CONTRACT_DOCUMENT" &&
+                x.documentType == status + "_DOCUMENTS" &&
                 x.id !== undefined
             ) || []
           }
@@ -310,8 +310,8 @@ const ContractView: React.FC<ContractViewProps> = ({
             const typeDocuments =
               tenderData.tenderDocuments?.filter(
                 (x) =>
-                  x.documentType == "TENDER_CONTRACT_DOCUMENT" &&
-                  x.documentCategory == status + "_DOCUMENTS"
+                  x.documentCategory == "TENDER_CONTRACT_DOCUMENT" &&
+                  x.documentType == status + "_DOCUMENTS"
               ) || [];
             updateDocuments(
               files,

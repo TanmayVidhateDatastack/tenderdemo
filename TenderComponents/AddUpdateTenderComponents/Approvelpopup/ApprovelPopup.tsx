@@ -13,8 +13,6 @@ import TextArea from "@/Elements/DsComponents/DsInputs/dsTextArea";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import { DisplayPane } from "@/Elements/DsComponents/DsPane/DsPane";
 
-
-
 class ActionStatus {
     notiType: "success" | "bonus" | "info" | "error" | "cross" = "success";
     notiMsg: string = "";
@@ -22,7 +20,7 @@ class ActionStatus {
 }
 export interface ApprovalProps {
     id: string;
-    popupType: "Approve" | "Revise" | "Reject";
+    popupType: "Approve" | "Revise" | "Reject"|"Reviewed";
     buttonColor: "btnDanger" | "btnPrimary";
     position?: "top" | "center";
     toasterMessage: string; // Single message string instead of an object
@@ -149,14 +147,13 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
         const approvalObject = createApprovalObject(cId, textAreaValue, status, selectedValueString, deviationCode);
 
     };
-
     const handleSave = async () => {
         const resultObject = {
             text: textAreaValue,
             selectedValue: selectedOption?.label,
             selectedLabel: selectedOption?.value,
         };
-
+   console.log("resultObject of approvebuton is ",resultObject)
 
         const selectedValueString = resultObject.selectedValue?.toString() ?? "";
 
@@ -235,7 +232,7 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
     // }, [deviationCode])
 
 
-    function ShowToaster() {
+    function ShowToastermessage() {
         if (popupType === "Approve") {
             setToasterType("success");
             setStatus("APPROVE");
@@ -343,10 +340,10 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
                             buttonColor="btnPrimary"
                             onClick={() => {
                                 if (selectedOption?.value) {
-                                    showToaster("approve-toaster");
+                                    ShowToastermessage();
                                 } 
                                 handleButtonClick();
-                                // handleSave();
+                                handleSave();
 
                                 setTimeout(() => {
                                     ClosePopup(id);
@@ -368,7 +365,7 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
                             buttonColor="btnPrimary"
                             onClick={() => {
                                 if (selectedOption?.value) {
-                                    showToaster("revise-toaster");
+                                    ShowToastermessage();
                                 } 
                             }}
                         />
@@ -380,9 +377,10 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
                             buttonViewStyle="btnContained"
                             buttonColor="btnDanger"
                             onClick={() => {
-                                if (selectedOption?.value) {
-                                    showToaster("reject-toaster");
-                                } 
+
+                             if (selectedOption?.value) {
+                                   ShowToastermessage();
+                              } 
                             }}
                         />
                     )}
@@ -398,34 +396,28 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
                 />
             )
             }
-            <Toaster
-                id="revise-toaster"
-                type={"bonus"}
-                message={"Tender has been send for Revision"}
-                position="top"
-                duration={3000}
-                handleClose={() => setToasterVisible(false)}
-                />
-                 <Toaster
-                id="approve-toaster"
-                type={"success"}
-                message={"Tende has been Approved "} 
-                position="top"
-                duration={3000}
-                handleClose={() => setToasterVisible(false)}
-                />
-                 <Toaster
-                id="reject-toaster"
-                type={"cross"}
-                message={"Tender has been rejected and also not has send"} 
-                position="top"
-                duration={3000}
-                handleClose={() => setToasterVisible(false)}
-                />
+
         </>
         
     );
 };
 
 export default ApprovalPopup;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

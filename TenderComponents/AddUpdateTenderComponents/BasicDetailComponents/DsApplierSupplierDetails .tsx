@@ -13,14 +13,19 @@ import {
   DsSelectOption,
 } from "@/Common/helpers/types";
 import { searchCustomerURL } from "@/Common/helpers/constant";
+import { useAppSelector } from "@/Redux/hook/hook";
+import { RootState } from "@/Redux/store/store";
 
 type Depot = {
   id: number;
   name: string;
   code: string;
 };
-
 const DsApplierSupplierDetails: React.FC = ({}) => {
+const permissions = useAppSelector((state: RootState) => state.permissions);
+const {
+disable
+  } = permissions;
   const [allSuppliedBy, setAllSuppliedBy] = useState<
     DsMultiLevelSelectOption[]
   >([]);
@@ -201,6 +206,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
     <div className={deptStyles.container}>
       <div className={styles.inputDetails}>
         <DsSelectMultiLevel
+        disable={disable}
           containerClasses={styles.fields}
           isSearchable={true}
           options={appliedBy}
@@ -234,6 +240,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
         ></DsSelectMultiLevel>
         <DsSelectMultiLevel
           containerClasses={styles.fields}
+          disable={disable}
           isSearchable={true}
           options={suppliedBy}
           {...(tenderData.id
@@ -265,6 +272,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
           isOpen={false}
         ></DsSelectMultiLevel>
         <DsMultiSelect
+        disable={disable}
           containerClasses={styles.fields}
           selectedOptions={selectedDepo}
           options={formatedDepot}
@@ -296,6 +304,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
               (e.target as HTMLInputElement).value
             )
           }
+          disable={disable}
         ></DsTextField>
         <DsTextField
           containerClasses={styles.fields}
@@ -312,6 +321,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
               Number((e.target as HTMLInputElement).value)
             )
           }
+          disable={disable}
         ></DsTextField>
       </div>
     </div>
