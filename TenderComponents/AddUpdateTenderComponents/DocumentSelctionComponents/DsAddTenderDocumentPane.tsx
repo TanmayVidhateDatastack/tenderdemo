@@ -31,7 +31,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
       const res = await fetchData({ url: getAllDocuments });
       if (res.code === 200) {
         const tenderDocuments = res.result.Documents.filter(
-          (doc: TenderDocument) => doc.documentCategory === "TenderDocument"
+          (doc: TenderDocument) => doc.documentType === "TenderDocument"
         );
 
         const grouped = tenderDocuments.reduce( 

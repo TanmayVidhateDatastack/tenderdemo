@@ -95,12 +95,12 @@ const ProductSearch: React.FC<ProductSearchProps> = ({
     <DsSearchComponent
       id="productSearch"
       dataListId="productSearchDatalist"
-      label={"   Add Product & quantity & hit enter"}
+      label={"Add Product & quantity & hit enter"}
       // placeholder={"Add product & qty & hit enter"}
       options={products ? products : undefined}
       setOptions={(value) => setOptions(value)}
       starticon={
-        <div style={{ width: "1.125em", height: "1.125em", position: "relative"}}>
+        <div style={{ width: "1em", height: "1.125em", position: "relative" ,marginLeft:"-0.2em"}}>
           {/* <Image src={searchicon} layout="fill" objectFit="cover" alt="searchicon" /> */}
           <IconFactory name={"search"}/>
         </div>

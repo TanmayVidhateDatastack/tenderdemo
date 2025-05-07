@@ -61,8 +61,8 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
             previouslySelectedFile={
               tenderData.tenderDocuments?.filter(
                 (x) =>
-                  x.documentType == "TENDER_SUPPLY_CONDITION" &&
-                  x.documentCategory == type &&
+                  x.documentCategory == "TENDER_SUPPLY_CONDITION" &&
+                  x.documentType == type &&
                   x.id !== undefined
               ) || []
             }
@@ -70,8 +70,8 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
               const typeDocuments =
                 tenderData.tenderDocuments?.filter(
                   (x) =>
-                    x.documentType == "TENDER_SUPPLY_CONDITION" &&
-                    x.documentCategory == type
+                    x.documentCategory == "TENDER_SUPPLY_CONDITION" &&
+                    x.documentType == type
                 ) || [];
               // console.log("updateDocuments",files);
               updateDocuments(
