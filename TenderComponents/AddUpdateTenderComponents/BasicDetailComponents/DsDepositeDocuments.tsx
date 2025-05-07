@@ -281,7 +281,7 @@ const DsDepositeDocuments: React.FC = () => {
                   downloadVisible={true}
                   refund={refund}
                   completedpayment={paymentCheckVisible}
-                  recoverycheckvisibible={recoveryPaymentVisible}
+                  // recoverycheckvisibible={recoveryPaymentVisible}
                 />
               </div>
             )
