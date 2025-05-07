@@ -431,8 +431,8 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               typeDocuments,
               removeTenderDocument,
               addNewTenderDocument,
-              type,
-              type + "_INSTRUCTION"
+              type + "_INSTRUCTION",
+              type
             );
           }}
         ></DsCsvUpload>

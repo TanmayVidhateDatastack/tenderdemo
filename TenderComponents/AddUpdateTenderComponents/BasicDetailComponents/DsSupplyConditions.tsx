@@ -79,8 +79,8 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
                 typeDocuments,
                 removeTenderDocument,
                 addNewTenderDocument,
+                type,
                 "TENDER_SUPPLY_CONDITION",
-                type
               );
             }}
           ></DsCsvUpload>
