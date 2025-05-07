@@ -1751,7 +1751,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             ...(tenderStatus &&
               tenderStatus != "newPricingVersion" && {
                 "x-contract-status": `${tenderStatus}`,
-              }),
+              }), 
           },
         });
 
@@ -1851,7 +1851,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           tenderData.tenderRevisions == null
         )
           tenderData.tenderRevisions = [
-            {
+            { 
               version: 1,
               status: DsStatus.DRFT.toUpperCase(),
               tenderItems: [],
