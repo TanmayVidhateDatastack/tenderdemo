@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 
 import btnStyles from "@/Elements/DsComponents/DsButtons/dsButton.module.css";
 import ContextMenu, {
+  closeAllContext,
   closeContext,
   createContext,
   displayContext,
@@ -30,6 +31,7 @@ import { TenderData } from "@/TenderComponents/AddUpdateTenderComponents/TenderD
 import { getYesterdayDate } from "@/Common/helpers/Method/conversion";
 import ApprovalPopup from "../AddUpdateTenderComponents/Approvelpopup/ApprovelPopup";
 import { ContractStatuses } from "../AddUpdateTenderComponents/CustomTabViews/ContractView";
+import { ClosePopup } from "@/Elements/DsComponents/dsPopup/dsPopup";
 
 class ActionStatus {
   notiType: "success" | "bonus" | "info" | "error" | "cross" = "success";
@@ -61,7 +63,6 @@ export const DSTendrFooter: React.FC = ({}) => {
       console.error("Fetch error: ", error);
     }
   };
-
   useEffect(() => {
     handleFetch();
   }, []);
@@ -407,6 +408,25 @@ export const DSTendrFooter: React.FC = ({}) => {
             onClick={() => showToaster("toaster1")}
           />
         );
+      } else if (role === "CHECKER") {
+        contextContent = (
+          <>
+            <PopupOpenButton
+              popupId="popup1"
+              buttonSize="btnSmall"
+              buttonText="Reviewed "
+              buttonViewStyle="btnText"
+              className={btnStyles.btnTextPrimary}
+            />
+            <PopupOpenButton
+              popupId="popup2"
+              buttonSize="btnSmall"
+              buttonText="Revise"
+              buttonViewStyle="btnText"
+              className={btnStyles.btnTextPrimary}
+            />
+          </>
+        );
       } else if (role === "HOMANAGER") {
         contextContent = (
           <>
@@ -416,6 +436,7 @@ export const DSTendrFooter: React.FC = ({}) => {
               buttonText="Approve"
               buttonViewStyle="btnText"
               className={btnStyles.btnTextPrimary}
+              onClick={(e)=>closeAllContext()}
             />
             <PopupOpenButton
               popupId="popup2"
@@ -423,6 +444,7 @@ export const DSTendrFooter: React.FC = ({}) => {
               buttonText="Revise"
               buttonViewStyle="btnText"
               className={btnStyles.btnTextPrimary}
+             
             />
             <PopupOpenButton
               popupId="popup3"
@@ -430,39 +452,11 @@ export const DSTendrFooter: React.FC = ({}) => {
               buttonText="Reject"
               buttonViewStyle="btnText"
               className={btnStyles.btnTextPrimary}
+             
             />
           </>
         );
       } else if (role === "MAKER") {
-        contextContent = (
-          <>
-            <PopupOpenButton
-              popupId="popup1"
-              buttonSize="btnSmall"
-              buttonText="Approve"
-              buttonViewStyle="btnText"
-              className={btnStyles.btnTextPrimary}
-              onClick={() => closeContext("SubmissionContext")}
-            />
-            <PopupOpenButton
-              popupId="popup2"
-              buttonSize="btnSmall"
-              buttonText="Revise"
-              buttonViewStyle="btnText"
-              className={btnStyles.btnTextPrimary}
-              onClick={() => closeContext("SubmissionContext")}
-            />
-            <PopupOpenButton
-              popupId="popup3"
-              buttonSize="btnSmall"
-              buttonText="Reject"
-              buttonViewStyle="btnText"
-              className={btnStyles.btnTextPrimary}
-              onClick={() => closeContext("SubmissionContext")}
-            />
-          </>
-        );
-      } else if (role === "CHECKER") {
         contextContent = (
           <DsButton
             label="Submit for Review"
@@ -473,15 +467,15 @@ export const DSTendrFooter: React.FC = ({}) => {
           />
         );
       }
-      if (contextContent) {
-        createContext("SubmissionContext", <div>{contextContent}</div>, true);
+      
+      if (contextContent && !document.getElementById("SubmissionContext")) {
+        createContext("SubmissionContext", <div onClick={()=>closeContext("SubmissionContext")}>{contextContent}</div>, true);
       }
     }
   }, [role]);
-
   return (
     <>
-      <div className={styles.footer}>
+    <div className={styles.footer}>
         <DsNavTo
           id="closeBtn"
           location=""
@@ -492,7 +486,6 @@ export const DSTendrFooter: React.FC = ({}) => {
           buttonViewStyle="btnOutlined"
           disable={false}
         />
-
         <DsSplitButton
           buttonViewStyle="btnContained"
           onClick={() => {
@@ -509,12 +502,10 @@ export const DSTendrFooter: React.FC = ({}) => {
           onSplitClick={(e) =>
             displayContext(e, "SubmissionContext", "top", "right")
           }
-          buttonSize="btnLarge"
-        >
+          buttonSize="btnLarge" >
           Save
         </DsSplitButton>
       </div>
-
       <ApprovalPopup
         id="popup1"
         types={[]}
@@ -523,14 +514,13 @@ export const DSTendrFooter: React.FC = ({}) => {
         position="center"
         toasterMessage={
           role === "HOMANAGER"
-            ? "The Tender has been Approved"
-            : role === "CHECKER"
-            ? "The Tender has been successfully moved to under approval state"
-            : "The action was successful!"
+        ? "The Tender has been Approved"
+        : role === "CHECKER"
+        ? "The Tender has been successfully moved to under approval state"
+        : "The action was successful!"
         }
         setActionStatus={setActionStatusValues}
       />
-
       <ApprovalPopup
         id="popup2"
         types={[]}

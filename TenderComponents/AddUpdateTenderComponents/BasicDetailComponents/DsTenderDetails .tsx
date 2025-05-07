@@ -8,7 +8,7 @@ import {
   // tenderDetailsProps,
   location,
   DsSelectOption,
-  // tenderDetailsProps,
+  tenderDetailsProps,
 } from "@/Common/helpers/types";
 import { useTenderData } from "../TenderDataContextProvider";
 import DsDatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker";
@@ -54,7 +54,7 @@ const DsTenderDetails: React.FC = () => {
   //     label:
 
   const permissions = useAppSelector((state: RootState) => state.permissions);
-  const { fetchCustomerButtonVisible } = permissions;
+  const { fetchCustomerButtonVisible,disable } = permissions;
 
   const handleRoleFetch = async () => {
     try {
@@ -121,6 +121,7 @@ const DsTenderDetails: React.FC = () => {
         }
         showArrow={true}
       />
+
       <div className={styles.inputDetails}>
         {/* <div className={deptStyle.fields}> */}
         <CustomerSearch
@@ -139,7 +140,7 @@ const DsTenderDetails: React.FC = () => {
               label="Fetch Information"
               buttonViewStyle="btnText"
               buttonSize="btnSmall"
-              disable={tenderData.customerId ? false : true}
+              disable={tenderData.customerId ? false : true }
               className={deptStyle.copyBtn}
               startIcon={
                 <div style={{ width: "0.95625em", height: "1.125em" }}>
@@ -203,6 +204,7 @@ const DsTenderDetails: React.FC = () => {
               (e.target as HTMLInputElement).value
             )
           }
+          disable={disable}
         ></DsTextField>
         <DsSingleSelect
           containerClasses={styles.fields}
@@ -217,6 +219,7 @@ const DsTenderDetails: React.FC = () => {
               console.log("tendertype", option.label);
             }
           }}
+          disable={disable}
         ></DsSingleSelect>
         <DsDatePicker
           containerClasses={styles.fields}
@@ -235,6 +238,7 @@ const DsTenderDetails: React.FC = () => {
           // disable={true}
           placeholder="DD/MM/YYYY"
           label="Tender issue date"
+          disable={disable}
         />
         <DsDatePicker
           containerClasses={styles.fields}
@@ -255,6 +259,7 @@ const DsTenderDetails: React.FC = () => {
           // disable={true}
           placeholder="DD/MM/YYYY"
           label="Last date of purchasing"
+          disable={disable}
         />
         <DsDatePicker
           containerClasses={styles.fields}
@@ -273,6 +278,7 @@ const DsTenderDetails: React.FC = () => {
           // disable={true}
           placeholder="DD/MM/YYYY"
           label="Submission date"
+          disable={disable}
         />
         <DsTextField
           containerClasses={styles.fields}
@@ -286,6 +292,7 @@ const DsTenderDetails: React.FC = () => {
               (e.target as HTMLInputElement).value
             )
           }
+          disable={disable}
         ></DsTextField>
         <DsSingleSelect
           containerClasses={styles.fields}
@@ -299,6 +306,7 @@ const DsTenderDetails: React.FC = () => {
               updateTenderData("submissionMode", option.value);
             }
           }}
+          disable={disable}
         ></DsSingleSelect>
         <DsTextField
           containerClasses={styles.fields}
@@ -312,6 +320,7 @@ const DsTenderDetails: React.FC = () => {
               Number((e.target as HTMLInputElement).value)
             )
           }
+          disable={disable}
         />
         <DsTextField
           containerClasses={styles.fields}
@@ -325,6 +334,7 @@ const DsTenderDetails: React.FC = () => {
               Number((e.target as HTMLInputElement).value)
             )
           }
+          disable={disable}
         ></DsTextField>
         <DsTextField
           maximumNumber={100}
@@ -340,6 +350,7 @@ const DsTenderDetails: React.FC = () => {
               Number((e.target as HTMLInputElement).value)
             )
           }
+          disable={disable}
         ></DsTextField>
         <DsTextField
           containerClasses={styles.fields}
@@ -349,6 +360,7 @@ const DsTenderDetails: React.FC = () => {
           onBlur={(e) =>
             updateTenderData("tenderUrl", (e.target as HTMLInputElement).value)
           }
+          disable={disable}
         ></DsTextField>
 
       {/* Gaurav Code  */}

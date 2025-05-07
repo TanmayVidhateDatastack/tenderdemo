@@ -10,7 +10,7 @@ type PermissionState = {
   filterButtonVisible: boolean;
   myApprovalButtonVisible: boolean;
   fetchCustomerButtonVisible:boolean,
-
+  disable:boolean,
   // myApprovalButtonVisible: boolean;
 };
 
@@ -23,6 +23,7 @@ const initialState: PermissionState = {
   filterButtonVisible: false,
   myApprovalButtonVisible: false,
   fetchCustomerButtonVisible:false,
+  disable:false,
   // myApprovalButtonVisible: false,
 
 };
@@ -33,7 +34,6 @@ const permissionsSlice = createSlice({
   reducers: {
     setVisibilityByRole: (state, action: PayloadAction<string>) => {
       const role = action.payload;
-
       state.tenderDatalistVisible = false;
       state.approvalButtonVisible = false;
       state.nearSubmissionButtonVisible = false;
@@ -42,6 +42,7 @@ const permissionsSlice = createSlice({
       state.feesPendingButtonVisible = false;
       state.myApprovalButtonVisible = false;
       state.fetchCustomerButtonVisible = false;
+      state.disable=false
 
       switch (role) {
         case "MAKER":
@@ -52,7 +53,6 @@ const permissionsSlice = createSlice({
           state.feesPendingButtonVisible = false;
           state.approvalButtonVisible = true;
           state.fetchCustomerButtonVisible = true;
-          
           break;
 
         case "CHECKER":
@@ -69,11 +69,12 @@ const permissionsSlice = createSlice({
           state.feesPendingButtonVisible = true;
           state.myApprovalButtonVisible = true;//replaced with underApprovalButtonVisible
           state.approvalButtonVisible = true;
+      
           break;
-
         case "ACCOUNTANCE":
           state.tenderDatalistVisible = true;
           state.filterButtonVisible = true;
+          state.disable = true;
           break;
         default:
           break;
