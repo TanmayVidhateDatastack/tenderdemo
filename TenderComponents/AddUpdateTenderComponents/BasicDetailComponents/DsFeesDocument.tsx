@@ -263,8 +263,12 @@ disable
                   options={optionlist || []}
                   setSelectOptions={(options) => {
                     setSelectedOptions(options);
-                    console.log("Selected options:", options);
+                    if (typeof options== "string") {
+                      updateTenderFee(type, "documents", options);
+                    }
+                    
                   }}
+                  
                 >
                   
                   <div className={styles.addBtn}>
@@ -319,6 +323,15 @@ disable
                       <DsTextField
                         containerClasses={styles.feeFields}
                         label={`${option.label}  ID`}
+                         onBlur={(e) =>{
+                          
+                          updateTenderFee(
+                            type,
+                            "paymentTransactionId",
+                            Number((e.target as HTMLInputElement).value)
+                          )
+                        }
+                      }
                       />
                     </div>
                   ))}

@@ -153,7 +153,7 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
             selectedValue: selectedOption?.label,
             selectedLabel: selectedOption?.value,
         };
-
+   console.log("resultObject of approvebuton is ",resultObject)
 
         const selectedValueString = resultObject.selectedValue?.toString() ?? "";
 
@@ -343,7 +343,7 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
                                     ShowToastermessage();
                                 } 
                                 handleButtonClick();
-                                // handleSave();
+                                handleSave();
 
                                 setTimeout(() => {
                                     ClosePopup(id);
@@ -377,6 +377,7 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
                             buttonViewStyle="btnContained"
                             buttonColor="btnDanger"
                             onClick={() => {
+
                              if (selectedOption?.value) {
                                    ShowToastermessage();
                               } 
@@ -402,4 +403,21 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
 };
 
 export default ApprovalPopup;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
