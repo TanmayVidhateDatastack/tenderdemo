@@ -7,7 +7,7 @@ services:
     image: datastackdevops/tender_ui:0.0.38
  
     ports:
-      - 7009:3000
+      - 7003:3000
     volumes:
       - ./logs:/app\logs:rw
                                                   
