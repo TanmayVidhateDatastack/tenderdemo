@@ -1,7 +1,7 @@
 import DsCsvUpload from "@/Elements/DsComponents/DsButtons/dsCsvUpload";
 import TextArea from "@/Elements/DsComponents/DsInputs/dsTextArea";
 import styles from "./deposite.module.css";
-import {  updateDocuments, useTenderData } from "../TenderDataContextProvider";
+import { updateDocuments, useTenderData } from "../TenderDataContextProvider";
 import IconFactory from "@/Elements/IconComponent";
 
 export interface DsApplicableConditionsProps {
@@ -30,42 +30,54 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
         </div>
         <div className={styles.notes}>
           <span className={styles.notesTitle}>Notes</span>
-            <TextArea
-             containerClasses={styles.feeFields}
-             className={styles.notesField}
-             initialValue={tenderData.tenderSupplyCondition.applicableConditions?.find((x)=>x.type==type)?.notes||""}
-              id="embossmentNotes"
-              placeholder="Please type here"
-              minRows={2}
-              disable={false}
-              onBlur={(e) => {
-                updateApplicableCondition(
-                  type,
-                  "notes",
-                  (e.target as HTMLInputElement).value 
-                );
-              }}  
-            />
+          <TextArea
+            containerClasses={styles.feeFields}
+            className={styles.notesField}
+            initialValue={
+              tenderData.tenderSupplyCondition.applicableConditions?.find(
+                (x) => x.type == type
+              )?.notes || ""
+            }
+            id="embossmentNotes"
+            placeholder="Please type here"
+            minRows={2}
+            disable={false}
+            onBlur={(e) => {
+              updateApplicableCondition(
+                type,
+                "notes",
+                (e.target as HTMLInputElement).value
+              );
+            }}
+          />
         </div>
         <div className={styles.attachFileBtn}>
-
           <DsCsvUpload
             id={id + "UploadedDocuments"}
             label="Attach File"
             buttonViewStyle="btnText"
             buttonSize="btnSmall"
             startIcon={<IconFactory name="fileAttach" />}
-            onSelectedFileChange={(files) => { 
-              const typeDocuments = tenderData.tenderDocuments?.filter(
+            previouslySelectedFile={
+              tenderData.tenderDocuments?.filter(
                 (x) =>
                   x.documentType == "TENDER_SUPPLY_CONDITION" &&
-                  x.category == type
-              )||[];
+                  x.documentCategory == type &&
+                  x.id !== undefined
+              ) || []
+            }
+            onSelectedFileChange={(files) => {
+              const typeDocuments =
+                tenderData.tenderDocuments?.filter(
+                  (x) =>
+                    x.documentType == "TENDER_SUPPLY_CONDITION" &&
+                    x.documentCategory == type
+                ) || [];
               // console.log("updateDocuments",files);
               updateDocuments(
                 files,
-                typeDocuments, 
-                removeTenderDocument, 
+                typeDocuments,
+                removeTenderDocument,
                 addNewTenderDocument,
                 "TENDER_SUPPLY_CONDITION",
                 type

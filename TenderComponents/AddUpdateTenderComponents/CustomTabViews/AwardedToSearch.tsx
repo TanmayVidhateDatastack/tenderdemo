@@ -1,3 +1,4 @@
+import { searchCustomerURL } from "@/Common/helpers/constant";
 import { datalistOptions } from "@/Common/helpers/types";
 import DsSearchComponent from "@/Elements/DsComponents/DsSearch/searchComponent";
 import { useState } from "react";
@@ -55,7 +56,7 @@ const AwardedToSearch: React.FC<AwardedToSearchProps> = ({
       options={awardedToOptions}
       setOptions={setAwardedToSearchOptions}
       setSearchUrl={function (searchTerm: string): string {
-        return searchTerm;
+        return searchCustomerURL + searchTerm;
       }}
       setSelectedOption={setAwardedTo}
       id={"awardedToSearch" + index}

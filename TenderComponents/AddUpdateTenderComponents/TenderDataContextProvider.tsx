@@ -4,7 +4,10 @@ import {
   DsStatus,
   // DsStatus,
   dsStatus,
+  getAllMetaData,
   getTenderByTenderId,
+  saveDocumentUrl,
+  // saveDocumentUrl,
   saveTenderurl,
 } from "@/Common/helpers/constant";
 import fetchData, { fileToBase64 } from "@/Common/helpers/Method/fetchData";
@@ -19,8 +22,7 @@ import React, {
   useState,
 } from "react";
 import { generatePatchDocument } from "@/Common/helpers/Method/UpdatePatchObjectCreation";
-import DsSupplyConditions from "./BasicDetailComponents/DsSupplyConditions";
-
+import { DsSelectOption } from "@/Common/helpers/types";
 class ActionStatus {
   notiType: "success" | "bonus" | "info" | "error" | "cross" = "success";
   notiMsg: string | React.ReactNode = "";
@@ -28,15 +30,16 @@ class ActionStatus {
   isOkayButtonVisible?: boolean = false;
 }
 export type Document = {
-  name: string;
-  document: File;
+  id?: number;
+  documentName?: string;
+  document?: File;
 };
 export type TenderDocument = {
   id?: number;
   documentType: string;
-  category: string;
-  subCategory?: string;
-  name: string;
+  documentCategory: string;
+  documentSubCategory?: string;
+  documentName: string;
   documentPath?: string;
   data?: File;
   documentStorageId?: number;
@@ -80,7 +83,7 @@ export type tenderSupplyCondition = {
   supplyPoint: string;
   consigneesCount: number | null;
   testReportRequired: string;
-  eligibility: string[]; 
+  eligibility: string[];
   applicableConditions: applicableSupplyConditions[];
 };
 export type applicableSupplyConditions = {
@@ -101,6 +104,7 @@ export type tenderFee = {
   instructionNotes: string;
   paymentStatus?: string;
   paymentDate?: string;
+  recoverypaymentDate?:string;
   refundNotes?: string;
   paymentTransactionId?: string;
   paymentReceiptId?: string;
@@ -120,7 +124,7 @@ export type ContractItems = {
     awardedToName: string;
   };
   awardedQuantity?: number;
-  awardedTo?: number;
+  awardedToId?: number;
   awardedRate?: number;
 };
 export type TenderContract = {
@@ -130,9 +134,10 @@ export type TenderContract = {
   tenderRevisions?: {
     id: number;
     tenderItems?: ContractItems[];
-  };
+  }[];
 };
 export type TenderData = {
+  contractStatus: unknown;
   // tenderId: string;
   id?: number;
   customerId: number;
@@ -182,6 +187,7 @@ export type TenderData = {
   tenderContract?: TenderContract;
   tenderDocuments?: TenderDocument[];
 };
+
 export function updateDocuments(
   files: File[],
   typeDocuments: TenderDocument[],
@@ -207,7 +213,12 @@ export function updateDocuments(
   //If all current files array is empty (all documents are removed) then simply empty/remove the tenderDocument array (with their corresponding document_type, category and sub-category).
   if (files.length == 0) {
     typeDocuments?.forEach((x) => {
-      removeDocumentFunction(x.documentType, x.category, x.name, x.subCategory);
+      removeDocumentFunction(
+        x.documentType,
+        x.documentCategory,
+        x.documentName,
+        x.documentSubCategory
+      );
     });
     return;
   }
@@ -215,31 +226,38 @@ export function updateDocuments(
   //When first time document is getting uploaded the tenderDocument is empty then simply add the document in TenderDocument Array
   if (typeDocuments?.length == 0) {
     files.forEach((x) => {
-      addDocumentFunction(
-        type,
-        category,
-        {
-          name: x.name,
-          document: x,
-        },
-        subCategory
-      );
+      if (x.documentName || x.document?.name)
+        addDocumentFunction(
+          type,
+          category,
+          {
+            name: x.documentName || x.document?.name || "",
+            document: x.document,
+          },
+          subCategory
+        );
     });
     return;
   }
 
   // For add document --> document is not in tenderDocument array and it is present in latest files array
   files?.forEach((x) => {
-    if (!typeDocuments?.find((f) => f.name == x.name)) {
-      addDocumentFunction(
-        type,
-        category,
-        {
-          name: x.name,
-          document: x,
-        },
-        subCategory
-      );
+    if (
+      !typeDocuments?.find(
+        (f) =>
+          f.documentName == x.documentName || f.documentName == x.document?.name
+      )
+    ) {
+      if (x.documentName || x.document?.name)
+        addDocumentFunction(
+          type,
+          category,
+          {
+            name: x.documentName || x.document?.name || "",
+            document: x.document,
+          },
+          subCategory
+        );
     }
     // else{
     // settError Message for duplicate file
@@ -248,14 +266,21 @@ export function updateDocuments(
   });
   // For remove document --> document is present in tenderDocument array and it is not present in latest files array.
   typeDocuments?.forEach((x) => {
-    if (!files.find((f) => f.name == x.name)) {
-      removeDocumentFunction(x.documentType, x.category, x.name, x.subCategory);
+    if (!files.find((f) => f.documentName == x.documentName)) {
+      removeDocumentFunction(
+        x.documentType,
+        x.documentCategory,
+        x.documentName,
+        x.documentSubCategory
+      );
     }
   });
 }
+
 interface TenderDataContextType {
   tenderData: TenderData;
   tenderDataCopy: TenderData;
+  metaData: Record<string, DsSelectOption[]>;
   actionStatus: ActionStatus;
   setActionStatusValues: (actionStatus: ActionStatus) => void;
   updateTenderData: (
@@ -326,6 +351,7 @@ interface TenderDataContextType {
     tenderStatus?: string
   ) => Promise<void>;
   fetchAndSetPreviousTender: (tenderId: number) => Promise<void>;
+  fetchMetaData: () => Promise<void>;
 }
 
 const TenderDataContext = createContext<TenderDataContextType | undefined>(
@@ -336,6 +362,33 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const reader = new FileReader();
+  const metaDataTypes: string[] = React.useMemo(() => {
+    return [
+      "TENDER_TYPE",
+      "SUBMISSION_MODE",
+      "SUPPLY_POINT",
+      "TEST_REPORT_REQUIRED",
+      "ELIGIBILITY",
+      "FEES_TYPE",
+      "TENDER_EMD_PAYMENT",
+      "TENDER_FEES_PAYMENT",
+      "TENDER_PSD_PAYMENT",
+      "TENDER_SUPPLY_CONDITION",
+      "PAYMENT_MODE",
+      "REFUND_ELIGIBILITY",
+      "TENDER_PARTIALLY_AWARDED_JUSTIFICATION",
+      "TENDER_LOST_JUSTIFICATION",
+      "TENDER_CANCELLED_JUSTIFICATION",
+      "TENDER_AWARDED_JUSTIFICATION",
+      "JUSTIFICATION_APPROVE_TYPE",
+      "JUSTIFICATION_REJECT_TYPE",
+      "JUSTIFICATION_REVISE_TYPE",
+    ];
+  }, []);
+  const [metaData, setMetaData] = useState<Record<string, DsSelectOption[]>>(
+    {}
+  );
+
   const [tenderData, setTenderData] = useState<TenderData>({
     customerId: 0,
     customerAddressId: undefined,
@@ -390,25 +443,27 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       contractStatus: "AWARDED",
       contractJustification: "test",
       contractStatusNotes: "test",
-      tenderRevisions: {
-        id: 0,
-        tenderItems: [
-          {
-            awardedQuantity: 1,
-            awardedRate: 2,
-            awardedTo: 1,
-            id: 2,
-            productId: 1,
-            product: {
-              awardedToName: "Testor",
-              productName: "Zer",
-              requestedGenericName: "Zept",
-              requestedPackingSize: "15ml vail",
-              type: "read-only",
+      tenderRevisions: [
+        {
+          id: 0,
+          tenderItems: [
+            {
+              awardedQuantity: 1,
+              awardedRate: 2,
+              awardedToId: 1,
+              id: 2,
+              productId: 1,
+              product: {
+                awardedToName: "Testor",
+                productName: "Zer",
+                requestedGenericName: "Zept",
+                requestedPackingSize: "15ml vail",
+                type: "read-only",
+              },
             },
-          },
-        ],
-      },
+          ],
+        },
+      ],
     },
   });
   const [tenderDataCopy, setTenderDataCopy] = useState<TenderData>({
@@ -553,7 +608,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 
   // ✅ Update applicable condition fields
-  const updateApplicableCondition = useCallback( 
+  const updateApplicableCondition = useCallback(
     (
       conditionType: string,
       key: keyof applicableSupplyConditions,
@@ -591,10 +646,15 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         tenderDocuments: [
           ...(prev.tenderDocuments || []),
           {
+            id: document?.id,
             documentType: documentType,
-            category: documentCategory,
-            subCategory: documentSubCategory,
-            name: document?.name || documentName || "",
+            documentCategory: documentCategory,
+            documentSubCategory: documentSubCategory,
+            documentName:
+              document?.documentName ||
+              document?.document?.name ||
+              documentName ||
+              "",
             documentPath: documentPath || "",
             documentStorageId: documentStorageId || 0,
             data: document?.document || undefined,
@@ -619,16 +679,16 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           ...(prev.tenderDocuments?.filter(
             (document) =>
               !(
-                document.name == documentName &&
+                document.documentName == documentName &&
                 document.documentType == documentType &&
-                document.category == documentCategory &&
-                document.subCategory == documentSubCategory
+                document.documentCategory == documentCategory &&
+                document.documentSubCategory == documentSubCategory
               )
           ) || []),
         ],
       }));
     },
-    [tenderData, tenderDataCopy, setTenderData]
+    [tenderData, setTenderData]
   );
 
   // const addDocumentToExistingType = (docType: string, document: Document) => {
@@ -836,23 +896,26 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         ...prev,
         tenderContract: {
           ...prev.tenderContract,
-          tenderRevisions: {
-            id: prev.tenderContract?.tenderRevisions?.id || 0,
-            tenderItems: prev.tenderContract?.tenderRevisions?.tenderItems?.map(
-              (item) =>
-                item.id === id || item.productId === id
-                  ? key.startsWith("product.")
-                    ? {
-                        ...item,
-                        product: {
-                          ...item.product,
-                          [key.split(".")[1]]: value, // Update the nested product field
-                        },
-                      }
-                    : { ...item, [key]: value } // Update the top-level field
-                  : item
-            ),
-          },
+          tenderRevisions: [
+            {
+              id: prev.tenderContract?.tenderRevisions?.[0]?.id || 0,
+              tenderItems:
+                prev.tenderContract?.tenderRevisions?.[0].tenderItems?.map(
+                  (item) =>
+                    item.id === id || item.productId === id
+                      ? key.startsWith("product.")
+                        ? {
+                            ...item,
+                            product: {
+                              ...item.product,
+                              [key.split(".")[1]]: value, // Update the nested product field
+                            },
+                          }
+                        : { ...item, [key]: value } // Update the top-level field
+                      : item
+                ),
+            },
+          ],
         },
       }));
     },
@@ -974,7 +1037,37 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   const saveTender = useCallback(
     async (status: string) => {
       if (!tenderData) return;
-      const tenderSaveData = {
+      let documentRequestId = 0;
+      const tenderSaveDocuments = tenderData.tenderDocuments?.map((x) => {
+        documentRequestId = documentRequestId - 1;
+        return { ...x, requestId: documentRequestId };
+      });
+      const formData = new FormData();
+
+      tenderSaveDocuments?.forEach((doc, index) => {
+        console.log(
+          doc.data,
+          typeof doc.data,
+          doc.data instanceof File,
+          doc.data instanceof Blob
+        );
+        // const blob = new Blob([doc.data.arrayBuffer()], {
+        //   type: "application/pdf",
+        // });
+        if (doc.data) {
+          formData.append(
+            `tenderDocuments[${index}].requestId`,
+            doc.requestId.toString()
+          );
+
+          formData.append(
+            `tenderDocuments[${index}].Document`,
+            doc.data,
+            doc.documentName
+          ); // File/Blob object
+        }
+      });
+      let tenderSaveData = {
         customerId: tenderData.customerId,
         customerAddressId: tenderData.customerAddressId,
         tenderNumber: tenderData.tenderNumber,
@@ -988,7 +1081,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         extendedDeliveryPeriod: tenderData.extendedDeliveryPeriod,
         lateDeliveryPenalty: tenderData.lateDeliveryPenalty,
         tenderUrl: tenderData.tenderUrl,
-        shippingLocations: tenderData.shippingLocations.join(","),
+        shippingLocations: tenderData.shippingLocations,
         appliedBy:
           tenderData.applierType.toLowerCase() == "organization"
             ? "IPCA"
@@ -1022,65 +1115,141 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               currency: x.currency,
               paidBy: x.paidBy,
               paymentMode: x.paymentMode,
+              refundEligibility: x.refundEligibility,
               paymentDueDate: x.paymentDueDate,
               instructionNotes: x.instructionNotes,
             };
           }),
         tenderSupplyCondition: {
           ...tenderData.tenderSupplyCondition,
-          eligibility: tenderData.tenderSupplyCondition.eligibility.join(","),
-          applicableConditions: JSON.stringify(
-            tenderData.tenderSupplyCondition.applicableConditions
-          ),
+          eligibility: tenderData.tenderSupplyCondition.eligibility,
+          applicableConditions:
+            tenderData.tenderSupplyCondition.applicableConditions.filter(
+              (x) => x.status == "ACTV"
+            ),
         },
         tenderDocuments:
-          tenderData.tenderDocuments?.map(async (x) => {
-            const base64String = x.data ? await fileToBase64(x.data) : "";
+          tenderSaveDocuments?.map((x) => {
+            // const newDocs=new FormData();
+            // newDocs.append("name",x.name);
+            // newDocs.append("data",x.data as Blob);
+            // newDocs.append("documentType",x.name);
+            // newDocs.append("category",x.name);
+            // const base64String = x.data ? await fileToBase64(x.data) : "";
             return {
-              name: x.name,
-              data: x.data,
+              documentName: x.documentName,
+              documentStorageId: x.documentStorageId,
               documentType: x.documentType,
-              category: x.category,
+              documentCategory: x.documentCategory,
+              documentSubCategory: x.documentSubCategory,
             };
           }) || [],
         comments: null,
       };
       delete tenderSaveData.tenderSupplyCondition.id;
-      const dataToSend = stripReadOnlyProperties({
-        ...tenderSaveData,
-        status: status.toUpperCase(),
-        lastUpdatedBy: 3,
-      });
-
-      console.log("sAVEEEE", dataToSend);
       try {
-        await fetchData({
-          url: saveTenderurl,
-          method: "POST",
-          dataObject: dataToSend,
-        }).then((res) => {
-          if (res.code === 200) {
-            setActionStatus({
-              notiMsg: "Tender Created Successfully",
-              notiType: "success",
-              showNotification: true,
+        if (
+          tenderData?.tenderDocuments &&
+          tenderData.tenderDocuments.length > 0 &&
+          tenderData.tenderDocuments.filter((x) => x.id == undefined).length > 0
+        )
+          await fetch(saveDocumentUrl, {
+            method: "POST",
+            body: formData,
+          }).then((result) => {
+            result.json().then(async (docRes) => {
+              if (docRes.code == 200) {
+                tenderSaveData = {
+                  ...tenderSaveData,
+                  tenderDocuments:
+                    tenderSaveDocuments?.map((x) => {
+                      // const newDocs=new FormData();
+                      // newDocs.append("name",x.name);
+                      // newDocs.append("data",x.data as Blob);
+                      // newDocs.append("documentType",x.name);
+                      // newDocs.append("category",x.name);
+                      // const base64String = x.data ? await fileToBase64(x.data) : "";
+                      return {
+                        documentName: x.documentName,
+                        documentStorageId: docRes.result.result[x.requestId],
+                        documentType: x.documentType,
+                        documentCategory: x.documentCategory,
+                        documentSubCategory: x.documentSubCategory,
+                      };
+                    }) || [],
+                };
+                const dataToSend = stripReadOnlyProperties({
+                  ...tenderSaveData,
+                  // status: status.toUpperCase(),
+                  lastUpdatedBy: 3,
+                });
+
+                console.log("sAVEEEE", dataToSend);
+                await fetch(saveTenderurl, {
+                  method: "POST",
+                  body: dataToSend,
+                }).then((result) => {
+                  result.json().then((res) => {
+                    if (res.code === 200) {
+                      setActionStatus({
+                        notiMsg: "Tender Created Successfully",
+                        notiType: "success",
+                        showNotification: true,
+                      });
+                      showToaster("create-order-toaster");
+                      setTimeout(() => {
+                        goBack();
+                      }, closeTimeForTender);
+                    } else {
+                      setActionStatus({
+                        notiMsg: "Tender could not be saved",
+                        notiType: "error",
+                        showNotification: true,
+                      });
+                      showToaster("create-order-toaster");
+                    }
+                  });
+                });
+                // console.log("result  = ", result);
+                //console.log("Order saved successfully");
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              }
             });
-            showToaster("create-order-toaster");
-            setTimeout(() => {
-              goBack();
-            }, closeTimeForTender);
-          } else {
-            setActionStatus({
-              notiMsg: "Tender could not be saved",
-              notiType: "error",
-              showNotification: true,
+          });
+        else {
+          const dataToSend = stripReadOnlyProperties({
+            ...tenderSaveData,
+            // status: status.toUpperCase(),
+            lastUpdatedBy: 3,
+          });
+
+          console.log("sAVEEEE", dataToSend);
+          await fetch(saveTenderurl, {
+            method: "POST",
+            body: dataToSend,
+          }).then((result) => {
+            result.json().then((res) => {
+              if (res.code === 200) {
+                setActionStatus({
+                  notiMsg: "Tender Created Successfully",
+                  notiType: "success",
+                  showNotification: true,
+                });
+                showToaster("create-order-toaster");
+                setTimeout(() => {
+                  goBack();
+                }, closeTimeForTender);
+              } else {
+                setActionStatus({
+                  notiMsg: "Tender could not be saved",
+                  notiType: "error",
+                  showNotification: true,
+                });
+                showToaster("create-order-toaster");
+              }
             });
-            showToaster("create-order-toaster");
-          }
-        });
-        // console.log("result  = ", result);
-        //console.log("Order saved successfully"); 
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          });
+        }
       } catch (error) {
         // console.error("Error saving order:", error);
       }
@@ -1091,6 +1260,42 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   const updateTender = useCallback(
     async (status: string) => {
       try {
+        let documentRequestId = 0;
+        const tenderOriginalDocuments = tenderDataCopy.tenderDocuments?.map(
+          (x) => {
+            documentRequestId = documentRequestId - 1;
+            return { ...x, requestId: documentRequestId };
+          }
+        );
+        const tenderSaveDocuments = tenderData.tenderDocuments?.map((x) => {
+          documentRequestId = documentRequestId - 1;
+          return { ...x, requestId: documentRequestId };
+        });
+        const formData = new FormData();
+
+        tenderSaveDocuments?.forEach((doc, index) => {
+          console.log(
+            doc.data,
+            typeof doc.data,
+            doc.data instanceof File,
+            doc.data instanceof Blob
+          );
+          // const blob = new Blob([doc.data.arrayBuffer()], {
+          //   type: "application/pdf",
+          // });
+          if (doc.data) {
+            formData.append(
+              `tenderDocuments[${index}].requestId`,
+              doc.requestId.toString()
+            );
+
+            formData.append(
+              `tenderDocuments[${index}].Document`,
+              doc.data,
+              doc.documentName
+            ); // File/Blob object
+          }
+        });
         const copylatestTenderRevision =
           tenderDataCopy.tenderRevisions?.length > 0
             ? [
@@ -1106,7 +1311,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             tenderData.tenderRevisions[0]
           ),
         ];
-        const dataToSendTenderCopy = stripReadOnlyProperties({
+        let dataToSendTenderCopy: any = stripReadOnlyProperties({
           ...tenderDataCopy,
           shippingLocations: tenderDataCopy.shippingLocations,
           appliedBy:
@@ -1125,16 +1330,82 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             tenderDataCopy.supplierType.toLowerCase() == "organization"
               ? null
               : tenderDataCopy.supplierId,
-          tenderSupplyCondition:
-            {
-              ...tenderDataCopy.tenderSupplyCondition,
-              eligibility:
-                tenderDataCopy.tenderSupplyCondition.eligibility,
-              applicableConditions: 
-                tenderDataCopy.tenderSupplyCondition.applicableConditions
-              ,
-            },
-
+          // tenderFees: tenderDataCopy.tenderFees
+          //   .filter((x) => x.status == "ACTV")
+          //   .map((x) => {
+          //     return {
+          //       id: x.id,
+          //       feesType: x.feesType,
+          //       amount: x.amount,
+          //       currency: x.currency,
+          //       paidBy: x.paidBy,
+          //       paymentMode: x.paymentMode,
+          //       refundEligibility: x.refundEligibility,
+          //       paymentDate: x.paymentDate,
+          //       paymentDueDate: x.paymentDueDate,
+          //       paymentRefundDate: x.paymentRefundDate,
+          //       paymentStatus: x.paymentStatus,
+          //       paymentRefundStatus: x.paymentRefundStatus,
+          //       instructionNotes: x.instructionNotes,
+          //       refundNotes: x.refundNotes,
+          //       paymentTransactionId: x.paymentTransactionId,
+          //       paymentReceiptId: x.paymentReceiptId,
+          //       acknowledgementReceiptId: x.acknowledgementReceiptId,
+          //       fundTransferConfirmationId: x.fundTransferConfirmationId,
+          //     };
+          //   }),
+          tenderSupplyCondition: {
+            ...tenderDataCopy.tenderSupplyCondition,
+            eligibility: tenderDataCopy.tenderSupplyCondition.eligibility,
+            applicableConditions:
+              tenderDataCopy.tenderSupplyCondition.applicableConditions
+                .filter((x) => x.status == "ACTV")
+                .map((x) => {
+                  return {
+                    id: x.id,
+                    type: x.type,
+                    notes: x.notes,
+                  };
+                }),
+          },
+          tenderFees: tenderDataCopy.tenderFees
+            .filter((x) => x.status == "ACTV")
+            .map((x) => {
+              return {
+                id: x.id,
+                feesType: x.feesType,
+                amount: x.amount,
+                currency: x.currency,
+                paidBy: x.paidBy,
+                paymentMode: x.paymentMode,
+                refundEligibility: x.refundEligibility,
+                paymentDueDate: x.paymentDueDate,
+                paymentStatus: x.paymentStatus,
+                instructionNotes: x.instructionNotes,
+                refundNotes: x.refundNotes,
+                paymentTransactionId: x.paymentTransactionId,
+                paymentReceiptId: x.paymentReceiptId,
+                acknowledgmentReceiptId: x.acknowledgementReceiptId,
+                fundTransferConfirmationId: x.fundTransferConfirmationId,
+              };
+            }),
+          tenderDocuments:
+            tenderOriginalDocuments?.map((x) => {
+              // const newDocs=new FormData();
+              // newDocs.append("name",x.name);
+              // newDocs.append("data",x.data as Blob);
+              // newDocs.append("documentType",x.name);
+              // newDocs.append("category",x.name);
+              // const base64String = x.data ? await fileToBase64(x.data) : "";
+              return {
+                id: x.id,
+                documentName: x.documentName,
+                documentStorageId: x.documentStorageId,
+                documentType: x.documentType,
+                documentCategory: x.documentCategory,
+                documentSubCategory: x.documentSubCategory,
+              };
+            }) || [],
           // tenderRevisions: copylatestTenderRevision,
           tenderRevisions: copylatestTenderRevision.map((x) => {
             if (x.id) return { id: x.id, tenderItems: x.tenderItems };
@@ -1143,7 +1414,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         });
         delete dataToSendTenderCopy.applierType;
         delete dataToSendTenderCopy.supplierType;
-        const dataToSendOriginalTender = stripReadOnlyProperties({
+        let dataToSendOriginalTender: any = stripReadOnlyProperties({
           ...tenderData,
           shippingLocations: tenderData.shippingLocations,
           appliedBy:
@@ -1162,17 +1433,63 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             tenderData.supplierType.toLowerCase() == "organization"
               ? null
               : tenderData.supplierId,
-          tenderSupplyCondition:
-            {
-              ...tenderData.tenderSupplyCondition,
-              eligibility:
-                tenderData.tenderSupplyCondition.eligibility,
+          tenderFees: tenderData.tenderFees
+            .filter((x) => x.status == "ACTV")
+            .map((x) => {
+              return {
+                id: x.id,
+                feesType: x.feesType,
+                amount: x.amount,
+                currency: x.currency,
+                paidBy: x.paidBy,
+                paymentMode: x.paymentMode,
+                refundEligibility: x.refundEligibility,
+                paymentDate: x.paymentDate,
+                paymentDueDate: x.paymentDueDate,
+                paymentRefundDate: x.paymentRefundDate,
+                paymentStatus: x.paymentStatus,
+                paymentRefundStatus: x.paymentRefundStatus,
+                instructionNotes: x.instructionNotes,
+                refundNotes: x.refundNotes,
+                paymentTransactionId: x.paymentTransactionId,
+                paymentReceiptId: x.paymentReceiptId,
+                acknowledgementReceiptId: x.acknowledgementReceiptId,
+                fundTransferConfirmationId: x.fundTransferConfirmationId,
+              };
+            }),
+          tenderSupplyCondition: {
+            ...tenderData.tenderSupplyCondition,
+            eligibility: tenderData.tenderSupplyCondition.eligibility,
 
-              applicableConditions: 
-                tenderData.tenderSupplyCondition.applicableConditions
-              ,
-            },
-
+            applicableConditions:
+              tenderData.tenderSupplyCondition.applicableConditions
+                .filter((x) => x.status == "ACTV")
+                .map((x) => {
+                  return {
+                    id: x.id,
+                    type: x.type,
+                    notes: x.notes,
+                    status: x.status,
+                  };
+                }),
+          },
+          tenderDocuments:
+            tenderSaveDocuments?.map((x) => {
+              // const newDocs=new FormData();
+              // newDocs.append("name",x.name);
+              // newDocs.append("data",x.data as Blob);
+              // newDocs.append("documentType",x.name);
+              // newDocs.append("category",x.name);
+              // const base64String = x.data ? await fileToBase64(x.data) : "";
+              return {
+                id: x.id,
+                documentName: x.documentName,
+                documentStorageId: x.documentStorageId,
+                documentType: x.documentType,
+                documentCategory: x.documentCategory,
+                documentSubCategory: x.documentSubCategory,
+              };
+            }) || [],
           // tenderRevisions: latestTenderRevision,
           tenderRevisions: latestTenderRevision.map((x) => {
             if (x.id) return { id: x.id, tenderItems: x.tenderItems };
@@ -1181,43 +1498,122 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         });
         delete dataToSendOriginalTender.applierType;
         delete dataToSendOriginalTender.supplierType;
-
-        const patchDocument = generatePatchDocument(
-          dataToSendTenderCopy,
-          dataToSendOriginalTender
-        );
         let url = saveTenderurl + "/" + tenderData.id;
         if (
-          status.toLowerCase() == DsStatus.AWRD ||
-          status == DsStatus.PAWRD ||
-          status == DsStatus.LOST ||
-          status == DsStatus.CNCL
-        )
+          status.toLowerCase() == DsStatus.AWRD.toLowerCase() ||
+          status.toLowerCase() == DsStatus.PAWRD.toLowerCase() ||
+          status.toLowerCase() == DsStatus.LOST.toLowerCase() ||
+          status.toLowerCase() == DsStatus.CNCL.toLowerCase()
+        ) {
           url = getTenderByTenderId + tenderData.id + "/contract";
-        await fetchData({
-          url: url,
-          method: "PATCH",
-          dataObject: patchDocument,
-        }).then((res) => {
-          if (res.code === 200) {
-            setActionStatus({
-              notiMsg: "Tender Updated Successfully",
-              notiType: "success",
-              showNotification: true,
+          dataToSendTenderCopy = stripReadOnlyProperties({
+            ...dataToSendTenderCopy.tenderContract,
+            tenderDocuments: dataToSendTenderCopy.tenderDocuments,
+            status: dataToSendTenderCopy.status,
+            lastUpdatedBy: dataToSendTenderCopy.lastUpdatedBy,
+          });
+          dataToSendOriginalTender = stripReadOnlyProperties({
+            ...dataToSendOriginalTender.tenderContract,
+            tenderDocuments: dataToSendOriginalTender.tenderDocuments,
+            status: dataToSendOriginalTender.status,
+            lastUpdatedBy: dataToSendOriginalTender.lastUpdatedBy,
+          });
+        }
+
+        if (
+          tenderData?.tenderDocuments &&
+          tenderData.tenderDocuments.length > 0 &&
+          tenderData.tenderDocuments.filter((x) => x.id == undefined).length > 0
+        ) {
+          await fetch(saveDocumentUrl, {
+            method: "POST",
+            body: formData,
+          }).then((result) => {
+            result.json().then(async (docRes) => {
+              if (docRes.code == 200) {
+                dataToSendOriginalTender = stripReadOnlyProperties({
+                  ...dataToSendOriginalTender,
+                  tenderDocuments:
+                    tenderSaveDocuments?.map((x) => {
+                      // const newDocs=new FormData();
+                      // newDocs.append("name",x.name);
+                      // newDocs.append("data",x.data as Blob);
+                      // newDocs.append("documentType",x.name);
+                      // newDocs.append("category",x.name);
+                      // const base64String = x.data ? await fileToBase64(x.data) : "";
+                      return {
+                        documentName: x.documentName,
+                        documentStorageId: docRes.result.result[x.requestId],
+                        documentType: x.documentType,
+                        documentCategory: x.documentCategory,
+                        documentSubCategory: x.documentSubCategory,
+                      };
+                    }) || [],
+                });
+
+                const patchDocument = generatePatchDocument(
+                  dataToSendTenderCopy,
+                  dataToSendOriginalTender
+                );
+
+                await fetchData({
+                  url: url,
+                  method: "PATCH",
+                  dataObject: patchDocument,
+                }).then((res) => {
+                  if (res.code === 200) {
+                    setActionStatus({
+                      notiMsg: "Tender Updated Successfully",
+                      notiType: "success",
+                      showNotification: true,
+                    });
+                    showToaster("create-order-toaster");
+                    setTimeout(() => {
+                      goBack();
+                    }, closeTimeForTender);
+                  } else {
+                    setActionStatus({
+                      notiMsg: "Tender could not be updated",
+                      notiType: "error",
+                      showNotification: true,
+                    });
+                    showToaster("create-order-toaster");
+                  }
+                });
+              }
             });
-            showToaster("create-order-toaster");
-            setTimeout(() => {
-              goBack();
-            }, closeTimeForTender);
-          } else {
-            setActionStatus({
-              notiMsg: "Tender could not be updated",
-              notiType: "error",
-              showNotification: true,
-            });
-            showToaster("create-order-toaster");
-          }
-        });
+          });
+        } else {
+          const patchDocument = generatePatchDocument(
+            dataToSendTenderCopy,
+            dataToSendOriginalTender
+          );
+
+          await fetchData({
+            url: url,
+            method: "PATCH",
+            dataObject: patchDocument,
+          }).then((res) => {
+            if (res.code === 200) {
+              setActionStatus({
+                notiMsg: "Tender Updated Successfully",
+                notiType: "success",
+                showNotification: true,
+              });
+              showToaster("create-order-toaster");
+              setTimeout(() => {
+                goBack();
+              }, closeTimeForTender);
+            } else {
+              setActionStatus({
+                notiMsg: "Tender could not be updated",
+                notiType: "error",
+                showNotification: true,
+              });
+              showToaster("create-order-toaster");
+            }
+          });
+        }
       } catch (error) {
         console.error("Error saving order:", error);
       }
@@ -1335,7 +1731,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             "Content-Type": "application/json",
             ...(tenderStatus &&
               tenderStatus != "newPricingVersion" && {
-                "x-contract-status": `{"tenderStatus":"${tenderStatus}"}`,
+                "x-contract-status": `${tenderStatus}`,
               }),
           },
         });
@@ -1383,18 +1779,21 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           tenderRevisions: tenderData.tenderRevisions,
           tenderFees: tenderData.tenderFees.map((fee) => ({
             ...fee,
+            paymentReceiptId: fee.paymentRecieptId,
             status: "ACTV",
           })),
           tenderSupplyCondition: {
             ...tenderData.tenderSupplyCondition,
             applicableConditions:
-              tenderData.tenderSupplyCondition.applicableConditions?.map(
-                (ac) => ({
+              tenderData.tenderSupplyCondition.applicableConditions
+                // ?.filter((x) => x.status == "ACTV")
+                .map((ac) => ({
                   ...ac,
                   status: "ACTV",
                 })
               ),
           },
+          tenderContract: { ...tenderData.tenderContract },
         };
         // console.log("km", newTenderData);
         if (tenderStatus == "newPricingVersion") {
@@ -1483,18 +1882,17 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             fundTransferConfirmationId: undefined,
             status: "ACTV",
           })),
-          tenderSupplyCondition: 
-            {
-              ...tenderData.tenderSupplyCondition,
-              applicableConditions:
-                tenderData.tenderSupplyCondition.applicableConditions?.map(
-                  (ac) => ({
-                    ...ac,
-                    status: "ACTV",
-                  })
-                ),
-            },
-          
+          tenderSupplyCondition: {
+            ...tenderData.tenderSupplyCondition,
+            applicableConditions:
+              tenderData.tenderSupplyCondition.applicableConditions?.map(
+                (ac) => ({
+                  ...ac,
+                  status: "ACTV",
+                })
+              ),
+          },
+
           status: "Draft",
           lastUpdatedBy: 0,
           tenderContract: undefined,
@@ -1509,7 +1907,148 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     },
     [fetchData]
   );
+  const fetchMetaData = useCallback(async () => {
+    await fetchData({
+      url: getAllMetaData,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-tender-codes": JSON.stringify(metaDataTypes),
+      },
+    })
+      .then((res) => {
+        if (res.code === 200) {
+          const result = res.result;
+          console.log("AAAAAAAAAAAAAAAAAA",result);
 
+          const metaData = {
+            tenderType: (result.tenderType || []).map(
+              (item: { codeValue: string; codeDescription: string }) => ({
+                value: item.codeValue,
+                label: item.codeDescription,
+              })
+            ),
+            submissionMode: (result.submissionMode || []).map(
+              (item: { codeValue: string; codeDescription: string }) => ({
+                value: item.codeValue,
+                label: item.codeDescription,
+              })
+            ),
+            supplyPoints: (result.supplyPoint || []).map(
+              (item: { codeValue: string; codeDescription: string }) => ({
+                value: item.codeValue,
+                label: item.codeDescription,
+              })
+            ),
+            testReportRequired: (result.testReportRequired || []).map(
+              (item: { codeValue: string; codeDescription: string }) => ({
+                value: item.codeValue,
+                label: item.codeDescription,
+              })
+            ),
+            eligibility: (result.eligibility || []).map(
+              (item: { codeValue: string; codeDescription: string }) => ({
+                value: item.codeValue,
+                label: item.codeDescription,
+              })
+            ),
+            feesType: (result.feesType || []).map(
+              (item: { codeValue: string; codeDescription: string }) => ({
+                value: item.codeValue,
+                label: item.codeDescription,
+              })
+            ),
+            tenderEmdPayment:(result.tenderEmdPayment || []).map(
+              (item: { codeValue: string; codeDescription: string }) => ({
+                value: item.codeValue,
+                label: item.codeDescription,
+              })
+            ),
+            tenderFeesPayment:(result.tenderFeesPayment || []).map(
+              (item: { codeValue: string; codeDescription: string }) => ({
+                value: item.codeValue,
+                label: item.codeDescription,
+              })
+            ),
+            tenderPsdPayment:(result.tenderPsdPayment || []).map(
+              (item: { codeValue: string; codeDescription: string }) => ({
+                value: item.codeValue,
+                label: item.codeDescription,
+              })
+            ),
+            applicableSupplyConditions: (
+              result.tenderSupplyCondition || []
+            ).map((item: { codeValue: string; codeDescription: string }) => ({
+              value: item.codeValue,
+              label: item.codeDescription,
+            })),
+            paymentModes: (result.paymentMode || []).map(
+              (item: { codeValue: string; codeDescription: string }) => ({
+                value: item.codeValue, // Optional: Lowercase if needed
+                label: item.codeDescription,
+              })
+            ),
+            refundEligibility: (result.refundEligibility || []).map(
+              (item: { codeValue: string; codeDescription: string }) => ({
+                value: item.codeValue,
+                label: item.codeDescription,
+              })
+            ),
+            tenderPartiallyAwardedJustification: (
+              result.tenderPartiallyAwardedJustification || []
+            ).map((item: { codeValue: string; codeDescription: string }) => ({
+              value: item.codeValue,
+              label: item.codeDescription,
+            })),
+            tenderLostJustification: (result.tenderLostJustification || []).map(
+              (item: { codeValue: string; codeDescription: string }) => ({
+                value: item.codeValue,
+                label: item.codeDescription,
+              })
+            ),
+            tenderAwardedJustification: (
+              result.tenderAwardedJustification || []
+            ).map((item: { codeValue: string; codeDescription: string }) => ({
+              value: item.codeValue,
+              label: item.codeDescription,
+            })),
+            tenderCancelledJustification: (
+              result.tenderCancelledJustification || []
+            ).map((item: { codeValue: string; codeDescription: string }) => ({
+              value: item.codeValue,
+              label: item.codeDescription,
+            })),
+            tenderApproveJustification: (
+              result.justificationApproveType || []
+            ).map((item: { codeValue: string; codeDescription: string }) => ({
+              value: item.codeValue,
+              label: item.codeDescription,
+            })),
+            tenderRejectJustification: (
+              result.justificationRejectType || []
+            ).map((item: { codeValue: string; codeDescription: string }) => ({
+              value: item.codeValue,
+              label: item.codeDescription,
+            })),
+            tenderReviseJustification: (
+              result.justificationReviseType || []
+            ).map((item: { codeValue: string; codeDescription: string }) => ({
+              value: item.codeValue,
+              label: item.codeDescription,
+            })),
+          };
+          setMetaData(metaData);
+        } else {
+          console.error(
+            "Error fetching data: ",
+            res.message || "Unknown error"
+          );
+        }
+      })
+      .catch((error) => {
+        console.error("Fetch error: ", error);
+      });
+  }, [metaDataTypes]);
   // const fetchPreviousTenderData = useCallback(async (customerId: number) => {
   //   try {
   //     const res = await fetchData({
@@ -1526,6 +2065,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       value={{
         tenderData,
         tenderDataCopy,
+        metaData,
         actionStatus,
         updateTenderData,
         updateTenderFee,
@@ -1545,6 +2085,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         setActionStatusValues,
         fetchAndSetOriginalTender,
         fetchAndSetPreviousTender,
+        fetchMetaData,
         updateContractDetails,
         updateContractItems,
         saveTender,

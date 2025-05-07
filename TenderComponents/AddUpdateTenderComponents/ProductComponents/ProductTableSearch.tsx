@@ -1,7 +1,7 @@
 import DsInfoDisplay from "@/Elements/ERPComponents/DsInfoDisplay/DsInfoDisplay";
 import { searchProductsURL } from "@/Common/helpers/constant";
 // import { TenderProduct } from "@/Common/helpers/types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { areSearchProduct } from "./productSearch";
 import DsSearchComponent from "@/Elements/DsComponents/DsSearch/searchComponent";
 import { TenderProduct } from "../TenderDataContextProvider";
@@ -45,6 +45,10 @@ const ProductTableSearch: React.FC<TableSearchProps> = ({
   const [productOptions, setProductOptions] = useState<
     { id: number; name: string; packSize: string }[]
   >([]);
+  const [val, setVal] = useState(initialValue);
+  useEffect(() => {
+    setVal(initialValue);
+  }, [initialValue]);
   return (
     <DsSearchComponent
       id={`ProductTableSearch${tableRowIndex + 1}`}
@@ -83,8 +87,8 @@ const ProductTableSearch: React.FC<TableSearchProps> = ({
       setSearchUrl={function (searchTerm: string): string {
         return searchProductsURL + searchTerm;
       }}
-      onClick={(e)=>e.stopPropagation()}
-      initialValue={initialValue}
+      onClick={(e) => e.stopPropagation()}
+      initialValue={val}
     />
   );
 };

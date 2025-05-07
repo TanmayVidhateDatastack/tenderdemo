@@ -5,9 +5,10 @@ import deptStyle from "./deposite.module.css";
 import { useEffect, useState } from "react";
 import { getTenderUserRoles } from "@/Common/helpers/constant";
 import {
-  tenderDetailsProps,
+  // tenderDetailsProps,
   location,
   DsSelectOption,
+  tenderDetailsProps,
 } from "@/Common/helpers/types";
 import { useTenderData } from "../TenderDataContextProvider";
 import DsDatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker";
@@ -23,7 +24,7 @@ import { setVisibilityByRole } from "@/Redux/slice/PermissionSlice/permissionSli
 import FetchCustomer from "./fetchcustomerComponent";
 import { useAppSelector } from "@/Redux/hook/hook";
 import { RootState } from "@/Redux/store/store";
-const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
+const DsTenderDetails: React.FC = () => {
   const [fetchVisible, setFetchVisible] = useState(true);
   const [role, setRole] = useState("checker");
   const [pos, setPos] = useState<
@@ -40,15 +41,16 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
     "success" | "bonus" | "info" | "error"
   >("info");
   const [showNotification, setShowNotification] = useState<boolean>(true);
-  const { updateTenderData, tenderData, tenderDataCopy } = useTenderData();
+  const { updateTenderData, tenderData, tenderDataCopy, metaData } =
+    useTenderData();
   const [customerLocations, setCustomerLocations] = useState<location[]>([]);
 
   // const [cust, setCust] = useState<DsSelectOption>();
   //     value:
   //     label:
-  
-    const permissions = useAppSelector((state: RootState) => state.permissions);
-    const { fetchCustomerButtonVisible } = permissions;
+
+  const permissions = useAppSelector((state: RootState) => state.permissions);
+  const { fetchCustomerButtonVisible,disable } = permissions;
 
   const handleRoleFetch = async () => {
     try {
@@ -69,7 +71,6 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
     handleRoleFetch();
   }, []);
 
-
   const getTodayDate = (date: Date) => {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -83,24 +84,24 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
   useEffect(() => {
     const tenderType = tenderData.tenderType;
     if (tenderType) {
-      const option = tenderDetails.tenderType.find(
+      const option = (metaData.tenderType || []).find(
         (x) => x.value == tenderType
       );
       if (option) setSelectedTenderType(option);
     }
-  }, [tenderData.tenderType, tenderDetails.tenderType]);
+  }, [tenderData.tenderType, metaData.tenderType]);
 
   const [selectedSubmissionMode, setSelectedSubmissionMode] =
     useState<DsSelectOption>();
   useEffect(() => {
     const submissionMode = tenderData.submissionMode;
     if (submissionMode) {
-      const option = tenderDetails.submissionMode.find(
+      const option = (metaData.submissionMode || []).find(
         (x) => x.value == submissionMode
       );
       if (option) setSelectedSubmissionMode(option);
     }
-  }, [tenderData.submissionMode, tenderDetails.submissionMode]);
+  }, [tenderData.submissionMode, metaData.submissionMode]);
 
   return (
     <>
@@ -116,24 +117,26 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
         }
         showArrow={true}
       />
-      <div className={styles.inputDetails}>
-        <div className={deptStyle.fields}>
-          <CustomerSearch
-            customer={tenderData.tenderDetails.customerName}
-            orderData={undefined}
-            setCustomerLocations={setCustomerLocations}
-            updateTenderData={updateTenderData}
-          />
-        </div>
 
-        {fetchCustomerButtonVisible &&  !(tenderDataCopy.id && tenderDataCopy.id !==0)  && ( 
-          <div className={deptStyle.fields}> 
+      <div className={styles.inputDetails}>
+        {/* <div className={deptStyle.fields}> */}
+        <CustomerSearch
+          customer={tenderData.tenderDetails.customerName}
+          orderData={undefined}
+          setCustomerLocations={setCustomerLocations}
+          updateTenderData={updateTenderData}
+        />
+        {/* </div> */}
+
+        {fetchCustomerButtonVisible &&
+          !(tenderDataCopy.id && tenderDataCopy.id !== 0) && (
+            // <div className={deptStyle.fields}>
             <DsButton
               id="copyBtn"
               label="Fetch Information"
               buttonViewStyle="btnText"
               buttonSize="btnSmall"
-              disable={tenderData.customerId ? false : true}
+              disable={tenderData.customerId ? false : true }
               className={deptStyle.copyBtn}
               startIcon={
                 <div style={{ width: "0.95625em", height: "1.125em" }}>
@@ -151,8 +154,8 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
                 displayContext(e, "contextMenuId5", "horizontal", "center");
               }}
             />
-          </div>
-        )}
+            // </div>
+          )}
         <DsSingleSelect
           containerClasses={styles.fields}
           id="CustomerAddress"
@@ -197,10 +200,11 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
               (e.target as HTMLInputElement).value
             )
           }
+          disable={disable}
         ></DsTextField>
         <DsSingleSelect
           containerClasses={styles.fields}
-          options={tenderDetails.tenderType}
+          options={metaData.tenderType || []}
           label="Tender type"
           // placeholder={"Tender type"}
           id={"tenderType"}
@@ -211,6 +215,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
               console.log("tendertype", option.label);
             }
           }}
+          disable={disable}
         ></DsSingleSelect>
         <DsDatePicker
           containerClasses={styles.fields}
@@ -229,6 +234,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
           // disable={true}
           placeholder="DD/MM/YYYY"
           label="Tender issue date"
+          disable={disable}
         />
         <DsDatePicker
           containerClasses={styles.fields}
@@ -249,6 +255,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
           // disable={true}
           placeholder="DD/MM/YYYY"
           label="Last date of purchasing"
+          disable={disable}
         />
         <DsDatePicker
           containerClasses={styles.fields}
@@ -267,6 +274,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
           // disable={true}
           placeholder="DD/MM/YYYY"
           label="Submission date"
+          disable={disable}
         />
         <DsTextField
           containerClasses={styles.fields}
@@ -280,11 +288,12 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
               (e.target as HTMLInputElement).value
             )
           }
+          disable={disable}
         ></DsTextField>
         <DsSingleSelect
           containerClasses={styles.fields}
           selectedOption={selectedSubmissionMode}
-          options={tenderDetails.submissionMode}
+          options={metaData.submissionMode || []}
           // type={"single"}
           label="Submission mode"
           id={"submissionMode"}
@@ -293,6 +302,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
               updateTenderData("submissionMode", option.value);
             }
           }}
+          disable={disable}
         ></DsSingleSelect>
         <DsTextField
           containerClasses={styles.fields}
@@ -306,6 +316,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
               Number((e.target as HTMLInputElement).value)
             )
           }
+          disable={disable}
         />
         <DsTextField
           containerClasses={styles.fields}
@@ -319,6 +330,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
               Number((e.target as HTMLInputElement).value)
             )
           }
+          disable={disable}
         ></DsTextField>
         <DsTextField
           maximumNumber={100}
@@ -334,6 +346,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
               Number((e.target as HTMLInputElement).value)
             )
           }
+          disable={disable}
         ></DsTextField>
         <DsTextField
           containerClasses={styles.fields}
@@ -343,6 +356,7 @@ const DsTenderDetails: React.FC<tenderDetailsProps> = ({ tenderDetails }) => {
           onBlur={(e) =>
             updateTenderData("tenderUrl", (e.target as HTMLInputElement).value)
           }
+          disable={disable}
         ></DsTextField>
       </div>
     </>

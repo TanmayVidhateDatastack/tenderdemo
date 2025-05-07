@@ -7,7 +7,9 @@ import { DocumentContext } from "./DocumentsContextProvider";
 const DocumentSelectorArea: React.FC = () => {
   const documentContext = useContext(DocumentContext);
   if (!documentContext) {
-    throw new Error("DocumentSelectorArea must be used within a DocumentContext");
+    throw new Error(
+      "DocumentSelectorArea must be used within a DocumentContext"
+    );
   }
 
   const { documentData } = documentContext;
@@ -15,19 +17,23 @@ const DocumentSelectorArea: React.FC = () => {
   const handleRemoveDocument = (documentName: string) => {
     if (!documentContext) return;
 
-    // ✅ Remove document from context   
+    // ✅ Remove document from context
     documentContext.setDocumentData((prevData) =>
       prevData
         .map((group) => ({
           ...group,
-          documents: group.documents.filter((d) => d.document.name !== documentName),
+          documents: group.documents.filter(
+            (d) => d.document.documentName !== documentName
+          ),
         }))
         .filter((group) => group.documents.length > 0)
     );
 
     // ✅ Remove from selectedDocuments & force update
     documentContext.setSelectedDocuments((prev) => {
-      const updatedSelection = prev.filter((d) => d.document.name !== documentName);
+      const updatedSelection = prev.filter(
+        (d) => d.document.documentName !== documentName
+      );
       // console.log("Updated selectedDocuments:", updatedSelection); // Debugging Log
       return updatedSelection;
     });
@@ -36,14 +42,16 @@ const DocumentSelectorArea: React.FC = () => {
   const [totalSelectedDocuments, setTotalSelectedDocuments] = useState(0);
 
   useEffect(() => {
-    const totalCount = documentData.reduce((acc, { documents }) => acc + documents.length, 0);
+    const totalCount = documentData.reduce(
+      (acc, { documents }) => acc + documents.length,
+      0
+    );
     setTotalSelectedDocuments(totalCount);
   }, [documentData]); // Runs whenever documentData changes
 
   useEffect(() => {
     // console.log("total selected documents : ", totalSelectedDocuments);
   }, [totalSelectedDocuments]);
-
 
   return (
     <>
@@ -53,14 +61,13 @@ const DocumentSelectorArea: React.FC = () => {
             <DocumentSelector
               headerTitle={type}
               headerNumber={documents.length.toString()}
-              initialDocuments={documents}
+              initialDocuments={documents.map((x) => x.document.documentName)}
               handleOnRemoveClick={(docName) => handleRemoveDocument(docName)}
             />
           </div>
         ) : null
       )}
-       </>
-
+    </>
   );
 };
 

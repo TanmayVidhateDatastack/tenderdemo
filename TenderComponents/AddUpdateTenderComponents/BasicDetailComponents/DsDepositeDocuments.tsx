@@ -1,7 +1,7 @@
 import styles from "./deposite.module.css";
 import Image from "next/image";
 import downarrow from "@/Common/TenderIcons/smallIcons/verticleArrow.svg";
-import { useEffect, useState } from "react";
+import { useDebugValue, useEffect, useState } from "react";
 import ContextMenu, {
   closeAllContext,
   createContext,
@@ -16,43 +16,30 @@ import { DsSelectOption } from "@/Common/helpers/types";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import DsFeesDocument from "./DsFeesDocument";
 import { useTenderData } from "../TenderDataContextProvider";
-
+ 
 import IconFactory from "@/Elements/IconComponent";
 import DsTenderDetails from "./DsTenderDetails ";
-import fetchData from "@/Common/helpers/Method/fetchData";
-import { getAllMetaData } from "@/Common/helpers/constant";
-export interface DepositDocument {
-  modes: DsSelectOption[];
-  refunds: DsSelectOption[];
-  // paidBy: DsSelectOption[];
-}
+import { useAppSelector } from "@/Redux/hook/hook";
+import { RootState } from "@/Redux/store/store";
+//  interface DepositDocument {
+//   modes: DsSelectOption[];
+//   refunds:DsSelectOption[];
+//   // paidBy: DsSelectOption[];
+// }
 // export interface Deposit {
 //   paidBy: DsSelectOption[];
 // }
-
-export interface FeesDocument {
-  applicableDeposits: DsSelectOption[];
-}
-export interface DepositeDocumentsProps {
-  // setDepositeDocuments: (depositeDocuments: DepositDocument[]) => void;
-  depositeDocument: DepositDocument[] | null;
-  applicableDeposits: DsSelectOption[] | [];
-  role: string;
-}
-const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
-  depositeDocument,
-  applicableDeposits,
-  role,
-}) => {
-  const metaDataTypes = [
-    "TENDER_EMD_PAYMENT",
-    "TENDER_FEES_PAYMENT",
-    "TENDER_PSD_PAYMENT",
-    "FEES_TYPE",
-  ];
-  const [documentTypeOptions, setDocumentTypeOptions] = useState<Record<string,DsSelectOption[]>>({});
-  const [feesoptions, setFeesOptions] = useState<DsSelectOption[]>([]);
-  const [psdoptions, setPsdOptions] = useState<DsSelectOption[]>([]);
+ 
+//  interface FeesDocument {
+//   applicableDeposits: DsSelectOption[];
+// }
+//  interface DepositeDocumentsProps {
+//   setDepositeDocuments: (depositeDocuments: DepositDocument[]) => void;
+//   depositeDocument: DepositDocument[] | null;
+//   applicableDeposits: DsSelectOption[] | [];
+//   role: string;
+// }
+const DsDepositeDocuments: React.FC = () => {
   const contextMenuId = "context-display-10";
   const {
     addTenderFee,
@@ -60,106 +47,75 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
     tenderData,
     tenderDataCopy,
     updateTenderFee,
+    metaData,
   } = useTenderData();
+  const [documentTypeOptions, setDocumentTypeOptions] = useState<
+    Record<string, DsSelectOption[]>
+  >({});
   const [mode, setMode] = useState<DsSelectOption[]>([]);
   const [refund, setRefund] = useState<DsSelectOption[]>([]);
   const [paidBy, setPaidBy] = useState<DsSelectOption[]>([]);
   const [applicablefees, SetApplicablefees] = useState<DsSelectOption[]>([]);
   const [paymentCheckVisible, setPaymentCheckVisible] =
     useState<boolean>(false);
+  const [recoveryPaymentVisible,setrecoveryPaymentVisible]= useState<boolean>(false)
   const [feeVisibility, setFeeVisibility] = useState<Record<string, boolean>>({
     "": true,
   });
+
+  // const [feeVisibility1, setFeeVisibility1] = useState<Record<string, boolean>>({"": true,});
+
+  const role = useAppSelector((state: RootState) => state.user.role);
+ 
   useEffect(() => {
     if (role == "MAKER" || role == "CHECKER") {
       setPaymentCheckVisible(false);
     } else {
       setPaymentCheckVisible(true);
     }
-    const handleFetchpayments = async () => {
-      try {
-        const metaData = await fetchData({
-          url: getAllMetaData,
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "x-tender-codes": JSON.stringify(metaDataTypes),
-          },
-        });
-        if (metaData.code === 200) {
-          const result = metaData.result;
-          console.log("MetaData ", result);
-  
-          const tenderpayments = [];
-       
-          const tenderEmdPayment = result?.tenderEmdPayment || [];
-          
-          const tenderFeesPayment = result?.tenderFeesPayment || [];
-  
-          const tenderPsdPayment = result?.tenderPsdPayment || [];
-
-          console.log("tenderpayments", tenderpayments);
-          const formattedOptionsEMD = tenderEmdPayment.map((item: any) => ({
-            value: item.codeValue,
-            label: item.codeDescription,
-          }));
-          const formattedOptionsFees= tenderFeesPayment.map((item: any) => ({
-            value: item.codeValue,
-            label: item.codeDescription,
-          }));
-          const formattedOptionsPsd= tenderPsdPayment.map((item: any) => ({
-            value: item.codeValue,
-            label: item.codeDescription,
-          }));
-
-
-        // console.log("formattedOptionsPsd",formattedOptionsPsd)
-        // console.log("formattedOptionsEMD",formattedOptionsEMD)
-        // console.log("formattedOptionsFees",formattedOptionsFees)
-          
-        setDocumentTypeOptions({"TENDER_EMD":formattedOptionsEMD,"TENDER_PSD":formattedOptionsPsd,"TENDER_FEES":formattedOptionsFees})
-          // setEMDOptions(formattedOptionsEMD);
-          // setFeesOptions(formattedOptionsFees);
-          // setFeesOptions(formattedOptionsPsd);
-
-        //   console.log("ftypeeee  ormattedOptionsPsd", typeof formattedOptionsPsd)
-        // console.log("formattedOptionsEMD",formattedOptionsEMD)
-        // console.log("formattedOptionsFees",formattedOptionsFees)
-          
-        // console.log("after setting values",eMDoptions)
-        // console.log("after setting values",feesoptions)
-        // console.log("after setting values",psdoptions)
-
-        }
-      } catch (error) {
-        console.error("Fetch error: ", error);
-      }
-    };
-    handleFetchpayments();
-  }, [role]);
+    if (role === "ACCOUNTANCE" && tenderData.status === "AWARDED" ||tenderData.status === "LOST" ||tenderData.status === "CANCELLED" )
+    {
+      setrecoveryPaymentVisible(true);
+    }
+    else
+    {
+      setrecoveryPaymentVisible(false)
+    }
+    // const handleFetchpayments = async () => {
+    if (
+      metaData.tenderEmdPayment &&
+      metaData.tenderFeesPayment &&
+      metaData.tenderPsdPayment
+    ) {
+      setDocumentTypeOptions({
+        TENDER_EMD: metaData.tenderEmdPayment,
+        TENDER_PSD: metaData.tenderPsdPayment,
+        TENDER_FEES: metaData.tenderFeesPayment,
+      });
+    }
+  }, [role, metaData]);
   useEffect(() => {
-    if (depositeDocument) {
-      const modesData = depositeDocument[0]?.modes || [];
-      console.log("TTTTTTTTTT",depositeDocument);
+    if (metaData) {
+      const modesData = metaData.paymentModes || [];
       // const paidByData = depositeDocument[0]?.paidBy || [];
-      const refundData = depositeDocument[0]?.refunds || [];
+      const refundData = metaData.refundEligibility || [];
       setMode(modesData);
       setRefund(refundData);
       // setPaidBy(paidByData);
     }
-    if (applicableDeposits && applicableDeposits.length > 0) {
-      console.log("000 : ", applicableDeposits);
-      const mappedDeposits = applicableDeposits.map((deposit) => ({
+    if (metaData.feesType && metaData.feesType.length > 0) {
+      // console.log("000 : ", applicableDeposits);
+      const mappedDeposits = metaData.feesType.map((deposit) => ({
         label: deposit.label,
         value: deposit.value,
       }));
-      console.log("mappedDeposits",mappedDeposits)
+      console.log("mappedDeposits", mappedDeposits);
       SetApplicablefees(mappedDeposits);
       const options: Record<string, boolean> = mappedDeposits.reduce<
         Record<string, boolean>
       >((acc, opt) => {
         const val = opt.value;
-
+ 
         if (typeof val === "string") {
           acc[val] = tenderData.tenderFees.some(
             (fee) => fee.feesType == opt.value && fee.status == "ACTV"
@@ -169,13 +125,8 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
       }, {});
       setFeeVisibility(options);
     }
-
-  
-  }, [depositeDocument, applicableDeposits, tenderDataCopy.tenderFees]);
-
-
-
-
+  }, [metaData, tenderDataCopy.tenderFees]);
+ 
   function handleonclick(
     e:
       | React.MouseEvent<HTMLElement, MouseEvent>
@@ -186,27 +137,33 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   }
   const selectedFees = new Set();
   const handleAdd = () => {
+    const checkFeeVisible = { ...feeVisibility };
+
     applicablefees.forEach((opt) => {
       const id = opt.value.toString();
       const checkbox = document.getElementById(id) as HTMLInputElement;
-
+ 
       if (checkbox?.checked) {
         selectedFees.add(id);
-        feeVisibility[id] = true;
+        checkFeeVisible[id] = true;
         if (tenderData.tenderFees.some((fee) => fee.feesType == id))
           updateTenderFee(id, "status", "ACTV");
         else addTenderFee(id);
       } else {
         selectedFees.delete(id);
-        feeVisibility[id] = false;
+        checkFeeVisible[id] = false;
         updateTenderFee(id, "status", "INAC");
       }
     });
+    setFeeVisibility(checkFeeVisible);
+
     closeAllContext();
     // console.log("Currently Selected:", Array.from(selectedFees));
   };
-
+ 
   useEffect(() => {
+    const checkFeeVisible = { ...feeVisibility };
+
     applicablefees.forEach((opt) => {
       const id = opt.value.toString();
       // if(tenderData.tenderFees.find((x)=> x.feesType==id)?.status=="INAC"){
@@ -217,37 +174,34 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
       // }
       const checkbox = document.getElementById(id) as HTMLInputElement;
       selectedFees.add(id);
-      feeVisibility[id] = true;
+      checkFeeVisible[id] = true;
       // addTenderFee(id);
       if (checkbox?.checked) {
         selectedFees.add(id);
-        feeVisibility[id] = true;
-        console.log(id);
+        checkFeeVisible[id] = true;
         if (tenderData.tenderFees.some((fee) => fee.feesType == id))
           updateTenderFee(id, "status", "ACTV");
         else addTenderFee(id);
-      } else if (checkbox) {
+      } else if (tenderData.id==undefined) {
         selectedFees.add(id);
-        feeVisibility[id] = true;
-        console.log(id);
+        checkFeeVisible[id] = true;
         if (tenderData.tenderFees.some((fee) => fee.feesType == id))
           updateTenderFee(id, "status", "ACTV");
         else addTenderFee(id);
       } else {
         selectedFees.delete(id);
-        feeVisibility[id] = false;
+        checkFeeVisible[id] = false;
         updateTenderFee(id, "status", "INAC");
       }
     });
-  }, [applicablefees, tenderDataCopy.id]);
+    setFeeVisibility(checkFeeVisible);
 
-
-
+  }, [applicablefees, tenderData.id,]);
 
   // useEffect(() => {
   //   console.log("feevisibility : ", feeVisibility);
   // }, [feeVisibility]);
-
+ 
   useEffect(() => {
     window.addEventListener("click", (e) => {
       const target = (e.target as HTMLElement).closest(
@@ -272,7 +226,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
       });
     };
   }, [applicablefees]);
-
+ 
   useEffect(() => {
     const handleScroll = (event: any) => {
       const excludedElement = document.getElementById("optionBtn");
@@ -286,7 +240,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
       window.removeEventListener("scroll", handleScroll, true);
     };
   }, []);
-
+ 
   return (
     <div className={styles.container}>
       <div className={styles.containerHead}>
@@ -312,9 +266,8 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
           />
         </div>
       </div>
-      {applicableDeposits.map((deposit) => {
-      
-          if(typeof deposit.value=="string")
+      {(metaData.feesType || []).map((deposit) => {
+        if (typeof deposit.value == "string")
           return (
             feeVisibility[deposit.value] && (
               <div className={styles.emdContainer2}>
@@ -326,16 +279,17 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
                   mode={mode}
                   paidBy={paidBy}
                   downloadVisible={true}
-                  paymentCompletedVisible={paymentCheckVisible}
                   refund={refund}
+                  completedpayment={paymentCheckVisible}
+                  recoverycheckvisibible={recoveryPaymentVisible}
                 />
               </div>
             )
           );
       })}
-     
       <ContextMenu
         id={contextMenuId}
+        className={styles.applicableDeposite}
         content={
           <>
             <div className={styles.applicableDeposit}>
@@ -343,6 +297,7 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
                 {applicablefees.map((checkbox, index) => (
                   <Ds_checkbox
                     key={index}
+                    containerClassName={styles.feesCheckboxContainer}
                     id={checkbox.value.toString()}
                     name={checkbox.label}
                     value={checkbox.value.toString()}
@@ -373,11 +328,6 @@ const DsDepositeDocuments: React.FC<DepositeDocumentsProps> = ({
   );
 };
 export default DsDepositeDocuments;
+ 
 
-// const tenderPaymentTypes={
-  // "TENDER_EMD_PAYMENT":[],
-  // "TENDER_psd_PAYMENT":[],
-  // "TENDER_fees_PAYMENT":[],
-  // "TENDER_EMD_PAYMENT":[],
-// }
-// feesdocument la prop andffetch data as dictonary jkeyvalue accept it by key value in prop
+ 

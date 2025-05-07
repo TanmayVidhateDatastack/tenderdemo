@@ -5,14 +5,14 @@ import DsSelectMultiLevel from "@/Elements/DsComponents/dsSelect/dsSelectMultiLe
 import {
   datalistOptions,
   DsSelectOption,
-  supplyDetailsProps,
 } from "@/Common/helpers/types";
 // import { datalistOptions, supplyDetailsProps } from "@/Common/helpers/types";
 import { useTenderData } from "../TenderDataContextProvider";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import { useEffect, useState } from "react";
-const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
-  const { updateSupplyCondition, tenderData,tenderDataCopy } = useTenderData();
+const DsSupplyDetails: React.FC = () => {
+  const { updateSupplyCondition, tenderData, tenderDataCopy, metaData } =
+    useTenderData();
   const [selectedEligibility, setSelectedEligibility] = useState<
     DsSelectOption[] 
   >([]);
@@ -31,42 +31,40 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
   useEffect(() => {
     const supplyPoint = tenderData.tenderSupplyCondition.supplyPoint;
     // if (supplyPoint) {
-    const option = supplyDetails.supplyPoints.find(
-      (x) => x.value == supplyPoint
-    );
+    const option = (metaData.supplyPoints||[]).find((x) => x.value == supplyPoint);
     setSelectedSupplyPoint(option);
     // }
   }, [
     tenderData.tenderSupplyCondition.supplyPoint,
     tenderData.id,
-    supplyDetails.supplyPoints,
+    metaData?.supplyPoints,
   ]);
 
   useEffect(() => {
     const testReportRequired =
       tenderData.tenderSupplyCondition.testReportRequired;
     // if (testReportRequired) {
-    const option = supplyDetails.reportRequirements.find(
+    const option = (metaData.testReportRequired||[]).find(
       (x) => x.value == testReportRequired
     );
     setSelectedtTestReportRequired(option);
     // }
   }, [
     tenderData.tenderSupplyCondition.testReportRequired,
-    tenderData.id, 
-    supplyDetails.reportRequirements,
+    tenderData.id,
+    metaData?.testReportRequired,
   ]);
   useEffect(() => {
-    if(tenderData.tenderSupplyCondition.eligibility){
-    const eligibility = [...tenderData.tenderSupplyCondition.eligibility];
-    const selectedEl = eligibility.map((x) => {
-      return {
-        value: x,
-        label: x,
-      };
-    });
-    setSelectedEligibility(selectedEl);
-  }
+    if (tenderData.tenderSupplyCondition.eligibility) {
+      const eligibility = [...tenderData.tenderSupplyCondition.eligibility];
+      const selectedEl = eligibility.map((x) => {
+        return {
+          value: x,
+          label: x,
+        };
+      });
+      setSelectedEligibility(selectedEl);
+    }
   }, [tenderDataCopy.tenderSupplyCondition.eligibility, tenderData.id]);
 
   return (
@@ -77,7 +75,7 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
           <DsSingleSelect
             containerClasses={styles.fields}
             selectedOption={selectedSupplyPoint}
-            options={supplyDetails.supplyPoints}
+            options={metaData.supplyPoints||[]}
             label="Supply point"
             placeholder={"Please select here"}
             id={"supplyPoints"}
@@ -101,25 +99,24 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
             }
           ></DsTextField>
 
-          <DsSingleSelect
+          <DsSingleSelect   
             containerClasses={styles.fields}
             selectedOption={selectedtTestReportRequired}
-            options={supplyDetails.reportRequirements}
+            options={metaData.testReportRequired||[]}
             label="Test report requirement"
             placeholder={"Please select here"}
             id={"reportReq"}
-            setSelectOption={(option) => {
-              if (typeof option.value == "string") {
+            setSelectOption={(option) => {  
+              if (typeof option.value == "string") {   
                 updateSupplyCondition("testReportRequired", option.value);
-              }
-            }}
+              } 
+            }}   
           ></DsSingleSelect>
-
           <DsMultiSelect
             //  const selectedDepo=useMemo(()=>{
             //    return tenderData.shippingLocations.map((x) => {
-            //       return (
-            //         formatedDepot.find((d) => Number(d.value) == x) || {
+            //       return ( 
+            //         formatedDepot.find((d) => Number(d.value) == x) || {  
             //           value: "",
             //           label: "",
             //         }
@@ -127,8 +124,8 @@ const DsSupplyDetails: React.FC<supplyDetailsProps> = ({ supplyDetails }) => {
             //     })
             //   },[formatedDepot,tenderData.shippingLocations]);
             containerClasses={styles.fields}
-            selectedOptions={selectedEligibility} 
-            options={supplyDetails.eligibility}   
+            selectedOptions={selectedEligibility}
+            options={metaData.eligibility||[]}
             label="Eligibility"
             placeholder={"Please search and select here"}
             id={"eligibility"}

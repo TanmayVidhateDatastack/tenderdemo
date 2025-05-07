@@ -44,6 +44,7 @@ const DsTenderProduct: React.FC<{
           gap: "17.5em",
           alignItems: "flex-start",
           margin: "20px",
+          justifyContent:"space-between"
         }}
       >
         <DsAddProduct setProductList={setProductList} version={version}/>

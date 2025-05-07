@@ -3,21 +3,24 @@ import TextArea from "@/Elements/DsComponents/DsInputs/dsTextArea";
 import DsSingleSelect from "@/Elements/DsComponents/dsSelect/dsSingleSelect";
 import TableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableOld";
 import DsInfoDisplay from "@/Elements/ERPComponents/DsInfoDisplay/DsInfoDisplay";
-import { ContractItems, updateDocuments, useTenderData } from "../TenderDataContextProvider";
+import {
+  ContractItems,
+  updateDocuments,
+  useTenderData,
+} from "../TenderDataContextProvider";
 import {
   datalistOptions,
   DsSelectOption,
   DsTableRow,
   tableData,
 } from "@/Common/helpers/types";
-import style from "./ContractView.module.css";
+import styles from "./ContractView.module.css";
 import { useEffect, useState } from "react";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import DsSearchComponent from "@/Elements/DsComponents/DsSearch/searchComponent";
 import AwardedToSearch from "./AwardedToSearch";
 import IconFactory from "@/Elements/IconComponent";
-
 export interface ContractViewProps {
   status: "AWARDED" | "PARTIALLY_AWARDED" | "LOST" | "CANCELLED";
   //   contractRevision: { id: number; contractItems: ContractItems };
@@ -26,20 +29,26 @@ export interface ContractViewProps {
   //     name: string;
   //   };
 }
+export const ContractStatuses = {
+  AWARDED: "Awarded",
+  PARTIALLY_AWARDED: "Partially Awarded",
+  LOST: "Lost",
+  CANCELLED: "Cancellation",
+};
 const ContractView: React.FC<ContractViewProps> = ({
   status,
   //   contractRevision,
   //   lastUpdatedBy,
 }) => {
-  const ContractStatuses = {
-    AWARDED: "Awarded",
-    PARTIALLY_AWARDED: "Partially Awarded",
-    LOST: "Lost",
-    CANCELLED: "Cancellation",
-  };
-  const { tenderData, updateContractDetails, updateContractItems,removeTenderDocument,
-    addNewTenderDocument } =
-    useTenderData();
+  const {
+    tenderDataCopy,
+    tenderData,
+    updateContractDetails,
+    updateContractItems,
+    removeTenderDocument,
+    addNewTenderDocument,
+    metaData,
+  } = useTenderData();
   const [justificationOptions, setJustificationOptions] = useState<
     DsSelectOption[]
   >([]);
@@ -51,7 +60,7 @@ const ContractView: React.FC<ContractViewProps> = ({
     });
   const [contractItemsTableData, setContractItemsTableData] =
     useState<tableData>({
-      className: style.ContractTable,
+      className: styles.ContractTable,
       type: "InterActive",
       id: "contractTable",
       isSortable: false,
@@ -59,7 +68,7 @@ const ContractView: React.FC<ContractViewProps> = ({
       columns: [
         {
           columnIndex: 0,
-          className: "cell-generic-name",
+          className: `${styles["cell-generic-name"]}`,
           columnHeader: "GENERIC NAME",
           isHidden: false,
           sort: "ASC",
@@ -116,7 +125,7 @@ const ContractView: React.FC<ContractViewProps> = ({
       content: [
         {
           columnIndex: 0,
-          className: "cell cell-generic-name",
+          className: `cell ${styles["cell-generic-name"]}`,
           content: item.product.requestedGenericName,
           filterValue: item.product.requestedGenericName,
           contentType: "string",
@@ -141,6 +150,7 @@ const ContractView: React.FC<ContractViewProps> = ({
           content: (
             <DsTextField
               initialValue={item.awardedQuantity?.toString()}
+              inputType="positive"
               onBlur={(e) => {
                 if (item.id)
                   updateContractItems(
@@ -162,13 +172,17 @@ const ContractView: React.FC<ContractViewProps> = ({
           content: (
             <AwardedToSearch
               awardedTo={{
-                id: item.awardedTo || 0,
+                id: item.awardedToId || 0,
                 name: item.product.awardedToName,
               }}
               index={0}
               setAwardedTo={(option) => {
                 if (item.id && option.id && option.value) {
-                  updateContractItems("awardedTo", item.id, option.id);
+                  updateContractItems(
+                    "awardedToId",
+                    item.id,
+                    Number(option.id)
+                  );
                   updateContractItems(
                     "product.awardedToName",
                     item.id,
@@ -178,7 +192,7 @@ const ContractView: React.FC<ContractViewProps> = ({
               }}
             />
           ),
-          filterValue: item.awardedTo,
+          filterValue: item.awardedToId,
           contentType: "reactNode",
         },
 
@@ -189,6 +203,7 @@ const ContractView: React.FC<ContractViewProps> = ({
           content: (
             <DsTextField
               initialValue={item.awardedRate?.toString()}
+              inputType="positive"
               onBlur={(e) => {
                 if (item.id)
                   updateContractItems(
@@ -212,40 +227,51 @@ const ContractView: React.FC<ContractViewProps> = ({
       rows: newRows,
     }));
   };
-  async function fetchJustificationOptions(status: string) {
-    try {
-      const justificationFetch = new URL("fetch");
-      justificationFetch.searchParams.set(
-        "justificationType",
-        "TENDER_" + status
-      );
-      const response = await fetchData({ url: justificationFetch.toString() });
-      const options = response.result.map((x) => {
-        return {
-          value: x.codeValue,
-          label: x.codeDescription,
-        };
-      });
-      if (options.length > 0) setJustificationOptions(options);
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  // async function fetchJustificationOptions(status: string) {
+  //   try {
+  //     const justificationFetch = new URL("fetch");
+  //     justificationFetch.searchParams.set(
+  //       "justificationType",
+  //       "TENDER_" + status
+  //     );
+  //     const response = await fetchData({ url: justificationFetch.toString() });
+  //     const options = response.result.map((x) => {
+  //       return {
+  //         value: x.codeValue,
+  //         label: x.codeDescription,
+  //       };
+  //     });
+  //     if (options.length > 0) setJustificationOptions(options);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
   useEffect(() => {
-    fetchJustificationOptions(status);
-  }, [status]);
+    // fetchJustificationOptions(status);
+    if (status == "AWARDED")
+      setJustificationOptions(metaData.tenderAwardedJustification);
+    else if (status == "PARTIALLY_AWARDED")
+      setJustificationOptions(metaData.tenderPartiallyAwardedJustification);
+    else if (status == "CANCELLED")
+      setJustificationOptions(metaData.tenderAwardedJustification);
+    else if (status == "LOST")
+      setJustificationOptions(metaData.tenderLostJustification);
+  }, [status, metaData, tenderData.id, tenderDataCopy.id]);
   useEffect(() => {
-    addTableData(tenderData.tenderContract?.tenderRevisions?.tenderItems || []);
-  }, [tenderData.tenderContract?.tenderRevisions?.tenderItems?.length]);
+    console.log(tenderData.tenderContract?.tenderRevisions);
+    addTableData(
+      tenderData.tenderContract?.tenderRevisions?.[0].tenderItems || []
+    );
+  }, [tenderData.tenderContract?.tenderRevisions]);
   return (
-    <>
-      <div>
-        <div>
+    <div className={styles.ContractPage}>
+      <div className={styles.justification}>
+        <div className={styles.title}>
           Tender{status ? ` ${ContractStatuses[status]} ` : " "}Justification{" "}
         </div>
         <DsSingleSelect
           id={"contractJustification"}
-          options={justificationOptions}
+          options={justificationOptions || []}
           selectedOption={selectedJustification}
           setSelectOption={(option) => {
             setSlectedJustification(option);
@@ -254,8 +280,8 @@ const ContractView: React.FC<ContractViewProps> = ({
           }}
         />
       </div>
-      <div>
-        <div>Supporting Notes</div>
+      <div className={styles.notes}>
+        <div className={styles.title}>Supporting Notes</div>
         <TextArea
           onBlur={(e) => {
             updateContractDetails(
@@ -263,43 +289,58 @@ const ContractView: React.FC<ContractViewProps> = ({
               (e.target as HTMLTextAreaElement).value
             );
           }}
+          minRows={status == "CANCELLED" ? 30 : 5}
+          initialValue={tenderData.tenderContract?.contractStatusNotes}
         />
-         <DsCsvUpload
-            id={"ContractUploadedDocuments"}
-            label="Attach File"
-            buttonViewStyle="btnText"
-            buttonSize="btnSmall"
-            startIcon={<IconFactory name="fileAttach" />}
-            onSelectedFileChange={(files) => {
-              const typeDocuments =
-                tenderData.tenderDocuments?.filter(
-                  (x) =>
-                    x.documentType == "TENDER_CONTRACT_DOCUMENT"
-                  && x.category == status+"_DOCUMENTS"
-                ) || [];
-              updateDocuments(
-                files,
-                typeDocuments,
-                removeTenderDocument,
-                addNewTenderDocument,
-                "TENDER_CONTRACT_DOCUMENT",
-                status+"_DOCUMENTS"
-              );
-            }}
-          ></DsCsvUpload>
+        <DsCsvUpload
+          id={"ContractUploadedDocuments"}
+          label="Attach File"
+          buttonViewStyle="btnText"
+          buttonSize="btnSmall"
+          startIcon={<IconFactory name="fileAttach" />}
+          previouslySelectedFile={
+            tenderDataCopy.tenderDocuments?.filter(
+              (x) =>
+                x.documentType == "TENDER_CONTRACT_DOCUMENT" &&
+                x.documentCategory == status + "_DOCUMENTS" &&
+                x.id !== undefined
+            ) || []
+          }
+          onSelectedFileChange={(files) => {
+            const typeDocuments =
+              tenderData.tenderDocuments?.filter(
+                (x) =>
+                  x.documentType == "TENDER_CONTRACT_DOCUMENT" &&
+                  x.documentCategory == status + "_DOCUMENTS"
+              ) || [];
+            updateDocuments(
+              files,
+              typeDocuments,
+              removeTenderDocument,
+              addNewTenderDocument,
+              "TENDER_CONTRACT_DOCUMENT",
+              status + "_DOCUMENTS"
+            );
+          }}
+        ></DsCsvUpload>
       </div>
-      <div>
-        <TableComponent
-          className={contractItemsTableData.className}
-          id={contractItemsTableData.id}
-          columns={contractItemsTableData.columns}
-          rows={contractItemsTableData.rows}
-        />
-      </div>
+      {status !== "CANCELLED" && (
+        <>
+          <div className={styles.awardTableTitle}>Product Award Details</div>
+          <div className={styles.table}>
+            <TableComponent
+              className={contractItemsTableData.className}
+              id={contractItemsTableData.id}
+              columns={contractItemsTableData.columns}
+              rows={contractItemsTableData.rows}
+            />
+          </div>
+        </>
+      )}
       <div>
         <DsInfoDisplay detailOf="Updated By" value={"Val"} />
       </div>
-    </>
+    </div>
   );
 };
 export default ContractView;

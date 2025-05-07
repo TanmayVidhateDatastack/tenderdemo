@@ -242,6 +242,14 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
             undefined,
             product.requestedGenericName
           );
+          updateTenderProduct(
+            version,
+            "product.productName",
+            product.product.productName || "",
+            undefined,
+            undefined,
+            product.requestedGenericName
+          );
         }
       }
     });
@@ -410,7 +418,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                   tableRowIndex={index + 1}
                   setLocalProducts={setLocalProducts}
                   setHasChanges={setHasChanges}
-                  initialValue={tenderproduct.product.productName || ""}
+                  initialValue={tenderproduct.product?.productName || ""}
                 />
               ) : (
                 tenderproduct.product?.productName || "-"
@@ -489,11 +497,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                         handleFieldChange(index, "lpr", Number(value))
                       }
                       onCompanyChange={(company) => {
-                        handleFieldChange(
-                          index,
-                          "competitorId",
-                          company.id
-                        );
+                        handleFieldChange(index, "competitorId", company.id);
                         handleFieldChange(
                           index,
                           "product.competitorName",
@@ -587,7 +591,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
               latestVersion == version ? (
                 <DsTextField
                   inputType="number"
-                  maximumNumber={100.00}
+                  maximumNumber={100.0}
                   initialValue={
                     Number(
                       tenderproduct.ptrPercentage?.toFixed(2)
@@ -860,14 +864,26 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         )}
 
         {tenderProductTable?.rows.length == 0 && (
-          <div className={styles.noDataFound}>
-            <div></div>
-            <div className={styles.noData}>
-              <IconFactory name={"emptyHourGlass"} />
-              <div>Products Not Available</div>
+          <>
+            <div className={styles.noDataFound}>
+              <div className={styles.noData}>
+                <div
+                  style={{
+                    width: "2em",
+                    height: "3em",
+                    // display: "flex",
+                    // alignItems: "center",
+                    // justifyContent: "center",
+                    // color: "black",
+                  }}
+                >
+                  <IconFactory name={"emptyHourGlass"} />
+                </div>
+                <div>Products Not Available</div>
+              </div>
             </div>
             <div className={styles.noDataBorders}></div>
-          </div>
+          </>
         )}
 
         <FloatingMenu

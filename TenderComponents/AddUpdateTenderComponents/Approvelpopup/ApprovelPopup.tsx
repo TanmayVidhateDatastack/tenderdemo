@@ -13,8 +13,6 @@ import TextArea from "@/Elements/DsComponents/DsInputs/dsTextArea";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import { DisplayPane } from "@/Elements/DsComponents/DsPane/DsPane";
 
-
-
 class ActionStatus {
     notiType: "success" | "bonus" | "info" | "error" | "cross" = "success";
     notiMsg: string = "";
@@ -149,7 +147,6 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
         const approvalObject = createApprovalObject(cId, textAreaValue, status, selectedValueString, deviationCode);
 
     };
-
     const handleSave = async () => {
         const resultObject = {
             text: textAreaValue,
@@ -274,7 +271,7 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
             });
             if (metaData.code === 200) {
                 const result = metaData.result;
-                console.log("MetaData ", result);
+                console.log("MetaData :-", result);
 
                 let justificationType = [];
                 if (popupType === "Approve") {
