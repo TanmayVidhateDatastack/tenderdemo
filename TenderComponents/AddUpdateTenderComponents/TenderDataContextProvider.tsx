@@ -1389,28 +1389,28 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           },
           tenderFees: tenderDataCopy.tenderFees
           .filter((x) => x.status == "ACTV")
-          .map((x) => {
-            return {
-              id: x.id,
-              feesType: x.feesType,
-              amount: x.amount,
-              currency: x.currency,
-              paidBy: x.paidBy,
-              paymentMode: x.paymentMode,
-              refundEligibility: x.refundEligibility,
-              paymentDate: x.paymentDate,
-              paymentDueDate: x.paymentDueDate,
-              paymentRefundDate: x.paymentRefundDate,
-              paymentStatus: x.paymentStatus,
-              paymentRefundStatus: x.paymentRefundStatus,
-              instructionNotes: x.instructionNotes,
-              refundNotes: x.refundNotes,
-              paymentTransactionId: x.paymentTransactionId,
-              paymentReceiptId: x.paymentReceiptId,
-              acknowledgementReceiptId: x.acknowledgementReceiptId,
-              fundTransferConfirmationId: x.fundTransferConfirmationId,
-            };
-          }),
+            .map((x) => {
+              return {
+                id: x.id,
+                feesType: x.feesType,
+                amount: x.amount,
+                currency: x.currency,
+                paidBy: x.paidBy,
+                paymentMode: x.paymentMode,
+                refundEligibility: x.refundEligibility,
+                paymentDate: x.paymentDate,
+                paymentDueDate: x.paymentDueDate,
+                paymentRefundDate: x.paymentRefundDate,
+                paymentStatus: x.paymentStatus,
+                paymentRefundStatus: x.paymentRefundStatus,
+                instructionNotes: x.instructionNotes,
+                refundNotes: x.refundNotes,
+                paymentTransactionId: x.paymentTransactionId,
+                paymentReceiptId: x.paymentReceiptId,
+                acknowledgementReceiptId: x.acknowledgementReceiptId,
+                fundTransferConfirmationId: x.fundTransferConfirmationId,
+              };
+            }),
           tenderDocuments:
             tenderOriginalDocuments?.map((x) => {
               // const newDocs=new FormData();
