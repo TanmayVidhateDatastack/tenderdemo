@@ -23,7 +23,7 @@ import IconFactory from "@/Elements/IconComponent";
 //   applicableConditions: DsSelectOption[] | [];
 // }
 
-const DsApplicableConditions: React.FC=() => {
+const DsApplicableConditions: React.FC = () => {
   const contextMenuId = "context-display-11";
   const [context, setContext] = useState(false);
   const [applicableCheckboxes, setApplicableCheckboxes] = useState<
@@ -80,12 +80,17 @@ const DsApplicableConditions: React.FC=() => {
   // useEffect(() =>{},[handleAdd]);
 
   useEffect(() => {
-    if (metaData.applicableSupplyConditions && metaData.applicableSupplyConditions.length > 0) {
-      const mappedConditions = metaData.applicableSupplyConditions.map((conditions) => ({
-        label: conditions.label,
-        value: conditions.value,
-      }));
-      setApplicableCheckboxes(mappedConditions||[]);
+    if (
+      metaData.applicableSupplyConditions &&
+      metaData.applicableSupplyConditions.length > 0
+    ) {
+      const mappedConditions = metaData.applicableSupplyConditions.map(
+        (conditions) => ({
+          label: conditions.label,
+          value: conditions.value,
+        })
+      );
+      setApplicableCheckboxes(mappedConditions || []);
 
       const options: Record<string, boolean> = mappedConditions.reduce<
         Record<string, boolean>
@@ -104,11 +109,14 @@ const DsApplicableConditions: React.FC=() => {
 
       setConditionsVisibility(options);
     }
-  }, [metaData?.applicableSupplyConditions, tenderDataCopy, tenderData.id]);
+  }, [
+    metaData?.applicableSupplyConditions,
+    tenderDataCopy.tenderSupplyCondition,
+  ]);
 
   useEffect(() => {
-    const checkConditionVisible = {...conditionsVisibility};
-    (metaData.applicableSupplyConditions||[]).forEach((opt) => {
+    const checkConditionVisible = { ...conditionsVisibility };
+    (metaData.applicableSupplyConditions || []).forEach((opt) => {
       const id = opt.value.toString();
       // if(tenderData.tenderFees.find((x)=> x.feesType==id)?.status=="INAC"){
       //   console.log("Inactive ",id);
@@ -124,27 +132,42 @@ const DsApplicableConditions: React.FC=() => {
         selectedConditions.add(id);
         checkConditionVisible[id] = true;
         console.log(id);
-        if (tenderData.tenderFees.some((fee) => fee.feesType == id))
+        if (
+          tenderData.tenderSupplyCondition.applicableConditions.some(
+            (ac) => ac.type == id
+          )
+        )
           updateApplicableCondition(id, "status", "ACTV");
         else addApplicableCondition(id);
-      } else if (checkbox) {
+      } else if (tenderData.id == undefined) {
         selectedConditions.add(id);
         checkConditionVisible[id] = true;
-        console.log(id); 
-        if (tenderData.tenderFees.some((fee) => fee.feesType == id))
-          updateApplicableCondition(id, "status", "ACTV"); 
+        console.log(id);
+        if (
+          tenderData.tenderSupplyCondition.applicableConditions.some(
+            (ac) => ac.type == id
+          )
+        )
+          updateApplicableCondition(id, "status", "ACTV");
         // else addApplicableCondition(id);
       } else {
         selectedConditions.delete(id);
         checkConditionVisible[id] = false;
-        if (tenderData.tenderFees.some((fee) => fee.feesType == id))
+        if (
+          tenderData.tenderSupplyCondition.applicableConditions.some(
+            (ac) => ac.type == id
+          )
+        )
           updateApplicableCondition(id, "status", "INAC");
       }
     });
     setConditionsVisibility(checkConditionVisible);
-    
-  }, [metaData.applicableSupplyConditions, tenderData.id]);
-  useEffect(() => {   
+  }, [
+    metaData.applicableSupplyConditions,
+
+    tenderData.id,
+  ]);
+  useEffect(() => {
     window.addEventListener("click", (e) => {
       const target = (e.target as HTMLElement).closest(
         `.${styles["depositsBtn"]}`
@@ -153,7 +176,7 @@ const DsApplicableConditions: React.FC=() => {
 
       if (!target && !target2) {
         closeContext(contextMenuId);
-        return; 
+        return;
       }
     });
 
@@ -194,22 +217,23 @@ const DsApplicableConditions: React.FC=() => {
             onClick={(e) => handleonclick(e)}
           />
         </div>
-        {conditionsVisibility&&Object.values(conditionsVisibility).filter((x) => x).length > 0 && (
-          <div className={styles.conditions}>
-            {(metaData.applicableSupplyConditions||[]).map((conditions) => {
-              if (typeof conditions.value == "string")
-                return (
-                  conditionsVisibility[conditions.value] && (
-                    <DsSupplyConditions
-                      type={conditions.value.toString()}
-                      title={conditions.label}
-                      id={conditions.value + "conditionsView"}
-                    />
-                  )
-                );
-            })}
-          </div>
-        )}
+        {conditionsVisibility &&
+          Object.values(conditionsVisibility).filter((x) => x).length > 0 && (
+            <div className={styles.conditions}>
+              {(metaData.applicableSupplyConditions || []).map((conditions) => {
+                if (typeof conditions.value == "string")
+                  return (
+                    conditionsVisibility[conditions.value] && (
+                      <DsSupplyConditions
+                        type={conditions.value.toString()}
+                        title={conditions.label}
+                        id={conditions.value + "conditionsView"}
+                      />
+                    )
+                  );
+              })}
+            </div>
+          )}
       </div>
       <ContextMenu
         id={contextMenuId}
@@ -221,7 +245,6 @@ const DsApplicableConditions: React.FC=() => {
                 <Ds_checkbox
                   key={index} // Unique key
                   containerClassName={styles.feesCheckboxContainer}
-
                   id={checkbox.value.toString()}
                   name={checkbox.label}
                   value={checkbox.value.toString()}
