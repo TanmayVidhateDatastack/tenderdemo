@@ -40,7 +40,7 @@ const DsApplicableConditions: React.FC = () => {
   } = useTenderData();
   const [conditionsVisibility, setConditionsVisibility] = useState<
     Record<string, boolean>
-  >({});
+  >({}); 
 
   function handleonclick(
     e:
@@ -78,7 +78,58 @@ const DsApplicableConditions: React.FC = () => {
     // console.log("Currently Selected:", Array.from(selectedConditions)); // Debugging output
   };
   // useEffect(() =>{},[handleAdd]);
-
+  useEffect(() => {
+    const checkConditionVisible = { ...conditionsVisibility };
+    (metaData.applicableSupplyConditions || []).forEach((opt) => {
+      const id = opt.value.toString();
+      // if(tenderData.tenderFees.find((x)=> x.feesType==id)?.status=="INAC"){
+      //   console.log("Inactive ",id);
+      // }
+      // else if (tenderData.tenderFees.find((x)=> x.feesType==id)?.status=="ACTV"){
+      //   console.log("active ",id);
+      // }
+      const checkbox = document.getElementById(id) as HTMLInputElement;
+      selectedConditions.add(id);
+      checkConditionVisible[id] = true;
+      // addTenderFee(id);
+      if (checkbox?.checked) {
+        selectedConditions.add(id);
+        checkConditionVisible[id] = true;
+        console.log(id);
+        if (
+          tenderData.tenderSupplyCondition.applicableConditions.some(
+            (ac) => ac.type == id
+          )
+        )
+          updateApplicableCondition(id, "status", "ACTV");
+        else addApplicableCondition(id);
+      } else if (tenderData.id !== undefined) {
+        selectedConditions.add(id);
+        checkConditionVisible[id] = true;
+        console.log(id);
+        if (
+          tenderData.tenderSupplyCondition.applicableConditions.some(
+            (ac) => ac.type == id
+          )
+        )
+          updateApplicableCondition(id, "status", "ACTV");
+        // else addApplicableCondition(id);
+      } else {
+        selectedConditions.delete(id);
+        checkConditionVisible[id] = false;
+        if (
+          tenderData.tenderSupplyCondition.applicableConditions.some(
+            (ac) => ac.type == id
+          )
+        )
+          updateApplicableCondition(id, "status", "INAC");
+      }
+    });
+    setConditionsVisibility(checkConditionVisible);
+  }, [
+    metaData.applicableSupplyConditions,
+    tenderData.id,
+  ]);
   useEffect(() => {
     if (
       metaData.applicableSupplyConditions &&
@@ -179,7 +230,6 @@ const DsApplicableConditions: React.FC = () => {
         return;
       }
     });
-
     return () => {
       window.removeEventListener("click", (e) => {
         const target = (e.target as HTMLElement).closest(

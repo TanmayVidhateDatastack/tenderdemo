@@ -1200,7 +1200,10 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 console.log("sAVEEEE", dataToSend);
                 await fetch(saveTenderurl, {
                   method: "POST",
-                  body: dataToSend,
+                  headers: {
+                    "Content-Type": "application/json"  //gaurav
+                  },
+                  body: JSON.stringify(dataToSend)       
                 }).then((result) => {
                   result.json().then((res) => {
                     if (res.code === 200) {
@@ -1239,7 +1242,10 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           console.log("sAVEEEE", dataToSend);
           await fetch(saveTenderurl, {
             method: "POST",
-            body: dataToSend,
+            headers: {
+              "Content-Type": "application/json"  //gaurav
+            },
+            body: JSON.stringify(dataToSend)       
           }).then((result) => {
             result.json().then((res) => {
               if (res.code === 200) {
@@ -1754,7 +1760,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             ...(tenderStatus &&
               tenderStatus != "newPricingVersion" && {
                 "x-contract-status": `${tenderStatus}`,
-              }),
+              }), 
           },
         });
 
@@ -1814,7 +1820,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                   status: "ACTV",
                 })),
           },
-          tenderContract: { ...tenderData.tenderContract },
+          tenderContract: tenderData.tenderContract ,//Gaurav changed from {..tenderData.tenderContract}
         };
         // console.log("km", newTenderData);
         if (tenderStatus == "newPricingVersion") {
@@ -1854,7 +1860,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           tenderData.tenderRevisions == null
         )
           tenderData.tenderRevisions = [
-            {
+            { 
               version: 1,
               status: DsStatus.DRFT.toUpperCase(),
               tenderItems: [],
