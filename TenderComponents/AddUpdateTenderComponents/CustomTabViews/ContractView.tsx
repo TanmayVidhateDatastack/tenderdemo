@@ -318,8 +318,8 @@ const ContractView: React.FC<ContractViewProps> = ({
               typeDocuments,
               removeTenderDocument,
               addNewTenderDocument,
+              status + "_DOCUMENTS",
               "TENDER_CONTRACT_DOCUMENT",
-              status + "_DOCUMENTS"
             );
           }}
         ></DsCsvUpload>
