@@ -86,7 +86,7 @@ const DsSupplyDetails: React.FC = () => {
           ></DsSingleSelect>
           <DsTextField
             containerClasses={styles.fields}
-            maxLength={10}
+            maxLength={5}
             initialValue={tenderData.tenderSupplyCondition.consigneesCount?.toString()}
             inputType="positiveInteger"
             label="Provide no. of consignees"

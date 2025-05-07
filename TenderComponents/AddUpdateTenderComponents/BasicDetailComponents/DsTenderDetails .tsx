@@ -24,6 +24,7 @@ import { setVisibilityByRole } from "@/Redux/slice/PermissionSlice/permissionSli
 import FetchCustomer from "./fetchcustomerComponent";
 import { useAppSelector } from "@/Redux/hook/hook";
 import { RootState } from "@/Redux/store/store";
+import Toaster, { showToaster } from "@/Elements/DsComponents/DsToaster/DsToaster";
 const DsTenderDetails: React.FC = () => {
   const [fetchVisible, setFetchVisible] = useState(true);
   const [role, setRole] = useState("checker");
@@ -44,6 +45,9 @@ const DsTenderDetails: React.FC = () => {
   const { updateTenderData, tenderData, tenderDataCopy, metaData } =
     useTenderData();
   const [customerLocations, setCustomerLocations] = useState<location[]>([]);
+
+    const [toasterVisible, setToasterVisible] = useState<boolean>(false);
+  
 
   // const [cust, setCust] = useState<DsSelectOption>();
   //     value:
@@ -358,6 +362,116 @@ const DsTenderDetails: React.FC = () => {
           }
           disable={disable}
         ></DsTextField>
+
+      {/* Gaurav Code  */}
+
+      {/* <div className={styles.inputDetails}>
+        <DsButton
+          label="Tender Lost "
+          onClick={() => showToaster("toaster1")}
+          buttonSize="btnSmall"
+        ></DsButton> 
+          <DsButton
+          label="Tender Awarded "
+          onClick={() => showToaster("toaster2")}
+          buttonSize="btnSmall"
+        ></DsButton>
+        <DsButton
+          label="Tender Partially"
+          onClick={() => showToaster("toaster3")}
+          buttonSize="btnSmall"
+        ></DsButton>
+        <DsButton
+          label="Tender Cancelled"
+          onClick={() => showToaster("toaster4")}
+          buttonSize="btnSmall"
+        ></DsButton>
+        <DsButton
+          label="Product Review"
+          onClick={() => showToaster("toaster5")}
+          buttonSize="btnSmall"
+        ></DsButton>
+        <DsButton
+          label="Tender Revision"
+          onClick={() => showToaster("toaster6")}
+          buttonSize="btnSmall"
+        ></DsButton>
+         <DsButton
+          label="Tender Rejected "
+          onClick={() => showToaster("toaster7")}
+          buttonSize="btnSmall"
+        ></DsButton>
+         <DsButton
+          label="Receipt submitted"
+          onClick={() => showToaster("toaster8")}
+          buttonSize="btnSmall"
+        ></DsButton>
+
+        <Toaster
+          id={"toaster1"}
+          message={"Tender Lost: Please capture communication details in the following form."}
+          type={"error"}
+          position={"top"}
+          duration={4000}
+          handleClose={() => setToasterVisible(false)}
+        />
+         <Toaster
+          id={"toaster2"}
+          message={"Tender Awarded: Please capture communication details in the following form."}
+          type={"success"}
+          position={"top"}
+          duration={4000}
+          handleClose={() => setToasterVisible(false)}
+        />
+         <Toaster
+          id={"toaster3"}
+          message={"Tender Partially_Awarded: Please capture communication details in the following form."}
+          type={"success"}
+          position={"top"}
+          duration={4000}
+          handleClose={() => setToasterVisible(false)}
+        />
+         <Toaster
+          id={"toaster4"}
+          message={"Tender Cancelled: Please capture communication details in the following form."}
+          type={"error"}
+          position={"top"}
+          duration={4000}
+          handleClose={() => setToasterVisible(false)}
+        />
+          <Toaster
+          id={"toaster5"}
+          message={"The product V2 data has been submitted for review."}
+          type={"success"}
+          position={"top"}
+          duration={4000}
+          handleClose={() => setToasterVisible(false)}
+        />
+          <Toaster
+          id={"toaster6"}
+          message={"The Tender has been sent for revision."}
+          type={"error"}
+          position={"top"}
+          duration={4000}
+          handleClose={() => setToasterVisible(false)}
+        />
+         <Toaster
+          id={"toaster7"}
+          message={"The tender has been rejected and also note has sent."}
+          type={"cross"}
+          position={"top"}
+          duration={4000}
+          handleClose={() => setToasterVisible(false)}
+        />
+         <Toaster
+          id={"toaster8"}
+          message={"The receipt has been submitted successfully."}
+          type={"success"}
+          position={"top"}
+          duration={4000}
+          handleClose={() => setToasterVisible(false)}
+        />
+        </div> */}
       </div>
     </>
   );
