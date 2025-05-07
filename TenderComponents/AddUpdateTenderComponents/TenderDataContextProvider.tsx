@@ -657,7 +657,11 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             documentType: documentType,
             documentCategory: documentCategory,
             documentSubCategory: documentSubCategory,
-            documentName: document?.documentName||document?.document?.name || documentName || "",
+            documentName:
+              document?.documentName ||
+              document?.document?.name ||
+              documentName ||
+              "",
             documentPath: documentPath || "",
             documentStorageId: documentStorageId || 0,
             data: document?.document || undefined,
@@ -691,7 +695,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         ],
       }));
     },
-    [tenderData,  setTenderData]
+    [tenderData, setTenderData]
   );
 
   // const addDocumentToExistingType = (docType: string, document: Document) => {
@@ -1792,17 +1796,16 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         const newTenderData: TenderData = {
           ...tenderData.tenders,
           tenderRevisions: tenderData.tenderRevisions,
-          tenderFees: tenderData.tenderFees
-            .map((fee) => ({ 
-              ...fee,  
-              paymentReceiptId: fee.paymentRecieptId,
-              status: "ACTV",
-            })),
+          tenderFees: tenderData.tenderFees.map((fee) => ({
+            ...fee,
+            paymentReceiptId: fee.paymentRecieptId,
+            status: "ACTV",
+          })),
           tenderSupplyCondition: {
             ...tenderData.tenderSupplyCondition,
             applicableConditions:
               tenderData.tenderSupplyCondition.applicableConditions
-                ?.filter((x) => x.status == "ACTV")
+                // ?.filter((x) => x.status == "ACTV")
                 .map((ac) => ({
                   ...ac,
                   status: "ACTV",
@@ -1817,11 +1820,11 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           else setTenderData(newTenderData);
         } else {
           setTenderData(newTenderData);
-        }   
+        }
         setTenderDataCopy({
           ...newTenderData,
           tenderRevisions: newTenderData.tenderRevisions.filter(
-            (x) => x.id != undefined  
+            (x) => x.id != undefined
           ),
           status: "",
           lastUpdatedBy: -1,
