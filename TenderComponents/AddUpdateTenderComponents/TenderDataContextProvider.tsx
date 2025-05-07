@@ -1388,7 +1388,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 }),
           },
           tenderFees: tenderDataCopy.tenderFees
-            .filter((x) => x.status == "ACTV")
+          .filter((x) => x.status == "ACTV")
             .map((x) => {
               return {
                 id: x.id,
@@ -1398,13 +1398,16 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 paidBy: x.paidBy,
                 paymentMode: x.paymentMode,
                 refundEligibility: x.refundEligibility,
+                paymentDate: x.paymentDate,
                 paymentDueDate: x.paymentDueDate,
+                paymentRefundDate: x.paymentRefundDate,
                 paymentStatus: x.paymentStatus,
+                paymentRefundStatus: x.paymentRefundStatus,
                 instructionNotes: x.instructionNotes,
                 refundNotes: x.refundNotes,
                 paymentTransactionId: x.paymentTransactionId,
                 paymentReceiptId: x.paymentReceiptId,
-                acknowledgmentReceiptId: x.acknowledgementReceiptId,
+                acknowledgementReceiptId: x.acknowledgementReceiptId,
                 fundTransferConfirmationId: x.fundTransferConfirmationId,
               };
             }),
@@ -1430,7 +1433,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             if (x.id) return { id: x.id, tenderItems: x.tenderItems };
             return { tenderItems: x.tenderItems };
           }),
-          comments: null,
+          // comments: null,
         });
         delete dataToSendTenderCopy.applierType;
         delete dataToSendTenderCopy.supplierType;
@@ -1489,7 +1492,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                     id: x.id,
                     type: x.type,
                     notes: x.notes,
-                    status: x.status,
+                    // status: x.status,
                   };
                 }),
           },
@@ -1512,14 +1515,14 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             }) || [],
           // tenderRevisions: latestTenderRevision,
           tenderRevisions:
-            tenderDataCopy.tenderRevisions?.length > 0 &&
+            tenderData.tenderRevisions?.length > 0 &&
             latestTenderRevision[0].tenderItems.length > 0
               ? latestTenderRevision.map((x) => {
                   if (x.id) return { id: x.id, tenderItems: x.tenderItems };
                   return { tenderItems: x.tenderItems };
                 })
               : [],
-          comments: "t",
+          // comments: "t",
         });
         delete dataToSendOriginalTender.applierType;
         delete dataToSendOriginalTender.supplierType;
