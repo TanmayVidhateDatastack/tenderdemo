@@ -1,13 +1,20 @@
 "use client";
+
 import styles from "./CsvPopup.module.css";
 import React, { useRef, useState, useEffect } from "react";
 import IconFactory from "@/Elements/IconComponent";
 
 interface UploadFileProps {
   uploadLabel?: string;
-  id ?: string;
+  id: string;
+  onSelectedFileChange?: (documents: { id?: number; document?: File }[]) => void; 
 }
-const UploadFile: React.FC<UploadFileProps & { id: string }> = ({ uploadLabel, id }) => {
+
+const UploadFile: React.FC<UploadFileProps> = ({
+  uploadLabel,
+  id,
+  onSelectedFileChange, 
+}) => {
   const [fileName, setFileName] = useState<string>(
     uploadLabel || "Attach your File here"
   );
@@ -19,6 +26,17 @@ const UploadFile: React.FC<UploadFileProps & { id: string }> = ({ uploadLabel, i
       setFileName(uploadLabel);
     }
   }, [uploadLabel]);
+
+  useEffect(() => {
+   
+    if (onSelectedFileChange) {
+      if (file) {
+        onSelectedFileChange([{ document: file }]);
+      } else {
+        onSelectedFileChange([]); 
+      }
+    }
+  }, [file]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
@@ -56,10 +74,10 @@ const UploadFile: React.FC<UploadFileProps & { id: string }> = ({ uploadLabel, i
         onDrop={handleDrop}
         onDragOver={handleDragOver}
       >
-        <div  onClick={() => document.getElementById(`selectfile-${id}`)?.click()}>
-        {fileName}
+        <div onClick={() => document.getElementById(`selectfile-${id}`)?.click()}>
+          {fileName}
         </div>
- 
+
         <input
           type="file"
           id={`selectfile-${id}`}
@@ -67,6 +85,7 @@ const UploadFile: React.FC<UploadFileProps & { id: string }> = ({ uploadLabel, i
           onChange={handleFileChange}
           ref={fileInputRef}
         />
+
         {file && (
           <div
             style={{ width: "1em", height: "1em" }}
