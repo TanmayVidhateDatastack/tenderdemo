@@ -38,7 +38,15 @@ export type tenderFee = {
   refundEligibility: string;
   paymentDueDate: string;
   notes: string;
-  documents: tenderDocument[];
+  recoverypaymentDate?:string;
+  refundNotes?: string;
+  paymentTransactionId?: string;
+  paymentReceiptId?: string;
+  acknowledgmentReceiptId?: string;
+  fundTransferConfirmationId?: string;
+  status?: "ACTV" | "INAC";
+  documents: string[];
+  
 };
 
 export interface DsFeesProps {
@@ -215,6 +223,7 @@ disable
 
 
 
+  
 
   return (
     <>
@@ -243,7 +252,7 @@ disable
 
         {/* // { )} } */}
       </div>
-    {completedpayment &&(
+    {completedpayment &&(<></>)}
             <>
             <div className={styles.fields}>
               <Ds_checkbox
@@ -320,11 +329,10 @@ disable
                 {selectedcheckbox &&
                   selectedOptions.map((option) => (
                     <div className={styles.fields}>
-                      <DsTextField
+                       <DsTextField
                         containerClasses={styles.feeFields}
                         label={`${option.label}  ID`}
                          onBlur={(e) =>{
-                          
                           updateTenderFee(
                             type,
                             "paymentTransactionId",
@@ -333,14 +341,20 @@ disable
                         }
                       }
                       />
+                  
                     </div>
                   ))}
+
+
+
+
+
                   </div>
                   <div className={styles.separator}></div>
               
         
         </>
-    )}
+    {/* )} */}
 
 
  <div className={eleStyles.inputDetails}>

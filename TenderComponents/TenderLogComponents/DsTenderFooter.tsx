@@ -119,7 +119,7 @@ export const DSTendrFooter: React.FC = ({}) => {
       ) {
         errors.push("Please select a customer.");
       }
-      if (tenderData?.tenderContract != undefined && tenderData?.tenderContract.contractJustification == undefined) { //Gaurav Changed 
+      if (tenderData?.tenderContract != undefined && tenderData?.tenderContract.contractJustification == undefined) { //Gaurav Changed
         errors.push("Please select a customer address.");
       }
       if (tenderData?.tenderNumber?.trim() === "") {

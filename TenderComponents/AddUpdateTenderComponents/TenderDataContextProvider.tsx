@@ -1757,7 +1757,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 })
               ),
           },
-          tenderContract: { ...tenderData.tenderContract },
+          tenderContract:tenderData.tenderContract,
         };
         // console.log("km", newTenderData);
         if (tenderStatus == "newPricingVersion") {
