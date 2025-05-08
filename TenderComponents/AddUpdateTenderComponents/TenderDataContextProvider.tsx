@@ -581,6 +581,16 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             paymentDueDate: "",
             instructionNotes: "",
             status: active,
+           
+            paymentDate: "",
+            paymentRefundDate: "",
+            refundNotes: "",
+            paymentTransactionId: "",
+            paymentReceiptId: "",
+            acknowledgementReceiptId: "",
+            fundTransferConfirmationId: "",
+            paymentStatus: "",
+            
           });
         }
 
@@ -1138,6 +1148,15 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               refundEligibility: x.refundEligibility,
               paymentDueDate: x.paymentDueDate,
               instructionNotes: x.instructionNotes,
+            
+              paymentDate: x.paymentDate,
+              paymentRefundDate:x.paymentRefundDate,
+              refundNotes: x.refundNotes,
+              paymentTransactionId: x.paymentTransactionId,
+              paymentReceiptId: x.paymentReceiptId,
+              acknowledgementReceiptId: x.acknowledgementReceiptId,
+              fundTransferConfirmationId: x.fundTransferConfirmationId,
+              paymentStatus: x.paymentStatus
             };
           }),
         tenderSupplyCondition: {
@@ -1570,6 +1589,29 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             status: dataToSendOriginalTender.status,
             lastUpdatedBy: dataToSendOriginalTender.lastUpdatedBy,
           });
+        }
+        if (
+          status.toLowerCase() == DsStatus.AWRD.toLowerCase() ||
+          // status.toLowerCase() == DsStatus.PAWRD.toLowerCase() ||
+          status.toLowerCase() == DsStatus.LOST.toLowerCase() ||
+          status.toLowerCase() == DsStatus.CNCL.toLowerCase()
+        ) {
+          url =updatePaymentUrl(tenderData.id)
+          dataToSendTenderCopy = stripReadOnlyProperties({
+            // ...dataToSendTenderCopy.tenderFee,
+            tenderFees: dataToSendTenderCopy.tenderFee,
+            tenderDocuments: dataToSendTenderCopy.tenderDocuments,
+            status: dataToSendTenderCopy.status,
+            lastUpdatedBy: dataToSendTenderCopy.lastUpdatedBy,
+          });
+          dataToSendOriginalTender = stripReadOnlyProperties({
+            // ...dataToSendOriginalTender.tenderContract,
+            tenderFees: dataToSendOriginalTender.tenderFee,
+            tenderDocuments: dataToSendOriginalTender.tenderDocuments,
+            status: dataToSendOriginalTender.status,
+            lastUpdatedBy: dataToSendOriginalTender.lastUpdatedBy,
+          });
+          
         }
 
         if (
@@ -2031,19 +2073,19 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 label: item.codeDescription,
               })
             ),
-            tenderEmdPayment: (result.feesType || []).map(
+            tenderEmdPayment: (result.tenderEmdPayment || []).map(
               (item: { codeValue: string; codeDescription: string }) => ({
                 value: item.codeValue,
                 label: item.codeDescription,
               })
             ),
-            tenderFeesPayment: (result.feesType || []).map(
+            tenderFeesPayment: (result.tenderFeesPayment || []).map(
               (item: { codeValue: string; codeDescription: string }) => ({
                 value: item.codeValue,
                 label: item.codeDescription,
               })
             ),
-            tenderPsdPayment: (result.feesType || []).map(
+            tenderPsdPayment: (result.tenderPsdPayment || []).map(
               (item: { codeValue: string; codeDescription: string }) => ({
                 value: item.codeValue,
                 label: item.codeDescription,

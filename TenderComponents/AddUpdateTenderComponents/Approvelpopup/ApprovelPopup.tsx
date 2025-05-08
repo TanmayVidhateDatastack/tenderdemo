@@ -135,28 +135,28 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
         }
     };
 
-    const handleButtonClick = () => {
-        const resultObject = {
-            text: textAreaValue,
-            selectedValue: selectedOption?.value || " ",
-            selectedLabel: selectedOption?.label,
+    // const handleButtonClick = () => {
+    //     const resultObject = {
+    //         text: textAreaValue,
+    //         selectedValue: selectedOption?.value || " ",
+    //         selectedLabel: selectedOption?.label,
 
-        };
-        const selectedValueString = resultObject?.selectedValue?.toString();
-        createApprovalObject(cId, textAreaValue, selectedValueString, status, deviationCode);
-        const approvalObject = createApprovalObject(cId, textAreaValue, status, selectedValueString, deviationCode);
+    //     };
+    //     const selectedValueString = resultObject?.selectedValue?.toString();
+    //     createApprovalObject(cId, textAreaValue, selectedValueString, status, deviationCode);
+    //     const approvalObject = createApprovalObject(cId, textAreaValue, status, selectedValueString, deviationCode);
 
-    };
+    // };
     const handleSave = async () => {
         const resultObject = {
             text: textAreaValue,
             selectedValue: selectedOption?.label,
             selectedLabel: selectedOption?.value,
         };
-   console.log("resultObject of approvebuton is ",resultObject)
+       console.log("resultObject of approvebuton is ",resultObject)
 
         const selectedValueString = resultObject.selectedValue?.toString() ?? "";
-
+        
         const approvalObject = createApprovalObject(cId, textAreaValue, status, selectedValueString, deviationCode);
 
 
@@ -342,7 +342,7 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
                                 if (selectedOption?.value) {
                                     ShowToastermessage();
                                 } 
-                                handleButtonClick();
+                               
                                 handleSave();
 
                                 setTimeout(() => {
@@ -364,6 +364,8 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
                             buttonViewStyle="btnContained"
                             buttonColor="btnPrimary"
                             onClick={() => {
+                         
+                                handleSave();
                                 if (selectedOption?.value) {
                                     ShowToastermessage();
                                 } 
@@ -377,7 +379,8 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
                             buttonViewStyle="btnContained"
                             buttonColor="btnDanger"
                             onClick={() => {
-
+                             
+                                handleSave();
                              if (selectedOption?.value) {
                                    ShowToastermessage();
                               } 
