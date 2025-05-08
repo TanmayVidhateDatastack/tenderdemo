@@ -118,16 +118,16 @@ export const DSTendrFooter: React.FC = ({}) => {
       ) {
         errors.push("Please select a customer.");
       }
-      if (tenderData?.tenderContract != undefined && tenderData?.tenderContract.contractJustification == undefined) { //Gaurav Changed 
-        errors.push("Please select a customer address.");
-      }
-      if (tenderData?.tenderNumber?.trim() === "") {
+      // if (tenderData?.tenderContract != undefined && tenderData?.tenderContract.contractJustification == undefined) { //Gaurav Changed 
+      //   errors.push("Please select a customer address.");
+      // }
+      if (tenderData?.tenderNumber?.trim() === "") { 
         errors.push("Please enter a tender number.");
       }
       if (tenderData?.tenderType === "") {
         errors.push("Please enter a tender type.");
       }
-      if (tenderData?.issueDate === "") {
+      if (tenderData?.issueDate === "") { 
         errors.push("Please enter the tender issue date.");
       }
       const todaysdate = new Date();
@@ -363,33 +363,36 @@ export const DSTendrFooter: React.FC = ({}) => {
     }
   };
   const validateAndUpdateTender = () => {
-    // console.log(tenderData);
-    // updateTender(tenderData.status);
-
-    const validate = validateFields(tenderData);
-    if (validate.length === 0) {
-      updateTender(tenderData.status);
+    if (tenderData?.status?.toLowerCase() === "draft") {
+      const validate = validateFields(tenderData);
+      if (validate.length === 0) {
+        updateTender(tenderData.status);
+      } else {
+        const message = (
+          <>
+            <div className={styles["toaster-message-grid"]}>
+              {validate.map((ms, index) => (
+                <div key={index} className={styles["toaster-item"]}>
+                  {ms}
+                </div>
+              ))}
+            </div>
+          </>
+        );
+        setActionStatusValues({
+          notiMsg: message,
+          notiType: "info",
+          showNotification: true,
+          isOkayButtonVisible: true,
+        });
+  
+        showToaster("create-order-toaster");
+      }
     } else {
-      const message = (
-        <>
-          <div className={styles["toaster-message-grid"]}>
-            {validate.map((ms, index) => (
-              <div key={index} className={styles["toaster-item"]}>
-                {ms}
-              </div>
-            ))}
-          </div>
-        </>
-      );
-      setActionStatusValues({
-        notiMsg: message,
-        notiType: "info",
-        showNotification: true,
-        isOkayButtonVisible: true,
-      });
-      showToaster("create-order-toaster");
+      updateTender(tenderData.status);
     }
   };
+  
 
   useEffect(() => {
     if (role && role !== "") {
@@ -472,7 +475,7 @@ export const DSTendrFooter: React.FC = ({}) => {
             onClick={() => showToaster("toaster1")}
           />
         );
-      }
+      } 
       if (contextContent) {
         createContext("SubmissionContext", <div>{contextContent}</div>, true);
       }
@@ -498,16 +501,17 @@ export const DSTendrFooter: React.FC = ({}) => {
           onClick={() => {
             // if (saveTender) validateAndSaveTender();
             // if (saveTender) saveTender("Draft");
-            if (tenderDataCopy?.id) {
-              validateAndUpdateTender();
-              // updateTender("Draft")
+            if (tenderDataCopy?.id) { 
+                validateAndUpdateTender();
+                // updateTender("Draft");
             } else {
               validateAndSaveTender();
               // saveTender("Draft");
-            }
+            } 
+            
           }}
           onSplitClick={(e) =>
-            displayContext(e, "SubmissionContext", "top", "right")
+            displayContext(e, "SubmissionContext", "top", "right") 
           }
           buttonSize="btnLarge"
         >

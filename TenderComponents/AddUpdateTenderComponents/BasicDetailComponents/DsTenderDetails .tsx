@@ -24,7 +24,9 @@ import { setVisibilityByRole } from "@/Redux/slice/PermissionSlice/permissionSli
 import FetchCustomer from "./fetchcustomerComponent";
 import { useAppSelector } from "@/Redux/hook/hook";
 import { RootState } from "@/Redux/store/store";
-import Toaster, { showToaster } from "@/Elements/DsComponents/DsToaster/DsToaster";
+import Toaster, {
+  showToaster,
+} from "@/Elements/DsComponents/DsToaster/DsToaster";
 const DsTenderDetails: React.FC = () => {
   const [fetchVisible, setFetchVisible] = useState(true);
   const [role, setRole] = useState("checker");
@@ -46,16 +48,14 @@ const DsTenderDetails: React.FC = () => {
     useTenderData();
   const [customerLocations, setCustomerLocations] = useState<location[]>([]);
 
-    const [toasterVisible, setToasterVisible] = useState<boolean>(false);
-  
+  // const [tenderStatus, setTenderStatus] = useState<string>();
 
-  // const [cust, setCust] = useState<DsSelectOption>();
-  //     value:
-  //     label:
+  const [toasterVisible, setToasterVisible] = useState<boolean>(false);
+
+  // const isEditable = tenderData?.status === "draft";
 
   const permissions = useAppSelector((state: RootState) => state.permissions);
   const { fetchCustomerButtonVisible } = permissions;
-
   const handleRoleFetch = async () => {
     try {
       const res = await fetchData({ url: getTenderUserRoles });
@@ -106,7 +106,7 @@ const DsTenderDetails: React.FC = () => {
       if (option) setSelectedSubmissionMode(option);
     }
   }, [tenderData.submissionMode, metaData.submissionMode]);
-
+  
   return (
     <>
       <ContextMenu
@@ -128,6 +128,7 @@ const DsTenderDetails: React.FC = () => {
           orderData={undefined}
           setCustomerLocations={setCustomerLocations}
           updateTenderData={updateTenderData}
+          
         />
         {/* </div> */}
 
@@ -163,6 +164,7 @@ const DsTenderDetails: React.FC = () => {
           containerClasses={styles.fields}
           id="CustomerAddress"
           placeholder="Select Customer Location"
+          disable={tenderData?.status.toLowerCase() !== "draft"}
           options={customerLocations.map((addr) => ({
             value: addr.id.toString(),
 
@@ -188,6 +190,7 @@ const DsTenderDetails: React.FC = () => {
 
               // console.log("customerLocationId",option.value)
             }
+            
           }}
         />
         <DsTextField
@@ -196,6 +199,7 @@ const DsTenderDetails: React.FC = () => {
           maxLength={50}
           label="Tender number"
           inputType="alphaNumeric"
+          disable={tenderData?.status.toLowerCase() !== "draft"}
           // placeholder="Please Type Here"
           onBlur={(e) =>
             updateTenderData(
@@ -207,8 +211,8 @@ const DsTenderDetails: React.FC = () => {
         <DsSingleSelect
           containerClasses={styles.fields}
           options={metaData.tenderType || []}
-          label="Tender type"
-          // placeholder={"Tender type"}
+          label="Tender type"  
+          disable={tenderData?.status.toLowerCase() !== "draft"}
           id={"tenderType"}
           selectedOption={selectedTenderType}
           setSelectOption={(option) => {
@@ -226,13 +230,14 @@ const DsTenderDetails: React.FC = () => {
               : undefined
           }
           maxDate={new Date()}
+          // minDate={}
           id={"issueDate"}
           setDateValue={(date) => {
             if (date instanceof Date) {
               updateTenderData("issueDate", getTodayDate(date));
             }
           }}
-          // disable={true}
+          disable={tenderData?.status.toLowerCase() !== "draft"}
           placeholder="DD/MM/YYYY"
           label="Tender issue date"
         />
@@ -252,7 +257,7 @@ const DsTenderDetails: React.FC = () => {
               updateTenderData("lastPurchaseDate", getTodayDate(date));
             }
           }}
-          // disable={true}
+          disable={tenderData?.status.toLowerCase() !== "draft"}
           placeholder="DD/MM/YYYY"
           label="Last date of purchasing"
         />
@@ -270,7 +275,7 @@ const DsTenderDetails: React.FC = () => {
               updateTenderData("submissionDate", getTodayDate(date));
             }
           }}
-          // disable={true}
+          disable={tenderData?.status.toLowerCase() !== "draft"}
           placeholder="DD/MM/YYYY"
           label="Submission date"
         />
@@ -280,6 +285,7 @@ const DsTenderDetails: React.FC = () => {
           initialValue={tenderData.rateContractValidity}
           inputType="positiveInteger"
           label="Rate contract validity"
+          disable={tenderData?.status.toLowerCase() !== "draft"}
           onBlur={(e) =>
             updateTenderData(
               "rateContractValidity",
@@ -291,6 +297,7 @@ const DsTenderDetails: React.FC = () => {
           containerClasses={styles.fields}
           selectedOption={selectedSubmissionMode}
           options={metaData.submissionMode || []}
+          disable={tenderData?.status.toLowerCase() !== "draft"}
           // type={"single"}
           label="Submission mode"
           id={"submissionMode"}
@@ -306,6 +313,7 @@ const DsTenderDetails: React.FC = () => {
           maxLength={5}
           inputType="positiveInteger"
           label={"Delivery period (In days)"}
+          disable={tenderData?.status.toLowerCase() !== "draft"}
           onBlur={(e) =>
             updateTenderData(
               "deliveryPeriod",
@@ -319,6 +327,7 @@ const DsTenderDetails: React.FC = () => {
           maxLength={5}
           inputType="positiveInteger"
           label={"Extended delivery period (In days)"}
+          disable={tenderData?.status.toLowerCase() !== "draft"}
           onBlur={(e) =>
             updateTenderData(
               "extendedDeliveryPeriod",
@@ -334,6 +343,7 @@ const DsTenderDetails: React.FC = () => {
           label="Penalty for late delivery %"
           inputType="positive"
           iconEnd={<pre>{" %"}</pre>}
+          disable={tenderData?.status.toLowerCase() !== "draft"}
           onBlur={(e) =>
             updateTenderData(
               "lateDeliveryPenalty",
@@ -346,14 +356,15 @@ const DsTenderDetails: React.FC = () => {
           maxLength={2000}
           initialValue={tenderData.tenderUrl}
           label="Tender site/url"
+          disable={tenderData?.status.toLowerCase() !== "draft"}
           onBlur={(e) =>
             updateTenderData("tenderUrl", (e.target as HTMLInputElement).value)
           }
         ></DsTextField>
 
-      {/* Gaurav Code  */}
+        {/* Gaurav Code  */}
 
-      {/* <div className={styles.inputDetails}>
+        {/* <div className={styles.inputDetails}>
         <DsButton
           label="Tender Lost "
           onClick={() => showToaster("toaster1")}

@@ -197,6 +197,7 @@ const DsApplicableConditions: React.FC=() => {
             buttonViewStyle="btnText"
             className={styles.optionBtn + " " + styles.depositsBtn}
             label="Applicable Supply Conditions"
+            disable={tenderData?.status.toLowerCase() !== "draft"}
             endIcon={
               <div
                 style={{
@@ -247,6 +248,7 @@ const DsApplicableConditions: React.FC=() => {
                   defaultChecked={
                     conditionsVisibility[checkbox.value.toString()]
                   }
+                  
                 />
               ))}
               <DsButton
@@ -255,6 +257,8 @@ const DsApplicableConditions: React.FC=() => {
                 className={styles.addBtn}
                 buttonSize="btnSmall"
                 onClick={() => handleAdd()}
+                disable={tenderData?.status.toLowerCase() !== "draft"}
+
               />{" "}
             </div>
           </>

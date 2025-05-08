@@ -241,6 +241,7 @@ const DsDepositeDocuments: React.FC = () => {
           <DsButton
             id="optionBtn"
             label="Applicable Deposits"
+            disable={tenderData?.status.toLowerCase() !== "draft"}
             className={styles.optionBtn + " " + styles.depositsBtn}
             onClick={(e) => handleonclick(e)}
             endIcon={
@@ -310,6 +311,8 @@ const DsDepositeDocuments: React.FC = () => {
                 buttonSize="btnSmall"
                 className={styles.addBtn}
                 onClick={handleAdd}
+                disable={tenderData?.status.toLowerCase() !== "draft"}
+
               />
             </div>
           </>

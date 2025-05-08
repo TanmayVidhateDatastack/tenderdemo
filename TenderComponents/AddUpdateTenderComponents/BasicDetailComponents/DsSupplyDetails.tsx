@@ -79,6 +79,7 @@ const DsSupplyDetails: React.FC = () => {
             label="Supply point"
             placeholder={"Please select here"}
             id={"supplyPoints"}
+            disable={tenderData?.status.toLowerCase() !== "draft"}
             setSelectOption={(option) => {
               if (typeof option.value == "string")
                 updateSupplyCondition("supplyPoint", option.value);
@@ -90,6 +91,7 @@ const DsSupplyDetails: React.FC = () => {
             initialValue={tenderData.tenderSupplyCondition.consigneesCount?.toString()}
             inputType="positiveInteger"
             label="Provide no. of consignees"
+            disable={tenderData?.status.toLowerCase() !== "draft"}
             // placeholder="Please type here"
             onBlur={(e) =>
               updateSupplyCondition(
@@ -105,6 +107,7 @@ const DsSupplyDetails: React.FC = () => {
             options={metaData.testReportRequired||[]}
             label="Test report requirement"
             placeholder={"Please select here"}
+            disable={tenderData?.status.toLowerCase() !== "draft"}
             id={"reportReq"}
             setSelectOption={(option) => {  
               if (typeof option.value == "string") {   
@@ -128,6 +131,7 @@ const DsSupplyDetails: React.FC = () => {
             options={metaData.eligibility||[]}
             label="Eligibility"
             placeholder={"Please search and select here"}
+            disable={tenderData?.status.toLowerCase() !== "draft"}
             id={"eligibility"}
             setSelectOptions={(options) => {
               updateSupplyCondition(

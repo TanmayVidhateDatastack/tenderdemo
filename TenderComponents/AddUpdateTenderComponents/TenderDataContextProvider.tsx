@@ -1291,7 +1291,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           return { ...x, requestId: documentRequestId };
         });
         const formData = new FormData();
-
+ 
         tenderSaveDocuments?.forEach((doc, index) => {
           console.log(
             doc.data,
@@ -1307,7 +1307,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               `tenderDocuments[${index}].requestId`,
               doc.requestId.toString()
             );
-
+ 
             formData.append(
               `tenderDocuments[${index}].Document`,
               doc.data,
@@ -1388,26 +1388,29 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 }),
           },
           tenderFees: tenderDataCopy.tenderFees
-            .filter((x) => x.status == "ACTV")
-            .map((x) => {
-              return {
-                id: x.id,
-                feesType: x.feesType,
-                amount: x.amount,
-                currency: x.currency,
-                paidBy: x.paidBy,
-                paymentMode: x.paymentMode,
-                refundEligibility: x.refundEligibility,
-                paymentDueDate: x.paymentDueDate,
-                paymentStatus: x.paymentStatus,
-                instructionNotes: x.instructionNotes,
-                refundNotes: x.refundNotes,
-                paymentTransactionId: x.paymentTransactionId,
-                paymentReceiptId: x.paymentReceiptId,
-                acknowledgmentReceiptId: x.acknowledgementReceiptId,
-                fundTransferConfirmationId: x.fundTransferConfirmationId,
-              };
-            }),
+          .filter((x) => x.status == "ACTV")
+          .map((x) => {
+            return {
+              id: x.id,
+              feesType: x.feesType,
+              amount: x.amount,
+              currency: x.currency,
+              paidBy: x.paidBy,
+              paymentMode: x.paymentMode,
+              refundEligibility: x.refundEligibility,
+              paymentDate: x.paymentDate,
+              paymentDueDate: x.paymentDueDate,
+              paymentRefundDate: x.paymentRefundDate,
+              paymentStatus: x.paymentStatus,
+              paymentRefundStatus: x.paymentRefundStatus,
+              instructionNotes: x.instructionNotes,
+              refundNotes: x.refundNotes,
+              paymentTransactionId: x.paymentTransactionId,
+              paymentReceiptId: x.paymentReceiptId,
+              acknowledgementReceiptId: x.acknowledgementReceiptId,
+              fundTransferConfirmationId: x.fundTransferConfirmationId,
+            };
+          }),
           tenderDocuments:
             tenderOriginalDocuments?.map((x) => {
               // const newDocs=new FormData();
@@ -1430,7 +1433,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             if (x.id) return { id: x.id, tenderItems: x.tenderItems };
             return { tenderItems: x.tenderItems };
           }),
-          comments: null,
+          // comments: null,
         });
         delete dataToSendTenderCopy.applierType;
         delete dataToSendTenderCopy.supplierType;
@@ -1444,7 +1447,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           applierId:
             tenderData.applierType.toLowerCase() == "organization"
               ? null
-              : tenderData.applierId,
+              : tenderData.applierId, 
           suppliedBy:
             tenderData.supplierType.toLowerCase() == "organization"
               ? "IPCA"
@@ -1480,7 +1483,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           tenderSupplyCondition: {
             ...tenderData.tenderSupplyCondition,
             eligibility: tenderData.tenderSupplyCondition.eligibility,
-
+ 
             applicableConditions:
               tenderData.tenderSupplyCondition.applicableConditions
                 .filter((x) => x.status == "ACTV")
@@ -1489,7 +1492,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                     id: x.id,
                     type: x.type,
                     notes: x.notes,
-                    status: x.status,
+                    // status: x.status,
                   };
                 }),
           },
@@ -1512,14 +1515,14 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             }) || [],
           // tenderRevisions: latestTenderRevision,
           tenderRevisions:
-            tenderDataCopy.tenderRevisions?.length > 0 &&
+            tenderData.tenderRevisions?.length > 0 &&
             latestTenderRevision[0].tenderItems.length > 0
               ? latestTenderRevision.map((x) => {
                   if (x.id) return { id: x.id, tenderItems: x.tenderItems };
                   return { tenderItems: x.tenderItems };
                 })
               : [],
-          comments: "t",
+          // comments: "t",
         });
         delete dataToSendOriginalTender.applierType;
         delete dataToSendOriginalTender.supplierType;
@@ -1544,7 +1547,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             lastUpdatedBy: dataToSendOriginalTender.lastUpdatedBy,
           });
         }
-
+ 
         if (
           tenderData?.tenderDocuments &&
           tenderData.tenderDocuments.length > 0 &&
@@ -1575,12 +1578,12 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                       };
                     }) || [],
                 });
-
+ 
                 const patchDocument = generatePatchDocument(
                   dataToSendTenderCopy,
                   dataToSendOriginalTender
                 );
-
+ 
                 await fetchData({
                   url: url,
                   method: "PATCH",
@@ -1613,7 +1616,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             dataToSendTenderCopy,
             dataToSendOriginalTender
           );
-
+ 
           await fetchData({
             url: url,
             method: "PATCH",
@@ -1643,12 +1646,12 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         console.error("Error saving order:", error);
       }
     },
-
+ 
     // async (status: string) => {
     //   const obj1 = {
     //     abc: "abc",
     //     least: ["sell", "bell"],
-
+ 
     //     mno: {
     //       abc1: "abc",
     //     },
@@ -1657,7 +1660,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     //         id: 1,
     //         abcx: "abc",
     //         least: ["sell", "bell"],
-
+ 
     //         mnox: {
     //           abc1x: "abc",
     //         },
@@ -1691,7 +1694,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     //         id: 1,
     //         abcx: "abc5",
     //         least: ["sell"],
-
+ 
     //         mnox: {
     //           abc1x: "abc7",
     //         },
@@ -1706,7 +1709,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     //                 h1: "rest",
     //                 h2: "t",
     //         least: ["sell", "bell", "hell"],
-
+ 
     //               },
     //             ],
     //           },
@@ -1746,6 +1749,8 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     // },
     [tenderData, tenderDataCopy, fetchData, generatePatchDocument]
   );
+ 
+ 
 
   const fetchAndSetOriginalTender = useCallback(
     async (tenderId: number, tenderStatus?: string) => {

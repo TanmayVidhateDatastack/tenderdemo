@@ -184,8 +184,6 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
   const [selectedDepo, setSelectedDepo] = useState<DsSelectOption[]>([]);
   useEffect(() => {
     const loc = [...tenderData.shippingLocations];
-    // console.log("ffffffffffffffffffffff",loc);
-    // console.log("gggggggggggggggggggggg",formatedDepot);
     const depo = loc.map((x) => {
       return (
         formatedDepot.find((d) => Number(d.value) == x) || {
@@ -205,6 +203,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
           isSearchable={true}
           options={appliedBy}
           label="Applied by"
+          disable={tenderData?.status.toLowerCase() !== "draft"}
           {...(tenderData.id
             ? {
                 selectedOption: {
@@ -248,6 +247,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
           label="Supplied by"
           placeholder={"Please search or select here"}
           id={"suppliedBy"}
+          disable={tenderData?.status.toLowerCase() !== "draft"}
           onSelect={handleSuppliedBySelects}
           setSelectOption={(isDataListOptions, option) => {
             // setSelected(option);
@@ -268,6 +268,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
           containerClasses={styles.fields}
           selectedOptions={selectedDepo}
           options={formatedDepot}
+          disable={tenderData?.status.toLowerCase() !== "draft"}
           // type="multi"
           label="Depot"
           placeholder={"Please search or select here"} 
@@ -289,6 +290,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
           initialValue={tenderData.supplierName}
           label="Stockist / Liasioner name"
           inputType="alphaNumeric"
+          disable={tenderData?.status.toLowerCase() !== "draft"}
           // placeholder="Please type here"
           onBlur={(e) =>
             updateTenderData(
@@ -305,6 +307,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
           maxLength={5}
           label="Stockist / Liasioner discount %"
           iconEnd={<pre>{" %"}</pre>}
+          disable={tenderData?.status.toLowerCase() !== "draft"}
           // placeholder="Please type here"
           onBlur={(e) =>
             updateTenderData(

@@ -41,7 +41,7 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
             id="embossmentNotes"
             placeholder="Please type here"
             minRows={2}
-            disable={false}
+            disable={tenderData?.status.toLowerCase() !== "draft"}
             onBlur={(e) => {
               updateApplicableCondition(
                 type,
@@ -57,7 +57,11 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
             label="Attach File"
             buttonViewStyle="btnText"
             buttonSize="btnSmall"
-            startIcon={<IconFactory name="fileAttach" />}
+            disable={tenderData?.status.toLowerCase() !== "draft"}
+            startIcon={
+            <IconFactory 
+            name="fileAttach" 
+            disabled={tenderData?.status.toLowerCase() !== "draft"} />}
             previouslySelectedFile={
               tenderData.tenderDocuments?.filter(
                 (x) =>
@@ -82,6 +86,7 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
                 "TENDER_SUPPLY_CONDITION",
                 type
               );
+              
             }}
           ></DsCsvUpload>
         </div>

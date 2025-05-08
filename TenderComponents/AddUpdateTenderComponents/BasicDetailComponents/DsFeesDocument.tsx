@@ -239,6 +239,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             <DsMultiSelect
               label="Add document type"
               id={id + "Documents"}
+              disable={tenderData?.status.toLowerCase() !== "draft"}
               options={optionlist || []}
               setSelectOptions={(options) => {
                 setSelectedOptions(options);
@@ -291,6 +292,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           }
           label={"Amount"}
           inputType="positiveInteger"
+          disable={tenderData?.status.toLowerCase() !== "draft"}
           onBlur={(e) =>
             updateTenderFee(
               type,
@@ -308,6 +310,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           options={depositeDocuments}
           label="Paid by"
           placeholder={"Please select here"}
+          disable={tenderData?.status.toLowerCase() !== "draft"}
           setSelectOption={(option) => {
             if (typeof option.value == "string") {
               updateTenderFee(type, "paidBy", option.value);
@@ -323,6 +326,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           options={mode}
           label="Modes"
           placeholder={"Please search and select here"}
+          disable={tenderData?.status.toLowerCase() !== "draft"}
           setSelectOption={(option) => {
             if (typeof option.value == "string") {
               updateTenderFee(type, "paymentMode", option.value);
@@ -337,6 +341,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           id={id + "_refund"}
           options={refund}
           label="Refund Eligibility"
+          disable={tenderData?.status.toLowerCase() !== "draft"}
           setSelectOption={(option) => {
             if (typeof option.value == "string") {
               updateTenderFee(type, "refundEligibility", option.value);
@@ -361,6 +366,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           }
           placeholder="DD/MM/YYYY"
           label="Due Date"
+          disable={tenderData?.status.toLowerCase() !== "draft"}
           setDateValue={(date) => {
             if (date instanceof Date) {
               updateTenderFee(type, "paymentDueDate", getTodayDate(date));
@@ -381,7 +387,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               ?.instructionNotes || ""
           }
           placeholder="Please type here"
-          disable={false}
+          disable={tenderData?.status.toLowerCase() !== "draft"}
           minRows={2}
           onBlur={(e) => {
             updateTenderFee(
@@ -399,7 +405,8 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           label="Attach File"
           buttonViewStyle="btnText"
           buttonSize="btnSmall"
-          startIcon={<IconFactory name="fileAttach" />}
+          startIcon={<IconFactory name="fileAttach" 
+          disabled={tenderData?.status.toLowerCase() !== "draft"}/>}
           previouslySelectedFile={
             tenderData.tenderDocuments?.filter(
               (x) =>
@@ -423,6 +430,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               type + "_INSTRUCTION"
             );
           }}
+          disable={tenderData?.status.toLowerCase() !== "draft"}
         ></DsCsvUpload>
       </div>
       {/* </div> */}
