@@ -533,7 +533,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
       {recoverycheckvisibible && (
         <>
           <div className={styles.separator}></div>
-
+          
           <Ds_checkbox
             id={"paymentrefund"}
             name={"Payment Recovered "}

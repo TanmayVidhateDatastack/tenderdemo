@@ -289,7 +289,7 @@ const ContractView: React.FC<ContractViewProps> = ({
               (e.target as HTMLTextAreaElement).value
             );
           }}
-          minRows={status == "CANCELLED" ? 30 : 5}
+          minRows={status == "CANCELLED" ? 20 : 5}
           initialValue={tenderData.tenderContract?.contractStatusNotes}
         />
         <DsCsvUpload

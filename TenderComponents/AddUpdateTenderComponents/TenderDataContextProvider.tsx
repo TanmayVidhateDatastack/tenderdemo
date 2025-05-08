@@ -1,5 +1,6 @@
 import { showToaster } from "@/Elements/DsComponents/DsToaster/DsToaster";
 import {
+  cancelTenderContractURl,
   closeTimeForTender,
   DsStatus,
   // DsStatus,
@@ -8,8 +9,9 @@ import {
   getTenderByTenderId,
   saveDocumentUrl,
   // saveDocumentUrl,
-  saveTenderurl,
-  updatePaymentUrl,
+  updateTenderUrl,
+  updateContractUrl,
+  saveTenderUrl,
 } from "@/Common/helpers/constant";
 import fetchData, { fileToBase64 } from "@/Common/helpers/Method/fetchData";
 
@@ -104,17 +106,20 @@ export type tenderFee = {
   paidBy: string;
   paymentMode: string;
   refundEligibility: string;
-  instructionNotes: string;
   paymentDueDate: string;
+
   paymentDate?: string;
   paymentRefundDate?: string;
   refundNotes?: string;
+  paymentStatus?: string;
+  paymentRefundStatus?: string;
+
   paymentTransactionId?: string;
   paymentReceiptId?: string;
   acknowledgementReceiptId?: string;
   fundTransferConfirmationId?: string;
-  paymentStatus?: string;
-  paymentRefundStatus?: string;
+
+  instructionNotes: string;
   status?: "ACTV" | "INAC";
   // documents: Document[];
 };
@@ -1219,7 +1224,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 });
 
                 console.log("sAVEEEE", dataToSend);
-                await fetch(saveTenderurl, {
+                await fetch(saveTenderUrl, {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json", //gaurav
@@ -1261,7 +1266,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           });
 
           console.log("sAVEEEE", dataToSend);
-          await fetch(saveTenderurl, {
+          await fetch(saveTenderUrl, {
             method: "POST",
             headers: {
               "Content-Type": "application/json", //gaurav
@@ -1555,14 +1560,18 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         });
         delete dataToSendOriginalTender.applierType;
         delete dataToSendOriginalTender.supplierType;
-        let url = saveTenderurl + "/" + tenderData.id;
+        let url = updateTenderUrl(tenderData.id);
+        //  + "/" + tenderData.id;
         if (
           status.toLowerCase() == DsStatus.AWRD.toLowerCase() ||
           status.toLowerCase() == DsStatus.PAWRD.toLowerCase() ||
           status.toLowerCase() == DsStatus.LOST.toLowerCase() ||
           status.toLowerCase() == DsStatus.CNCL.toLowerCase()
         ) {
-          url = getTenderByTenderId + tenderData.id + "/contract";
+          // url = getTenderByTenderId + tenderData.id + "/contract";
+          if (status.toLowerCase() == DsStatus.CNCL.toLowerCase())
+            url = cancelTenderContractURl(tenderData.id);
+          else url = updateContractUrl(tenderData.id);
           dataToSendTenderCopy = stripReadOnlyProperties({
             ...dataToSendTenderCopy.tenderContract,
             tenderDocuments: dataToSendTenderCopy.tenderDocuments,
@@ -1571,6 +1580,11 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           });
           dataToSendOriginalTender = stripReadOnlyProperties({
             ...dataToSendOriginalTender.tenderContract,
+            contractStatusNotes:
+              dataToSendOriginalTender.tenderContract.contractStatusNotes ||
+              dataToSendOriginalTender.tenderContract.contractStatusNotes?.trim() !== ""
+                ? dataToSendOriginalTender.tenderContract.contractStatusNotes
+                : null,
             tenderDocuments: dataToSendOriginalTender.tenderDocuments,
             status: dataToSendOriginalTender.status,
             lastUpdatedBy: dataToSendOriginalTender.lastUpdatedBy,
