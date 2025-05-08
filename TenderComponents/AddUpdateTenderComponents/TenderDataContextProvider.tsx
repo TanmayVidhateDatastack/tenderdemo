@@ -104,10 +104,10 @@ export type tenderFee = {
   paidBy: string;
   paymentMode: string;
   refundEligibility: string;
-  paymentDate?: string;
-  paymentDueDate: string;
-  paymentRefundDate?: string;
   instructionNotes: string;
+  paymentDueDate: string;
+  paymentDate?: string;
+  paymentRefundDate?: string;
   refundNotes?: string;
   paymentTransactionId?: string;
   paymentReceiptId?: string;
@@ -576,6 +576,16 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             paymentDueDate: "",
             instructionNotes: "",
             status: active,
+           
+            paymentDate: "",
+            paymentRefundDate: "",
+            refundNotes: "",
+            paymentTransactionId: "",
+            paymentReceiptId: "",
+            acknowledgementReceiptId: "",
+            fundTransferConfirmationId: "",
+            paymentStatus: "",
+            
           });
         }
 
@@ -1133,6 +1143,15 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               refundEligibility: x.refundEligibility,
               paymentDueDate: x.paymentDueDate,
               instructionNotes: x.instructionNotes,
+            
+              paymentDate: x.paymentDate,
+              paymentRefundDate:x.paymentRefundDate,
+              refundNotes: x.refundNotes,
+              paymentTransactionId: x.paymentTransactionId,
+              paymentReceiptId: x.paymentReceiptId,
+              acknowledgementReceiptId: x.acknowledgementReceiptId,
+              fundTransferConfirmationId: x.fundTransferConfirmationId,
+              paymentStatus: x.paymentStatus
             };
           }),
         tenderSupplyCondition: {

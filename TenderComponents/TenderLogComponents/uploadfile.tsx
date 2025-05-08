@@ -100,3 +100,13 @@ const UploadFile: React.FC<UploadFileProps> = ({
 };
 
 export default UploadFile;
+
+
+
+
+
+
+
+
+
+
