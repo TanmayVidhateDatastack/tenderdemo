@@ -12,6 +12,7 @@ import {
   updateTenderUrl,
   updateContractUrl,
   saveTenderUrl,
+  updatePaymentUrl,
 } from "@/Common/helpers/constant";
 import fetchData, { fileToBase64 } from "@/Common/helpers/Method/fetchData";
 
@@ -27,6 +28,8 @@ import React, {
 import { generatePatchDocument } from "@/Common/helpers/Method/UpdatePatchObjectCreation";
 import DsSupplyConditions from "./BasicDetailComponents/DsSupplyConditions";
 import { DsSelectOption } from "@/Common/helpers/types";
+import { useAppSelector } from "@/Redux/hook/hook";
+import { RootState } from "@/Redux/store/store";
 
 class ActionStatus {
   notiType: "success" | "bonus" | "info" | "error" | "cross" = "success";
@@ -488,7 +491,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     notiType: "success",
     showNotification: false,
   });
-
+  const role = useAppSelector((state: RootState) => state.user.role);
   // ✅ Update top-level tender fields
   const updateTenderData = useCallback(
     (
@@ -581,7 +584,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             paymentDueDate: "",
             instructionNotes: "",
             status: active,
-           
+
             paymentDate: "",
             paymentRefundDate: "",
             refundNotes: "",
@@ -590,7 +593,6 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             acknowledgementReceiptId: "",
             fundTransferConfirmationId: "",
             paymentStatus: "",
-            
           });
         }
 
@@ -1148,15 +1150,15 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               refundEligibility: x.refundEligibility,
               paymentDueDate: x.paymentDueDate,
               instructionNotes: x.instructionNotes,
-            
+
               paymentDate: x.paymentDate,
-              paymentRefundDate:x.paymentRefundDate,
+              paymentRefundDate: x.paymentRefundDate,
               refundNotes: x.refundNotes,
               paymentTransactionId: x.paymentTransactionId,
               paymentReceiptId: x.paymentReceiptId,
               acknowledgementReceiptId: x.acknowledgementReceiptId,
               fundTransferConfirmationId: x.fundTransferConfirmationId,
-              paymentStatus: x.paymentStatus
+              paymentStatus: x.paymentStatus,
             };
           }),
         tenderSupplyCondition: {
@@ -1563,10 +1565,11 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         let url = updateTenderUrl(tenderData.id);
         //  + "/" + tenderData.id;
         if (
-          status.toLowerCase() == DsStatus.AWRD.toLowerCase() ||
-          status.toLowerCase() == DsStatus.PAWRD.toLowerCase() ||
-          status.toLowerCase() == DsStatus.LOST.toLowerCase() ||
-          status.toLowerCase() == DsStatus.CNCL.toLowerCase()
+          (status.toLowerCase() == DsStatus.AWRD.toLowerCase() ||
+            status.toLowerCase() == DsStatus.PAWRD.toLowerCase() ||
+            status.toLowerCase() == DsStatus.LOST.toLowerCase() ||
+            status.toLowerCase() == DsStatus.CNCL.toLowerCase()) &&
+          role === "MAKER"
         ) {
           // url = getTenderByTenderId + tenderData.id + "/contract";
           if (status.toLowerCase() == DsStatus.CNCL.toLowerCase())
@@ -1582,7 +1585,8 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             ...dataToSendOriginalTender.tenderContract,
             contractStatusNotes:
               dataToSendOriginalTender.tenderContract.contractStatusNotes ||
-              dataToSendOriginalTender.tenderContract.contractStatusNotes?.trim() !== ""
+              dataToSendOriginalTender.tenderContract.contractStatusNotes?.trim() !==
+                ""
                 ? dataToSendOriginalTender.tenderContract.contractStatusNotes
                 : null,
             tenderDocuments: dataToSendOriginalTender.tenderDocuments,
@@ -1591,12 +1595,13 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           });
         }
         if (
-          status.toLowerCase() == DsStatus.AWRD.toLowerCase() ||
-          // status.toLowerCase() == DsStatus.PAWRD.toLowerCase() ||
-          status.toLowerCase() == DsStatus.LOST.toLowerCase() ||
-          status.toLowerCase() == DsStatus.CNCL.toLowerCase()
+          (status.toLowerCase() == DsStatus.AWRD.toLowerCase() ||
+            // status.toLowerCase() == DsStatus.PAWRD.toLowerCase() ||
+            status.toLowerCase() == DsStatus.LOST.toLowerCase() ||
+            status.toLowerCase() == DsStatus.CNCL.toLowerCase()) &&
+          role === "ACCOUNTANCE"
         ) {
-          url =updatePaymentUrl(tenderData.id)
+          url = updatePaymentUrl(tenderData.id);
           dataToSendTenderCopy = stripReadOnlyProperties({
             // ...dataToSendTenderCopy.tenderFee,
             tenderFees: dataToSendTenderCopy.tenderFee,
@@ -1611,7 +1616,6 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             status: dataToSendOriginalTender.status,
             lastUpdatedBy: dataToSendOriginalTender.lastUpdatedBy,
           });
-          
         }
 
         if (
