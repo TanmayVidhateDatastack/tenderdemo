@@ -255,7 +255,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               updateTenderFee(
                 type,
                 "paymentStatus",
-                (e.target as HTMLInputElement).checked ? "DONE" : "PEND"
+                e.target.checked ? "DONE" : "PEND"
               );
             }}
           />
@@ -338,7 +338,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
         <div className={eleStyles.inputDetails}>
           {selectedcheckbox &&
             selectedOptions.map((option) => (
-              <div key={""} className={styles.fields}>
+              <div className={styles.fields}>
                 <DsTextField
                   containerClasses={styles.feeFields}
                   label={`${option.label}   ID`}

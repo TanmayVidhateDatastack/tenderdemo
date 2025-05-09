@@ -620,6 +620,7 @@ export const DSTendrFooter: React.FC = ({}) => {
       <ApprovalPopup
         id="popup1"
         types={[]}
+        tenderId={tenderData.id}
         popupType="Approve"
         buttonColor="btnPrimary"
         position="center"
@@ -634,6 +635,7 @@ export const DSTendrFooter: React.FC = ({}) => {
       />
       <ApprovalPopup
         id="popup2"
+  tenderId={tenderData.id}
         types={[]}
         popupType="Revise"
         buttonColor="btnPrimary"
@@ -643,6 +645,7 @@ export const DSTendrFooter: React.FC = ({}) => {
       />
       <ApprovalPopup
         id="popup3"
+        tenderId={tenderData.id}
         types={[]}
         popupType="Reject"
         buttonColor="btnDanger"
