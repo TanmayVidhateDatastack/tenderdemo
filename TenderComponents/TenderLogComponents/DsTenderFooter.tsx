@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 
 import btnStyles from "@/Elements/DsComponents/DsButtons/dsButton.module.css";
 import ContextMenu, {
+  closeAllContext,
   closeContext,
   createContext,
   displayContext,
@@ -30,6 +31,7 @@ import { TenderData } from "@/TenderComponents/AddUpdateTenderComponents/TenderD
 import { getYesterdayDate } from "@/Common/helpers/Method/conversion";
 import ApprovalPopup from "../AddUpdateTenderComponents/Approvelpopup/ApprovelPopup";
 import { ContractStatuses } from "../AddUpdateTenderComponents/CustomTabViews/ContractView";
+import { ClosePopup } from "@/Elements/DsComponents/dsPopup/dsPopup";
 
 class ActionStatus {
   notiType: "success" | "bonus" | "info" | "error" | "cross" = "success";
@@ -42,12 +44,20 @@ export const DSTendrFooter: React.FC = ({}) => {
   const dispatch = useAppDispatch<AppDispatch>();
   const role = useAppSelector((state: RootState) => state.user.role);
   const [toasterVisible, setToasterVisible] = useState<boolean>(false);
+  const [splitButtonDisableState, setSplitButtonDisbale] =
+    useState<boolean>(false);
+  const [saveTenderClicked,setSaveTenderClicked]=useState<boolean>(false);
+  const [contextContent, setContextContext] = useState<React.ReactElement<
+    any,
+    string | React.JSXElementConstructor<any>
+  > | null>();
   const {
     setActionStatusValues,
     saveTender,
     tenderData,
     tenderDataCopy,
     updateTender,
+    updateContractDetails,
   } = useTenderData();
   const handleFetch = async () => {
     try {
@@ -65,7 +75,7 @@ export const DSTendrFooter: React.FC = ({}) => {
     handleFetch();
   }, []);
 
-  const validateFields = (tenderData:TenderData) => {
+  const validateFields = (tenderData: TenderData) => {
     const errors: string[] = [];
     if (
       tenderData.status.toLowerCase() == DsStatus.AWRD.toLowerCase() ||
@@ -73,41 +83,46 @@ export const DSTendrFooter: React.FC = ({}) => {
       tenderData.status.toLowerCase() == DsStatus.LOST.toLowerCase() ||
       tenderData.status.toLowerCase() == DsStatus.CNCL.toLowerCase()
     ) {
-      if (tenderData?.tenderContract?.contractJustification == undefined) {
-        errors.push(
-          `Please select a Tender ${
-            tenderData.status ? ContractStatuses[tenderData.status] : " "
-          }Justification.`
-        );
-      }
       if (
-        tenderData?.tenderContract?.contractStatusNotes == undefined ||
-        tenderData?.tenderContract?.contractStatusNotes == ""
+        tenderData.tenderContract?.contractStatus !== "DRAFT" ||
+        tenderData.status.toLowerCase() == DsStatus.CNCL.toLowerCase()
       ) {
-        errors.push(`Please enter Supporting Notes.`);
-      }
-      if (
-        tenderData.tenderContract?.tenderRevisions?.[0].tenderItems?.find(
-          (x) =>
-            x.product.awardedToName == undefined ||
-            x.product.awardedToName == "" ||
-            x.awardedRate == undefined ||
-            x.awardedQuantity == undefined
-        )
-      ) {
-        errors.push(
-          `Please fill the every field in Product Award Details Table.`
-        );
-      }
-      if (
-        !(
-          tenderData.tenderDocuments &&
-          tenderData.tenderDocuments.filter(
-            (x) => x.documentType == "TENDER_CONTRACT_DOCUMENT"
-          ).length > 0
-        )
-      ) {
-        errors.push(`Please attach at least one file`);
+        if (tenderData?.tenderContract?.contractJustification == undefined) {
+          errors.push(
+            `Please select a Tender ${
+              tenderData.status ? ContractStatuses[tenderData.status] : " "
+            }Justification.`
+          );
+        }
+        if (
+          tenderData?.tenderContract?.contractStatusNotes == undefined ||
+          tenderData?.tenderContract?.contractStatusNotes == ""
+        ) {
+          errors.push(`Please enter Supporting Notes.`);
+        }
+        if (
+          tenderData.tenderContract?.tenderRevisions?.[0].tenderItems?.find(
+            (x) =>
+              x.product.awardedToName == undefined ||
+              x.product.awardedToName == "" ||
+              x.awardedRate == undefined ||
+              x.awardedQuantity == undefined
+          )
+        ) {
+          errors.push(
+            `Please fill the every field in Product Award Details Table.`
+          );
+        }
+        if (
+          !(
+            tenderData.tenderDocuments &&
+            tenderData.tenderDocuments.filter(
+              (x) => x.documentCategory == "TENDER_CONTRACT_DOCUMENT"
+            ).length > 0
+          )
+        ) {
+          errors.push(`Please attach at least one file`);
+        }
       }
     } else {
       if (
@@ -117,9 +132,13 @@ export const DSTendrFooter: React.FC = ({}) => {
       ) {
         errors.push("Please select a customer.");
       }
-      if (tenderData?.tenderContract?.contractJustification == undefined) {
-        errors.push("Please select a customer address.");
-      }
+      // if (
+      //   tenderData?.tenderContract != undefined &&
+      //   tenderData?.tenderContract.contractJustification == undefined
+      // ) {
+      //   //Gaurav Changed
+      //   errors.push("Please select a customer address.");
+      // }
       if (tenderData?.tenderNumber?.trim() === "") {
         errors.push("Please enter a tender number.");
       }
@@ -394,10 +413,9 @@ export const DSTendrFooter: React.FC = ({}) => {
     if (role && role !== "") {
       dispatch(setVisibilityByRole(role));
       console.log("Role=", role);
-      let contextContent: React.ReactElement | null = null;
 
       if (role === "ACCOUNTANCE") {
-        contextContent = (
+        setContextContext(
           <DsButton
             label="Submit Receipt"
             buttonSize="btnSmall"
@@ -407,7 +425,7 @@ export const DSTendrFooter: React.FC = ({}) => {
           />
         );
       } else if (role === "CHECKER") {
-        contextContent = (
+        setContextContext(
           <>
             <PopupOpenButton
               popupId="popup1"
@@ -426,7 +444,7 @@ export const DSTendrFooter: React.FC = ({}) => {
           </>
         );
       } else if (role === "HOMANAGER") {
-        contextContent = (
+        setContextContext(
           <>
             <PopupOpenButton
               popupId="popup1"
@@ -434,7 +452,7 @@ export const DSTendrFooter: React.FC = ({}) => {
               buttonText="Approve"
               buttonViewStyle="btnText"
               className={btnStyles.btnTextPrimary}
-              onClick={() => closeContext("SubmissionContext")}
+              onClick={(e) => closeAllContext()}
             />
             <PopupOpenButton
               popupId="popup2"
@@ -442,7 +460,6 @@ export const DSTendrFooter: React.FC = ({}) => {
               buttonText="Revise"
               buttonViewStyle="btnText"
               className={btnStyles.btnTextPrimary}
-              onClick={() => closeContext("SubmissionContext")}
             />
             <PopupOpenButton
               popupId="popup3"
@@ -450,27 +467,96 @@ export const DSTendrFooter: React.FC = ({}) => {
               buttonText="Reject"
               buttonViewStyle="btnText"
               className={btnStyles.btnTextPrimary}
-              onClick={() => closeContext("SubmissionContext")}
             />
           </>
         );
       } else if (role === "MAKER") {
-        contextContent = (
-          <DsButton
-            label="Submit for Review"
-            buttonSize="btnSmall"
-            buttonViewStyle="btnText"
-            className={btnStyles.btnTextPrimary}
-            onClick={() => showToaster("toaster1")}
-          />
-        );
+        if (
+          tenderData.status == "AWARDED" ||
+          tenderData.status == "PARTIALLY_AWARDED" ||
+          tenderData.status == "LOST"
+        )
+          setContextContext(
+            <DsButton
+              label="Submit"
+              buttonSize="btnSmall"
+              buttonViewStyle="btnText"
+              className={btnStyles.btnTextPrimary}
+              onClick={() => {
+                // if (
+                //   tenderData.status == "AWARDED" ||
+                //   tenderData.status == "PARTIALLY_AWARDED" ||
+                //   tenderData.status == "LOST"
+                // )
+                if (tenderDataCopy?.id) {
+                  // if (saveTender) validateAndSaveTender();
+                  // if (saveTender) saveTender("Draft");
+                  updateContractDetails("contractStatus", "SUBMITTED");
+                  setSaveTenderClicked(true)
+                  setTimeout(() => {
+                    validateAndUpdateTender();
+                  }, 0);
+                  // updateTender("Draft")
+                }
+                // showToaster("toaster1");
+              }}
+            />
+          );
+        else {
+          setContextContext(
+            <DsButton
+              label="Submit for Review"
+              buttonSize="btnSmall"
+              buttonViewStyle="btnText"
+              className={btnStyles.btnTextPrimary}
+              // onClick={() => showToaster("toaster1")}
+            />
+          );
+        }
       }
-      if (contextContent) {
-        createContext("SubmissionContext", <div>{contextContent}</div>, true);
-      }
-    }
-  }, [role]);
 
+      // setContextContext(contextContent);
+      // if (contextContent && !document.getElementById("SubmissionContext")) {
+      //   createContext(
+      //     "SubmissionContext",
+      //     <div onClick={() => closeContext("SubmissionContext")}>
+      //       {contextContent}
+      //     </div>,
+      //     true
+      //   );
+      // }
+    }
+  }, [role, tenderData.status]);
+  useEffect(() => {
+    const splitButtonDisable =
+      tenderData.status == "DRAFT"
+        ? false
+        : !(
+            tenderData.tenderContract?.contractStatus == "DRAFT" ||
+            tenderData.status == "AWARDED" ||
+            tenderData.status == "PARTIALLY_AWARDED" ||
+            tenderData.status == "LOST" ||
+            tenderData.tenderContract?.contractStatus == undefined ||
+            tenderData.tenderContract?.contractStatus == null
+          );
+
+    setSplitButtonDisbale(splitButtonDisable);
+  }, [tenderData.id]);
+  useEffect(()=>{
+    if(saveTenderClicked){
+
+      if (tenderDataCopy?.id) {
+        // if (saveTender) validateAndSaveTender();
+        // if (saveTender) saveTender("Draft");
+        validateAndUpdateTender();
+        // updateTender("Draft")
+      } else {
+        validateAndSaveTender();
+        // saveTender("Draft");
+      }
+      setSaveTenderClicked(false);
+    }
+  },[saveTenderClicked])
   return (
     <>
       <div className={styles.footer}>
@@ -484,30 +570,57 @@ export const DSTendrFooter: React.FC = ({}) => {
           buttonViewStyle="btnOutlined"
           disable={false}
         />
-
-        <DsSplitButton
-          buttonViewStyle="btnContained"
-          onClick={() => {
-            // if (saveTender) validateAndSaveTender();
-            // if (saveTender) saveTender("Draft");
-            if (tenderDataCopy?.id) {
-              validateAndUpdateTender();
-              // updateTender("Draft")
-            } else {
-              validateAndSaveTender();
-              // saveTender("Draft");
+        {tenderData.status == "AWARDED" ||
+        tenderData.status == "PARTIALLY_AWARDED" ||
+        tenderData.status == "LOST" ||
+        tenderData.status == "DRAFT" ? (
+          <DsSplitButton
+            buttonViewStyle="btnContained"
+            onClick={() => {
+              if (
+                tenderData.status == "AWARDED" ||
+                tenderData.status == "PARTIALLY_AWARDED" ||
+                tenderData.status == "LOST"
+              )
+                updateContractDetails("contractStatus", "DRAFT");
+                setSaveTenderClicked(true);
+            }}
+            onSplitClick={(e) =>
+              displayContext(e, "SubmissionContext", "top", "right")
             }
-          }}
-          onSplitClick={(e) =>
-            displayContext(e, "SubmissionContext", "top", "right")
-          }
-          buttonSize="btnLarge" >
-          Save
-        </DsSplitButton>
+            buttonSize="btnLarge"
+            disable={splitButtonDisableState}
+          >
+            Save
+          </DsSplitButton>
+        ) : (
+          <DsButton
+            buttonViewStyle="btnContained"
+            onClick={() => {
+              // if (saveTender) validateAndSaveTender();
+              // if (saveTender) saveTender("Draft");
+              if (tenderDataCopy?.id) {
+                validateAndUpdateTender();
+                // updateTender("Draft")
+              } else {
+                validateAndSaveTender();
+                // saveTender("Draft");
+              }
+            }}
+            onSplitClick={(e) =>
+              displayContext(e, "SubmissionContext", "top", "right")
+            }
+            buttonSize="btnLarge"
+            disable={tenderData.status !== "CANCELLED"}
+          >
+            {tenderData.status !== "CANCELLED" ? "Save" : "Submit"}
+          </DsButton>
+        )}
       </div>
       <ApprovalPopup
         id="popup1"
         types={[]}
+        tenderId={tenderData.id}
         popupType="Approve"
         buttonColor="btnPrimary"
         position="center"
@@ -522,6 +635,7 @@ export const DSTendrFooter: React.FC = ({}) => {
       />
       <ApprovalPopup
         id="popup2"
+  tenderId={tenderData.id}
         types={[]}
         popupType="Revise"
         buttonColor="btnPrimary"
@@ -531,6 +645,7 @@ export const DSTendrFooter: React.FC = ({}) => {
       />
       <ApprovalPopup
         id="popup3"
+        tenderId={tenderData.id}
         types={[]}
         popupType="Reject"
         buttonColor="btnDanger"
@@ -552,7 +667,11 @@ export const DSTendrFooter: React.FC = ({}) => {
         duration={4000}
         handleClose={() => setToasterVisible(false)}
       />
-      {/* <ContextMenu id={"SubmissionContext"} showArrow={true} content={<div>{contextContent}</div>}/> */}
+      <ContextMenu
+        id={"SubmissionContext"}
+        showArrow={true}
+        content={<div>{contextContent}</div>}
+      />
     </>
   );
 };

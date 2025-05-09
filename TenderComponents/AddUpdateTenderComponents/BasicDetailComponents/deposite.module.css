@@ -138,24 +138,10 @@ min-height: fit-content;
   }
 
   .feesCheckboxes{
-    padding: 0.1em !important;
-  }
-  .feesCheckboxContainer{
-    margin-top: 0.625em !important;
-
-  }
-  .applicableDeposite{
-    border-radius: 0.25em !important;
-
-  }
-  .applicableDeposite > div{
-    border-radius: 0.25em !important;
-
+    padding: 0.1rem !important;
   }
   .applicableDeposit{
     padding: 8px;
-    border-radius: 0.25em !important;
-
   }
   .downloadReceipt{
     background-color: inherit !important;
@@ -214,8 +200,4 @@ min-height: fit-content;
 .uploadfile
 {
   margin-top: 20px;
-}
-.disablefield
-{
-  color: yellow !important;
 }

@@ -11,18 +11,18 @@ import { DsSelectOption } from "@/Common/helpers/types";
 import { updateDocuments, useTenderData } from "../TenderDataContextProvider";
 import TextArea from "@/Elements/DsComponents/DsInputs/dsTextArea";
 import DatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker";
-import { getAllMetaData, paidBys } from "@/Common/helpers/constant";
+import {
+  downloadDocumentUrl,
+  getAllMetaData,
+  paidBys,
+} from "@/Common/helpers/constant";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import { useEffect, useState } from "react";
 import IconFactory from "@/Elements/IconComponent";
 import DsMultiSelect from "@/Elements/DsComponents/dsSelect/dsMultiSelect";
 import { getYesterdayDate } from "@/Common/helpers/Method/conversion";
 import UploadFile from "@/TenderComponents/TenderLogComponents/uploadfile";
-
 import { closeAllContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
-import DsDatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker";
-import { useAppSelector } from "@/Redux/hook/hook";
-import { RootState } from "@/Redux/store/store";
 
 export type tenderDocument = {
   name: string;
@@ -38,7 +38,17 @@ export type tenderFee = {
   refundEligibility: string;
   paymentDueDate: string;
   notes: string;
-  documents: tenderDocument[];
+  recoverypaymentDate?: string;
+  refundNotes?: string;
+  paymentTransactionId?: string;
+  paymentReceiptId?: string;
+  acknowledgementReceiptId?: string;
+  fundTransferConfirmationId?: string;
+  paymentRefundStatus?: string;
+  paymentStatus?: string;
+  status?: "ACTV" | "INAC";
+  paymentstatus: string;
+  documents: string[];
 };
 
 export interface DsFeesProps {
@@ -48,8 +58,8 @@ export interface DsFeesProps {
   refund: DsSelectOption[];
   paidBy: DsSelectOption[];
   downloadVisible: boolean;
-  completedpayment:boolean;
-  recoverycheckvisibible:boolean;
+  completedpayment: boolean;
+  recoverycheckvisibible: boolean;
   type: string;
   optionlist: DsSelectOption[];
 }
@@ -73,14 +83,13 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
   refund,
   paidBy,
   downloadVisible,
-  recoverycheckvisibible=false,
+  recoverycheckvisibible,
   optionlist,
   completedpayment = false,
+  // recoverypaymentVisible = false,
 }) => {
-
   const {
     updateTenderFee,
-    // updatePaymentFee,
     addNewTenderDocument,
     tenderData,
     removeTenderDocument,
@@ -100,12 +109,6 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
   const [selectedPaidBy, setSelectedPaidBy] = useState<DsSelectOption>();
   const [selectedcheckbox, setSelectedCheckbox] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState<DsSelectOption[]>([]);
-  const { updateTenderData} =
-  useTenderData();
-  const permissions = useAppSelector((state: RootState) => state.permissions);
-const {
-disable
-  } = permissions;
 
   // const handleFetchpayments = async () => {
   //   try {
@@ -213,12 +216,9 @@ disable
     refund,
   ]);
 
-
-
-
   return (
     <>
- 
+      {/* <div> */}
       <div className={styles.feeContainer} id={id}>
         <div className={styles.headContainer}>
           <div className={styles.headTitle}>{title}</div>
@@ -243,96 +243,143 @@ disable
 
         {/* // { )} } */}
       </div>
-    {completedpayment &&(
-            <>
-            <div className={styles.fields}>
-              <Ds_checkbox
-                id={"payment"}
-                name={"Payment Completed"}
-                value={"Payment Completed"}
-                label={"Payment Completed"}
-              />
-              </div>
-              
-           <div className={eleStyles.inputDetails}>
-           <div className={styles.fields}>
-                <DsMultiSelect
-                  label="Add document type"
-                  containerClasses={styles.feeFields}
-                  id={id+"Documents"}
-                  options={optionlist || []}
-                  setSelectOptions={(options) => {
-                    setSelectedOptions(options);
-                    console.log("Selected options:", options);
-                  }}
-                >
-                  
-                  <div className={styles.addBtn}>
-                    <DsButton
-                      label="Add"
-                      buttonViewStyle="btnContained"
-                      buttonSize="btnSmall"
-                      className={styles.addBtn}
-                      onClick={() => {
-                        closeAllContext();
-                        setSelectedCheckbox(true);
-                        console.log("Add button clicked");
-                      }}
-                    />
-                  </div>
-                </DsMultiSelect>
-        
-                </div>
+
+      {completedpayment && (      <>
         <div className={styles.fields}>
-              <DatePicker
+          <Ds_checkbox
+            id={"payment"}
+            name={"Payment Completed"}
+            value={"Payment Completed"}
+            label={"Payment Completed"}
+            onChange={(e) => {
+              updateTenderFee(
+                type,
+                "paymentStatus",
+                e.target.checked ? "DONE" : "PEND"
+              );
+            }}
+          />
+        </div>
+
+        <div className={eleStyles.inputDetails}>
+          <div className={styles.fields}>
+            <DsMultiSelect
+              label="Add document type"
+              containerClasses={styles.feeFields}
+              id={id + "Documents"}
+              options={optionlist || []}
+              setSelectOptions={(options) => {
+                setSelectedOptions(options);
+                console.log("Selected options:", options);
+              }}
+            >
+              <div className={styles.addBtn}>
+                <DsButton
+                  label="Add"
+                  buttonViewStyle="btnContained"
+                  buttonSize="btnSmall"
+                  className={styles.addBtn}
+                  onClick={() => {
+                    closeAllContext();
+                    setSelectedCheckbox(true);
+                    console.log("Add button clicked");
+                  }}
+                />
+              </div>
+            </DsMultiSelect>
+          </div>
+          <div className={styles.fields}>
+            <DatePicker
+              containerClasses={styles.feeFields}
+              id={id + "paymentdate"}
+              initialDate={
+                tenderData.tenderFees
+                  ? new Date(
+                      tenderData.tenderFees[0]?.paymentDate || ""
+                    ).toLocaleDateString("en-GB")
+                  : undefined
+              }
+              maxDate={new Date()}
+              placeholder="DD/MM/YYYY"
+              label="payment Date"
+              setDateValue={(date) => {
+                if (date instanceof Date) {
+                  updateTenderFee(type, "paymentDate", getTodayDate(date));
+                }
+              }}
+            />
+          </div>
+        </div>
+        {selectedcheckbox &&
+          selectedOptions.map((option, index) => (
+            <UploadFile
+              key={`upload-${index}`}
+              uploadLabel={`Upload ${option.label} here `}
+              id={typeof option.value === "string" ? option.value : ""}
+              onSelectedFileChange={(files) => {
+                const typeDocuments =
+                  tenderData.tenderDocuments?.filter(
+                    (x) =>
+                      x.documentCategory == type &&
+                      x.documentType == type + "_INSTRUCTION"
+                  ) || [];
+                updateDocuments(
+                  files,
+                  typeDocuments,
+                  removeTenderDocument,
+                  addNewTenderDocument,
+                  type + "_INSTRUCTION",
+                  type
+                );
+              }}
+            />
+          ))}
+
+        <div className={eleStyles.inputDetails}>
+          {selectedcheckbox &&
+            selectedOptions.map((option) => (
+              <div className={styles.fields}>
+                <DsTextField
                   containerClasses={styles.feeFields}
-                  id={id + "paymentdate"}
-                  initialDate={
-                    tenderData.tenderFees
-                      ? new Date(tenderData.tenderFees[0]?.paymentDate || "").toLocaleDateString("en-GB")
-                      : undefined
-                  }
-                  maxDate={new Date()}
-                  placeholder="DD/MM/YYYY"
-                  label="payment Date"
-                  setDateValue={(date) => {
-                    if (date instanceof Date) {
-                      updateTenderFee(type, "paymentDate", getTodayDate(date));
+                  label={`${option.label}   ID`}
+                  onBlur={(e) => {
+                    if (typeof option.value == "string") {
+                      if (option.value.includes("ACKNOWLEDGMENT_RECEIPT"))
+                        updateTenderFee(
+                          type,
+                          "acknowledgementReceiptId",
+                          Number((e.target as HTMLInputElement).value)
+                        );
+                      if (option.value.includes("FUND_TRANSFER_CONFIRMATION"))
+                        updateTenderFee(
+                          type,
+                          "fundTransferConfirmationId",
+                          Number((e.target as HTMLInputElement).value)
+                        );
+                      if (option.value.includes("PAYMENT_RECEIPT"))
+                        updateTenderFee(
+                          type,
+                          "paymentReceiptId",
+                          Number((e.target as HTMLInputElement).value)
+                        );
+                      if (option.value.includes("TRANSACTION_RECEIPT"))
+                        updateTenderFee(
+                          type,
+                          "paymentTransactionId",
+                          Number((e.target as HTMLInputElement).value)
+                        );
                     }
                   }}
                 />
-           </div>
               </div>
-              {selectedcheckbox &&
-                selectedOptions.map((option, index) => (
-                  <UploadFile
-                    key={`upload-${index}`}
-                    uploadLabel={`Upload ${option.label} here `}
-                    id={typeof option.value === "string" ? option.value : ""}
-                  />
-                ))}
-        
-         <div className={eleStyles.inputDetails}>
-                {selectedcheckbox &&
-                  selectedOptions.map((option) => (
-                    <div className={styles.fields}>
-                      <DsTextField
-                        containerClasses={styles.feeFields}
-                        label={`${option.label}  ID`}
-                      />
-                    </div>
-                  ))}
-                  </div>
-                  <div className={styles.separator}></div>
-              
-        
-        </>
-    )}
+            ))}
+        </div>
+        <div className={styles.separator}></div>
+      </>
+      )}
 
-
- <div className={eleStyles.inputDetails}>
+      <div className={eleStyles.inputDetails}>
         <DsTextField
-        disable={disable}
           containerClasses={styles.feeFields}
           maxLength={10}
           initialValue={
@@ -353,7 +400,6 @@ disable
         {/* </div> */}
         {/* <div className={styles.fieldColors}> */}
         <DsSingleSelect
-          disable={disable}
           containerClasses={styles.feeFields}
           id={id + "_paidType1"}
           selectedOption={selectedPaidBy}
@@ -369,7 +415,6 @@ disable
         {/* </div> */}
         {/* <div className={styles.fieldColors}> */}
         <DsSingleSelect
-          disable={disable}
           containerClasses={styles.feeFields}
           selectedOption={selectedPaymentMode}
           id={id + "_modes1"}
@@ -385,7 +430,6 @@ disable
         {/* </div> */}
         {/* <div className={styles.fieldColors}> */}
         <DsSingleSelect
-          disable={disable}
           containerClasses={styles.feeFields}
           selectedOption={selectedRefund}
           id={id + "_refund"}
@@ -401,7 +445,6 @@ disable
 
         {/* <div className={styles.fieldColors}> */}
         <DatePicker
-          disable={disable}
           containerClasses={styles.feeFields}
           id={id + "dueDate"}
           minDate={getYesterdayDate()}
@@ -424,98 +467,9 @@ disable
         />
         {/* </div> */}
       </div>
-
       <div className={styles.notes}>
         <span className={styles.notesTitle}>Notes</span>
         {/* <div className={styles.fieldColors}> */}
-        <TextArea
-        
-          containerClasses={styles.feeFields}
-          className={styles.notesField}
-          initialValue={
-            tenderData.tenderFees.find((x) => x.feesType == type)
-              ?.instructionNotes || ""
-          }
-          placeholder="Please type here"
-          disable={disable}
-          minRows={2}
-          onBlur={(e) => {
-            updateTenderFee(
-              type,
-              "instructionNotes",
-              (e.target as HTMLInputElement).value
-            );
-          }}
-        />
-   
-      </div>
-      <div className={styles.uploadfile}>
-        <DsCsvUpload
-          disable={disable}
-          id={id + "UploadedDocuments"}
-          label="Attach File"
-          buttonViewStyle="btnText"
-          buttonSize="btnSmall"
-          startIcon={<IconFactory name="fileAttach" />}
-          previouslySelectedFile={
-            tenderData.tenderDocuments?.filter(
-              (x) =>
-                x.documentType == type &&
-                x.documentCategory == type + "_INSTRUCTION" &&
-                x.id !== undefined
-            ) || []
-          }
-          onSelectedFileChange={(files) => {
-            const typeDocuments =
-              tenderData.tenderDocuments?.filter(
-                (x) =>
-                  x.documentType == type && x.documentCategory == type + "_INSTRUCTION"
-              ) || [];
-            updateDocuments(
-              files,
-              typeDocuments,
-              removeTenderDocument,
-              addNewTenderDocument,
-              type,
-              type + "_INSTRUCTION"
-            );
-          }}
-        ></DsCsvUpload>
-      </div>
-      {recoverycheckvisibible && (<>
-      <div className={styles.separator}></div>
-      
-      <Ds_checkbox
-        id={"payment"}
-        name={"Payment Recovered "}
-        value={"Payment Recovered"}
-        label={"Payment Recovered"}
-      />
-
-      <div className={eleStyles.inputDetails}>
-        <div className={styles.fields}>
-                 <DatePicker
-                  containerClasses={styles.feeFields}
-                  id={id + "recoverypayment"}
-                  initialDate={
-                    tenderData.tenderFees
-                      ? new Date(tenderData.tenderFees[0]?.recoverypaymentDate || "").toLocaleDateString("en-GB")
-                      : undefined
-                  }
-                  maxDate={new Date()}
-                  placeholder="DD/MM/YYYY"
-                  label="payment Date"
-                  setDateValue={(date) => {
-                    if (date instanceof Date) {
-                      updateTenderFee(type, "paymentDate", getTodayDate(date));
-                    }
-                  }}
-                />
-                </div>
-                </div>
-            <div className={styles.notes}>
-        <span className={styles.notesTitle}>Notes</span>
-        
         <TextArea
           containerClasses={styles.feeFields}
           className={styles.notesField}
@@ -534,33 +488,159 @@ disable
             );
           }}
         />
-      
+        {/* </div> */}
       </div>
-      <div className={styles.uploadfile}>
+      <div>
         <DsCsvUpload
-          id={id + "Recoveredfiledoc"}
+          id={id + "UploadedDocuments"}
           label="Attach File"
           buttonViewStyle="btnText"
           buttonSize="btnSmall"
           startIcon={<IconFactory name="fileAttach" />}
+          previouslySelectedFile={
+            tenderData.tenderDocuments
+              ?.filter(
+                (x) =>
+                  x.documentCategory == type &&
+                  x.documentType == type + "_INSTRUCTION" &&
+                  x.id !== undefined
+              )
+              .map((x) => {
+                return {
+                  ...x,
+                  fileDownloadHref: downloadDocumentUrl(tenderData.id, x.id),
+                };
+              }) || []
+          }
           onSelectedFileChange={(files) => {
             const typeDocuments =
               tenderData.tenderDocuments?.filter(
                 (x) =>
-                  x.documentType == type && x.category == type + "_INSTRUCTION"
+                  x.documentCategory == type &&
+                  x.documentType == type + "_INSTRUCTION"
               ) || [];
             updateDocuments(
               files,
               typeDocuments,
               removeTenderDocument,
               addNewTenderDocument,
-              type,
-              type + "_INSTRUCTION"
+              type + "_INSTRUCTION",
+              type
             );
           }}
         ></DsCsvUpload>
       </div>
-      </>
+      {recoverycheckvisibible && (
+        <>
+          <div className={styles.separator}></div>
+          
+          <Ds_checkbox
+            id={"paymentrefund"}
+            name={"Payment Recovered "}
+            value={"Payment Recovered"}
+            label={"Payment Recovered"}
+            onChange={(e) => {
+              updateTenderFee(
+                type,
+                "paymentStatus",
+                e.target.checked ? "DONE" : "PEND"
+              );
+            }}
+          />
+
+          <div className={eleStyles.inputDetails}>
+            <div className={styles.fields}>
+              <DatePicker
+                containerClasses={styles.feeFields}
+                id={id + "recoverypayment"}
+                initialDate={
+                  tenderData.tenderFees
+                    ? new Date(
+                        tenderData.tenderFees[0]?.paymentRefundDate || ""
+                      ).toLocaleDateString("en-GB")
+                    : undefined
+                }
+                maxDate={new Date()}
+                placeholder="DD/MM/YYYY"
+                label="payment Date"
+                setDateValue={(date) => {
+                  if (date instanceof Date) {
+                    updateTenderFee(
+                      type,
+                      "paymentRefundDate",
+                      getTodayDate(date)
+                    );
+                  }
+                }}
+              />
+            </div>
+          </div>
+          <div className={styles.notes}>
+            <span className={styles.notesTitle}>Notes</span>
+
+            <TextArea
+              containerClasses={styles.feeFields}
+              className={styles.notesField}
+              initialValue={
+                tenderData.tenderFees.find((x) => x.feesType == type)
+                  ?.instructionNotes || ""
+              }
+              placeholder="Please type here"
+              disable={false}
+              minRows={2}
+              onBlur={(e) => {
+                updateTenderFee(
+                  type,
+                  "refundNotes",
+                  (e.target as HTMLInputElement).value
+                );
+              }}
+            />
+          </div>
+          <div className={styles.uploadfile}>
+            <DsCsvUpload
+              id={id + "uploadrefundDocument"}
+              label="Attach File"
+              buttonViewStyle="btnText"
+              buttonSize="btnSmall"
+              startIcon={<IconFactory name="fileAttach" />}
+              previouslySelectedFile={
+                tenderData.tenderDocuments
+                  ?.filter(
+                    (x) =>
+                      x.documentCategory == type &&
+                      x.documentType == type + "_INSTRUCTION" &&
+                      x.id !== undefined
+                  )
+                  .map((x) => {
+                    return {
+                      ...x,
+                      fileDownloadHref: downloadDocumentUrl(
+                        tenderData.id,
+                        x.id
+                      ),
+                    };
+                  }) || []
+              }
+              onSelectedFileChange={(files) => {
+                const typeDocuments =
+                  tenderData.tenderDocuments?.filter(
+                    (x) =>
+                      x.documentCategory == type &&
+                      x.documentType == type + "_INSTRUCTION"
+                  ) || [];
+                updateDocuments(
+                  files,
+                  typeDocuments,
+                  removeTenderDocument,
+                  addNewTenderDocument,
+                  type + "_INSTRUCTION",
+                  type
+                );
+              }}
+            ></DsCsvUpload>
+          </div>
+        </>
       )}
     </>
   );
