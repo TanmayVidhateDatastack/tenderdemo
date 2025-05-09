@@ -68,10 +68,6 @@ const DsAddProduct: React.FC<addProductProps> = ({
           },
         };
         setProductList(tenderProduct); // Corrected
-        setSelectedProductId(0);
-        setQtyInputVal("");
-        setProductSearchVal("0");
-        setTimeout(() => setProductSearchVal(""), 0);
       }
       // console.log(product);
       // console.log("product ", product);
