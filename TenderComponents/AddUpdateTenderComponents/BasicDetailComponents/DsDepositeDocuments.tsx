@@ -21,6 +21,7 @@ import IconFactory from "@/Elements/IconComponent";
 import DsTenderDetails from "./DsTenderDetails ";
 import { useAppSelector } from "@/Redux/hook/hook";
 import { RootState } from "@/Redux/store/store";
+
 //  interface DepositDocument {
 //   modes: DsSelectOption[];
 //   refunds:DsSelectOption[];
@@ -81,7 +82,6 @@ const DsDepositeDocuments: React.FC = () => {
     {
       setrecoveryPaymentVisible(false)
     }
-    // const handleFetchpayments = async () => {
     if (
       metaData.tenderEmdPayment &&
       metaData.tenderFeesPayment &&

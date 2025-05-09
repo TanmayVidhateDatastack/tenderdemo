@@ -1,6 +1,6 @@
 "use client";
 
-import { closeTimeForSalesOrder, getAllMetaData, updateApprovalTypes } from "@/Common/helpers/constant";
+import { approvelurl, closeTimeForSalesOrder, getAllMetaData, updateApprovalTypes } from "@/Common/helpers/constant";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import { DsSelectOption } from "@/Common/helpers/types";
 import DsPopup, { ClosePopup } from "@/Elements/DsComponents/dsPopup/dsPopup";
@@ -28,44 +28,44 @@ export interface ApprovalProps {
     setActionStatus: (actionStatus: ActionStatus) => void;
     deviationCode?: string;
     types: DsSelectOption[];
-    orderId?: number;
+    tenderId?: number;
 }
 
 
-const createApprovalObject = (customerId: number, comment: string, status: string, value: string, deviationCode?: string) => {
-    return [
-        {
-            op: "replace",
-            path: "ApprovalStage",
-            value: "BASIC_CHECK_APPROVAL",
-        },
-        {
-            op: "replace",
-            path: "/ApprovedBy",
-            value: customerId,
-        },
-        {
-            op: "replace",
-            path: "/ApproverComments",
-            value: comment, // Dynamic comment
-        },
-        {
-            op: "replace",
-            path: "/Status",
-            value: status, // Dynamic status
-        },
-        {
-            op: "add",
-            path: "/JustificationType",
-            value: deviationCode, // Dynamic justification value
-        },
-        {
-            op: "add",
-            path: "/JustificationDescription",
-            value: value, // Dynamic justification value
-        },
-    ];
-};
+// const createApprovalObject = (customerId: number, comment: string, status: string, value: string, deviationCode?: string) => {
+//     return [
+//         {
+//             op: "replace",
+//             path: "ApprovalStage",
+//             value: "BASIC_CHECK_APPROVAL",
+//         },
+//         {
+//             op: "replace",
+//             path: "/ApprovedBy",
+//             value: customerId,
+//         },
+//         {
+//             op: "replace",
+//             path: "/ApproverComments",
+//             value: comment, // Dynamic comment
+//         },
+//         {
+//             op: "replace",
+//             path: "/Status",
+//             value: status, // Dynamic status
+//         },
+//         {
+//             op: "add",
+//             path: "/JustificationType",
+//             value: deviationCode, // Dynamic justification value
+//         },
+//         {
+//             op: "add",
+//             path: "/JustificationDescription",
+//             value: value, // Dynamic justification value
+//         },
+//     ];
+// };
 
 
 const ApprovalPopup: React.FC<ApprovalProps> = ({
@@ -78,7 +78,7 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
     deviationCode,
     setActionStatus,
     types,
-    orderId
+    tenderId
 }) => {
     const metaDataTypes = [
         "JUSTIFICATION_APPROVE_TYPE",
@@ -118,7 +118,7 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
         if (customerId) {
             setCId(customerId);
         }
-    }, [customerId, orderId])
+    }, [customerId, tenderId])
 
     useEffect(() => {
         if (selectedOption) {
@@ -135,50 +135,44 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
         }
     };
 
-    // const handleButtonClick = () => {
-    //     const resultObject = {
-    //         text: textAreaValue,
-    //         selectedValue: selectedOption?.value || " ",
-    //         selectedLabel: selectedOption?.label,
 
-    //     };
-    //     const selectedValueString = resultObject?.selectedValue?.toString();
-    //     createApprovalObject(cId, textAreaValue, selectedValueString, status, deviationCode);
-    //     const approvalObject = createApprovalObject(cId, textAreaValue, status, selectedValueString, deviationCode);
 
-    // };
     const handleSave = async () => {
-        const resultObject = {
-            text: textAreaValue,
-            selectedValue: selectedOption?.label,
-            selectedLabel: selectedOption?.value,
+        const approvalObject = {
+            approvalComments: textAreaValue,
+            justificationType: selectedOption?.value || "", 
+            approvalStatus: status,
+            lastUpdatedBy: customerId || 1,
         };
-       console.log("resultObject of approvebuton is ",resultObject)
-
-        const selectedValueString = resultObject.selectedValue?.toString() ?? "";
-        
-        const approvalObject = createApprovalObject(cId, textAreaValue, status, selectedValueString, deviationCode);
-
-
-        const apiUrl = updateApprovalTypes + orderId;
-
+    
+        const apiUrl = approvelurl(tenderId)
+        console.log("apiurl",apiUrl)
+        console.log("Sending POST data:", approvalObject);
+    
         try {
             const response = await fetch(apiUrl, {
-                method: "PATCH",
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(approvalObject),
+            
             });
-
-            if (response.status === 200) {
+    
+            console.log("Response body", response);
+            console.log("POST status is", response.status);
+            console.log("approvel object", approvalObject);
+    
+            if (response.ok) {
                 const responseData = await response.json();
                 if (responseData.code === 200) {
+                    console.log("Response Status inside:", response.status);  
                     setActionStatus({
                         notiMsg: "Status Updated Successfully!",
                         notiType: "success",
                         showNotification: true,
                     });
+                    
                     showToaster("create-order-toaster");
                 } else {
                     setActionStatus({
@@ -187,10 +181,8 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
                         showNotification: true,
                     });
                     showToaster("create-order-toaster");
-
                 }
             } else {
-                console.error("Error saving data:", response.statusText);
                 setActionStatus({
                     notiMsg: "Status Update Failed!",
                     notiType: "error",
@@ -199,8 +191,7 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
                 showToaster("create-order-toaster");
             }
         } catch (error) {
-            console.error("Error in API call:", error);
-            showToaster("server_error");
+            console.error("API Error:", error);
             setActionStatus({
                 notiMsg: "Status Update Failed!",
                 notiType: "error",
@@ -209,28 +200,7 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
             showToaster("create-order-toaster");
         }
     };
-
-    // const handleFetchJustificationTypes = async () => {
-    //     await fetchData({ url: getJustificationTypes + deviationCode }).then((res) => {
-    //         if (res?.code === 200 && Array.isArray(res?.result)) {
-    //             const formattedOptions = res.result.map((item) => ({
-    //                 label: item.description,
-    //                 value: item.id,
-    //             }));
-
-    //             console.log("formated option : ", formattedOptions)
-    //             setOptions(formattedOptions);
-    //         }
-    //         else {
-    //             console.log("error found while fetching")
-    //         }
-    //     });
-    // };
-
-    // useEffect(() => {
-    //     handleFetchJustificationTypes();
-    // }, [deviationCode])
-
+    
 
     function ShowToastermessage() {
         if (popupType === "Approve") {
