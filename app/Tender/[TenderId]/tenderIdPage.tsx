@@ -33,6 +33,7 @@ import DsStatusIndicator, {
 } from "@/Elements/DsComponents/dsStatus/dsStatusIndicator";
 import ContractView from "@/TenderComponents/AddUpdateTenderComponents/CustomTabViews/ContractView";
 import { tab } from "@/Common/helpers/types";
+import { setSelectedTabId } from "@/Redux/slice/TabSlice/TabSlice";
 
 const DsTenderIdPage: React.FC<{
   paramOrderId: string | number;
@@ -178,6 +179,17 @@ const DsTenderIdPage: React.FC<{
           ];
         return prev;
       });
+    }
+    if (tenderStatus) {
+      if (tenderStatus !== "newPricingVersion") setTabId("Contract");
+      else {
+        const latestVersion =
+          tenderData.tenderRevisions.reduce((maxObj, currentObj) =>
+            currentObj.version > maxObj.version ? currentObj : maxObj
+          )?.version || 1;
+
+        setTabId(`v${latestVersion}`);
+      }
     }
     if (tenderDataCopy.id) {
       appTitle.current =
