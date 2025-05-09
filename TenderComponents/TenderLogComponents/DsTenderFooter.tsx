@@ -528,17 +528,17 @@ export const DSTendrFooter: React.FC = ({}) => {
     }
   }, [role, tenderData.status]);
   useEffect(() => {
-    const splitButtonDisable =
-      tenderData.status == "DRAFT"
-        ? false
-        : !(
-            tenderData.tenderContract?.contractStatus == "DRAFT" ||
-            tenderData.status == "AWARDED" ||
-            tenderData.status == "PARTIALLY_AWARDED" ||
-            tenderData.status == "LOST" ||
-            tenderData.tenderContract?.contractStatus == undefined ||
-            tenderData.tenderContract?.contractStatus == null
-          );
+    const splitButtonDisable =false;
+      // tenderData.status == "DRAFT"
+      //   ? false
+      //   : !(
+      //       tenderData.tenderContract?.contractStatus == "DRAFT" ||
+      //       tenderData.status == "AWARDED" ||
+      //       tenderData.status == "PARTIALLY_AWARDED" ||
+      //       tenderData.status == "LOST" ||
+      //       tenderData.tenderContract?.contractStatus == undefined ||
+      //       tenderData.tenderContract?.contractStatus == null
+      //     );
 
     setSplitButtonDisbale(splitButtonDisable);
   }, [tenderData.id]);
@@ -589,7 +589,7 @@ export const DSTendrFooter: React.FC = ({}) => {
               displayContext(e, "SubmissionContext", "top", "right")
             }
             buttonSize="btnLarge"
-            disable={splitButtonDisableState}
+            // disable={splitButtonDisableState}
           >
             Save
           </DsSplitButton>
@@ -611,7 +611,7 @@ export const DSTendrFooter: React.FC = ({}) => {
               displayContext(e, "SubmissionContext", "top", "right")
             }
             buttonSize="btnLarge"
-            disable={tenderData.status !== "CANCELLED"}
+            // disable={tenderData.status !== "CANCELLED"}
           >
             {tenderData.status !== "CANCELLED" ? "Save" : "Submit"}
           </DsButton>
