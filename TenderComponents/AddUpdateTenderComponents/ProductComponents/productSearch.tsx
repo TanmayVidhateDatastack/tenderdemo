@@ -7,7 +7,7 @@ import style from "@/TenderComponents/AddUpdateTenderComponents/BasicDetailCompo
 import IconFactory from "@/Elements/IconComponent";
 
 export interface ProductSearchProps {
-  // initialValue?:string;
+  initialValue?:string;
   orderStatus?: string;
   setSelectedProductId: Dispatch<SetStateAction<number | undefined>>;
   setSelectedProductBatchId: Dispatch<SetStateAction<number | undefined>>;
@@ -36,6 +36,7 @@ export function areSearchProduct(value: unknown): value is searchProduct[] {
   return Array.isArray(value) && value.every(isSearchProduct);
 }
 const ProductSearch: React.FC<ProductSearchProps> = ({
+  initialValue,
   orderStatus,
   disabled,
   setSelectedProductId,
@@ -112,7 +113,7 @@ const ProductSearch: React.FC<ProductSearchProps> = ({
      
       }}
       
- 
+      initialValue={initialValue}
       setSelectedOption={setSelectedOption}
 
     

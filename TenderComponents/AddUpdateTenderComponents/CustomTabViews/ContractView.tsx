@@ -299,11 +299,11 @@ const ContractView: React.FC<ContractViewProps> = ({
           buttonSize="btnSmall"
           startIcon={<IconFactory name="fileAttach" />}
           previouslySelectedFile={
-            tenderDataCopy.tenderDocuments?.filter(
+            tenderData.tenderDocuments?.filter(
               (x) =>
                 x.documentCategory == "TENDER_CONTRACT_DOCUMENT" &&
-                x.documentType == status + "_DOCUMENTS" &&
-                x.id !== undefined
+                x.documentType == status + "_DOCUMENT" 
+                // && x.id !== undefined
             ) || []
           }
           onSelectedFileChange={(files) => {
@@ -311,14 +311,14 @@ const ContractView: React.FC<ContractViewProps> = ({
               tenderData.tenderDocuments?.filter(
                 (x) =>
                   x.documentCategory == "TENDER_CONTRACT_DOCUMENT" &&
-                  x.documentType == status + "_DOCUMENTS"
+                  x.documentType == status + "_DOCUMENT"
               ) || [];
             updateDocuments(
               files,
               typeDocuments,
               removeTenderDocument,
               addNewTenderDocument,
-              status + "_DOCUMENTS",
+              status + "_DOCUMENT",
               "TENDER_CONTRACT_DOCUMENT",
             );
           }}

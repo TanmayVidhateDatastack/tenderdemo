@@ -502,8 +502,9 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               ?.filter(
                 (x) =>
                   x.documentCategory == type &&
-                  x.documentType == type + "_INSTRUCTION" &&
-                  x.id !== undefined
+                  x.documentType == type + "_INSTRUCTION" 
+                  // &&
+                  // x.id !== undefined
               )
               .map((x) => {
                 return {
@@ -609,8 +610,9 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   ?.filter(
                     (x) =>
                       x.documentCategory == type &&
-                      x.documentType == type + "_INSTRUCTION" &&
-                      x.id !== undefined
+                      x.documentType == type + "_INSTRUCTION" 
+                      // &&
+                      // x.id !== undefined
                   )
                   .map((x) => {
                     return {
