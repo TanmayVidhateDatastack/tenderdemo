@@ -493,9 +493,9 @@ export const DSTendrFooter: React.FC = ({}) => {
                   // if (saveTender) saveTender("Draft");
                   updateContractDetails("contractStatus", "SUBMITTED");
                   setSaveTenderClicked(true)
-                  // setTimeout(() => {
-                  //   validateAndUpdateTender();
-                  // }, 0);
+                  setTimeout(() => {
+                    validateAndUpdateTender();
+                  }, 0);
                   // updateTender("Draft")
                 }
                 // showToaster("toaster1");
@@ -620,8 +620,8 @@ export const DSTendrFooter: React.FC = ({}) => {
       <ApprovalPopup
         id="popup1"
         types={[]}
-        tenderId={tenderData.id}
         popupType="Approve"
+        tenderId={tenderData.id}
         buttonColor="btnPrimary"
         position="center"
         toasterMessage={
@@ -635,8 +635,8 @@ export const DSTendrFooter: React.FC = ({}) => {
       />
       <ApprovalPopup
         id="popup2"
-  tenderId={tenderData.id}
         types={[]}
+        tenderId={tenderData.id}
         popupType="Revise"
         buttonColor="btnPrimary"
         position="center"
@@ -645,9 +645,9 @@ export const DSTendrFooter: React.FC = ({}) => {
       />
       <ApprovalPopup
         id="popup3"
-        tenderId={tenderData.id}
         types={[]}
         popupType="Reject"
+        tenderId={tenderData.id}
         buttonColor="btnDanger"
         position="center"
         toasterMessage={"The Tender has been Rejected & also note has sent "}
