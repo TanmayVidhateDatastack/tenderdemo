@@ -33,8 +33,9 @@ const DsAddProduct: React.FC<addProductProps> = ({
     // console.log("selected product id = ", quantity);
 
     if (selectedProductId) {
+      const productUrl = getProductURL(selectedProductId, qtyInputVal);
       const product = await fetchData({
-        url: `${getProductURL}${selectedProductId}?requestedQuantity=${qtyInputVal}`,
+        url: productUrl,
 
         // getProductURL + selectedProductId + "?requestedQuantity=" + quantity,
       });
