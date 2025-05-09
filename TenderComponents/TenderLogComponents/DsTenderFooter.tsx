@@ -493,9 +493,9 @@ export const DSTendrFooter: React.FC = ({}) => {
                   // if (saveTender) saveTender("Draft");
                   updateContractDetails("contractStatus", "SUBMITTED");
                   setSaveTenderClicked(true)
-                  setTimeout(() => {
-                    validateAndUpdateTender();
-                  }, 0);
+                  // setTimeout(() => {
+                  //   validateAndUpdateTender();
+                  // }, 0);
                   // updateTender("Draft")
                 }
                 // showToaster("toaster1");
