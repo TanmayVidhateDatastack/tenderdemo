@@ -24,6 +24,7 @@ const DsAddProduct: React.FC<addProductProps> = ({
   const [disabled, setDisabled] = useState<boolean>(false);
   const { tenderData } = useTenderData();
   const [qtyInputVal, setQtyInputVal] = useState<string>("");
+  const [productSearchVal, setProductSearchVal] = useState<string>("");
 
   const selectProduct = async () => {
     // console.log("Quantity entered:", qtyInputVal);
@@ -59,7 +60,7 @@ const DsAddProduct: React.FC<addProductProps> = ({
           productId: product.result.id,
           requestedQuantity: Number(qtyInputVal),
           product: {
-            type:"read-only",
+            type: "read-only",
             productName: product.result.name,
             productPackingSize: product.result.cartonSize,
             dataSource: "fetch",
@@ -68,6 +69,8 @@ const DsAddProduct: React.FC<addProductProps> = ({
         setProductList(tenderProduct); // Corrected
         setSelectedProductId(0);
         setQtyInputVal("");
+        setProductSearchVal("0");
+        setTimeout(() => setProductSearchVal(""), 0);
       }
       // console.log(product);
       // console.log("product ", product);
@@ -81,10 +84,12 @@ const DsAddProduct: React.FC<addProductProps> = ({
     console.log(latestVersion, version);
     setDisabled(latestVersion !== version);
   }, [version, tenderData.tenderRevisions]);
+
   return (
     <div className={styles.input}>
       <>
         <ProductSearch
+          initialValue={productSearchVal}
           orderStatus={orderStatus}
           setSelectedProductId={(id) => setSelectedProductId(id)}
           setSelectedProductBatchId={(id) => setSelectedProductId(id)}

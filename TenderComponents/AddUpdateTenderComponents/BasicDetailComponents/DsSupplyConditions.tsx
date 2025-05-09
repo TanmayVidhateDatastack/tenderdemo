@@ -62,8 +62,9 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
               tenderData.tenderDocuments?.filter(
                 (x) =>
                   x.documentCategory == "TENDER_SUPPLY_CONDITION" &&
-                  x.documentType == type &&
-                  x.id !== undefined
+                  x.documentType == type
+                // &&
+                // x.id !== undefined
               ) || []
             }
             onSelectedFileChange={(files) => {
@@ -80,7 +81,7 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
                 removeTenderDocument,
                 addNewTenderDocument,
                 type,
-                "TENDER_SUPPLY_CONDITION",
+                "TENDER_SUPPLY_CONDITION"
               );
             }}
           ></DsCsvUpload>
