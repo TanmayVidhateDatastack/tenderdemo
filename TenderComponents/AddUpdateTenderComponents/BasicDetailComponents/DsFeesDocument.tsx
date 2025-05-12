@@ -545,7 +545,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             onChange={(e) => {
               updateTenderFee(
                 type,
-                "paymentStatus",
+                "paymentrefundStatus",
                 e.target.checked ? "DONE" : "PEND"
               );
             }}

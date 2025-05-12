@@ -115,6 +115,7 @@ export type tenderFee = {
   paymentRefundDate?: string;
   refundNotes?: string;
   paymentStatus?: string;
+  paymentrefundStatus?:string
   paymentRefundStatus?: string;
 
   paymentTransactionId?: string;
