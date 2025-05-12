@@ -43,9 +43,10 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
     saveTender,
     tenderDataCopy,
   } = useTenderData();
-  const [tenderProductTable, setTenderProductTable] = useState<
-    tableData | undefined
-  >();
+  // const [tenderProductTable, setTenderProductTable] = useState<
+  //   tableData | undefined
+  // >();
+
   const [localProducts, setLocalProducts] = useState<TenderProduct[]>([]);
   const [hasChanges, setHasChanges] = useState(false);
   const [productIds, setProductIds] = useState<number[]>([]);
@@ -133,7 +134,427 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
     setHasChanges(true);
     // setTimeout(() => handleSave(), 2);
   };
+ const rows: DsTableRow[] = useMemo(
+    () =>
+      calculatedProducts.map((tenderproduct, index) => ({
+        rowIndex: index + 1,
+        customAttributes: {
+          genericName: tenderproduct.requestedGenericName || "",
+          productId: tenderproduct.productId || 0,
+          productName: tenderproduct.product.productName || "",
+        },
 
+        content: [
+          {
+            columnIndex: 1,
+            render: () =>  tenderproduct.product?.dataSource === "fetch" &&
+                latestVersion == version ? (
+                <DsTextField
+                  initialValue={tenderproduct.requestedGenericName || ""}
+                  onBlur={(e) =>
+                    handleFieldChange(
+                      index,
+                      "requestedGenericName",
+                      (e.target as HTMLInputElement).value
+                    )
+                  }
+                  onClick={(e) => e.stopPropagation()}
+                />
+              ) : (
+                tenderproduct.requestedGenericName || "-"
+              )
+            ,
+            className: styles.cellgenericname,
+          },
+
+          {
+            columnIndex: 2,
+            render: () =>  tenderproduct.product?.dataSource === "csv" ? (
+                tenderproduct.requestedQuantity || "-"
+              ) : latestVersion != version ? (
+                tenderproduct.requestedQuantity || "-"
+              ) : (
+                <DsTextField
+                  initialValue={
+                    tenderproduct.requestedQuantity?.toString() || ""
+                  }
+                  inputType="positiveInteger"
+                  onBlur={(e) =>
+                    handleFieldChange(
+                      index,
+                      "requestedQuantity",
+                      Number((e.target as HTMLInputElement).value)
+                    )
+                  }
+                  onClick={(e) => e.stopPropagation()}
+                />
+              )
+            ,
+
+            className: styles.cellquantity,
+          },
+
+          {
+            columnIndex: 3,
+            render: () =>  tenderproduct.product?.dataSource === "fetch" &&
+                latestVersion == version ? (
+                <DsTextField
+                  initialValue={tenderproduct.requestedPackingSize || ""}
+                  onBlur={(e) =>
+                    handleFieldChange(
+                      index,
+                      "requestedPackingSize",
+                      (e.target as HTMLInputElement).value
+                    )
+                  }
+                  onClick={(e) => e.stopPropagation()}
+                />
+              ) : (
+                tenderproduct.requestedPackingSize || "-"
+              )
+            ,
+            className: styles.cellpackingsize,
+          },
+
+          {
+            columnIndex: 4,
+            render: () =>  tenderproduct.product?.dataSource === "csv" &&
+                latestVersion == version ? (
+                <ProductTableSearch
+                  tableRowIndex={index + 1}
+                  setLocalProducts={setLocalProducts}
+                  setHasChanges={setHasChanges}
+                  initialValue={tenderproduct.product?.productName || ""}
+                />
+              ) : (
+                tenderproduct.product?.productName || "-"
+              )
+            ,
+
+            className: styles.cellproductname,
+          },
+          {
+            columnIndex: 5,
+            render: () => 
+              // tenderproduct.product?.dataSource === "csv" ? (
+              tenderproduct.product.productPackingSize || "-",
+            // ) : latestVersion != version ? (
+            //   tenderproduct.product.productPackingSize || "-"
+            // ) : (
+            //   <DsTextField
+            //     initialValue={tenderproduct.product?.productPackingSize || ""}
+            //     onBlur={(e) =>
+            //       handleFieldChange(
+            //         index,
+            //         "product.productPackingSize",
+            //         (e.target as HTMLInputElement).value
+            //       )
+            //     }
+            //   />
+            // ),
+            className: styles.cellproductpakingsize,
+          },
+
+          {
+            columnIndex: 6,
+            render: () => 
+              tenderproduct.product?.dataSource == "saved"
+                ? tenderproduct.product.mrp?.toString() || "-"
+                : "-",
+            className: styles.cellmrp,
+          },
+          {
+            columnIndex: 7,
+           render: () => 
+              tenderproduct.product?.dataSource == "saved"
+                ? tenderproduct.product.ptr?.toString() || "-"
+                : "-",
+            className: styles.cellptr,
+          },
+          {
+            columnIndex: 8,
+            render: () => 
+              tenderproduct.product?.dataSource == "saved"
+                ? tenderproduct.product.directCost?.toString() || "-"
+                : "-",
+            className: styles.celldirectcost,
+          },
+          {
+            columnIndex: 9,
+            render: () => 
+              tenderproduct.product?.dataSource == "saved"
+                ? tenderproduct.product.lqr?.toString() || "-"
+                : "-",
+            className: styles.celllqr,
+          },
+          {
+            columnIndex: 10,
+            render: () =>  tenderproduct.product?.dataSource == "saved" ? (
+                latestVersion != version ? (
+                  tenderproduct.lastPurchaseRate ? (
+                    <DsCustomerLPR
+                      index={index + 1}
+                      lprValue={tenderproduct.lastPurchaseRate}
+                      lprTo={{
+                        id: tenderproduct.competitorId || 0,
+                        name: tenderproduct.product.competitorName || "",
+                      }}
+                      onValueChange={(value) =>
+                        handleFieldChange(
+                          index,
+                          "lastPurchaseRate",
+                          Number(value)
+                        )
+                      }
+                      onCompanyChange={(company) => {
+                        handleFieldChange(index, "competitorId", company.id);
+                        handleFieldChange(
+                          index,
+                          "product.competitorName",
+                          company.name
+                        );
+                      }}
+                      disable={latestVersion != version}
+                    />
+                  ) : (
+                    "-"
+                  )
+                ) : (
+                  <DsCustomerLPR
+                    index={index + 1}
+                    lprValue={tenderproduct.lastPurchaseRate}
+                    lprTo={{
+                      id: tenderproduct.competitorId || 0,
+                      name: tenderproduct.product.competitorName || "",
+                    }}
+                    onValueChange={(value) =>
+                      handleFieldChange(
+                        index,
+                        "lastPurchaseRate",
+                        Number(value)
+                      )
+                    }
+                    onCompanyChange={(company) => {
+                      handleFieldChange(index, "competitorId", company.id);
+                      handleFieldChange(
+                        index,
+                        "product.competitorName",
+                        company.name
+                      );
+                    }}
+                    disable={latestVersion != version}
+                  />
+                )
+              ) : (
+                "-"
+              )
+            ,
+            className: styles.celllpr,
+          },
+          {
+            columnIndex: 11,
+             render: () =>  tenderproduct.product?.dataSource == "saved" &&
+              latestVersion == version ? (
+                <DsTextField
+                  inputType="positive"
+                  initialValue={tenderproduct.proposedRate?.toString() || ""}
+                  onKeyUp={(e) => {
+                    if (e.key === "Enter") {
+                      (e.target as HTMLElement).blur();
+                    }
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                  onBlur={(e) => {
+                    const proposedRate = Number(
+                      (e.target as HTMLInputElement).value
+                    );
+                    if (tenderproduct.proposedRate !== proposedRate) {
+                      const ptrTemp = tenderproduct.product.ptr;
+                      const ptr =
+                        ptrTemp !== undefined
+                          ? typeof ptrTemp == "number"
+                            ? ptrTemp
+                            : Number(ptrTemp)
+                          : 1;
+                      const ptrPer =
+                        100 - Number(((proposedRate / ptr) * 100).toFixed(2));
+                      const discount =
+                        (proposedRate * TenderProductDiscountPercentage) / 100;
+                      // console.log(proposedRate);
+                      // console.log(ptrPer);
+                      // console.log(discount);
+                      handleFieldChange(index, "proposedRate", proposedRate);
+                      handleFieldChange(index, "ptrPercentage", ptrPer);
+                      handleFieldChange(
+                        index,
+                        "stockistDiscountValue",
+                        discount
+                      );
+                    }
+                  }}
+                />
+              ) : (
+                "-"
+              ),
+            className: styles.cellproposedrate,
+          },
+          {
+            columnIndex: 12,
+            render: () =>  tenderproduct.product?.dataSource == "saved" &&
+              latestVersion == version ? (
+                <DsTextField
+                  inputType="number"
+                  maximumNumber={100.0}
+                  initialValue={
+                    Number(
+                      tenderproduct.ptrPercentage?.toFixed(2)
+                    ).toString() || ""
+                  }
+                  onKeyUp={(e) => {
+                    if (e.key === "Enter") {
+                      (e.target as HTMLElement).blur();
+                    }
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                  onBlur={(e) => {
+                    const ptrPer = Number((e.target as HTMLInputElement).value);
+                    if (tenderproduct.ptrPercentage !== ptrPer) {
+                      const ptrTemp = tenderproduct.product.ptr;
+                      const ptr =
+                        ptrTemp !== undefined
+                          ? typeof ptrTemp == "number"
+                            ? ptrTemp
+                            : Number(ptrTemp)
+                          : 1;
+
+                      const proposedRate = ((100 - ptrPer) * ptr) / 100;
+
+                      const discount =
+                        (proposedRate * TenderProductDiscountPercentage) / 100;
+                      // console.log(proposedRate);
+                      // console.log(ptrPer);
+                      // console.log(discount);
+                      handleFieldChange(
+                        index,
+                        "ptrPercentage",
+                        parseFloat(ptrPer.toFixed(2))
+                      );
+                      handleFieldChange(index, "proposedRate", proposedRate);
+                      handleFieldChange(
+                        index,
+                        "stockistDiscountValue",
+                        discount
+                      );
+                    }
+                    (e.target as HTMLInputElement).value = ptrPer.toFixed(2);
+                  }}
+                  className={`${
+                    (tenderproduct.ptrPercentage || 0) <= 0
+                      ? styles.warningAlert
+                      : ""
+                  }`}
+                />
+              ) : (
+                "-"
+              ),
+            className: styles.cellptr,
+          },
+          {
+            columnIndex: 13,
+            render: () =>  tenderproduct.product?.dataSource == "saved" &&
+              latestVersion == version ? (
+                <DsTextField
+                  inputType="number"
+                  initialValue={
+                    (
+                      ((tenderproduct.proposedRate || 0) *
+                        TenderProductDiscountPercentage) /
+                      100
+                    ).toFixed(2) || ""
+                  }
+                  onKeyUp={(e) => {
+                    if (e.key === "Enter") {
+                      (e.target as HTMLElement).blur();
+                    }
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                  onBlur={(e) => {
+                    const discount = Number(
+                      (e.target as HTMLInputElement).value
+                    );
+                    if (tenderproduct.stockistDiscountValue !== discount) {
+                      const proposedRate =
+                        (discount * 100) / TenderProductDiscountPercentage;
+                      const ptrTemp = tenderproduct.product.ptr;
+                      const ptr =
+                        ptrTemp !== undefined
+                          ? typeof ptrTemp == "number"
+                            ? ptrTemp
+                            : Number(ptrTemp)
+                          : 1;
+
+                      const ptrPer =
+                        100 - Number(((proposedRate / ptr) * 100).toFixed(2));
+                      // console.log(proposedRate);
+                      // console.log(ptrPer);
+                      // console.log(discount);
+                      handleFieldChange(
+                        index,
+                        "stockistDiscountValue",
+                        discount
+                      );
+                      handleFieldChange(index, "proposedRate", proposedRate);
+                      handleFieldChange(index, "ptrPercentage", ptrPer);
+                    }
+                  }}
+                />
+              ) : (
+                "-"
+              ),
+            className: styles.celldiscount,
+          },
+          {
+            columnIndex: 14,
+            render: () =>  tenderproduct.product?.dataSource == "saved"
+                ? tenderproduct.product.totalCost?.toFixed(2) || "-"
+                : "-",
+            className: styles.celltotalcost,
+          },
+          {
+            columnIndex: 15,
+             render: () => 
+              tenderproduct.product?.dataSource == "saved"
+                ? tenderproduct.product.marginValue?.toFixed(2) || "-"
+                : "-",
+            className: `${
+              (tenderproduct.product.marginValue || 0) <= 0
+                ? styles.warningAlert
+                : ""
+            } ${styles.cellmargin}`,
+          },
+          {
+            columnIndex: 16,
+             render: () =>  tenderproduct.product?.dataSource == "saved"
+                ? (tenderproduct.product.marginPercent || 0).toFixed(2) + "%" ||
+                  "-"
+                : "-",
+            className: `${styles.cellmarginper} ${
+              (tenderproduct.product.marginPercent || 0) < marginPercentLimit
+                ? styles.red
+                : ""
+            }`,
+          },
+          {
+            columnIndex: 17,
+            render: () =>  tenderproduct.product?.dataSource == "saved"
+                ? tenderproduct.product.netValue?.toFixed(2) || "-"
+                : "-",
+            className: styles.cellnetvalue,
+          },
+        ],
+      })),
+    [calculatedProducts]
+  );
   const handleSave = () => {
     calculatedProducts.forEach((product) => {
       if (product.id) {
@@ -327,425 +748,15 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
     []
   );
 
-  const rows: DsTableRow[] = useMemo(
-    () =>
-      calculatedProducts.map((tenderproduct, index) => ({
-        rowIndex: index + 1,
-        customAttributes: {
-          genericName: tenderproduct.requestedGenericName || "",
-          productId: tenderproduct.productId || 0,
-          productName: tenderproduct.product.productName || "",
-        },
-
-        content: [
-          {
-            columnIndex: 1,
-            content:
-              tenderproduct.product?.dataSource === "fetch" &&
-              latestVersion == version ? (
-                <DsTextField
-                  initialValue={tenderproduct.requestedGenericName || ""}
-                  onBlur={(e) =>
-                    handleFieldChange(
-                      index,
-                      "requestedGenericName",
-                      (e.target as HTMLInputElement).value
-                    )
-                  }
-                  onClick={(e) => e.stopPropagation()}
-                />
-              ) : (
-                tenderproduct.requestedGenericName || "-"
-              ),
-            className: styles.cellgenericname,
-          },
-
-          {
-            columnIndex: 2,
-            content:
-              tenderproduct.product?.dataSource === "csv" ? (
-                tenderproduct.requestedQuantity || "-"
-              ) : latestVersion != version ? (
-                tenderproduct.requestedQuantity || "-"
-              ) : (
-                <DsTextField
-                  initialValue={
-                    tenderproduct.requestedQuantity?.toString() || ""
-                  }
-                  inputType="positiveInteger"
-                  onBlur={(e) =>
-                    handleFieldChange(
-                      index,
-                      "requestedQuantity",
-                      Number((e.target as HTMLInputElement).value)
-                    )
-                  }
-                  onClick={(e) => e.stopPropagation()}
-                />
-              ),
-
-            className: styles.cellquantity,
-          },
-
-          {
-            columnIndex: 3,
-            content:
-              tenderproduct.product?.dataSource === "fetch" &&
-              latestVersion == version ? (
-                <DsTextField
-                  initialValue={tenderproduct.requestedPackingSize || ""}
-                  onBlur={(e) =>
-                    handleFieldChange(
-                      index,
-                      "requestedPackingSize",
-                      (e.target as HTMLInputElement).value
-                    )
-                  }
-                  onClick={(e) => e.stopPropagation()}
-                />
-              ) : (
-                tenderproduct.requestedPackingSize || "-"
-              ),
-            className: styles.cellpackingsize,
-          },
-
-          {
-            columnIndex: 4,
-            content:
-              tenderproduct.product?.dataSource === "csv" &&
-              latestVersion == version ? (
-                <ProductTableSearch
-                  tableRowIndex={index + 1}
-                  setLocalProducts={setLocalProducts}
-                  setHasChanges={setHasChanges}
-                  initialValue={tenderproduct.product?.productName || ""}
-                />
-              ) : (
-                tenderproduct.product?.productName || "-"
-              ),
-
-            className: styles.cellproductname,
-          },
-          {
-            columnIndex: 5,
-            content:
-              // tenderproduct.product?.dataSource === "csv" ? (
-              tenderproduct.product.productPackingSize || "-",
-            // ) : latestVersion != version ? (
-            //   tenderproduct.product.productPackingSize || "-"
-            // ) : (
-            //   <DsTextField
-            //     initialValue={tenderproduct.product?.productPackingSize || ""}
-            //     onBlur={(e) =>
-            //       handleFieldChange(
-            //         index,
-            //         "product.productPackingSize",
-            //         (e.target as HTMLInputElement).value
-            //       )
-            //     }
-            //   />
-            // ),
-            className: styles.cellproductpakingsize,
-          },
-
-          {
-            columnIndex: 6,
-            content:
-              tenderproduct.product?.dataSource == "saved"
-                ? tenderproduct.product.mrp?.toString() || "-"
-                : "-",
-            className: styles.cellmrp,
-          },
-          {
-            columnIndex: 7,
-            content:
-              tenderproduct.product?.dataSource == "saved"
-                ? tenderproduct.product.ptr?.toString() || "-"
-                : "-",
-            className: styles.cellptr,
-          },
-          {
-            columnIndex: 8,
-            content:
-              tenderproduct.product?.dataSource == "saved"
-                ? tenderproduct.product.directCost?.toString() || "-"
-                : "-",
-            className: styles.celldirectcost,
-          },
-          {
-            columnIndex: 9,
-            content:
-              tenderproduct.product?.dataSource == "saved"
-                ? tenderproduct.product.lqr?.toString() || "-"
-                : "-",
-            className: styles.celllqr,
-          },
-          {
-            columnIndex: 10,
-            content:
-              tenderproduct.product?.dataSource == "saved" ? (
-                latestVersion != version ? (
-                  tenderproduct.lastPurchaseRate ? (
-                    <DsCustomerLPR
-                      index={index + 1}
-                      lprValue={tenderproduct.lastPurchaseRate}
-                      lprTo={{
-                        id: tenderproduct.competitorId || 0,
-                        name: tenderproduct.product.competitorName || "",
-                      }}
-                      onValueChange={(value) =>
-                        handleFieldChange(index, "lastPurchaseRate", Number(value))
-                      }
-                      onCompanyChange={(company) => {
-                        handleFieldChange(index, "competitorId", company.id);
-                        handleFieldChange(
-                          index,
-                          "product.competitorName",
-                          company.name
-                        );
-                      }}
-                      disable={latestVersion != version}
-                    />
-                  ) : (
-                    "-"
-                  )
-                ) : (
-                  <DsCustomerLPR
-                    index={index + 1}
-                    lprValue={tenderproduct.lastPurchaseRate}
-                    lprTo={{
-                      id: tenderproduct.competitorId || 0,
-                      name: tenderproduct.product.competitorName || "",
-                    }}
-                    onValueChange={(value) =>
-                      handleFieldChange(index, "lastPurchaseRate", Number(value))
-                    }
-                    onCompanyChange={(company) => {
-                      handleFieldChange(index, "competitorId", company.id);
-                      handleFieldChange(
-                        index,
-                        "product.competitorName",
-                        company.name
-                      );
-                    }}
-                    disable={latestVersion != version}
-                  />
-                )
-              ) : (
-                "-"
-              ),
-            className: styles.celllpr,
-          },
-          {
-            columnIndex: 11,
-            content:
-              tenderproduct.product?.dataSource == "saved" &&
-              latestVersion == version ? (
-                <DsTextField
-                  inputType="positive"
-                  initialValue={tenderproduct.proposedRate?.toString() || ""}
-                  onKeyUp={(e) => {
-                    if (e.key === "Enter") {
-                      (e.target as HTMLElement).blur();
-                    }
-                  }}
-                  onClick={(e) => e.stopPropagation()}
-                  onBlur={(e) => {
-                    const proposedRate = Number(
-                      (e.target as HTMLInputElement).value
-                    );
-                    if (tenderproduct.proposedRate !== proposedRate) {
-                      const ptrTemp = tenderproduct.product.ptr;
-                      const ptr =
-                        ptrTemp !== undefined
-                          ? typeof ptrTemp == "number"
-                            ? ptrTemp
-                            : Number(ptrTemp)
-                          : 1;
-                      const ptrPer =
-                        100 - Number(((proposedRate / ptr) * 100).toFixed(2));
-                      const discount =
-                        (proposedRate * TenderProductDiscountPercentage) / 100;
-                      // console.log(proposedRate);
-                      // console.log(ptrPer);
-                      // console.log(discount);
-                      handleFieldChange(index, "proposedRate", proposedRate);
-                      handleFieldChange(index, "ptrPercentage", ptrPer);
-                      handleFieldChange(
-                        index,
-                        "stockistDiscountValue",
-                        discount
-                      );
-                    }
-                  }}
-                />
-              ) : (
-                "-"
-              ),
-            className: styles.cellproposedrate,
-          },
-          {
-            columnIndex: 12,
-            content:
-              tenderproduct.product?.dataSource == "saved" &&
-              latestVersion == version ? (
-                <DsTextField
-                  inputType="number"
-                  maximumNumber={100.0}
-                  initialValue={
-                    Number(
-                      tenderproduct.ptrPercentage?.toFixed(2)
-                    ).toString() || ""
-                  }
-                  onKeyUp={(e) => {
-                    if (e.key === "Enter") {
-                      (e.target as HTMLElement).blur();
-                    }
-                  }}
-                  onClick={(e) => e.stopPropagation()}
-                  onBlur={(e) => {
-                    const ptrPer = Number((e.target as HTMLInputElement).value);
-                    if (tenderproduct.ptrPercentage !== ptrPer) {
-                      const ptrTemp = tenderproduct.product.ptr;
-                      const ptr =
-                        ptrTemp !== undefined
-                          ? typeof ptrTemp == "number"
-                            ? ptrTemp
-                            : Number(ptrTemp)
-                          : 1;
-
-                      const proposedRate = ((100 - ptrPer) * ptr) / 100;
-
-                      const discount =
-                        (proposedRate * TenderProductDiscountPercentage) / 100;
-                      // console.log(proposedRate);
-                      // console.log(ptrPer);
-                      // console.log(discount);
-                      handleFieldChange(
-                        index,
-                        "ptrPercentage",
-                        parseFloat(ptrPer.toFixed(2))
-                      );
-                      handleFieldChange(index, "proposedRate", proposedRate);
-                      handleFieldChange(
-                        index,
-                        "stockistDiscountValue",
-                        discount
-                      );
-                    }
-                    (e.target as HTMLInputElement).value = ptrPer.toFixed(2);
-                  }}
-                  className={`${
-                    (tenderproduct.ptrPercentage || 0) <= 0
-                      ? styles.warningAlert
-                      : ""
-                  }`}
-                />
-              ) : (
-                "-"
-              ),
-            className: styles.cellptr,
-          },
-          {
-            columnIndex: 13,
-            content:
-              tenderproduct.product?.dataSource == "saved" &&
-              latestVersion == version ? (
-                <DsTextField
-                  inputType="number"
-                  initialValue={
-                    (
-                      ((tenderproduct.proposedRate || 0) *
-                        TenderProductDiscountPercentage) /
-                      100
-                    ).toFixed(2) || ""
-                  }
-                  onKeyUp={(e) => {
-                    if (e.key === "Enter") {
-                      (e.target as HTMLElement).blur();
-                    }
-                  }}
-                  onClick={(e) => e.stopPropagation()}
-                  onBlur={(e) => {
-                    const discount = Number(
-                      (e.target as HTMLInputElement).value
-                    );
-                    if (tenderproduct.stockistDiscountValue !== discount) {
-                      const proposedRate =
-                        (discount * 100) / TenderProductDiscountPercentage;
-                      const ptrTemp = tenderproduct.product.ptr;
-                      const ptr =
-                        ptrTemp !== undefined
-                          ? typeof ptrTemp == "number"
-                            ? ptrTemp
-                            : Number(ptrTemp)
-                          : 1;
-
-                      const ptrPer =
-                        100 - Number(((proposedRate / ptr) * 100).toFixed(2));
-                      // console.log(proposedRate);
-                      // console.log(ptrPer);
-                      // console.log(discount);
-                      handleFieldChange(
-                        index,
-                        "stockistDiscountValue",
-                        discount
-                      );
-                      handleFieldChange(index, "proposedRate", proposedRate);
-                      handleFieldChange(index, "ptrPercentage", ptrPer);
-                    }
-                  }}
-                />
-              ) : (
-                "-"
-              ),
-            className: styles.celldiscount,
-          },
-          {
-            columnIndex: 14,
-            content:
-              tenderproduct.product?.dataSource == "saved"
-                ? tenderproduct.product.totalCost?.toFixed(2) || "-"
-                : "-",
-            className: styles.celltotalcost,
-          },
-          {
-            columnIndex: 15,
-            content:
-              tenderproduct.product?.dataSource == "saved"
-                ? tenderproduct.product.marginValue?.toFixed(2) || "-"
-                : "-",
-            className: `${
-              (tenderproduct.product.marginValue || 0) <= 0
-                ? styles.warningAlert
-                : ""
-            } ${styles.cellmargin}`,
-          },
-          {
-            columnIndex: 16,
-            content:
-              tenderproduct.product?.dataSource == "saved"
-                ? (tenderproduct.product.marginPercent || 0).toFixed(2) + "%" ||
-                  "-"
-                : "-",
-            className: `${styles.cellmarginper} ${
-              (tenderproduct.product.marginPercent || 0) < marginPercentLimit
-                ? styles.red
-                : ""
-            }`,
-          },
-          {
-            columnIndex: 17,
-            content:
-              tenderproduct.product?.dataSource == "saved"
-                ? tenderproduct.product.netValue?.toFixed(2) || "-"
-                : "-",
-            className: styles.cellnetvalue,
-          },
-        ],
-      })),
-    [calculatedProducts]
-  );
+   const tenderProductTable = useMemo(() => ({
+  className: styles["tender-product-table"],
+  id: "productTable",
+  type: "InterActive",
+  isSortable: false,
+  hasSearch: false,
+  columns,
+  rows,
+}), [columns, rows]);
   useEffect(() => {
     setLocalProducts(
       tenderData.tenderRevisions.find((x) => x.version == version)
@@ -838,17 +849,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
   useEffect(() => {
     handleSave();
   }, [hasChanges]);
-  useEffect(() => {
-    setTenderProductTable({
-      className: styles["tender-product-table"],
-      id: "productTable",
-      type: "InterActive",
-      isSortable: false,
-      hasSearch: false,
-      columns,
-      rows,
-    });
-  }, [columns, rows]);
+
   return (
     <>
       <div className="tender-product-container" style={{ overflowY: "hidden" }}>
