@@ -60,7 +60,7 @@ export type TenderProduct = {
   requestedQuantity?: number;
   requestedPackingSize?: string;
   productId?: number;
-  lpr?: number;
+  lastPurchaseRate?: number;
   competitorId?: number;
   proposedRate?: number;
   ptrPercentage?: number;
@@ -798,7 +798,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 product: x.product,
                 proposedRate: x.proposedRate,
                 ptrPercentage: x.ptrPercentage,
-                lpr: x.lpr,
+                lastPurchaseRate: x.lastPurchaseRate,
                 competitorId: x.competitorId,
                 stockistDiscountValue: x.stockistDiscountValue,
               } as TenderProduct;
