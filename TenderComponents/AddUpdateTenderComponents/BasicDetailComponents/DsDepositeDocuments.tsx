@@ -16,7 +16,7 @@ import { DsSelectOption } from "@/Common/helpers/types";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import DsFeesDocument from "./DsFeesDocument";
 import { useTenderData } from "../TenderDataContextProvider";
-
+ 
 import IconFactory from "@/Elements/IconComponent";
 import DsTenderDetails from "./DsTenderDetails ";
 import { useAppSelector } from "@/Redux/hook/hook";
@@ -30,7 +30,7 @@ import { RootState } from "@/Redux/store/store";
 // export interface Deposit {
 //   paidBy: DsSelectOption[];
 // }
-
+ 
 //  interface FeesDocument {
 //   applicableDeposits: DsSelectOption[];
 // }
@@ -59,8 +59,7 @@ const DsDepositeDocuments: React.FC = () => {
   const [applicablefees, SetApplicablefees] = useState<DsSelectOption[]>([]);
   const [paymentCheckVisible, setPaymentCheckVisible] =
     useState<boolean>(false);
-  const [recoveryPaymentVisible, setrecoveryPaymentVisible] =
-    useState<boolean>(false);
+  const [recoveryPaymentVisible,setrecoveryPaymentVisible]= useState<boolean>(false)
   const [feeVisibility, setFeeVisibility] = useState<Record<string, boolean>>({
     "": true,
   });
@@ -68,22 +67,20 @@ const DsDepositeDocuments: React.FC = () => {
   // const [feeVisibility1, setFeeVisibility1] = useState<Record<string, boolean>>({"": true,});
 
   const role = useAppSelector((state: RootState) => state.user.role);
-
+ 
   useEffect(() => {
     if (role == "MAKER" || role == "CHECKER") {
       setPaymentCheckVisible(false);
     } else {
       setPaymentCheckVisible(true);
     }
-    if (
-      role === "ACCOUNTANCE" &&
-      (tenderData.status === "AWARDED" ||
-        tenderData.status === "LOST" ||
-        tenderData.status === "CANCELLED")
-    ) {
+    if(role === "ACCOUNTANCE" && (tenderData.status === "AWARDED" ||tenderData.status === "LOST" ||tenderData.status === "CANCELLED" ))
+    {
       setrecoveryPaymentVisible(true);
-    } else {
-      setrecoveryPaymentVisible(false);
+    }
+    else
+    {
+      setrecoveryPaymentVisible(false)
     }
     if (
       metaData.tenderEmdPayment &&
@@ -118,7 +115,7 @@ const DsDepositeDocuments: React.FC = () => {
         Record<string, boolean>
       >((acc, opt) => {
         const val = opt.value;
-
+ 
         if (typeof val === "string") {
           acc[val] = tenderData.tenderFees.some(
             (fee) => fee.feesType == opt.value && fee.status == "ACTV"
@@ -129,7 +126,7 @@ const DsDepositeDocuments: React.FC = () => {
       setFeeVisibility(options);
     }
   }, [metaData, tenderDataCopy.tenderFees]);
-
+ 
   function handleonclick(
     e:
       | React.MouseEvent<HTMLElement, MouseEvent>
@@ -145,7 +142,7 @@ const DsDepositeDocuments: React.FC = () => {
     applicablefees.forEach((opt) => {
       const id = opt.value.toString();
       const checkbox = document.getElementById(id) as HTMLInputElement;
-
+ 
       if (checkbox?.checked) {
         selectedFees.add(id);
         checkFeeVisible[id] = true;
@@ -163,7 +160,7 @@ const DsDepositeDocuments: React.FC = () => {
     closeAllContext();
     // console.log("Currently Selected:", Array.from(selectedFees));
   };
-
+ 
   useEffect(() => {
     const checkFeeVisible = { ...feeVisibility };
 
@@ -185,7 +182,7 @@ const DsDepositeDocuments: React.FC = () => {
         if (tenderData.tenderFees.some((fee) => fee.feesType == id))
           updateTenderFee(id, "status", "ACTV");
         else addTenderFee(id);
-      } else if (tenderData.id == undefined) {
+      } else if (tenderData.id==undefined) {
         selectedFees.add(id);
         checkFeeVisible[id] = true;
         if (tenderData.tenderFees.some((fee) => fee.feesType == id))
@@ -198,12 +195,13 @@ const DsDepositeDocuments: React.FC = () => {
       }
     });
     setFeeVisibility(checkFeeVisible);
-  }, [applicablefees, tenderData.id]);
+
+  }, [applicablefees, tenderData.id,]);
 
   // useEffect(() => {
   //   console.log("feevisibility : ", feeVisibility);
   // }, [feeVisibility]);
-
+ 
   useEffect(() => {
     window.addEventListener("click", (e) => {
       const target = (e.target as HTMLElement).closest(
@@ -228,7 +226,7 @@ const DsDepositeDocuments: React.FC = () => {
       });
     };
   }, [applicablefees]);
-
+ 
   useEffect(() => {
     const handleScroll = (event: any) => {
       const excludedElement = document.getElementById("optionBtn");
@@ -242,7 +240,7 @@ const DsDepositeDocuments: React.FC = () => {
       window.removeEventListener("scroll", handleScroll, true);
     };
   }, []);
-
+ 
   return (
     <div className={styles.container}>
       <div className={styles.containerHead}>
@@ -268,14 +266,36 @@ const DsDepositeDocuments: React.FC = () => {
           />
         </div>
       </div>
-      {(metaData.feesType || []).map((deposit) => {
-        if (typeof deposit.value == "string")
-          return (
-            feeVisibility[deposit.value] && (
-              <div className={styles.emdContainer2}>
+         {(metaData.feesType || []).map((deposit) => {
+        if (typeof deposit.value === "string") {
+          const currentFee = tenderData?.tenderFees?.find(
+            (f) => f.feesType === deposit.value
+          );
+          console.log("deposite.value", currentFee);
+          const isEmpty =
+            !currentFee ||
+            (!currentFee.amount &&
+              !currentFee.paymentMode &&
+              !currentFee.paidBy &&
+              !currentFee.instructionNotes &&
+              !currentFee.paymentDueDate &&
+              !currentFee.refundEligibility&&
+              !currentFee.paymentStatus &&
+              !currentFee.paymentDate &&
+              !currentFee.paymentTransactionId &&
+              !currentFee.paymentReceiptId &&
+              !currentFee.paymentTransactionId &&
+              !currentFee.fundTransferConfirmationId &&
+              !currentFee.paymentRefundDate &&
+              !currentFee.refundNotes 
+            );
+
+          if (feeVisibility[deposit.value] && !isEmpty) {
+            return (
+              <div className={styles.emdContainer2} key={deposit.value}>
                 <DsFeesDocument
                   optionlist={documentTypeOptions[deposit.value]}
-                  type={deposit.value.toString()}
+                  type={deposit.value}
                   title={deposit.label}
                   id={deposit.value + "DocumentView"}
                   mode={mode}
@@ -286,8 +306,10 @@ const DsDepositeDocuments: React.FC = () => {
                   recoverycheckvisibible={recoveryPaymentVisible}
                 />
               </div>
-            )
-          );
+            );
+          }
+        }
+        return null;
       })}
       <ContextMenu
         id={contextMenuId}
@@ -330,3 +352,6 @@ const DsDepositeDocuments: React.FC = () => {
   );
 };
 export default DsDepositeDocuments;
+ 
+
+ 

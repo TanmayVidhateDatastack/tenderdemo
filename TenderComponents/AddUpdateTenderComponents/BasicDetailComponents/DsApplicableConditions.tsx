@@ -40,7 +40,7 @@ const DsApplicableConditions: React.FC = () => {
   } = useTenderData();
   const [conditionsVisibility, setConditionsVisibility] = useState<
     Record<string, boolean>
-  >({}); 
+  >({});
 
   function handleonclick(
     e:
@@ -126,10 +126,7 @@ const DsApplicableConditions: React.FC = () => {
       }
     });
     setConditionsVisibility(checkConditionVisible);
-  }, [
-    metaData.applicableSupplyConditions,
-    tenderData.id,
-  ]);
+  }, [metaData.applicableSupplyConditions, tenderData.id]);
   useEffect(() => {
     if (
       metaData.applicableSupplyConditions &&
@@ -214,20 +211,33 @@ const DsApplicableConditions: React.FC = () => {
             onClick={(e) => handleonclick(e)}
           />
         </div>
+
         {conditionsVisibility &&
-          Object.values(conditionsVisibility).filter((x) => x).length > 0 && (
+          Object.values(conditionsVisibility).some(Boolean) && (
             <div className={styles.conditions}>
-              {(metaData.applicableSupplyConditions || []).map((conditions) => {
-                if (typeof conditions.value == "string")
-                  return (
-                    conditionsVisibility[conditions.value] && (
+              {(metaData.applicableSupplyConditions || []).map((condition) => {
+                if (typeof condition.value === "string") {
+                  const value = condition.value;
+
+                  const currentCondition =
+                    tenderData?.tenderSupplyCondition?.applicableConditions?.find(
+                      (c) => c.type === value
+                    );
+
+                  const isEmpty = !currentCondition || !currentCondition.notes;
+
+                  if (conditionsVisibility[value] && !isEmpty) {
+                    return (
                       <DsSupplyConditions
-                        type={conditions.value.toString()}
-                        title={conditions.label}
-                        id={conditions.value + "conditionsView"}
+                        key={value}
+                        type={value}
+                        title={condition.label}
+                        id={`${value}conditionsView`}
                       />
-                    )
-                  );
+                    );
+                  }
+                }
+                return null;
               })}
             </div>
           )}
@@ -238,19 +248,29 @@ const DsApplicableConditions: React.FC = () => {
         content={
           <>
             <div className={styles.applicableDeposit}>
-              {applicableCheckboxes.map((checkbox, index) => (
-                <Ds_checkbox
-                  key={index} // Unique key
-                  containerClassName={styles.feesCheckboxContainer}
-                  id={checkbox.value.toString()}
-                  name={checkbox.label}
-                  value={checkbox.value.toString()}
-                  label={checkbox.label}
-                  defaultChecked={
-                    conditionsVisibility[checkbox.value.toString()]
-                  }
-                />
-              ))}
+              {applicableCheckboxes.map((checkbox, index) => {
+                const currentCondition =
+                  tenderData?.tenderSupplyCondition?.applicableConditions?.find(
+                    (c) => c.type === checkbox.value.toString()
+                  );
+
+                const isEmpty = !currentCondition || !currentCondition.notes;
+
+                return (
+                  <Ds_checkbox
+                    key={index}
+                    containerClassName={styles.feesCheckboxContainer}
+                    id={checkbox.value.toString()}
+                    name={checkbox.label}
+                    value={checkbox.value.toString()}
+                    label={checkbox.label}
+                    defaultChecked={
+                      conditionsVisibility[checkbox.value.toString()] ===
+                        true && !isEmpty
+                    }
+                  />
+                );
+              })}
               <DsButton
                 label="Add"
                 buttonViewStyle="btnContained"
