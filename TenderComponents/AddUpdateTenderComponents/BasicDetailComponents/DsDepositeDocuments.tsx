@@ -74,7 +74,7 @@ const DsDepositeDocuments: React.FC = () => {
     } else {
       setPaymentCheckVisible(true);
     }
-    if (role === "ACCOUNTANCE" && tenderData.status === "AWARDED" ||tenderData.status === "LOST" ||tenderData.status === "CANCELLED" )
+    if(role === "ACCOUNTANCE" && (tenderData.status === "AWARDED" ||tenderData.status === "LOST" ||tenderData.status === "CANCELLED" ))
     {
       setrecoveryPaymentVisible(true);
     }
