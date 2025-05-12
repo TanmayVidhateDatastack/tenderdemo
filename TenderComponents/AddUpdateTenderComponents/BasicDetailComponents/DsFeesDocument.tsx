@@ -216,7 +216,6 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     refund,
   ]);
 
-  const [addedOptions, setAddedOptions] = useState([]); // <-- stores options added via "Add"
   return (
     <>
       {/* <div> */}
@@ -271,11 +270,6 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               options={optionlist || []}
               setSelectOptions={(options) => {
                 setSelectedOptions(options);
-                 setAddedOptions((prevAdded) =>
-      prevAdded.filter((opt) =>
-        options.some((sel) => sel.value === opt.value)
-      )
-    );
                 console.log("Selected options:", options);
               }}
             >
@@ -289,12 +283,6 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                     closeAllContext();
                      setSelectedCheckbox(true);
                     
-                          setAddedOptions((prev) => {
-          const newOptions = selectedOptions.filter(
-            (opt) => !prev.some((p) => p.value === opt.value)
-          );
-          return [...prev, ...newOptions];
-        });
                     console.log("Add button clicked");
                   }}
                 />
@@ -330,18 +318,18 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               uploadLabel={`Upload ${option.label} here `}
               id={typeof option.value === "string" ? option.value : ""}
               onSelectedFileChange={(files) => {
-                const typeDocuments =
+                const Documents =
                   tenderData.tenderDocuments?.filter(
                     (x) =>
                       x.documentCategory == type &&
-                      x.documentType == type + "_INSTRUCTION"
+                      x.documentType == type + "_UPLOADINSTRUCTION"
                   ) || [];
                 updateDocuments(
                   files,
-                  typeDocuments,
+                  Documents,
                   removeTenderDocument,
                   addNewTenderDocument,
-                  type + "_INSTRUCTION",
+                  type + "_UPLOADINSTRUCTION",
                   type
                 );
               }}
@@ -351,7 +339,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
         <div className={eleStyles.inputDetails}>
           {selectedcheckbox &&
             selectedOptions.map((option) => (
-              <div key="" className={styles.fields}>
+              <div className={styles.fields}>
                 <DsTextField
                   containerClasses={styles.feeFields}
                   label={`${option.label}   ID`}
@@ -542,6 +530,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               type
             );
           }}
+          
         ></DsCsvUpload>
       </div>
       {recoverycheckvisibible && (
