@@ -23,6 +23,8 @@ import DsMultiSelect from "@/Elements/DsComponents/dsSelect/dsMultiSelect";
 import { getYesterdayDate } from "@/Common/helpers/Method/conversion";
 import UploadFile from "@/TenderComponents/TenderLogComponents/uploadfile";
 import { closeAllContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
+import { useAppSelector } from "@/Redux/hook/hook";
+import { RootState } from "@/Redux/store/store";
 
 export type tenderDocument = {
   name: string;
@@ -100,6 +102,25 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     "TENDER_PSD_PAYMENT",
     "FEES_TYPE",
   ];
+   const permissions = useAppSelector((state: RootState) => state.permissions);
+  const {
+    amountDisable,
+    paidByDisable,
+    modesDisable,
+    refundEligibilityDisable,
+    PaymentdueDateDisable,
+    instructionNotesDisable,
+    attachFileButtonDisable,
+    paymentcompletedDisable,
+    addDocumentTypeButtonDisable,
+    addDocumentTypeSlectDisable,
+    uploadFileButtonDisabled,
+    transactionIdDisable,
+    recieptIdDisable,
+    paymentRecoveredDisable,
+    recoveredNotesDisable,
+    recoveredAttachFileButton,
+  } = permissions;
   const [depositeDocuments, setDepositeDocuments] = useState<DsSelectOption[]>(
     []
   );
@@ -247,6 +268,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
       {completedpayment && (      <>
         <div className={styles.fields}>
           <Ds_checkbox
+          disable={paymentcompletedDisable}
             id={"payment"}
             name={"Payment Completed"}
             value={"Payment Completed"}
@@ -265,6 +287,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           <div className={styles.fields}>
             <DsMultiSelect
               label="Add document type"
+              disable={addDocumentTypeSlectDisable}
               containerClasses={styles.feeFields}
               id={id + "Documents"}
               options={optionlist || []}
@@ -276,6 +299,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               <div className={styles.addBtn}>
                 <DsButton
                   label="Add"
+                  disable={addDocumentTypeButtonDisable}
                   buttonViewStyle="btnContained"
                   buttonSize="btnSmall"
                   className={styles.addBtn}
@@ -314,6 +338,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
         {selectedcheckbox  &&
           selectedOptions.map((option, index) => (
             <UploadFile
+            // disable={uploadFileButtonDisabled}
               key={`upload-${index}`}
               uploadLabel={`Upload ${option.label} here `}
               id={typeof option.value === "string" ? option.value : ""}
@@ -343,6 +368,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 <DsTextField
                   containerClasses={styles.feeFields}
                   label={`${option.label}   ID`}
+                  disable={transactionIdDisable}
                   onBlur={(e) => {
                     if (typeof option.value == "string") {
                       if (option.value.includes("ACKNOWLEDGMENT_RECEIPT"))
@@ -383,6 +409,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
         <DsTextField
           containerClasses={styles.feeFields}
           maxLength={10}
+          disable={amountDisable}
           initialValue={
             tenderData.tenderFees
               .find((x) => x.feesType == type)
@@ -407,6 +434,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           options={depositeDocuments}
           label="Paid by"
           placeholder={"Please select here"}
+          disable={paidByDisable}
           setSelectOption={(option) => {
             if (typeof option.value == "string") {
               updateTenderFee(type, "paidBy", option.value);
@@ -420,6 +448,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           selectedOption={selectedPaymentMode}
           id={id + "_modes1"}
           options={mode}
+          disable={modesDisable}
           label="Modes"
           placeholder={"Please search and select here"}
           setSelectOption={(option) => {
@@ -435,6 +464,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           selectedOption={selectedRefund}
           id={id + "_refund"}
           options={refund}
+          disable={refundEligibilityDisable}
           label="Refund Eligibility"
           setSelectOption={(option) => {
             if (typeof option.value == "string") {
@@ -460,6 +490,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           }
           placeholder="DD/MM/YYYY"
           label="Due Date"
+          disable={PaymentdueDateDisable}
           setDateValue={(date) => {
             if (date instanceof Date) {
               updateTenderFee(type, "paymentDueDate", getTodayDate(date));
@@ -479,7 +510,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               ?.instructionNotes || ""
           }
           placeholder="Please type here"
-          disable={false}
+          disable={instructionNotesDisable}
           minRows={2}
           onBlur={(e) => {
             updateTenderFee(
@@ -497,7 +528,8 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           label="Attach File"
           buttonViewStyle="btnText"
           buttonSize="btnSmall"
-          startIcon={<IconFactory name="fileAttach" />}
+          startIcon={<IconFactory name="fileAttach" 
+          disabled={tenderData?.status.toLowerCase() !== "draft"}/>}
           previouslySelectedFile={
             tenderData.tenderDocuments
               ?.filter(
@@ -530,7 +562,11 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               type
             );
           }}
+<<<<<<< HEAD
           
+=======
+          disable={attachFileButtonDisable}
+>>>>>>> d02f30f6c7cec7cd0435e842072b8983840f437e
         ></DsCsvUpload>
       </div>
       {recoverycheckvisibible && (
@@ -538,6 +574,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           <div className={styles.separator}></div>
           
           <Ds_checkbox
+            disable={paymentRecoveredDisable}
             id={"paymentrefund"}
             name={"Payment Recovered "}
             value={"Payment Recovered"}
@@ -589,7 +626,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   ?.instructionNotes || ""
               }
               placeholder="Please type here"
-              disable={false}
+              disable={recoveredNotesDisable}
               minRows={2}
               onBlur={(e) => {
                 updateTenderFee(
@@ -604,6 +641,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             <DsCsvUpload
               id={id + "uploadrefundDocument"}
               label="Attach File"
+              disable={recoveredAttachFileButton}
               buttonViewStyle="btnText"
               buttonSize="btnSmall"
               startIcon={<IconFactory name="fileAttach" />}

@@ -64,6 +64,11 @@ const DsDepositeDocuments: React.FC = () => {
   const [feeVisibility, setFeeVisibility] = useState<Record<string, boolean>>({
     "": true,
   });
+  const permissions = useAppSelector((state: RootState) => state.permissions);
+  const {
+ applicableDepositButtonDisable
+  } = permissions;
+
 
   // const [feeVisibility1, setFeeVisibility1] = useState<Record<string, boolean>>({"": true,});
 
@@ -251,6 +256,7 @@ const DsDepositeDocuments: React.FC = () => {
           <DsButton
             id="optionBtn"
             label="Applicable Deposits"
+            disable={applicableDepositButtonDisable}
             className={styles.optionBtn + " " + styles.depositsBtn}
             onClick={(e) => handleonclick(e)}
             endIcon={
@@ -262,7 +268,7 @@ const DsDepositeDocuments: React.FC = () => {
                 }}
                 className={styles.DownArrow}
               >
-                <IconFactory name="dropDownArrow" />
+                <IconFactory name="dropDownArrow"  disabled={applicableDepositButtonDisable}/>
               </div>
             }
           />
@@ -313,12 +319,13 @@ const DsDepositeDocuments: React.FC = () => {
         return null;
       })}
       <ContextMenu
-        id={contextMenuId}
-        className={styles.applicableDeposite}
+        id={contextMenuId} 
+        className={styles.applicableDeposite} 
         content={
           <>
             <div className={styles.applicableDeposit}>
               <div className={styles.feesCheckboxes}>
+<<<<<<< HEAD
                 {applicablefees.map((checkbox, index) => {
                   const currentFee = tenderData?.tenderFees?.find(
                     (f) => f.feesType === checkbox.value.toString()
@@ -360,6 +367,25 @@ const DsDepositeDocuments: React.FC = () => {
                     />
                   );
                 })}
+=======
+                {applicablefees.map((checkbox, index) => ( 
+                  <Ds_checkbox
+                    key={index}
+                    containerClassName={styles.feesCheckboxContainer} 
+                    id={checkbox.value.toString()}
+                    name={checkbox.label}
+                    value={checkbox.value.toString()}
+                    label={checkbox.label} 
+                    defaultChecked={
+                      tenderDataCopy.id
+                        ? tenderDataCopy?.tenderFees?.some(
+                            (fee) => fee.feesType == checkbox.value
+                          )
+                        : true
+                    }
+                  />
+                ))}
+>>>>>>> d02f30f6c7cec7cd0435e842072b8983840f437e
               </div>
               <DsButton
                 label="Add"
