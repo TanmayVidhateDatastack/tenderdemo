@@ -282,7 +282,7 @@ const permissionsSlice = createSlice({
           case "CANCELLED":
           case "AWARDED":
             if (role === "ACCOUNTANCE") {
-              state.paymentRecoveredDisable = true;
+              state.paymentRecoveredDisable = true; 
               state.recoveredNotesDisable = true; 
               state.recoveredAttachFileButton = true; 
             }
@@ -292,6 +292,6 @@ const permissionsSlice = createSlice({
     }   
   } 
 });  
- 
+
 export const { setVisibilityByRole,setDisabledByStatusAndRole } = permissionsSlice.actions;
 export default permissionsSlice.reducer; 

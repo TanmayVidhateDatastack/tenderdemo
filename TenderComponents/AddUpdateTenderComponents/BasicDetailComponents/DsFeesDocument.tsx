@@ -32,15 +32,15 @@ export type tenderDocument = {
 };
 
 export type tenderFee = {
-  type: string;
+  type: string; 
   amount: number;
-  currency: string;
+  currency: string;  
   paidBy: string;
   paymentMode: string;
   refundEligibility: string;
   paymentDueDate: string;
   notes: string;
-  recoverypaymentDate?: string;
+  recoverypaymentDate?: string; 
   refundNotes?: string;
   paymentTransactionId?: string;
   paymentReceiptId?: string;
@@ -512,7 +512,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           disable={instructionNotesDisable}
           minRows={2}
           onBlur={(e) => {
-            updateTenderFee(
+            updateTenderFee( 
               type,
               "instructionNotes",
               (e.target as HTMLInputElement).value
@@ -662,7 +662,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               onSelectedFileChange={(files) => {
                 const typeDocuments =
                   tenderData.tenderDocuments?.filter(
-                    (x) =>
+                    (x) => 
                       x.documentCategory == type &&
                       x.documentType == type + "_INSTRUCTION"
                   ) || [];
@@ -674,7 +674,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   type + "_INSTRUCTION",
                   type
                 );
-              }}
+              }}  
             ></DsCsvUpload>
           </div>
         </>
@@ -682,5 +682,5 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     </>
   );
 };
-
+ 
 export default DsFeesDocument;
