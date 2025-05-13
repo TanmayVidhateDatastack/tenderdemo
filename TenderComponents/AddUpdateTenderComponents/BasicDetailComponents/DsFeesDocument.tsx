@@ -527,7 +527,8 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           label="Attach File"
           buttonViewStyle="btnText"
           buttonSize="btnSmall"
-          startIcon={<IconFactory name="fileAttach" />}
+          startIcon={<IconFactory name="fileAttach" 
+          disabled={tenderData?.status.toLowerCase() !== "draft"}/>}
           previouslySelectedFile={
             tenderData.tenderDocuments
               ?.filter(

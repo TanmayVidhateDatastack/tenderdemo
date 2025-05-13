@@ -23,7 +23,9 @@ import ContextMenu, {
 import FetchCustomer from "./fetchcustomerComponent";
 import { useAppSelector } from "@/Redux/hook/hook";
 import { RootState } from "@/Redux/store/store";
-import Toaster, { showToaster } from "@/Elements/DsComponents/DsToaster/DsToaster";
+import Toaster, {
+  showToaster,
+} from "@/Elements/DsComponents/DsToaster/DsToaster";
 const DsTenderDetails: React.FC = () => {
   const [fetchVisible, setFetchVisible] = useState(true);
   const [role, setRole] = useState("checker");
@@ -44,6 +46,8 @@ const DsTenderDetails: React.FC = () => {
   const { updateTenderData, tenderData, tenderDataCopy, metaData } =
     useTenderData();
   const [customerLocations, setCustomerLocations] = useState<location[]>([]);
+
+  // const [tenderStatus, setTenderStatus] = useState<string>();
 
     const [toasterVisible, setToasterVisible] = useState<boolean>(false);
   
@@ -120,7 +124,7 @@ const DsTenderDetails: React.FC = () => {
       if (option) setSelectedSubmissionMode(option);
     }
   }, [tenderData.submissionMode, metaData.submissionMode]);
-
+  
   return (
     <>
       <ContextMenu
@@ -225,8 +229,7 @@ const DsTenderDetails: React.FC = () => {
         <DsSingleSelect
           containerClasses={styles.fields}
           options={metaData.tenderType || []}
-          label="Tender type"
-          // placeholder={"Tender type"}
+          label="Tender type"  
           id={"tenderType"}
           selectedOption={selectedTenderType}
           setSelectOption={(option) => {
@@ -245,13 +248,13 @@ const DsTenderDetails: React.FC = () => {
               : undefined
           }
           maxDate={new Date()}
+          // minDate={}
           id={"issueDate"}
           setDateValue={(date) => {
             if (date instanceof Date) {
               updateTenderData("issueDate", getTodayDate(date));
             }
           }}
-          // disable={true}
           placeholder="DD/MM/YYYY"
           label="Tender issue date"
           disable={tenderIssueDateDisable}
@@ -272,7 +275,6 @@ const DsTenderDetails: React.FC = () => {
               updateTenderData("lastPurchaseDate", getTodayDate(date));
             }
           }}
-          // disable={true}
           placeholder="DD/MM/YYYY"
           label="Last date of purchasing"
           disable={lastPurchaseDateDisable}
@@ -291,7 +293,6 @@ const DsTenderDetails: React.FC = () => {
               updateTenderData("submissionDate", getTodayDate(date));
             }
           }}
-          // disable={true}
           placeholder="DD/MM/YYYY"
           label="Submission date"
           disable={submissionDateDisable}
@@ -379,9 +380,9 @@ const DsTenderDetails: React.FC = () => {
           disable={tenderUrlDisable}
         ></DsTextField>
 
-      {/* Gaurav Code  */}
+        {/* Gaurav Code  */}
 
-      {/* <div className={styles.inputDetails}>
+        {/* <div className={styles.inputDetails}>
         <DsButton
           label="Tender Lost "
           onClick={() => showToaster("toaster1")}

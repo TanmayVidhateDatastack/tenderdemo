@@ -189,8 +189,6 @@ appliedByDisable,suppliedDisable,depotDisable,stockistNameDisable,stockistDiscou
   const [selectedDepo, setSelectedDepo] = useState<DsSelectOption[]>([]);
   useEffect(() => {
     const loc = [...tenderData.shippingLocations];
-    // console.log("ffffffffffffffffffffff",loc);
-    // console.log("gggggggggggggggggggggg",formatedDepot);
     const depo = loc.map((x) => {
       return (
         formatedDepot.find((d) => Number(d.value) == x) || {
@@ -211,6 +209,7 @@ appliedByDisable,suppliedDisable,depotDisable,stockistNameDisable,stockistDiscou
           isSearchable={true}
           options={appliedBy}
           label="Applied by"
+          disable={tenderData?.status.toLowerCase() !== "draft"}
           {...(tenderData.id
             ? {
                 selectedOption: {
@@ -255,6 +254,7 @@ appliedByDisable,suppliedDisable,depotDisable,stockistNameDisable,stockistDiscou
           label="Supplied by"
           placeholder={"Please search or select here"}
           id={"suppliedBy"}
+          disable={tenderData?.status.toLowerCase() !== "draft"}
           onSelect={handleSuppliedBySelects}
           setSelectOption={(isDataListOptions, option) => {
             // setSelected(option);
@@ -276,6 +276,7 @@ appliedByDisable,suppliedDisable,depotDisable,stockistNameDisable,stockistDiscou
           containerClasses={styles.fields}
           selectedOptions={selectedDepo}
           options={formatedDepot}
+          disable={tenderData?.status.toLowerCase() !== "draft"}
           // type="multi"
           label="Depot"
           placeholder={"Please search or select here"} 
@@ -297,6 +298,7 @@ appliedByDisable,suppliedDisable,depotDisable,stockistNameDisable,stockistDiscou
           initialValue={tenderData.supplierName}
           label="Stockist / Liasioner name"
           inputType="alphaNumeric"
+          disable={tenderData?.status.toLowerCase() !== "draft"}
           // placeholder="Please type here"
           onBlur={(e) =>
             updateTenderData(
@@ -314,6 +316,7 @@ appliedByDisable,suppliedDisable,depotDisable,stockistNameDisable,stockistDiscou
           maxLength={5}
           label="Stockist / Liasioner discount %"
           iconEnd={<pre>{" %"}</pre>}
+          disable={tenderData?.status.toLowerCase() !== "draft"}
           // placeholder="Please type here"
           onBlur={(e) =>
             updateTenderData(
