@@ -3,10 +3,10 @@ import DsSingleSelect from "@/Elements/DsComponents/dsSelect/dsSingleSelect";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import deptStyle from "./deposite.module.css";
 import { useEffect, useState } from "react";
-import { getTenderUserRoles } from "@/Common/helpers/constant";
+import { getTenderUserRoles } from "@/Common/helpers/constant"; 
 import {
-  // tenderDetailsProps,
-  location,
+  // tenderDetailsProps, 
+  location, 
   DsSelectOption,
   // tenderDetailsProps,
 } from "@/Common/helpers/types";
@@ -15,12 +15,11 @@ import DsDatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import CustomerSearch from "./customerSearch";
-import IconFactory from "@/Elements/IconComponent";
-import { getYesterdayDate } from "@/Common/helpers/Method/conversion";
+import IconFactory from "@/Elements/IconComponent"; 
+import { getYesterdayDate } from "@/Common/helpers/Method/conversion"; 
 import ContextMenu, {
   displayContext,
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
-import { setVisibilityByRole } from "@/Redux/slice/PermissionSlice/permissionSlice";
 import FetchCustomer from "./fetchcustomerComponent";
 import { useAppSelector } from "@/Redux/hook/hook";
 import { RootState } from "@/Redux/store/store";
@@ -52,9 +51,24 @@ const DsTenderDetails: React.FC = () => {
   // const [cust, setCust] = useState<DsSelectOption>();
   //     value:
   //     label:
-
+ 
   const permissions = useAppSelector((state: RootState) => state.permissions);
-  const { fetchCustomerButtonVisible,disable } = permissions;
+  const {
+    fetchCustomerButtonVisible,
+    tenderNumberDisable,
+    searchCustomerDisable,
+    customerLocationDisable,
+    tenderTypeDisable,
+    tenderIssueDateDisable,
+    lastPurchaseDateDisable,
+    submissionDateDisable,
+    rateContractvalidityDisable,
+    submissionModeDisable,
+    deliveryPeriodDisable,
+    extendedDeliveryPeriodDisable,
+    penaltyLastDeliveryDisable,
+    tenderUrlDisable,
+  } = permissions;
 
   const handleRoleFetch = async () => {
     try {
@@ -129,6 +143,7 @@ const DsTenderDetails: React.FC = () => {
           orderData={undefined}
           setCustomerLocations={setCustomerLocations}
           updateTenderData={updateTenderData}
+          disabled={searchCustomerDisable}
         />
         {/* </div> */}
 
@@ -162,7 +177,8 @@ const DsTenderDetails: React.FC = () => {
           )}
         <DsSingleSelect
           containerClasses={styles.fields}
-          id="CustomerAddress"
+          disable={customerLocationDisable}
+          id="CustomerAddress" 
           placeholder="Select Customer Location"
           options={customerLocations.map((addr) => ({
             value: addr.id.toString(),
@@ -189,7 +205,7 @@ const DsTenderDetails: React.FC = () => {
 
               // console.log("customerLocationId",option.value)
             }
-          }}
+          }} 
         />
         <DsTextField
           containerClasses={styles.fields}
@@ -204,7 +220,7 @@ const DsTenderDetails: React.FC = () => {
               (e.target as HTMLInputElement).value
             )
           }
-          disable={disable}
+          disable={tenderNumberDisable}
         ></DsTextField>
         <DsSingleSelect
           containerClasses={styles.fields}
@@ -219,7 +235,7 @@ const DsTenderDetails: React.FC = () => {
               console.log("tendertype", option.label);
             }
           }}
-          disable={disable}
+          disable={tenderTypeDisable}
         ></DsSingleSelect>
         <DsDatePicker
           containerClasses={styles.fields}
@@ -238,7 +254,7 @@ const DsTenderDetails: React.FC = () => {
           // disable={true}
           placeholder="DD/MM/YYYY"
           label="Tender issue date"
-          disable={disable}
+          disable={tenderIssueDateDisable}
         />
         <DsDatePicker
           containerClasses={styles.fields}
@@ -259,7 +275,7 @@ const DsTenderDetails: React.FC = () => {
           // disable={true}
           placeholder="DD/MM/YYYY"
           label="Last date of purchasing"
-          disable={disable}
+          disable={lastPurchaseDateDisable}
         />
         <DsDatePicker
           containerClasses={styles.fields}
@@ -278,7 +294,7 @@ const DsTenderDetails: React.FC = () => {
           // disable={true}
           placeholder="DD/MM/YYYY"
           label="Submission date"
-          disable={disable}
+          disable={submissionDateDisable}
         />
         <DsTextField
           containerClasses={styles.fields}
@@ -292,7 +308,7 @@ const DsTenderDetails: React.FC = () => {
               (e.target as HTMLInputElement).value
             )
           }
-          disable={disable}
+          disable={rateContractvalidityDisable}
         ></DsTextField>
         <DsSingleSelect
           containerClasses={styles.fields}
@@ -306,7 +322,7 @@ const DsTenderDetails: React.FC = () => {
               updateTenderData("submissionMode", option.value);
             }
           }}
-          disable={disable}
+          disable={submissionModeDisable}
         ></DsSingleSelect>
         <DsTextField
           containerClasses={styles.fields}
@@ -320,7 +336,7 @@ const DsTenderDetails: React.FC = () => {
               Number((e.target as HTMLInputElement).value)
             )
           }
-          disable={disable}
+          disable={deliveryPeriodDisable}
         />
         <DsTextField
           containerClasses={styles.fields}
@@ -334,7 +350,7 @@ const DsTenderDetails: React.FC = () => {
               Number((e.target as HTMLInputElement).value)
             )
           }
-          disable={disable}
+          disable={extendedDeliveryPeriodDisable}
         ></DsTextField>
         <DsTextField
           maximumNumber={100}
@@ -350,7 +366,7 @@ const DsTenderDetails: React.FC = () => {
               Number((e.target as HTMLInputElement).value)
             )
           }
-          disable={disable}
+          disable={penaltyLastDeliveryDisable}
         ></DsTextField>
         <DsTextField
           containerClasses={styles.fields}
@@ -360,7 +376,7 @@ const DsTenderDetails: React.FC = () => {
           onBlur={(e) =>
             updateTenderData("tenderUrl", (e.target as HTMLInputElement).value)
           }
-          disable={disable}
+          disable={tenderUrlDisable}
         ></DsTextField>
 
       {/* Gaurav Code  */}

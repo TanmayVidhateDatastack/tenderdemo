@@ -3,6 +3,8 @@ import TextArea from "@/Elements/DsComponents/DsInputs/dsTextArea";
 import styles from "./deposite.module.css";
 import { updateDocuments, useTenderData } from "../TenderDataContextProvider";
 import IconFactory from "@/Elements/IconComponent";
+import { useAppSelector } from "@/Redux/hook/hook";
+import { RootState } from "@/Redux/store/store";
 
 export interface DsApplicableConditionsProps {
   title: string;
@@ -21,7 +23,8 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
     tenderData,
     removeTenderDocument,
   } = useTenderData();
-
+  const permissions = useAppSelector((state: RootState) => state.permissions);
+  const {condtionNotesDisable,attachFileConditionButtonDisable} = permissions;
   return (
     <>
       <div className={styles.emdContainer}>
@@ -41,7 +44,7 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
             id="embossmentNotes"
             placeholder="Please type here"
             minRows={2}
-            disable={false}
+            disable={condtionNotesDisable}
             onBlur={(e) => {
               updateApplicableCondition(
                 type,
@@ -57,22 +60,25 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
             label="Attach File"
             buttonViewStyle="btnText"
             buttonSize="btnSmall"
-            startIcon={<IconFactory name="fileAttach" />}
+            disable={attachFileConditionButtonDisable}
+            startIcon={
+            <IconFactory 
+            name="fileAttach" 
+            disabled={attachFileConditionButtonDisable}/>}
             previouslySelectedFile={
               tenderData.tenderDocuments?.filter(
                 (x) =>
-                  x.documentCategory == "TENDER_SUPPLY_CONDITION" &&
-                  x.documentType == type
-                // &&
-                // x.id !== undefined
+                  x.documentType == "TENDER_SUPPLY_CONDITION" &&
+                  x.documentCategory == type &&
+                  x.id !== undefined
               ) || []
             }
             onSelectedFileChange={(files) => {
               const typeDocuments =
                 tenderData.tenderDocuments?.filter(
                   (x) =>
-                    x.documentCategory == "TENDER_SUPPLY_CONDITION" &&
-                    x.documentType == type
+                    x.documentType == "TENDER_SUPPLY_CONDITION" &&
+                    x.documentCategory == type
                 ) || [];
               // console.log("updateDocuments",files);
               updateDocuments(
@@ -80,9 +86,10 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
                 typeDocuments,
                 removeTenderDocument,
                 addNewTenderDocument,
-                type,
-                "TENDER_SUPPLY_CONDITION"
+                "TENDER_SUPPLY_CONDITION",
+                type
               );
+              
             }}
           ></DsCsvUpload>
         </div>
@@ -90,4 +97,4 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
     </>
   );
 };
-export default DsSupplyConditions;
+export default DsSupplyConditions; 
