@@ -275,6 +275,7 @@ const DsDepositeDocuments: React.FC = () => {
           />
         </div>
       </div>
+
       {(metaData.feesType || []).map((deposit) => {
         if (typeof deposit.value === "string") {
           const currentFee = tenderData?.tenderFees?.find(
@@ -297,8 +298,7 @@ const DsDepositeDocuments: React.FC = () => {
               !currentFee.fundTransferConfirmationId &&
               !currentFee.paymentRefundDate &&
               !currentFee.refundNotes);
-
-          if (feeVisibility[deposit.value] && !isEmpty) {
+          if (feeVisibility[deposit.value] &&  (tenderData.id === undefined ||!isEmpty)) {
             return (
               <div className={styles.emdContainer2} key={deposit.value}>
                 <DsFeesDocument
@@ -335,10 +335,11 @@ const DsDepositeDocuments: React.FC = () => {
                     value={checkbox.value.toString()}
                     label={checkbox.label}
                     defaultChecked={
+                      
                       tenderDataCopy.id
                         ? tenderDataCopy?.tenderFees?.some(
                             (fee) => fee.feesType == checkbox.value
-                          )
+                          ) 
                         : true
                     }
                   />
