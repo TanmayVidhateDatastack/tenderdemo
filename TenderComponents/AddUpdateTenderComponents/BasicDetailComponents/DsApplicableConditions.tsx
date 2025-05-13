@@ -212,35 +212,34 @@ const DsApplicableConditions: React.FC = () => {
           />
         </div>
 
-        {conditionsVisibility &&
-          Object.values(conditionsVisibility).some(Boolean) && (
-            <div className={styles.conditions}>
-              {(metaData.applicableSupplyConditions || []).map((condition) => {
-                if (typeof condition.value === "string") {
-                  const value = condition.value;
+        {conditionsVisibility && (
+          <div className={styles.conditions}>
+            {(metaData.applicableSupplyConditions || []).map((condition) => {
+              if (typeof condition.value === "string") {
+                const value = condition.value;
 
-                  const currentCondition =
-                    tenderData?.tenderSupplyCondition?.applicableConditions?.find(
-                      (c) => c.type === value
-                    );
+                const currentCondition =
+                  tenderData?.tenderSupplyCondition?.applicableConditions?.find(
+                    (c) => c.type === value
+                  );
 
-                  const isEmpty = !currentCondition || !currentCondition.notes;
+                const isEmpty = !currentCondition || !currentCondition.notes;
 
-                  if (conditionsVisibility[value] && !isEmpty) {
-                    return (
-                      <DsSupplyConditions
-                        key={value}
-                        type={value}
-                        title={condition.label}
-                        id={`${value}conditionsView`}
-                      />
-                    );
-                  }
+                if (conditionsVisibility[value] && !isEmpty) {
+                  return (
+                    <DsSupplyConditions
+                      key={value}
+                      type={value}
+                      title={condition.label}
+                      id={`${value}conditionsView`}
+                    />
+                  );
                 }
-                return null;
-              })}
-            </div>
-          )}
+              }
+              return null;
+            })}
+          </div>
+        )}
       </div>
       <ContextMenu
         id={contextMenuId}
