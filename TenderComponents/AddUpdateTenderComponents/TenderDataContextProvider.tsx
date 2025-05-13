@@ -110,19 +110,16 @@ export type tenderFee = {
   paymentMode: string;
   refundEligibility: string;
   paymentDueDate: string;
-
   paymentDate?: string;
   paymentRefundDate?: string;
   refundNotes?: string;
   paymentStatus?: string;
-  paymentrefundStatus?:string
+ // paymentrefundStatus?:string
   paymentRefundStatus?: string;
-
   paymentTransactionId?: string;
   paymentReceiptId?: string;
   acknowledgementReceiptId?: string;
   fundTransferConfirmationId?: string;
-
   instructionNotes: string;
   status?: "ACTV" | "INAC";
   // documents: Document[];

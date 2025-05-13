@@ -76,6 +76,7 @@ const DsDepositeDocuments: React.FC = () => {
 
   useEffect(() => {
     if (role == "MAKER" || role == "CHECKER" || role == "HOMANAGER") {
+
       setPaymentCheckVisible(false);
     } else {
       setPaymentCheckVisible(true);
@@ -319,63 +320,20 @@ const DsDepositeDocuments: React.FC = () => {
         return null;
       })}
       <ContextMenu
-        id={contextMenuId} 
-        className={styles.applicableDeposite} 
+        id={contextMenuId}
+        className={styles.applicableDeposite}
         content={
           <>
             <div className={styles.applicableDeposit}>
               <div className={styles.feesCheckboxes}>
-<<<<<<< HEAD
-                {applicablefees.map((checkbox, index) => {
-                  const currentFee = tenderData?.tenderFees?.find(
-                    (f) => f.feesType === checkbox.value.toString()
-                  );
-                  console.log("deposite.value", currentFee);
-                  const isEmpty =
-                    !currentFee ||
-                    (!currentFee.amount &&
-                      !currentFee.paymentMode &&
-                      !currentFee.paidBy &&
-                      !currentFee.instructionNotes &&
-                      !currentFee.paymentDueDate &&
-                      !currentFee.refundEligibility &&
-                      !currentFee.paymentStatus &&
-                      !currentFee.paymentDate &&
-                      !currentFee.paymentTransactionId &&
-                      !currentFee.paymentReceiptId &&
-                      !currentFee.paymentTransactionId &&
-                      !currentFee.fundTransferConfirmationId &&
-                      !currentFee.paymentRefundDate &&
-                      !currentFee.refundNotes);
-
-                  return (
-                    <Ds_checkbox
-                      key={index}
-                      containerClassName={styles.feesCheckboxContainer}
-                      id={checkbox.value.toString()}
-                      name={checkbox.label}
-                      value={checkbox.value.toString()}
-                      label={checkbox.label}
-                      defaultChecked={
-                        tenderDataCopy.id
-                          ? tenderDataCopy?.tenderFees?.some(
-                              (fee) => fee.feesType == checkbox.value
-                            )
-                          : true && !isEmpty
-                      }
-                      
-                    />
-                  );
-                })}
-=======
-                {applicablefees.map((checkbox, index) => ( 
+               {applicablefees.map((checkbox, index) => (
                   <Ds_checkbox
                     key={index}
-                    containerClassName={styles.feesCheckboxContainer} 
+                    containerClassName={styles.feesCheckboxContainer}
                     id={checkbox.value.toString()}
                     name={checkbox.label}
                     value={checkbox.value.toString()}
-                    label={checkbox.label} 
+                    label={checkbox.label}
                     defaultChecked={
                       tenderDataCopy.id
                         ? tenderDataCopy?.tenderFees?.some(
@@ -385,7 +343,6 @@ const DsDepositeDocuments: React.FC = () => {
                     }
                   />
                 ))}
->>>>>>> d02f30f6c7cec7cd0435e842072b8983840f437e
               </div>
               <DsButton
                 label="Add"
