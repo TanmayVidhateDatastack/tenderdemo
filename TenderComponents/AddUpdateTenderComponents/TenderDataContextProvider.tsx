@@ -110,18 +110,16 @@ export type tenderFee = {
   paymentMode: string;
   refundEligibility: string;
   paymentDueDate: string;
-
   paymentDate?: string;
   paymentRefundDate?: string;
   refundNotes?: string;
   paymentStatus?: string;
+ // paymentrefundStatus?:string
   paymentRefundStatus?: string;
-
   paymentTransactionId?: string;
   paymentReceiptId?: string;
   acknowledgementReceiptId?: string;
   fundTransferConfirmationId?: string;
-
   instructionNotes: string;
   status?: "ACTV" | "INAC";
   // documents: Document[];
@@ -1973,14 +1971,14 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               }),
             };
           });
-        console.log("sv", tenderData);
+        console.log("saved data", tenderData);
 
         tenderData.tenders.tenderDetails =
           tenderData.tenders.tenderDetailsReadOnly;
         delete tenderData.tenders.tenderDetailsReadOnly;
         // delete tenderData.tenders.id;
 
-        console.log("swgev", tenderData);
+        console.log("saveddatais ", tenderData);
 
         const newTenderData: TenderData = {
           ...tenderData.tenders,

@@ -76,6 +76,7 @@ const DsDepositeDocuments: React.FC = () => {
 
   useEffect(() => {
     if (role == "MAKER" || role == "CHECKER" || role == "HOMANAGER") {
+
       setPaymentCheckVisible(false);
     } else {
       setPaymentCheckVisible(true);
@@ -275,13 +276,34 @@ const DsDepositeDocuments: React.FC = () => {
         </div>
       </div>
       {(metaData.feesType || []).map((deposit) => {
-        if (typeof deposit.value == "string")
-          return (
-            feeVisibility[deposit.value] && (
-              <div className={styles.emdContainer2}>
+        if (typeof deposit.value === "string") {
+          const currentFee = tenderData?.tenderFees?.find(
+            (f) => f.feesType === deposit.value
+          );
+          console.log("deposite.value", currentFee);
+          const isEmpty =
+            !currentFee ||
+            (!currentFee.amount &&
+              !currentFee.paymentMode &&
+              !currentFee.paidBy &&
+              !currentFee.instructionNotes &&
+              !currentFee.paymentDueDate &&
+              !currentFee.refundEligibility &&
+              !currentFee.paymentStatus &&
+              !currentFee.paymentDate &&
+              !currentFee.paymentTransactionId &&
+              !currentFee.paymentReceiptId &&
+              !currentFee.paymentTransactionId &&
+              !currentFee.fundTransferConfirmationId &&
+              !currentFee.paymentRefundDate &&
+              !currentFee.refundNotes);
+
+          if (feeVisibility[deposit.value] && !isEmpty) {
+            return (
+              <div className={styles.emdContainer2} key={deposit.value}>
                 <DsFeesDocument
                   optionlist={documentTypeOptions[deposit.value]}
-                  type={deposit.value.toString()}
+                  type={deposit.value}
                   title={deposit.label}
                   id={deposit.value + "DocumentView"}
                   mode={mode}
@@ -292,24 +314,26 @@ const DsDepositeDocuments: React.FC = () => {
                   recoverycheckvisibible={recoveryPaymentVisible}
                 />
               </div>
-            )
-          );
+            );
+          }
+        }
+        return null;
       })}
       <ContextMenu
-        id={contextMenuId} 
-        className={styles.applicableDeposite} 
+        id={contextMenuId}
+        className={styles.applicableDeposite}
         content={
           <>
             <div className={styles.applicableDeposit}>
               <div className={styles.feesCheckboxes}>
-                {applicablefees.map((checkbox, index) => ( 
+               {applicablefees.map((checkbox, index) => (
                   <Ds_checkbox
                     key={index}
-                    containerClassName={styles.feesCheckboxContainer} 
+                    containerClassName={styles.feesCheckboxContainer}
                     id={checkbox.value.toString()}
                     name={checkbox.label}
                     value={checkbox.value.toString()}
-                    label={checkbox.label} 
+                    label={checkbox.label}
                     defaultChecked={
                       tenderDataCopy.id
                         ? tenderDataCopy?.tenderFees?.some(

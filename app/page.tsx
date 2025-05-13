@@ -329,30 +329,30 @@ export default function Home() {
         : { userId: 3, pageNo: 0, pageSize: 0 };
     // console.log("json object :", JSON.stringify(tenderFilters));
     await fetchData({
-      url: getAllTenders, 
+      url: getAllTenders,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         "x-tender-filters": JSON.stringify(tenderFilters),
-      }, 
+      },
     })
       .then((res) => {
+        // console.log("objevct to be send", tenderFilters);
 
         if (res?.code === 200 && Array.isArray(res?.result)) {
           console.log("getAllTenders:", res);
           const formattedData = formatTenders(res?.result);
           // console.log("formatted data:", formattedData);
-          setData(formattedData); 
-          // addOrder(formattedData); 
+          setData(formattedData);
+          // addOrder(formattedData);
         } else {
           setData([]);
         }
       })
       .catch((error) => {
-        console.error("Error fetching orders:", error);
+        // console.error("Error fetching orders:", error);
       });
   };
-
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const formatTenders = (tenders: any[]): Tender[] => {
@@ -372,10 +372,10 @@ export default function Home() {
       suppliedBy: item.supplierName,
       preparedBy: item.preparedBy,
       value: item.value.toString(),
-      status: { 
+      status: {
         tenderStatus: item.status?.tenderStatus ?? "-",
-        message: item.status?.message ?? "-", 
-        statusDescription: item.status?.tenderStatusDescription ?? "-", 
+        message: item.status?.message ?? "-",
+        statusDescription: item.status?.tenderStatusDescription ?? "-",
       },
     }));
   };
@@ -448,7 +448,7 @@ export default function Home() {
     await fetchData({
       url: getAllMetaData,
       method: "GET",
-      headers: { 
+      headers: {
         "Content-Type": "application/json",
         "x-tender-codes": JSON.stringify(metaDataTypes),
       },
@@ -564,7 +564,7 @@ export default function Home() {
               <DsName
                 id={t.tenderId + "customerName"}
                 name={t.customerName || "-"}
-              /> 
+              />
             ),
             filterValue: t.customerName,
             customAttributes: { tenderId: t.tenderId },
@@ -581,7 +581,7 @@ export default function Home() {
             ),
             filterValue: t.submissionDate,
             customAttributes: { tenderId: t.tenderId },
-            contentType: "string", 
+            contentType: "string",
           },
           {
             columnIndex: 2,
@@ -745,7 +745,7 @@ export default function Home() {
     e: React.MouseEvent<HTMLElement>,
     rowIndex: number
   ) => {
-    const row = tempTableData.rows[rowIndex];     
+    const row = tempTableData.rows[rowIndex];
     const currentRow=e.currentTarget;
     document.querySelector("."+styles.selectedRow)?.classList.remove(styles.selectedRow);
     currentRow.classList.add(styles.selectedRow);
