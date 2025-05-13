@@ -64,13 +64,18 @@ const DsDepositeDocuments: React.FC = () => {
   const [feeVisibility, setFeeVisibility] = useState<Record<string, boolean>>({
     "": true,
   });
+  const permissions = useAppSelector((state: RootState) => state.permissions);
+  const {
+ applicableDepositButtonDisable
+  } = permissions;
+
 
   // const [feeVisibility1, setFeeVisibility1] = useState<Record<string, boolean>>({"": true,});
 
   const role = useAppSelector((state: RootState) => state.user.role);
 
   useEffect(() => {
-    if (role == "MAKER" || role == "CHECKER") {
+    if (role == "MAKER" || role == "CHECKER" || role == "HOMANAGER") {
       setPaymentCheckVisible(false);
     } else {
       setPaymentCheckVisible(true);
@@ -251,6 +256,7 @@ const DsDepositeDocuments: React.FC = () => {
           <DsButton
             id="optionBtn"
             label="Applicable Deposits"
+            disable={applicableDepositButtonDisable}
             className={styles.optionBtn + " " + styles.depositsBtn}
             onClick={(e) => handleonclick(e)}
             endIcon={
@@ -262,7 +268,7 @@ const DsDepositeDocuments: React.FC = () => {
                 }}
                 className={styles.DownArrow}
               >
-                <IconFactory name="dropDownArrow" />
+                <IconFactory name="dropDownArrow"  disabled={applicableDepositButtonDisable}/>
               </div>
             }
           />
@@ -290,20 +296,20 @@ const DsDepositeDocuments: React.FC = () => {
           );
       })}
       <ContextMenu
-        id={contextMenuId}
-        className={styles.applicableDeposite}
+        id={contextMenuId} 
+        className={styles.applicableDeposite} 
         content={
           <>
             <div className={styles.applicableDeposit}>
               <div className={styles.feesCheckboxes}>
-                {applicablefees.map((checkbox, index) => (
+                {applicablefees.map((checkbox, index) => ( 
                   <Ds_checkbox
                     key={index}
-                    containerClassName={styles.feesCheckboxContainer}
+                    containerClassName={styles.feesCheckboxContainer} 
                     id={checkbox.value.toString()}
                     name={checkbox.label}
                     value={checkbox.value.toString()}
-                    label={checkbox.label}
+                    label={checkbox.label} 
                     defaultChecked={
                       tenderDataCopy.id
                         ? tenderDataCopy?.tenderFees?.some(
