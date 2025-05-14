@@ -1,4 +1,6 @@
 import styles from "./deposite.module.css";
+import Image from "next/image";
+import downarrow from "@/Common/TenderIcons/smallIcons/verticleArrow.svg";
 import { useDebugValue, useEffect, useState } from "react";
 import ContextMenu, {
   closeAllContext,
@@ -14,10 +16,30 @@ import { DsSelectOption } from "@/Common/helpers/types";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import DsFeesDocument from "./DsFeesDocument";
 import { useTenderData } from "../TenderDataContextProvider";
+ 
 import IconFactory from "@/Elements/IconComponent";
+import DsTenderDetails from "./DsTenderDetails ";
 import { useAppSelector } from "@/Redux/hook/hook";
 import { RootState } from "@/Redux/store/store";
-
+ 
+//  interface DepositDocument {
+//   modes: DsSelectOption[];
+//   refunds:DsSelectOption[];
+//   // paidBy: DsSelectOption[];
+// }
+// export interface Deposit {
+//   paidBy: DsSelectOption[];
+// }
+ 
+//  interface FeesDocument {
+//   applicableDeposits: DsSelectOption[];
+// }
+//  interface DepositeDocumentsProps {
+//   setDepositeDocuments: (depositeDocuments: DepositDocument[]) => void;
+//   depositeDocument: DepositDocument[] | null;
+//   applicableDeposits: DsSelectOption[] | [];
+//   role: string;
+// }
 const DsDepositeDocuments: React.FC = () => {
   const contextMenuId = "context-display-10";
   const {
@@ -43,9 +65,15 @@ const DsDepositeDocuments: React.FC = () => {
     "": true,
   });
   const permissions = useAppSelector((state: RootState) => state.permissions);
-  const { applicableDepositButtonDisable } = permissions;
+  const {
+ applicableDepositButtonDisable
+  } = permissions;
+ 
+ 
+  // const [feeVisibility1, setFeeVisibility1] = useState<Record<string, boolean>>({"": true,});
+ 
   const role = useAppSelector((state: RootState) => state.user.role);
-
+ 
   useEffect(() => {
     if (role == "MAKER" || role == "CHECKER" || role == "HOMANAGER") {
       setPaymentCheckVisible(false);
@@ -95,7 +123,7 @@ const DsDepositeDocuments: React.FC = () => {
         Record<string, boolean>
       >((acc, opt) => {
         const val = opt.value;
-
+ 
         if (typeof val === "string") {
           acc[val] = tenderData.tenderFees.some(
             (fee) => fee.feesType == opt.value && fee.status == "ACTV"
@@ -106,7 +134,7 @@ const DsDepositeDocuments: React.FC = () => {
       setFeeVisibility(options);
     }
   }, [metaData, tenderDataCopy.tenderFees]);
-
+ 
   function handleonclick(
     e:
       | React.MouseEvent<HTMLElement, MouseEvent>
@@ -118,11 +146,11 @@ const DsDepositeDocuments: React.FC = () => {
   const selectedFees = new Set();
   const handleAdd = () => {
     const checkFeeVisible = { ...feeVisibility };
-
+ 
     applicablefees.forEach((opt) => {
       const id = opt.value.toString();
       const checkbox = document.getElementById(id) as HTMLInputElement;
-
+ 
       if (checkbox?.checked) {
         selectedFees.add(id);
         checkFeeVisible[id] = true;
@@ -136,12 +164,12 @@ const DsDepositeDocuments: React.FC = () => {
       }
     });
     setFeeVisibility(checkFeeVisible);
-
+ 
     closeAllContext();
-    console.log("Currently Selected:", Array.from(selectedFees));
+    // console.log("Currently Selected:", Array.from(selectedFees));
   };
-
-  useEffect(() => {
+ 
+ useEffect(() => {
     const checkFeeVisible = { ...feeVisibility };
     applicablefees.forEach((opt) => {
       const id = opt.value.toString();
@@ -171,7 +199,7 @@ const DsDepositeDocuments: React.FC = () => {
   // useEffect(() => {
   //   console.log("feevisibility : ", feeVisibility);
   // }, [feeVisibility]);
-
+ 
   useEffect(() => {
     window.addEventListener("click", (e) => {
       const target = (e.target as HTMLElement).closest(
@@ -196,7 +224,7 @@ const DsDepositeDocuments: React.FC = () => {
       });
     };
   }, [applicablefees]);
-
+ 
   useEffect(() => {
     const handleScroll = (event: any) => {
       const excludedElement = document.getElementById("optionBtn");
@@ -210,7 +238,7 @@ const DsDepositeDocuments: React.FC = () => {
       window.removeEventListener("scroll", handleScroll, true);
     };
   }, []);
-
+ 
   return (
     <div className={styles.container}>
       <div className={styles.containerHead}>
@@ -231,24 +259,20 @@ const DsDepositeDocuments: React.FC = () => {
                 }}
                 className={styles.DownArrow}
               >
-                <IconFactory
-                  name="dropDownArrow"
-                  disabled={applicableDepositButtonDisable}
-                />
+                <IconFactory name="dropDownArrow"  disabled={applicableDepositButtonDisable}/>
               </div>
             }
           />
         </div>
       </div>
-
       {(metaData.feesType || []).map((deposit) => {
-        if (typeof deposit.value === "string") {
-          if (feeVisibility[deposit.value]) {
-            return (
-              <div className={styles.emdContainer2} key={deposit.value}>
+        if (typeof deposit.value == "string")
+          return (
+            feeVisibility[deposit.value] && (
+              <div className={styles.emdContainer2}>
                 <DsFeesDocument
                   optionlist={documentTypeOptions[deposit.value]}
-                  type={deposit.value}
+                  type={deposit.value.toString()}
                   title={deposit.label}
                   id={deposit.value + "DocumentView"}
                   mode={mode}
@@ -259,10 +283,8 @@ const DsDepositeDocuments: React.FC = () => {
                   recoverycheckvisibible={recoveryPaymentVisible}
                 />
               </div>
-            );
-          }
-        }
-        return null;
+            )
+          );
       })}
       <ContextMenu
         id={contextMenuId}
@@ -280,6 +302,7 @@ const DsDepositeDocuments: React.FC = () => {
                     value={checkbox.value.toString()}
                     label={checkbox.label}
                     defaultChecked={feeVisibility[checkbox.value.toString()]}
+
                   />
                 ))}
               </div>
@@ -299,3 +322,5 @@ const DsDepositeDocuments: React.FC = () => {
   );
 };
 export default DsDepositeDocuments;
+ 
+ 
