@@ -16,12 +16,12 @@ import { DsSelectOption } from "@/Common/helpers/types";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import DsFeesDocument from "./DsFeesDocument";
 import { useTenderData } from "../TenderDataContextProvider";
-
+ 
 import IconFactory from "@/Elements/IconComponent";
 import DsTenderDetails from "./DsTenderDetails ";
 import { useAppSelector } from "@/Redux/hook/hook";
 import { RootState } from "@/Redux/store/store";
-
+ 
 //  interface DepositDocument {
 //   modes: DsSelectOption[];
 //   refunds:DsSelectOption[];
@@ -30,7 +30,7 @@ import { RootState } from "@/Redux/store/store";
 // export interface Deposit {
 //   paidBy: DsSelectOption[];
 // }
-
+ 
 //  interface FeesDocument {
 //   applicableDeposits: DsSelectOption[];
 // }
@@ -70,12 +70,11 @@ const DsDepositeDocuments: React.FC = () => {
   } = permissions;
 
   // const [feeVisibility1, setFeeVisibility1] = useState<Record<string, boolean>>({"": true,});
-
+ 
   const role = useAppSelector((state: RootState) => state.user.role);
-
+ 
   useEffect(() => {
     if (role == "MAKER" || role == "CHECKER" || role == "HOMANAGER") {
-
       setPaymentCheckVisible(false);
     } else {
       setPaymentCheckVisible(true);
@@ -123,7 +122,7 @@ const DsDepositeDocuments: React.FC = () => {
         Record<string, boolean>
       >((acc, opt) => {
         const val = opt.value;
-
+ 
         if (typeof val === "string") {
           acc[val] = tenderData.tenderFees.some(
             (fee) => fee.feesType == opt.value && fee.status == "ACTV"
@@ -134,7 +133,7 @@ const DsDepositeDocuments: React.FC = () => {
       setFeeVisibility(options);
     }
   }, [metaData, tenderDataCopy.tenderFees]);
-
+ 
   function handleonclick(
     e:
       | React.MouseEvent<HTMLElement, MouseEvent>
@@ -146,11 +145,11 @@ const DsDepositeDocuments: React.FC = () => {
   const selectedFees = new Set();
   const handleAdd = () => {
     const checkFeeVisible = { ...feeVisibility };
-
+ 
     applicablefees.forEach((opt) => {
       const id = opt.value.toString();
       const checkbox = document.getElementById(id) as HTMLInputElement;
-
+ 
       if (checkbox?.checked) {
         selectedFees.add(id);
         checkFeeVisible[id] = true;
@@ -164,51 +163,42 @@ const DsDepositeDocuments: React.FC = () => {
       }
     });
     setFeeVisibility(checkFeeVisible);
-
+ 
     closeAllContext();
     // console.log("Currently Selected:", Array.from(selectedFees));
   };
-
-  useEffect(() => {
+ 
+ useEffect(() => {
     const checkFeeVisible = { ...feeVisibility };
-
     applicablefees.forEach((opt) => {
       const id = opt.value.toString();
-      // if(tenderData.tenderFees.find((x)=> x.feesType==id)?.status=="INAC"){
-      //   console.log("Inactive ",id);
-      // }
-      // else if (tenderData.tenderFees.find((x)=> x.feesType==id)?.status=="ACTV"){
-      //   console.log("active ",id);
-      // }
-      const checkbox = document.getElementById(id) as HTMLInputElement;
-      selectedFees.add(id);
-      checkFeeVisible[id] = true;
-      // addTenderFee(id);
-      if (checkbox?.checked) {
+      const isEmpty = tenderData.tenderFees.find((fee) => fee.feesType === id);
+      console.log("isEmpty", isEmpty);
+      const isActive = isEmpty?.status === "ACTV";
+
+      if (tenderData.id === undefined || isActive) {
         selectedFees.add(id);
         checkFeeVisible[id] = true;
-        if (tenderData.tenderFees.some((fee) => fee.feesType == id))
+        if (!isEmpty) {
+          addTenderFee(id);
+        } else {
           updateTenderFee(id, "status", "ACTV");
-        else addTenderFee(id);
-      } else if (tenderData.id == undefined) {
-        selectedFees.add(id);
-        checkFeeVisible[id] = true;
-        if (tenderData.tenderFees.some((fee) => fee.feesType == id))
-          updateTenderFee(id, "status", "ACTV");
-        else addTenderFee(id);
+        }
       } else {
         selectedFees.delete(id);
+        checkFeeVisible[id] = false;
         checkFeeVisible[id] = false;
         updateTenderFee(id, "status", "INAC");
       }
     });
+
     setFeeVisibility(checkFeeVisible);
   }, [applicablefees, tenderData.id]);
 
   // useEffect(() => {
   //   console.log("feevisibility : ", feeVisibility);
   // }, [feeVisibility]);
-
+ 
   useEffect(() => {
     window.addEventListener("click", (e) => {
       const target = (e.target as HTMLElement).closest(
@@ -233,7 +223,7 @@ const DsDepositeDocuments: React.FC = () => {
       });
     };
   }, [applicablefees]);
-
+ 
   useEffect(() => {
     const handleScroll = (event: any) => {
       const excludedElement = document.getElementById("optionBtn");
@@ -247,7 +237,7 @@ const DsDepositeDocuments: React.FC = () => {
       window.removeEventListener("scroll", handleScroll, true);
     };
   }, []);
-
+ 
   return (
     <div className={styles.container}>
       <div className={styles.containerHead}>
@@ -275,34 +265,13 @@ const DsDepositeDocuments: React.FC = () => {
         </div>
       </div>
       {(metaData.feesType || []).map((deposit) => {
-        if (typeof deposit.value === "string") {
-          const currentFee = tenderData?.tenderFees?.find(
-            (f) => f.feesType === deposit.value
-          );
-          console.log("deposite.value", currentFee);
-          const isEmpty =
-            !currentFee ||
-            (!currentFee.amount &&
-              !currentFee.paymentMode &&
-              !currentFee.paidBy &&
-              !currentFee.instructionNotes &&
-              !currentFee.paymentDueDate &&
-              !currentFee.refundEligibility &&
-              !currentFee.paymentStatus &&
-              !currentFee.paymentDate &&
-              !currentFee.paymentTransactionId &&
-              !currentFee.paymentReceiptId &&
-              !currentFee.paymentTransactionId &&
-              !currentFee.fundTransferConfirmationId &&
-              !currentFee.paymentRefundDate &&
-              !currentFee.refundNotes);
-
-          if (feeVisibility[deposit.value] && !isEmpty) {
-            return (
-              <div className={styles.emdContainer2} key={deposit.value}>
+        if (typeof deposit.value == "string")
+          return (
+            feeVisibility[deposit.value] && (
+              <div className={styles.emdContainer2}>
                 <DsFeesDocument
                   optionlist={documentTypeOptions[deposit.value]}
-                  type={deposit.value}
+                  type={deposit.value.toString()}
                   title={deposit.label}
                   id={deposit.value + "DocumentView"}
                   mode={mode}
@@ -313,10 +282,8 @@ const DsDepositeDocuments: React.FC = () => {
                   recoverycheckvisibible={recoveryPaymentVisible}
                 />
               </div>
-            );
-          } 
-        }
-        return null;
+            )
+          );
       })}
       <ContextMenu
         id={contextMenuId}
@@ -325,7 +292,7 @@ const DsDepositeDocuments: React.FC = () => {
           <>
             <div className={styles.applicableDeposit}>
               <div className={styles.feesCheckboxes}>
-               {applicablefees.map((checkbox, index) => (
+                {applicablefees.map((checkbox, index) => (
                   <Ds_checkbox
                     key={index}
                     containerClassName={styles.feesCheckboxContainer}
@@ -333,13 +300,8 @@ const DsDepositeDocuments: React.FC = () => {
                     name={checkbox.label}
                     value={checkbox.value.toString()}
                     label={checkbox.label}
-                    defaultChecked={
-                      tenderDataCopy.id
-                        ? tenderDataCopy?.tenderFees?.some(
-                            (fee) => fee.feesType == checkbox.value
-                          )
-                        : true
-                    }
+                    defaultChecked={feeVisibility[checkbox.value.toString()]}
+
                   />
                 ))}
               </div>
@@ -359,3 +321,5 @@ const DsDepositeDocuments: React.FC = () => {
   );
 };
 export default DsDepositeDocuments;
+ 
+ 
