@@ -1,4 +1,3 @@
-
 import styles from "./deposite.module.css";
 import Image from "next/image";
 import downarrow from "@/Common/TenderIcons/smallIcons/verticleArrow.svg";
@@ -21,10 +20,6 @@ import { useTenderData } from "../TenderDataContextProvider";
 import IconFactory from "@/Elements/IconComponent";
 import { useAppSelector } from "@/Redux/hook/hook";
 import { RootState } from "@/Redux/store/store";
-
-//  interface ApplicableConditionsProps {
-//   applicableConditions: DsSelectOption[] | [];
-// }
 
 const DsApplicableConditions: React.FC = () => {
   const contextMenuId = "context-display-11";
@@ -82,57 +77,40 @@ const DsApplicableConditions: React.FC = () => {
     closeAllContext();
     // console.log("Currently Selected:", Array.from(selectedConditions)); // Debugging output
   };
-  // useEffect(() =>{},[handleAdd]);
 
-
-
-
-
-  
   useEffect(() => {
     const checkConditionVisible = { ...conditionsVisibility };
+
     (metaData.applicableSupplyConditions || []).forEach((opt) => {
       const id = opt.value.toString();
 
-      const checkbox = document.getElementById(id) as HTMLInputElement;
-      selectedConditions.add(id);
-      checkConditionVisible[id] = true;
-      // addTenderFee(id);
-      if (checkbox?.checked) {
-        selectedConditions.add(id);
-        checkConditionVisible[id] = true;
-        console.log(id);
-        if (
-          tenderData.tenderSupplyCondition.applicableConditions.some(
-            (ac) => ac.type == id
-          )
-        )
-          updateApplicableCondition(id, "status", "ACTV");
-        else addApplicableCondition(id);
-      } else if (tenderData.id !== undefined) {
-        selectedConditions.add(id);
-        checkConditionVisible[id] = true;
-        console.log(id);
-        if (
-          tenderData.tenderSupplyCondition.applicableConditions.some(
-            (ac) => ac.type == id
-          )
-        )
-          updateApplicableCondition(id, "status", "ACTV");
-        // else addApplicableCondition(id);
-      } else {
+      const isEmpty =
+        !tenderData.tenderSupplyCondition.applicableConditions?.some(
+          (c) => c.type === id
+        );
+
+      let isVisible = true;
+
+      if (tenderData.id !== undefined && isEmpty) {
+        isVisible = false;
+        updateApplicableCondition(id, "status", "INAC");
         selectedConditions.delete(id);
-        checkConditionVisible[id] = false;
-        if (
-          tenderData.tenderSupplyCondition.applicableConditions.some(
-            (ac) => ac.type == id
-          )
-        )
-          updateApplicableCondition(id, "status", "INAC");
+      } else {
+        updateApplicableCondition(id, "status", "ACTV");
+
+        if (isEmpty) {
+          addApplicableCondition(id);
+        }
+
+        selectedConditions.add(id);
       }
+
+      checkConditionVisible[id] = isVisible;
     });
+
     setConditionsVisibility(checkConditionVisible);
   }, [metaData.applicableSupplyConditions, tenderData.id]);
+
   useEffect(() => {
     if (
       metaData.applicableSupplyConditions &&
@@ -223,19 +201,15 @@ const DsApplicableConditions: React.FC = () => {
           <div className={styles.conditions}>
             {(metaData.applicableSupplyConditions || []).map((conditions) => {
               if (typeof conditions.value == "string") {
-                const value = conditions.value;
+                // const value = conditions.value;
 
-                const isEmpty =
-                  tenderData?.tenderSupplyCondition?.applicableConditions?.find(
-                    (c) => c.type === value
-                  ) == undefined;
+                // const currentcondition =
+                //   tenderData?.tenderSupplyCondition?.applicableConditions?.find(
+                //     (c) => c.type === value
+                //   );
+                // const isEmpty = !currentcondition || !currentcondition.notes;
 
-                console.log("condition.valye", conditions.value);
-
-                if (
-                  conditionsVisibility[conditions.value] &&
-                  (tenderData.id === undefined || !isEmpty)
-                )
+                if (conditionsVisibility[conditions.value])
                   return (
                     <>
                       <DsSupplyConditions
@@ -258,22 +232,16 @@ const DsApplicableConditions: React.FC = () => {
           <>
             <div className={styles.applicableDeposit}>
               {applicableCheckboxes.map((checkbox, index) => {
-                const isEmpty =
-                  tenderData?.tenderSupplyCondition?.applicableConditions?.find(
-                    (c) => c.type === checkbox.value.toString()
-                  ) == undefined;
-
                 return (
                   <Ds_checkbox
-                    key={index} // Unique key
+                    key={index}
                     containerClassName={styles.feesCheckboxContainer}
                     id={checkbox.value.toString()}
                     name={checkbox.label}
                     value={checkbox.value.toString()}
                     label={checkbox.label}
                     defaultChecked={
-                   conditionsVisibility[checkbox.value.toString()] 
-                       
+                      conditionsVisibility[checkbox.value.toString()]
                     }
                   />
                 );

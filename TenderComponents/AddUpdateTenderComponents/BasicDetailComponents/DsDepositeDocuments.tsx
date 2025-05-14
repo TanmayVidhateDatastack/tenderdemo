@@ -1,6 +1,4 @@
 import styles from "./deposite.module.css";
-import Image from "next/image";
-import downarrow from "@/Common/TenderIcons/smallIcons/verticleArrow.svg";
 import { useDebugValue, useEffect, useState } from "react";
 import ContextMenu, {
   closeAllContext,
@@ -16,9 +14,7 @@ import { DsSelectOption } from "@/Common/helpers/types";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import DsFeesDocument from "./DsFeesDocument";
 import { useTenderData } from "../TenderDataContextProvider";
-
 import IconFactory from "@/Elements/IconComponent";
-import DsTenderDetails from "./DsTenderDetails ";
 import { useAppSelector } from "@/Redux/hook/hook";
 import { RootState } from "@/Redux/store/store";
 
@@ -65,18 +61,11 @@ const DsDepositeDocuments: React.FC = () => {
     "": true,
   });
   const permissions = useAppSelector((state: RootState) => state.permissions);
-  const {
- applicableDepositButtonDisable
-  } = permissions;
-
-
-  // const [feeVisibility1, setFeeVisibility1] = useState<Record<string, boolean>>({"": true,});
-
+  const { applicableDepositButtonDisable } = permissions;
   const role = useAppSelector((state: RootState) => state.user.role);
 
   useEffect(() => {
     if (role == "MAKER" || role == "CHECKER" || role == "HOMANAGER") {
-
       setPaymentCheckVisible(false);
     } else {
       setPaymentCheckVisible(true);
@@ -167,7 +156,7 @@ const DsDepositeDocuments: React.FC = () => {
     setFeeVisibility(checkFeeVisible);
 
     closeAllContext();
-    // console.log("Currently Selected:", Array.from(selectedFees));
+    console.log("Currently Selected:", Array.from(selectedFees));
   };
 
   useEffect(() => {
@@ -175,34 +164,27 @@ const DsDepositeDocuments: React.FC = () => {
 
     applicablefees.forEach((opt) => {
       const id = opt.value.toString();
-      // if(tenderData.tenderFees.find((x)=> x.feesType==id)?.status=="INAC"){
-      //   console.log("Inactive ",id);
-      // }
-      // else if (tenderData.tenderFees.find((x)=> x.feesType==id)?.status=="ACTV"){
-      //   console.log("active ",id);
-      // }
-      const checkbox = document.getElementById(id) as HTMLInputElement;
-      selectedFees.add(id);
-      checkFeeVisible[id] = true;
-      // addTenderFee(id);
-      if (checkbox?.checked) {
+
+      const isEmpty = tenderData.tenderFees.find((fee) => fee.feesType === id);
+      console.log("isEmpty", isEmpty);
+      const isActive = isEmpty?.status === "ACTV";
+
+      if (tenderData.id === undefined || isActive) {
         selectedFees.add(id);
         checkFeeVisible[id] = true;
-        if (tenderData.tenderFees.some((fee) => fee.feesType == id))
+        if (!isEmpty) {
+          addTenderFee(id);
+        } else {
           updateTenderFee(id, "status", "ACTV");
-        else addTenderFee(id);
-      } else if (tenderData.id == undefined) {
-        selectedFees.add(id);
-        checkFeeVisible[id] = true;
-        if (tenderData.tenderFees.some((fee) => fee.feesType == id))
-          updateTenderFee(id, "status", "ACTV");
-        else addTenderFee(id);
+        }
       } else {
         selectedFees.delete(id);
+        checkFeeVisible[id] = false;
         checkFeeVisible[id] = false;
         updateTenderFee(id, "status", "INAC");
       }
     });
+
     setFeeVisibility(checkFeeVisible);
   }, [applicablefees, tenderData.id]);
 
@@ -269,7 +251,10 @@ const DsDepositeDocuments: React.FC = () => {
                 }}
                 className={styles.DownArrow}
               >
-                <IconFactory name="dropDownArrow"  disabled={applicableDepositButtonDisable}/>
+                <IconFactory
+                  name="dropDownArrow"
+                  disabled={applicableDepositButtonDisable}
+                />
               </div>
             }
           />
@@ -278,27 +263,7 @@ const DsDepositeDocuments: React.FC = () => {
 
       {(metaData.feesType || []).map((deposit) => {
         if (typeof deposit.value === "string") {
-          const currentFee = tenderData?.tenderFees?.find(
-            (f) => f.feesType === deposit.value
-          );
-          console.log("deposite.value", currentFee);
-          const isEmpty =
-            !currentFee ||
-            (!currentFee.amount &&
-              !currentFee.paymentMode &&
-              !currentFee.paidBy &&
-              !currentFee.instructionNotes &&
-              !currentFee.paymentDueDate &&
-              !currentFee.refundEligibility &&
-              !currentFee.paymentStatus &&
-              !currentFee.paymentDate &&
-              !currentFee.paymentTransactionId &&
-              !currentFee.paymentReceiptId &&
-              !currentFee.paymentTransactionId &&
-              !currentFee.fundTransferConfirmationId &&
-              !currentFee.paymentRefundDate &&
-              !currentFee.refundNotes);
-          if (feeVisibility[deposit.value] &&  (tenderData.id === undefined ||!isEmpty)) {
+          if (feeVisibility[deposit.value]) {
             return (
               <div className={styles.emdContainer2} key={deposit.value}>
                 <DsFeesDocument
@@ -326,7 +291,7 @@ const DsDepositeDocuments: React.FC = () => {
           <>
             <div className={styles.applicableDeposit}>
               <div className={styles.feesCheckboxes}>
-               {applicablefees.map((checkbox, index) => (
+                {applicablefees.map((checkbox, index) => (
                   <Ds_checkbox
                     key={index}
                     containerClassName={styles.feesCheckboxContainer}
@@ -334,14 +299,7 @@ const DsDepositeDocuments: React.FC = () => {
                     name={checkbox.label}
                     value={checkbox.value.toString()}
                     label={checkbox.label}
-                    defaultChecked={
-                      
-                      tenderDataCopy.id
-                        ? tenderDataCopy?.tenderFees?.some(
-                            (fee) => fee.feesType == checkbox.value
-                          ) 
-                        : true
-                    }
+                    defaultChecked={feeVisibility[checkbox.value.toString()]}
                   />
                 ))}
               </div>
