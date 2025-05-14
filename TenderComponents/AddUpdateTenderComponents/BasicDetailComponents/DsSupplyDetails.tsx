@@ -10,12 +10,21 @@ import {
 import { useTenderData } from "../TenderDataContextProvider";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import { useEffect, useState } from "react";
+import { useAppSelector } from "@/Redux/hook/hook";
+import { RootState } from "@/Redux/store/store";
 const DsSupplyDetails: React.FC = () => {
   const { updateSupplyCondition, tenderData, tenderDataCopy, metaData } =
     useTenderData();
   const [selectedEligibility, setSelectedEligibility] = useState<
     DsSelectOption[] 
   >([]);
+   const permissions = useAppSelector((state: RootState) => state.permissions);
+  const {
+    supplypointDisable,
+    consignessCountDisable,
+    testreportRequiredDisable,
+    eligibilityDisable,
+  } = permissions;
   const [selectedSupplyPoint, setSelectedSupplyPoint] =
     useState<DsSelectOption>();
   const [selectedtTestReportRequired, setSelectedtTestReportRequired] =
@@ -74,6 +83,7 @@ const DsSupplyDetails: React.FC = () => {
         <div className={styles.inputDetails}>
           <DsSingleSelect
             containerClasses={styles.fields}
+            disable={supplypointDisable}
             selectedOption={selectedSupplyPoint}
             options={metaData.supplyPoints||[]}
             label="Supply point"
@@ -87,6 +97,7 @@ const DsSupplyDetails: React.FC = () => {
           <DsTextField
             containerClasses={styles.fields}
             maxLength={5}
+            disable={consignessCountDisable}
             initialValue={tenderData.tenderSupplyCondition.consigneesCount?.toString()}
             inputType="positiveInteger"
             label="Provide no. of consignees"
@@ -103,6 +114,7 @@ const DsSupplyDetails: React.FC = () => {
             containerClasses={styles.fields}
             selectedOption={selectedtTestReportRequired}
             options={metaData.testReportRequired||[]}
+            disable={testreportRequiredDisable}
             label="Test report requirement"
             placeholder={"Please select here"}
             id={"reportReq"}
@@ -126,6 +138,7 @@ const DsSupplyDetails: React.FC = () => {
             containerClasses={styles.fields}
             selectedOptions={selectedEligibility}
             options={metaData.eligibility||[]}
+            disable={eligibilityDisable}
             label="Eligibility"
             placeholder={"Please search and select here"}
             id={"eligibility"}
