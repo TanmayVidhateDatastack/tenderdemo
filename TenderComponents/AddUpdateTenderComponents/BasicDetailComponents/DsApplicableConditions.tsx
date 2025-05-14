@@ -75,7 +75,7 @@ const DsApplicableConditions: React.FC = () => {
       }
     });
     closeAllContext();
-    // console.log("Currently Selected:", Array.from(selectedConditions)); // Debugging output
+   
   };
 
   useEffect(() => {

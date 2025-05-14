@@ -18,24 +18,6 @@ import IconFactory from "@/Elements/IconComponent";
 import { useAppSelector } from "@/Redux/hook/hook";
 import { RootState } from "@/Redux/store/store";
 
-//  interface DepositDocument {
-//   modes: DsSelectOption[];
-//   refunds:DsSelectOption[];
-//   // paidBy: DsSelectOption[];
-// }
-// export interface Deposit {
-//   paidBy: DsSelectOption[];
-// }
-
-//  interface FeesDocument {
-//   applicableDeposits: DsSelectOption[];
-// }
-//  interface DepositeDocumentsProps {
-//   setDepositeDocuments: (depositeDocuments: DepositDocument[]) => void;
-//   depositeDocument: DepositDocument[] | null;
-//   applicableDeposits: DsSelectOption[] | [];
-//   role: string;
-// }
 const DsDepositeDocuments: React.FC = () => {
   const contextMenuId = "context-display-10";
   const {
@@ -161,10 +143,8 @@ const DsDepositeDocuments: React.FC = () => {
 
   useEffect(() => {
     const checkFeeVisible = { ...feeVisibility };
-
     applicablefees.forEach((opt) => {
       const id = opt.value.toString();
-
       const isEmpty = tenderData.tenderFees.find((fee) => fee.feesType === id);
       console.log("isEmpty", isEmpty);
       const isActive = isEmpty?.status === "ACTV";
