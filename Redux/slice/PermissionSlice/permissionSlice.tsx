@@ -54,8 +54,10 @@ type PermissionState = {
   transactionIdDisable:boolean,  
   recieptIdDisable:boolean,
   paymentRecoveredDisable:boolean;
+  paymentRecoverdDateDisable:boolean;
   recoveredNotesDisable:boolean;
   recoveredAttachFileButton:boolean;
+  saveButtonDisabled:boolean;
   
 };
 
@@ -113,7 +115,9 @@ const initialState: PermissionState = {
   recieptIdDisable:true,
   paymentRecoveredDisable:true, 
   recoveredNotesDisable:true,
+  paymentRecoverdDateDisable:true,
   recoveredAttachFileButton:true, 
+  saveButtonDisabled:true,
 };
 
 const permissionsSlice = createSlice({
@@ -214,9 +218,12 @@ const permissionsSlice = createSlice({
         state.transactionIdDisable=true;
         state.recieptIdDisable=true;
         state.paymentRecoveredDisable=true;
+        state.paymentRecoverdDateDisable=true;
         state.recoveredNotesDisable=true;
         state.recoveredAttachFileButton=true;
-        state.disable=true
+        state.attachFileConditionButtonDisable=true;
+        state.saveButtonDisabled=true;
+        state.disable=true  
 
         switch (status) {
           case "DRAFT":
@@ -255,6 +262,7 @@ const permissionsSlice = createSlice({
                 state.applicableConditionButtonDisable = false;
                 state.condtionNotesDisable = false;
                 state.attachFileConditionButtonDisable=false;
+                state.saveButtonDisabled=false;
                 state.disable = false;
                 break;
 
@@ -275,6 +283,7 @@ const permissionsSlice = createSlice({
               state.uploadFileButtonDisabled=false,
               state.transactionIdDisable = false;
               state.recieptIdDisable = false;
+              state.saveButtonDisabled=false;
             }
             break;
 
@@ -282,9 +291,11 @@ const permissionsSlice = createSlice({
           case "CANCELLED":
           case "AWARDED":
             if (role === "ACCOUNTANCE") {
-              state.paymentRecoveredDisable = true;
+              state.paymentRecoveredDisable = true; 
+              state.paymentRecoverdDateDisable=true;
               state.recoveredNotesDisable = true; 
               state.recoveredAttachFileButton = true; 
+              state.saveButtonDisabled=false;
             }
             break;
         }  
@@ -292,6 +303,6 @@ const permissionsSlice = createSlice({
     }   
   } 
 });  
- 
+
 export const { setVisibilityByRole,setDisabledByStatusAndRole } = permissionsSlice.actions;
 export default permissionsSlice.reducer; 

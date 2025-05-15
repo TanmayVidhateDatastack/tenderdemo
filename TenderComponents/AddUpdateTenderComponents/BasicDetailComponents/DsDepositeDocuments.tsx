@@ -42,7 +42,7 @@ import { RootState } from "@/Redux/store/store";
 // }
 const DsDepositeDocuments: React.FC = () => {
   const contextMenuId = "context-display-10";
-  const {
+  const { 
     addTenderFee,
     removeTenderFeeByType,
     tenderData,
@@ -68,8 +68,7 @@ const DsDepositeDocuments: React.FC = () => {
   const {
  applicableDepositButtonDisable
   } = permissions;
- 
- 
+
   // const [feeVisibility1, setFeeVisibility1] = useState<Record<string, boolean>>({"": true,});
  
   const role = useAppSelector((state: RootState) => state.user.role);
