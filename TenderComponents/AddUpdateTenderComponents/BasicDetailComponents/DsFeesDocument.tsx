@@ -100,6 +100,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     "TENDER_PSD_PAYMENT",
     "FEES_TYPE",
   ];
+  
   const [depositeDocuments, setDepositeDocuments] = useState<DsSelectOption[]>(
     []
   );
@@ -649,5 +650,4 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     </>
   );
 };
-
 export default DsFeesDocument;
