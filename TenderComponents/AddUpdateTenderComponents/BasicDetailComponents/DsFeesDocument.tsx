@@ -32,15 +32,15 @@ export type tenderDocument = {
 };
 
 export type tenderFee = {
-  type: string; 
+  type: string;
   amount: number;
-  currency: string;  
+  currency: string;
   paidBy: string;
   paymentMode: string;
   refundEligibility: string;
   paymentDueDate: string;
   notes: string;
-  recoverypaymentDate?: string; 
+  recoverypaymentDate?: string;
   refundNotes?: string;
   paymentTransactionId?: string;
   paymentReceiptId?: string;
@@ -102,7 +102,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     "TENDER_PSD_PAYMENT",
     "FEES_TYPE",
   ];
-  
+
   const [depositeDocuments, setDepositeDocuments] = useState<DsSelectOption[]>(
     []
   );
@@ -113,27 +113,27 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
   const [selectedcheckbox, setSelectedCheckbox] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState<DsSelectOption[]>([]);
 
-    const permissions = useAppSelector((state: RootState) => state.permissions);
-    const {
-      amountDisable,
-      paidByDisable,
-      modesDisable,
-      refundEligibilityDisable,
-      PaymentdueDateDisable,
-      instructionNotesDisable,
-      attachFileButtonDisable,
-      paymentcompletedDisable,
-      addDocumentTypeButtonDisable,
-      addDocumentTypeSlectDisable,
-      uploadFileButtonDisabled,
-      transactionIdDisable,
-      recieptIdDisable,
-      paymentRecoverdDateDisable,
-      paymentRecoveredDisable,
-      recoveredNotesDisable,
-      recoveredAttachFileButton,
-    } = permissions;
- 
+  const permissions = useAppSelector((state: RootState) => state.permissions);
+  const {
+    amountDisable,
+    paidByDisable,
+    modesDisable,
+    refundEligibilityDisable,
+    PaymentdueDateDisable,
+    instructionNotesDisable,
+    attachFileButtonDisable,
+    paymentcompletedDisable,
+    addDocumentTypeButtonDisable,
+    addDocumentTypeSlectDisable,
+    uploadFileButtonDisabled,
+    transactionIdDisable,
+    recieptIdDisable,
+    paymentRecoverdDateDisable,
+    paymentRecoveredDisable,
+    recoveredNotesDisable,
+    recoveredAttachFileButton,
+  } = permissions;
+
   // const handleFetchpayments = async () => {
   //   try {
   //     const metaData = await fetchData({
@@ -268,7 +268,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
         {/* // { )} } */}
       </div>
 
-      {completedpayment && (      <>
+      {completedpayment && (<>
         <div className={styles.fields}>
           <Ds_checkbox
             id={"payment"}
@@ -305,8 +305,8 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   className={styles.addBtn}
                   onClick={() => {
                     closeAllContext();
-                     setSelectedCheckbox(true);
-                    
+                    setSelectedCheckbox(true);
+
                     console.log("Add button clicked");
                   }}
                 />
@@ -320,8 +320,8 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               initialDate={
                 tenderData.tenderFees
                   ? new Date(
-                      tenderData.tenderFees[0]?.paymentDate || ""
-                    ).toLocaleDateString("en-GB")
+                    tenderData.tenderFees[0]?.paymentDate || ""
+                  ).toLocaleDateString("en-GB")
                   : undefined
               }
               maxDate={new Date()}
@@ -335,7 +335,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             />
           </div>
         </div>
-        {selectedcheckbox  &&
+        {selectedcheckbox &&
           selectedOptions.map((option, index) => (
             <UploadFile
               key={`upload-${index}`}
@@ -482,9 +482,9 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             tenderData.tenderFees.find((x) => x.feesType == type)
               ?.paymentDueDate
               ? new Date(
-                  tenderData.tenderFees.find((x) => x.feesType == type)
-                    ?.paymentDueDate || ""
-                ).toLocaleDateString("en-GB")
+                tenderData.tenderFees.find((x) => x.feesType == type)
+                  ?.paymentDueDate || ""
+              ).toLocaleDateString("en-GB")
               : undefined
           }
           placeholder="DD/MM/YYYY"
@@ -511,7 +511,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           disable={instructionNotesDisable}
           minRows={2}
           onBlur={(e) => {
-            updateTenderFee( 
+            updateTenderFee(
               type,
               "instructionNotes",
               (e.target as HTMLInputElement).value
@@ -533,9 +533,9 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               ?.filter(
                 (x) =>
                   x.documentCategory == type &&
-                  x.documentType == type + "_INSTRUCTION" 
-                  // &&
-                  // x.id !== undefined
+                  x.documentType == type + "_INSTRUCTION"
+                // &&
+                // x.id !== undefined
               )
               .map((x) => {
                 return {
@@ -560,13 +560,13 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               type
             );
           }}
-          
+
         ></DsCsvUpload>
       </div>
       {recoverycheckvisibible && (
         <>
           <div className={styles.separator}></div>
-          
+
           <Ds_checkbox
             disable={paymentRecoveredDisable}
             id={"paymentrefund"}
@@ -591,8 +591,8 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 initialDate={
                   tenderData.tenderFees
                     ? new Date(
-                        tenderData.tenderFees[0]?.paymentRefundDate || ""
-                      ).toLocaleDateString("en-GB")
+                      tenderData.tenderFees[0]?.paymentRefundDate || ""
+                    ).toLocaleDateString("en-GB")
                     : undefined
                 }
                 maxDate={new Date()}
@@ -645,9 +645,9 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   ?.filter(
                     (x) =>
                       x.documentCategory == type &&
-                      x.documentType == type + "_INSTRUCTION" 
-                      // &&
-                      // x.id !== undefined
+                      x.documentType == type + "_INSTRUCTION"
+                    // &&
+                    // x.id !== undefined
                   )
                   .map((x) => {
                     return {
@@ -662,7 +662,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               onSelectedFileChange={(files) => {
                 const typeDocuments =
                   tenderData.tenderDocuments?.filter(
-                    (x) => 
+                    (x) =>
                       x.documentCategory == type &&
                       x.documentType == type + "_INSTRUCTION"
                   ) || [];
@@ -674,7 +674,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   type + "_INSTRUCTION",
                   type
                 );
-              }}  
+              }}
             ></DsCsvUpload>
           </div>
         </>
@@ -682,5 +682,5 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     </>
   );
 };
- 
+
 export default DsFeesDocument;
