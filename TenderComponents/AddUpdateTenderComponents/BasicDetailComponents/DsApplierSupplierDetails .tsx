@@ -24,7 +24,7 @@ type Depot = {
 const DsApplierSupplierDetails: React.FC = ({}) => {
 const permissions = useAppSelector((state: RootState) => state.permissions);
 const {
-disable
+appliedByDisable,suppliedDisable,depotDisable,stockistNameDisable,stockistDiscountDisable
   } = permissions;
   const [allSuppliedBy, setAllSuppliedBy] = useState<
     DsMultiLevelSelectOption[]
@@ -189,8 +189,6 @@ disable
   const [selectedDepo, setSelectedDepo] = useState<DsSelectOption[]>([]);
   useEffect(() => {
     const loc = [...tenderData.shippingLocations];
-    // console.log("ffffffffffffffffffffff",loc);
-    // console.log("gggggggggggggggggggggg",formatedDepot);
     const depo = loc.map((x) => {
       return (
         formatedDepot.find((d) => Number(d.value) == x) || {
@@ -206,7 +204,7 @@ disable
     <div className={deptStyles.container}>
       <div className={styles.inputDetails}>
         <DsSelectMultiLevel
-        disable={disable}
+        disable={appliedByDisable}
           containerClasses={styles.fields}
           isSearchable={true}
           options={appliedBy}
@@ -240,7 +238,7 @@ disable
         ></DsSelectMultiLevel>
         <DsSelectMultiLevel
           containerClasses={styles.fields}
-          disable={disable}
+          disable={suppliedDisable}
           isSearchable={true}
           options={suppliedBy}
           {...(tenderData.id
@@ -272,7 +270,7 @@ disable
           isOpen={false}
         ></DsSelectMultiLevel>
         <DsMultiSelect
-        disable={disable}
+        disable={depotDisable}
           containerClasses={styles.fields}
           selectedOptions={selectedDepo}
           options={formatedDepot}
@@ -304,7 +302,7 @@ disable
               (e.target as HTMLInputElement).value
             )
           }
-          disable={disable}
+          disable={stockistNameDisable}
         ></DsTextField>
         <DsTextField
           containerClasses={styles.fields}
@@ -321,7 +319,7 @@ disable
               Number((e.target as HTMLInputElement).value)
             )
           }
-          disable={disable}
+          disable={stockistDiscountDisable}
         ></DsTextField>
       </div>
     </div>
