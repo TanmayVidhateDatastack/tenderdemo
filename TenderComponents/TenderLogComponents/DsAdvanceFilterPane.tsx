@@ -85,7 +85,7 @@ const DsAdvanceFilterPane: React.FC<advProps> = ({ filters, onFiltersApplied, se
             e: React.MouseEvent<HTMLElement>,
             filterValues: filterTypes[],
             filterCount: number
-          ): 0 | 1 {
+          ) {
             convertFilterValuesToApiFormat(filterValues);
             ClosePane(e);
             ///api call to getAllOrderData with filters
@@ -95,7 +95,7 @@ const DsAdvanceFilterPane: React.FC<advProps> = ({ filters, onFiltersApplied, se
               "filterConsole: ",
               filterCount
             );
-            return 0;
+            // return 0;
           }}
           clearFilters={function (): void {
             setIsQuickFilter(() => true);
