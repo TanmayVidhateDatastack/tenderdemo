@@ -596,3 +596,7 @@ a.secondary {
 .selectedRow{
   background-color: var(--tableRowSelect) !important;
 }
+.advPane {
+  padding: 1rem !important;
+}
+ 
