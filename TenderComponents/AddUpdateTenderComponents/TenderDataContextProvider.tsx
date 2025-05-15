@@ -1417,7 +1417,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           tenderFees: tenderDataCopy.tenderFees
             .filter((x) => x.status == "ACTV")
             .map((x) => {
-          
+              //  console.log("paymentMode",tenderData.tenderFees.paymentMode)
               return {
                 id: x.id,
                 feesType: x.feesType,
