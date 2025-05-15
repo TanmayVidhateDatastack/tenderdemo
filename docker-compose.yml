@@ -4,10 +4,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: datastackdevops/tender_ui:0.0.38
+    image: datastackdevops/tender_ui:0.0.46
  
     ports:
-      - 7009:3000
+      - 7003:3000
     volumes:
       - ./logs:/app\logs:rw
-                                                  
+                            
+                                                   

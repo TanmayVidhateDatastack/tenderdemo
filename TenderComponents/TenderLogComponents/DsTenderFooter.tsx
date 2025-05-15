@@ -71,6 +71,11 @@ export const DSTendrFooter: React.FC = ({}) => {
       console.error("Fetch error: ", error);
     }
   };
+  
+  const permissions = useAppSelector((state: RootState) => state.permissions);
+  const {
+   saveButtonDisabled
+  } = permissions;
   useEffect(() => {
     handleFetch();
   }, []);
@@ -528,17 +533,17 @@ export const DSTendrFooter: React.FC = ({}) => {
     }
   }, [role, tenderData.status]);
   useEffect(() => {
-    const splitButtonDisable =
-      tenderData.status == "DRAFT"
-        ? false
-        : !(
-            tenderData.tenderContract?.contractStatus == "DRAFT" ||
-            tenderData.status == "AWARDED" ||
-            tenderData.status == "PARTIALLY_AWARDED" ||
-            tenderData.status == "LOST" ||
-            tenderData.tenderContract?.contractStatus == undefined ||
-            tenderData.tenderContract?.contractStatus == null
-          );
+    const splitButtonDisable =false;
+      // tenderData.status == "DRAFT"
+      //   ? false
+      //   : !(
+      //       tenderData.tenderContract?.contractStatus == "DRAFT" ||
+      //       tenderData.status == "AWARDED" ||
+      //       tenderData.status == "PARTIALLY_AWARDED" ||
+      //       tenderData.status == "LOST" ||
+      //       tenderData.tenderContract?.contractStatus == undefined ||
+      //       tenderData.tenderContract?.contractStatus == null
+      //     );
 
     setSplitButtonDisbale(splitButtonDisable);
   }, [tenderData.id]);
@@ -575,6 +580,7 @@ export const DSTendrFooter: React.FC = ({}) => {
         tenderData.status == "LOST" ||
         tenderData.status == "DRAFT" ? (
           <DsSplitButton
+          //  disable={true}
             buttonViewStyle="btnContained"
             onClick={() => {
               if (
@@ -589,12 +595,13 @@ export const DSTendrFooter: React.FC = ({}) => {
               displayContext(e, "SubmissionContext", "top", "right")
             }
             buttonSize="btnLarge"
-            disable={splitButtonDisableState}
+            disable={saveButtonDisabled}
           >
             Save
           </DsSplitButton>
         ) : (
           <DsButton
+           disable={saveButtonDisabled}
             buttonViewStyle="btnContained"
             onClick={() => {
               // if (saveTender) validateAndSaveTender();
@@ -611,7 +618,7 @@ export const DSTendrFooter: React.FC = ({}) => {
               displayContext(e, "SubmissionContext", "top", "right")
             }
             buttonSize="btnLarge"
-            disable={tenderData.status !== "CANCELLED"}
+            // disable={tenderData.status !== "CANCELLED"}
           >
             {tenderData.status !== "CANCELLED" ? "Save" : "Submit"}
           </DsButton>
@@ -620,8 +627,8 @@ export const DSTendrFooter: React.FC = ({}) => {
       <ApprovalPopup
         id="popup1"
         types={[]}
-        tenderId={tenderData.id}
         popupType="Approve"
+        tenderId={tenderData.id}
         buttonColor="btnPrimary"
         position="center"
         toasterMessage={
@@ -635,8 +642,8 @@ export const DSTendrFooter: React.FC = ({}) => {
       />
       <ApprovalPopup
         id="popup2"
-  tenderId={tenderData.id}
         types={[]}
+        tenderId={tenderData.id}
         popupType="Revise"
         buttonColor="btnPrimary"
         position="center"
@@ -645,9 +652,9 @@ export const DSTendrFooter: React.FC = ({}) => {
       />
       <ApprovalPopup
         id="popup3"
-        tenderId={tenderData.id}
         types={[]}
         popupType="Reject"
+        tenderId={tenderData.id}
         buttonColor="btnDanger"
         position="center"
         toasterMessage={"The Tender has been Rejected & also note has sent "}
