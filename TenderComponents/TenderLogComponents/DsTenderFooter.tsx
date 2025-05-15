@@ -71,6 +71,11 @@ export const DSTendrFooter: React.FC = ({ }) => {
       console.error("Fetch error: ", error);
     }
   };
+
+  const permissions = useAppSelector((state: RootState) => state.permissions);
+  const {
+    saveButtonDisabled
+  } = permissions;
   useEffect(() => {
     handleFetch();
   }, []);
@@ -574,6 +579,7 @@ export const DSTendrFooter: React.FC = ({ }) => {
           tenderData.status == "LOST" ||
           tenderData.status == "DRAFT" ? (
           <DsSplitButton
+            //  disable={true}
             buttonViewStyle="btnContained"
             onClick={() => {
               if (
@@ -588,12 +594,14 @@ export const DSTendrFooter: React.FC = ({ }) => {
               displayContext(e, "SubmissionContext", "top", "right")
             }
             buttonSize="btnLarge"
-          // disable={splitButtonDisableState}
+            // disable={splitButtonDisableState}
+            disable={saveButtonDisabled}
           >
             Save
           </DsSplitButton>
         ) : (
           <DsButton
+            disable={saveButtonDisabled}
             buttonViewStyle="btnContained"
             onClick={() => {
               // if (saveTender) validateAndSaveTender();

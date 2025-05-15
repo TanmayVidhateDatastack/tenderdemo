@@ -7,9 +7,8 @@ import DsDataList from "@/Elements/DsComponents/DsInputs/dsDatalist";
 import Image from "next/image";
 import search from "@/Common/TenderIcons/searchicon.svg"
 import fetchData from "@/Common/helpers/Method/fetchData";
-import { documents } from "@/Common/helpers/types";
 import { DocumentContext } from "./DocumentsContextProvider";
-import { getAllDocuments } from "@/Common/helpers/constant";
+import { getTenderTabsDocuments } from "@/Common/helpers/constant";
 import buttonstyle from "@/Elements/DsComponents/DsButtons/dsButton.module.css"
 import { TenderDocument, updateDocuments, useTenderData } from "../TenderDataContextProvider";
 import { closeContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
@@ -43,7 +42,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
 
   const handleFetch = async () => {
     try {
-      const res = await fetchData({ url: getAllDocuments });
+      const res = await fetchData({ url: getTenderTabsDocuments });
       if (res.code === 200) {
         const tenderDocuments = res.result.filter(
           (doc: TenderDocument) => doc.documentCategory === "TENDER_DOCUMENT"//doc.documentType === "TENDER_DOCUMENT" to doc.documentCategory === "TENDER_DOCUMENT"

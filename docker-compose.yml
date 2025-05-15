@@ -10,4 +10,5 @@ services:
       - 7003:3000
     volumes:
       - ./logs:/app\logs:rw
+                            
                                                    

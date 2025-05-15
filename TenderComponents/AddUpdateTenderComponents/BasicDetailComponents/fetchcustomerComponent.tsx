@@ -7,7 +7,10 @@ import { closeContext } from "@/Elements/DsComponents/dsContextHolder/dsContextH
 import btnStyles from "@/Elements/DsComponents/DsButtons/dsButton.module.css";
 import RadioButton from "./dsRadioButton";
 import fetchData from "@/Common/helpers/Method/fetchData";
-import { getTenderByTenderId, getTendersByCustomerId } from "@/Common/helpers/constant";
+import {
+  getTenderByTenderId,
+  getTendersByCustomerId,
+} from "@/Common/helpers/constant";
 import Toaster, {
   hideToaster,
   showToaster,
@@ -89,7 +92,8 @@ const FetchCustomer: React.FC<FetchCustomerProps> = ({
       console.error("Error fetching data", error);
     }
   }, [customerId]);
-  const {fetchAndSetPreviousTender}=useTenderData();
+
+  const { fetchAndSetPreviousTender } = useTenderData();
 
   useEffect(() => {
     handleFetch();
@@ -113,7 +117,7 @@ const FetchCustomer: React.FC<FetchCustomerProps> = ({
         ></DsTableComponent>
 
         <div className={style.fetchButtons}>
-         <DsButton
+          <DsButton
             label="Cancel"
             className={btnStyles.btnOutlined}
             buttonColor="btnDark"
@@ -122,20 +126,18 @@ const FetchCustomer: React.FC<FetchCustomerProps> = ({
             onClick={() => {
               closeContext("contextMenuId5");
             }}
-            />
-          
+          />
+
           <DsButton
             label="Fetch"
-            onClick={() => {    
+            onClick={() => {
               fetchAndSetPreviousTender(selectedTender.tenderId);
               closeContext("contextMenuId5");
               showToaster("fetchCustomer");
             }}
           />
-       
         </div>
       </div>
-     
     </>
   );
 };
