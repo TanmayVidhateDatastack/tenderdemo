@@ -133,7 +133,7 @@ const DsTenderDetails: React.FC = () => {
           <div className={styles.ContextCreateNew}>
             <FetchCustomer
               customerId={tenderData.customerId}
-              customerName="(Directorate of Health Services)"
+              customerName={tenderData.tenderDetails.customerName}
             />
           </div>
         }
