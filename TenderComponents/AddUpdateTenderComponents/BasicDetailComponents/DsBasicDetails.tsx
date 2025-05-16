@@ -12,6 +12,7 @@ import DsTenderDetails from "./DsTenderDetails ";
 import DsSupplyDetails from "./DsSupplyDetails";
 import DsApplicableConditions from "./DsApplicableConditions";
 import { useTenderData } from "../TenderDataContextProvider";
+import { useSearchParams } from "next/navigation";
 
 export interface Deposit {
   paidBy: DsSelectOption[];
@@ -23,6 +24,9 @@ const DsBasicDetails = () => {
   useEffect(() => {
     fetchMetaData();
   }, []);
+     const searchParams = useSearchParams();
+  const type = searchParams.get("type") || "institutional" ; 
+
 
   return (
     <>
@@ -37,14 +41,17 @@ const DsBasicDetails = () => {
       <div className={styles.container}>
         <DsDepositeDocuments />
       </div>
-      <span className={styles.Seperator}></span>
+     
+        {type === "institutional" && (
+          <>
+           <span className={styles.Seperator}></span>
       <div className={styles.container}>
         <DsSupplyDetails />
-        {/* </div>
-      <span className={styles.Seperator}></span>
-      <div> */}
+      
         <DsApplicableConditions />
       </div>
+      </>
+        )}
     </>
   );
 };

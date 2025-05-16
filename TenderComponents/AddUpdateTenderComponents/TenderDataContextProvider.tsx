@@ -390,6 +390,9 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       "TENDER_PSD_PAYMENT",
       "TENDER_SUPPLY_CONDITION",
       "PAYMENT_MODE",
+      "EMD_PAYMENT_MODE",
+      "TENDER_FEE_PAYMENT_MODE",
+      "PSD_PAYMENT_MODE",
       "REFUND_ELIGIBILITY",
       "TENDER_PARTIALLY_AWARDED_JUSTIFICATION",
       "TENDER_LOST_JUSTIFICATION",
@@ -1955,7 +1958,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       .then((res) => {
         if (res.code === 200) {
           const result = res.result;
-          console.log("AAAAAAAAAAAAAAAAAA", result);
+     
 
           const metaData = {
             tenderType: (result.tenderType || []).map(
@@ -2024,6 +2027,25 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 label: item.codeDescription,
               })
             ),
+            emdPaymentMode: (result.emdPaymentMode || []).map(
+              (item: { codeValue: string; codeDescription: string }) => ({
+                value: item.codeValue,
+                label: item.codeDescription,
+              })
+            ),
+            
+            tenderFeePaymentMode: (result.tenderFeePaymentMode || []).map(
+              (item: { codeValue: string; codeDescription: string }) => ({
+                value: item.codeValue,
+                label: item.codeDescription,
+              })
+            ),
+            psdPaymentMode: (result.psdPaymentMode || []).map(
+              (item: { codeValue: string; codeDescription: string }) => ({
+                value: item.codeValue,
+                label: item.codeDescription,
+              })
+            ),
             refundEligibility: (result.refundEligibility || []).map(
               (item: { codeValue: string; codeDescription: string }) => ({
                 value: item.codeValue,
@@ -2073,6 +2095,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               label: item.codeDescription,
             })),
           };
+               console.log("AAAAAAAAAAAAAAAAAA", metaData);
           setMetaData(metaData);
         } else {
           console.error(
