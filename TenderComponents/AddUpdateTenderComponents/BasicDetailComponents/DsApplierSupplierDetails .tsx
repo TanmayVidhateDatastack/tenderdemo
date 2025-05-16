@@ -50,7 +50,6 @@ appliedByDisable,suppliedDisable,depotDisable,stockistNameDisable,stockistDiscou
     }
     return customers;
   }
-
   function setStockistSearchOptionss(values: unknown) {
     let customers: datalistOptions[] = [];
     if (Array.isArray(values) && values.every((val) => val.id && val.name)) {
