@@ -381,11 +381,10 @@ const DsTenderIdPage: React.FC<{
                 {
                   <>
                     <DsStatusIndicator
-                      label={`${
-                        displayFlag == "Existing"
+                      label={`${displayFlag == "Existing"
                           ? tenderData?.status
                           : DsStatus.DRFT
-                      }`}
+                        }`}
                       className={styles.statusIndicator}
                       type="user_defined"
                       id="state"
@@ -394,7 +393,7 @@ const DsTenderIdPage: React.FC<{
                           ? tenderData?.status ?? DsStatus.DRFT
                           : DsStatus.DRFT
                       }
-                      // handleClickableOnClick={handleStatusClick}
+                    // handleClickableOnClick={handleStatusClick}
                     />
                   </>
                 }
@@ -489,8 +488,8 @@ const DsTenderIdPage: React.FC<{
                       tenderData.status == "PARTIALLY_AWARDED" ||
                       tenderData.status == "LOST" ||
                       tenderData.status == "CANCELLED") && (
-                      <ContractView status={tenderData.status} />
-                    )}
+                        <ContractView status={tenderData.status} />
+                      )}
                   </TabView>
                 </>
               )}
