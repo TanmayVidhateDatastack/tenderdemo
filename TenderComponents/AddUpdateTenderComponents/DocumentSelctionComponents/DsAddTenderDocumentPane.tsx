@@ -14,6 +14,7 @@ import { TenderDocument, updateDocuments, useTenderData } from "../TenderDataCon
 import { closeContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import { ClosePane } from "@/Elements/DsComponents/DsPane/DsPane";
 import { userAgent } from "next/server";
+import { group } from "console";
 
 
 
@@ -131,34 +132,71 @@ const DsAddTenderDocumentPane: React.FC = () => {
               });
             }
           } else {
+            //manually modified for tender document
+            const newdocs = {
+              documentName: doc.documentName,
+              documentType: doc.documentType,
+              documentCategory: "TENDER_DOCUMENT",
+              id: 0,
+              documentId: doc?.id,
+              isVisible: false,
+            } as TenderDocument;
+
+
+
             updatedData.push({
               type: doc.documentType,
               documents: [
-                { document: doc, isVisible: false },
+                { document: newdocs, isVisible: false },
               ],
             });
           }
         });
 
-        const typeDocuments =
-          // tenderData.tenderDocuments?.filter(
-          tenderData.tenderDocuments?.filter(
-            (x) =>
-              x.documentCategory == "TENDER_DOCUMENT" &&
-              // x.documentType == type + "_TENDER_DOCUMENT"
-              // x.documentType == "FDA_DOCUMENT"
-              Object.keys(groupedDocuments).includes(x.documentType)
-          ) || [];
-        updateDocuments(
-          selectedDocuments,
-          typeDocuments,
-          removeTenderDocument,
-          addNewTenderDocument,
-          // type + "_TENDER_DOCUMENT",
-          // "FDA_DOCUMENT",
-          Object.keys(groupedDocuments).join("_TENDER_DOCUMENT"),
-          "TENDER_DOCUMENT"
-        );
+        // const uniqueDocumentTypes = [
+        //   ...Array.from(new Set(selectedDocuments.map((doc) => doc.documentType)))
+        // ];
+
+        // uniqueDocumentTypes.forEach((documentType) => {
+        //   const typeDocuments = tenderData.tenderDocuments?.filter(
+        //     (x) =>
+        //       x.documentCategory === "TENDER_DOCUMENT" &&
+        //       x.documentType === documentType
+        //   ) || [];
+
+        //   updateDocuments(
+        //     selectedDocuments,
+        //     typeDocuments,
+        //     removeTenderDocument,
+        //     addNewTenderDocument,
+        //     documentType,
+        //     "TENDER_DOCUMENT"
+        //   );
+        // });
+
+
+        // Object.keys(selectedDocuments).forEach((documentType) => {
+        //   const typeDocuments =
+        //     // tenderData.tenderDocuments?.filter(
+        //     tenderData.tenderDocuments?.filter(
+        //       (x) =>
+        //         x.documentCategory == "TENDER_DOCUMENT" &&
+        //         x.documentType == documentType
+        //       // x.documentType == "FDA_DOCUMENT"
+        //       // Object.keys(groupedDocuments).includes(x.documentType)
+        //     ) || [];
+        //   updateDocuments(
+        //     selectedDocuments,
+        //     typeDocuments,
+        //     removeTenderDocument,
+        //     addNewTenderDocument,
+        //     // type + "_TENDER_DOCUMENT",
+        //     // "FDA_DOCUMENT",
+        //     "TENDER_DOCUMENT",
+        //     documentType
+        //   );
+        // });
+
 
         // Remove documents that are not in selectedDocuments
         updatedData = updatedData.map((group) => {
@@ -183,6 +221,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
       console.log("Grouped Documents:", groupedDocuments);
       setFilterDocuments(groupedDocuments);
     }
+
   }, [groupedDocuments]);
 
   const handleSearch = (text: string) => {
