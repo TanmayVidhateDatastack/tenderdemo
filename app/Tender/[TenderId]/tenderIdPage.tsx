@@ -69,8 +69,7 @@ const DsTenderIdPage: React.FC<{
   const [tabs, setTabs] = useState<tab[]>([
     { tabId: "0", tabName: "Basic Details" },
   ]);
-  const searchParams = useSearchParams();
-  const type = searchParams.get("type") || "institutional" ;
+ 
 
   const [displayFlag, setDisplayFlag] = useState<"New" | "Existing">(
     "Existing"
