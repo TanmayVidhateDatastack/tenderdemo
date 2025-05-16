@@ -1353,6 +1353,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               `tenderDocuments[${docCount}].document`,
               doc.data,
               doc.documentName
+
             ); // File/Blob object
             docCount = docCount + 1;
           }
