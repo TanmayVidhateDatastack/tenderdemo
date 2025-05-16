@@ -1012,7 +1012,7 @@ export default function Home() {
               buttonColor="btnPrimary"
               buttonViewStyle="btnText"
               className={styles.MenuBtn}
-              location="Tender/New"
+              location="/Tender/New?type=institutional"
               label="Institutional"
             />
             <DsNavTo
