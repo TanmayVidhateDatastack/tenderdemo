@@ -111,6 +111,7 @@ min-height: fit-content;
   }
   .copyBtn{
     padding: var(--ds-padding);
+    justify-content: flex-start;
   }
  
  
@@ -156,7 +157,8 @@ min-height: fit-content;
   .fetcustomerContainer{
     padding: 15px;
     overflow-y: scroll;
-    
+    border-left: 6px solid var(--tender-green);
+    border-radius: 4px 4px 4px 4px;
   }
   .fetchMessage {
     white-space: normal;
@@ -171,7 +173,12 @@ min-height: fit-content;
   }
   .fetchInfo{
     text-align: left;
+    display: flex;
+    gap:5px;
     /* font-size: var(--font-14); */
+  }
+  .fetchinfolabel{
+    font-weight: bold;
   }
   .fetchTable{
     margin: 10px 10px 10px 0px; 
