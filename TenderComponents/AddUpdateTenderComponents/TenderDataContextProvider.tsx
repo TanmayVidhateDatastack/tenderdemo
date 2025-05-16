@@ -156,6 +156,7 @@ export type TenderData = {
   customerAddressId: number | undefined;
   tenderNumber: string;
   tenderType: string;
+  contractType:string
   issueDate: string | undefined;
   lastPurchaseDate: string | undefined;
   submissionDate: string | undefined;
@@ -386,6 +387,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     return [
       "TENDER_TYPE",
       "SUBMISSION_MODE",
+      "RATE_CONTRACT_TYPE",
       "SUPPLY_POINT",
       "TEST_REPORT_REQUIRED",
       "ELIGIBILITY",
@@ -395,6 +397,9 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       "TENDER_PSD_PAYMENT",
       "TENDER_SUPPLY_CONDITION",
       "PAYMENT_MODE",
+      "EMD_PAYMENT_MODE",
+      "TENDER_FEE_PAYMENT_MODE",
+      "PSD_PAYMENT_MODE",
       "REFUND_ELIGIBILITY",
       "TENDER_PARTIALLY_AWARDED_JUSTIFICATION",
       "TENDER_LOST_JUSTIFICATION",
@@ -414,6 +419,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     customerAddressId: undefined,
     tenderNumber: "",
     tenderType: "",
+    contractType:"",
     issueDate: "",
     lastPurchaseDate: "",
     submissionDate: "",
@@ -1110,6 +1116,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         customerAddressId: tenderData.customerAddressId,
         tenderNumber: tenderData.tenderNumber,
         tenderType: tenderData.tenderType,
+        contractType:tenderData.contractType,
         issueDate: tenderData.issueDate,
         lastPurchaseDate: tenderData.lastPurchaseDate,
         submissionDate: tenderData.submissionDate,
@@ -1965,7 +1972,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       .then((res) => {
         if (res.code === 200) {
           const result = res.result;
-          console.log("AAAAAAAAAAAAAAAAAA", result);
+     
 
           const metaData = {
             tenderType: (result.tenderType || []).map(
@@ -1973,6 +1980,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 value: item.codeValue,
                 label: item.codeDescription,
               })
+              
             ),
             submissionMode: (result.submissionMode || []).map(
               (item: { codeValue: string; codeDescription: string }) => ({
@@ -1980,6 +1988,16 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 label: item.codeDescription,
               })
             ),
+              rateContractType: (result.rateContractType || []).map(
+              (item: { codeValue: string; codeDescription: string }) => ({
+                value: item.codeValue,
+                label: item.codeDescription,
+              })
+            ),
+                         
+
+
+            
             supplyPoints: (result.supplyPoint || []).map(
               (item: { codeValue: string; codeDescription: string }) => ({
                 value: item.codeValue,
@@ -2034,6 +2052,25 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 label: item.codeDescription,
               })
             ),
+            emdPaymentMode: (result.emdPaymentMode || []).map(
+              (item: { codeValue: string; codeDescription: string }) => ({
+                value: item.codeValue,
+                label: item.codeDescription,
+              })
+            ),
+            
+            tenderFeePaymentMode: (result.tenderFeePaymentMode || []).map(
+              (item: { codeValue: string; codeDescription: string }) => ({
+                value: item.codeValue,
+                label: item.codeDescription,
+              })
+            ),
+            psdPaymentMode: (result.psdPaymentMode || []).map(
+              (item: { codeValue: string; codeDescription: string }) => ({
+                value: item.codeValue,
+                label: item.codeDescription,
+              })
+            ),
             refundEligibility: (result.refundEligibility || []).map(
               (item: { codeValue: string; codeDescription: string }) => ({
                 value: item.codeValue,
@@ -2082,7 +2119,10 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               value: item.codeValue,
               label: item.codeDescription,
             })),
+            
+            
           };
+               console.log("AAAAAAAAAAAAAAAAAA", metaData);
           setMetaData(metaData);
         } else {
           console.error(

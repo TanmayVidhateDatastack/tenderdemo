@@ -273,7 +273,6 @@ export default function Home() {
 
     return getStyledDueStatus(result, diffDays);
   };
-
   const getStyledDueStatus = (result: string, diffDays: number) => {
     let className = styles.blackText;
     if (diffDays <= 0) className = styles.zeroText;
@@ -281,7 +280,6 @@ export default function Home() {
 
     return <span className={className}>{result}</span>;
   };
-
   const handleFetch = async () => {
     const onlyStatus = {
       userId: 3,
@@ -342,9 +340,8 @@ export default function Home() {
         if (res?.code === 200 && Array.isArray(res?.result)) {
           console.log("getAllTenders:", res);
           const formattedData = formatTenders(res?.result);
-          // console.log("formatted data:", formattedData);
+          console.log("formatted data:", formattedData);
           setData(formattedData);
-          // addOrder(formattedData);
         } else {
           setData([]);
         }
@@ -1003,7 +1000,7 @@ export default function Home() {
               buttonColor="btnPrimary"
               buttonViewStyle="btnText"
               className={styles.MenuBtn}
-              location="Tender/New"
+              location="/Tender/New?type=institutional"
               label="Institutional"
             />
             <DsNavTo
@@ -1011,7 +1008,7 @@ export default function Home() {
               buttonColor="btnPrimary"
               buttonViewStyle="btnText"
               className={styles.MenuBtn}
-              location="/Tender/New"
+              location="/Tender/New?type=corporate"
               label="Corporate"
             />
           </div>

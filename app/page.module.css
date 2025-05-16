@@ -599,4 +599,15 @@ a.secondary {
 .advPane {
   padding: 1rem !important;
 }
+.recordNotFound{
+  justify-content: center;
+  color: red;
+  font-size: 1.5625em;
+  font-weight: bold;
+  align-items: center;
+  height: 85%;
+  align-content: center;
+  text-align: center;
+  margin-top: 0.625em;
+}
  

@@ -53,6 +53,9 @@ const DsDepositeDocuments: React.FC = () => {
   const [documentTypeOptions, setDocumentTypeOptions] = useState<
     Record<string, DsSelectOption[]>
   >({});
+  const [documentTypeModes, setDocumentTypeModes] = useState<
+    Record<string, DsSelectOption[]>
+  >({});
   const [mode, setMode] = useState<DsSelectOption[]>([]);
   const [refund, setRefund] = useState<DsSelectOption[]>([]);
   const [paidBy, setPaidBy] = useState<DsSelectOption[]>([]);
@@ -102,14 +105,27 @@ const DsDepositeDocuments: React.FC = () => {
     }
   }, [role, metaData]);
   useEffect(() => {
-    if (metaData) {
-      const modesData = metaData.paymentModes || [];
+    if (metaData ) {
+      // const modesData = metaData.paymentModes || [];
       // const paidByData = depositeDocument[0]?.paidBy || [];
       const refundData = metaData.refundEligibility || [];
-      setMode(modesData);
+      // setMode(modesData);
       setRefund(refundData);
       // setPaidBy(paidByData);
     }
+     if (
+      metaData.emdPaymentMode &&
+      metaData.tenderFeePaymentMode &&
+      metaData.psdPaymentMode
+    ) {
+      setDocumentTypeModes({
+        TENDER_EMD: metaData.emdPaymentMode,
+        TENDER_PSD: metaData.psdPaymentMode,
+        TENDER_FEES: metaData.tenderFeePaymentMode,
+      });
+    }
+
+
     if (metaData.feesType && metaData.feesType.length > 0) {
       // console.log("000 : ", applicableDeposits);
       const mappedDeposits = metaData.feesType.map((deposit) => ({
@@ -274,7 +290,7 @@ const DsDepositeDocuments: React.FC = () => {
                   type={deposit.value.toString()}
                   title={deposit.label}
                   id={deposit.value + "DocumentView"}
-                  mode={mode}
+                  mode={documentTypeModes[deposit.value]}
                   paidBy={paidBy}
                   downloadVisible={true}
                   refund={refund}
