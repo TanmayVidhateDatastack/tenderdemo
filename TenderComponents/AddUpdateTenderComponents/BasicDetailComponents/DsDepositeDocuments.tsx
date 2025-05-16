@@ -120,8 +120,8 @@ const DsDepositeDocuments: React.FC = () => {
     ) {
       setDocumentTypeModes({
         TENDER_EMD: metaData.emdPaymentMode,
-        TENDER_PSD: metaData.tenderFeePaymentMode,
-        TENDER_FEES: metaData.psdPaymentMode,
+        TENDER_PSD: metaData.psdPaymentMode,
+        TENDER_FEES: metaData.tenderFeePaymentMode,
       });
     }
 
