@@ -3,10 +3,10 @@ import DsSingleSelect from "@/Elements/DsComponents/dsSelect/dsSingleSelect";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import deptStyle from "./deposite.module.css";
 import { useEffect, useState } from "react";
-import { getTenderUserRoles } from "@/Common/helpers/constant"; 
+import { getTenderUserRoles } from "@/Common/helpers/constant";
 import {
-  // tenderDetailsProps, 
-  location, 
+  // tenderDetailsProps,
+  location,
   DsSelectOption,
   // tenderDetailsProps,
 } from "@/Common/helpers/types";
@@ -15,8 +15,8 @@ import DsDatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import CustomerSearch from "./customerSearch";
-import IconFactory from "@/Elements/IconComponent"; 
-import { getYesterdayDate } from "@/Common/helpers/Method/conversion"; 
+import IconFactory from "@/Elements/IconComponent";
+import { getYesterdayDate } from "@/Common/helpers/Method/conversion";
 import ContextMenu, {
   displayContext,
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
@@ -49,13 +49,12 @@ const DsTenderDetails: React.FC = () => {
 
   // const [tenderStatus, setTenderStatus] = useState<string>();
 
-    const [toasterVisible, setToasterVisible] = useState<boolean>(false);
-  
+  const [toasterVisible, setToasterVisible] = useState<boolean>(false);
 
   // const [cust, setCust] = useState<DsSelectOption>();
   //     value:
   //     label:
- 
+
   const permissions = useAppSelector((state: RootState) => state.permissions);
   const {
     fetchCustomerButtonVisible,
@@ -113,6 +112,23 @@ const DsTenderDetails: React.FC = () => {
     }
   }, [tenderData.tenderType, metaData.tenderType]);
 
+  const [selectedRateContractType, setselectedRateContractType] =
+    useState<DsSelectOption>();
+
+  useEffect(() => {
+    const rateContractType = tenderData.contractType;
+
+    if (rateContractType) {
+      const option = (metaData.rateContractType || []).find(
+        (x) => x.value === rateContractType
+      );
+
+      if (option) {
+        setselectedRateContractType(option);
+      }
+    }
+  }, [tenderData.contractType, metaData.rateContractType]);
+
   const [selectedSubmissionMode, setSelectedSubmissionMode] =
     useState<DsSelectOption>();
   useEffect(() => {
@@ -124,7 +140,7 @@ const DsTenderDetails: React.FC = () => {
       if (option) setSelectedSubmissionMode(option);
     }
   }, [tenderData.submissionMode, metaData.submissionMode]);
-  
+
   return (
     <>
       <ContextMenu
@@ -159,7 +175,7 @@ const DsTenderDetails: React.FC = () => {
               label="Fetch Information"
               buttonViewStyle="btnText"
               buttonSize="btnSmall"
-              disable={tenderData.customerId ? false : true }
+              disable={tenderData.customerId ? false : true}
               className={deptStyle.copyBtn}
               startIcon={
                 <div style={{ width: "0.95625em", height: "1.125em" }}>
@@ -182,7 +198,7 @@ const DsTenderDetails: React.FC = () => {
         <DsSingleSelect
           containerClasses={styles.fields}
           disable={customerLocationDisable}
-          id="CustomerAddress" 
+          id="CustomerAddress"
           placeholder="Select Customer Location"
           options={customerLocations.map((addr) => ({
             value: addr.id.toString(),
@@ -209,7 +225,7 @@ const DsTenderDetails: React.FC = () => {
 
               // console.log("customerLocationId",option.value)
             }
-          }} 
+          }}
         />
         <DsTextField
           containerClasses={styles.fields}
@@ -229,7 +245,7 @@ const DsTenderDetails: React.FC = () => {
         <DsSingleSelect
           containerClasses={styles.fields}
           options={metaData.tenderType || []}
-          label="Tender type"  
+          label="Tender type"
           id={"tenderType"}
           selectedOption={selectedTenderType}
           setSelectOption={(option) => {
@@ -297,20 +313,37 @@ const DsTenderDetails: React.FC = () => {
           label="Submission date"
           disable={submissionDateDisable}
         />
-        <DsTextField
+        <DsSingleSelect
           containerClasses={styles.fields}
-          maxLength={6}
-          initialValue={tenderData.rateContractValidity}
-          inputType="positiveInteger"
-          label="Rate contract validity"
-          onBlur={(e) =>
-            updateTenderData(
-              "rateContractValidity",
-              (e.target as HTMLInputElement).value
-            )
-          }
-          disable={rateContractvalidityDisable}
-        ></DsTextField>
+          options={metaData.rateContractType || []}
+          label="Contract type"
+          id={"contractType"}
+          selectedOption={selectedRateContractType}
+          setSelectOption={(option) => {
+            if (typeof option.value == "string") {
+              updateTenderData("contractType", option.value);
+              console.log("rateContractType", option.label);
+            }
+          }}
+          // disable={tenderTypeDisable}
+        ></DsSingleSelect>
+        {selectedRateContractType?.value === "RATE_CONTRACT" && (
+          <DsTextField
+            containerClasses={styles.fields}
+            maxLength={6}
+            initialValue={tenderData.rateContractValidity}
+            inputType="positiveInteger"
+            label="Rate contract validity"
+            onBlur={(e) =>
+              updateTenderData(
+                "rateContractValidity",
+                (e.target as HTMLInputElement).value
+              )
+            }
+            disable={rateContractvalidityDisable}
+          />
+        )}
+
         <DsSingleSelect
           containerClasses={styles.fields}
           selectedOption={selectedSubmissionMode}
