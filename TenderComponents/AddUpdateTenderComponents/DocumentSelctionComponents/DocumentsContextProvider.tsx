@@ -1,5 +1,5 @@
 import React, { createContext, useState, ReactNode, Dispatch, SetStateAction, useEffect } from "react";
-import { TenderDocument } from "../TenderDataContextProvider";
+import { TenderDocument, updateDocuments, useTenderData } from "../TenderDataContextProvider";
 
 export interface Document {
   document: TenderDocument;
@@ -35,7 +35,8 @@ export const DocumentProvider: React.FC<DocumentProviderProps> = ({ children }) 
   const [documentData, setDocumentData] = useState<DocumentType[]>([]);
   const [selectedDocuments, setSelectedDocuments] = useState<Document[]>([]);
   const [totalSelectedDocuments, setTotalSelectedDocuments] = useState(0);
-
+  const { tenderData, removeTenderDocument,
+    addNewTenderDocument } = useTenderData();
   const toggleDocumentVisibility = (type: string, documentName: string) => {
     setDocumentData((prevData) =>
       prevData.map((docType) =>
@@ -65,6 +66,29 @@ export const DocumentProvider: React.FC<DocumentProviderProps> = ({ children }) 
   useEffect(() => {
     const totalCount = documentData.reduce((acc, { documents }) => acc + documents.length, 0);
     setTotalSelectedDocuments(totalCount);
+    const types = Array.from(new Set(documentData.map((x) => x.type)));
+    types.forEach((documentType) => {
+      const typeDocuments =
+        tenderData.tenderDocuments?.filter(
+
+          (x) =>
+            x.documentCategory == "TENDER_DOCUMENT" &&
+            x.documentType == documentType
+          // x.documentType == "FDA_DOCUMENT"
+          // Object.keys(groupedDocuments).includes(x.documentType)
+        ) || [];
+      const document = documentData.filter((doc) => doc.type === documentType).flatMap((doc) => doc.documents.map((d) => { return { ...d.document, id: d.document.documentId } }));
+      updateDocuments(
+        document,
+        typeDocuments,
+        removeTenderDocument,
+        addNewTenderDocument,
+        // type + "_TENDER_DOCUMENT",
+        // "FDA_DOCUMENT",
+        documentType,
+        "TENDER_DOCUMENT"
+      );
+    });
   }, [documentData]);
 
   useEffect(() => {
