@@ -285,13 +285,13 @@ const permissionsSlice = createSlice({
               state.recieptIdDisable = false;
               state.saveButtonDisabled=false;
             }
-            break;
+            break;  
 
           case "LOST":  
           case "CANCELLED":
           case "AWARDED":
             if (role === "ACCOUNTANCE") {
-              state.paymentRecoveredDisable = true; 
+              state.paymentRecoveredDisable = true;  
               state.paymentRecoverdDateDisable=true;
               state.recoveredNotesDisable = true; 
               state.recoveredAttachFileButton = true; 

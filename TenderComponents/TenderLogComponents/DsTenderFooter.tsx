@@ -40,13 +40,13 @@ class ActionStatus {
   isOkayButtonVisible?: boolean = false;
 }
 
-export const DSTendrFooter: React.FC = ({}) => {
+export const DSTendrFooter: React.FC = ({ }) => {
   const dispatch = useAppDispatch<AppDispatch>();
   const role = useAppSelector((state: RootState) => state.user.role);
   const [toasterVisible, setToasterVisible] = useState<boolean>(false);
   const [splitButtonDisableState, setSplitButtonDisbale] =
     useState<boolean>(false);
-  const [saveTenderClicked,setSaveTenderClicked]=useState<boolean>(false);
+  const [saveTenderClicked, setSaveTenderClicked] = useState<boolean>(false);
   const [contextContent, setContextContext] = useState<React.ReactElement<
     any,
     string | React.JSXElementConstructor<any>
@@ -71,10 +71,10 @@ export const DSTendrFooter: React.FC = ({}) => {
       console.error("Fetch error: ", error);
     }
   };
-  
+
   const permissions = useAppSelector((state: RootState) => state.permissions);
   const {
-   saveButtonDisabled
+    saveButtonDisabled
   } = permissions;
   useEffect(() => {
     handleFetch();
@@ -94,8 +94,7 @@ export const DSTendrFooter: React.FC = ({}) => {
       ) {
         if (tenderData?.tenderContract?.contractJustification == undefined) {
           errors.push(
-            `Please select a Tender ${
-              tenderData.status ? ContractStatuses[tenderData.status] : " "
+            `Please select a Tender ${tenderData.status ? ContractStatuses[tenderData.status] : " "
             }Justification.`
           );
         }
@@ -514,7 +513,7 @@ export const DSTendrFooter: React.FC = ({}) => {
               buttonSize="btnSmall"
               buttonViewStyle="btnText"
               className={btnStyles.btnTextPrimary}
-              // onClick={() => showToaster("toaster1")}
+            // onClick={() => showToaster("toaster1")}
             />
           );
         }
@@ -533,22 +532,22 @@ export const DSTendrFooter: React.FC = ({}) => {
     }
   }, [role, tenderData.status]);
   useEffect(() => {
-    const splitButtonDisable =false;
-      // tenderData.status == "DRAFT"
-      //   ? false
-      //   : !(
-      //       tenderData.tenderContract?.contractStatus == "DRAFT" ||
-      //       tenderData.status == "AWARDED" ||
-      //       tenderData.status == "PARTIALLY_AWARDED" ||
-      //       tenderData.status == "LOST" ||
-      //       tenderData.tenderContract?.contractStatus == undefined ||
-      //       tenderData.tenderContract?.contractStatus == null
-      //     );
+    const splitButtonDisable = false;
+    // tenderData.status == "DRAFT"
+    //   ? false
+    //   : !(
+    //       tenderData.tenderContract?.contractStatus == "DRAFT" ||
+    //       tenderData.status == "AWARDED" ||
+    //       tenderData.status == "PARTIALLY_AWARDED" ||
+    //       tenderData.status == "LOST" ||
+    //       tenderData.tenderContract?.contractStatus == undefined ||
+    //       tenderData.tenderContract?.contractStatus == null
+    //     );
 
     setSplitButtonDisbale(splitButtonDisable);
   }, [tenderData.id]);
-  useEffect(()=>{
-    if(saveTenderClicked){
+  useEffect(() => {
+    if (saveTenderClicked) {
 
       if (tenderDataCopy?.id) {
         // if (saveTender) validateAndSaveTender();
@@ -561,7 +560,7 @@ export const DSTendrFooter: React.FC = ({}) => {
       }
       setSaveTenderClicked(false);
     }
-  },[saveTenderClicked])
+  }, [saveTenderClicked])
   return (
     <>
       <div className={styles.footer}>
@@ -576,11 +575,11 @@ export const DSTendrFooter: React.FC = ({}) => {
           disable={false}
         />
         {tenderData.status == "AWARDED" ||
-        tenderData.status == "PARTIALLY_AWARDED" ||
-        tenderData.status == "LOST" ||
-        tenderData.status == "DRAFT" ? (
+          tenderData.status == "PARTIALLY_AWARDED" ||
+          tenderData.status == "LOST" ||
+          tenderData.status == "DRAFT" ? (
           <DsSplitButton
-          //  disable={true}
+            //  disable={true}
             buttonViewStyle="btnContained"
             onClick={() => {
               if (
@@ -589,19 +588,20 @@ export const DSTendrFooter: React.FC = ({}) => {
                 tenderData.status == "LOST"
               )
                 updateContractDetails("contractStatus", "DRAFT");
-                setSaveTenderClicked(true);
+              setSaveTenderClicked(true);
             }}
             onSplitClick={(e) =>
               displayContext(e, "SubmissionContext", "top", "right")
             }
             buttonSize="btnLarge"
+            // disable={splitButtonDisableState}
             disable={saveButtonDisabled}
           >
             Save
           </DsSplitButton>
         ) : (
           <DsButton
-           disable={saveButtonDisabled}
+            disable={saveButtonDisabled}
             buttonViewStyle="btnContained"
             onClick={() => {
               // if (saveTender) validateAndSaveTender();
@@ -618,7 +618,7 @@ export const DSTendrFooter: React.FC = ({}) => {
               displayContext(e, "SubmissionContext", "top", "right")
             }
             buttonSize="btnLarge"
-            // disable={tenderData.status !== "CANCELLED"}
+          // disable={tenderData.status !== "CANCELLED"}
           >
             {tenderData.status !== "CANCELLED" ? "Save" : "Submit"}
           </DsButton>
@@ -635,8 +635,8 @@ export const DSTendrFooter: React.FC = ({}) => {
           role === "HOMANAGER"
             ? "The Tender has been Approved"
             : role === "CHECKER"
-            ? "The Tender has been successfully moved to under approval state"
-            : "The action was successful!"
+              ? "The Tender has been successfully moved to under approval state"
+              : "The action was successful!"
         }
         setActionStatus={setActionStatusValues}
       />
@@ -666,8 +666,8 @@ export const DSTendrFooter: React.FC = ({}) => {
           role === "ACCOUNTANCE"
             ? "The Data has been Submitted by Review "
             : role === "MAKER"
-            ? "The receipt has been submitted successfully"
-            : "The action was successful!"
+              ? "The receipt has been submitted successfully"
+              : "The action was successful!"
         }
         type={"success"}
         position={"top"}
