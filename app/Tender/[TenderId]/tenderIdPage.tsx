@@ -37,8 +37,6 @@ import { setSelectedTabId } from "@/Redux/slice/TabSlice/TabSlice";
 import { setDisabledByStatusAndRole } from "@/Redux/slice/PermissionSlice/permissionSlice";
 import { useAppDispatch, useAppSelector } from "@/Redux/hook/hook";
 import { AppDispatch } from "@/Redux/store/store";
-
-//fetch CUSTOMER_TYPE FROM URL
 import { useSearchParams } from "next/navigation";
 
 const DsTenderIdPage: React.FC<{
@@ -71,6 +69,8 @@ const DsTenderIdPage: React.FC<{
   const [tabs, setTabs] = useState<tab[]>([
     { tabId: "0", tabName: "Basic Details" },
   ]);
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type") || "institutional" ;
 
   const [displayFlag, setDisplayFlag] = useState<"New" | "Existing">(
     "Existing"
