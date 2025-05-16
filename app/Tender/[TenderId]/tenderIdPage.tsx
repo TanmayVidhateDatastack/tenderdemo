@@ -41,7 +41,7 @@ import { useSearchParams } from "next/navigation";
 
 const DsTenderIdPage: React.FC<{
   paramOrderId: string | number;
-  tenderStatus?: string; 
+  tenderStatus?: string;
 }> = ({ paramOrderId, tenderStatus }) => {
   const [selectedTabId, setTabId] = useTabState("tenderPage");
   const {
@@ -58,15 +58,18 @@ const DsTenderIdPage: React.FC<{
   const [isLatestVersion, setIsLatestVersion] = useState(false);
   const [orderId, setOrderId] = useState<string>(paramOrderId?.toString());
   const appTitle = useRef<string>("New");
-   const dispatch = useAppDispatch<AppDispatch>();
+  const dispatch = useAppDispatch<AppDispatch>();
   const userRole = useAppSelector((state) => state.user);
   const version = 1;
+
+  // get the type value from URL
+   const searchParams = useSearchParams();
+  const type = searchParams.get("type") || "institutional" ; 
 
   const [tabs, setTabs] = useState<tab[]>([
     { tabId: "0", tabName: "Basic Details" },
   ]);
-  const searchParams = useSearchParams();
-  const type = searchParams.get("type") || "institutional" ;
+ 
 
   const [displayFlag, setDisplayFlag] = useState<"New" | "Existing">(
     "Existing"
@@ -82,7 +85,7 @@ const DsTenderIdPage: React.FC<{
     reader.onload = (event) => {
       const fileContent = event.target?.result;
       setMessage("The File has been  attached successfully!");
- 
+
       const text = event.target?.result as string;
       const rows = text
         .replace("\r\n", "\n")
@@ -149,19 +152,19 @@ const DsTenderIdPage: React.FC<{
       )
         fetchAndSetOriginalTender(Number(orderId), tenderStatus);
       else {
-        fetchAndSetOriginalTender(Number(orderId)); 
+        fetchAndSetOriginalTender(Number(orderId));
       }
     }
   }, [orderId]);
 
-    useEffect(() => {
-      dispatch(
-        setDisabledByStatusAndRole({
-          role:userRole.role,
-          status: tenderData?.status.toUpperCase() ?? DsStatus.DRFT,
-        })
-      );
-    }, [userRole.role, tenderData?.status]); 
+  useEffect(() => {
+    dispatch(
+      setDisabledByStatusAndRole({
+        role: userRole.role,
+        status: tenderData?.status.toUpperCase() ?? DsStatus.DRFT,
+      })
+    );
+  }, [userRole.role, tenderData?.status]);
 
   useEffect(() => {
     console.log(displayFlag, "displayFlag");
@@ -173,19 +176,19 @@ const DsTenderIdPage: React.FC<{
     setTabs([
       { tabId: "0", tabName: "Basic Details" },
       ...revisionTabs,
-      { tabId: "2", tabName: "Documents", disable: (displayFlag == "New") || (type != "institutional")},
+      { tabId: "2", tabName: "Documents", disable: (displayFlag == "New") || (type != "institutional") },
     ]);
 
-    if ( 
-      tenderData.status == "AWARDED" ||  
+    if (
+      tenderData.status == "AWARDED" ||
       tenderData.status == "PARTIALLY_AWARDED" ||
-      tenderData.status == "LOST" || 
-      tenderData.status == "CANCELLED"  
-    ) { 
-      setTabs((prev) => { 
+      tenderData.status == "LOST" ||
+      tenderData.status == "CANCELLED"
+    ) {
+      setTabs((prev) => {
         if (prev?.find((x) => x.tabId == "Contract") == undefined)
           return [
-            ...prev,   
+            ...prev,
             {
               tabId: "Contract",
               tabName: "Tender " + formatStatus(tenderData.status),
@@ -239,7 +242,7 @@ const DsTenderIdPage: React.FC<{
 
   //   }
   // },[displayFlag])
-   
+
   return (
     <>
       <DocumentProvider>
@@ -379,15 +382,15 @@ const DsTenderIdPage: React.FC<{
                     )}
                 </div>
               )}
-
               <div>
                 {
                   <>
                     <DsStatusIndicator
-                      label={`${displayFlag == "Existing"
+                      label={`${
+                        displayFlag == "Existing"
                           ? tenderData?.status
                           : DsStatus.DRFT
-                        }`}
+                      }`}
                       className={styles.statusIndicator}
                       type="user_defined"
                       id="state"
@@ -396,7 +399,6 @@ const DsTenderIdPage: React.FC<{
                           ? tenderData?.status ?? DsStatus.DRFT
                           : DsStatus.DRFT
                       }
-                    // handleClickableOnClick={handleStatusClick}
                     />
                   </>
                 }
@@ -491,8 +493,8 @@ const DsTenderIdPage: React.FC<{
                       tenderData.status == "PARTIALLY_AWARDED" ||
                       tenderData.status == "LOST" ||
                       tenderData.status == "CANCELLED") && (
-                        <ContractView status={tenderData.status} />
-                      )}
+                      <ContractView status={tenderData.status} />
+                    )}
                   </TabView>
                 </>
               )}
