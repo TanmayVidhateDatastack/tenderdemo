@@ -88,12 +88,14 @@ type Depot = {
   code: string;
 };
 export default function Home() {
-  const [data, setData] = useState<Tender[]>([]); //for table data
+  const [data, setData] = useState<Tender[]|null>(null); //for table data
   const [searchQuery, setSearchQuery] = useState(""); //for search query
   const [selectedStatus, setSelectedStatus] = useState(""); //for quickfilter
   const [advFilter, setAdvFilter] = useState<Record<string, React.ReactNode>>(
     {}
   );
+
+
   const [isFilterActive, setIsFilterActive] = useState(true);
 
   const [tenderMetadataFilters, setTenderMetadataFilters] = useState<{
@@ -224,7 +226,7 @@ export default function Home() {
     rows: [],
   });
   const calculateDueStatus = (submittionDate: string) => {
-    if (!submittionDate) return "-"; // Handle empty values
+    if (!submittionDate) return "-"; // Handle empty values 
 
     let subDate = new Date(submittionDate);
 
@@ -451,11 +453,11 @@ export default function Home() {
       headers: {
         "Content-Type": "application/json",
         "x-tender-codes": JSON.stringify(metaDataTypes),
-      },
+      }, 
     })
       .then((res) => {
         if (res?.code === 200 && res?.result) {
-          // if(res?.c)
+          // if(res?.c) 
 
           setFetchedMetadata(res.result); // Store only tenderType
           console.log("Stored Tender Type:", res.result);
@@ -510,8 +512,9 @@ export default function Home() {
     handleFetchDepot();
     handleFetchApplierSupplier();
   }, []);
-  useEffect(() => {
-    handleFetch();
+
+  useEffect(() => { 
+      handleFetch();
   }, [selectedStatus, searchQuery, advFilter]);
 
   // useEffect(() => {
@@ -793,7 +796,7 @@ export default function Home() {
   useEffect(() => {
     // console.log("Data updated:", data);
     // if (data.length > 0) {
-    addTableData(data);
+    addTableData(data ?? []);
     // }
   }, [data]);
 
@@ -851,8 +854,8 @@ export default function Home() {
         }
       >
         <div className={styles.totalCal}>
-          <DsTotalTenders data={data} />
-          <DsTotalValues data={data} />
+          <DsTotalTenders data={data ?? []} />
+          <DsTotalValues data={data ?? []} />
         </div>
         <div className={styles.container}>
           {" "}
@@ -872,7 +875,14 @@ export default function Home() {
                 handelRowClick(e, rowIndex);
               }}
             />
+           { tempTableData.rows.length == 0 && data != null && <div className={styles.recordNotFound}>
+
+             No Record Found!
+             
+            </div>
+            }
           </div>
+
           {/* {selectedRow && ( */}
             <DsTenderTableFloatingMenu
               e={selectedRow?.e}

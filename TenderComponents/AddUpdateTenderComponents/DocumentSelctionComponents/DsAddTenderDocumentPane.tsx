@@ -7,19 +7,33 @@ import DsDataList from "@/Elements/DsComponents/DsInputs/dsDatalist";
 import Image from "next/image";
 import search from "@/Common/TenderIcons/searchicon.svg"
 import fetchData from "@/Common/helpers/Method/fetchData";
-import { documents } from "@/Common/helpers/types";
 import { DocumentContext } from "./DocumentsContextProvider";
-import { getAllDocuments } from "@/Common/helpers/constant";
+import { getTenderTabsDocuments } from "@/Common/helpers/constant";
 import buttonstyle from "@/Elements/DsComponents/DsButtons/dsButton.module.css"
-import { TenderDocument } from "../TenderDataContextProvider";
-import { tenderDocument } from "../BasicDetailComponents/DsFeesDocument";
+import { TenderDocument, updateDocuments, useTenderData } from "../TenderDataContextProvider";
 import { closeContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
+import { ClosePane } from "@/Elements/DsComponents/DsPane/DsPane";
+import { userAgent } from "next/server";
+
+
+
 
 const DsAddTenderDocumentPane: React.FC = () => {
-  const [openAccordion, setOpenAccordion] = useState<string | null |number>(null);
+  const [openAccordion, setOpenAccordion] = useState<string | null | number>(null);
   const [groupedDocuments, setGroupedDocuments] = useState<Record<string, TenderDocument[]>>({});
   const [selectedDocuments, setSelectedDocuments] = useState<TenderDocument[]>([]);
-                                                                                       
+  const [filterDocuments, setFilterDocuments] = useState(groupedDocuments);
+  const [searchText, setSearchText] = useState("");
+
+  // const [isApplyDisabled, setIsApplyDisabled] = useState(true);
+
+  const {
+    updateTenderFee,
+    addNewTenderDocument,
+    tenderData,
+    removeTenderDocument,
+  } = useTenderData();
+
   const documentContext = useContext(DocumentContext);
 
   useEffect(() => {
@@ -28,16 +42,16 @@ const DsAddTenderDocumentPane: React.FC = () => {
 
   const handleFetch = async () => {
     try {
-      const res = await fetchData({ url: getAllDocuments });
+      const res = await fetchData({ url: getTenderTabsDocuments });
       if (res.code === 200) {
-        const tenderDocuments = res.result.Documents.filter(
-          (doc: TenderDocument) => doc.documentType === "TenderDocument"
+        const tenderDocuments = res.result.filter(
+          (doc: TenderDocument) => doc.documentCategory === "TENDER_DOCUMENT"//doc.documentType === "TENDER_DOCUMENT" to doc.documentCategory === "TENDER_DOCUMENT"
         );
 
-        const grouped = tenderDocuments.reduce( 
+        const grouped = tenderDocuments.reduce(
           (acc: Record<string, TenderDocument[]>, doc: TenderDocument) => {
             if (!acc[doc.documentType]) {
-              acc[doc.documentType] = []; 
+              acc[doc.documentType] = [];
             }
             acc[doc.documentType].push(doc);
             return acc;
@@ -90,7 +104,12 @@ const DsAddTenderDocumentPane: React.FC = () => {
   }, [documentContext]);
 
 
+
+
   const handledocument = () => {
+    if (searchText.length > 0) {
+      setSearchText("");
+    }
     if (documentContext) {
       documentContext.setDocumentData((prevData) => {
         let updatedData: {
@@ -120,7 +139,27 @@ const DsAddTenderDocumentPane: React.FC = () => {
             });
           }
         });
-              
+
+        const typeDocuments =
+          // tenderData.tenderDocuments?.filter(
+          tenderData.tenderDocuments?.filter(
+            (x) =>
+              x.documentCategory == "TENDER_DOCUMENT" &&
+              // x.documentType == type + "_TENDER_DOCUMENT"
+              // x.documentType == "FDA_DOCUMENT"
+              Object.keys(groupedDocuments).includes(x.documentType)
+          ) || [];
+        updateDocuments(
+          selectedDocuments,
+          typeDocuments,
+          removeTenderDocument,
+          addNewTenderDocument,
+          // type + "_TENDER_DOCUMENT",
+          // "FDA_DOCUMENT",
+          Object.keys(groupedDocuments).join("_TENDER_DOCUMENT"),
+          "TENDER_DOCUMENT"
+        );
+
         // Remove documents that are not in selectedDocuments
         updatedData = updatedData.map((group) => {
           return {
@@ -136,8 +175,45 @@ const DsAddTenderDocumentPane: React.FC = () => {
         return updatedData;
       });
     }
-    
+
   };
+
+  useEffect(() => {
+    if (groupedDocuments) {
+      console.log("Grouped Documents:", groupedDocuments);
+      setFilterDocuments(groupedDocuments);
+    }
+  }, [groupedDocuments]);
+
+  const handleSearch = (text: string) => {
+    setSearchText(text); // Store search text
+
+    if (!text.trim()) {
+      // Show all documents if search is empty
+      setFilterDocuments(groupedDocuments);
+      return;
+    }
+
+    const filteredDocs = {};
+
+    Object.entries(groupedDocuments).forEach(([type, docs]) => {
+      const matchingDocs = docs.filter((doc) =>
+        doc.documentName.toLowerCase().includes(text.toLowerCase())
+      );
+      if (matchingDocs.length > 0) {
+        filteredDocs[type] = matchingDocs;
+      }
+    });
+
+    setFilterDocuments(filteredDocs);
+
+    // auto-open the only matching accordion
+    // if (Object.keys(filteredDocs).length === 1) {
+    //   setOpenAccordion(Object.keys(filteredDocs)[0]);
+    // }
+  };
+
+
 
 
   return (
@@ -149,32 +225,44 @@ const DsAddTenderDocumentPane: React.FC = () => {
           label="Search Document Here"
           iconEnd={<Image src={search} alt="search" />}
           options={[]}
+          onChange={(e) => handleSearch(e.target.value)}
+          className={styles.searchDocument}
         />
-        {Object.entries(groupedDocuments).map(([type, docs]) => (
+        {Object.entries(filterDocuments).map(([type, docs]) => (
           <Accordion
             key={type}
             id={type}
             title={type}
-            isOpen={openAccordion === type} 
-            onToggle={handleAccordionToggle} 
+            isOpen={openAccordion === type}
+            onToggle={handleAccordionToggle}
           >
             <div className={styles.documents}>
-              {docs.map((doc) => (  
-                <Ds_checkbox  
+              {docs.map((doc) => (
+                <Ds_checkbox
                   className={styles.documentsCkechS}
-                  key={doc.id} 
-                  id={doc.id?.toString()||doc.documentName}
-                  name={doc.documentName} 
-                  value={doc.id?.toString()||doc.documentName}
+                  key={doc.id}
+                  id={doc.id?.toString() || doc.documentName}
+                  name={doc.documentName}
+                  value={doc.id?.toString() || doc.documentName}
                   label={doc.documentName}
-                  onChange={() => handleCheckboxChange(doc)}  
-                  isChecked={selectedDocuments.some((d) => d.id === doc.id)} 
-                /> 
+                  onChange={() => handleCheckboxChange(doc)}
+                  isChecked={selectedDocuments.some((d) => d.id === doc.id)}
+                />
               ))}
             </div>
           </Accordion>
         ))}
-          <DsButton buttonViewStyle="btnContained" className={buttonstyle.btnAutoWidth +" "+styles.SaveBtn} label="Save" onClick={handledocument} />
+        <DsButton
+          buttonViewStyle="btnContained"
+          className={buttonstyle.btnAutoWidth + " " + styles.SaveBtn}
+          label="Save"
+          onClick={(e) => {
+            handledocument();
+            ClosePane(e);
+            // setSearchText("ABC"); // Clear search text
+            console.log(" Search text:", searchText);
+          }}
+        />
       </div>
     </>
   );
