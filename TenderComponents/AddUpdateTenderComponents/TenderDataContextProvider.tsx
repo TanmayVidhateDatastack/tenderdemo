@@ -39,6 +39,7 @@ class ActionStatus {
 }
 export type Document = {
   id?: number;
+  documentId?: number;
   documentName?: string;
   document?: File;
   name?: string;
@@ -217,6 +218,7 @@ export function updateDocuments(
     documentType: string,
     documentCategory: string,
     document: {
+      documentId?: number;
       name: string;
       document?: File;
     },
@@ -248,6 +250,7 @@ export function updateDocuments(
           type,
           category,
           {
+            documentId: x.id ? Number(x.id) : undefined,
             name: x.documentName || x.document?.name || "",
             document: x.document,
           },
@@ -270,6 +273,7 @@ export function updateDocuments(
           type,
           category,
           {
+            documentId: x.id ? Number(x.id) : undefined,
             name: x.documentName || x.document?.name || "",
             document: x.document,
           },
@@ -690,7 +694,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               name ||
               "",
             documentPath: documentPath || "",
-            documentId: documentId || 0,
+            documentId: documentId || document?.documentId || 0,
             data: document?.document || undefined,
           },
         ],
@@ -1449,9 +1453,9 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 paymentReceiptId: x.paymentReceiptId,
                 acknowledgementReceiptId: x.acknowledgementReceiptId,
                 fundTransferConfirmationId: x.fundTransferConfirmationId,
-               
+
               };
-              
+
             }),
           tenderDocuments:
             tenderOriginalDocuments?.map((x) => {
@@ -1937,7 +1941,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               tenderData.tenderSupplyCondition.applicableConditions?.map(
                 (ac) => ({
                   ...ac,
-                  notes:undefined,
+                  notes: undefined,
                   status: "ACTV",
                 })
               ),
