@@ -1002,7 +1002,6 @@ export default function Home() {
         onFiltersApplied={handleFiltersApplied}
         setIsQuickFilter={setIsFilterActive}
       />
-
       <ContextMenu
         id={"CreateNewActions"}
         showArrow={true}
@@ -1021,7 +1020,7 @@ export default function Home() {
               buttonColor="btnPrimary"
               buttonViewStyle="btnText"
               className={styles.MenuBtn}
-              location="/Tender/New"
+               location="/Tender/New?type=corporate"
               label="Corporate"
             />
           </div>
