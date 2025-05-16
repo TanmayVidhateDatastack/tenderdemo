@@ -216,7 +216,8 @@ const permissionsSlice = createSlice({
         state.paymentRecoveredDisable=true;
         state.recoveredNotesDisable=true;
         state.recoveredAttachFileButton=true;
-        state.disable=true
+        state.attachFileConditionButtonDisable=true;
+        state.disable=true  
 
         switch (status) {
           case "DRAFT":
