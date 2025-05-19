@@ -88,7 +88,7 @@ type Depot = {
   code: string;
 };
 export default function Home() {
-  const [data, setData] = useState<Tender[]>([]); //for table data
+  const [data, setData] = useState<Tender[]| null>(null); //for table data
   const [searchQuery, setSearchQuery] = useState(""); //for search query
   const [selectedStatus, setSelectedStatus] = useState(""); //for quickfilter
   const [advFilter, setAdvFilter] = useState<Record<string, React.ReactNode>>(
@@ -347,6 +347,7 @@ export default function Home() {
         }
       })
       .catch((error) => {
+        setData([]);
         // console.error("Error fetching orders:", error);
       });
   };
@@ -790,7 +791,7 @@ export default function Home() {
   useEffect(() => {
     // console.log("Data updated:", data);
     // if (data.length > 0) {
-    addTableData(data);
+    addTableData(data??[]);
     // }
   }, [data]);
 
@@ -848,8 +849,8 @@ export default function Home() {
         }
       >
         <div className={styles.totalCal}>
-          <DsTotalTenders data={data} />
-          <DsTotalValues data={data} />
+          <DsTotalTenders data={data??[]} />
+          <DsTotalValues data={data??[]} />
         </div>
         <div className={styles.container}>
           {" "}
@@ -869,6 +870,12 @@ export default function Home() {
                 handelRowClick(e, rowIndex);
               }}
             />
+            { tempTableData.rows.length == 0 && data != null && <div className={styles.recordNotFound}>
+
+             No Record Found!
+             
+            </div>
+            }
           </div>
           {/* {selectedRow && ( */}
             <DsTenderTableFloatingMenu

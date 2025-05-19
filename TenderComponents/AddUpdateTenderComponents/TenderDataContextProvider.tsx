@@ -408,6 +408,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       "JUSTIFICATION_APPROVE_TYPE",
       "JUSTIFICATION_REJECT_TYPE",
       "JUSTIFICATION_REVISE_TYPE",
+      "TENDER_DOCUMENT"
     ];
   }, []);
   const [metaData, setMetaData] = useState<Record<string, DsSelectOption[]>>(
@@ -1109,6 +1110,20 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             doc.data,
             doc.documentName
           ); // File/Blob object
+           formData.append(
+            `tenderDocuments[${index}].documentCategory`,
+            doc.documentCategory
+          );
+          formData.append(
+            `tenderDocuments[${index}].documentType`,
+            doc.documentType
+          );
+         
+          formData.append(
+            `tenderDocuments[${index}].documentSubType`,
+            doc.data,
+            doc.documentSubType
+          );
         }
       });
       let tenderSaveData = {
@@ -1355,6 +1370,19 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               doc.documentName
 
             ); // File/Blob object
+              formData.append(
+              `tenderDocuments[${docCount}].documentType`,
+              doc.documentType
+            );
+            formData.append(
+              `tenderDocuments[${docCount}].documentCategory`,
+              doc.documentCategory
+            );
+            formData.append(
+              `tenderDocuments[${docCount}].documentSubType`,
+              doc.data,
+              doc.documentSubType
+            );
             docCount = docCount + 1;
           }
         });
@@ -2120,6 +2148,13 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               value: item.codeValue,
               label: item.codeDescription,
             })),
+            tenderDocument: (
+              result.tenderDocument || []
+            ).map((item: { codeValue: string; codeDescription: string }) => ({
+              value: item.codeValue,
+              label: item.codeDescription,
+            })),
+            
             
             
           };
