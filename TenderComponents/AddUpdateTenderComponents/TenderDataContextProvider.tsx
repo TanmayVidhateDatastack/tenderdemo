@@ -2014,7 +2014,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 value: item.codeValue,
                 label: item.codeDescription,
               })
-
+              
             ),
             submissionMode: (result.submissionMode || []).map(
               (item: { codeValue: string; codeDescription: string }) => ({
@@ -2028,10 +2028,10 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 label: item.codeDescription,
               })
             ),
+                         
 
 
-
-
+            
             supplyPoints: (result.supplyPoint || []).map(
               (item: { codeValue: string; codeDescription: string }) => ({
                 value: item.codeValue,

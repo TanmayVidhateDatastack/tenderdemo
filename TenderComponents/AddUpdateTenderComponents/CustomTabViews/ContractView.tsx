@@ -280,8 +280,13 @@ const ContractView: React.FC<ContractViewProps> = ({
           }}
         />
       </div>
-      <div className={styles.notes}>
-        <div className={styles.title}>Supporting Notes</div>
+      <div className={styles.notes}> 
+        
+        {(status == "PARTIALLY_AWARDED") || (status == "AWARDED") ?(
+        <div className={styles.title}>Supporting Notes/Delivery Details</div>
+        ):(
+           <div className={styles.title}>Supporting Notes</div>
+        )}
         <TextArea
           onBlur={(e) => {
             updateContractDetails(
