@@ -14,9 +14,8 @@ const DocumentSelectorArea: React.FC = () => {
   }
 
   const { documentData } = documentContext;
-  const {
-    metaData
-  } = useTenderData();
+
+  const { metaData } = useTenderData();
 
   const handleRemoveDocument = (documentName: string) => {
     if (!documentContext) return;

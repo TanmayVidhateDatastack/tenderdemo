@@ -152,7 +152,6 @@ const DsAddTenderDocumentPane: React.FC = () => {
         });
 
 
-
         // Remove documents that are not in selectedDocuments
         updatedData = updatedData.map((group) => {
           return {
