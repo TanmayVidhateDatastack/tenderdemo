@@ -224,7 +224,6 @@ const permissionsSlice = createSlice({
         state.attachFileConditionButtonDisable=true;
         state.saveButtonDisabled=true;
         state.disable=true  
-
         switch (status) {
           case "DRAFT":
             switch (role) {
@@ -265,15 +264,12 @@ const permissionsSlice = createSlice({
                 state.saveButtonDisabled=false;
                 state.disable = false;
                 break;
-
               case "CHECKER":
                 break;
-
               case "HOMANAGER":
                 break;
             } 
             break;
-
           case "APPROVED": 
           case "APPROVALPENDING":
             if (role === "ACCOUNTANCE") {
@@ -286,15 +282,14 @@ const permissionsSlice = createSlice({
               state.saveButtonDisabled=false;
             }
             break;  
-
           case "LOST":  
           case "CANCELLED":
           case "AWARDED":
             if (role === "ACCOUNTANCE") {
-              state.paymentRecoveredDisable = true;  
-              state.paymentRecoverdDateDisable=true;
-              state.recoveredNotesDisable = true; 
-              state.recoveredAttachFileButton = true; 
+              state.paymentRecoveredDisable = false;  
+              state.paymentRecoverdDateDisable=false;
+              state.recoveredNotesDisable = false; 
+              state.recoveredAttachFileButton = false; 
               state.saveButtonDisabled=false;
             }
             break;
