@@ -1197,6 +1197,10 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               (x) => x.status == "ACTV"
             ),
         },
+
+    
+
+        
         tenderDocuments:
           tenderSaveDocuments?.map((x) => {
             // const newDocs=new FormData();
@@ -1482,8 +1486,9 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 fundTransferConfirmationId: x.fundTransferConfirmationId,
               };
             }),
+            
           tenderDocuments:
-            tenderOriginalDocuments?.map((x) => {
+            tenderOriginalDocuments ?.map((x) => {
               // const newDocs=new FormData();
               // newDocs.append("name",x.name);
               // newDocs.append("data",x.data as Blob);
@@ -1580,6 +1585,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               // newDocs.append("category",x.name);
               // const base64String = x.data ? await fileToBase64(x.data) : "";
               return {
+                
                 id: x.id,
                 documentName: x.documentName,
                 documentId: x.documentId,
@@ -1687,12 +1693,12 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                       // const base64String = x.data ? await fileToBase64(x.data) : "";
                       return {
                         id: x.id,
-
                         documentName: x.documentName,
                         documentId: docRes.result[x.requestId] || x.documentId,
                         documentType: x.documentType,
                         documentCategory: x.documentCategory,
                         documentSubType: x.documentSubType,
+                        
                       };
                     }) || [],
                 });
@@ -1851,6 +1857,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 id: x.id,
                 documentName: x.documentName,
                 documentId: x.documentId,
+           
                 documentType: x.documentType,
                 documentCategory: x.documentCategory,
                 documentSubType: x.documentSubType,
