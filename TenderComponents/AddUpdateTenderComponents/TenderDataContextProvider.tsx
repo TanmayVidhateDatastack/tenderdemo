@@ -1109,7 +1109,6 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             doc.data,
             doc.documentName
           ); // File/Blob object
-
            formData.append(
             `tenderDocuments[${index}].documentCategory`,
             doc.documentCategory
@@ -1369,8 +1368,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               doc.data,
               doc.documentName
             ); // File/Blob object
-
-            formData.append(
+              formData.append(
               `tenderDocuments[${docCount}].documentType`,
               doc.documentType
             );
@@ -1383,7 +1381,6 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               doc.data,
               doc.documentSubType
             );
-
             docCount = docCount + 1;
           }
         });
