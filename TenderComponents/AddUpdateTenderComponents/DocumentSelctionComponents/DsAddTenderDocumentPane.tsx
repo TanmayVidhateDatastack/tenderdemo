@@ -142,8 +142,18 @@ const DsAddTenderDocumentPane: React.FC = () => {
 
           if (existingType) {
             if (!existingType.documents.some((d) => d.document.documentName === doc.documentName)) {
+
+              const newdocs = {
+                documentName: doc.documentName,
+                documentType: doc.documentType,
+                documentCategory: "TENDER_DOCUMENT",
+                id: 0,
+                documentId: doc?.id,
+                isVisible: false,
+              } as TenderDocument;
+
               existingType.documents.push({
-                document: doc,
+                document: newdocs,
                 isVisible: false,
               });
             }
@@ -158,7 +168,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
               isVisible: false,
             } as TenderDocument;
 
-
+            console.log("New Document:", newdocs);
 
             updatedData.push({
               type: doc.documentType,

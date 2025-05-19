@@ -78,6 +78,8 @@ export const DocumentProvider: React.FC<DocumentProviderProps> = ({ children }) 
           // Object.keys(groupedDocuments).includes(x.documentType)
         ) || [];
       const document = documentData.filter((doc) => doc.type === documentType).flatMap((doc) => doc.documents.map((d) => { return { ...d.document, id: d.document.documentId } }));
+
+      console.log("Document conpro :", document);
       updateDocuments(
         document,
         typeDocuments,
@@ -89,6 +91,71 @@ export const DocumentProvider: React.FC<DocumentProviderProps> = ({ children }) 
         "TENDER_DOCUMENT"
       );
     });
+
+    // const types = Array.from(new Set(documentData.map((x) => x.type)));
+
+    // const updatedGroupedDocs = {}; // Will hold all types' documents together
+
+    // types.forEach((documentType) => {
+    //   const typeDocuments =
+    //     tenderData.tenderDocuments?.filter(
+    //       (x) =>
+    //         x.documentCategory === "TENDER_DOCUMENT" &&
+    //         x.documentType === documentType
+    //     ) || [];
+
+    //   const filteredByType = documentData.filter((doc) => doc.type === documentType);
+    //   console.log(`${documentType}: Found ${filteredByType.length} groups`);
+
+    //   const documents = filteredByType
+    //     .flatMap((doc, groupIndex) => {
+    //       console.log(` ${documentType}: group[${groupIndex}] has ${doc.documents?.length} documents`);
+    //       return (doc.documents || []).map((d, docIndex) => {
+    //         if (!d?.document?.documentId) {
+    //           console.warn(` Skipping invalid doc at [${groupIndex}][${docIndex}]`, d);
+    //           return null;
+    //         }
+
+    //         const resultDoc = {
+    //           ...d.document,
+    //           id: d.document.documentId,
+    //           documentType,
+    //           documentCategory: "TENDER_DOCUMENT",
+    //         };
+    //         console.log(` Adding doc: ${resultDoc.documentName} [${resultDoc.id}]`);
+    //         return resultDoc;
+    //       });
+    //     })
+    //     .filter((doc): doc is NonNullable<typeof doc> => doc !== null);
+
+    //   updatedGroupedDocs[documentType] = documents;
+
+    //   // Optional: update individual APIs or log
+    //   // You can also push into some API call accumulator if needed
+    // });
+
+    // console.log(" Final Mapped Grouped Docs:", updatedGroupedDocs);
+
+    // Object.entries(updatedGroupedDocs).forEach(([documentType, docs]) => {
+    //   const typeDocuments =
+    //     tenderData.tenderDocuments?.filter(
+    //       (x) =>
+    //         x.documentCategory === "TENDER_DOCUMENT" &&
+    //         x.documentType === documentType
+    //     ) || [];
+
+    //   updateDocuments(
+    //     docs as { id?: string | number; documentName?: string; document?: File }[],
+    //     typeDocuments,
+    //     removeTenderDocument,
+    //     addNewTenderDocument,
+    //     documentType,
+    //     "TENDER_DOCUMENT"
+    //   );
+    // });
+
+
+
   }, [documentData]);
 
   useEffect(() => {
@@ -118,31 +185,8 @@ export const DocumentProvider: React.FC<DocumentProviderProps> = ({ children }) 
       setDocumentData(groupedDocuments);
     }
   }, [tenderData.tenderDocuments]);
- 
 
-  //fetch documents from the server
-  useEffect(() => {
-    if (tenderData.tenderDocuments) {
-      // Group documents by type
-      const groupedDocuments = tenderData.tenderDocuments.reduce((acc: DocumentType[], doc) => {
-        // Filter out documents that are type "TENDER_DOCUMENT"
-        const { documentType } = doc;
-        if (doc.documentCategory !== "TENDER_DOCUMENT") return acc;
-        // Check if the document type already exists in the accumulator
-        const existingGroup = acc.find((group) => group.type === documentType);
-        if (existingGroup) {
-          // If it exists, push the document to the existing group's documents array
-          existingGroup.documents.push({ document: doc, isVisible: true });
-        } else {
-          // If it doesn't exist, create a new group and add the document
-          acc.push({ type: documentType, documents: [{ document: doc, isVisible: true }] });
-        }
-        //return the accumulator with the new document 
-        return acc;
-      }, []);
-      setDocumentData(groupedDocuments);
-    }
-  }, [tenderData.tenderDocuments]);
+
 
   const contextValue: DocumentContextType = {
     totalSelectedDocuments,
