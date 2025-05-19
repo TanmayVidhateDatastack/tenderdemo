@@ -58,6 +58,7 @@ type PermissionState = {
   recoveredNotesDisable:boolean;
   recoveredAttachFileButton:boolean;
   saveButtonDisabled:boolean;
+  ContractTypeDisable:boolean;
   
 };
 
@@ -118,6 +119,7 @@ const initialState: PermissionState = {
   paymentRecoverdDateDisable:true,
   recoveredAttachFileButton:true, 
   saveButtonDisabled:true,
+  ContractTypeDisable:true,
 };
 
 const permissionsSlice = createSlice({
@@ -187,6 +189,7 @@ const permissionsSlice = createSlice({
         state.lastPurchaseDateDisable = true;
         state.submissionDateDisable = true;
         state.rateContractvalidityDisable = true; 
+        state.ContractTypeDisable =true;
         state.submissionModeDisable = true;
         state.deliveryPeriodDisable = true; 
         state.extendedDeliveryPeriodDisable = true; 
@@ -235,6 +238,7 @@ const permissionsSlice = createSlice({
                 state.tenderIssueDateDisable = false;
                 state.lastPurchaseDateDisable = false;
                 state.submissionDateDisable = false;
+                state.ContractTypeDisable =false;
                 state.rateContractvalidityDisable = false;
                 state.submissionModeDisable = false;
                 state.deliveryPeriodDisable = false;
