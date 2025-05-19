@@ -25,13 +25,16 @@ const DsAddTenderDocumentPane: React.FC = () => {
   const [selectedDocuments, setSelectedDocuments] = useState<TenderDocument[]>([]);
   const [filterDocuments, setFilterDocuments] = useState(groupedDocuments);
   const [searchText, setSearchText] = useState("");
-    const [title, setTitle] = useState({});
+  const [title, setTitle] = useState({});
 
   // const [isApplyDisabled, setIsApplyDisabled] = useState(true);
 
   const {
     metaData
   } = useTenderData();
+
+
+
 
   const documentContext = useContext(DocumentContext);
 
@@ -98,7 +101,22 @@ const DsAddTenderDocumentPane: React.FC = () => {
 
     setSelectedDocuments(updatedSelectedDocuments);
 
+    const groupedDocs = Object.values(filterDocuments).flat();
+    console.log("Flat Grouped Docs:", groupedDocs);
 
+    const contextDocs = documentContext?.documentData?.flatMap(cd => cd.documents) || [];
+    console.log("Context Docs:", contextDocs);
+
+    const updatedGroupedDocuments = groupedDocs.filter((doc) =>
+      contextDocs.some((d) => {
+        // console.log(`Comparing context id ${d.document.id} with doc id ${doc.id}`);
+        return d.document.documentId === doc.id;
+      })
+    );
+
+    console.log("Updated Grouped Documents:", updatedGroupedDocuments);
+
+    setSelectedDocuments(updatedGroupedDocuments);
 
   }, [documentContext]);
 
@@ -124,8 +142,18 @@ const DsAddTenderDocumentPane: React.FC = () => {
 
           if (existingType) {
             if (!existingType.documents.some((d) => d.document.documentName === doc.documentName)) {
+
+              const newdocs = {
+                documentName: doc.documentName,
+                documentType: doc.documentType,
+                documentCategory: "TENDER_DOCUMENT",
+                id: 0,
+                documentId: doc?.id,
+                isVisible: false,
+              } as TenderDocument;
+
               existingType.documents.push({
-                document: doc,
+                document: newdocs,
                 isVisible: false,
               });
             }
@@ -140,7 +168,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
               isVisible: false,
             } as TenderDocument;
 
-
+            console.log("New Document:", newdocs);
 
             updatedData.push({
               type: doc.documentType,
@@ -151,7 +179,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
           }
         });
 
-       
+
         // Remove documents that are not in selectedDocuments
         updatedData = updatedData.map((group) => {
           return {
@@ -201,11 +229,10 @@ const DsAddTenderDocumentPane: React.FC = () => {
     setFilterDocuments(filteredDocs);
 
     // auto-open the only matching accordion
-    // if (Object.keys(filteredDocs).length === 1) {
-    //   setOpenAccordion(Object.keys(filteredDocs)[0]);
-    // }
+    if (Object.keys(filteredDocs).length === 1) {
+      setOpenAccordion(Object.keys(filteredDocs)[0]);
+    }
   };
-
 
   useEffect(() => {
     if (metaData.tenderDocument) {
@@ -219,8 +246,6 @@ const DsAddTenderDocumentPane: React.FC = () => {
       setTitle(labelMap);
     }
   }, [metaData.tenderDocument]);
- 
- 
 
   return (
     <>
@@ -253,6 +278,8 @@ const DsAddTenderDocumentPane: React.FC = () => {
                   label={doc.documentName}
                   onChange={() => handleCheckboxChange(doc)}
                   isChecked={selectedDocuments.some((d) => d.id === doc.id)}
+                // isChecked={selectedDocuments.some((d) => d.id === doc.documentId)}
+
                 />
               ))}
             </div>

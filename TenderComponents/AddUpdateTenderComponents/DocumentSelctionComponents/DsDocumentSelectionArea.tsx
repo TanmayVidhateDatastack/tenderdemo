@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import styles from "./document.module.css";
 import DocumentSelector from "@/Elements/DsComponents/dsDocumentSelector/dsDocumentSelector";
 import { DocumentContext } from "./DocumentsContextProvider";
-import { TenderDataProvider, useTenderData } from "../TenderDataContextProvider";
+import { useTenderData } from "../TenderDataContextProvider";
 // import { documents } from "@/Common/helpers/types"; // ✅ Import correct type
 
 const DocumentSelectorArea: React.FC = () => {
@@ -15,9 +15,7 @@ const DocumentSelectorArea: React.FC = () => {
 
   const { documentData } = documentContext;
 
- const {
-    metaData
-  } = useTenderData();
+  const { metaData } = useTenderData();
 
   const handleRemoveDocument = (documentName: string) => {
     if (!documentContext) return;
@@ -45,9 +43,11 @@ const DocumentSelectorArea: React.FC = () => {
   };
 
   const [totalSelectedDocuments, setTotalSelectedDocuments] = useState(0);
-    const [title, setTitle] = useState({});
+  const [title, setTitle] = useState({});
+
 
   useEffect(() => {
+    console.log("Document Data Updated:", documentData); // Debugging Log
     const totalCount = documentData.reduce(
       (acc, { documents }) => acc + documents.length,
       0
@@ -56,13 +56,10 @@ const DocumentSelectorArea: React.FC = () => {
   }, [documentData]); // Runs whenever documentData changes
 
   useEffect(() => {
-    // console.log("total selected documents : ", totalSelectedDocuments);
-  }, [totalSelectedDocuments]);
-
-    useEffect(() => {
     if (metaData.tenderDocument) {
       const labelMap = {};
-      documentData.forEach(({type}) => {
+
+      documentData.forEach(({ type }) => {
         const typeDescription = metaData.tenderDocument.find(item => item.value === type);
         if (typeDescription) {
           labelMap[type] = typeDescription.label;
@@ -70,9 +67,7 @@ const DocumentSelectorArea: React.FC = () => {
       });
       setTitle(labelMap);
     }
-  }, [metaData.tenderDocument]);
- 
- 
+  }, [documentData, metaData.tenderDocument]);
 
   return (
     <>
