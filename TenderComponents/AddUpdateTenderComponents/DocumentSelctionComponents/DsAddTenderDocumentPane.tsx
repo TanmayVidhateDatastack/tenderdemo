@@ -33,6 +33,9 @@ const DsAddTenderDocumentPane: React.FC = () => {
     metaData
   } = useTenderData();
 
+
+
+
   const documentContext = useContext(DocumentContext);
 
   useEffect(() => {
@@ -98,7 +101,22 @@ const DsAddTenderDocumentPane: React.FC = () => {
 
     setSelectedDocuments(updatedSelectedDocuments);
 
+    const groupedDocs = Object.values(filterDocuments).flat();
+    console.log("Flat Grouped Docs:", groupedDocs);
 
+    const contextDocs = documentContext?.documentData?.flatMap(cd => cd.documents) || [];
+    console.log("Context Docs:", contextDocs);
+
+    const updatedGroupedDocuments = groupedDocs.filter((doc) =>
+      contextDocs.some((d) => {
+        // console.log(`Comparing context id ${d.document.id} with doc id ${doc.id}`);
+        return d.document.documentId === doc.id;
+      })
+    );
+
+    console.log("Updated Grouped Documents:", updatedGroupedDocuments);
+
+    setSelectedDocuments(updatedGroupedDocuments);
 
   }, [documentContext]);
 
@@ -250,6 +268,8 @@ const DsAddTenderDocumentPane: React.FC = () => {
                   label={doc.documentName}
                   onChange={() => handleCheckboxChange(doc)}
                   isChecked={selectedDocuments.some((d) => d.id === doc.id)}
+                // isChecked={selectedDocuments.some((d) => d.id === doc.documentId)}
+
                 />
               ))}
             </div>
