@@ -1109,6 +1109,20 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             doc.data,
             doc.documentName
           ); // File/Blob object
+           formData.append(
+            `tenderDocuments[${index}].documentCategory`,
+            doc.documentCategory
+          );
+          formData.append(
+            `tenderDocuments[${index}].documentType`,
+            doc.documentType
+          );
+         
+          formData.append(
+            `tenderDocuments[${index}].documentSubType`,
+            doc.data,
+            doc.documentSubType
+          );
         }
       });
       let tenderSaveData = {
@@ -1355,6 +1369,19 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               doc.documentName
 
             ); // File/Blob object
+              formData.append(
+              `tenderDocuments[${docCount}].documentType`,
+              doc.documentType
+            );
+            formData.append(
+              `tenderDocuments[${docCount}].documentCategory`,
+              doc.documentCategory
+            );
+            formData.append(
+              `tenderDocuments[${docCount}].documentSubType`,
+              doc.data,
+              doc.documentSubType
+            );
             docCount = docCount + 1;
           }
         });
