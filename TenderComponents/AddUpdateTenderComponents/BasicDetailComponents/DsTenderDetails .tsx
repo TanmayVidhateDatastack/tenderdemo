@@ -71,6 +71,7 @@ const DsTenderDetails: React.FC = () => {
     extendedDeliveryPeriodDisable,
     penaltyLastDeliveryDisable,
     tenderUrlDisable,
+    ContractTypeDisable,
   } = permissions;
 
   const handleRoleFetch = async () => {
@@ -318,6 +319,7 @@ const DsTenderDetails: React.FC = () => {
           options={metaData.rateContractType || []}
           label="Contract type"
           id={"contractType"}
+          disable={ContractTypeDisable}
           selectedOption={selectedRateContractType}
           setSelectOption={(option) => {
             if (typeof option.value == "string") {
