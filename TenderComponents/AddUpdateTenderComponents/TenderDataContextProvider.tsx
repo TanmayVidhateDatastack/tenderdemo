@@ -408,6 +408,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       "JUSTIFICATION_APPROVE_TYPE",
       "JUSTIFICATION_REJECT_TYPE",
       "JUSTIFICATION_REVISE_TYPE",
+      "TENDER_DOCUMENT"
     ];
   }, []);
   const [metaData, setMetaData] = useState<Record<string, DsSelectOption[]>>(
@@ -2147,6 +2148,13 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               value: item.codeValue,
               label: item.codeDescription,
             })),
+            tenderDocument: (
+              result.tenderDocument || []
+            ).map((item: { codeValue: string; codeDescription: string }) => ({
+              value: item.codeValue,
+              label: item.codeDescription,
+            })),
+            
             
             
           };

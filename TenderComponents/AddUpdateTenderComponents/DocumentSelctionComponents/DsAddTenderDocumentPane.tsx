@@ -25,14 +25,12 @@ const DsAddTenderDocumentPane: React.FC = () => {
   const [selectedDocuments, setSelectedDocuments] = useState<TenderDocument[]>([]);
   const [filterDocuments, setFilterDocuments] = useState(groupedDocuments);
   const [searchText, setSearchText] = useState("");
+    const [title, setTitle] = useState({});
 
   // const [isApplyDisabled, setIsApplyDisabled] = useState(true);
 
   const {
-    updateTenderFee,
-    addNewTenderDocument,
-    tenderData,
-    removeTenderDocument,
+    metaData
   } = useTenderData();
 
   const documentContext = useContext(DocumentContext);
@@ -153,51 +151,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
           }
         });
 
-        // const uniqueDocumentTypes = [
-        //   ...Array.from(new Set(selectedDocuments.map((doc) => doc.documentType)))
-        // ];
-
-        // uniqueDocumentTypes.forEach((documentType) => {
-        //   const typeDocuments = tenderData.tenderDocuments?.filter(
-        //     (x) =>
-        //       x.documentCategory === "TENDER_DOCUMENT" &&
-        //       x.documentType === documentType
-        //   ) || [];
-
-        //   updateDocuments(
-        //     selectedDocuments,
-        //     typeDocuments,
-        //     removeTenderDocument,
-        //     addNewTenderDocument,
-        //     documentType,
-        //     "TENDER_DOCUMENT"
-        //   );
-        // });
-
-
-        // Object.keys(selectedDocuments).forEach((documentType) => {
-        //   const typeDocuments =
-        //     // tenderData.tenderDocuments?.filter(
-        //     tenderData.tenderDocuments?.filter(
-        //       (x) =>
-        //         x.documentCategory == "TENDER_DOCUMENT" &&
-        //         x.documentType == documentType
-        //       // x.documentType == "FDA_DOCUMENT"
-        //       // Object.keys(groupedDocuments).includes(x.documentType)
-        //     ) || [];
-        //   updateDocuments(
-        //     selectedDocuments,
-        //     typeDocuments,
-        //     removeTenderDocument,
-        //     addNewTenderDocument,
-        //     // type + "_TENDER_DOCUMENT",
-        //     // "FDA_DOCUMENT",
-        //     "TENDER_DOCUMENT",
-        //     documentType
-        //   );
-        // });
-
-
+       
         // Remove documents that are not in selectedDocuments
         updatedData = updatedData.map((group) => {
           return {
@@ -253,7 +207,20 @@ const DsAddTenderDocumentPane: React.FC = () => {
   };
 
 
-
+  useEffect(() => {
+    if (metaData.tenderDocument) {
+      const labelMap = {};
+      Object.entries(filterDocuments).forEach(([type]) => {
+        const typeDescription = metaData.tenderDocument.find(item => item.value === type);
+        if (typeDescription) {
+          labelMap[type] = typeDescription.label;
+        }
+      });
+      setTitle(labelMap);
+    }
+  }, [metaData.tenderDocument]);
+ 
+ 
 
   return (
     <>
@@ -271,7 +238,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
           <Accordion
             key={type}
             id={type}
-            title={type}
+            title={title[type] || type}
             isOpen={openAccordion === type}
             onToggle={handleAccordionToggle}
           >
