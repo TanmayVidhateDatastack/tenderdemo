@@ -75,7 +75,7 @@ const UploadFile: React.FC<UploadFileProps> = ({
         onDragOver={handleDragOver}
         onClick={() => document.getElementById(`selectfile-${id}`)?.click()}
       >
-        <div>
+        <div >
           {fileName}
         </div>
         <input
@@ -89,8 +89,7 @@ const UploadFile: React.FC<UploadFileProps> = ({
         {file && (
           <div
             style={{ width: "1em", height: "1em" }}
-            onClick={(e)=>{handleRemoveFile();
-                 e.stopPropagation(); }}
+            onClick={(e)=> {handleRemoveFile();e.stopPropagation()}  }
           >
             <IconFactory name={"crossSmall"} />
           </div>
