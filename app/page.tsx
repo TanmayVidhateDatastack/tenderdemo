@@ -771,6 +771,7 @@ export default function Home() {
         return { e, rowIndex, statuscell, tenderId };
       }
     });
+    
   };
   const handleRowDoubleClick = (
     e: React.MouseEvent<HTMLElement>,
