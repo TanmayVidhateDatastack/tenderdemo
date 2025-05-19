@@ -597,7 +597,7 @@ export const DSTendrFooter: React.FC = ({ }) => {
             // disable={splitButtonDisableState}
             disable={saveButtonDisabled}
           >
-            Save
+            Save 
           </DsSplitButton>
         ) : (
           <DsButton
