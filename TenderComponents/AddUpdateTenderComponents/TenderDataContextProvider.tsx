@@ -1668,9 +1668,9 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           tenderData?.tenderDocuments &&
           tenderData.tenderDocuments.length > 0 &&
           (tenderData.tenderDocuments ?? []).filter((x) => x.id == undefined).length > 0 &&
-          (tenderData?.tenderDocuments?.filter((x) => x.documentId == 0)?.length ?? 0) < 0
+          (tenderData?.tenderDocuments?.filter((x) => x.documentId == 0)?.length ?? 0) > 0
         ) {
-          await fetch(saveDocumentUrl(tenderData.id ?? 0), {
+          await fetch(saveDocumentUrl(tenderData.id ?? 0), { 
             method: "POST",
             body: formData,
           }).then((result) => {
