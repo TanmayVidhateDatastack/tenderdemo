@@ -645,7 +645,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                       x.documentCategory == type &&
                       x.documentType == type + "_INSTRUCTION"
                     // &&
-                    // x.id !== undefined
+                    // x.id !== undefined 
                   )
                   .map((x) => {
                     return {
@@ -673,10 +673,10 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   type
                 );
               }}
-            ></DsCsvUpload>
-          </div>
-        </>
-      )}
+            ></DsCsvUpload> 
+          </div> 
+        </> 
+      )} 
     </>
   );
 };
