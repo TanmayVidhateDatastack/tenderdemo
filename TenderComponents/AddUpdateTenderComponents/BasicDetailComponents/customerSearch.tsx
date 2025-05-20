@@ -11,7 +11,6 @@ import { TenderData } from "../TenderDataContextProvider";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import { useAppSelector } from "@/Redux/hook/hook";
 import { RootState } from "@/Redux/store/store";
-
 //  interface CustomerSearchProps {
 //   orderData: TenderData | null;
 //   setSelectedCustomer?: Dispatch<SetStateAction<customer | undefined>>;

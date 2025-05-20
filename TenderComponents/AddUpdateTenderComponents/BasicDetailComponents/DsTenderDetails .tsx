@@ -233,7 +233,7 @@ const DsTenderDetails: React.FC = () => {
           containerClasses={styles.fields}
           initialValue={tenderData.tenderNumber}
           maxLength={50}
-          label="Tender number"
+          label="Tender Number"
           inputType="alphaNumeric"
           // placeholder="Please Type Here"
           onBlur={(e) =>
@@ -247,7 +247,7 @@ const DsTenderDetails: React.FC = () => {
         <DsSingleSelect
           containerClasses={styles.fields}
           options={metaData.tenderType || []}
-          label="Tender type"
+          label="Tender Type"
           id={"tenderType"}
           selectedOption={selectedTenderType}
           setSelectOption={(option) => {
@@ -274,7 +274,7 @@ const DsTenderDetails: React.FC = () => {
             }
           }}
           placeholder="DD/MM/YYYY"
-          label="Tender issue date"
+          label="Tender Issue Date"
           disable={tenderIssueDateDisable}
         />
         <DsDatePicker
@@ -294,7 +294,7 @@ const DsTenderDetails: React.FC = () => {
             }
           }}
           placeholder="DD/MM/YYYY"
-          label="Last date of purchasing"
+          label="Last Date of Purchasing"
           disable={lastPurchaseDateDisable}
         />
         <DsDatePicker
@@ -312,13 +312,13 @@ const DsTenderDetails: React.FC = () => {
             }
           }}
           placeholder="DD/MM/YYYY"
-          label="Submission date"
+          label="Submission Date"
           disable={submissionDateDisable}
         />
         <DsSingleSelect
           containerClasses={styles.fields}
           options={metaData.rateContractType || []}
-          label="Contract type"
+          label="Contract Type"
           id={"contractType"}
           disable={ContractTypeDisable}
           selectedOption={selectedRateContractType}
@@ -336,7 +336,7 @@ const DsTenderDetails: React.FC = () => {
             maxLength={6}
             initialValue={tenderData.rateContractValidity}
             inputType="positiveInteger"
-            label="Rate contract validity"
+            label="Rate Contract Validity"
             onBlur={(e) =>
               updateTenderData(
                 "rateContractValidity",
@@ -352,7 +352,7 @@ const DsTenderDetails: React.FC = () => {
           selectedOption={selectedSubmissionMode}
           options={metaData.submissionMode || []}
           // type={"single"}
-          label="Submission mode"
+          label="Submission Mode"
           id={"submissionMode"}
           setSelectOption={(option) => {
             if (typeof option.value == "string") {
@@ -366,7 +366,7 @@ const DsTenderDetails: React.FC = () => {
           initialValue={tenderData.deliveryPeriod?.toString()}
           maxLength={5}
           inputType="positiveInteger"
-          label={"Delivery period (In days)"}
+          label={"Delivery Period (In days)"}
           onBlur={(e) =>
             updateTenderData(
               "deliveryPeriod",
@@ -380,7 +380,7 @@ const DsTenderDetails: React.FC = () => {
           initialValue={tenderData.extendedDeliveryPeriod?.toString()}
           maxLength={5}
           inputType="positiveInteger"
-          label={"Extended delivery period (In days)"}
+          label={"Extended Delivery Period (In days)"}
           onBlur={(e) =>
             updateTenderData(
               "extendedDeliveryPeriod",
@@ -394,7 +394,7 @@ const DsTenderDetails: React.FC = () => {
           containerClasses={styles.fields}
           maxLength={5}
           initialValue={tenderData.lateDeliveryPenalty?.toString()}
-          label="Penalty for late delivery %"
+          label="Penalty for Late Delivery %"
           inputType="positive"
           iconEnd={<pre>{" %"}</pre>}
           onBlur={(e) =>
@@ -409,7 +409,7 @@ const DsTenderDetails: React.FC = () => {
           containerClasses={styles.fields}
           maxLength={2000}
           initialValue={tenderData.tenderUrl}
-          label="Tender site/url"
+          label="Tender Site/Url"
           onBlur={(e) =>
             updateTenderData("tenderUrl", (e.target as HTMLInputElement).value)
           }
