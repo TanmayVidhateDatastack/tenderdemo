@@ -57,19 +57,19 @@ const DsTenderIdPage: React.FC<{
   const [isCsvWhite, setIsCsvWhite] = useState(false);
   const [isLatestVersion, setIsLatestVersion] = useState(false);
   const [orderId, setOrderId] = useState<string>(paramOrderId?.toString());
-  const appTitle = useRef<string>("New");
+  const [appTitle, setAppTitle] = useState<string>("New");
   const dispatch = useAppDispatch<AppDispatch>();
   const userRole = useAppSelector((state) => state.user);
   const version = 1;
 
   // get the type value from URL
-   const searchParams = useSearchParams();
-  const type = searchParams.get("type") || "institutional" ; 
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type") || "institutional";
 
   const [tabs, setTabs] = useState<tab[]>([
     { tabId: "0", tabName: "Basic Details" },
   ]);
- 
+
 
   const [displayFlag, setDisplayFlag] = useState<"New" | "Existing">(
     "Existing"
@@ -140,7 +140,7 @@ const DsTenderIdPage: React.FC<{
     // console.log("orderId", orderId);
     if (orderId?.toString().toLowerCase() == "new") {
       setDisplayFlag("New");
-      appTitle.current = "New Tender";
+      setAppTitle("New Tender");
     } else if (Number(orderId) > 0) {
       setDisplayFlag("Existing");
       if (
@@ -208,15 +208,17 @@ const DsTenderIdPage: React.FC<{
         setTabId(`v${latestVersion}`);
       }
     }
-    if (tenderDataCopy.id) {
-      appTitle.current =
-        tenderDataCopy.tenderNumber +
-        " ( " +
-        tenderDataCopy.tenderDetails.customerName +
-        " )";
-    }
-    // };
-  }, [tenderDataCopy, displayFlag]);
+    
+      if (tenderDataCopy.id) {
+        setAppTitle( 
+          tenderData.tenderNumber +
+          " ( " +
+          tenderData.tenderDetails.customerName +
+          " )"
+        );
+      }
+  }, [tenderDataCopy, displayFlag,tenderData.tenderDetails.customerName,tenderData.tenderNumber]); 
+
   useEffect(() => {
     const version = Number(selectedTabId.split("v")[1]);
 
@@ -248,7 +250,7 @@ const DsTenderIdPage: React.FC<{
       <DocumentProvider>
         <DsApplication
           selectedTabId={selectedTabId}
-          appTitle={appTitle.current}
+          appTitle={appTitle}
           appMenu={
             <>
               {/* { selectedTabId === `v${rev.version}` && (
@@ -386,11 +388,10 @@ const DsTenderIdPage: React.FC<{
                 {
                   <>
                     <DsStatusIndicator
-                      label={`${
-                        displayFlag == "Existing"
+                      label={`${displayFlag == "Existing"
                           ? tenderData?.status
                           : DsStatus.DRFT
-                      }`}
+                        }`}
                       className={styles.statusIndicator}
                       type="user_defined"
                       id="state"
@@ -493,8 +494,8 @@ const DsTenderIdPage: React.FC<{
                       tenderData.status == "PARTIALLY_AWARDED" ||
                       tenderData.status == "LOST" ||
                       tenderData.status == "CANCELLED") && (
-                      <ContractView status={tenderData.status} />
-                    )}
+                        <ContractView status={tenderData.status} />
+                      )}
                   </TabView>
                 </>
               )}

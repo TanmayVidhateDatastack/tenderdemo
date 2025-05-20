@@ -11,6 +11,7 @@ import { TenderData } from "../TenderDataContextProvider";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import { useAppSelector } from "@/Redux/hook/hook";
 import { RootState } from "@/Redux/store/store";
+
 //  interface CustomerSearchProps {
 //   orderData: TenderData | null;
 //   setSelectedCustomer?: Dispatch<SetStateAction<customer | undefined>>;
@@ -49,7 +50,7 @@ const CustomerSearch: React.FC<{
     const [customerInputValue, setCustomerInputValue] = useState(customer ?? "");
     const [customerSearchKey, setCustomerSearchKey] = useState(0);
 
-    const [selectedAddress, setSelectedAddress] = useState<string>(""); // Track selected address
+    const [selectedAddress, setSelectedAddress] = useState<string>(""); 
     const permissions = useAppSelector((state: RootState) => state.permissions);
     const { disable } = permissions;
 
@@ -149,5 +150,5 @@ const CustomerSearch: React.FC<{
     );
   }
 );
-
+ 
 export default CustomerSearch;
