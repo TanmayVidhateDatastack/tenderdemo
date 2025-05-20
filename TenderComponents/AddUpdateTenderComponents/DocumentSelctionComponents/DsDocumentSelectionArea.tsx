@@ -3,6 +3,7 @@ import styles from "./document.module.css";
 import DocumentSelector from "@/Elements/DsComponents/dsDocumentSelector/dsDocumentSelector";
 import { DocumentContext } from "./DocumentsContextProvider";
 import { useTenderData } from "../TenderDataContextProvider";
+import { downloadDocumentUrl } from "@/Common/helpers/constant";
 // import { documents } from "@/Common/helpers/types"; // ✅ Import correct type
 
 const DocumentSelectorArea: React.FC = () => {
@@ -15,7 +16,7 @@ const DocumentSelectorArea: React.FC = () => {
 
   const { documentData } = documentContext;
 
-  const { metaData } = useTenderData();
+  const { metaData, tenderData } = useTenderData();
 
   const handleRemoveDocument = (documentName: string) => {
     if (!documentContext) return;
@@ -69,6 +70,64 @@ const DocumentSelectorArea: React.FC = () => {
     }
   }, [documentData, metaData.tenderDocument]);
 
+
+
+  const handleDownloadDocument = (type, docId) => {
+    const doc = tenderData.tenderDocuments?.find(
+      (x) =>
+        x.documentCategory === "TENDER_DOCUMENT" &&
+        x.documentType === type &&
+        x.documentId === docId
+    );
+
+    if (!doc) {
+      console.log("Document not found for ID:", docId);
+      return;
+    }
+
+    // return { fileDownloadHref: downloadDocumentUrl(tenderData.id, doc.id) };
+
+    const fileDownloadHref = downloadDocumentUrl(tenderData.id, doc.id);
+
+    const link = document.createElement("a");
+    link.href = fileDownloadHref;
+    link.download = doc.documentName || `Document_${doc.id}`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+
+  // const handleDownloadDocument = (type, e) => {
+  //   const target = e.target.value;
+  //   console.log("e target :", e); // Debugging Log
+  //   const documentsToDownload =
+  //     tenderData.tenderDocuments?.filter(
+  //       (x) =>
+  //         x.documentCategory === "TENDER_DOCUMENT" &&
+  //         x.documentType === type
+  //     ).map((x) => {
+  //       return {
+  //         ...x,
+  //         fileDownloadHref: downloadDocumentUrl(tenderData.id, x.id),
+  //       };
+  //     }) || [];
+
+  //   console.log("Documents to Download:", documentsToDownload);
+
+  //   // Programmatically trigger downloads
+  //   documentsToDownload.forEach((doc) => {
+  //     const link = document.createElement("a");
+  //     link.href = doc.fileDownloadHref;
+  //     link.download = doc.documentName || `Document_${doc.documentId}`; // fallback filename
+  //     document.body.appendChild(link);
+  //     link.click();
+  //     document.body.removeChild(link);
+  //   });
+  // };
+
+
+
   return (
     <>
       {documentData.map(({ type, documents }) =>
@@ -79,6 +138,19 @@ const DocumentSelectorArea: React.FC = () => {
               headerNumber={documents.length.toString()}
               initialDocuments={documents.map((x) => x.document.documentName)}
               handleOnRemoveClick={(docName) => handleRemoveDocument(docName)}
+              // onClick={(docName) => {
+              //   const docObj = documents.find((x) => x.document.documentName === docName);
+              //   if (!docObj) return;
+
+              //   handleDownloadDocument(type, docObj.document.documentId);
+              // }}
+              onClick={(docName) => {
+                const match = documents.find(
+                  (x) => x.document.documentName === docName
+                );
+                if (!match) return;
+                handleDownloadDocument(type, match.document.documentId);
+              }}
             />
           </div>
         ) : null
