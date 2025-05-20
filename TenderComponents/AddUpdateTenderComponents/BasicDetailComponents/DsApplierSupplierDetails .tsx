@@ -292,7 +292,7 @@ appliedByDisable,suppliedDisable,depotDisable,stockistNameDisable,stockistDiscou
         <DsTextField
           containerClasses={styles.fields}
           initialValue={tenderData.supplierName}
-          label="Stockist / Liasioner name"
+          label="Stockist / Liasioner Name"
           inputType="alphaNumeric"
           // placeholder="Please type here"
           onBlur={(e) =>
@@ -309,7 +309,7 @@ appliedByDisable,suppliedDisable,depotDisable,stockistNameDisable,stockistDiscou
           initialValue={tenderData.supplierDiscount?.toString()}
           inputType="positive"
           maxLength={5}
-          label="Stockist / Liasioner discount %"
+          label="Stockist / Liasioner Discount %"
           iconEnd={<pre>{" %"}</pre>}
           // placeholder="Please type here"
           onBlur={(e) =>
