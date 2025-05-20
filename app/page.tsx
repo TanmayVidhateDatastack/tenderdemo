@@ -726,12 +726,12 @@ export default function Home() {
   };
 
   const router = useRouter();
-  const goTo = (tenderId: number, status?: string) => {
+  const goTo = (tenderId: number, status?: string) => { 
     const location = `/Tender/${tenderId}`;
     if (status) sessionStorage.setItem("tenderStatus", status);
-    else {
+    else { 
       const storedStatus = sessionStorage.getItem("tenderStatus");
-      if (storedStatus) {
+      if (storedStatus) { 
         sessionStorage.removeItem("tenderStatus");
       }
     }
