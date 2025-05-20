@@ -140,7 +140,7 @@ const DsSupplyDetails: React.FC = () => {
             options={metaData.eligibility||[]}
             disable={eligibilityDisable}
             label="Eligibility"
-            placeholder={"Please search and select here"}
+            placeholder={"Please select here"}
             id={"eligibility"}
             setSelectOptions={(options) => {
               updateSupplyCondition(

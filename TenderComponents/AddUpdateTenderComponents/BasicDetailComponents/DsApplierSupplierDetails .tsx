@@ -275,7 +275,7 @@ appliedByDisable,suppliedDisable,depotDisable,stockistNameDisable,stockistDiscou
           options={formatedDepot}
           // type="multi"
           label="Depot"
-          placeholder={"Please search or select here"} 
+          placeholder={"Please select here"} 
           id={"depot"}
           setSelectOptions={(options) => {
             const shipIds = options.reduce<number[]>((acc, option) => {
