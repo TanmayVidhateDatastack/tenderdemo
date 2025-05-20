@@ -221,10 +221,9 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
       if (refundValue) {
         const option = refund.find((x) => x.value == refundValue);
         if (option) setSelectedRefund(option);
-        // console.log("Fetched Notes Values are", tenderData.tenderFees.find((x) => x.feesType == type)?.instructionNotes);
+     // console.log("Fetched Notes Values are", tenderData.tenderFees.find((x) => x.feesType == type)?.instructionNotes);
       }
     }
-
     const paidByvalue = tenderData.tenderFees.find(
       (x) => x.feesType == type
     )?.paidBy;
@@ -239,7 +238,6 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     mode,
     refund,
   ]);
-
   return (
     <>
       {/* <div> */}
@@ -288,7 +286,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
         <div className={eleStyles.inputDetails}>
           <div className={styles.fields}>
             <DsMultiSelect
-              label="Add document type"
+              label="Add Document Type"
               containerClasses={styles.feeFields}
               id={id + "Documents"}
               options={optionlist || []}
@@ -326,7 +324,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               }
               maxDate={new Date()}
               placeholder="DD/MM/YYYY"
-              label="payment Date"
+              label="Payment Date"
               setDateValue={(date) => {
                 if (date instanceof Date) {
                   updateTenderFee(type, "paymentDate", getTodayDate(date));
@@ -597,7 +595,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 }
                 maxDate={new Date()}
                 placeholder="DD/MM/YYYY"
-                label="payment Date"
+                label="Payment Date"
                 setDateValue={(date) => {
                   if (date instanceof Date) {
                     updateTenderFee(
@@ -647,7 +645,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                       x.documentCategory == type &&
                       x.documentType == type + "_INSTRUCTION"
                     // &&
-                    // x.id !== undefined
+                    // x.id !== undefined 
                   )
                   .map((x) => {
                     return {
@@ -675,10 +673,10 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   type
                 );
               }}
-            ></DsCsvUpload>
-          </div>
-        </>
-      )}
+            ></DsCsvUpload> 
+          </div> 
+        </> 
+      )} 
     </>
   );
 };

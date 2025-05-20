@@ -12,3 +12,4 @@ services:
       - ./logs:/app\logs:rw
                             
                                                    
+ 

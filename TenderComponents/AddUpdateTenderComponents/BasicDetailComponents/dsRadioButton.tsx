@@ -1,6 +1,5 @@
 import React from "react";
 import styles from "./dsRadioButton.module.css";
-
 type RadioButtonProps = {
   id: string;
   label: string;

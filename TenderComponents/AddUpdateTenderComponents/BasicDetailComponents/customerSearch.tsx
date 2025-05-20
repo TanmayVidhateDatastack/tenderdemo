@@ -4,14 +4,13 @@ import {
   getAllCustomerLocationsURL,
 } from "@/Common/helpers/constant";
 import { customer, datalistOptions, location } from "@/Common/helpers/types";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import React from "react";
 import DsSearchComponent from "@/Elements/DsComponents/DsSearch/searchComponent";
 import { TenderData } from "../TenderDataContextProvider";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import { useAppSelector } from "@/Redux/hook/hook";
 import { RootState } from "@/Redux/store/store";
-
 //  interface CustomerSearchProps {
 //   orderData: TenderData | null;
 //   setSelectedCustomer?: Dispatch<SetStateAction<customer | undefined>>;
@@ -47,12 +46,18 @@ const CustomerSearch: React.FC<{
   ({ customer, disabled, updateTenderData, setCustomerLocations }) => {
     const [customers, setCustomers] = useState<datalistOptions[]>();
     const [selectedCustomer, setSelectedCustomer] = useState<number>();
+    const [customerInputValue, setCustomerInputValue] = useState(customer ?? "");
+    const [customerSearchKey, setCustomerSearchKey] = useState(0);
+
     const [selectedAddress, setSelectedAddress] = useState<string>(""); // Track selected address
     const permissions = useAppSelector((state: RootState) => state.permissions);
     const { disable } = permissions;
+
+
     async function setSelectedOptions(option: datalistOptions): Promise<void> {
       const selectedCustomerId = Number(option.id);
       setSelectedCustomer(selectedCustomerId);
+      setCustomerInputValue(option.value ?? "");
       if (updateTenderData) {
         updateTenderData("customerId", selectedCustomerId);
         updateTenderData(
@@ -60,6 +65,7 @@ const CustomerSearch: React.FC<{
           option.attributes.name || ""
         );
       }
+
       setSelectedAddress("");
 
       try {
@@ -82,12 +88,23 @@ const CustomerSearch: React.FC<{
           }));
           setCustomerLocations?.(formattedAddresses);
         } else {
-          console.error("Invalid API response:", data);
           setCustomerLocations?.([]);
         }
       } catch (error) {
-        console.error("Error fetching customer details:", error);
         setCustomerLocations?.([]);
+      }
+    }
+    function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+      const val = e.target.value;
+      setCustomerInputValue(val);
+
+      if (val.trim() === "") {
+        // If user cleared the field manually
+        updateTenderData?.("customerId", 0);
+        updateTenderData?.("tenderDetails.customerName", "");
+        setCustomerLocations?.([]);
+        setSelectedCustomer(undefined);
+        setCustomerSearchKey((prev) => prev + 1); // Force re-mount
       }
     }
 
@@ -108,19 +125,26 @@ const CustomerSearch: React.FC<{
         setCustomers(customers);
       }
     }
+    useEffect(() => {
+      if (customer) {
+        setCustomerInputValue(customer);
+      }
+    }, [customer]);
 
     return (
       <DsSearchComponent
+        key={customerSearchKey}
         containerClasses={styles.fields}
         disable={disable || disabled}
         id="customerSearch"
-        initialValue={customer}
+        initialValue={customerInputValue}
         dataListId="customerSearchDatalist"
         label={"Search Customer"}
         options={customers || undefined}
         setOptions={setOptions}
         setSearchUrl={(searchTerm: string) => searchCustomerURL + searchTerm}
         setSelectedOption={setSelectedOptions}
+        onChange={handleInputChange}
       />
     );
   }
