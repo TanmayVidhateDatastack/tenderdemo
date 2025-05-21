@@ -157,7 +157,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
                 height: "1.125em",
                 position: "relative",
               }}
-            >
+            > 
               <Image
                 src={searchicon}
                 layout="fill"
