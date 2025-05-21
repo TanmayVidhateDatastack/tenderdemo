@@ -418,7 +418,7 @@ export const DSTendrFooter: React.FC = ({ }) => {
       dispatch(setVisibilityByRole(role));
       console.log("Role=", role);
 
-      if (role === "ACCOUNTANCE") {
+      if (role === "ACCOUNTANCE" || role === "FINANCE") {
         setContextContext(
           <DsButton
             label="Submit Receipt"
@@ -663,7 +663,7 @@ export const DSTendrFooter: React.FC = ({ }) => {
       <Toaster
         id={"toaster1"}
         message={
-          role === "ACCOUNTANCE"
+          role === "ACCOUNTANCE" || role === "FINANCE"
             ? "The Data has been Submitted by Review "
             : role === "MAKER"
               ? "The receipt has been submitted successfully"
