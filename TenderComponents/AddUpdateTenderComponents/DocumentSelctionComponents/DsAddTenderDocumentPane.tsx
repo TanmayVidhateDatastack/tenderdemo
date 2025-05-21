@@ -62,6 +62,8 @@ const DsAddTenderDocumentPane: React.FC = () => {
         );
 
         setGroupedDocuments(grouped);
+        documentContext?.setFetchedDocuments(grouped);
+
       } else {
         console.error("Error fetching data: ", res.message || "Unknown error");
       }

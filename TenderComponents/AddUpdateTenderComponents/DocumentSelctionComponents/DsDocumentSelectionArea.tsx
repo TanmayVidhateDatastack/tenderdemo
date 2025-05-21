@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import styles from "./document.module.css";
 import DocumentSelector from "@/Elements/DsComponents/dsDocumentSelector/dsDocumentSelector";
-import { DocumentContext } from "./DocumentsContextProvider";
+import { DocumentContext, DocumentType } from "./DocumentsContextProvider";
 import { useTenderData } from "../TenderDataContextProvider";
 import { downloadDocumentUrl } from "@/Common/helpers/constant";
 // import { documents } from "@/Common/helpers/types"; // ✅ Import correct type
@@ -38,14 +38,52 @@ const DocumentSelectorArea: React.FC = () => {
       const updatedSelection = prev.filter(
         (d) => d.document.documentName !== documentName
       );
-      // console.log("Updated selectedDocuments:", updatedSelection); // Debugging Log
       return updatedSelection;
     });
   };
 
+  // const handleRemoveDocument = (documentName: string) => {
+  //   if (!documentContext) return;
+
+  //   console.log(" Removing document:", documentName);
+
+  //   //  Step 1: Update documentData functionally
+  //   documentContext.setDocumentData((prevData) => {
+  //     console.log(" Before Remove - documentData:", prevData);
+
+  //     const updatedData = prevData
+  //       .map((group) => ({
+  //         ...group,
+  //         documents: group.documents.filter(
+  //           (d) => d.document.documentName !== documentName
+  //         ),
+  //       }))
+  //       .filter((group) => group.documents.length > 0); // Remove groups with no documents
+
+  //     console.log(" After Remove - documentData:", updatedData);
+  //     return updatedData;
+  //   });
+
+  //   //  Step 2: Update selectedDocuments functionally
+  //   documentContext.setSelectedDocuments((prevSelected) => {
+  //     const updatedSelection = prevSelected.filter(
+  //       (d) => d.document.documentName !== documentName
+  //     );
+
+  //     console.log("Updated selectedDocuments:", updatedSelection);
+  //     return updatedSelection;
+  //   });
+  // };
+
+
+
   const [totalSelectedDocuments, setTotalSelectedDocuments] = useState(0);
   const [title, setTitle] = useState({});
+  const [updatedDocumentsData, setUpdatedDocumentData] = useState<DocumentType[]>([]);
 
+  useEffect(() => {
+    setUpdatedDocumentData(documentData);
+  }, [documentData]);
 
   useEffect(() => {
     console.log("Document Data Updated:", documentData); // Debugging Log
@@ -155,6 +193,28 @@ const DocumentSelectorArea: React.FC = () => {
           </div>
         ) : null
       )}
+
+      {/*{updatedDocumentsData.map(({ type, documents }) =>
+        documents.length > 0 ? (
+          <div key={`${type}-${documents.map(d => d.document.documentName).join('-')}`} className={styles.documentsDivs}>
+            <DocumentSelector
+              key={`${type}-${documents.map(d => d.document.documentName).join('-')}`}
+              headerTitle={title[type] || type}
+              headerNumber={documents.length.toString()}
+              initialDocuments={documents.map((x) => x.document.documentName)}
+              handleOnRemoveClick={(docName) => handleRemoveDocument(docName)}
+              onClick={(docName) => {
+                const match = documents.find(
+                  (x) => x.document.documentName === docName
+                );
+                if (!match) return;
+                handleDownloadDocument(type, match.document.documentId);
+              }}
+            />
+          </div>
+        ) : null
+      )}*/}
+
     </>
   );
 };
