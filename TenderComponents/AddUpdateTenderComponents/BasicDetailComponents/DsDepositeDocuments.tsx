@@ -62,10 +62,11 @@ const DsDepositeDocuments: React.FC = () => {
       setPaymentCheckVisible(true);
     }
     if (
-      role === "ACCOUNTANCE" &&
-      (tenderData.status === "AWARDED" ||
-        tenderData.status === "LOST" ||
-        tenderData.status === "CANCELLED")
+      role === "ACCOUNTANCE" ||
+      (role === "FINANCE" &&
+        (tenderData.status === "AWARDED" ||
+          tenderData.status === "LOST" ||
+          tenderData.status === "CANCELLED"))
     ) {
       setrecoveryPaymentVisible(true);
     } else {
@@ -261,7 +262,7 @@ const DsDepositeDocuments: React.FC = () => {
           />
         </div>
       </div>
-      {(metaData.feesType || []).map((deposit) => {
+      {/* {(metaData.feesType || []).map((deposit) => {
         if (typeof deposit.value == "string")
           return (
             feeVisibility[deposit.value] && (
@@ -281,7 +282,45 @@ const DsDepositeDocuments: React.FC = () => {
               </div>
             )
           );
+      })} */}
+      {(metaData.feesType || []).map((deposit) => {
+        if (typeof deposit.value !== "string") return null;
+
+        const selectedFee = tenderData.tenderFees.find(
+          (fee) => fee.feesType === deposit.value
+        );
+
+        const selectedMode = selectedFee?.paymentMode || "";
+
+        const isBankGuarantee = selectedMode === "BANK_GUARANTEE";
+
+        if (
+          role === "ACCOUNTANCE" &&
+          (deposit.value === "TENDER_EMD" || deposit.value === "TENDER_PSD")
+        ) {
+          if (!isBankGuarantee) return null;
+        }
+
+        return (
+          feeVisibility[deposit.value] && (
+            <div className={styles.emdContainer2} key={deposit.value}>
+              <DsFeesDocument
+                optionlist={documentTypeOptions[deposit.value]}
+                type={deposit.value.toString()}
+                title={deposit.label}
+                id={deposit.value + "DocumentView"}
+                mode={documentTypeModes[deposit.value]}
+                paidBy={paidBy}
+                downloadVisible={true}
+                refund={refund}
+                completedpayment={paymentCheckVisible}
+                recoverycheckvisibible={recoveryPaymentVisible}
+              />
+            </div>
+          )
+        );
       })}
+
       <ContextMenu
         id={contextMenuId}
         className={styles.applicableDeposite}
