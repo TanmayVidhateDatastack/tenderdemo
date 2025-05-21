@@ -146,7 +146,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
     <>
       {tenderDatalistVisible && (
         <DsTextField
-          placeholder="Search Tender by Id, Name & Value"
+          placeholder="Search Tender by Id or Name "
           id="userSelect"
           disable={false}
           initialValue=""
@@ -157,7 +157,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
                 height: "1.125em",
                 position: "relative",
               }}
-            >
+            > 
               <Image
                 src={searchicon}
                 layout="fill"

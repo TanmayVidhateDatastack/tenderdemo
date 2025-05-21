@@ -67,9 +67,9 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
             disabled={attachFileConditionButtonDisable}/>}
             previouslySelectedFile={
               tenderData.tenderDocuments?.filter(
-                (x) =>
-                  x.documentType == "TENDER_SUPPLY_CONDITION" &&
-                  x.documentCategory == type &&
+                (x) => 
+                  x.documentType == type &&
+                  x.documentCategory == "TENDER_SUPPLY_CONDITION" &&
                   x.id !== undefined
               ) || []
             }
@@ -77,17 +77,17 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
               const typeDocuments =
                 tenderData.tenderDocuments?.filter(
                   (x) =>
-                    x.documentType == "TENDER_SUPPLY_CONDITION" &&
-                    x.documentCategory == type
+                    x.documentType == type &&
+                    x.documentCategory == "TENDER_SUPPLY_CONDITION"
                 ) || [];
-              // console.log("updateDocuments",files);
+              // console.log("updateDocuments",files); 
               updateDocuments(
                 files,
                 typeDocuments,
                 removeTenderDocument,
                 addNewTenderDocument,
+                type,
                 "TENDER_SUPPLY_CONDITION",
-                type
               );
               
             }}
