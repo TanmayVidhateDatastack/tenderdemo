@@ -172,6 +172,13 @@ const permissionsSlice = createSlice({
           state.paymentRecoveryVisible =true;
           state.disable = true;
           break;
+        case "FINANCE": 
+          state.tenderDatalistVisible = true;
+          state.filterButtonVisible = true;
+          state.paymentCompletedVisible =true;
+          state.paymentRecoveryVisible =true;
+          state.disable = true;
+          break;
         default:
           break;
       }
@@ -276,7 +283,7 @@ const permissionsSlice = createSlice({
             break;
           case "APPROVED": 
           case "APPROVALPENDING":
-            if (role === "ACCOUNTANCE") {
+            if (role === "ACCOUNTANCE"|| role === "FINANCE") {
               state.paymentcompletedDisable = false;
               state.addDocumentTypeSlectDisable=false,
               state.addDocumentTypeButtonDisable=false,
@@ -289,7 +296,7 @@ const permissionsSlice = createSlice({
           case "LOST":  
           case "CANCELLED":
           case "AWARDED":
-            if (role === "ACCOUNTANCE") {
+            if (role === "ACCOUNTANCE" || role === "FINANCE") {
               state.paymentRecoveredDisable = false;  
               state.paymentRecoverdDateDisable=false;
               state.recoveredNotesDisable = false; 

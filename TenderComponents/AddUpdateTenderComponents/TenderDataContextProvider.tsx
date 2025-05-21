@@ -1647,7 +1647,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             // status.toLowerCase() == DsStatus.PAWRD.toLowerCase() ||
             status.toLowerCase() == DsStatus.LOST.toLowerCase() ||
             status.toLowerCase() == DsStatus.CNCL.toLowerCase()) &&
-          role === "ACCOUNTANCE"
+          role === "ACCOUNTANCE" || role === "FINANCE"
         ) {
           url = updatePaymentUrl(tenderData.id);
           dataToSendTenderCopy = stripReadOnlyProperties({

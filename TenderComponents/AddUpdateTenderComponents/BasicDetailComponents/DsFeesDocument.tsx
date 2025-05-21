@@ -294,6 +294,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 setSelectedOptions(options);
                 console.log("Selected options:", options);
               }}
+              disableScroll={true}
             >
               <div className={styles.addBtn}>
                 <DsButton
@@ -333,10 +334,10 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             />
           </div>
         </div>
-        {selectedcheckbox &&
+        {/* {selectedcheckbox &&
           selectedOptions.map((option, index) => (
             <UploadFile
-              key={`upload-${index}`}
+                 key={`upload-${type}-${option.value}-${index}`}
               uploadLabel={`Upload ${option.label} here `}
               id={typeof option.value === "string" ? option.value : ""}
               onSelectedFileChange={(files) => {
@@ -352,6 +353,31 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   removeTenderDocument,
                   addNewTenderDocument,
                   type + "_UPLOADINSTRUCTION",
+                  type
+                );
+              }}
+            />
+          ))} */}
+     {selectedcheckbox &&
+          selectedOptions.map((option, index) => (
+            <UploadFile
+              key={`upload-${type}-${option.value}-${index}`}
+              uploadLabel={`Upload ${option.label} here `}
+              id={`${type}_${option.value}`}
+              onSelectedFileChange={(files) => {
+                // Filter by both documentCategory and documentType for this option
+                const Documents =
+                  tenderData.tenderDocuments?.filter(
+                    (x) =>
+                      x.documentCategory === type &&
+                      x.documentType === `${type}_${option.value}_UPLOADINSTRUCTION`
+                  ) || [];
+                updateDocuments(
+                  files,
+                  Documents,
+                  removeTenderDocument,
+                  addNewTenderDocument,
+                  `${type}_${option.value}_UPLOADINSTRUCTION`,
                   type
                 );
               }}
@@ -437,7 +463,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             }
           }}
         ></DsSingleSelect>
-        {/* </div> */}
+
         {/* <div className={styles.fieldColors}> */}
         <DsSingleSelect
           containerClasses={styles.feeFields}
@@ -453,7 +479,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             }
           }}
         ></DsSingleSelect>
-        {/* </div> */}
+
         {/* <div className={styles.fieldColors}> */}
         <DsSingleSelect
           containerClasses={styles.feeFields}
