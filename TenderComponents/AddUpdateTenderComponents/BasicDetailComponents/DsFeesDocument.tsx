@@ -294,7 +294,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 setSelectedOptions(options);
                 console.log("Selected options:", options);
               }}
-              disableScroll={true}
+              // disableScroll={true}
             >
               <div className={styles.addBtn}>
                 <DsButton

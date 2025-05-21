@@ -291,7 +291,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
           containerClasses={styles.fields}
           initialValue={tenderData.supplierName}
           label="Stockist / Liasioner Name"
-          inputType="alphaNumeric"
+          inputType="text"
           // placeholder="Please type here"
           onBlur={(e) =>
             updateTenderData(
