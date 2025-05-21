@@ -146,7 +146,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
     <>
       {tenderDatalistVisible && (
         <DsTextField
-          placeholder="Search Tender by Id Or Name "
+          placeholder="Search Tender by Id or Name "
           id="userSelect"
           disable={false}
           initialValue=""
