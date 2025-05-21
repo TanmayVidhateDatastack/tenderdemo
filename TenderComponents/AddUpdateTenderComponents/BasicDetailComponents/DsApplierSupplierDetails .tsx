@@ -293,7 +293,7 @@ appliedByDisable,suppliedDisable,depotDisable,stockistNameDisable,stockistDiscou
           containerClasses={styles.fields}
           initialValue={tenderData.supplierName}
           label="Stockist / Liasioner Name"
-          inputType="alphaNumeric"
+          inputType="text"
           // placeholder="Please type here"
           onBlur={(e) =>
             updateTenderData(
