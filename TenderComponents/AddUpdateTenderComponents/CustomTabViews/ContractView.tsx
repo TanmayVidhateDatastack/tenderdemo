@@ -1,7 +1,7 @@
 import DsCsvUpload from "@/Elements/DsComponents/DsButtons/dsCsvUpload";
 import TextArea from "@/Elements/DsComponents/DsInputs/dsTextArea";
 import DsSingleSelect from "@/Elements/DsComponents/dsSelect/dsSingleSelect";
-import TableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableComponent";
+
 import DsInfoDisplay from "@/Elements/ERPComponents/DsInfoDisplay/DsInfoDisplay";
 import {
   ContractItems,
