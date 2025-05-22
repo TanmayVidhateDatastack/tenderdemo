@@ -1269,6 +1269,10 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               (x) => x.status == "ACTV"
             ),
         },
+
+    
+
+        
         tenderDocuments:
           tenderSaveDocuments?.map((x) => {
             // const newDocs=new FormData();
@@ -1554,8 +1558,9 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 fundTransferConfirmationId: x.fundTransferConfirmationId,
               };
             }),
+            
           tenderDocuments:
-            tenderOriginalDocuments?.map((x) => {
+            tenderOriginalDocuments ?.map((x) => {
               // const newDocs=new FormData();
               // newDocs.append("name",x.name);
               // newDocs.append("data",x.data as Blob);
@@ -1652,6 +1657,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               // newDocs.append("category",x.name);
               // const base64String = x.data ? await fileToBase64(x.data) : "";
               return {
+                
                 id: x.id,
                 documentName: x.documentName,
                 documentId: x.documentId,
@@ -1713,7 +1719,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             // status.toLowerCase() == DsStatus.PAWRD.toLowerCase() ||
             status.toLowerCase() == DsStatus.LOST.toLowerCase() ||
             status.toLowerCase() == DsStatus.CNCL.toLowerCase()) &&
-          role === "ACCOUNTANCE"
+          role === "ACCOUNTANCE" || role === "FINANCE"
         ) {
           url = updatePaymentUrl(tenderData.id);
           dataToSendTenderCopy = stripReadOnlyProperties({
@@ -1736,12 +1742,10 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         if (
           tenderData?.tenderDocuments &&
           tenderData.tenderDocuments.length > 0 &&
-          (tenderData.tenderDocuments ?? []).filter((x) => x.id == undefined)
-            .length > 0 &&
-          (tenderData?.tenderDocuments?.filter((x) => x.documentId == 0)
-            ?.length ?? 0) < 0
+          (tenderData.tenderDocuments ?? []).filter((x) => x.id == undefined).length > 0 &&
+          (tenderData?.tenderDocuments?.filter((x) => x.documentId == 0)?.length ?? 0) > 0
         ) {
-          await fetch(saveDocumentUrl(tenderData.id ?? 0), {
+          await fetch(saveDocumentUrl(tenderData.id ?? 0), { 
             method: "POST",
             body: formData,
           }).then((result) => {
@@ -1759,12 +1763,12 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                       // const base64String = x.data ? await fileToBase64(x.data) : "";
                       return {
                         id: x.id,
-
                         documentName: x.documentName,
                         documentId: docRes.result[x.requestId] || x.documentId,
                         documentType: x.documentType,
                         documentCategory: x.documentCategory,
                         documentSubType: x.documentSubType,
+                        
                       };
                     }) || [],
                 });
@@ -1923,6 +1927,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 id: x.id,
                 documentName: x.documentName,
                 documentId: x.documentId,
+           
                 documentType: x.documentType,
                 documentCategory: x.documentCategory,
                 documentSubType: x.documentSubType,

@@ -78,7 +78,6 @@ const UploadFile: React.FC<UploadFileProps> = ({
         <div >
           {fileName}
         </div>
-
         <input
           type="file"
           id={`selectfile-${id}`}
