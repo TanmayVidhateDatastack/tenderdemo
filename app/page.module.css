@@ -514,6 +514,12 @@ a.secondary {
 }
 .tender-product-table {
   font-size: var(--font-13);
+  overflow-y: hidden !important;
+}
+.tender-product-table tbody{
+  min-height: fit-content !important;
+  height: 25em !important;
+  max-height: 25em;
 }
 .tender-product-table tbody tr{
   min-height: 3em !important;

@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import TableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableComponent";
 import { tableData, tcolumn, DsTableRow } from "@/Common/helpers/types";
 import { TenderProduct, useTenderData } from "../TenderDataContextProvider";
@@ -13,7 +19,7 @@ import {
 } from "@/Elements/DsComponents/FloatingMenu/dsFloatingMenu";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import Image from "next/image";
-import { changeImage } from "@/Common/helpers/Method/conversion";
+import { changeImage, emToPx } from "@/Common/helpers/Method/conversion";
 import ContextMenu, {
   closeAllContext,
   closeContext,
@@ -29,6 +35,7 @@ import TbodyComponent from "@/Elements/DsComponents/DsTablecomponent/bodyCompone
 import TrComponent from "@/Elements/DsComponents/DsTablecomponent/bodyComponents/dsTrComponent";
 import TdComponent from "@/Elements/DsComponents/DsTablecomponent/bodyComponents/dsTdComponent";
 import Ds_checkbox from "@/Elements/DsComponents/DsCheckbox/dsCheckbox";
+import { List, AutoSizer } from "react-virtualized";
 
 interface DsProductTableProps {
   productList: TenderProduct[];
@@ -788,8 +795,9 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
   //         },
   //       ],
   //     })),
-  //   [productList, calculatedProducts.length, latestVersion, version]
+  //   [productList, latestVersion, version]
   // );
+
   const columns: tcolumn[] = useMemo(
     () => [
       {
@@ -903,9 +911,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
       ) as HTMLInputElement;
 
       // if (checkbox) {
-      const row = calculatedProducts?.find(
-        (row,index) => index == rowIndex
-      );
+      const row = calculatedProducts?.find((row, index) => index == rowIndex);
       if (row) {
         const productId = row?.productId;
 
@@ -916,9 +922,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
             //   const productName =
             // row?.customAttributes?.productName?.toString();
             const productName = String(
-              row.product?.productName ||
-                row.requestedGenericName ||
-                "-"
+              row.product?.productName || row.requestedGenericName || "-"
             );
 
             setProductIds((prev) => [...prev, Number(productId)]);
@@ -953,6 +957,49 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
     closeContext("sales-product");
     closeContext("delete-menu");
   };
+  const [checks, setChecks] = useState<
+    { rowIndex: number; isChecked: boolean }[]
+  >([]);
+  const isAllCheckBoxSelected = useRef<boolean>(false);
+
+  const setCheckboxSelected = (
+    e: React.MouseEvent<HTMLElement> | React.FocusEvent<HTMLInputElement>,
+    rowIndex: number
+  ) => {
+    // isRowClicked = true;
+    // const selectedCheckboxes = checkboxLength;
+    const target = e.target as HTMLInputElement;
+    const isChecked = target.checked;
+    setChecks((prev) =>
+      prev.map((item) =>
+        item.rowIndex === rowIndex ? { ...item, isChecked: isChecked } : item
+      )
+    );
+
+    const table = target?.closest("table");
+    const seLectedCheckBoxes = table?.querySelectorAll(
+      `.table-body-checkboxes:checked`
+    ).length;
+    const allCheckBoxes = table?.querySelectorAll(
+      `.table-body-checkboxes`
+    ).length;
+
+    if (seLectedCheckBoxes === allCheckBoxes) {
+      isAllCheckBoxSelected.current = true;
+    } else if (seLectedCheckBoxes === 0) {
+      isAllCheckBoxSelected.current = false;
+    } else {
+      isAllCheckBoxSelected.current = false;
+    }
+    if (handleCheckBoxClick) {
+      handleCheckBoxClick(
+        e as React.MouseEvent<HTMLInputElement>,
+        rowIndex,
+        isChecked
+      );
+    }
+    e.stopPropagation();
+  };
   useEffect(() => {
     if (tenderProductTable?.id) {
       document
@@ -962,7 +1009,401 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         });
     }
   }, [tenderProductTable?.id]);
-
+  const rowRenderer = useCallback(
+    ({ index, key, style }) => (
+      <div key={key} style={style}>
+        <TrComponent
+          rowIndex={index}
+          key={index + "_" + calculatedProducts[index].productId}
+          customAttributes={{
+            genericName: calculatedProducts[index].requestedGenericName || "",
+            productId: calculatedProducts[index].productId || 0,
+            productName: calculatedProducts[index].product.productName || "",
+          }}
+        >
+          <TdComponent
+            className={styles.cellcheckbox}
+            columnIndex={0}
+            render={() => (
+              <Ds_checkbox
+                className={`table-body-checkboxes row-checkbox-${index}`}
+                defaultChecked={selectedRowIndices.includes(index)}
+                // onClick={getCheckboxHandler(index)}
+                id={""}
+                name={""}
+                value={""}
+                label={""}
+                onClick={(e) => setCheckboxSelected(e, row.rowIndex)}
+              />
+            )}
+            type={""}
+            rowIndex={0}
+          />
+          <TdComponent
+            key={index + "_" + calculatedProducts[index].productId + "generic"}
+            className={styles.cellgenericname}
+            type={""}
+            rowIndex={index}
+            columnIndex={1}
+          >
+            {latestVersion == version ? (
+              <DsTextField
+                initialValue={
+                  calculatedProducts[index].requestedGenericName || ""
+                }
+                onBlur={(e) =>
+                  handleFieldChange(
+                    index,
+                    "requestedGenericName",
+                    e.target.value
+                  )
+                }
+                onClick={(e) => e.stopPropagation()}
+              />
+            ) : (
+              calculatedProducts[index].requestedGenericName || "-"
+            )}
+          </TdComponent>
+          <TdComponent
+            className={styles.cellquantity}
+            type={""}
+            rowIndex={index}
+            columnIndex={2}
+          >
+            {latestVersion != version ? (
+              calculatedProducts[index].requestedQuantity || "-"
+            ) : (
+              <DsTextField
+                initialValue={
+                  calculatedProducts[index].requestedQuantity?.toString() || ""
+                }
+                inputType="positiveInteger"
+                onBlur={(e) =>
+                  handleFieldChange(
+                    index,
+                    "requestedQuantity",
+                    Number(e.target.value)
+                  )
+                }
+                onClick={(e) => e.stopPropagation()}
+              />
+            )}
+          </TdComponent>
+          <TdComponent
+            className={styles.cellpackingsize}
+            type={""}
+            rowIndex={index}
+            columnIndex={3}
+          >
+            {latestVersion == version ? (
+              <DsTextField
+                initialValue={
+                  calculatedProducts[index].requestedPackingSize || ""
+                }
+                onBlur={(e) =>
+                  handleFieldChange(
+                    index,
+                    "requestedPackingSize",
+                    e.target.value
+                  )
+                }
+                onClick={(e) => e.stopPropagation()}
+              />
+            ) : (
+              calculatedProducts[index].requestedPackingSize || "-"
+            )}
+          </TdComponent>
+          <TdComponent
+            className={styles.cellproductname}
+            type={""}
+            rowIndex={index}
+            columnIndex={4}
+          >
+            {latestVersion == version ? (
+              <ProductTableSearch
+                tableRowIndex={index}
+                setLocalProducts={setLocalProducts}
+                setHasChanges={setHasChanges}
+                initialValue={
+                  calculatedProducts[index].product?.productName || ""
+                }
+              />
+            ) : (
+              calculatedProducts[index].product?.productName || "-"
+            )}
+          </TdComponent>
+          <TdComponent
+            className={styles.cellproductpakingsize}
+            type={""}
+            rowIndex={index}
+            columnIndex={5}
+          >
+            {calculatedProducts[index].product.productPackingSize || "-"}
+          </TdComponent>
+          <TdComponent
+            className={styles.cellmrp}
+            type={""}
+            rowIndex={index}
+            columnIndex={6}
+          >
+            {calculatedProducts[index].product.mrp?.toString() || "-"}
+          </TdComponent>
+          <TdComponent
+            className={styles.cellptr}
+            type={""}
+            rowIndex={index}
+            columnIndex={7}
+          >
+            {calculatedProducts[index].product.ptr?.toString() || "-"}
+          </TdComponent>
+          <TdComponent
+            className={styles.celldirectcost}
+            type={""}
+            rowIndex={index}
+            columnIndex={8}
+          >
+            {calculatedProducts[index].product.directCost?.toString() || "-"}
+          </TdComponent>
+          <TdComponent
+            className={styles.celllqr}
+            type={""}
+            rowIndex={index}
+            columnIndex={9}
+          >
+            {latestVersion == version ? (
+              <DsTextField
+                inputType="positive"
+                initialValue={
+                  calculatedProducts[index].lastQuotedRate?.toString() || ""
+                }
+                onKeyUp={(e) => {
+                  if (e.key === "Enter") {
+                    (e.target as HTMLInputElement).blur();
+                  }
+                }}
+                onClick={(e) => e.stopPropagation()}
+                onBlur={(e) => {
+                  const lqr = Number(e.target.value);
+                  handleFieldChange(index, "lastQuotedRate", lqr);
+                }}
+              />
+            ) : (
+              calculatedProducts[index].lastQuotedRate?.toString() || "-"
+            )}
+          </TdComponent>
+          <TdComponent
+            className={styles.celllpr}
+            type={""}
+            rowIndex={index}
+            columnIndex={10}
+          >
+            {latestVersion == version ? (
+              <DsCustomerLPR
+                index={index + 1}
+                lprValue={calculatedProducts[index].lastPurchaseRate}
+                lprTo={{
+                  id: calculatedProducts[index].competitorId || 0,
+                  name: calculatedProducts[index].product.competitorName || "",
+                }}
+                onValueChange={(value) =>
+                  handleFieldChange(index, "lastPurchaseRate", Number(value))
+                }
+                onCompanyChange={(company) => {
+                  handleFieldChange(index, "competitorId", company.id);
+                  handleFieldChange(
+                    index,
+                    "product.competitorName",
+                    company.name
+                  );
+                }}
+                disable={latestVersion != version}
+              />
+            ) : (
+              "-"
+            )}
+          </TdComponent>
+          <TdComponent
+            className={styles.cellproposedrate}
+            type={""}
+            rowIndex={index}
+            columnIndex={11}
+          >
+            {latestVersion == version ? (
+              <DsTextField
+                inputType="positive"
+                initialValue={
+                  calculatedProducts[index].proposedRate?.toString() || ""
+                }
+                onKeyUp={(e) => {
+                  if (e.key === "Enter") {
+                    (e.target as HTMLInputElement).blur();
+                  }
+                }}
+                onClick={(e) => e.stopPropagation()}
+                onBlur={(e) => {
+                  const proposedRate = Number(e.target.value);
+                  if (calculatedProducts[index].proposedRate !== proposedRate) {
+                    const ptrTemp = calculatedProducts[index].product.ptr;
+                    const ptr =
+                      ptrTemp !== undefined
+                        ? typeof ptrTemp == "number"
+                          ? ptrTemp
+                          : Number(ptrTemp)
+                        : 1;
+                    const ptrPer =
+                      100 - Number(((proposedRate / ptr) * 100).toFixed(2));
+                    const discount =
+                      (proposedRate * TenderProductDiscountPercentage) / 100;
+                    handleFieldChange(index, "proposedRate", proposedRate);
+                    handleFieldChange(index, "ptrPercentage", ptrPer);
+                    handleFieldChange(index, "stockistDiscountValue", discount);
+                  }
+                }}
+              />
+            ) : (
+              "-"
+            )}
+          </TdComponent>
+          <TdComponent
+            className={styles.cellptr}
+            type={""}
+            rowIndex={index}
+            columnIndex={12}
+          >
+            {latestVersion == version ? (
+              <DsTextField
+                inputType="number"
+                maximumNumber={100.0}
+                initialValue={
+                  Number(
+                    calculatedProducts[index].ptrPercentage?.toFixed(2)
+                  ).toString() || ""
+                }
+                onKeyUp={(e) => {
+                  if (e.key === "Enter") {
+                    (e.target as HTMLInputElement).blur();
+                  }
+                }}
+                onClick={(e) => e.stopPropagation()}
+                onBlur={(e) => {
+                  const ptrPer = Number(e.target.value);
+                  if (calculatedProducts[index].ptrPercentage !== ptrPer) {
+                    const ptrTemp = calculatedProducts[index].product.ptr;
+                    const ptr =
+                      ptrTemp !== undefined
+                        ? typeof ptrTemp == "number"
+                          ? ptrTemp
+                          : Number(ptrTemp)
+                        : 1;
+                    const proposedRate = ((100 - ptrPer) * ptr) / 100;
+                    const discount =
+                      (proposedRate * TenderProductDiscountPercentage) / 100;
+                    handleFieldChange(
+                      index,
+                      "ptrPercentage",
+                      parseFloat(ptrPer.toFixed(2))
+                    );
+                    handleFieldChange(index, "proposedRate", proposedRate);
+                    handleFieldChange(index, "stockistDiscountValue", discount);
+                  }
+                  e.target.value = ptrPer.toFixed(2);
+                }}
+                className={`${
+                  (calculatedProducts[index].ptrPercentage || 0) <= 0
+                    ? styles.warningAlert
+                    : ""
+                }`}
+              />
+            ) : (
+              "-"
+            )}
+          </TdComponent>
+          <TdComponent
+            className={styles.celldiscount}
+            type={""}
+            rowIndex={index}
+            columnIndex={13}
+          >
+            {latestVersion == version ? (
+              <DsTextField
+                inputType="number"
+                initialValue={
+                  (
+                    ((calculatedProducts[index].proposedRate || 0) *
+                      TenderProductDiscountPercentage) /
+                    100
+                  ).toFixed(2) || ""
+                }
+                onKeyUp={(e) => {
+                  if (e.key === "Enter") {
+                    (e.target as HTMLInputElement).blur();
+                  }
+                }}
+                onClick={(e) => e.stopPropagation()}
+                onBlur={(e) => {
+                  const discount = Number(e.target.value);
+                  if (
+                    calculatedProducts[index].stockistDiscountValue !== discount
+                  ) {
+                    const proposedRate =
+                      (discount * 100) / TenderProductDiscountPercentage;
+                    const ptrTemp = calculatedProducts[index].product.ptr;
+                    const ptr =
+                      ptrTemp !== undefined
+                        ? typeof ptrTemp == "number"
+                          ? ptrTemp
+                          : Number(ptrTemp)
+                        : 1;
+                    const ptrPer =
+                      100 - Number(((proposedRate / ptr) * 100).toFixed(2));
+                    handleFieldChange(index, "stockistDiscountValue", discount);
+                    handleFieldChange(index, "proposedRate", proposedRate);
+                    handleFieldChange(index, "ptrPercentage", ptrPer);
+                  }
+                }}
+              />
+            ) : (
+              "-"
+            )}
+          </TdComponent>
+          <TdComponent
+            className={styles.celltotalcost}
+            type={""}
+            rowIndex={index}
+            columnIndex={14}
+          >
+            {calculatedProducts[index].product.totalCost?.toFixed(2) || "-"}
+          </TdComponent>
+          <TdComponent
+            className={styles.cellmargin}
+            type={""}
+            rowIndex={index}
+            columnIndex={15}
+          >
+            {calculatedProducts[index].product.marginValue?.toFixed(2) || "-"}
+          </TdComponent>
+          <TdComponent
+            className={styles.cellmarginper}
+            type={""}
+            rowIndex={index}
+            columnIndex={16}
+          >
+            {(calculatedProducts[index].product.marginPercent || 0).toFixed(2) +
+              "%" || "-"}
+          </TdComponent>
+          <TdComponent
+            className={styles.cellnetvalue}
+            type={""}
+            rowIndex={index}
+            columnIndex={17}
+          >
+            {calculatedProducts[index].product.netValue?.toFixed(2) || "-"}
+          </TdComponent>
+        </TrComponent>
+      </div>
+    ),
+    [calculatedProducts, latestVersion, version]
+  );
   return (
     <>
       <div className="tender-product-container" style={{ overflowY: "hidden" }}>
@@ -974,453 +1415,24 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
             // rows={tenderProductTable.rows}
             handleCheckboxClick={handleCheckBoxClick}
             isSelectAble={true}
+            isAllCheckboxChecked={isAllCheckBoxSelected.current}
           >
             <TbodyComponent className={""}>
-              {calculatedProducts.map((tenderproduct, index) => (
-                <TrComponent
-                  rowIndex={index}
-                  key={index + "_" + tenderproduct.productId}
-                  customAttributes={{
-                    genericName:
-                      calculatedProducts[index].requestedGenericName || "",
-                    productId: calculatedProducts[index].productId || 0,
-                    productName:
-                      calculatedProducts[index].product.productName || "",
-                  }}
-                >
-                  <TdComponent
-                    className={styles.cellcheckbox}
-                    columnIndex={0}
-                    render={() => (
-                      <Ds_checkbox
-                        className={`row-checkbox-${index}`}
-                        defaultChecked={selectedRowIndices.includes(index)}
-                        // onClick={getCheckboxHandler(index)}
-                        id={""}
-                        name={""}
-                        value={""}
-                        label={""}
-                      />
+              <AutoSizer>
+                {({ height, width }) => (
+                  <List
+                    width={width}
+                    height={height}
+                    rowCount={calculatedProducts.length}
+                    rowHeight={emToPx(
+                      3,
+                      document.getElementById(tenderProductTable.id)
                     )}
-                    type={""}
-                    rowIndex={0}
+                    rowRenderer={rowRenderer}
+                    overscanRowCount={10} // Render extra rows for smooth scrolling
                   />
-                  <TdComponent
-                    key={index + "_" + tenderproduct.productId + "generic"}
-                    className={styles.cellgenericname}
-                    type={""}
-                    rowIndex={index}
-                    columnIndex={1}
-                  >
-                    {latestVersion == version ? (
-                      <DsTextField
-                        initialValue={
-                          calculatedProducts[index].requestedGenericName || ""
-                        }
-                        onBlur={(e) =>
-                          handleFieldChange(
-                            index,
-                            "requestedGenericName",
-                            e.target.value
-                          )
-                        }
-                        onClick={(e) => e.stopPropagation()}
-                      />
-                    ) : (
-                      calculatedProducts[index].requestedGenericName || "-"
-                    )}
-                  </TdComponent>
-                  <TdComponent
-                    className={styles.cellquantity}
-                    type={""}
-                    rowIndex={index}
-                    columnIndex={2}
-                  >
-                    {latestVersion != version ? (
-                      calculatedProducts[index].requestedQuantity || "-"
-                    ) : (
-                      <DsTextField
-                        initialValue={
-                          calculatedProducts[
-                            index
-                          ].requestedQuantity?.toString() || ""
-                        }
-                        inputType="positiveInteger"
-                        onBlur={(e) =>
-                          handleFieldChange(
-                            index,
-                            "requestedQuantity",
-                            Number(e.target.value)
-                          )
-                        }
-                        onClick={(e) => e.stopPropagation()}
-                      />
-                    )}
-                  </TdComponent>
-                  <TdComponent
-                    className={styles.cellpackingsize}
-                    type={""}
-                    rowIndex={index}
-                    columnIndex={3}
-                  >
-                    {latestVersion == version ? (
-                      <DsTextField
-                        initialValue={
-                          calculatedProducts[index].requestedPackingSize || ""
-                        }
-                        onBlur={(e) =>
-                          handleFieldChange(
-                            index,
-                            "requestedPackingSize",
-                            e.target.value
-                          )
-                        }
-                        onClick={(e) => e.stopPropagation()}
-                      />
-                    ) : (
-                      calculatedProducts[index].requestedPackingSize || "-"
-                    )}
-                  </TdComponent>
-                  <TdComponent
-                    className={styles.cellproductname}
-                    type={""}
-                    rowIndex={index}
-                    columnIndex={4}
-                  >
-                    {latestVersion == version ? (
-                      <ProductTableSearch
-                        tableRowIndex={index}
-                        setLocalProducts={setLocalProducts}
-                        setHasChanges={setHasChanges}
-                        initialValue={
-                          calculatedProducts[index].product?.productName || ""
-                        }
-                      />
-                    ) : (
-                      calculatedProducts[index].product?.productName || "-"
-                    )}
-                  </TdComponent>
-                  <TdComponent
-                    className={styles.cellproductpakingsize}
-                    type={""}
-                    rowIndex={index}
-                    columnIndex={5}
-                  >
-                    {calculatedProducts[index].product.productPackingSize ||
-                      "-"}
-                  </TdComponent>
-                  <TdComponent
-                    className={styles.cellmrp}
-                    type={""}
-                    rowIndex={index}
-                    columnIndex={6}
-                  >
-                    {calculatedProducts[index].product.mrp?.toString() || "-"}
-                  </TdComponent>
-                  <TdComponent
-                    className={styles.cellptr}
-                    type={""}
-                    rowIndex={index}
-                    columnIndex={7}
-                  >
-                    {calculatedProducts[index].product.ptr?.toString() || "-"}
-                  </TdComponent>
-                  <TdComponent
-                    className={styles.celldirectcost}
-                    type={""}
-                    rowIndex={index}
-                    columnIndex={8}
-                  >
-                    {calculatedProducts[index].product.directCost?.toString() ||
-                      "-"}
-                  </TdComponent>
-                  <TdComponent
-                    className={styles.celllqr}
-                    type={""}
-                    rowIndex={index}
-                    columnIndex={9}
-                  >
-                    {latestVersion == version ? (
-                      <DsTextField
-                        inputType="positive"
-                        initialValue={
-                          calculatedProducts[index].lastQuotedRate?.toString() || ""
-                        }
-                        onKeyUp={(e) => {
-                          if (e.key === "Enter") {
-                            (e.target as HTMLInputElement).blur();
-                          }
-                        }}
-                        onClick={(e) => e.stopPropagation()}
-                        onBlur={(e) => {
-                          const lqr = Number(e.target.value);
-                          handleFieldChange(index, "lastQuotedRate", lqr);
-                        }}
-                      />
-                    ) : (
-                      calculatedProducts[index].lastQuotedRate?.toString() || "-"
-                    )}
-                  </TdComponent>
-                  <TdComponent
-                    className={styles.celllpr}
-                    type={""}
-                    rowIndex={index}
-                    columnIndex={10}
-                  >
-                    {latestVersion == version ? (
-                      <DsCustomerLPR
-                        index={index + 1}
-                        lprValue={calculatedProducts[index].lastPurchaseRate}
-                        lprTo={{
-                          id: calculatedProducts[index].competitorId || 0,
-                          name:
-                            calculatedProducts[index].product.competitorName ||
-                            "",
-                        }}
-                        onValueChange={(value) =>
-                          handleFieldChange(
-                            index,
-                            "lastPurchaseRate",
-                            Number(value)
-                          )
-                        }
-                        onCompanyChange={(company) => {
-                          handleFieldChange(index, "competitorId", company.id);
-                          handleFieldChange(
-                            index,
-                            "product.competitorName",
-                            company.name
-                          );
-                        }}
-                        disable={latestVersion != version}
-                      />
-                    ) : (
-                      "-"
-                    )}
-                  </TdComponent>
-                  <TdComponent
-                    className={styles.cellproposedrate}
-                    type={""}
-                    rowIndex={index}
-                    columnIndex={11}
-                  >
-                    {latestVersion == version ? (
-                      <DsTextField
-                        inputType="positive"
-                        initialValue={
-                          calculatedProducts[index].proposedRate?.toString() ||
-                          ""
-                        }
-                        onKeyUp={(e) => {
-                          if (e.key === "Enter") {
-                            (e.target as HTMLInputElement).blur();
-                          }
-                        }}
-                        onClick={(e) => e.stopPropagation()}
-                        onBlur={(e) => {
-                          const proposedRate = Number(e.target.value);
-                          if (
-                            calculatedProducts[index].proposedRate !==
-                            proposedRate
-                          ) {
-                            const ptrTemp =
-                              calculatedProducts[index].product.ptr;
-                            const ptr =
-                              ptrTemp !== undefined
-                                ? typeof ptrTemp == "number"
-                                  ? ptrTemp
-                                  : Number(ptrTemp)
-                                : 1;
-                            const ptrPer =
-                              100 -
-                              Number(((proposedRate / ptr) * 100).toFixed(2));
-                            const discount =
-                              (proposedRate * TenderProductDiscountPercentage) /
-                              100;
-                            handleFieldChange(
-                              index,
-                              "proposedRate",
-                              proposedRate
-                            );
-                            handleFieldChange(index, "ptrPercentage", ptrPer);
-                            handleFieldChange(
-                              index,
-                              "stockistDiscountValue",
-                              discount
-                            );
-                          }
-                        }}
-                      />
-                    ) : (
-                      "-"
-                    )}
-                  </TdComponent>
-                  <TdComponent
-                    className={styles.cellptr}
-                    type={""}
-                    rowIndex={index}
-                    columnIndex={12}
-                  >
-                    {latestVersion == version ? (
-                      <DsTextField
-                        inputType="number"
-                        maximumNumber={100.0}
-                        initialValue={
-                          Number(
-                            calculatedProducts[index].ptrPercentage?.toFixed(2)
-                          ).toString() || ""
-                        }
-                        onKeyUp={(e) => {
-                          if (e.key === "Enter") {
-                            (e.target as HTMLInputElement).blur();
-                          }
-                        }}
-                        onClick={(e) => e.stopPropagation()}
-                        onBlur={(e) => {
-                          const ptrPer = Number(e.target.value);
-                          if (
-                            calculatedProducts[index].ptrPercentage !== ptrPer
-                          ) {
-                            const ptrTemp =
-                              calculatedProducts[index].product.ptr;
-                            const ptr =
-                              ptrTemp !== undefined
-                                ? typeof ptrTemp == "number"
-                                  ? ptrTemp
-                                  : Number(ptrTemp)
-                                : 1;
-                            const proposedRate = ((100 - ptrPer) * ptr) / 100;
-                            const discount =
-                              (proposedRate * TenderProductDiscountPercentage) /
-                              100;
-                            handleFieldChange(
-                              index,
-                              "ptrPercentage",
-                              parseFloat(ptrPer.toFixed(2))
-                            );
-                            handleFieldChange(
-                              index,
-                              "proposedRate",
-                              proposedRate
-                            );
-                            handleFieldChange(
-                              index,
-                              "stockistDiscountValue",
-                              discount
-                            );
-                          }
-                          e.target.value = ptrPer.toFixed(2);
-                        }}
-                        className={`${
-                          (calculatedProducts[index].ptrPercentage || 0) <= 0
-                            ? styles.warningAlert
-                            : ""
-                        }`}
-                      />
-                    ) : (
-                      "-"
-                    )}
-                  </TdComponent>
-                  <TdComponent
-                    className={styles.celldiscount}
-                    type={""}
-                    rowIndex={index}
-                    columnIndex={13}
-                  >
-                    {latestVersion == version ? (
-                      <DsTextField
-                        inputType="number"
-                        initialValue={
-                          (
-                            ((calculatedProducts[index].proposedRate || 0) *
-                              TenderProductDiscountPercentage) /
-                            100
-                          ).toFixed(2) || ""
-                        }
-                        onKeyUp={(e) => {
-                          if (e.key === "Enter") {
-                            (e.target as HTMLInputElement).blur();
-                          }
-                        }}
-                        onClick={(e) => e.stopPropagation()}
-                        onBlur={(e) => {
-                          const discount = Number(e.target.value);
-                          if (
-                            calculatedProducts[index].stockistDiscountValue !==
-                            discount
-                          ) {
-                            const proposedRate =
-                              (discount * 100) /
-                              TenderProductDiscountPercentage;
-                            const ptrTemp =
-                              calculatedProducts[index].product.ptr;
-                            const ptr =
-                              ptrTemp !== undefined
-                                ? typeof ptrTemp == "number"
-                                  ? ptrTemp
-                                  : Number(ptrTemp)
-                                : 1;
-                            const ptrPer =
-                              100 -
-                              Number(((proposedRate / ptr) * 100).toFixed(2));
-                            handleFieldChange(
-                              index,
-                              "stockistDiscountValue",
-                              discount
-                            );
-                            handleFieldChange(
-                              index,
-                              "proposedRate",
-                              proposedRate
-                            );
-                            handleFieldChange(index, "ptrPercentage", ptrPer);
-                          }
-                        }}
-                      />
-                    ) : (
-                      "-"
-                    )}
-                  </TdComponent>
-                  <TdComponent
-                    className={styles.celltotalcost}
-                    type={""}
-                    rowIndex={index}
-                    columnIndex={14}
-                  >
-                    {calculatedProducts[index].product.totalCost?.toFixed(2) ||
-                      "-"}
-                  </TdComponent>
-                  <TdComponent
-                    className={styles.cellmargin}
-                    type={""}
-                    rowIndex={index}
-                    columnIndex={15}
-                  >
-                    {calculatedProducts[index].product.marginValue?.toFixed(
-                      2
-                    ) || "-"}
-                  </TdComponent>
-                  <TdComponent
-                    className={styles.cellmarginper}
-                    type={""}
-                    rowIndex={index}
-                    columnIndex={16}
-                  >
-                    {(
-                      calculatedProducts[index].product.marginPercent || 0
-                    ).toFixed(2) + "%" || "-"}
-                  </TdComponent>
-                  <TdComponent
-                    className={styles.cellnetvalue}
-                    type={""}
-                    rowIndex={index}
-                    columnIndex={17}
-                  >
-                    {calculatedProducts[index].product.netValue?.toFixed(2) ||
-                      "-"}
-                  </TdComponent>
-                </TrComponent>
-              ))}
+                )}
+              </AutoSizer>
             </TbodyComponent>
           </TableComponent>
         )}
@@ -1534,12 +1546,10 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                       if (selectedRowIndices.length > 0) {
                         selectedRowIndices.forEach((rowIndex) => {
                           const row = calculatedProducts?.find(
-                            (r,index) => index== rowIndex
+                            (r, index) => index == rowIndex
                           );
 
-                          const genericName = String(
-                            row?.requestedGenericName
-                          );
+                          const genericName = String(row?.requestedGenericName);
 
                           removeTenderProduct(version, undefined, genericName);
                         });
