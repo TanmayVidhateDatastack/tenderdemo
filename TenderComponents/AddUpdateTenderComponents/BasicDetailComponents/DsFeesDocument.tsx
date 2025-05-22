@@ -113,7 +113,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
   const [selectedcheckbox, setSelectedCheckbox] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState<DsSelectOption[]>([]);
   const [tempOptions, setTempOptions] = useState<DsSelectOption[]>([]);
- 
+
 
   const permissions = useAppSelector((state: RootState) => state.permissions);
   const {
@@ -223,7 +223,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
       if (refundValue) {
         const option = refund.find((x) => x.value == refundValue);
         if (option) setSelectedRefund(option);
-     // console.log("Fetched Notes Values are", tenderData.tenderFees.find((x) => x.feesType == type)?.instructionNotes);
+        // console.log("Fetched Notes Values are", tenderData.tenderFees.find((x) => x.feesType == type)?.instructionNotes);
       }
     }
     const paidByvalue = tenderData.tenderFees.find(
@@ -289,6 +289,34 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           <div className={styles.fields}>
             <DsMultiSelect
               label="Add Document Type"
+              containerClasses={`${styles.feeFields} ${styles.scrollableContainer}`}
+              id={id + "Documents"}
+              options={optionlist || []}
+              setSelectOptions={(options) => {
+                setTempOptions(options);
+                console.log("Selected options:", options);
+              }}
+            >
+              <div className={styles.addBtnSticky}>
+                <DsButton
+                  label="Add"
+                  buttonViewStyle="btnContained"
+                  buttonSize="btnSmall"
+                  className={styles.addBtn}
+                  onClick={() => {
+                    closeAllContext();
+                    setSelectedCheckbox(true);
+                    setSelectedOptions(tempOptions);
+                    console.log("Add button clicked");
+                  }}
+                />
+              </div>
+            </DsMultiSelect>
+          </div>
+
+          {/* <div className={styles.fields}>
+            <DsMultiSelect
+              label="Add Document Type"
               containerClasses={styles.feeFields}
               id={id + "Documents"}
               options={optionlist || []}
@@ -296,7 +324,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 setTempOptions(options);
                 console.log("Selected options:", options);
               }}
-              // disableScroll={true}
+            // disableScroll={true}
             >
               <div className={styles.addBtn}>
                 <DsButton
@@ -313,7 +341,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 />
               </div>
             </DsMultiSelect>
-          </div>
+          </div> */}
           <div className={styles.fields}>
             <DatePicker
               containerClasses={styles.feeFields}
@@ -360,7 +388,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               }}
             />
           ))} */}
-     {selectedcheckbox &&
+        {selectedcheckbox &&
           selectedOptions.map((option, index) => (
             <UploadFile
               key={`upload-${type}-${option.value}-${index}`}
@@ -389,42 +417,44 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
         <div className={eleStyles.inputDetails}>
           {selectedcheckbox &&
             selectedOptions.map((option) => (
-              <div key="" className={styles.fields}>
-                <DsTextField
-                  containerClasses={styles.feeFields}
-                  label={`${option.label}   ID`}
-                  onBlur={(e) => {
-                    if (typeof option.value == "string") {
-                      if (option.value.includes("ACKNOWLEDGMENT_RECEIPT"))
-                        updateTenderFee(
-                          type,
-                          "acknowledgementReceiptId",
-                          Number((e.target as HTMLInputElement).value)
-                        );
-                      if (option.value.includes("FUND_TRANSFER_CONFIRMATION"))
-                        updateTenderFee(
-                          type,
-                          "fundTransferConfirmationId",
-                          Number((e.target as HTMLInputElement).value)
-                        );
-                      if (option.value.includes("PAYMENT_RECEIPT"))
-                        updateTenderFee(
-                          type,
-                          "paymentReceiptId",
-                          Number((e.target as HTMLInputElement).value)
-                        );
-                      if (option.value.includes("TRANSACTION_RECEIPT"))
-                        updateTenderFee(
-                          type,
-                          "paymentTransactionId",
-                          Number((e.target as HTMLInputElement).value)
-                        );
-                    }
-                  }}
-                />
-              </div>
+              <>
+                <div className={styles.fields}>
+                  <DsTextField
+                    containerClasses={styles.feeFields}
+                    label={`${option.label}   ID`}
+                    onBlur={(e) => {
+                      if (typeof option.value == "string") {
+                        if (option.value.includes("ACKNOWLEDGMENT_RECEIPT"))
+                          updateTenderFee(
+                            type,
+                            "acknowledgementReceiptId",
+                            Number((e.target as HTMLInputElement).value)
+                          );
+                        if (option.value.includes("FUND_TRANSFER_CONFIRMATION"))
+                          updateTenderFee(
+                            type,
+                            "fundTransferConfirmationId",
+                            Number((e.target as HTMLInputElement).value)
+                          );
+                        if (option.value.includes("PAYMENT_RECEIPT"))
+                          updateTenderFee(
+                            type,
+                            "paymentReceiptId",
+                            Number((e.target as HTMLInputElement).value)
+                          );
+                        if (option.value.includes("TRANSACTION_RECEIPT"))
+                          updateTenderFee(
+                            type,
+                            "paymentTransactionId",
+                            Number((e.target as HTMLInputElement).value)
+                          );
+                      }
+                    }}
+                  />
+                </div>
+              </>
             ))}
-        </div>
+        </div >
         <div className={styles.separator}></div>
       </>
       )}
@@ -701,10 +731,10 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   type
                 );
               }}
-            ></DsCsvUpload> 
-          </div> 
-        </> 
-      )} 
+            ></DsCsvUpload>
+          </div>
+        </>
+      )}
     </>
   );
 };

@@ -10,14 +10,17 @@ import fetchData from "@/Common/helpers/Method/fetchData";
 import { DocumentContext } from "./DocumentsContextProvider";
 import { getTenderTabsDocuments } from "@/Common/helpers/constant";
 import buttonstyle from "@/Elements/DsComponents/DsButtons/dsButton.module.css"
-import { TenderDocument, updateDocuments, useTenderData } from "../TenderDataContextProvider";
-import { closeContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
+import { TenderDocument, useTenderData } from "../TenderDataContextProvider";
 import { ClosePane } from "@/Elements/DsComponents/DsPane/DsPane";
-import { userAgent } from "next/server";
-import { group } from "console";
+import { showToaster } from "@/Elements/DsComponents/DsToaster/DsToaster";
 
 
-
+class ActionStatus {
+  notiType: "success" | "bonus" | "info" | "error" | "cross" = "success";
+  notiMsg: string | React.ReactNode = "";
+  showNotification: boolean = false;
+  isOkayButtonVisible?: boolean = false;
+}
 
 const DsAddTenderDocumentPane: React.FC = () => {
   const [openAccordion, setOpenAccordion] = useState<string | null | number>(null);
@@ -27,14 +30,13 @@ const DsAddTenderDocumentPane: React.FC = () => {
   const [searchText, setSearchText] = useState("");
   const [title, setTitle] = useState({});
 
+
   // const [isApplyDisabled, setIsApplyDisabled] = useState(true);
 
   const {
-    metaData
+    metaData,
+    setActionStatusValues
   } = useTenderData();
-
-
-
 
   const documentContext = useContext(DocumentContext);
 
@@ -62,6 +64,8 @@ const DsAddTenderDocumentPane: React.FC = () => {
         );
 
         setGroupedDocuments(grouped);
+        documentContext?.setFetchedDocuments(grouped);
+
       } else {
         console.error("Error fetching data: ", res.message || "Unknown error");
       }
@@ -192,8 +196,18 @@ const DsAddTenderDocumentPane: React.FC = () => {
           };
         }).filter(group => group.documents.length > 0);
         // console.log("Updated Document Context:", updatedData); 
+        if (updatedData.length > 0) {
+          setActionStatusValues({
+            notiMsg: "The documents has been successfully added",
+            notiType: "success",
+            showNotification: true,
+          });
+          showToaster("create-order-toaster");
+        }
         return updatedData;
+
       });
+
     }
 
   };
