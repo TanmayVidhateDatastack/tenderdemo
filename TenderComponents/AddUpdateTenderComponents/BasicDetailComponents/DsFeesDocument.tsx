@@ -112,6 +112,8 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
   const [selectedPaidBy, setSelectedPaidBy] = useState<DsSelectOption>();
   const [selectedcheckbox, setSelectedCheckbox] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState<DsSelectOption[]>([]);
+  const [tempOptions, setTempOptions] = useState<DsSelectOption[]>([]);
+ 
 
   const permissions = useAppSelector((state: RootState) => state.permissions);
   const {
@@ -291,7 +293,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               id={id + "Documents"}
               options={optionlist || []}
               setSelectOptions={(options) => {
-                setSelectedOptions(options);
+                setTempOptions(options);
                 console.log("Selected options:", options);
               }}
               // disableScroll={true}
@@ -305,7 +307,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   onClick={() => {
                     closeAllContext();
                     setSelectedCheckbox(true);
-
+                    setSelectedOptions(tempOptions)
                     console.log("Add button clicked");
                   }}
                 />
