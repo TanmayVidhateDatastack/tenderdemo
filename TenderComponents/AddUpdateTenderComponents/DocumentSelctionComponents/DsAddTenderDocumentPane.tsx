@@ -208,7 +208,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
         // console.log("Updated Document Context:", updatedData); 
         if (updatedData.length > 0) {
           setActionStatus({
-            notiMsg: "The documents has been successfully added.",
+            notiMsg: "The documents has been successfully added",
             notiType: "success",
             showNotification: true,
           });
