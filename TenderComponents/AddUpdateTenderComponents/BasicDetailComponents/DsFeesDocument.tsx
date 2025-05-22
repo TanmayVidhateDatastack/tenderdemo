@@ -113,6 +113,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
   const [selectedcheckbox, setSelectedCheckbox] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState<DsSelectOption[]>([]);
   const [tempOptions, setTempOptions] = useState<DsSelectOption[]>([]);
+ 
 
   const permissions = useAppSelector((state: RootState) => state.permissions);
   const {
@@ -285,57 +286,58 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             />
           </div>
 
-          <div className={eleStyles.inputDetails}>
-            <div className={styles.fields}>
-              <DsMultiSelect
-                label="Add Document Type"
-                containerClasses={styles.feeFields}
-                id={id + "Documents"}
-                options={optionlist || []}
-                setSelectOptions={(options) => {
-                  setTempOptions(options);
-                  console.log("Selected options:", options);
-                }}
-                disableScroll={true}
-              >
-                <div className={styles.addBtn}>
-                  <DsButton
-                    label="Add"
-                    buttonViewStyle="btnContained"
-                    buttonSize="btnSmall"
-                    className={styles.addBtn}
-                    onClick={() => {
-                      closeAllContext();
-                      setSelectedCheckbox(true);
-                      setSelectedOptions(tempOptions);
-                    }}
-                  />
-                </div>
-              </DsMultiSelect>
-            </div>
-            <div className={styles.fields}>
-              <DatePicker
-                containerClasses={styles.feeFields}
-                id={id + "paymentdate"}
-                initialDate={
-                  tenderData.tenderFees
-                    ? new Date(
-                        tenderData.tenderFees[0]?.paymentDate || ""
-                      ).toLocaleDateString("en-GB")
-                    : undefined
-                }
-                maxDate={new Date()}
-                placeholder="DD/MM/YYYY"
-                label="Payment Date"
-                setDateValue={(date) => {
-                  if (date instanceof Date) {
-                    updateTenderFee(type, "paymentDate", getTodayDate(date));
-                  }
-                }}
-              />
-            </div>
+        <div className={eleStyles.inputDetails}>
+          <div className={styles.fields}>
+            <DsMultiSelect
+              label="Add Document Type"
+              containerClasses={styles.feeFields}
+              id={id + "Documents"}
+              options={optionlist || []}
+              setSelectOptions={(options) => {
+                setTempOptions(options);
+                console.log("Selected options:", options);
+              }}
+              // disableScroll={true}
+            >
+              <div className={styles.addBtn}>
+                <DsButton
+                  label="Add"
+                  buttonViewStyle="btnContained"
+                  buttonSize="btnSmall"
+                  className={styles.addBtn}
+                  onClick={() => {
+                    closeAllContext();
+                    setSelectedCheckbox(true);
+                    setSelectedOptions(tempOptions)
+                    console.log("Add button clicked");
+                  }}
+                />
+              </div>
+            </DsMultiSelect>
           </div>
-          {/* {selectedcheckbox &&
+          <div className={styles.fields}>
+            <DatePicker
+              containerClasses={styles.feeFields}
+              id={id + "paymentdate"}
+              initialDate={
+                tenderData.tenderFees
+                  ? new Date(
+                    tenderData.tenderFees[0]?.paymentDate || ""
+                  ).toLocaleDateString("en-GB")
+                  : undefined
+              }
+              maxDate={new Date()}
+              placeholder="DD/MM/YYYY"
+              label="Payment Date"
+              setDateValue={(date) => {
+                if (date instanceof Date) {
+                  updateTenderFee(type, "paymentDate", getTodayDate(date));
+                }
+              }}
+            />
+          </div>
+        </div>
+        {/* {selectedcheckbox &&
           selectedOptions.map((option, index) => (
             <UploadFile
                  key={`upload-${type}-${option.value}-${index}`}
