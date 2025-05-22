@@ -15,9 +15,15 @@ import { closeContext } from "@/Elements/DsComponents/dsContextHolder/dsContextH
 import { ClosePane } from "@/Elements/DsComponents/DsPane/DsPane";
 import { userAgent } from "next/server";
 import { group } from "console";
+import { showToaster } from "@/Elements/DsComponents/DsToaster/DsToaster";
 
 
-
+class ActionStatus {
+  notiType: "success" | "bonus" | "info" | "error" | "cross" = "success";
+  notiMsg: string | React.ReactNode = "";
+  showNotification: boolean = false;
+  isOkayButtonVisible?: boolean = false;
+}
 
 const DsAddTenderDocumentPane: React.FC = () => {
   const [openAccordion, setOpenAccordion] = useState<string | null | number>(null);
@@ -26,6 +32,12 @@ const DsAddTenderDocumentPane: React.FC = () => {
   const [filterDocuments, setFilterDocuments] = useState(groupedDocuments);
   const [searchText, setSearchText] = useState("");
   const [title, setTitle] = useState({});
+
+  const [actionStatus, setActionStatus] = useState<ActionStatus>({
+    notiMsg: "",
+    notiType: "success",
+    showNotification: false,
+  });
 
   // const [isApplyDisabled, setIsApplyDisabled] = useState(true);
 
@@ -194,8 +206,18 @@ const DsAddTenderDocumentPane: React.FC = () => {
           };
         }).filter(group => group.documents.length > 0);
         // console.log("Updated Document Context:", updatedData); 
+        if (updatedData.length > 0) {
+          setActionStatus({
+            notiMsg: "The documents has been successfully added.",
+            notiType: "success",
+            showNotification: true,
+          });
+          showToaster("create-order-toaster");
+        }
         return updatedData;
+
       });
+
     }
 
   };

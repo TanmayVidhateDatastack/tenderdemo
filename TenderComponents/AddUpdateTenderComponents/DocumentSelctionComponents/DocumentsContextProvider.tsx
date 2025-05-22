@@ -66,80 +66,86 @@ export const DocumentProvider: React.FC<DocumentProviderProps> = ({ children }) 
   }, [documentData]);
 
   // ✅ Update totalSelectedDocuments count when documentData changes
-  // useEffect(() => {
-  //   const totalCount = documentData.reduce((acc, { documents }) => acc + documents.length, 0);
-  //   setTotalSelectedDocuments(totalCount);
-  //   const types = Array.from(new Set(documentData.map((x) => x.type)));
-  //   // const types = Array.from(
-  //   //   new Set(
-  //   //     Object.values(fetchedDocuments) // gives array of arrays
-  //   //       .flat()                        // flattens into one array
-  //   //       .map((x) => x.type)           // now map will work
-  //   //   )
-  //   // );
-  //   // const types = Object.keys(fetchedDocuments);
-
-  //   types.forEach((documentType) => {
-  //     console.log("Document Type:", documentType);
-  //     const typeDocuments =
-  //       tenderData.tenderDocuments?.filter(
-  //         (x) =>
-  //           x.documentCategory == "TENDER_DOCUMENT" &&
-  //           x.documentType == documentType
-  //       ) || [];
-  //     const document = documentData.filter((doc) => doc.type === documentType).flatMap((doc) => doc.documents.map((d) => { return { ...d.document, id: d.document.documentId } }));
-
-  //     console.log("Document conpro :", document);
-  //     updateDocuments(
-  //       document,
-  //       typeDocuments,
-  //       removeTenderDocument,
-  //       addNewTenderDocument,
-  //       // type + "_TENDER_DOCUMENT",
-  //       // "FDA_DOCUMENT",
-  //       documentType,
-  //       "TENDER_DOCUMENT"
-  //     );
-  //   });
-  // }, [documentData]);
-
   useEffect(() => {
-    const totalCount = documentData.reduce(
-      (acc, { documents }) => acc + documents.length,
-      0
-    );
+    const totalCount = documentData.reduce((acc, { documents }) => acc + documents.length, 0);
     setTotalSelectedDocuments(totalCount);
-
-    const types = Array.from(new Set(documentData.map((x) => x.type)));
+    // const types = Array.from(new Set(documentData.map((x) => x.type)));
+    // const types = Array.from(
+    //   new Set(
+    //     Object.values(fetchedDocuments) // gives array of arrays
+    //       .flat()                        // flattens into one array
+    //       .map((x) => x.type)           // now map will work
+    //   )
+    // );
+    const types = Object.keys(fetchedDocuments);
 
     types.forEach((documentType) => {
-      const document = documentData
-        .filter((doc) => doc.type === documentType)
-        .flatMap((doc) =>
-          doc.documents.map((d) => ({
-            ...d.document,
-            id: d.document.documentId,
-          }))
-        );
-
+      console.log("Document Type:", documentType);
       const typeDocuments =
         tenderData.tenderDocuments?.filter(
           (x) =>
-            x.documentCategory === "TENDER_DOCUMENT" &&
-            x.documentType === documentType
+            x.documentCategory == "TENDER_DOCUMENT" &&
+            x.documentType == documentType
         ) || [];
+      // Set all IDs in typeDocuments to undefined
+      const updatedTypeDocuments = typeDocuments.map((doc) => ({
+        ...doc,
+        id: undefined, // Set the ID to undefined
+      }));
 
-      // ✅ Always call updateDocuments — even if the document array is empty
+      const document = documentData.filter((doc) => doc.type === documentType).flatMap((doc) => doc.documents.map((d) => { return { ...d.document, id: d.document.documentId } }));
+
+      console.log("Document conpro :", document);
       updateDocuments(
         document,
-        typeDocuments,
+        updatedTypeDocuments,
         removeTenderDocument,
         addNewTenderDocument,
+        // type + "_TENDER_DOCUMENT",
+        // "FDA_DOCUMENT",
         documentType,
         "TENDER_DOCUMENT"
       );
     });
   }, [documentData]);
+
+  // useEffect(() => {
+  //   const totalCount = documentData.reduce(
+  //     (acc, { documents }) => acc + documents.length,
+  //     0
+  //   );
+  //   setTotalSelectedDocuments(totalCount);
+
+  //   const types = Array.from(new Set(documentData.map((x) => x.type)));
+
+  //   types.forEach((documentType) => {
+  //     const document = documentData
+  //       .filter((doc) => doc.type === documentType)
+  //       .flatMap((doc) =>
+  //         doc.documents.map((d) => ({
+  //           ...d.document,
+  //           id: d.document.documentId,
+  //         }))
+  //       );
+
+  //     const typeDocuments =
+  //       tenderData.tenderDocuments?.filter(
+  //         (x) =>
+  //           x.documentCategory === "TENDER_DOCUMENT" &&
+  //           x.documentType === documentType
+  //       ) || [];
+
+  //     // ✅ Always call updateDocuments — even if the document array is empty
+  //     updateDocuments(
+  //       document,
+  //       typeDocuments,
+  //       removeTenderDocument,
+  //       addNewTenderDocument,
+  //       documentType,
+  //       "TENDER_DOCUMENT"
+  //     );
+  //   });
+  // }, [documentData]);
 
 
 
