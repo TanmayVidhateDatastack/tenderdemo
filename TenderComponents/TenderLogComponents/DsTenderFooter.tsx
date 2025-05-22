@@ -121,7 +121,8 @@ export const DSTendrFooter: React.FC = ({ }) => {
     recoveredAttachFileButton,
     ContractTypeDisable,
 
-
+    //product Tab
+    productTableDisable,
   } = permissions;
   useEffect(() => {
     handleFetch();
@@ -324,7 +325,7 @@ export const DSTendrFooter: React.FC = ({ }) => {
           }
         }
       });
-      if (tenderData.tenderRevisions.length > 0) {
+      if (tenderData.tenderRevisions.length > 0 && !productTableDisable) {
         const latestRevision = tenderData.tenderRevisions.reduce(
           (prev, current) => {
             return prev.version > current.version ? prev : current;
