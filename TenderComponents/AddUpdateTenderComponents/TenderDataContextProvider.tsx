@@ -1405,7 +1405,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         console.error("Error saving order:", error);
       }
     },
-    [ fetchData]
+    [ tenderData,tenderDataCopy,fetchData]
   );
 
   const updateTender = useCallback(
@@ -1840,7 +1840,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         console.error("Error saving order:", error);
       }
     },
-    [ fetchData, generatePatchDocument]
+    [ tenderData,tenderDataCopy,fetchData, generatePatchDocument]
   );
 
   const fetchAndSetOriginalTender = useCallback(
