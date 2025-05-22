@@ -29,6 +29,8 @@ import TbodyComponent from "@/Elements/DsComponents/DsTablecomponent/bodyCompone
 import TrComponent from "@/Elements/DsComponents/DsTablecomponent/bodyComponents/dsTrComponent";
 import TdComponent from "@/Elements/DsComponents/DsTablecomponent/bodyComponents/dsTdComponent";
 import Ds_checkbox from "@/Elements/DsComponents/DsCheckbox/dsCheckbox";
+import { useAppSelector } from "@/Redux/hook/hook";
+import { RootState } from "@/Redux/store/store";
 
 interface DsProductTableProps {
   productList: TenderProduct[];
@@ -47,6 +49,13 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
     saveTender,
     tenderDataCopy,
   } = useTenderData();
+
+
+  const permissions = useAppSelector((state: RootState) => state.permissions);
+  const {
+    productTableDisable
+  } = permissions;
+
   // const [tenderProductTable, setTenderProductTable] = useState<
   //   tableData | undefined
   // >();
@@ -85,8 +94,8 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         const discount = tenderproduct.stockistDiscountValue
           ? tenderproduct.stockistDiscountValue
           : ((tenderproduct.proposedRate || 0) *
-              TenderProductDiscountPercentage) /
-            100;
+            TenderProductDiscountPercentage) /
+          100;
 
         calculated.product.totalCost =
           Number(tenderproduct.product.directCost) + Number(discount);
@@ -94,11 +103,11 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
           Number(tenderproduct.proposedRate) - calculated.product.totalCost;
         calculated.product.marginPercent =
           tenderproduct.proposedRate !== 0 &&
-          tenderproduct.proposedRate !== undefined &&
-          tenderproduct.proposedRate !== null
+            tenderproduct.proposedRate !== undefined &&
+            tenderproduct.proposedRate !== null
             ? (calculated.product.marginValue /
-                Number(tenderproduct.proposedRate)) *
-                100 || 0
+              Number(tenderproduct.proposedRate)) *
+            100 || 0
             : 0;
       }
       // if (tenderproduct.ptrPercentage && tenderproduct.product.ptr)
@@ -128,12 +137,12 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         i === index
           ? field.startsWith("product.")
             ? {
-                ...p,
-                product: {
-                  ...p.product,
-                  [field.split(".")[1]]: value, // Update the nested product field
-                },
-              }
+              ...p,
+              product: {
+                ...p.product,
+                [field.split(".")[1]]: value, // Update the nested product field
+              },
+            }
             : { ...p, [field]: value }
           : p
       )
@@ -904,7 +913,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
 
       // if (checkbox) {
       const row = calculatedProducts?.find(
-        (row,index) => index == rowIndex
+        (row, index) => index == rowIndex
       );
       if (row) {
         const productId = row?.productId;
@@ -917,8 +926,8 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
             // row?.customAttributes?.productName?.toString();
             const productName = String(
               row.product?.productName ||
-                row.requestedGenericName ||
-                "-"
+              row.requestedGenericName ||
+              "-"
             );
 
             setProductIds((prev) => [...prev, Number(productId)]);
@@ -973,7 +982,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
             columns={tenderProductTable.columns}
             // rows={tenderProductTable.rows}
             handleCheckboxClick={handleCheckBoxClick}
-            isSelectAble={true}
+            isSelectAble={version == latestVersion && !productTableDisable}
           >
             <TbodyComponent className={""}>
               {calculatedProducts.map((tenderproduct, index) => (
@@ -991,7 +1000,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                   <TdComponent
                     className={styles.cellcheckbox}
                     columnIndex={0}
-                    render={() => (
+                    render={ (productTableDisable || version != latestVersion) ? undefined: () => (
                       <Ds_checkbox
                         className={`row-checkbox-${index}`}
                         defaultChecked={selectedRowIndices.includes(index)}
@@ -1000,6 +1009,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                         name={""}
                         value={""}
                         label={""}
+                        
                       />
                     )}
                     type={""}
@@ -1012,7 +1022,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                     rowIndex={index}
                     columnIndex={1}
                   >
-                    {latestVersion == version ? (
+                    {latestVersion == version && !productTableDisable ? (
                       <DsTextField
                         initialValue={
                           calculatedProducts[index].requestedGenericName || ""
@@ -1036,7 +1046,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                     rowIndex={index}
                     columnIndex={2}
                   >
-                    {latestVersion != version ? (
+                    {latestVersion != version  || productTableDisable ? (
                       calculatedProducts[index].requestedQuantity || "-"
                     ) : (
                       <DsTextField
@@ -1063,7 +1073,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                     rowIndex={index}
                     columnIndex={3}
                   >
-                    {latestVersion == version ? (
+                    {latestVersion == version  && !productTableDisable ? (
                       <DsTextField
                         initialValue={
                           calculatedProducts[index].requestedPackingSize || ""
@@ -1087,7 +1097,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                     rowIndex={index}
                     columnIndex={4}
                   >
-                    {latestVersion == version ? (
+                    {latestVersion == version  && !productTableDisable ? (
                       <ProductTableSearch
                         tableRowIndex={index}
                         setLocalProducts={setLocalProducts}
@@ -1140,7 +1150,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                     rowIndex={index}
                     columnIndex={9}
                   >
-                    {latestVersion == version ? (
+                    {latestVersion == version  && !productTableDisable ? (
                       <DsTextField
                         inputType="positive"
                         initialValue={
@@ -1167,7 +1177,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                     rowIndex={index}
                     columnIndex={10}
                   >
-                    {latestVersion == version ? (
+                    {latestVersion == version  && !productTableDisable ?(
                       <DsCustomerLPR
                         index={index + 1}
                         lprValue={calculatedProducts[index].lastPurchaseRate}
@@ -1192,7 +1202,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                             company.name
                           );
                         }}
-                        disable={latestVersion != version}
+                        disable={latestVersion != version  || productTableDisable }
                       />
                     ) : (
                       "-"
@@ -1204,7 +1214,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                     rowIndex={index}
                     columnIndex={11}
                   >
-                    {latestVersion == version ? (
+                    {latestVersion == version  && !productTableDisable ? (
                       <DsTextField
                         inputType="positive"
                         initialValue={
@@ -1261,7 +1271,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                     rowIndex={index}
                     columnIndex={12}
                   >
-                    {latestVersion == version ? (
+                    {latestVersion == version  && !productTableDisable ? (
                       <DsTextField
                         inputType="number"
                         maximumNumber={100.0}
@@ -1311,11 +1321,10 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                           }
                           e.target.value = ptrPer.toFixed(2);
                         }}
-                        className={`${
-                          (calculatedProducts[index].ptrPercentage || 0) <= 0
+                        className={`${(calculatedProducts[index].ptrPercentage || 0) <= 0
                             ? styles.warningAlert
                             : ""
-                        }`}
+                          }`}
                       />
                     ) : (
                       "-"
@@ -1327,7 +1336,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                     rowIndex={index}
                     columnIndex={13}
                   >
-                    {latestVersion == version ? (
+                    {latestVersion == version  && !productTableDisable ? (
                       <DsTextField
                         inputType="number"
                         initialValue={
@@ -1534,7 +1543,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                       if (selectedRowIndices.length > 0) {
                         selectedRowIndices.forEach((rowIndex) => {
                           const row = calculatedProducts?.find(
-                            (r,index) => index== rowIndex
+                            (r, index) => index == rowIndex
                           );
 
                           const genericName = String(

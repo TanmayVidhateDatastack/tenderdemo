@@ -7,6 +7,8 @@ import DsButton from "../../../Elements/DsComponents/DsButtons/dsButton";
 import DsTextField from "../../../Elements/DsComponents/DsInputs/dsTextField";
 import { useEffect, useState } from "react";
 import { TenderProduct, useTenderData } from "../TenderDataContextProvider";
+import { useAppSelector } from "@/Redux/hook/hook";
+import { RootState } from "@/Redux/store/store";
 
 export interface addProductProps {
   version?: number;
@@ -19,6 +21,13 @@ const DsAddProduct: React.FC<addProductProps> = ({
   orderStatus,
   setProductList,
 }) => {
+
+
+  const permissions = useAppSelector((state: RootState) => state.permissions);
+  const {
+    productTableDisable,
+  } = permissions;
+
   // console.log("Add product ", orderStatus);
   const [selectedProductId, setSelectedProductId] = useState<number>();
   const [disabled, setDisabled] = useState<boolean>(false);
@@ -66,11 +75,11 @@ const DsAddProduct: React.FC<addProductProps> = ({
             productPackingSize: product.result.cartonSize,
             dataSource: "fetch",
           },
-        };
+        }; 
         setProductList(tenderProduct); // Corrected
-      }
+      } 
       // console.log(product);
-      // console.log("product ", product);
+      // console.log("product ", product); 
     }
   };
   useEffect(() => {
@@ -79,8 +88,8 @@ const DsAddProduct: React.FC<addProductProps> = ({
         currentObj.version > maxObj.version ? currentObj : maxObj
       )?.version || 1;
     console.log(latestVersion, version);
-    setDisabled(latestVersion !== version);
-  }, [version, tenderData.tenderRevisions]);  
+    setDisabled(latestVersion !== version || productTableDisable);
+  }, [version, tenderData.tenderRevisions]);
 
   return (
     <div className={styles.input}>
@@ -100,7 +109,7 @@ const DsAddProduct: React.FC<addProductProps> = ({
           id="qty"
           inputType="positiveInteger"
           containerClasses={styles.qtyinproductContainer}
-          disable={disabled}
+          disable={disabled || !selectedProductId}
           className={styles.qtyinproduct}
         ></DsTextField>
 
@@ -121,4 +130,4 @@ const DsAddProduct: React.FC<addProductProps> = ({
   );
 };
 
-export default DsAddProduct; 
+export default DsAddProduct;  
