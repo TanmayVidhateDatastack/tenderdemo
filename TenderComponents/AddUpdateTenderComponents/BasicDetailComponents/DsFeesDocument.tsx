@@ -295,8 +295,10 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               options={optionlist || []}
               setSelectOptions={(options) => {
                 setTempOptions(options);
+                
                 console.log("Selected options:", options);
               }}
+              showOptions={false}
             >
               <div className={styles.addBtnSticky}>
                 <DsButton
