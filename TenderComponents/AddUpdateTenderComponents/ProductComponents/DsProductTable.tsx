@@ -824,7 +824,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         columnHeader: "Direct Cost",
         className: styles.celldirectcost,
       },
-      { columnIndex: 9, columnHeader: "IP LQR", className: styles.celllqr },
+      { columnIndex: 9, columnHeader: "LQR", className: styles.celllqr },
       {
         columnIndex: 10,
         columnHeader: "Customer LPR",
@@ -1144,7 +1144,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                       <DsTextField
                         inputType="positive"
                         initialValue={
-                          calculatedProducts[index].lqr?.toString() || ""
+                          calculatedProducts[index].lastQuotedRate?.toString() || ""
                         }
                         onKeyUp={(e) => {
                           if (e.key === "Enter") {
@@ -1154,11 +1154,11 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                         onClick={(e) => e.stopPropagation()}
                         onBlur={(e) => {
                           const lqr = Number(e.target.value);
-                          handleFieldChange(index, "lqr", lqr);
+                          handleFieldChange(index, "lastQuotedRate", lqr);
                         }}
                       />
                     ) : (
-                      calculatedProducts[index].lqr?.toString() || "-"
+                      calculatedProducts[index].lastQuotedRate?.toString() || "-"
                     )}
                   </TdComponent>
                   <TdComponent

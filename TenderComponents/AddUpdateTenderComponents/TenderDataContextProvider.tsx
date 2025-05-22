@@ -67,7 +67,7 @@ export type TenderProduct = {
   proposedRate?: number;
   ptrPercentage?: number;
   stockistDiscountValue?: number;
-  lqr?: number;
+  lastQuotedRate?: number;
 
   product: {
     type?: "read-only";
