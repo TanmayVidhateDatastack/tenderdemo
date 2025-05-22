@@ -51,7 +51,7 @@ const DsTenderProduct: React.FC<{
         <DsProductKpis version={version} />
       </div>
 
-      <DsProductTable productList={productList} version={version} />
+      <DsProductTable productList={productList} version={version}  />
     </>
   );
 };
