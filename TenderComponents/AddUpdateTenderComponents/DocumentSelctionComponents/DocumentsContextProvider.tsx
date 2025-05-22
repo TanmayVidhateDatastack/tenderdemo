@@ -6,7 +6,7 @@ export interface Document {
   isVisible: boolean;
 }
 
-interface DocumentType {
+export interface DocumentType {
   type: string;
   documents: Document[];
 }
@@ -18,6 +18,8 @@ interface DocumentContextType {
   setSelectedDocuments: Dispatch<SetStateAction<Document[]>>;
   totalSelectedDocuments: number;
   toggleDocumentVisibility: (type: string, documentName: string) => void;
+  fetchedDocuments: DocumentType[];
+  setFetchedDocuments: Dispatch<SetStateAction<DocumentType[]>>;
 }
 export interface DocumentSelectorProps {
   headerTitle: string;
@@ -33,6 +35,7 @@ interface DocumentProviderProps {
 
 export const DocumentProvider: React.FC<DocumentProviderProps> = ({ children }) => {
   const [documentData, setDocumentData] = useState<DocumentType[]>([]);
+  const [fetchedDocuments, setFetchedDocuments] = useState<DocumentType[]>([]);
   const [selectedDocuments, setSelectedDocuments] = useState<Document[]>([]);
   const [totalSelectedDocuments, setTotalSelectedDocuments] = useState(0);
   const { tenderData, removeTenderDocument,
@@ -66,23 +69,36 @@ export const DocumentProvider: React.FC<DocumentProviderProps> = ({ children }) 
   useEffect(() => {
     const totalCount = documentData.reduce((acc, { documents }) => acc + documents.length, 0);
     setTotalSelectedDocuments(totalCount);
-    const types = Array.from(new Set(documentData.map((x) => x.type)));
+    // const types = Array.from(new Set(documentData.map((x) => x.type)));
+    // const types = Array.from(
+    //   new Set(
+    //     Object.values(fetchedDocuments) // gives array of arrays
+    //       .flat()                        // flattens into one array
+    //       .map((x) => x.type)           // now map will work
+    //   )
+    // );
+    const types = Object.keys(fetchedDocuments);
+
     types.forEach((documentType) => {
+      console.log("Document Type:", documentType);
       const typeDocuments =
         tenderData.tenderDocuments?.filter(
-
           (x) =>
             x.documentCategory == "TENDER_DOCUMENT" &&
             x.documentType == documentType
-          // x.documentType == "FDA_DOCUMENT"
-          // Object.keys(groupedDocuments).includes(x.documentType)
         ) || [];
+      // Set all IDs in typeDocuments to undefined
+      const updatedTypeDocuments = typeDocuments.map((doc) => ({
+        ...doc,
+        id: undefined, // Set the ID to undefined
+      }));
+
       const document = documentData.filter((doc) => doc.type === documentType).flatMap((doc) => doc.documents.map((d) => { return { ...d.document, id: d.document.documentId } }));
 
       console.log("Document conpro :", document);
       updateDocuments(
         document,
-        typeDocuments,
+        updatedTypeDocuments,
         removeTenderDocument,
         addNewTenderDocument,
         // type + "_TENDER_DOCUMENT",
@@ -91,72 +107,47 @@ export const DocumentProvider: React.FC<DocumentProviderProps> = ({ children }) 
         "TENDER_DOCUMENT"
       );
     });
-
-    // const types = Array.from(new Set(documentData.map((x) => x.type)));
-
-    // const updatedGroupedDocs = {}; // Will hold all types' documents together
-
-    // types.forEach((documentType) => {
-    //   const typeDocuments =
-    //     tenderData.tenderDocuments?.filter(
-    //       (x) =>
-    //         x.documentCategory === "TENDER_DOCUMENT" &&
-    //         x.documentType === documentType
-    //     ) || [];
-
-    //   const filteredByType = documentData.filter((doc) => doc.type === documentType);
-    //   console.log(`${documentType}: Found ${filteredByType.length} groups`);
-
-    //   const documents = filteredByType
-    //     .flatMap((doc, groupIndex) => {
-    //       console.log(` ${documentType}: group[${groupIndex}] has ${doc.documents?.length} documents`);
-    //       return (doc.documents || []).map((d, docIndex) => {
-    //         if (!d?.document?.documentId) {
-    //           console.warn(` Skipping invalid doc at [${groupIndex}][${docIndex}]`, d);
-    //           return null;
-    //         }
-
-    //         const resultDoc = {
-    //           ...d.document,
-    //           id: d.document.documentId,
-    //           documentType,
-    //           documentCategory: "TENDER_DOCUMENT",
-    //         };
-    //         console.log(` Adding doc: ${resultDoc.documentName} [${resultDoc.id}]`);
-    //         return resultDoc;
-    //       });
-    //     })
-    //     .filter((doc): doc is NonNullable<typeof doc> => doc !== null);
-
-    //   updatedGroupedDocs[documentType] = documents;
-
-    //   // Optional: update individual APIs or log
-    //   // You can also push into some API call accumulator if needed
-    // });
-
-    // console.log(" Final Mapped Grouped Docs:", updatedGroupedDocs);
-
-    // Object.entries(updatedGroupedDocs).forEach(([documentType, docs]) => {
-    //   const typeDocuments =
-    //     tenderData.tenderDocuments?.filter(
-    //       (x) =>
-    //         x.documentCategory === "TENDER_DOCUMENT" &&
-    //         x.documentType === documentType
-    //     ) || [];
-
-    //   updateDocuments(
-    //     docs as { id?: string | number; documentName?: string; document?: File }[],
-    //     typeDocuments,
-    //     removeTenderDocument,
-    //     addNewTenderDocument,
-    //     documentType,
-    //     "TENDER_DOCUMENT"
-    //   );
-    // });
-
-
-
   }, [documentData]);
+
+  // useEffect(() => {
+  //   const totalCount = documentData.reduce(
+  //     (acc, { documents }) => acc + documents.length,
+  //     0
+  //   );
+  //   setTotalSelectedDocuments(totalCount);
+
+  //   const types = Array.from(new Set(documentData.map((x) => x.type)));
+
+  //   types.forEach((documentType) => {
+  //     const document = documentData
+  //       .filter((doc) => doc.type === documentType)
+  //       .flatMap((doc) =>
+  //         doc.documents.map((d) => ({
+  //           ...d.document,
+  //           id: d.document.documentId,
+  //         }))
+  //       );
+
+  //     const typeDocuments =
+  //       tenderData.tenderDocuments?.filter(
+  //         (x) =>
+  //           x.documentCategory === "TENDER_DOCUMENT" &&
+  //           x.documentType === documentType
+  //       ) || [];
+
+  //     // ✅ Always call updateDocuments — even if the document array is empty
+  //     updateDocuments(
+  //       document,
+  //       typeDocuments,
+  //       removeTenderDocument,
+  //       addNewTenderDocument,
+  //       documentType,
+  //       "TENDER_DOCUMENT"
+  //     );
+  //   });
+  // }, [documentData]);
+
+
 
   useEffect(() => {
     // console.log("Context Updated SelectedDocuments:", selectedDocuments);
@@ -195,6 +186,8 @@ export const DocumentProvider: React.FC<DocumentProviderProps> = ({ children }) 
     selectedDocuments,
     setSelectedDocuments,
     toggleDocumentVisibility,
+    fetchedDocuments,
+    setFetchedDocuments,
   };
   return <DocumentContext.Provider value={contextValue}>{children}</DocumentContext.Provider>;
 };

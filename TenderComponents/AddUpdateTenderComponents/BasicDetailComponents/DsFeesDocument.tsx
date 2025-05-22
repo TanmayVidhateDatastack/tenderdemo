@@ -113,7 +113,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
   const [selectedcheckbox, setSelectedCheckbox] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState<DsSelectOption[]>([]);
   const [tempOptions, setTempOptions] = useState<DsSelectOption[]>([]);
- 
+
 
   const permissions = useAppSelector((state: RootState) => state.permissions);
   const {
@@ -290,6 +290,34 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           <div className={styles.fields}>
             <DsMultiSelect
               label="Add Document Type"
+              containerClasses={`${styles.feeFields} ${styles.scrollableContainer}`}
+              id={id + "Documents"}
+              options={optionlist || []}
+              setSelectOptions={(options) => {
+                setTempOptions(options);
+                console.log("Selected options:", options);
+              }}
+            >
+              <div className={styles.addBtnSticky}>
+                <DsButton
+                  label="Add"
+                  buttonViewStyle="btnContained"
+                  buttonSize="btnSmall"
+                  className={styles.addBtn}
+                  onClick={() => {
+                    closeAllContext();
+                    setSelectedCheckbox(true);
+                    setSelectedOptions(tempOptions);
+                    console.log("Add button clicked");
+                  }}
+                />
+              </div>
+            </DsMultiSelect>
+          </div>
+
+          {/* <div className={styles.fields}>
+            <DsMultiSelect
+              label="Add Document Type"
               containerClasses={styles.feeFields}
               id={id + "Documents"}
               options={optionlist || []}
@@ -297,6 +325,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 setTempOptions(options);
                 console.log("Selected options:", options);
               }}
+            // disableScroll={true}
               showOptions={false}
             
             >
@@ -315,7 +344,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 />
               </div>
             </DsMultiSelect>
-          </div>
+          </div> */}
           <div className={styles.fields}>
             <DatePicker
               containerClasses={styles.feeFields}
@@ -362,36 +391,36 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               }}
             />
           ))} */}
-          {selectedcheckbox &&
-            selectedOptions.map((option, index) => (
-              <UploadFile
-                key={`upload-${type}-${option.value}-${index}`}
-                uploadLabel={`Upload ${option.label} here `}
-                id={`${type}_${option.value}`}
-                onSelectedFileChange={(files) => {
-                  // Filter by both documentCategory and documentType for this option
-                  const Documents =
-                    tenderData.tenderDocuments?.filter(
-                      (x) =>
-                        x.documentCategory === type &&
-                        x.documentType ===
-                          `${type}_${option.value}_UPLOADINSTRUCTION`
-                    ) || [];
-                  updateDocuments(
-                    files,
-                    Documents,
-                    removeTenderDocument,
-                    addNewTenderDocument,
-                    `${type}_${option.value}_UPLOADINSTRUCTION`,
-                    type
-                  );
-                }}
-              />
-            ))}
+        {selectedcheckbox &&
+          selectedOptions.map((option, index) => (
+            <UploadFile
+              key={`upload-${type}-${option.value}-${index}`}
+              uploadLabel={`Upload ${option.label} here `}
+              id={`${type}_${option.value}`}
+              onSelectedFileChange={(files) => {
+                // Filter by both documentCategory and documentType for this option
+                const Documents =
+                  tenderData.tenderDocuments?.filter(
+                    (x) =>
+                      x.documentCategory === type &&
+                      x.documentType === `${type}_${option.value}_UPLOADINSTRUCTION`
+                  ) || [];
+                updateDocuments(
+                  files,
+                  Documents,
+                  removeTenderDocument,
+                  addNewTenderDocument,
+                  `${type}_${option.value}_UPLOADINSTRUCTION`,
+                  type
+                );
+              }}
+            />
+          ))}
 
-          <div className={eleStyles.inputDetails}>
-            {selectedcheckbox &&
-              selectedOptions.map((option) => (
+        <div className={eleStyles.inputDetails}>
+          {selectedcheckbox &&
+            selectedOptions.map((option) => (
+              <>
                 <div className={styles.fields}>
                   <DsTextField
                     containerClasses={styles.feeFields}
@@ -426,10 +455,11 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                     }}
                   />
                 </div>
-              ))}
-          </div>
-          <div className={styles.separator}></div>
-        </>
+              </>
+            ))}
+        </div >
+        <div className={styles.separator}></div>
+      </>
       )}
 
       <div className={eleStyles.inputDetails}>
