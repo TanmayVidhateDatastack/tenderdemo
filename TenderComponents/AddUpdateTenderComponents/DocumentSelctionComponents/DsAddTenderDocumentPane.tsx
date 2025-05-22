@@ -10,11 +10,8 @@ import fetchData from "@/Common/helpers/Method/fetchData";
 import { DocumentContext } from "./DocumentsContextProvider";
 import { getTenderTabsDocuments } from "@/Common/helpers/constant";
 import buttonstyle from "@/Elements/DsComponents/DsButtons/dsButton.module.css"
-import { TenderDocument, updateDocuments, useTenderData } from "../TenderDataContextProvider";
-import { closeContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
+import { TenderDocument, useTenderData } from "../TenderDataContextProvider";
 import { ClosePane } from "@/Elements/DsComponents/DsPane/DsPane";
-import { userAgent } from "next/server";
-import { group } from "console";
 import { showToaster } from "@/Elements/DsComponents/DsToaster/DsToaster";
 
 
@@ -33,20 +30,13 @@ const DsAddTenderDocumentPane: React.FC = () => {
   const [searchText, setSearchText] = useState("");
   const [title, setTitle] = useState({});
 
-  const [actionStatus, setActionStatus] = useState<ActionStatus>({
-    notiMsg: "",
-    notiType: "success",
-    showNotification: false,
-  });
 
   // const [isApplyDisabled, setIsApplyDisabled] = useState(true);
 
   const {
-    metaData
+    metaData,
+    setActionStatusValues
   } = useTenderData();
-
-
-
 
   const documentContext = useContext(DocumentContext);
 
@@ -207,7 +197,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
         }).filter(group => group.documents.length > 0);
         // console.log("Updated Document Context:", updatedData); 
         if (updatedData.length > 0) {
-          setActionStatus({
+          setActionStatusValues({
             notiMsg: "The documents has been successfully added",
             notiType: "success",
             showNotification: true,
