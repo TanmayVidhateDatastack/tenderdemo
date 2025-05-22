@@ -80,7 +80,7 @@ const DsAddProduct: React.FC<addProductProps> = ({
       )?.version || 1;
     console.log(latestVersion, version);
     setDisabled(latestVersion !== version);
-  }, [version, tenderData.tenderRevisions]);
+  }, [version, tenderData.tenderRevisions]);  
 
   return (
     <div className={styles.input}>
@@ -121,4 +121,4 @@ const DsAddProduct: React.FC<addProductProps> = ({
   );
 };
 
-export default DsAddProduct;
+export default DsAddProduct; 
