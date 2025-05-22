@@ -472,7 +472,10 @@ export const DSTendrFooter: React.FC = ({ }) => {
             buttonSize="btnSmall"
             buttonViewStyle="btnText"
             className={btnStyles.btnTextPrimary}
-            onClick={() => showToaster("toaster1")}
+            onClick={() => {showToaster("toaster1");
+                  tenderData.status = "Fees_Pending";
+                  updateTender(tenderData.status);
+            }}
           />
         );
       } else if (role === "CHECKER") {

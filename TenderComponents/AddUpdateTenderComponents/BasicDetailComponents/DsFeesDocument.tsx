@@ -267,8 +267,8 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
 
         {/* // { )} } */}
       </div>
-
-      {completedpayment && (
+{/* 
+      {completedpayment && ( */}
         <>
           <div className={styles.fields}>
             <Ds_checkbox
@@ -297,7 +297,8 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 setTempOptions(options);
                 console.log("Selected options:", options);
               }}
-              // disableScroll={true}
+              showOptions={false}
+            
             >
               <div className={styles.addBtn}>
                 <DsButton
@@ -429,7 +430,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           </div>
           <div className={styles.separator}></div>
         </>
-      )}
+      {/* )} */}
 
       <div className={eleStyles.inputDetails}>
         <DsTextField

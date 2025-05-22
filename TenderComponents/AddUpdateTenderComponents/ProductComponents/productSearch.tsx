@@ -92,12 +92,12 @@ const ProductSearch: React.FC<ProductSearchProps> = ({
     }
   };
   return (
+   
     <div className={style.addproduct}>
     <DsSearchComponent
       id="productSearch"
       dataListId="productSearchDatalist"
       label={"Add Product & quantity & hit enter"}
-      // placeholder={"Add product & qty & hit enter"}
       options={products ? products : undefined}
       setOptions={(value) => setOptions(value)}
       starticon={
@@ -109,8 +109,6 @@ const ProductSearch: React.FC<ProductSearchProps> = ({
       setSearchUrl={(searchTerm: string) => {
         // console.log("name", searchProductsURL +searchTerm);
         return searchProductsURL +searchTerm;
-     
-     
       }}
       
       initialValue={initialValue}
@@ -119,8 +117,8 @@ const ProductSearch: React.FC<ProductSearchProps> = ({
     
       disable={disabled}
     />
-    </div>
- 
+  
+ </div>
   );
 };
 export default ProductSearch;
