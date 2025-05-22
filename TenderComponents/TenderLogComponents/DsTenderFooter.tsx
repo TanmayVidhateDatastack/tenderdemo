@@ -33,6 +33,7 @@ import ApprovalPopup from "../AddUpdateTenderComponents/Approvelpopup/ApprovelPo
 import { ContractStatuses } from "../AddUpdateTenderComponents/CustomTabViews/ContractView";
 import { ClosePopup } from "@/Elements/DsComponents/dsPopup/dsPopup";
 
+
 class ActionStatus {
   notiType: "success" | "bonus" | "info" | "error" | "cross" = "success";
   notiMsg: string | React.ReactNode = "";
@@ -74,7 +75,54 @@ export const DSTendrFooter: React.FC = ({ }) => {
 
   const permissions = useAppSelector((state: RootState) => state.permissions);
   const {
-    saveButtonDisabled
+    saveButtonDisabled,
+    searchCustomerDisable,
+    customerLocationDisable,
+    tenderNumberDisable,
+    tenderTypeDisable,
+    tenderIssueDateDisable,
+    lastPurchaseDateDisable,
+    submissionDateDisable,
+    rateContractvalidityDisable,
+    submissionModeDisable,
+    deliveryPeriodDisable,
+    extendedDeliveryPeriodDisable,
+    penaltyLastDeliveryDisable,
+    tenderUrlDisable,
+    appliedByDisable,
+    suppliedDisable,
+    depotDisable,
+    stockistNameDisable,
+    stockistDiscountDisable,
+    applicableDepositButtonDisable,
+    amountDisable,
+    paidByDisable,
+    modesDisable,
+    refundEligibilityDisable,
+    PaymentdueDateDisable,
+    instructionNotesDisable,
+    attachFileButtonDisable,
+    supplypointDisable,
+    consignessCountDisable,
+    testreportRequiredDisable,
+    eligibilityDisable,
+    applicableConditionButtonDisable,
+    condtionNotesDisable,
+    attachFileConditionButtonDisable,
+    paymentcompletedDisable,
+    addDocumentTypeSlectDisable,
+    addDocumentTypeButtonDisable,
+    uploadFileButtonDisabled,
+    transactionIdDisable,
+    recieptIdDisable,
+    paymentRecoveredDisable,
+    recoveredNotesDisable,
+    paymentRecoverdDateDisable,
+    recoveredAttachFileButton,
+    ContractTypeDisable,
+
+    //product Tab
+    productTableDisable,
   } = permissions;
   useEffect(() => {
     handleFetch();
@@ -129,10 +177,10 @@ export const DSTendrFooter: React.FC = ({ }) => {
         }
       }
     } else {
-      if (
+      if (!searchCustomerDisable && (
         tenderData?.customerId == null ||
         tenderData?.customerId == undefined ||
-        tenderData.customerId == 0
+        tenderData.customerId == 0)
       ) {
         errors.push("Please select a customer.");
       }
@@ -143,19 +191,19 @@ export const DSTendrFooter: React.FC = ({ }) => {
       //   //Gaurav Changed
       //   errors.push("Please select a customer address.");
       // }
-      if (tenderData?.tenderNumber?.trim() === "") {
+      if (!tenderNumberDisable && tenderData?.tenderNumber?.trim() === "") {
         errors.push("Please enter a tender number.");
       }
-      if (tenderData?.tenderType === "") {
+      if (!tenderTypeDisable && tenderData?.tenderType === "") {
         errors.push("Please enter a tender type.");
       }
-      if (tenderData?.issueDate === "") {
+      if (!tenderIssueDateDisable && tenderData?.issueDate === "") {
         errors.push("Please enter the tender issue date.");
       }
       const todaysdate = new Date();
       // todaysdate.setHours(0, 0, 0, 0);
 
-      if (
+      if (!tenderIssueDateDisable &&
         tenderData?.issueDate &&
         new Date(tenderData.issueDate) > todaysdate
       ) {
@@ -163,10 +211,10 @@ export const DSTendrFooter: React.FC = ({ }) => {
           "The tender issue date should not be later than today's date."
         );
       }
-      if (tenderData?.lastPurchaseDate === "") {
+      if (!lastPurchaseDateDisable && tenderData?.lastPurchaseDate === "") {
         errors.push("Please enter the last purchase date.");
       }
-      if (
+      if (!lastPurchaseDateDisable &&
         tenderData?.lastPurchaseDate &&
         new Date(tenderData.lastPurchaseDate) < getYesterdayDate()
       ) {
@@ -174,10 +222,10 @@ export const DSTendrFooter: React.FC = ({ }) => {
           "The last purchase date should not be earlier than today's date."
         );
       }
-      if (tenderData?.submissionDate === "") {
+      if (!submissionDateDisable && tenderData?.submissionDate === "") {
         errors.push("Please enter the submission date.");
       }
-      if (
+      if (!submissionDateDisable &&
         tenderData?.submissionDate &&
         new Date(tenderData.submissionDate) < getYesterdayDate()
       ) {
@@ -185,30 +233,30 @@ export const DSTendrFooter: React.FC = ({ }) => {
           "The submission date should not be earlier than today's date."
         );
       }
-      if (tenderData?.submissionMode?.trim() === "") {
+      if (!submissionModeDisable && tenderData?.submissionMode?.trim() === "") {
         errors.push("Please select a submission mode.");
       }
 
       const urlPattern =
         /^(https?:\/\/)?([\w\-]+\.)+[\w\-]+(\/[\w\-._~:/?#[\]@!$&'()*+,;=]*)?$/;
       const tenderURL = tenderData?.tenderUrl?.trim() ?? "";
-      if (tenderURL === "") {
+      if (!tenderUrlDisable && tenderURL === "") {
         errors.push("Please enter the tender URL.");
-      } else if (!urlPattern.test(tenderURL)) {
+      } else if (!tenderUrlDisable && !urlPattern.test(tenderURL)) {
         errors.push("Please enter a valid tender URL.");
       }
-      if (tenderData?.applierType?.trim() === "") {
+      if (!appliedByDisable && tenderData?.applierType?.trim() === "") {
         errors.push("Please select an applier type.");
       }
-      if (tenderData?.supplierType?.trim() === "") {
+      if (!suppliedDisable && tenderData?.supplierType?.trim() === "") {
         errors.push("Please select a supplier type.");
       }
-      if (tenderData?.shippingLocations?.length === 0) {
+      if (!depotDisable && tenderData?.shippingLocations?.length === 0) {
         console.log(tenderData);
         errors.push("Please select at least one shipping location.");
       }
 
-      if (tenderData?.supplierDiscount === 0) {
+      if (!stockistDiscountDisable && tenderData?.supplierDiscount === 0) {
         errors.push("Please enter the supplier discount.");
       }
 
@@ -222,7 +270,7 @@ export const DSTendrFooter: React.FC = ({ }) => {
             errors.push(`${fee.feesType}: Please select a fee type.`);
           }
 
-          if (fee.amount == null || fee.amount === 0) {
+          if (!amountDisable && (fee.amount == null || fee.amount === 0)) {
             errors.push(`${fee.feesType}: Please enter an amount.`);
           }
 
@@ -230,19 +278,19 @@ export const DSTendrFooter: React.FC = ({ }) => {
             errors.push(`${fee.feesType}:  Please select a currency.`);
           }
 
-          if (!fee.paidBy?.trim()) {
+          if (!paidByDisable && !fee.paidBy?.trim()) {
             errors.push(`${fee.feesType}: Please specify who paid the fee.`);
           }
 
-          if (!fee.paymentDueDate?.trim()) {
+          if (!PaymentdueDateDisable && !fee.paymentDueDate?.trim()) {
             errors.push(`${fee.feesType}: Payment due date is required.`);
-          } else if (new Date(fee.paymentDueDate) < getYesterdayDate()) {
+          } else if (!PaymentdueDateDisable && new Date(fee.paymentDueDate) < getYesterdayDate()) {
             errors.push(
               `${fee.feesType}:  The payment due date cannot be in the past.`
             );
           }
 
-          if (!fee.instructionNotes?.trim()) {
+          if (! instructionNotesDisable && !fee.instructionNotes?.trim()) {
             errors.push(
               `${fee.feesType} ${index + 1}:  Please enter instruction notes.`
             );
@@ -250,18 +298,18 @@ export const DSTendrFooter: React.FC = ({ }) => {
         }
       });
 
-      if (tenderData?.tenderSupplyCondition?.supplyPoint?.trim() === "") {
+      if (!supplypointDisable && tenderData?.tenderSupplyCondition?.supplyPoint?.trim() === "") {
         errors.push("Please select a supply point.");
       }
-      if (tenderData?.tenderSupplyCondition?.consigneesCount === 0) {
+      if (!consignessCountDisable && tenderData?.tenderSupplyCondition?.consigneesCount === 0) {
         errors.push("Please enter the number of consignees.");
       }
       if (
-        tenderData?.tenderSupplyCondition?.testReportRequired?.trim() === ""
+       ! testreportRequiredDisable && tenderData?.tenderSupplyCondition?.testReportRequired?.trim() === ""
       ) {
         errors.push("Please specify whether a test report is required.");
       }
-      if (tenderData?.tenderSupplyCondition?.eligibility.length == 0) {
+      if (!eligibilityDisable && tenderData?.tenderSupplyCondition?.eligibility.length == 0) {
         errors.push("Please select at least one eligibility criterion.");
       }
 
@@ -272,12 +320,12 @@ export const DSTendrFooter: React.FC = ({ }) => {
           if (condition.type?.toString().trim() == "") {
             errors.push(`${condition.type} :Please select a type.`);
           }
-          if (condition.notes?.trim() == "") {
+          if (!condtionNotesDisable && condition.notes?.trim() == "") {
             errors.push(`${condition.type}: Please enter notes.`);
           }
         }
       });
-      if (tenderData.tenderRevisions.length > 0) {
+      if (tenderData.tenderRevisions.length > 0 && !productTableDisable) {
         const latestRevision = tenderData.tenderRevisions.reduce(
           (prev, current) => {
             return prev.version > current.version ? prev : current;
@@ -418,14 +466,17 @@ export const DSTendrFooter: React.FC = ({ }) => {
       dispatch(setVisibilityByRole(role));
       console.log("Role=", role);
 
-      if (role === "ACCOUNTANCE") {
+      if (role === "ACCOUNTANCE" || role === "FINANCE") {
         setContextContext(
           <DsButton
             label="Submit Receipt"
             buttonSize="btnSmall"
             buttonViewStyle="btnText"
             className={btnStyles.btnTextPrimary}
-            onClick={() => showToaster("toaster1")}
+            onClick={() => {showToaster("toaster1");
+                  tenderData.status = "Fees_Pending";
+                  updateTender(tenderData.status);
+            }}
           />
         );
       } else if (role === "CHECKER") {
@@ -556,7 +607,7 @@ export const DSTendrFooter: React.FC = ({ }) => {
         // updateTender("Draft")
       } else {
         validateAndSaveTender();
-        // saveTender("Draft");
+        // saveTender("Draft"); 
       }
       setSaveTenderClicked(false);
     }
@@ -597,7 +648,7 @@ export const DSTendrFooter: React.FC = ({ }) => {
             // disable={splitButtonDisableState}
             disable={saveButtonDisabled}
           >
-            Save 
+            Save
           </DsSplitButton>
         ) : (
           <DsButton
@@ -663,7 +714,7 @@ export const DSTendrFooter: React.FC = ({ }) => {
       <Toaster
         id={"toaster1"}
         message={
-          role === "ACCOUNTANCE"
+          role === "ACCOUNTANCE" || role === "FINANCE"
             ? "The Data has been Submitted by Review "
             : role === "MAKER"
               ? "The receipt has been submitted successfully"

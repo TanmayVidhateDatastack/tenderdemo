@@ -25,6 +25,12 @@ import {
   marginPercentLimit,
   TenderProductDiscountPercentage,
 } from "@/Common/helpers/constant";
+import TbodyComponent from "@/Elements/DsComponents/DsTablecomponent/bodyComponents/dsTbodyComponent";
+import TrComponent from "@/Elements/DsComponents/DsTablecomponent/bodyComponents/dsTrComponent";
+import TdComponent from "@/Elements/DsComponents/DsTablecomponent/bodyComponents/dsTdComponent";
+import Ds_checkbox from "@/Elements/DsComponents/DsCheckbox/dsCheckbox";
+import { useAppSelector } from "@/Redux/hook/hook";
+import { RootState } from "@/Redux/store/store";
 
 interface DsProductTableProps {
   productList: TenderProduct[];
@@ -43,12 +49,22 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
     saveTender,
     tenderDataCopy,
   } = useTenderData();
+
+
+  const permissions = useAppSelector((state: RootState) => state.permissions);
+  const {
+    productTableDisable
+  } = permissions;
+
   // const [tenderProductTable, setTenderProductTable] = useState<
   //   tableData | undefined
   // >();
 
   const [localProducts, setLocalProducts] = useState<TenderProduct[]>([]);
-  const [hasChanges, setHasChanges] = useState(false);
+  const [hasChanges, setHasChanges] = useState<{
+    index: number;
+    changed: boolean;
+  }>();
   const [productIds, setProductIds] = useState<number[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<number | undefined>();
   const [selectedProductName, setSelectedProductName] = useState<
@@ -78,8 +94,8 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         const discount = tenderproduct.stockistDiscountValue
           ? tenderproduct.stockistDiscountValue
           : ((tenderproduct.proposedRate || 0) *
-              TenderProductDiscountPercentage) /
-            100;
+            TenderProductDiscountPercentage) /
+          100;
 
         calculated.product.totalCost =
           Number(tenderproduct.product.directCost) + Number(discount);
@@ -87,11 +103,11 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
           Number(tenderproduct.proposedRate) - calculated.product.totalCost;
         calculated.product.marginPercent =
           tenderproduct.proposedRate !== 0 &&
-          tenderproduct.proposedRate !== undefined &&
-          tenderproduct.proposedRate !== null
+            tenderproduct.proposedRate !== undefined &&
+            tenderproduct.proposedRate !== null
             ? (calculated.product.marginValue /
-                Number(tenderproduct.proposedRate)) *
-                100 || 0
+              Number(tenderproduct.proposedRate)) *
+            100 || 0
             : 0;
       }
       // if (tenderproduct.ptrPercentage && tenderproduct.product.ptr)
@@ -121,562 +137,668 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         i === index
           ? field.startsWith("product.")
             ? {
-                ...p,
-                product: {
-                  ...p.product,
-                  [field.split(".")[1]]: value, // Update the nested product field
-                },
-              }
+              ...p,
+              product: {
+                ...p.product,
+                [field.split(".")[1]]: value, // Update the nested product field
+              },
+            }
             : { ...p, [field]: value }
           : p
       )
     );
-    setHasChanges(true);
+    const product = localProducts[index];
+    if (field.startsWith("product.")) {
+      const subField = field.split(".")[1];
+      updateTenderProduct(version, field, value, product.id, product.productId);
+    } else {
+      updateTenderProduct(version, field, value, product.id, product.productId);
+    }
     // setTimeout(() => handleSave(), 2);
   };
- const rows: DsTableRow[] = useMemo(
-    () =>
-      calculatedProducts.map((tenderproduct, index) => ({
-        rowIndex: index + 1,
-        customAttributes: {
-          genericName: tenderproduct.requestedGenericName || "",
-          productId: tenderproduct.productId || 0,
-          productName: tenderproduct.product.productName || "",
-        },
 
-        content: [
-          {
-            columnIndex: 1,
-            render: () =>  tenderproduct.product?.dataSource === "fetch" &&
-                latestVersion == version ? (
-                <DsTextField
-                  initialValue={tenderproduct.requestedGenericName || ""}
-                  onBlur={(e) =>
-                    handleFieldChange(
-                      index,
-                      "requestedGenericName",
-                      (e.target as HTMLInputElement).value
-                    )
-                  }
-                  onClick={(e) => e.stopPropagation()}
-                />
-              ) : (
-                tenderproduct.requestedGenericName || "-"
-              )
-            ,
-            className: styles.cellgenericname,
-          },
+  // const handleSave = () => {
+  //   calculatedProducts.forEach((product) => {
+  //     // if (product.id) {
+  //     updateTenderProduct(
+  //       version,
+  //       "product.productName",
+  //       product.product.productName || "",
+  //       product.id
+  //     );
+  //     updateTenderProduct(
+  //       version,
+  //       "requestedQuantity",
+  //       product.requestedQuantity || 0,
+  //       product.id
+  //     );
+  //     updateTenderProduct(
+  //       version,
+  //       "requestedPackingSize",
+  //       product.requestedPackingSize || "",
+  //       product.id
+  //     );
+  //     updateTenderProduct(
+  //       version,
+  //       "product.totalCost",
+  //       product.product.totalCost || 0,
+  //       product.id
+  //     );
+  //     updateTenderProduct(
+  //       version,
+  //       "product.marginValue",
+  //       product.product.marginValue || 0,
+  //       product.id
+  //     );
+  //     updateTenderProduct(
+  //       version,
+  //       "product.marginPercent",
+  //       product.product.marginPercent || 0,
+  //       product.id
+  //     );
+  //     updateTenderProduct(
+  //       version,
+  //       "product.netValue",
+  //       product.product.netValue || 0,
+  //       product.id
+  //     );
+  //     updateTenderProduct(
+  //       version,
+  //       "proposedRate",
+  //       product.proposedRate || 0,
+  //       product.id
+  //     );
+  //     updateTenderProduct(
+  //       version,
+  //       "ptrPercentage",
+  //       product.ptrPercentage || 0,
+  //       product.id
+  //     );
+  //     updateTenderProduct(
+  //       version,
+  //       "stockistDiscountValue",
+  //       product.stockistDiscountValue || 0,
+  //       product.id
+  //     );
+  //     // }
+  //     // if (product.product.dataSource === "fetch") {
+  //     if (product.requestedGenericName)
+  //       updateTenderProduct(
+  //         version,
+  //         "requestedGenericName",
+  //         product.requestedGenericName,
+  //         undefined,
+  //         product.productId
+  //       );
+  //     if (product.requestedPackingSize)
+  //       updateTenderProduct(
+  //         version,
+  //         "requestedPackingSize",
+  //         product.requestedPackingSize,
+  //         undefined,
+  //         product.productId
+  //       );
+  //     if (product.requestedQuantity)
+  //       updateTenderProduct(
+  //         version,
+  //         "requestedQuantity",
+  //         product.requestedQuantity,
+  //         undefined,
+  //         product.productId
+  //       );
+  //     if (product.product.productPackingSize)
+  //       updateTenderProduct(
+  //         version,
+  //         "product.productPackingSize",
+  //         product.product.productPackingSize,
+  //         undefined,
+  //         product.productId
+  //       );
+  //     // }
+  //     // if (product.product.dataSource === "csv") {
+  //     if (product.requestedGenericName && product.productId) {
+  //       updateTenderProduct(
+  //         version,
+  //         "productId",
+  //         product.productId,
+  //         undefined,
+  //         undefined,
+  //         product.requestedGenericName
+  //       );
+  //       updateTenderProduct(
+  //         version,
+  //         "product.productName",
+  //         product.product.productName || "",
+  //         undefined,
+  //         undefined,
+  //         product.requestedGenericName
+  //       );
+  //       // }
+  //     }
+  //   });
+  //   setHasChanges(false);
+  // };
+  useEffect(() => {
+    // handleSave();
+    if (hasChanges?.changed) {
+      const product = localProducts[hasChanges?.index];
 
-          {
-            columnIndex: 2,
-            render: () =>  tenderproduct.product?.dataSource === "csv" ? (
-                tenderproduct.requestedQuantity || "-"
-              ) : latestVersion != version ? (
-                tenderproduct.requestedQuantity || "-"
-              ) : (
-                <DsTextField
-                  initialValue={
-                    tenderproduct.requestedQuantity?.toString() || ""
-                  }
-                  inputType="positiveInteger"
-                  onBlur={(e) =>
-                    handleFieldChange(
-                      index,
-                      "requestedQuantity",
-                      Number((e.target as HTMLInputElement).value)
-                    )
-                  }
-                  onClick={(e) => e.stopPropagation()}
-                />
-              )
-            ,
-
-            className: styles.cellquantity,
-          },
-
-          {
-            columnIndex: 3,
-            render: () =>  tenderproduct.product?.dataSource === "fetch" &&
-                latestVersion == version ? (
-                <DsTextField
-                  initialValue={tenderproduct.requestedPackingSize || ""}
-                  onBlur={(e) =>
-                    handleFieldChange(
-                      index,
-                      "requestedPackingSize",
-                      (e.target as HTMLInputElement).value
-                    )
-                  }
-                  onClick={(e) => e.stopPropagation()}
-                />
-              ) : (
-                tenderproduct.requestedPackingSize || "-"
-              )
-            ,
-            className: styles.cellpackingsize,
-          },
-
-          {
-            columnIndex: 4,
-            render: () =>  tenderproduct.product?.dataSource === "csv" &&
-                latestVersion == version ? (
-                <ProductTableSearch
-                  tableRowIndex={index + 1}
-                  setLocalProducts={setLocalProducts}
-                  setHasChanges={setHasChanges}
-                  initialValue={tenderproduct.product?.productName || ""}
-                />
-              ) : (
-                tenderproduct.product?.productName || "-"
-              )
-            ,
-
-            className: styles.cellproductname,
-          },
-          {
-            columnIndex: 5,
-            render: () => 
-              // tenderproduct.product?.dataSource === "csv" ? (
-              tenderproduct.product.productPackingSize || "-",
-            // ) : latestVersion != version ? (
-            //   tenderproduct.product.productPackingSize || "-"
-            // ) : (
-            //   <DsTextField
-            //     initialValue={tenderproduct.product?.productPackingSize || ""}
-            //     onBlur={(e) =>
-            //       handleFieldChange(
-            //         index,
-            //         "product.productPackingSize",
-            //         (e.target as HTMLInputElement).value
-            //       )
-            //     }
-            //   />
-            // ),
-            className: styles.cellproductpakingsize,
-          },
-
-          {
-            columnIndex: 6,
-            render: () => 
-              tenderproduct.product?.dataSource == "saved"
-                ? tenderproduct.product.mrp?.toString() || "-"
-                : "-",
-            className: styles.cellmrp,
-          },
-          {
-            columnIndex: 7,
-           render: () => 
-              tenderproduct.product?.dataSource == "saved"
-                ? tenderproduct.product.ptr?.toString() || "-"
-                : "-",
-            className: styles.cellptr,
-          },
-          {
-            columnIndex: 8,
-            render: () => 
-              tenderproduct.product?.dataSource == "saved"
-                ? tenderproduct.product.directCost?.toString() || "-"
-                : "-",
-            className: styles.celldirectcost,
-          },
-          {
-            columnIndex: 9,
-            render: () => 
-              tenderproduct.product?.dataSource == "saved"
-                ? tenderproduct.product.lqr?.toString() || "-"
-                : "-",
-            className: styles.celllqr,
-          },
-          {
-            columnIndex: 10,
-            render: () =>  tenderproduct.product?.dataSource == "saved" ? (
-                latestVersion != version ? (
-                  tenderproduct.lastPurchaseRate ? (
-                    <DsCustomerLPR
-                      index={index + 1}
-                      lprValue={tenderproduct.lastPurchaseRate}
-                      lprTo={{
-                        id: tenderproduct.competitorId || 0,
-                        name: tenderproduct.product.competitorName || "",
-                      }}
-                      onValueChange={(value) =>
-                        handleFieldChange(
-                          index,
-                          "lastPurchaseRate",
-                          Number(value)
-                        )
-                      }
-                      onCompanyChange={(company) => {
-                        handleFieldChange(index, "competitorId", company.id);
-                        handleFieldChange(
-                          index,
-                          "product.competitorName",
-                          company.name
-                        );
-                      }}
-                      disable={latestVersion != version}
-                    />
-                  ) : (
-                    "-"
-                  )
-                ) : (
-                  <DsCustomerLPR
-                    index={index + 1}
-                    lprValue={tenderproduct.lastPurchaseRate}
-                    lprTo={{
-                      id: tenderproduct.competitorId || 0,
-                      name: tenderproduct.product.competitorName || "",
-                    }}
-                    onValueChange={(value) =>
-                      handleFieldChange(
-                        index,
-                        "lastPurchaseRate",
-                        Number(value)
-                      )
-                    }
-                    onCompanyChange={(company) => {
-                      handleFieldChange(index, "competitorId", company.id);
-                      handleFieldChange(
-                        index,
-                        "product.competitorName",
-                        company.name
-                      );
-                    }}
-                    disable={latestVersion != version}
-                  />
-                )
-              ) : (
-                "-"
-              )
-            ,
-            className: styles.celllpr,
-          },
-          {
-            columnIndex: 11,
-             render: () =>  tenderproduct.product?.dataSource == "saved" &&
-              latestVersion == version ? (
-                <DsTextField
-                  inputType="positive"
-                  initialValue={tenderproduct.proposedRate?.toString() || ""}
-                  onKeyUp={(e) => {
-                    if (e.key === "Enter") {
-                      (e.target as HTMLElement).blur();
-                    }
-                  }}
-                  onClick={(e) => e.stopPropagation()}
-                  onBlur={(e) => {
-                    const proposedRate = Number(
-                      (e.target as HTMLInputElement).value
-                    );
-                    if (tenderproduct.proposedRate !== proposedRate) {
-                      const ptrTemp = tenderproduct.product.ptr;
-                      const ptr =
-                        ptrTemp !== undefined
-                          ? typeof ptrTemp == "number"
-                            ? ptrTemp
-                            : Number(ptrTemp)
-                          : 1;
-                      const ptrPer =
-                        100 - Number(((proposedRate / ptr) * 100).toFixed(2));
-                      const discount =
-                        (proposedRate * TenderProductDiscountPercentage) / 100;
-                      // console.log(proposedRate);
-                      // console.log(ptrPer);
-                      // console.log(discount);
-                      handleFieldChange(index, "proposedRate", proposedRate);
-                      handleFieldChange(index, "ptrPercentage", ptrPer);
-                      handleFieldChange(
-                        index,
-                        "stockistDiscountValue",
-                        discount
-                      );
-                    }
-                  }}
-                />
-              ) : (
-                "-"
-              ),
-            className: styles.cellproposedrate,
-          },
-          {
-            columnIndex: 12,
-            render: () =>  tenderproduct.product?.dataSource == "saved" &&
-              latestVersion == version ? (
-                <DsTextField
-                  inputType="number"
-                  maximumNumber={100.0}
-                  initialValue={
-                    Number(
-                      tenderproduct.ptrPercentage?.toFixed(2)
-                    ).toString() || ""
-                  }
-                  onKeyUp={(e) => {
-                    if (e.key === "Enter") {
-                      (e.target as HTMLElement).blur();
-                    }
-                  }}
-                  onClick={(e) => e.stopPropagation()}
-                  onBlur={(e) => {
-                    const ptrPer = Number((e.target as HTMLInputElement).value);
-                    if (tenderproduct.ptrPercentage !== ptrPer) {
-                      const ptrTemp = tenderproduct.product.ptr;
-                      const ptr =
-                        ptrTemp !== undefined
-                          ? typeof ptrTemp == "number"
-                            ? ptrTemp
-                            : Number(ptrTemp)
-                          : 1;
-
-                      const proposedRate = ((100 - ptrPer) * ptr) / 100;
-
-                      const discount =
-                        (proposedRate * TenderProductDiscountPercentage) / 100;
-                      // console.log(proposedRate);
-                      // console.log(ptrPer);
-                      // console.log(discount);
-                      handleFieldChange(
-                        index,
-                        "ptrPercentage",
-                        parseFloat(ptrPer.toFixed(2))
-                      );
-                      handleFieldChange(index, "proposedRate", proposedRate);
-                      handleFieldChange(
-                        index,
-                        "stockistDiscountValue",
-                        discount
-                      );
-                    }
-                    (e.target as HTMLInputElement).value = ptrPer.toFixed(2);
-                  }}
-                  className={`${
-                    (tenderproduct.ptrPercentage || 0) <= 0
-                      ? styles.warningAlert
-                      : ""
-                  }`}
-                />
-              ) : (
-                "-"
-              ),
-            className: styles.cellptr,
-          },
-          {
-            columnIndex: 13,
-            render: () =>  tenderproduct.product?.dataSource == "saved" &&
-              latestVersion == version ? (
-                <DsTextField
-                  inputType="number"
-                  initialValue={
-                    (
-                      ((tenderproduct.proposedRate || 0) *
-                        TenderProductDiscountPercentage) /
-                      100
-                    ).toFixed(2) || ""
-                  }
-                  onKeyUp={(e) => {
-                    if (e.key === "Enter") {
-                      (e.target as HTMLElement).blur();
-                    }
-                  }}
-                  onClick={(e) => e.stopPropagation()}
-                  onBlur={(e) => {
-                    const discount = Number(
-                      (e.target as HTMLInputElement).value
-                    );
-                    if (tenderproduct.stockistDiscountValue !== discount) {
-                      const proposedRate =
-                        (discount * 100) / TenderProductDiscountPercentage;
-                      const ptrTemp = tenderproduct.product.ptr;
-                      const ptr =
-                        ptrTemp !== undefined
-                          ? typeof ptrTemp == "number"
-                            ? ptrTemp
-                            : Number(ptrTemp)
-                          : 1;
-
-                      const ptrPer =
-                        100 - Number(((proposedRate / ptr) * 100).toFixed(2));
-                      // console.log(proposedRate);
-                      // console.log(ptrPer);
-                      // console.log(discount);
-                      handleFieldChange(
-                        index,
-                        "stockistDiscountValue",
-                        discount
-                      );
-                      handleFieldChange(index, "proposedRate", proposedRate);
-                      handleFieldChange(index, "ptrPercentage", ptrPer);
-                    }
-                  }}
-                />
-              ) : (
-                "-"
-              ),
-            className: styles.celldiscount,
-          },
-          {
-            columnIndex: 14,
-            render: () =>  tenderproduct.product?.dataSource == "saved"
-                ? tenderproduct.product.totalCost?.toFixed(2) || "-"
-                : "-",
-            className: styles.celltotalcost,
-          },
-          {
-            columnIndex: 15,
-             render: () => 
-              tenderproduct.product?.dataSource == "saved"
-                ? tenderproduct.product.marginValue?.toFixed(2) || "-"
-                : "-",
-            className: `${
-              (tenderproduct.product.marginValue || 0) <= 0
-                ? styles.warningAlert
-                : ""
-            } ${styles.cellmargin}`,
-          },
-          {
-            columnIndex: 16,
-             render: () =>  tenderproduct.product?.dataSource == "saved"
-                ? (tenderproduct.product.marginPercent || 0).toFixed(2) + "%" ||
-                  "-"
-                : "-",
-            className: `${styles.cellmarginper} ${
-              (tenderproduct.product.marginPercent || 0) < marginPercentLimit
-                ? styles.red
-                : ""
-            }`,
-          },
-          {
-            columnIndex: 17,
-            render: () =>  tenderproduct.product?.dataSource == "saved"
-                ? tenderproduct.product.netValue?.toFixed(2) || "-"
-                : "-",
-            className: styles.cellnetvalue,
-          },
-        ],
-      })),
-    [calculatedProducts]
-  );
-  const handleSave = () => {
-    calculatedProducts.forEach((product) => {
-      if (product.id) {
+      if (product.requestedGenericName && product.productId) {
+        updateTenderProduct(
+          version,
+          "productId",
+          product.productId,
+          undefined,
+          undefined,
+          product.requestedGenericName
+        );
         updateTenderProduct(
           version,
           "product.productName",
           product.product.productName || "",
-          product.id
-        );
-        updateTenderProduct(
-          version,
-          "requestedQuantity",
-          product.requestedQuantity || 0,
-          product.id
-        );
-        updateTenderProduct(
-          version,
-          "requestedPackingSize",
-          product.requestedPackingSize || "",
-          product.id
-        );
-        updateTenderProduct(
-          version,
-          "product.totalCost",
-          product.product.totalCost || 0,
-          product.id
-        );
-        updateTenderProduct(
-          version,
-          "product.marginValue",
-          product.product.marginValue || 0,
-          product.id
-        );
-        updateTenderProduct(
-          version,
-          "product.marginPercent",
-          product.product.marginPercent || 0,
-          product.id
-        );
-        updateTenderProduct(
-          version,
-          "product.netValue",
-          product.product.netValue || 0,
-          product.id
-        );
-        updateTenderProduct(
-          version,
-          "proposedRate",
-          product.proposedRate || 0,
-          product.id
-        );
-        updateTenderProduct(
-          version,
-          "ptrPercentage",
-          product.ptrPercentage || 0,
-          product.id
-        );
-        updateTenderProduct(
-          version,
-          "stockistDiscountValue",
-          product.stockistDiscountValue || 0,
-          product.id
+          undefined,
+          undefined,
+          product.requestedGenericName
         );
       }
-      if (product.product.dataSource === "fetch") {
-        if (product.requestedGenericName)
-          updateTenderProduct(
-            version,
-            "requestedGenericName",
-            product.requestedGenericName,
-            undefined,
-            product.productId
-          );
-        if (product.requestedPackingSize)
-          updateTenderProduct(
-            version,
-            "requestedPackingSize",
-            product.requestedPackingSize,
-            undefined,
-            product.productId
-          );
-        if (product.requestedQuantity)
-          updateTenderProduct(
-            version,
-            "requestedQuantity",
-            product.requestedQuantity,
-            undefined,
-            product.productId
-          );
-        if (product.product.productPackingSize)
-          updateTenderProduct(
-            version,
-            "product.productPackingSize",
-            product.product.productPackingSize,
-            undefined,
-            product.productId
-          );
-      }
-      if (product.product.dataSource === "csv") {
-        if (product.requestedGenericName && product.productId) {
-          updateTenderProduct(
-            version,
-            "productId",
-            product.productId,
-            undefined,
-            undefined,
-            product.requestedGenericName
-          );
-          updateTenderProduct(
-            version,
-            "product.productName",
-            product.product.productName || "",
-            undefined,
-            undefined,
-            product.requestedGenericName
-          );
-        }
-      }
-    });
-    setHasChanges(false);
-  };
+    }
+  }, [hasChanges]);
+  // const rows: DsTableRow[] = useMemo(
+  //   () =>
+  //     calculatedProducts.map((tenderproduct, index) => ({
+  //       rowIndex: index + 1,
+  //       key: index + 1 + "_" + tenderproduct.productId,
+  //       customAttributes: {
+  //         genericName: calculatedProducts[index].requestedGenericName || "",
+  //         productId: calculatedProducts[index].productId || 0,
+  //         productName: calculatedProducts[index].product.productName || "",
+  //       },
 
+  //       content: [
+  //         {
+  //           key: index + 1 + "_" + tenderproduct.productId + "generic",
+  //           columnIndex: 1,
+  //           render: () =>
+  //             // calculatedProducts[index].product?.dataSource === "fetch" &&
+  //             latestVersion == version ? (
+  //               <DsTextField
+  //                 initialValue={
+  //                   calculatedProducts[index].requestedGenericName || ""
+  //                 }
+  //                 onBlur={(e) =>
+  //                   handleFieldChange(
+  //                     index,
+  //                     "requestedGenericName",
+  //                     (e.target as HTMLInputElement).value
+  //                   )
+  //                 }
+  //                 onClick={(e) => e.stopPropagation()}
+  //               />
+  //             ) : (
+  //               calculatedProducts[index].requestedGenericName || "-"
+  //             ),
+  //           className: styles.cellgenericname,
+  //         },
+
+  //         {
+  //           key: index + 1 + "_" + tenderproduct.productId + "reqQuant",
+
+  //           columnIndex: 2,
+  //           render: () =>
+  //             //  calculatedProducts[index].product?.dataSource === "csv" ? (
+  //             //   calculatedProducts[index].requestedQuantity || "-"
+  //             // ) :
+  //             latestVersion != version ? (
+  //               calculatedProducts[index].requestedQuantity || "-"
+  //             ) : (
+  //               <DsTextField
+  //                 initialValue={
+  //                   calculatedProducts[index].requestedQuantity?.toString() ||
+  //                   ""
+  //                 }
+  //                 inputType="positiveInteger"
+  //                 onBlur={(e) =>
+  //                   handleFieldChange(
+  //                     index,
+  //                     "requestedQuantity",
+  //                     Number((e.target as HTMLInputElement).value)
+  //                   )
+  //                 }
+  //                 onClick={(e) => e.stopPropagation()}
+  //               />
+  //             ),
+  //           className: styles.cellquantity,
+  //         },
+
+  //         {
+  //           key: index + 1 + "_" + tenderproduct.productId + "reqPack",
+  //           columnIndex: 3,
+  //           render: () =>
+  //             // calculatedProducts[index].product?.dataSource === "fetch" &&
+  //             latestVersion == version ? (
+  //               <DsTextField
+  //                 initialValue={
+  //                   calculatedProducts[index].requestedPackingSize || ""
+  //                 }
+  //                 onBlur={(e) =>
+  //                   handleFieldChange(
+  //                     index,
+  //                     "requestedPackingSize",
+  //                     (e.target as HTMLInputElement).value
+  //                   )
+  //                 }
+  //                 onClick={(e) => e.stopPropagation()}
+  //               />
+  //             ) : (
+  //               calculatedProducts[index].requestedPackingSize || "-"
+  //             ),
+  //           className: styles.cellpackingsize,
+  //         },
+
+  //         {
+  //           key: index + 1 + "_" + tenderproduct.productId + "prdSearch",
+  //           columnIndex: 4,
+  //           render: () =>
+  //             // calculatedProducts[index].product?.dataSource === "csv" &&
+  //             latestVersion == version ? (
+  //               <ProductTableSearch
+  //                 tableRowIndex={index + 1}
+  //                 setLocalProducts={setLocalProducts}
+  //                 setHasChanges={setHasChanges}
+  //                 initialValue={
+  //                   calculatedProducts[index].product?.productName || ""
+  //                 }
+  //               />
+  //             ) : (
+  //               calculatedProducts[index].product?.productName || "-"
+  //             ),
+  //           className: styles.cellproductname,
+  //         },
+  //         {
+  //           key: index + 1 + "_" + tenderproduct.productId + "prdPack",
+  //           columnIndex: 5,
+  //           render: () =>
+  //             // calculatedProducts[index].product?.dataSource === "csv" ? (
+  //             calculatedProducts[index].product.productPackingSize || "-",
+  //           // ) : latestVersion != version ? (
+  //           //   calculatedProducts[index].product.productPackingSize || "-"
+  //           // ) : (
+  //           //   <DsTextField
+  //           //     initialValue={calculatedProducts[index].product?.productPackingSize || ""}
+  //           //     onBlur={(e) =>
+  //           //       handleFieldChange(
+  //           //         index,
+  //           //         "product.productPackingSize",
+  //           //         (e.target as HTMLInputElement).value
+  //           //       )
+  //           //     }
+  //           //   />
+  //           // ),
+  //           className: styles.cellproductpakingsize,
+  //         },
+
+  //         {
+  //           key: index + 1 + "_" + tenderproduct.productId + "mrp",
+  //           columnIndex: 6,
+  //           render: () =>
+  //             // calculatedProducts[index].product?.dataSource == "saved"?
+  //             calculatedProducts[index].product.mrp?.toString() || "-",
+  //           // : "-",
+  //           className: styles.cellmrp,
+  //         },
+  //         {
+  //           key: index + 1 + "_" + tenderproduct.productId + "ptr",
+  //           columnIndex: 7,
+  //           render: () =>
+  //             // calculatedProducts[index].product?.dataSource == "saved"?
+  //             calculatedProducts[index].product.ptr?.toString() || "-",
+  //           // : "-",
+  //           className: styles.cellptr,
+  //         },
+  //         {
+  //           key: index + 1 + "_" + tenderproduct.productId + "direct",
+  //           columnIndex: 8,
+  //           render: () =>
+  //             // calculatedProducts[index].product?.dataSource == "saved"?
+  //             calculatedProducts[index].product.directCost?.toString() || "-",
+  //           // : "-",
+  //           className: styles.celldirectcost,
+  //         },
+  //         {
+  //           key: index + 1 + "_" + tenderproduct.productId + "lqr",
+  //           columnIndex: 9,
+  //           render: () =>
+  //             // calculatedProducts[index].product?.dataSource == "saved"?
+  //             latestVersion == version ? (
+  //               <DsTextField
+  //                 inputType="positive"
+  //                 initialValue={calculatedProducts[index].lqr?.toString() || ""}
+  //                 onKeyUp={(e) => {
+  //                   if (e.key === "Enter") {
+  //                     (e.target as HTMLElement).blur();
+  //                   }
+  //                 }}
+  //                 onClick={(e) => e.stopPropagation()}
+  //                 onBlur={(e) => {
+  //                   const lqr = Number((e.target as HTMLInputElement).value);
+  //                   // if (calculatedProducts[index].proposedRate !== proposedRate) {
+  //                   //   const ptrTemp = calculatedProducts[index].product.ptr;
+  //                   //   const ptr =
+  //                   //     ptrTemp !== undefined
+  //                   //       ? typeof ptrTemp == "number"
+  //                   //         ? ptrTemp
+  //                   //         : Number(ptrTemp)
+  //                   //       : 1;
+  //                   //   const ptrPer =
+  //                   //     100 - Number(((proposedRate / ptr) * 100).toFixed(2));
+  //                   //   const discount =
+  //                   //     (proposedRate * calculatedProducts[index]DiscountPercentage) / 100;
+  //                   // console.log(proposedRate);
+  //                   // console.log(ptrPer);
+  //                   // console.log(discount);
+  //                   // handleFieldChange(index, "proposedRate", proposedRate);
+  //                   handleFieldChange(index, "lqr", lqr);
+  //                   // handleFieldChange(
+  //                   //   index,
+  //                   //   "stockistDiscountValue",
+  //                   //   discount
+  //                   // );
+  //                   // }
+  //                 }}
+  //               />
+  //             ) : (
+  //               calculatedProducts[index].lqr?.toString() || "-"
+  //             ),
+  //           // : "-",
+  //           className: styles.celllqr,
+  //         },
+  //         {
+  //           key: index + 1 + "_" + tenderproduct.productId + "lpr",
+  //           columnIndex: 10,
+  //           render: () =>
+  //             // calculatedProducts[index].product?.dataSource == "saved" ? (
+  //             latestVersion == version ? (
+  //               //   calculatedProducts[index].lastPurchaseRate ? (
+  //               //     <DsCustomerLPR
+  //               //       index={index + 1}
+  //               //       lprValue={calculatedProducts[index].lastPurchaseRate}
+  //               //       lprTo={{
+  //               //         id: calculatedProducts[index].competitorId || 0,
+  //               //         name: calculatedProducts[index].product.competitorName || "",
+  //               //       }}
+  //               //       onValueChange={(value) =>
+  //               //         handleFieldChange(
+  //               //           index,
+  //               //           "lastPurchaseRate",
+  //               //           Number(value)
+  //               //         )
+  //               //       }
+  //               //       onCompanyChange={(company) => {
+  //               //         handleFieldChange(index, "competitorId", company.id);
+  //               //         handleFieldChange(
+  //               //           index,
+  //               //           "product.competitorName",
+  //               //           company.name
+  //               //         );
+  //               //       }}
+  //               //       disable={latestVersion != version}
+  //               //     />
+  //               //   ) : (
+  //               //     "-"
+  //               //   )
+  //               // ) : (
+  //               <DsCustomerLPR
+  //                 index={index + 1}
+  //                 lprValue={calculatedProducts[index].lastPurchaseRate}
+  //                 lprTo={{
+  //                   id: calculatedProducts[index].competitorId || 0,
+  //                   name:
+  //                     calculatedProducts[index].product.competitorName || "",
+  //                 }}
+  //                 onValueChange={(value) =>
+  //                   handleFieldChange(index, "lastPurchaseRate", Number(value))
+  //                 }
+  //                 onCompanyChange={(company) => {
+  //                   handleFieldChange(index, "competitorId", company.id);
+  //                   handleFieldChange(
+  //                     index,
+  //                     "product.competitorName",
+  //                     company.name
+  //                   );
+  //                 }}
+  //                 disable={latestVersion != version}
+  //               />
+  //             ) : (
+  //               "-"
+  //             ),
+  //           className: styles.celllpr,
+  //         },
+  //         {
+  //           key: index + 1 + "_" + tenderproduct.productId + "proposedRate",
+  //           columnIndex: 11,
+  //           render: () =>
+  //             // calculatedProducts[index].product?.dataSource == "saved" &&
+  //             latestVersion == version ? (
+  //               <DsTextField
+  //                 inputType="positive"
+  //                 initialValue={
+  //                   calculatedProducts[index].proposedRate?.toString() || ""
+  //                 }
+  //                 onKeyUp={(e) => {
+  //                   if (e.key === "Enter") {
+  //                     (e.target as HTMLElement).blur();
+  //                   }
+  //                 }}
+  //                 onClick={(e) => e.stopPropagation()}
+  //                 onBlur={(e) => {
+  //                   const proposedRate = Number(
+  //                     (e.target as HTMLInputElement).value
+  //                   );
+  //                   if (
+  //                     calculatedProducts[index].proposedRate !== proposedRate
+  //                   ) {
+  //                     const ptrTemp = calculatedProducts[index].product.ptr;
+  //                     const ptr =
+  //                       ptrTemp !== undefined
+  //                         ? typeof ptrTemp == "number"
+  //                           ? ptrTemp
+  //                           : Number(ptrTemp)
+  //                         : 1;
+  //                     const ptrPer =
+  //                       100 - Number(((proposedRate / ptr) * 100).toFixed(2));
+  //                     const discount =
+  //                       (proposedRate * TenderProductDiscountPercentage) / 100;
+  //                     // console.log(proposedRate);
+  //                     // console.log(ptrPer);
+  //                     // console.log(discount);
+  //                     handleFieldChange(index, "proposedRate", proposedRate);
+  //                     handleFieldChange(index, "ptrPercentage", ptrPer);
+  //                     handleFieldChange(
+  //                       index,
+  //                       "stockistDiscountValue",
+  //                       discount
+  //                     );
+  //                   }
+  //                 }}
+  //               />
+  //             ) : (
+  //               "-"
+  //             ),
+  //           className: styles.cellproposedrate,
+  //         },
+  //         {
+  //           key: index + 1 + "_" + tenderproduct.productId + "ptrPercent",
+  //           columnIndex: 12,
+  //           render: () =>
+  //             // calculatedProducts[index].product?.dataSource == "saved" &&
+  //             latestVersion == version ? (
+  //               <DsTextField
+  //                 inputType="number"
+  //                 maximumNumber={100.0}
+  //                 initialValue={
+  //                   Number(
+  //                     calculatedProducts[index].ptrPercentage?.toFixed(2)
+  //                   ).toString() || ""
+  //                 }
+  //                 onKeyUp={(e) => {
+  //                   if (e.key === "Enter") {
+  //                     (e.target as HTMLElement).blur();
+  //                   }
+  //                 }}
+  //                 onClick={(e) => e.stopPropagation()}
+  //                 onBlur={(e) => {
+  //                   const ptrPer = Number((e.target as HTMLInputElement).value);
+  //                   if (calculatedProducts[index].ptrPercentage !== ptrPer) {
+  //                     const ptrTemp = calculatedProducts[index].product.ptr;
+  //                     const ptr =
+  //                       ptrTemp !== undefined
+  //                         ? typeof ptrTemp == "number"
+  //                           ? ptrTemp
+  //                           : Number(ptrTemp)
+  //                         : 1;
+
+  //                     const proposedRate = ((100 - ptrPer) * ptr) / 100;
+
+  //                     const discount =
+  //                       (proposedRate * TenderProductDiscountPercentage) / 100;
+  //                     // console.log(proposedRate);
+  //                     // console.log(ptrPer);
+  //                     // console.log(discount);
+  //                     handleFieldChange(
+  //                       index,
+  //                       "ptrPercentage",
+  //                       parseFloat(ptrPer.toFixed(2))
+  //                     );
+  //                     handleFieldChange(index, "proposedRate", proposedRate);
+  //                     handleFieldChange(
+  //                       index,
+  //                       "stockistDiscountValue",
+  //                       discount
+  //                     );
+  //                   }
+  //                   (e.target as HTMLInputElement).value = ptrPer.toFixed(2);
+  //                 }}
+  //                 className={`${
+  //                   (calculatedProducts[index].ptrPercentage || 0) <= 0
+  //                     ? styles.warningAlert
+  //                     : ""
+  //                 }`}
+  //               />
+  //             ) : (
+  //               "-"
+  //             ),
+  //           className: styles.cellptr,
+  //         },
+  //         {
+  //           key: index + 1 + "_" + tenderproduct.productId + "discount",
+  //           columnIndex: 13,
+  //           render: () =>
+  //             // calculatedProducts[index].product?.dataSource == "saved" &&
+  //             latestVersion == version ? (
+  //               <DsTextField
+  //                 inputType="number"
+  //                 initialValue={
+  //                   (
+  //                     ((calculatedProducts[index].proposedRate || 0) *
+  //                       TenderProductDiscountPercentage) /
+  //                     100
+  //                   ).toFixed(2) || ""
+  //                 }
+  //                 onKeyUp={(e) => {
+  //                   if (e.key === "Enter") {
+  //                     (e.target as HTMLElement).blur();
+  //                   }
+  //                 }}
+  //                 onClick={(e) => e.stopPropagation()}
+  //                 onBlur={(e) => {
+  //                   const discount = Number(
+  //                     (e.target as HTMLInputElement).value
+  //                   );
+  //                   if (
+  //                     calculatedProducts[index].stockistDiscountValue !==
+  //                     discount
+  //                   ) {
+  //                     const proposedRate =
+  //                       (discount * 100) / TenderProductDiscountPercentage;
+  //                     const ptrTemp = calculatedProducts[index].product.ptr;
+  //                     const ptr =
+  //                       ptrTemp !== undefined
+  //                         ? typeof ptrTemp == "number"
+  //                           ? ptrTemp
+  //                           : Number(ptrTemp)
+  //                         : 1;
+
+  //                     const ptrPer =
+  //                       100 - Number(((proposedRate / ptr) * 100).toFixed(2));
+  //                     // console.log(proposedRate);
+  //                     // console.log(ptrPer);
+  //                     // console.log(discount);
+  //                     handleFieldChange(
+  //                       index,
+  //                       "stockistDiscountValue",
+  //                       discount
+  //                     );
+  //                     handleFieldChange(index, "proposedRate", proposedRate);
+  //                     handleFieldChange(index, "ptrPercentage", ptrPer);
+  //                   }
+  //                 }}
+  //               />
+  //             ) : (
+  //               "-"
+  //             ),
+  //           className: styles.celldiscount,
+  //         },
+  //         {
+  //           key: index + 1 + "_" + tenderproduct.productId + "totalCost",
+  //           columnIndex: 14,
+  //           render: () =>
+  //             // calculatedProducts[index].product?.dataSource == "saved"?
+  //             calculatedProducts[index].product.totalCost?.toFixed(2) || "-",
+  //           // : "-",
+  //           className: styles.celltotalcost,
+  //         },
+  //         {
+  //           key: index + 1 + "_" + tenderproduct.productId + "margin",
+  //           columnIndex: 15,
+  //           render: () =>
+  //             // calculatedProducts[index].product?.dataSource == "saved"?
+  //             calculatedProducts[index].product.marginValue?.toFixed(2) || "-",
+  //           // : "-",
+  //           className: `${
+  //             (calculatedProducts[index].product.marginValue || 0) <= 0
+  //               ? styles.warningAlert
+  //               : ""
+  //           } ${styles.cellmargin}`,
+  //         },
+  //         {
+  //           key: index + 1 + "_" + tenderproduct.productId + "marginPercent",
+  //           columnIndex: 16,
+  //           render: () =>
+  //             // calculatedProducts[index].product?.dataSource == "saved"?
+  //             (calculatedProducts[index].product.marginPercent || 0).toFixed(
+  //               2
+  //             ) + "%" || "-",
+  //           // : "-",
+  //           className: `${styles.cellmarginper} ${
+  //             (calculatedProducts[index].product.marginPercent || 0) <
+  //             marginPercentLimit
+  //               ? styles.red
+  //               : ""
+  //           }`,
+  //         },
+  //         {
+  //           key: index + 1 + "_" + tenderproduct.productId + "netvalue",
+  //           columnIndex: 17,
+  //           render: () =>
+  //             // calculatedProducts[index].product?.dataSource == "saved"?
+  //             calculatedProducts[index].product.netValue?.toFixed(2) || "-",
+  //           // : "-",
+  //           className: styles.cellnetvalue,
+  //         },
+  //       ],
+  //     })),
+  //   [productList, calculatedProducts.length, latestVersion, version]
+  // );
   const columns: tcolumn[] = useMemo(
     () => [
       {
@@ -711,7 +833,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         columnHeader: "Direct Cost",
         className: styles.celldirectcost,
       },
-      { columnIndex: 9, columnHeader: "IP LQR", className: styles.celllqr },
+      { columnIndex: 9, columnHeader: "LQR", className: styles.celllqr },
       {
         columnIndex: 10,
         columnHeader: "Customer LPR",
@@ -748,21 +870,24 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
     []
   );
 
-   const tenderProductTable = useMemo(() => ({
-  className: styles["tender-product-table"],
-  id: "productTable",
-  type: "InterActive",
-  isSortable: false,
-  hasSearch: false,
-  columns,
-  rows,
-}), [columns, rows]);
+  const tenderProductTable = useMemo(
+    () => ({
+      className: styles["tender-product-table"],
+      id: "productTable",
+      type: "InterActive",
+      isSortable: false,
+      hasSearch: false,
+      columns,
+      // rows,
+    }),
+    [columns]
+  );
   useEffect(() => {
     setLocalProducts(
       tenderData.tenderRevisions.find((x) => x.version == version)
         ?.tenderItems || []
     );
-  }, [tenderDataCopy, productList.length, version]);
+  }, [tenderDataCopy.id, productList.length, version]);
 
   // useEffect(() => {
   //   const revision = tenderData.tenderRevisions.find(
@@ -787,11 +912,11 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
       ) as HTMLInputElement;
 
       // if (checkbox) {
-      const row = tenderProductTable?.rows?.find(
-        (row) => row.rowIndex === rowIndex
+      const row = calculatedProducts?.find(
+        (row, index) => index == rowIndex
       );
       if (row) {
-        const productId = row?.customAttributes?.productId;
+        const productId = row?.productId;
 
         if (isChecked === true) {
           setSelectedRowIndices((prev) => [...prev, rowIndex]);
@@ -800,9 +925,9 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
             //   const productName =
             // row?.customAttributes?.productName?.toString();
             const productName = String(
-              row.customAttributes?.productName ||
-                row.customAttributes?.genericName ||
-                "-"
+              row.product?.productName ||
+              row.requestedGenericName ||
+              "-"
             );
 
             setProductIds((prev) => [...prev, Number(productId)]);
@@ -846,9 +971,6 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         });
     }
   }, [tenderProductTable?.id]);
-  useEffect(() => {
-    handleSave();
-  }, [hasChanges]);
 
   return (
     <>
@@ -858,13 +980,461 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
             className={tenderProductTable.className}
             id={tenderProductTable.id}
             columns={tenderProductTable.columns}
-            rows={tenderProductTable.rows}
+            // rows={tenderProductTable.rows}
             handleCheckboxClick={handleCheckBoxClick}
-            isSelectAble={true}
-          />
+            isSelectAble={version == latestVersion && !productTableDisable}
+          >
+            <TbodyComponent className={""}>
+              {calculatedProducts.map((tenderproduct, index) => (
+                <TrComponent
+                  rowIndex={index}
+                  key={index + "_" + tenderproduct.productId}
+                  customAttributes={{
+                    genericName:
+                      calculatedProducts[index].requestedGenericName || "",
+                    productId: calculatedProducts[index].productId || 0,
+                    productName:
+                      calculatedProducts[index].product.productName || "",
+                  }}
+                >
+                  <TdComponent
+                    className={styles.cellcheckbox}
+                    columnIndex={0}
+                    render={ (productTableDisable || version != latestVersion) ? undefined: () => (
+                      <Ds_checkbox
+                        className={`row-checkbox-${index}`}
+                        defaultChecked={selectedRowIndices.includes(index)}
+                        // onClick={getCheckboxHandler(index)}
+                        id={""}
+                        name={""}
+                        value={""}
+                        label={""}
+                        
+                      />
+                    )}
+                    type={""}
+                    rowIndex={0}
+                  />
+                  <TdComponent
+                    key={index + "_" + tenderproduct.productId + "generic"}
+                    className={styles.cellgenericname}
+                    type={""}
+                    rowIndex={index}
+                    columnIndex={1}
+                  >
+                    {latestVersion == version && !productTableDisable ? (
+                      <DsTextField
+                        initialValue={
+                          calculatedProducts[index].requestedGenericName || ""
+                        }
+                        onBlur={(e) =>
+                          handleFieldChange(
+                            index,
+                            "requestedGenericName",
+                            e.target.value
+                          )
+                        }
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                    ) : (
+                      calculatedProducts[index].requestedGenericName || "-"
+                    )}
+                  </TdComponent>
+                  <TdComponent
+                    className={styles.cellquantity}
+                    type={""}
+                    rowIndex={index}
+                    columnIndex={2}
+                  >
+                    {latestVersion != version  || productTableDisable ? (
+                      calculatedProducts[index].requestedQuantity || "-"
+                    ) : (
+                      <DsTextField
+                        initialValue={
+                          calculatedProducts[
+                            index
+                          ].requestedQuantity?.toString() || ""
+                        }
+                        inputType="positiveInteger"
+                        onBlur={(e) =>
+                          handleFieldChange(
+                            index,
+                            "requestedQuantity",
+                            Number(e.target.value)
+                          )
+                        }
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                    )}
+                  </TdComponent>
+                  <TdComponent
+                    className={styles.cellpackingsize}
+                    type={""}
+                    rowIndex={index}
+                    columnIndex={3}
+                  >
+                    {latestVersion == version  && !productTableDisable ? (
+                      <DsTextField
+                        initialValue={
+                          calculatedProducts[index].requestedPackingSize || ""
+                        }
+                        onBlur={(e) =>
+                          handleFieldChange(
+                            index,
+                            "requestedPackingSize",
+                            e.target.value
+                          )
+                        }
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                    ) : (
+                      calculatedProducts[index].requestedPackingSize || "-"
+                    )}
+                  </TdComponent>
+                  <TdComponent
+                    className={styles.cellproductname}
+                    type={""}
+                    rowIndex={index}
+                    columnIndex={4}
+                  >
+                    {latestVersion == version  && !productTableDisable ? (
+                      <ProductTableSearch
+                        tableRowIndex={index}
+                        setLocalProducts={setLocalProducts}
+                        setHasChanges={setHasChanges}
+                        initialValue={
+                          calculatedProducts[index].product?.productName || ""
+                        }
+                      />
+                    ) : (
+                      calculatedProducts[index].product?.productName || "-"
+                    )}
+                  </TdComponent>
+                  <TdComponent
+                    className={styles.cellproductpakingsize}
+                    type={""}
+                    rowIndex={index}
+                    columnIndex={5}
+                  >
+                    {calculatedProducts[index].product.productPackingSize ||
+                      "-"}
+                  </TdComponent>
+                  <TdComponent
+                    className={styles.cellmrp}
+                    type={""}
+                    rowIndex={index}
+                    columnIndex={6}
+                  >
+                    {calculatedProducts[index].product.mrp?.toString() || "-"}
+                  </TdComponent>
+                  <TdComponent
+                    className={styles.cellptr}
+                    type={""}
+                    rowIndex={index}
+                    columnIndex={7}
+                  >
+                    {calculatedProducts[index].product.ptr?.toString() || "-"}
+                  </TdComponent>
+                  <TdComponent
+                    className={styles.celldirectcost}
+                    type={""}
+                    rowIndex={index}
+                    columnIndex={8}
+                  >
+                    {calculatedProducts[index].product.directCost?.toString() ||
+                      "-"}
+                  </TdComponent>
+                  <TdComponent
+                    className={styles.celllqr}
+                    type={""}
+                    rowIndex={index}
+                    columnIndex={9}
+                  >
+                    {latestVersion == version  && !productTableDisable ? (
+                      <DsTextField
+                        inputType="positive"
+                        initialValue={
+                          calculatedProducts[index].lastQuotedRate?.toString() || ""
+                        }
+                        onKeyUp={(e) => {
+                          if (e.key === "Enter") {
+                            (e.target as HTMLInputElement).blur();
+                          }
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                        onBlur={(e) => {
+                          const lqr = Number(e.target.value);
+                          handleFieldChange(index, "lastQuotedRate", lqr);
+                        }}
+                      />
+                    ) : (
+                      calculatedProducts[index].lastQuotedRate?.toString() || "-"
+                    )}
+                  </TdComponent>
+                  <TdComponent
+                    className={styles.celllpr}
+                    type={""}
+                    rowIndex={index}
+                    columnIndex={10}
+                  >
+                    {latestVersion == version  && !productTableDisable ?(
+                      <DsCustomerLPR
+                        index={index + 1}
+                        lprValue={calculatedProducts[index].lastPurchaseRate}
+                        lprTo={{
+                          id: calculatedProducts[index].competitorId || 0,
+                          name:
+                            calculatedProducts[index].product.competitorName ||
+                            "",
+                        }}
+                        onValueChange={(value) =>
+                          handleFieldChange(
+                            index,
+                            "lastPurchaseRate",
+                            Number(value)
+                          )
+                        }
+                        onCompanyChange={(company) => {
+                          handleFieldChange(index, "competitorId", company.id);
+                          handleFieldChange(
+                            index,
+                            "product.competitorName",
+                            company.name
+                          );
+                        }}
+                        disable={latestVersion != version  || productTableDisable }
+                      />
+                    ) : (
+                      "-"
+                    )}
+                  </TdComponent>
+                  <TdComponent
+                    className={styles.cellproposedrate}
+                    type={""}
+                    rowIndex={index}
+                    columnIndex={11}
+                  >
+                    {latestVersion == version  && !productTableDisable ? (
+                      <DsTextField
+                        inputType="positive"
+                        initialValue={
+                          calculatedProducts[index].proposedRate?.toString() ||
+                          ""
+                        }
+                        onKeyUp={(e) => {
+                          if (e.key === "Enter") {
+                            (e.target as HTMLInputElement).blur();
+                          }
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                        onBlur={(e) => {
+                          const proposedRate = Number(e.target.value);
+                          if (
+                            calculatedProducts[index].proposedRate !==
+                            proposedRate
+                          ) {
+                            const ptrTemp =
+                              calculatedProducts[index].product.ptr;
+                            const ptr =
+                              ptrTemp !== undefined
+                                ? typeof ptrTemp == "number"
+                                  ? ptrTemp
+                                  : Number(ptrTemp)
+                                : 1;
+                            const ptrPer =
+                              100 -
+                              Number(((proposedRate / ptr) * 100).toFixed(2));
+                            const discount =
+                              (proposedRate * TenderProductDiscountPercentage) /
+                              100;
+                            handleFieldChange(
+                              index,
+                              "proposedRate",
+                              proposedRate
+                            );
+                            handleFieldChange(index, "ptrPercentage", ptrPer);
+                            handleFieldChange(
+                              index,
+                              "stockistDiscountValue",
+                              discount
+                            );
+                          }
+                        }}
+                      />
+                    ) : (
+                      "-"
+                    )}
+                  </TdComponent>
+                  <TdComponent
+                    className={styles.cellptr}
+                    type={""}
+                    rowIndex={index}
+                    columnIndex={12}
+                  >
+                    {latestVersion == version  && !productTableDisable ? (
+                      <DsTextField
+                        inputType="number"
+                        maximumNumber={100.0}
+                        initialValue={
+                          Number(
+                            calculatedProducts[index].ptrPercentage?.toFixed(2)
+                          ).toString() || ""
+                        }
+                        onKeyUp={(e) => {
+                          if (e.key === "Enter") {
+                            (e.target as HTMLInputElement).blur();
+                          }
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                        onBlur={(e) => {
+                          const ptrPer = Number(e.target.value);
+                          if (
+                            calculatedProducts[index].ptrPercentage !== ptrPer
+                          ) {
+                            const ptrTemp =
+                              calculatedProducts[index].product.ptr;
+                            const ptr =
+                              ptrTemp !== undefined
+                                ? typeof ptrTemp == "number"
+                                  ? ptrTemp
+                                  : Number(ptrTemp)
+                                : 1;
+                            const proposedRate = ((100 - ptrPer) * ptr) / 100;
+                            const discount =
+                              (proposedRate * TenderProductDiscountPercentage) /
+                              100;
+                            handleFieldChange(
+                              index,
+                              "ptrPercentage",
+                              parseFloat(ptrPer.toFixed(2))
+                            );
+                            handleFieldChange(
+                              index,
+                              "proposedRate",
+                              proposedRate
+                            );
+                            handleFieldChange(
+                              index,
+                              "stockistDiscountValue",
+                              discount
+                            );
+                          }
+                          e.target.value = ptrPer.toFixed(2);
+                        }}
+                        className={`${(calculatedProducts[index].ptrPercentage || 0) <= 0
+                            ? styles.warningAlert
+                            : ""
+                          }`}
+                      />
+                    ) : (
+                      "-"
+                    )}
+                  </TdComponent>
+                  <TdComponent
+                    className={styles.celldiscount}
+                    type={""}
+                    rowIndex={index}
+                    columnIndex={13}
+                  >
+                    {latestVersion == version  && !productTableDisable ? (
+                      <DsTextField
+                        inputType="number"
+                        initialValue={
+                          (
+                            ((calculatedProducts[index].proposedRate || 0) *
+                              TenderProductDiscountPercentage) /
+                            100
+                          ).toFixed(2) || ""
+                        }
+                        onKeyUp={(e) => {
+                          if (e.key === "Enter") {
+                            (e.target as HTMLInputElement).blur();
+                          }
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                        onBlur={(e) => {
+                          const discount = Number(e.target.value);
+                          if (
+                            calculatedProducts[index].stockistDiscountValue !==
+                            discount
+                          ) {
+                            const proposedRate =
+                              (discount * 100) /
+                              TenderProductDiscountPercentage;
+                            const ptrTemp =
+                              calculatedProducts[index].product.ptr;
+                            const ptr =
+                              ptrTemp !== undefined
+                                ? typeof ptrTemp == "number"
+                                  ? ptrTemp
+                                  : Number(ptrTemp)
+                                : 1;
+                            const ptrPer =
+                              100 -
+                              Number(((proposedRate / ptr) * 100).toFixed(2));
+                            handleFieldChange(
+                              index,
+                              "stockistDiscountValue",
+                              discount
+                            );
+                            handleFieldChange(
+                              index,
+                              "proposedRate",
+                              proposedRate
+                            );
+                            handleFieldChange(index, "ptrPercentage", ptrPer);
+                          }
+                        }}
+                      />
+                    ) : (
+                      "-"
+                    )}
+                  </TdComponent>
+                  <TdComponent
+                    className={styles.celltotalcost}
+                    type={""}
+                    rowIndex={index}
+                    columnIndex={14}
+                  >
+                    {calculatedProducts[index].product.totalCost?.toFixed(2) ||
+                      "-"}
+                  </TdComponent>
+                  <TdComponent
+                    className={styles.cellmargin}
+                    type={""}
+                    rowIndex={index}
+                    columnIndex={15}
+                  >
+                    {calculatedProducts[index].product.marginValue?.toFixed(
+                      2
+                    ) || "-"}
+                  </TdComponent>
+                  <TdComponent
+                    className={styles.cellmarginper}
+                    type={""}
+                    rowIndex={index}
+                    columnIndex={16}
+                  >
+                    {(
+                      calculatedProducts[index].product.marginPercent || 0
+                    ).toFixed(2) + "%" || "-"}
+                  </TdComponent>
+                  <TdComponent
+                    className={styles.cellnetvalue}
+                    type={""}
+                    rowIndex={index}
+                    columnIndex={17}
+                  >
+                    {calculatedProducts[index].product.netValue?.toFixed(2) ||
+                      "-"}
+                  </TdComponent>
+                </TrComponent>
+              ))}
+            </TbodyComponent>
+          </TableComponent>
         )}
 
-        {tenderProductTable?.rows.length == 0 && (
+        {calculatedProducts.length == 0 && (
           <>
             <div className={styles.noDataFound}>
               <div className={styles.noData}>
@@ -972,12 +1542,12 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                       }
                       if (selectedRowIndices.length > 0) {
                         selectedRowIndices.forEach((rowIndex) => {
-                          const row = tenderProductTable?.rows?.find(
-                            (r) => r.rowIndex === rowIndex
+                          const row = calculatedProducts?.find(
+                            (r, index) => index == rowIndex
                           );
 
                           const genericName = String(
-                            row?.customAttributes?.genericName
+                            row?.requestedGenericName
                           );
 
                           removeTenderProduct(version, undefined, genericName);

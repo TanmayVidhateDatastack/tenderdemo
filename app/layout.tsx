@@ -8,7 +8,6 @@ const openSans = localFont({
   variable: "--font-Open-sans",
   weight: "100 900",
 }); 
-
 // //normal fonts
 // const openSans_MediumItalic = localFont({
 //   src: "./fonts/Open_Sans/static/OpenSans_Condensed-MediumItalic.ttf",

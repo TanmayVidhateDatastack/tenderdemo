@@ -208,16 +208,16 @@ const DsTenderIdPage: React.FC<{
         setTabId(`v${latestVersion}`);
       }
     }
-    
-      if (tenderDataCopy.id) {
-        setAppTitle( 
-          tenderData.tenderNumber +
-          " ( " +
-          tenderData.tenderDetails.customerName +
-          " )"
-        );
-      }
-  }, [tenderDataCopy, displayFlag,tenderData.tenderDetails.customerName,tenderData.tenderNumber]); 
+
+    if (tenderDataCopy.id) {
+      setAppTitle(
+        tenderData.tenderNumber +
+        " ( " +
+        tenderData.tenderDetails.customerName +
+        " )"
+      );
+    }
+  }, [tenderDataCopy, displayFlag, tenderData.tenderDetails.customerName, tenderData.tenderNumber]);
 
   useEffect(() => {
     const version = Number(selectedTabId.split("v")[1]);
@@ -389,8 +389,8 @@ const DsTenderIdPage: React.FC<{
                   <>
                     <DsStatusIndicator
                       label={`${displayFlag == "Existing"
-                          ? tenderData?.status
-                          : DsStatus.DRFT
+                        ? tenderData?.status
+                        : DsStatus.DRFT
                         }`}
                       className={styles.statusIndicator}
                       type="user_defined"
@@ -432,7 +432,7 @@ const DsTenderIdPage: React.FC<{
                   setProductList={(product) =>
                     addTenderProduct(rev.version, product)
                   }
-                /> */}
+                /> */} <div style={{ textDecoration: 'none' }}>
                       <DsTenderProduct
                         productList={rev.tenderItems || []}
                         setProductList={(product) => {
@@ -446,6 +446,7 @@ const DsTenderIdPage: React.FC<{
                         }}
                         version={rev.version}
                       />
+                      </div>
                     </TabView>
                   ))}
 
