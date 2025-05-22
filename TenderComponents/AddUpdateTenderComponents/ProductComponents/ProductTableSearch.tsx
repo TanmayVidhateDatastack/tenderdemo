@@ -9,7 +9,7 @@ import { TenderProduct } from "../TenderDataContextProvider";
 interface TableSearchProps {
   tableRowIndex: number;
   setLocalProducts: React.Dispatch<React.SetStateAction<TenderProduct[]>>;
-  setHasChanges: React.Dispatch<React.SetStateAction<{index:number, value:boolean}>>;
+  setHasChanges: React.Dispatch<React.SetStateAction<{index:number, changed:boolean}|undefined>>;
   initialValue: string;
 }
 const ProductTableSearch: React.FC<TableSearchProps> = ({
@@ -39,7 +39,7 @@ const ProductTableSearch: React.FC<TableSearchProps> = ({
           : p
       )
     );
-    setHasChanges({index:index, value:true});
+    setHasChanges({index:index, changed:true});
   // setHasChanges(true);
   };
 

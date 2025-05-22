@@ -903,11 +903,11 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
       ) as HTMLInputElement;
 
       // if (checkbox) {
-      const row = tenderProductTable?.rows?.find(
-        (row) => row.rowIndex === rowIndex
+      const row = calculatedProducts?.find(
+        (row,index) => index == rowIndex
       );
       if (row) {
-        const productId = row?.customAttributes?.productId;
+        const productId = row?.productId;
 
         if (isChecked === true) {
           setSelectedRowIndices((prev) => [...prev, rowIndex]);
@@ -916,8 +916,8 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
             //   const productName =
             // row?.customAttributes?.productName?.toString();
             const productName = String(
-              row.customAttributes?.productName ||
-                row.customAttributes?.genericName ||
+              row.product?.productName ||
+                row.requestedGenericName ||
                 "-"
             );
 
@@ -978,8 +978,8 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
             <TbodyComponent className={""}>
               {calculatedProducts.map((tenderproduct, index) => (
                 <TrComponent
-                  rowIndex={index + 1}
-                  key={index + 1 + "_" + tenderproduct.productId}
+                  rowIndex={index}
+                  key={index + "_" + tenderproduct.productId}
                   customAttributes={{
                     genericName:
                       calculatedProducts[index].requestedGenericName || "",
@@ -993,8 +993,8 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                     columnIndex={0}
                     render={() => (
                       <Ds_checkbox
-                        className={`row-checkbox-${index + 1}`}
-                        defaultChecked={selectedRowIndices.includes(index + 1)}
+                        className={`row-checkbox-${index}`}
+                        defaultChecked={selectedRowIndices.includes(index)}
                         // onClick={getCheckboxHandler(index)}
                         id={""}
                         name={""}
@@ -1006,7 +1006,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                     rowIndex={0}
                   />
                   <TdComponent
-                    key={index + 1 + "_" + tenderproduct.productId + "generic"}
+                    key={index + "_" + tenderproduct.productId + "generic"}
                     className={styles.cellgenericname}
                     type={""}
                     rowIndex={index}
@@ -1089,7 +1089,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                   >
                     {latestVersion == version ? (
                       <ProductTableSearch
-                        tableRowIndex={index + 1}
+                        tableRowIndex={index}
                         setLocalProducts={setLocalProducts}
                         setHasChanges={setHasChanges}
                         initialValue={
@@ -1148,7 +1148,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                         }
                         onKeyUp={(e) => {
                           if (e.key === "Enter") {
-                            e.target.blur();
+                            (e.target as HTMLInputElement).blur();
                           }
                         }}
                         onClick={(e) => e.stopPropagation()}
@@ -1213,7 +1213,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                         }
                         onKeyUp={(e) => {
                           if (e.key === "Enter") {
-                            e.target.blur();
+                            (e.target as HTMLInputElement).blur();
                           }
                         }}
                         onClick={(e) => e.stopPropagation()}
@@ -1272,7 +1272,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                         }
                         onKeyUp={(e) => {
                           if (e.key === "Enter") {
-                            e.target.blur();
+                            (e.target as HTMLInputElement).blur();
                           }
                         }}
                         onClick={(e) => e.stopPropagation()}
@@ -1339,7 +1339,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                         }
                         onKeyUp={(e) => {
                           if (e.key === "Enter") {
-                            e.target.blur();
+                            (e.target as HTMLInputElement).blur();
                           }
                         }}
                         onClick={(e) => e.stopPropagation()}
@@ -1533,12 +1533,12 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                       }
                       if (selectedRowIndices.length > 0) {
                         selectedRowIndices.forEach((rowIndex) => {
-                          const row = tenderProductTable?.rows?.find(
-                            (r) => r.rowIndex === rowIndex
+                          const row = calculatedProducts?.find(
+                            (r,index) => index== rowIndex
                           );
 
                           const genericName = String(
-                            row?.customAttributes?.genericName
+                            row?.requestedGenericName
                           );
 
                           removeTenderProduct(version, undefined, genericName);
