@@ -4,7 +4,7 @@ import DsApplication from "@/Elements/ERPComponents/DsApplicationComponents/DsAp
 import DsBasicDetails from "@/TenderComponents/AddUpdateTenderComponents/BasicDetailComponents/DsBasicDetails";
 import {
   TenderProduct,
-  useTenderData,
+  useTenderData,  
 } from "@/TenderComponents/AddUpdateTenderComponents/TenderDataContextProvider";
 import { useTabState } from "@/Redux/hook/tabHook"; // Import the custom hook
 import DSTendrFooter from "@/TenderComponents/TenderLogComponents/DsTenderFooter";
@@ -19,7 +19,7 @@ import DsPane from "@/Elements/DsComponents/DsPane/DsPane";
 import PaneOpenButton from "@/Elements/DsComponents/DsPane/PaneOpenButton";
 import DocumentProvider, {
   DocumentContext,
-} from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/DocumentsContextProvider";
+} from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/DocumentsContextProvider"; 
 import DsAddTenderDocumentPane from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/DsAddTenderDocumentPane";
 import DocumentSelectorArea from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/DsDocumentSelectionArea";
 import styles from "@/TenderComponents/AddUpdateTenderComponents/DocumentSelctionComponents/document.module.css";
@@ -40,7 +40,7 @@ import { AppDispatch } from "@/Redux/store/store";
 import { useSearchParams } from "next/navigation";
 
 const DsTenderIdPage: React.FC<{
-  paramOrderId: string | number;
+  paramOrderId: string | number; 
   tenderStatus?: string;
 }> = ({ paramOrderId, tenderStatus }) => {
   const [selectedTabId, setTabId] = useTabState("tenderPage");
@@ -99,7 +99,7 @@ const DsTenderIdPage: React.FC<{
         (rev) => rev.version === version
       );
 
-      const existingGenericNames = new Set(
+      const existingGenericNames = new Set( 
         (currentRevision?.tenderItems || [])
           .map((p) => p.requestedGenericName?.trim().toLowerCase())
           .filter(Boolean)

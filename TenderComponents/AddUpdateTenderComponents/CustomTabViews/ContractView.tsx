@@ -21,7 +21,6 @@ import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import DsSearchComponent from "@/Elements/DsComponents/DsSearch/searchComponent";
 import AwardedToSearch from "./AwardedToSearch";
 import IconFactory from "@/Elements/IconComponent";
-import TableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableComponent";
 export interface ContractViewProps {
   status: "AWARDED" | "PARTIALLY_AWARDED" | "LOST" | "CANCELLED";
   //   contractRevision: { id: number; contractItems: ContractItems };
