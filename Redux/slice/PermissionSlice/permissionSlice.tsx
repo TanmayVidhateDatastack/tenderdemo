@@ -59,7 +59,11 @@ type PermissionState = {
   recoveredAttachFileButton:boolean;
   saveButtonDisabled:boolean;
   ContractTypeDisable:boolean;
-  
+
+  //Product Tab 
+  productSearchDisable:boolean;
+  productquantityDisable:boolean;
+  addProductBtnDisable:boolean;
 };
 
 const initialState: PermissionState = {
@@ -120,6 +124,11 @@ const initialState: PermissionState = {
   recoveredAttachFileButton:true, 
   saveButtonDisabled:true,
   ContractTypeDisable:true,
+  //product tab
+  productSearchDisable:true,
+  productquantityDisable:true,
+  addProductBtnDisable:true,
+
 };
 
 const permissionsSlice = createSlice({
@@ -234,6 +243,10 @@ const permissionsSlice = createSlice({
         state.attachFileConditionButtonDisable=true;
         state.saveButtonDisabled=true;
         state.disable=true  
+        //product tab
+        state.productSearchDisable=true;
+        state. productquantityDisable=true;
+        state.addProductBtnDisable=true;
         switch (status) {
           case "DRAFT":
             switch (role) {
@@ -274,6 +287,10 @@ const permissionsSlice = createSlice({
                 state.attachFileConditionButtonDisable=false;
                 state.saveButtonDisabled=false;
                 state.disable = false;
+                //product tab
+                state.productSearchDisable=false;
+                state. productquantityDisable=false;
+                state.addProductBtnDisable=false;
                 break;
               case "CHECKER":
                 break;
