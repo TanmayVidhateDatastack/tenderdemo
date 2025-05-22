@@ -298,7 +298,7 @@ const permissionsSlice = createSlice({
           case "AWARDED":
             if (role === "ACCOUNTANCE" || role === "FINANCE") {
               state.paymentRecoveredDisable = false;  
-              state.paymentRecoverdDateDisable=false;
+              state.paymentRecoverdDateDisable=false;   
               state.recoveredNotesDisable = false; 
               state.recoveredAttachFileButton = false; 
               state.saveButtonDisabled=false;
