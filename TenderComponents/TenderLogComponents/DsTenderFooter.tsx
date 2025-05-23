@@ -32,6 +32,7 @@ import { getYesterdayDate } from "@/Common/helpers/Method/conversion";
 import ApprovalPopup from "../AddUpdateTenderComponents/Approvelpopup/ApprovelPopup";
 import { ContractStatuses } from "../AddUpdateTenderComponents/CustomTabViews/ContractView";
 import { ClosePopup } from "@/Elements/DsComponents/dsPopup/dsPopup";
+import { useSearchParams } from "next/navigation";
 
 
 class ActionStatus {
@@ -72,6 +73,9 @@ export const DSTendrFooter: React.FC = ({ }) => {
       console.error("Fetch error: ", error);
     }
   };
+
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type") || "institutional" || "corporate";
 
   const permissions = useAppSelector((state: RootState) => state.permissions);
   const {
@@ -261,11 +265,17 @@ export const DSTendrFooter: React.FC = ({ }) => {
       }
 
       const fees = tenderData?.tenderFees ?? [];
-      const todaysDate = new Date();
-      // todaysdate.setHours(0, 0, 0, 0);
-
       fees.forEach((fee, index) => {
         if (fee.status == "ACTV") {
+
+          if (
+            type === "institutional" &&
+            tenderData.applierType === "STOCKIST" &&
+            tenderData.supplierType === "STOCKIST"
+          ) {
+            return; 
+          }
+
           if (!fee.feesType?.toString().trim()) {
             errors.push(`${fee.feesType}: Please select a fee type.`);
           }
@@ -290,7 +300,7 @@ export const DSTendrFooter: React.FC = ({ }) => {
             );
           }
 
-          if (! instructionNotesDisable && !fee.instructionNotes?.trim()) {
+          if (!instructionNotesDisable && !fee.instructionNotes?.trim()) {
             errors.push(
               `${fee.feesType} ${index + 1}:  Please enter instruction notes.`
             );
@@ -305,7 +315,7 @@ export const DSTendrFooter: React.FC = ({ }) => {
         errors.push("Please enter the number of consignees.");
       }
       if (
-       ! testreportRequiredDisable && tenderData?.tenderSupplyCondition?.testReportRequired?.trim() === ""
+        !testreportRequiredDisable && tenderData?.tenderSupplyCondition?.testReportRequired?.trim() === ""
       ) {
         errors.push("Please specify whether a test report is required.");
       }
@@ -473,9 +483,10 @@ export const DSTendrFooter: React.FC = ({ }) => {
             buttonSize="btnSmall"
             buttonViewStyle="btnText"
             className={btnStyles.btnTextPrimary}
-            onClick={() => {showToaster("toaster1");
-                  tenderData.status = "Fees_Pending";
-                  updateTender(tenderData.status);
+            onClick={() => {
+              showToaster("toaster1");
+              tenderData.status = "Fees_Pending";
+              updateTender(tenderData.status);
             }}
           />
         );

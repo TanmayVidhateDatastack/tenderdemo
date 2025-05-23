@@ -19,13 +19,13 @@ export interface Deposit {
 }
 
 const DsBasicDetails = () => {
-  const { fetchMetaData } = useTenderData();
+  const { fetchMetaData, tenderData, tenderDataCopy } = useTenderData();
 
   useEffect(() => {
     fetchMetaData();
   }, []);
-     const searchParams = useSearchParams();
-  const type = searchParams.get("type") || "institutional" ; 
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type") || "institutional" || "corporate";
 
 
   return (
@@ -37,21 +37,28 @@ const DsBasicDetails = () => {
       <div className={styles.container}>
         <DsApplierSupplierDetails />
       </div>
-      <span className={styles.Seperator}></span>
-      <div className={styles.container}>
-        <DsDepositeDocuments />
-      </div>
-     
-        {type === "institutional" && (
+      {!(
+        type === "institutional" &&
+        tenderData.applierType === "STOCKIST" &&
+        tenderData.supplierType === "STOCKIST"
+      ) && (
           <>
-           <span className={styles.Seperator}></span>
-      <div className={styles.container}>
-        <DsSupplyDetails />
-      
-        <DsApplicableConditions />
-      </div>
-      </>
+            <span className={styles.Seperator}></span>
+            <div className={styles.container}>
+              <DsDepositeDocuments />
+            </div>
+          </>
         )}
+      {type === "institutional" && (
+        <>
+          <span className={styles.Seperator}></span>
+          <div className={styles.container}>
+            <DsSupplyDetails />
+
+            <DsApplicableConditions />
+          </div>
+        </>
+      )}
     </>
   );
 };
