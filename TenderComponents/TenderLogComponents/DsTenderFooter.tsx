@@ -20,6 +20,8 @@ import {
   dsStatus,
   getTenderUserRoles,
   DsStatus,
+  approvelurl,
+  getAllMetaData,
 } from "@/Common/helpers/constant";
 import DsNavTo from "@/Elements/ERPComponents/DsNavigationComponent/DsNavTo";
 import DsSplitButton from "@/Elements/DsComponents/DsButtons/dsSplitButton";
@@ -39,11 +41,23 @@ class ActionStatus {
   notiMsg: string | React.ReactNode = "";
   showNotification: boolean = false;
   isOkayButtonVisible?: boolean = false;
+
 }
 
-export const DSTendrFooter: React.FC = ({ }) => {
+export interface DSTendrFooterProp
+{
+  tenderId?: number ;
+ customerId?: number;
+}
+const DSTendrFooter: React.FC<DSTendrFooterProp> = ({
+tenderId,
+customerId
+
+
+})=>{
   const dispatch = useAppDispatch<AppDispatch>();
   const role = useAppSelector((state: RootState) => state.user.role);
+    const [cId, setCId] = useState<number>(1);
   const [toasterVisible, setToasterVisible] = useState<boolean>(false);
   const [splitButtonDisableState, setSplitButtonDisbale] =
     useState<boolean>(false);
@@ -127,6 +141,47 @@ export const DSTendrFooter: React.FC = ({ }) => {
   useEffect(() => {
     handleFetch();
   }, []);
+
+    useEffect(() => {
+        if (customerId) {
+            setCId(customerId);
+        }
+    }, [customerId, tenderId])
+
+
+    const handleSaveReceipt = async () => {
+        const approvalObject = {
+            approvalComments: "",
+            justificationType: "",
+            approvalStatus: tenderData.status === "save" ? "SAVED" : "SUBMITTED",
+            lastUpdatedBy: customerId || 1,
+        };
+        const apiUrl = approvelurl(tenderId)
+        console.log("apiurl",apiUrl)
+        console.log("Sending POST data:", approvalObject);
+    
+        try {
+            const response = await fetch(apiUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(approvalObject),
+            
+            });
+    
+            console.log("Response body", response);
+            console.log("POST status is", response.status);
+            console.log("approvel object", approvalObject);
+    
+           
+        } catch (error) {
+            console.error("API Error:", error);
+           
+        }
+    };
+    
+   
 
   const validateFields = (tenderData: TenderData) => {
     const errors: string[] = [];
@@ -474,8 +529,8 @@ export const DSTendrFooter: React.FC = ({ }) => {
             buttonViewStyle="btnText"
             className={btnStyles.btnTextPrimary}
             onClick={() => {showToaster("toaster1");
-                  tenderData.status = "Fees_Pending";
-                  updateTender(tenderData.status);
+                 handleSaveReceipt();
+              
             }}
           />
         );
@@ -570,16 +625,7 @@ export const DSTendrFooter: React.FC = ({ }) => {
         }
       }
 
-      // setContextContext(contextContent);
-      // if (contextContent && !document.getElementById("SubmissionContext")) {
-      //   createContext(
-      //     "SubmissionContext",
-      //     <div onClick={() => closeContext("SubmissionContext")}>
-      //       {contextContent}
-      //     </div>,
-      //     true
-      //   );
-      // }
+ 
     }
   }, [role, tenderData.status]);
   useEffect(() => {

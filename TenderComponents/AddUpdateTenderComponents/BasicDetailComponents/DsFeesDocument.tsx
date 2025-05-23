@@ -284,7 +284,8 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           <div className={styles.fields}>
             <DsMultiSelect
               label="Add Document Type"
-              containerClasses={styles.feeFields}
+              containerClasses={`${styles.feeFields} `}
+              className={`${styles.scrollableContainer}`}
               id={id + "Documents"}
               options={optionlist || []}
               setSelectOptions={(options) => {
@@ -292,9 +293,9 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 console.log("Selected options:", options);
               }}
               showOptions={false}
-            
+              
             >
-              <div className={styles.addBtn}>
+            <div className={styles.addBtnSticky}>
                 <DsButton
                   label="Add"
                   buttonViewStyle="btnContained"
@@ -307,7 +308,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                     console.log("Add button clicked");
                   }}
                 />
-              </div>
+          </div>
             </DsMultiSelect>
           </div>
           <div className={styles.fields}>
@@ -382,7 +383,6 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 }}
               />
             ))}
-
           <div className={eleStyles.inputDetails}>
             {selectedcheckbox &&
               selectedOptions.map((option) => (

@@ -41,7 +41,6 @@ const DsBasicDetails = () => {
       <div className={styles.container}>
         <DsDepositeDocuments />
       </div>
-     
         {type === "institutional" && (
           <>
            <span className={styles.Seperator}></span>

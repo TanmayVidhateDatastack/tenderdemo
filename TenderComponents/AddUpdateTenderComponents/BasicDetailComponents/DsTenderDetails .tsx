@@ -325,7 +325,7 @@ const DsTenderDetails: React.FC = () => {
           setSelectOption={(option) => {
             if (typeof option.value == "string") {
               updateTenderData("contractType", option.value);
-              console.log("rateContractType", option.label);
+             
             }
           }}
           // disable={tenderTypeDisable}
