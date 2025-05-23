@@ -157,7 +157,6 @@ const DsTenderDetails: React.FC = () => {
         }
         showArrow={true}
       />
-
       <div className={styles.inputDetails}>
         {/* <div className={deptStyle.fields}> */}
         <CustomerSearch

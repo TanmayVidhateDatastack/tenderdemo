@@ -215,7 +215,6 @@ min-height: fit-content;
 }
  
 .addBtnSticky {
- 
  position: sticky;
   bottom: 0;
   background-color: white;
