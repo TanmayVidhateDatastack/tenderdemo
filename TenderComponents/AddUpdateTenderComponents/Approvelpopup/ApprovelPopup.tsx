@@ -214,7 +214,7 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
             setToasterType("error");
         }
         else if (popupType === "Reviewed") {
-            setStatus("REVIEWED");
+            setStatus("REVIEW");
             setToasterType("success");
         }
         setToasterVisible(true);
@@ -233,7 +233,7 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
         }
         else if (popupType === "Reviewed") {
             setPopUpTitle("Reviewed");
-            setStatus("REVIEWED");
+            setStatus("REVIEW");
         }
     }, [popupType]);
 
