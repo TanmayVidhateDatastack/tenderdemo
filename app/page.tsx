@@ -79,7 +79,8 @@ const metaDataTypes = ["TENDER_TYPE", "CUSTOMER_TYPE", "TENDER_STATUS"];
   tenderStatus?: CodeItem[];
   justificationApproveType?: CodeItem[];
   justificationReviseType?: CodeItem[];
-  justificationRejectType?: CodeItem[];
+  justificationReviewedjectType?: CodeItem[];
+  justificationType?: CodeItem[];
   customerType?: CodeItem[];
 }
 type Depot = {

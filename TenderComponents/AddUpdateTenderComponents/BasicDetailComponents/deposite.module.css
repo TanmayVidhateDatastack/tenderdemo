@@ -124,7 +124,19 @@ min-height: fit-content;
     /* border-radius: 25px !important; */
   }
 
- 
+  .addBtn{
+    min-width: 100% !important;
+    max-width: fit-content !important;
+    background-color: var(--primary) !important;
+    color: var(--background) !important;
+    margin-right: 0;
+    margin-left: 0;
+    margin-top:1em;
+  }
+  .addBtn:hover{
+    background-color: var(--primary);
+    color: var(--background);
+  }
 
   .feesCheckboxes{
     padding: 0.1rem !important;
@@ -196,33 +208,17 @@ min-height: fit-content;
 {
   margin-top: 20px;
 }
-
- .addBtn{
-    min-width: 100% !important;
-    max-width: fit-content !important;
-    background-color: var(--primary) !important;
-    color: var(--background) !important;
-    margin-right: 0;
-    margin-left: 0;
-    margin-top:1em;
-    border-radius: 0px;
-  }
-  .addBtn:hover{
-    background-color: var(--primary);
-    color: var(--background);
-  }
-
 .scrollableContainer {
   max-height: 300px;
   overflow-y: auto;
-  position: relative; 
+  position: relative;
 }
-
+ 
 .addBtnSticky {
-  position: sticky;
+ position: sticky;
   bottom: 0;
-  background-color: #fff; 
+  background-color: white;
   text-align: center;
-  margin-bottom: -2px !important;
-  z-index: 1; 
+  padding:8px;
+  z-index: 110;
 }
