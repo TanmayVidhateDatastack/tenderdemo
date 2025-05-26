@@ -165,7 +165,6 @@ const DsTenderDetails: React.FC = () => {
         }
         showArrow={true}
       />
-
       <div className={styles.inputDetails}>
         {/* <div className={deptStyle.fields}> */}
         <CustomerSearch
@@ -333,7 +332,7 @@ const DsTenderDetails: React.FC = () => {
           setSelectOption={(option) => {
             if (typeof option.value == "string") {
               updateTenderData("contractType", option.value);
-              console.log("rateContractType", option.label);
+             
             }
           }}
         // disable={tenderTypeDisable}

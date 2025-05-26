@@ -20,6 +20,8 @@ import {
   dsStatus,
   getTenderUserRoles,
   DsStatus,
+  approvelurl,
+  getAllMetaData,
 } from "@/Common/helpers/constant";
 import DsNavTo from "@/Elements/ERPComponents/DsNavigationComponent/DsNavTo";
 import DsSplitButton from "@/Elements/DsComponents/DsButtons/dsSplitButton";
@@ -40,11 +42,23 @@ class ActionStatus {
   notiMsg: string | React.ReactNode = "";
   showNotification: boolean = false;
   isOkayButtonVisible?: boolean = false;
+
 }
 
-export const DSTendrFooter: React.FC = ({ }) => {
+export interface DSTendrFooterProp
+{
+  tenderId?: number ;
+ customerId?: number;
+}
+const DSTendrFooter: React.FC<DSTendrFooterProp> = ({
+tenderId,
+customerId
+
+
+})=>{
   const dispatch = useAppDispatch<AppDispatch>();
   const role = useAppSelector((state: RootState) => state.user.role);
+    const [cId, setCId] = useState<number>(1);
   const [toasterVisible, setToasterVisible] = useState<boolean>(false);
   const [splitButtonDisableState, setSplitButtonDisbale] =
     useState<boolean>(false);
@@ -131,6 +145,47 @@ export const DSTendrFooter: React.FC = ({ }) => {
   useEffect(() => {
     handleFetch();
   }, []);
+
+    useEffect(() => {
+        if (customerId) {
+            setCId(customerId);
+        }
+    }, [customerId, tenderId])
+
+
+    const handleSaveReceipt = async () => {
+        const approvalObject = {
+            approvalComments: "",
+            justificationType: "",
+            approvalStatus: tenderData.status === "save" ? "SAVED" : "SUBMITTED",
+            lastUpdatedBy: customerId || 1,
+        };
+        const apiUrl = approvelurl(tenderId)
+        console.log("apiurl",apiUrl)
+        console.log("Sending POST data:", approvalObject);
+    
+        try {
+            const response = await fetch(apiUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(approvalObject),
+            
+            });
+    
+            console.log("Response body", response);
+            console.log("POST status is", response.status);
+            console.log("approvel object", approvalObject);
+    
+           
+        } catch (error) {
+            console.error("API Error:", error);
+           
+        }
+    };
+    
+   
 
   const validateFields = (tenderData: TenderData) => {
     const errors: string[] = [];
@@ -494,14 +549,14 @@ export const DSTendrFooter: React.FC = ({ }) => {
         setContextContext(
           <>
             <PopupOpenButton
-              popupId="popup1"
+              popupId="reviewedPopup"
               buttonSize="btnSmall"
               buttonText="Reviewed "
               buttonViewStyle="btnText"
               className={btnStyles.btnTextPrimary}
             />
             <PopupOpenButton
-              popupId="popup2"
+              popupId="revisePopup"
               buttonSize="btnSmall"
               buttonText="Revise"
               buttonViewStyle="btnText"
@@ -513,7 +568,7 @@ export const DSTendrFooter: React.FC = ({ }) => {
         setContextContext(
           <>
             <PopupOpenButton
-              popupId="popup1"
+              popupId="approvalPopup"
               buttonSize="btnSmall"
               buttonText="Approve"
               buttonViewStyle="btnText"
@@ -521,14 +576,14 @@ export const DSTendrFooter: React.FC = ({ }) => {
               onClick={(e) => closeAllContext()}
             />
             <PopupOpenButton
-              popupId="popup2"
+              popupId="revisePopup"
               buttonSize="btnSmall"
               buttonText="Revise"
               buttonViewStyle="btnText"
               className={btnStyles.btnTextPrimary}
             />
             <PopupOpenButton
-              popupId="popup3"
+              popupId="rejectPopup"
               buttonSize="btnSmall"
               buttonText="Reject"
               buttonViewStyle="btnText"
@@ -581,16 +636,7 @@ export const DSTendrFooter: React.FC = ({ }) => {
         }
       }
 
-      // setContextContext(contextContent);
-      // if (contextContent && !document.getElementById("SubmissionContext")) {
-      //   createContext(
-      //     "SubmissionContext",
-      //     <div onClick={() => closeContext("SubmissionContext")}>
-      //       {contextContent}
-      //     </div>,
-      //     true
-      //   );
-      // }
+ 
     }
   }, [role, tenderData.status]);
   useEffect(() => {
@@ -636,7 +682,8 @@ export const DSTendrFooter: React.FC = ({ }) => {
           buttonViewStyle="btnOutlined"
           disable={false}
         />
-        {tenderData.status == "AWARDED" ||
+     
+       {tenderData.status == "AWARDED" ||
           tenderData.status == "PARTIALLY_AWARDED" ||
           tenderData.status == "LOST" ||
           tenderData.status == "DRAFT" ? (
@@ -687,7 +734,7 @@ export const DSTendrFooter: React.FC = ({ }) => {
         )}
       </div>
       <ApprovalPopup
-        id="popup1"
+        id="approvalPopup"
         types={[]}
         popupType="Approve"
         tenderId={tenderData.id}
@@ -703,7 +750,7 @@ export const DSTendrFooter: React.FC = ({ }) => {
         setActionStatus={setActionStatusValues}
       />
       <ApprovalPopup
-        id="popup2"
+        id="revisePopup"
         types={[]}
         tenderId={tenderData.id}
         popupType="Revise"
@@ -713,13 +760,29 @@ export const DSTendrFooter: React.FC = ({ }) => {
         setActionStatus={setActionStatusValues}
       />
       <ApprovalPopup
-        id="popup3"
+        id="rejectPopup"
         types={[]}
         popupType="Reject"
         tenderId={tenderData.id}
         buttonColor="btnDanger"
         position="center"
         toasterMessage={"The Tender has been Rejected & also note has sent "}
+        setActionStatus={setActionStatusValues}
+      />
+      <ApprovalPopup
+        id="reviewedPopup"
+        types={[]}
+        popupType="Reviewed"
+        tenderId={tenderData.id}
+        buttonColor="btnPrimary"
+        position="center"
+        toasterMessage={
+          role === "HOMANAGER"
+            ? "The Tender has been Approved"
+            : role === "CHECKER"
+              ? "The Tender has been successfully moved to under approval state"
+              : "The action was successful!"
+        }
         setActionStatus={setActionStatusValues}
       />
       <Toaster
