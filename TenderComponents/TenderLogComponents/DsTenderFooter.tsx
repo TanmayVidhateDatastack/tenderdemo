@@ -538,14 +538,14 @@ customerId
         setContextContext(
           <>
             <PopupOpenButton
-              popupId="popup1"
+              popupId="reviewedPopup"
               buttonSize="btnSmall"
               buttonText="Reviewed "
               buttonViewStyle="btnText"
               className={btnStyles.btnTextPrimary}
             />
             <PopupOpenButton
-              popupId="popup2"
+              popupId="revisePopup"
               buttonSize="btnSmall"
               buttonText="Revise"
               buttonViewStyle="btnText"
@@ -557,7 +557,7 @@ customerId
         setContextContext(
           <>
             <PopupOpenButton
-              popupId="popup1"
+              popupId="approvalPopup"
               buttonSize="btnSmall"
               buttonText="Approve"
               buttonViewStyle="btnText"
@@ -565,14 +565,14 @@ customerId
               onClick={(e) => closeAllContext()}
             />
             <PopupOpenButton
-              popupId="popup2"
+              popupId="revisePopup"
               buttonSize="btnSmall"
               buttonText="Revise"
               buttonViewStyle="btnText"
               className={btnStyles.btnTextPrimary}
             />
             <PopupOpenButton
-              popupId="popup3"
+              popupId="rejectPopup"
               buttonSize="btnSmall"
               buttonText="Reject"
               buttonViewStyle="btnText"
@@ -671,7 +671,8 @@ customerId
           buttonViewStyle="btnOutlined"
           disable={false}
         />
-        {tenderData.status == "AWARDED" ||
+     
+       {tenderData.status == "AWARDED" ||
           tenderData.status == "PARTIALLY_AWARDED" ||
           tenderData.status == "LOST" ||
           tenderData.status == "DRAFT" ? (
@@ -722,7 +723,7 @@ customerId
         )}
       </div>
       <ApprovalPopup
-        id="popup1"
+        id="approvalPopup"
         types={[]}
         popupType="Approve"
         tenderId={tenderData.id}
@@ -738,7 +739,7 @@ customerId
         setActionStatus={setActionStatusValues}
       />
       <ApprovalPopup
-        id="popup2"
+        id="revisePopup"
         types={[]}
         tenderId={tenderData.id}
         popupType="Revise"
@@ -748,13 +749,29 @@ customerId
         setActionStatus={setActionStatusValues}
       />
       <ApprovalPopup
-        id="popup3"
+        id="rejectPopup"
         types={[]}
         popupType="Reject"
         tenderId={tenderData.id}
         buttonColor="btnDanger"
         position="center"
         toasterMessage={"The Tender has been Rejected & also note has sent "}
+        setActionStatus={setActionStatusValues}
+      />
+      <ApprovalPopup
+        id="reviewedPopup"
+        types={[]}
+        popupType="Reviewed"
+        tenderId={tenderData.id}
+        buttonColor="btnPrimary"
+        position="center"
+        toasterMessage={
+          role === "HOMANAGER"
+            ? "The Tender has been Approved"
+            : role === "CHECKER"
+              ? "The Tender has been successfully moved to under approval state"
+              : "The action was successful!"
+        }
         setActionStatus={setActionStatusValues}
       />
       <Toaster
