@@ -19,14 +19,21 @@ export interface Deposit {
 }
 
 const DsBasicDetails = () => {
-  const { fetchMetaData, tenderData, tenderDataCopy } = useTenderData();
+  const { fetchMetaData, tenderData, updateTenderData } = useTenderData();
 
   useEffect(() => {
     fetchMetaData();
   }, []);
   const searchParams = useSearchParams();
   const type = searchParams.get("type") || "institutional" || "corporate";
-
+  
+  useEffect(() => {
+    if (type === "institutional" &&
+      tenderData.applierType === "STOCKIST" &&
+      tenderData.supplierType === "STOCKIST") {
+      updateTenderData("tenderFees", []);
+    }
+  }, [type, tenderData.applierType, tenderData.supplierType])
 
   return (
     <>
