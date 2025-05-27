@@ -214,7 +214,7 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
             setToasterType("error");
         }
         else if (popupType === "Reviewed") {
-            setStatus("REVIEWED");
+            setStatus("REVIEWE");
             setToasterType("success");
         }
         setToasterVisible(true);
@@ -233,7 +233,7 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
         }
         else if (popupType === "Reviewed") {
             setPopUpTitle("Reviewed");
-            setStatus("REVIEWED");
+            setStatus("REVIEW");
         }
     }, [popupType]);
 
@@ -340,7 +340,9 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
                             }}
                         />
                     )}
-                                        {buttonColor === "btnPrimary" && popupType === "Approve" && (
+                  
+                    {buttonColor === "btnPrimary" && popupType === "Approve" && (
+                        
                         <DsButton
                             id="approveButton"
                             label="Approve"
