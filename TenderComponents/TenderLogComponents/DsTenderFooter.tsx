@@ -640,7 +640,8 @@ export const DSTendrFooter: React.FC = ({ }) => {
         {tenderData.status == "AWARDED" ||
           tenderData.status == "PARTIALLY_AWARDED" ||
           tenderData.status == "LOST" ||
-          tenderData.status == "DRAFT" ? (
+          tenderData.status == "DRAFT" ||
+          tenderData.status == "UNDER_APPROVAL" ? (
           <DsSplitButton
             //  disable={true}
             buttonViewStyle="btnContained"
@@ -657,8 +658,8 @@ export const DSTendrFooter: React.FC = ({ }) => {
               displayContext(e, "SubmissionContext", "top", "right")
             }
             buttonSize="btnLarge"
-            // disable={splitButtonDisableState}
-            disable={saveButtonDisabled}
+          // disable={splitButtonDisableState}
+          // disable={saveButtonDisabled}
           >
             Save
           </DsSplitButton>
