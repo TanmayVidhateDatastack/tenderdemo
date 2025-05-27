@@ -167,11 +167,12 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
                 const responseData = await response.json();
                 if (responseData.code === 200) {
                     console.log("Response Status inside:", response.status);  
+                   
                     setActionStatus({
                         notiMsg: "Status Updated Successfully!",
                         notiType: "success",
                         showNotification: true,
-                    });
+                    });  
                     
                     showToaster("create-order-toaster");
                 } else {
@@ -340,7 +341,9 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
                             }}
                         />
                     )}
-                                        {buttonColor === "btnPrimary" && popupType === "Approve" && (
+                  
+                    {buttonColor === "btnPrimary" && popupType === "Approve" && (
+                        
                         <DsButton
                             id="approveButton"
                             label="Approve"
