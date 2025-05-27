@@ -162,7 +162,7 @@ const CustomerSearch: React.FC<{
         setOptions={setOptions}
         setSearchUrl={(searchTerm: string) => searchCustomerURL + searchTerm}
         setSelectedOption={setSelectedOptions}
-        onChange={handleInputChange}
+        onChange={(e)=>{if(e)handleInputChange(e)}}
         onBlur={handleOnBlur}
       />
     );

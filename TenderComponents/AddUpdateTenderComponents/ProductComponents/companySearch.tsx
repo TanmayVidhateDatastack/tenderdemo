@@ -75,7 +75,8 @@ const CompanySearch: React.FC<CompanySearchProps> = ({
       setSearchUrl={(searchTerm: string) => {
         return getCompetitorsURL  + searchTerm;
       }}
-    
+      tabIndex={0}
+      autofocus={true}
       setSelectedOption={setSelectedOption}
       disable={orderStatus === DsStatus.APRV ? true : false}
     />
