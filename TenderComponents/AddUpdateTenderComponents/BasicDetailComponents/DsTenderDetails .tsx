@@ -151,6 +151,20 @@ const DsTenderDetails: React.FC = () => {
   //   }
   // }, [tenderData.tenderDetails.customerName]);
 
+  //Gaurav Nalwade
+  const [addressName, setAddressName] = useState<DsSelectOption|undefined>();
+
+  useEffect(() => {
+      setAddressName(
+        tenderData.customerAddressId && tenderData.tenderDetails.customerAddressName ? 
+          {
+            label: tenderData.tenderDetails.customerAddressName,
+            value: tenderData.customerAddressId.toString(),
+          } :
+          undefined
+      );
+  }, [tenderData?.customerId])
+
   return (
     <>
       <ContextMenu
@@ -215,15 +229,16 @@ const DsTenderDetails: React.FC = () => {
             label: `${addr.city}, ${addr.state}, ${addr.pinCode}`,
             key: addr.id.toString(),
           }))}
-          selectedOption={
-            tenderData.customerAddressId &&
-              tenderData.tenderDetails.customerAddressName
-              ? {
-                label: tenderData.tenderDetails.customerAddressName,
-                value: tenderData.customerAddressId.toString(),
-              }
-              : undefined
-          }
+          selectedOption={addressName}
+          // selectedOption={
+          //   tenderData.customerAddressId &&
+          //     tenderData.tenderDetails.customerAddressName
+          //     ? {
+          //       label: tenderData.tenderDetails.customerAddressName,
+          //       value: tenderData.customerAddressId.toString(),
+          //     }
+          //     : undefined
+          // }
           setSelectOption={(option) => {
             if (typeof option.value == "string") {
               updateTenderData("customerAddressId", Number(option.value));

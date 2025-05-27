@@ -57,8 +57,11 @@ const CustomerSearch: React.FC<{
     const { disable } = permissions;
 
 
-    const handleOnBlur = () =>{
-      setCustomerInputValue(customerName);
+    const handleOnBlur = (e) => {
+      const n=e.target.value == '' ? '' : customerName
+      setCustomerName(n);
+      setCustomerInputValue(n);
+      
     }
 
 
@@ -80,7 +83,6 @@ const CustomerSearch: React.FC<{
           "tenderDetails.customerAddressName",
           ''
         );
-        var a = orderData;  
       }
 
       // setSelectedAddress("");
@@ -115,6 +117,12 @@ const CustomerSearch: React.FC<{
       const val = e.target.value;
       setCustomerInputValue(val);
 
+      if(val == ""){
+        updateTenderData?.("customerId", 0);
+        updateTenderData?.("tenderDetails.customerName", "");
+        updateTenderData?.("customerAddressId", 0);
+        updateTenderData?.("tenderDetails.customerAddressName", '');
+      }
       // if (val.trim() === "") {
       //   // If user cleared the field manually
       //   // updateTenderData?.("customerId", 0);
@@ -142,6 +150,7 @@ const CustomerSearch: React.FC<{
         setCustomers(customers);
       }
     }
+
     useEffect(() => {
       if (customer) {
         setCustomerInputValue(customer);
