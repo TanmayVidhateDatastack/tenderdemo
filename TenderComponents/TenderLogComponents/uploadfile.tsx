@@ -8,12 +8,14 @@ interface UploadFileProps {
   uploadLabel?: string;
   id: string;
   onSelectedFileChange?: (documents: { id?: number; document?: File }[]) => void; 
+  disable?: boolean;
 }
 
 const UploadFile: React.FC<UploadFileProps> = ({
   uploadLabel,
   id,
   onSelectedFileChange, 
+  disable=false,
 }) => {
   const [fileName, setFileName] = useState<string>(
     uploadLabel || "Attach your File here"
@@ -70,12 +72,13 @@ const UploadFile: React.FC<UploadFileProps> = ({
   return (
     <div className={styles.container}>
       <div
-        className={`${styles.footer} ${styles.attachfile}`}
+        className={`${styles.uploadfooter} ${styles.attachfile} ${disable ? styles.disabled : ""}`}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onClick={() => document.getElementById(`selectfile-${id}`)?.click()}
+        
       >
-        <div >
+        <div className={disable?styles.disabled:""}> 
           {fileName}
         </div>
         <input
@@ -84,12 +87,16 @@ const UploadFile: React.FC<UploadFileProps> = ({
           style={{ display: "none" }}
           onChange={handleFileChange}
           ref={fileInputRef}
+          disabled={disable}
         />
 
         {file && (
           <div
             style={{ width: "1em", height: "1em" }}
-            onClick={(e)=> {handleRemoveFile();e.stopPropagation()}  }
+            onClick={(e)=> {
+              disable?"":
+              handleRemoveFile();
+              e.stopPropagation()}  }
           >
             <IconFactory name={"crossSmall"} />
           </div>
