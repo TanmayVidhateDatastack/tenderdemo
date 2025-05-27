@@ -20,13 +20,11 @@ export interface Deposit {
 
 const DsBasicDetails = () => {
   const { fetchMetaData, tenderData, updateTenderData } = useTenderData();
-
   useEffect(() => {
     fetchMetaData();
   }, []);
   const searchParams = useSearchParams();
   const type = searchParams.get("type") || "institutional" || "corporate";
-  
   useEffect(() => {
     if (type === "institutional" &&
       tenderData.applierType === "STOCKIST" &&
@@ -38,7 +36,7 @@ const DsBasicDetails = () => {
   return (
     <>
       <div className={styles.container}>
-        <DsTenderDetails />
+ <DsTenderDetails />
       </div>
       <span className={styles.Seperator}></span>
       <div className={styles.container}>
