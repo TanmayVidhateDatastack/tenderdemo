@@ -20,8 +20,6 @@ import {
   dsStatus,
   getTenderUserRoles,
   DsStatus,
-  approvelurl,
-  getAllMetaData,
 } from "@/Common/helpers/constant";
 import DsNavTo from "@/Elements/ERPComponents/DsNavigationComponent/DsNavTo";
 import DsSplitButton from "@/Elements/DsComponents/DsButtons/dsSplitButton";
@@ -41,23 +39,11 @@ class ActionStatus {
   notiMsg: string | React.ReactNode = "";
   showNotification: boolean = false;
   isOkayButtonVisible?: boolean = false;
-
 }
 
-export interface DSTendrFooterProp
-{
-  tenderId?: number ;
- customerId?: number;
-}
-const DSTendrFooter: React.FC<DSTendrFooterProp> = ({
-tenderId,
-customerId
-
-
-})=>{
+export const DSTendrFooter: React.FC = ({ }) => {
   const dispatch = useAppDispatch<AppDispatch>();
   const role = useAppSelector((state: RootState) => state.user.role);
-    const [cId, setCId] = useState<number>(1);
   const [toasterVisible, setToasterVisible] = useState<boolean>(false);
   const [splitButtonDisableState, setSplitButtonDisbale] =
     useState<boolean>(false);
@@ -141,47 +127,6 @@ customerId
   useEffect(() => {
     handleFetch();
   }, []);
-
-    useEffect(() => {
-        if (customerId) {
-            setCId(customerId);
-        }
-    }, [customerId, tenderId])
-
-
-    const handleSaveReceipt = async () => {
-        const approvalObject = {
-            approvalComments: "",
-            justificationType: "",
-            approvalStatus: tenderData.status === "save" ? "SAVED" : "SUBMITTED",
-            lastUpdatedBy: customerId || 1,
-        };
-        const apiUrl = approvelurl(tenderId)
-        console.log("apiurl",apiUrl)
-        console.log("Sending POST data:", approvalObject);
-    
-        try {
-            const response = await fetch(apiUrl, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(approvalObject),
-            
-            });
-    
-            console.log("Response body", response);
-            console.log("POST status is", response.status);
-            console.log("approvel object", approvalObject);
-    
-           
-        } catch (error) {
-            console.error("API Error:", error);
-           
-        }
-    };
-    
-   
 
   const validateFields = (tenderData: TenderData) => {
     const errors: string[] = [];
@@ -321,6 +266,15 @@ customerId
 
       fees.forEach((fee, index) => {
         if (fee.status == "ACTV") {
+
+          if (
+            type === "institutional" &&
+            tenderData.applierType === "STOCKIST" &&
+            tenderData.supplierType === "STOCKIST"
+          ) {
+            return;
+          }
+
           if (!fee.feesType?.toString().trim()) {
             errors.push(`${fee.feesType}: Please select a fee type.`);
           }
@@ -367,6 +321,7 @@ customerId
       if (!eligibilityDisable && tenderData?.tenderSupplyCondition?.eligibility.length == 0) {
         errors.push("Please select at least one eligibility criterion.");
       }
+
 
       const applicableConditions =
         tenderData?.tenderSupplyCondition?.applicableConditions ?? [];
@@ -545,7 +500,7 @@ customerId
               className={btnStyles.btnTextPrimary}
             />
             <PopupOpenButton
-              popupId="revisePopup"
+              popupId="rejectPopup"
               buttonSize="btnSmall"
               buttonText="Revise"
               buttonViewStyle="btnText"
@@ -565,14 +520,14 @@ customerId
               onClick={(e) => closeAllContext()}
             />
             <PopupOpenButton
-              popupId="revisePopup"
+              popupId="rejectPopup"
               buttonSize="btnSmall"
               buttonText="Revise"
               buttonViewStyle="btnText"
               className={btnStyles.btnTextPrimary}
             />
             <PopupOpenButton
-              popupId="rejectPopup"
+              popupId="revisePopup"
               buttonSize="btnSmall"
               buttonText="Reject"
               buttonViewStyle="btnText"
@@ -625,7 +580,16 @@ customerId
         }
       }
 
- 
+      // setContextContext(contextContent);
+      // if (contextContent && !document.getElementById("SubmissionContext")) {
+      //   createContext(
+      //     "SubmissionContext",
+      //     <div onClick={() => closeContext("SubmissionContext")}>
+      //       {contextContent}
+      //     </div>,
+      //     true
+      //   );
+      // }
     }
   }, [role, tenderData.status]);
   useEffect(() => {
@@ -671,8 +635,7 @@ customerId
           buttonViewStyle="btnOutlined"
           disable={false}
         />
-     
-       {tenderData.status == "AWARDED" ||
+        {tenderData.status == "AWARDED" ||
           tenderData.status == "PARTIALLY_AWARDED" ||
           tenderData.status == "LOST" ||
           tenderData.status == "DRAFT" ? (
@@ -739,7 +702,7 @@ customerId
         setActionStatus={setActionStatusValues}
       />
       <ApprovalPopup
-        id="revisePopup"
+        id="rejectPopup"
         types={[]}
         tenderId={tenderData.id}
         popupType="Revise"
@@ -749,7 +712,7 @@ customerId
         setActionStatus={setActionStatusValues}
       />
       <ApprovalPopup
-        id="rejectPopup"
+        id="revisePopup"
         types={[]}
         popupType="Reject"
         tenderId={tenderData.id}
@@ -774,6 +737,7 @@ customerId
         }
         setActionStatus={setActionStatusValues}
       />
+
       <Toaster
         id={"toaster1"}
         message={
