@@ -1,47 +1,34 @@
 import DsInfoDisplay from "@/Elements/ERPComponents/DsInfoDisplay/DsInfoDisplay";
-import { searchProductsURL } from "@/Common/helpers/constant";
+import { getProductURL, searchProductsURL } from "@/Common/helpers/constant";
 // import { TenderProduct } from "@/Common/helpers/types";
 import { useEffect, useState } from "react";
 import { areSearchProduct } from "./productSearch";
 import DsSearchComponent from "@/Elements/DsComponents/DsSearch/searchComponent";
 import { TenderProduct } from "../TenderDataContextProvider";
+import { TenderProductWithRowId } from "./DsProductTable";
+import { on } from "events";
+import { useTableContext } from "@/Elements/DsComponents/NewDsTable/TableProvider";
+import fetchData from "@/Common/helpers/Method/fetchData";
 
 interface TableSearchProps {
-  tableRowIndex: number;
-  setLocalProducts: React.Dispatch<React.SetStateAction<TenderProduct[]>>;
-  setHasChanges: React.Dispatch<React.SetStateAction<{index:number, changed:boolean}|undefined>>;
+  rowId: number;
+  setLocalProducts: React.Dispatch<
+    React.SetStateAction<TenderProductWithRowId[]>
+  >;
+  // setHasChanges: React.Dispatch<React.SetStateAction<{index:number, changed:boolean}|undefined>>;
   initialValue: string;
+  onBlur?: (e?: React.FocusEvent<HTMLElement>) => void;
+  autofocus?: boolean;
 }
 const ProductTableSearch: React.FC<TableSearchProps> = ({
-  tableRowIndex,
+  rowId,
   setLocalProducts,
-  setHasChanges,
+  // setHasChanges,
   initialValue,
+  onBlur,
+  autofocus = false,
 }) => {
-  const handleProductSelect = (
-    index: number,
-    id: number,
-    name: string,
-    packSize: string
-  ) => {
-    setLocalProducts((prev) =>
-      prev.map((p, i) =>
-        i === index
-          ? {
-              ...p,
-              productId: id,
-              product: {
-                ...p.product,
-                productName: name,
-                productPackingSize: packSize,
-              },
-            }
-          : p
-      )
-    );
-    setHasChanges({index:index, changed:true});
-  // setHasChanges(true);
-  };
+  const { updateCell, data } = useTableContext();
 
   const [productOptions, setProductOptions] = useState<
     { id: number; name: string; packSize: string }[]
@@ -52,8 +39,9 @@ const ProductTableSearch: React.FC<TableSearchProps> = ({
   }, [initialValue]);
   return (
     <DsSearchComponent
-      id={`ProductTableSearch${tableRowIndex + 1}`}
-      dataListId={`ProductTableSearchOptions${tableRowIndex + 1}`}
+    autofocus={autofocus}
+      id={`ProductTableSearch${rowId + 1}`}
+      dataListId={`ProductTableSearchOptions${rowId + 1}`}
       options={productOptions.map((opt) => ({
         value: opt.name,
         id: opt.id.toString(),
@@ -62,19 +50,70 @@ const ProductTableSearch: React.FC<TableSearchProps> = ({
           <DsInfoDisplay detailOf="PackSize">{opt.packSize}</DsInfoDisplay>
         ),
       }))}
-      setSelectedOption={(option) => {
+      setSelectedOption={async (option) => {
         if (option) {
           const selected = productOptions.find(
             (p) => p.id.toString() == option.id
           );
-          if (selected?.id)
-            handleProductSelect(
-              tableRowIndex - 1,
-              selected.id,
-              selected.name,
-              selected.packSize
+          if (selected?.id) {
+            const productUrl = getProductURL(
+              selected?.id,
+              data.find((p) => p.rowId === rowId)?.product?.requestedQuantity ||
+                0
             );
+            const product = await fetchData({
+              url: productUrl,
+
+              // getProductURL + selectedProductId + "?requestedQuantity=" + quantity,
+            });
+            if (product?.code === 200) {
+              setLocalProducts((prev) =>
+                prev.map((p) =>
+                  p.rowId === rowId
+                    ? {
+                        ...p,
+                        productId: product.result.id,
+                        lastQuotedRate: 50,
+                        lastPurchaseRate: 50,
+                        product: {
+                          ...p.product,
+                          productName: product.result.name,
+                          productPackingSize: product.result.packingSize,
+                          mrp: product.result.mrpRate,
+                          ptr: product.result.priceToRetailer,
+                          directCost: product.result.basicRate,
+                        },
+                      }
+                    : p
+                )
+              );
+              setTimeout(() => {
+                updateCell(rowId, "productId", product.result.id);
+                updateCell(rowId, "lastQuotedRate", 50);
+                updateCell(rowId, "lastPurchaseRate", 50);
+                updateCell(rowId, "product.productName", product.result.name);
+                updateCell(
+                  rowId,
+                  "product.productPackingSize",
+                  product.result.packingSize
+                );
+                updateCell(rowId, "product.mrp", product.result.mrpRate);
+                updateCell(
+                  rowId,
+                  "product.ptr",
+                  product.result.priceToRetailer
+                );
+                updateCell(
+                  rowId,
+                  "product.directCost",
+                  product.result.basicRate
+                );
+              }, 10);
+            }
+          }
         }
+
+        onBlur?.();
       }}
       setOptions={function (values: unknown[]): void {
         if (areSearchProduct(values)) {
@@ -88,8 +127,9 @@ const ProductTableSearch: React.FC<TableSearchProps> = ({
       setSearchUrl={function (searchTerm: string): string {
         return searchProductsURL + searchTerm;
       }}
-      onClick={(e) => e.stopPropagation()}
+      onClick={(e) => e?.stopPropagation()}
       initialValue={val}
+      onBlur={onBlur}
     />
   );
 };
