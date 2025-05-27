@@ -1683,7 +1683,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         });
         delete dataToSendOriginalTender.applierType;
         delete dataToSendOriginalTender.supplierType;
-        let url = updateTenderUrl(tenderData.id);
+        let url = updateTenderUrl(tenderData.id,action);
         //  + "/" + tenderData.id;
         if (
           (status.toLowerCase() == DsStatus.AWRD.toLowerCase() ||
@@ -1694,8 +1694,8 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         ) {
           // url = getTenderByTenderId + tenderData.id + "/contract";
           if (status.toLowerCase() == DsStatus.CNCL.toLowerCase())
-            url = cancelTenderContractURl(tenderData.id);
-          else url = updateContractUrl(tenderData.id);
+            url = cancelTenderContractURl(tenderData.id,"SUBMIT");
+          else url = updateContractUrl(tenderData.id,action);
           dataToSendTenderCopy = stripReadOnlyProperties({
             ...dataToSendTenderCopy.tenderContract,
             tenderDocuments: dataToSendTenderCopy.tenderDocuments,
@@ -1722,7 +1722,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             status.toLowerCase() == DsStatus.CNCL.toLowerCase()) &&
           role === "ACCOUNTANCE" || role === "FINANCE"
         ) {
-          url = updatePaymentUrl(tenderData.id);
+          url = updatePaymentUrl(tenderData.id,action);
           dataToSendTenderCopy = stripReadOnlyProperties({
             // ...dataToSendTenderCopy.tenderFee,
             tenderFees: dataToSendTenderCopy.tenderFee,
