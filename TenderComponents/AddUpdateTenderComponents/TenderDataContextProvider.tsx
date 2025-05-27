@@ -367,7 +367,7 @@ interface TenderDataContextType {
     value: string | number
   ) => void;
   saveTender: (status: string) => Promise<void>;
-  updateTender: (status: string) => Promise<void>;
+  updateTender: (status: string,action:"SAVE"|"SUBMIT") => Promise<void>;
   fetchAndSetOriginalTender: (
     tenderId: number,
     tenderStatus?: string
@@ -1409,7 +1409,8 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 
   const updateTender = useCallback(
-    async (status: string) => {
+    async (status: string,action:
+      "SAVE"|"SUBMIT") => {
       try {
         let documentRequestId = 0;
         const tenderOriginalDocuments = tenderDataCopy.tenderDocuments?.map(
@@ -1965,9 +1966,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         const response = await fetchData({
           url: getTenderByTenderId + tenderId,
         });
-
         const tenderData = response.result;
-
         tenderData.tenders.lastPurchaseDate = undefined;
         tenderData.tenders.submissionDate = undefined;
         tenderData.tenders.issueDate = undefined;

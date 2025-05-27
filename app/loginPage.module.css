@@ -1,0 +1,154 @@
+ 
+.body, .html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+  }
+   
+  .container {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+  }
+   
+  .leftcolumn,
+  .rightcolumn {
+    flex: 1;
+  }
+   
+  .leftcolumn {
+    background-color:#000000;
+    opacity: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1.25em;
+    height: 100vh;
+   
+  }
+   
+  .rightcolumn {
+    background: #FAFEFF 0% 0% no-repeat padding-box;
+    opacity: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1.25em;
+    height: 100vh;
+  }
+   
+  .rightContent {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    text-align: left;
+    width:65%;
+  }
+  .leftContent {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    text-align: left;
+    padding-top: 0%;
+  }
+   
+  .labelforlogin {
+    width: 65px;
+    height: 33px;
+    color: #0F0F0F;
+    text-align: left;
+    opacity: 1;
+    font-weight: bold;
+    font-size:var(--font-18);
+  }
+   
+  .label {
+    height: 19px;
+    letter-spacing: 0px;
+    color: var(--grey-700);
+    font-size: var(--font-12);
+    opacity: 1;
+    margin-bottom: 0.5em;
+  }
+   
+  .poweredclass {
+    position: absolute;
+    bottom: 0.625em;
+    right: 7.5em;
+    color:var(--grey-900);
+    font-size: var(--font-13);
+  }
+   
+  .datastacklogo {
+    position: absolute;
+    bottom: 0.45em;
+    right: 0.625em;
+    width: 5.3em;
+    height: auto;
+  }
+  .logo{
+    width:118.32px;
+    opacity: 100%;
+    margin: 0;
+    padding: 0;
+   
+  }
+  .labelforaiPharma {
+    font-size: var(--font-29);
+    font-weight: bold;
+    display: flex;
+    flex-direction: row;
+  }
+   
+  .ai {
+    color: white;
+  }
+   
+  .pharma {
+    color: #B3E5FB;
+    margin-left: 0;
+  }
+  .PharmaReinvented {
+    font-size: var(--font-12);
+    color: #FFFFFF;
+    opacity: 90%;
+    max-width: 27em;
+    text-align: left;
+    word-wrap: break-word;
+  }
+  .bottomdiv {
+    align-self: flex-end;
+    display: flex;
+    flex-direction: row;
+    gap: 0.625em;
+    color:#FFFFFF;
+    opacity: 90%;
+    position: absolute;
+    bottom:0.625em;
+    font-size: var(--font-13);
+  }
+ 
+  .logindiv button{
+    margin:0 !important;
+    width:100%
+  }
+  .mainDiv{
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    gap:1em;
+  }
+  .cornerDiv{
+    display: flex;
+    flex-direction: column;
+  }
+   
+   
+   
+   
+ 
