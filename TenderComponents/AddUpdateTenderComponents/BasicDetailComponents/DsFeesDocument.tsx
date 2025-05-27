@@ -278,6 +278,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   e.target.checked ? "DONE" : "PEND"
                 );
               }}
+              disable={paymentcompletedDisable}
             />
           </div>
         <div className={eleStyles.inputDetails}>
@@ -293,6 +294,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 console.log("Selected options:", options);
               }}
               showOptions={false}
+              disable={addDocumentTypeSlectDisable}
               
             >
             <div className={styles.addBtnSticky}>
@@ -307,6 +309,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                     setSelectedOptions(tempOptions)
                     console.log("Add button clicked");
                   }}
+                  disable={addDocumentTypeButtonDisable}
                 />
           </div>
             </DsMultiSelect>
@@ -330,6 +333,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   updateTenderFee(type, "paymentDate", getTodayDate(date));
                 }
               }}
+               disable={paymentcompletedDisable}
             />
           </div>
         </div>
@@ -381,6 +385,8 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                     type
                   );
                 }}
+                disable={uploadFileButtonDisabled}
+
               />
             ))}
           <div className={eleStyles.inputDetails}>
@@ -418,6 +424,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                           );
                       }
                     }}
+                  disable={recieptIdDisable}
                   />
                 </div>
               ))}

@@ -704,7 +704,7 @@ export const DSTendrFooter: React.FC = ({}) => {
             }
             buttonSize="btnLarge"
             // disable={splitButtonDisableState}
-            // disable={saveButtonDisabled}
+            disable={saveButtonDisabled}
           >
             Save
           </DsSplitButton>
