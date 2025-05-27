@@ -60,10 +60,15 @@ const DsAddProduct: React.FC<addProductProps> = ({
         const tenderProduct: TenderProduct = {
           productId: product.result.id,
           requestedQuantity: Number(qtyInputVal),
+          lastQuotedRate:50,
+          lastPurchaseRate: 50,
           product: {
             type: "read-only",
             productName: product.result.name,
-            productPackingSize: product.result.cartonSize,
+            productPackingSize: product.result.packingSize,
+            mrp: product.result.mrpRate,
+            ptr: product.result.priceToRetailer,
+            directCost: product.result.basicRate,
             dataSource: "fetch",
           },
         };
