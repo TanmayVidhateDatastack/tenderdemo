@@ -1949,7 +1949,6 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           tenderRevisions: newTenderData.tenderRevisions.filter(
             (x) => x.id != undefined
           ),
-          status: "",
           lastUpdatedBy: -1,
         });
         return response;
