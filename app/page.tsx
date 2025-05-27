@@ -865,7 +865,7 @@ export default function Home() {
               hasIcons={true}
               isSelectAble={false}
               rows={tempTableData.rows}
-              isFooterRequired={true}
+              // isFooterRequired={true}
               isSortable={true}
               handleRowDoubleClick={handleRowDoubleClick}
               handleRowClick={(e, rowIndex) => {

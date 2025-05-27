@@ -233,7 +233,7 @@ const DsProductKpis: React.FC<ProductKpiProps> = ({ version }) => {
           startIcon={<Image src={rupees} alt="link" />}
           startIconwhite={<Image src={whiterupee} alt="link" />}
           startIcondisable={<Image src={rupeedisabled} alt="link" />}
-          highlight={true}
+          highlight={false}
           id={"NetValue"}
         />
         <DsKpi

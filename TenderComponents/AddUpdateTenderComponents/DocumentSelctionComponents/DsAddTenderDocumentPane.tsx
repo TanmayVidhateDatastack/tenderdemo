@@ -270,7 +270,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
           label="Search Document Here"
           iconEnd={<Image src={search} alt="search" />}
           options={[]}
-          onChange={(e) => handleSearch(e.target.value)}
+          onChange={(e) => handleSearch(e?.target.value||"")}
           className={styles.searchDocument}
         />
         {Object.entries(filterDocuments).map(([type, docs]) => (
