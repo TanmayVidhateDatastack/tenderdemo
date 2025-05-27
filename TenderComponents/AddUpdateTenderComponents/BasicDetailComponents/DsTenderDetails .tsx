@@ -169,7 +169,7 @@ const DsTenderDetails: React.FC = () => {
         {/* <div className={deptStyle.fields}> */}
         <CustomerSearch
           customer={tenderData.tenderDetails.customerName}
-          orderData={undefined}
+          orderData={tenderData}
           setCustomerLocations={setCustomerLocations}
           updateTenderData={updateTenderData}
           disabled={searchCustomerDisable}
