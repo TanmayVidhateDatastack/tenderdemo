@@ -5,6 +5,7 @@ import { updateDocuments, useTenderData } from "../TenderDataContextProvider";
 import IconFactory from "@/Elements/IconComponent";
 import { useAppSelector } from "@/Redux/hook/hook";
 import { RootState } from "@/Redux/store/store";
+import { downloadDocumentUrl } from "@/Common/helpers/constant";
 
 export interface DsApplicableConditionsProps {
   title: string;
@@ -24,7 +25,7 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
     removeTenderDocument,
   } = useTenderData();
   const permissions = useAppSelector((state: RootState) => state.permissions);
-  const {condtionNotesDisable,attachFileConditionButtonDisable} = permissions;
+  const { condtionNotesDisable, attachFileConditionButtonDisable } = permissions;
   return (
     <>
       <div className={styles.emdContainer}>
@@ -62,16 +63,21 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
             buttonSize="btnSmall"
             disable={attachFileConditionButtonDisable}
             startIcon={
-            <IconFactory 
-            name="fileAttach" 
-            disabled={attachFileConditionButtonDisable}/>}
+              <IconFactory
+                name="fileAttach"
+                disabled={attachFileConditionButtonDisable} />}
             previouslySelectedFile={
               tenderData.tenderDocuments?.filter(
-                (x) => 
+                (x) =>
                   x.documentType == type &&
-                  x.documentCategory == "TENDER_SUPPLY_CONDITION" &&
-                  x.id !== undefined
-              ) || []
+                  x.documentCategory == "TENDER_SUPPLY_CONDITION"
+                  // x.id !== undefined
+              ).map((x) => {
+                return {
+                  ...x,
+                  fileDownloadHref: downloadDocumentUrl(tenderData.id, x.id),
+                };
+              }) || []
             }
             onSelectedFileChange={(files) => {
               const typeDocuments =
@@ -89,7 +95,7 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
                 type,
                 "TENDER_SUPPLY_CONDITION",
               );
-              
+
             }}
           ></DsCsvUpload>
         </div>

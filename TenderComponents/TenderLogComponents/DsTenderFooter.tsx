@@ -20,6 +20,8 @@ import {
   dsStatus,
   getTenderUserRoles,
   DsStatus,
+  devHostUrl,
+  hostUrl,
 } from "@/Common/helpers/constant";
 import DsNavTo from "@/Elements/ERPComponents/DsNavigationComponent/DsNavTo";
 import DsSplitButton from "@/Elements/DsComponents/DsButtons/dsSplitButton";
@@ -74,7 +76,7 @@ export const DSTendrFooter: React.FC = ({}) => {
       console.error("Fetch error: ", error);
     }
   };
-
+ 
   const searchParams = useSearchParams();
   const type = searchParams.get("type") || "institutional" || "corporate";
 
@@ -663,12 +665,13 @@ export const DSTendrFooter: React.FC = ({}) => {
       setSaveTenderClicked(false);
     }
   }, [saveTenderClicked]);
+
   return (
     <>
       <div className={styles.footer}>
         <DsNavTo
           id="closeBtn"
-          location=""
+          location={hostUrl}
           label="Close"
           buttonSize="btnLarge"
           className={btnStyles.btnOutlined}
@@ -679,7 +682,8 @@ export const DSTendrFooter: React.FC = ({}) => {
         {tenderData.status == "AWARDED" ||
           tenderData.status == "PARTIALLY_AWARDED" ||
           tenderData.status == "LOST" ||
-          tenderData.status == "DRAFT" 
+          tenderData.status == "DRAFT" ||
+          tenderData.status == "UNDER_APPROVAL"
         ? (
           <DsSplitButton
             //  disable={true}
