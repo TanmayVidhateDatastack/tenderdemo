@@ -13,33 +13,30 @@ import DsSupplyDetails from "./DsSupplyDetails";
 import DsApplicableConditions from "./DsApplicableConditions";
 import { useTenderData } from "../TenderDataContextProvider";
 import { useSearchParams } from "next/navigation";
-import DsMultiSelect from "@/Elements/DsComponents/dsSelect/dsMultiSelect";
+
 export interface Deposit {
   paidBy: DsSelectOption[];
 }
-const DsBasicDetails = () => {
 
+const DsBasicDetails = () => {
   const { fetchMetaData, tenderData, updateTenderData } = useTenderData();
-  
+
   useEffect(() => {
     fetchMetaData();
   }, []);
   const searchParams = useSearchParams();
   const type = searchParams.get("type") || "institutional" || "corporate";
   
-  // useEffect(() => {
-  //   if (type === "institutional" &&
-  //     tenderData.applierType === "STOCKIST" &&
-  //     tenderData.supplierType === "STOCKIST") {
-  //     updateTenderData("tenderFees", []);
-  //   }
-  // }, [type, tenderData.applierType, tenderData.supplierType])
+  useEffect(() => {
+    if (type === "institutional" &&
+      tenderData.applierType === "STOCKIST" &&
+      tenderData.supplierType === "STOCKIST") {
+      updateTenderData("tenderFees", []);
+    }
+  }, [type, tenderData.applierType, tenderData.supplierType])
 
   return (
     <>
-      <div className={styles.container}>
-    
-            </div>
       <div className={styles.container}>
         <DsTenderDetails />
       </div>
@@ -47,18 +44,18 @@ const DsBasicDetails = () => {
       <div className={styles.container}>
         <DsApplierSupplierDetails />
       </div>
-      {/* {!(
+      {!(
         type === "institutional" &&
         tenderData.applierType === "STOCKIST" &&
         tenderData.supplierType === "STOCKIST"
-      ) && ( */}
+      ) && (
           <>
             <span className={styles.Seperator}></span>
             <div className={styles.container}>
               <DsDepositeDocuments />
             </div>
           </>
-        {/* )} */}
+        )}
       {type === "institutional" && (
         <>
           <span className={styles.Seperator}></span>
