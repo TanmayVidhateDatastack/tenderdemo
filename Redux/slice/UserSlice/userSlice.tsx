@@ -9,7 +9,7 @@ export type UserRole = {
 export type UserState = {
   userRoles: UserRole[]; // Array to store roles
   role: string; // Single role or other status (depending on your use case)
-  user: User; // User object containing user details
+  // user: User; // User object containing user details
 };
 
 export const ContractStatuses = {
@@ -22,53 +22,53 @@ export const ContractStatuses = {
 const initialState: UserState = {
   userRoles: [], // Initialize with an empty array
   role: "", // Initialize with an empty string
-  user: {
-    userId: 0,
-    firstName: "",
-    lastName: "",
-    employeeId: "",
-    email: "",
-    company: {
-      id: 0,
-      name: "",
-      address: {
-        id: 0,
-        address1: "",
-        address2: "",
-        address3: "",
-        address4: "",
-        city: "",
-        state: "",
-        pinCode: "",
-        isPrimary: "",
-      },
-    },
-    division: {
-      id: 0,
-      name: "",
-    },
-    location: {
-      id: 0,
-      name: "",
-      address: {
-        id: 0,
-        address1: "",
-        address2: "",
-        address3: "",
-        address4: "",
-        city: "",
-        state: "",
-        pinCode: "",
-        isPrimary: "",
-      },
-    },
-    role: [
-      {
-        id: 0,
-        name: "",
-      },
-    ],
-  },
+  // user: {
+  //   userId: 0,
+  //   firstName: "",
+  //   lastName: "",
+  //   employeeId: "",
+  //   email: "",
+  //   company: {
+  //     id: 0,
+  //     name: "",
+  //     address: {
+  //       id: 0,
+  //       address1: "",
+  //       address2: "",
+  //       address3: "",
+  //       address4: "",
+  //       city: "",
+  //       state: "",
+  //       pinCode: "",
+  //       isPrimary: "",
+  //     },
+  //   },
+  //   division: {
+  //     id: 0,
+  //     name: "",
+  //   },
+  //   location: {
+  //     id: 0,
+  //     name: "",
+  //     address: {
+  //       id: 0,
+  //       address1: "",
+  //       address2: "",
+  //       address3: "",
+  //       address4: "",
+  //       city: "",
+  //       state: "",
+  //       pinCode: "",
+  //       isPrimary: "",
+  //     },
+  //   },
+  //   role: [
+  //     {
+  //       id: 0,
+  //       name: "",
+  //     },
+  //   ],
+  // },
 };
 
 const userSlice = createSlice({
@@ -82,13 +82,13 @@ const userSlice = createSlice({
     setUserRole: (state, action: PayloadAction<string>) => {
       state.role = action.payload; // Update roles to the new string value
       return state;
-    },
-    setUser: (state, action: PayloadAction<User>) => {
-      state.user = action.payload; // Update roles to the new string value
-      return state;
-    },
+    }
+    // setUser: (state, action: PayloadAction<User>) => {
+    //   state.user = action.payload; // Update roles to the new string value
+    //   return state;
+    // },
   }
 });
 
-export const { setUserRoles, setUserRole, setUser } = userSlice.actions;
+export const { setUserRoles, setUserRole } = userSlice.actions;
 export default userSlice.reducer;
