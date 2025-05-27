@@ -316,11 +316,11 @@ const DsDepositeDocuments: React.FC = () => {
                 completedpayment={paymentCheckVisible}
                 recoverycheckvisibible={recoveryPaymentVisible}
               />
+                
             </div>
           )
         );
       })}
-
       <ContextMenu
         id={contextMenuId}
         className={styles.applicableDeposite}

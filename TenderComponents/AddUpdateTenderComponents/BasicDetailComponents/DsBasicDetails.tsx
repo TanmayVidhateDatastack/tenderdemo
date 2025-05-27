@@ -13,11 +13,9 @@ import DsSupplyDetails from "./DsSupplyDetails";
 import DsApplicableConditions from "./DsApplicableConditions";
 import { useTenderData } from "../TenderDataContextProvider";
 import { useSearchParams } from "next/navigation";
-
 export interface Deposit {
   paidBy: DsSelectOption[];
 }
-
 const DsBasicDetails = () => {
   const { fetchMetaData, tenderData, updateTenderData } = useTenderData();
 
@@ -26,14 +24,14 @@ const DsBasicDetails = () => {
   }, []);
   const searchParams = useSearchParams();
   const type = searchParams.get("type") || "institutional" || "corporate";
-  
-  useEffect(() => {
-    if (type === "institutional" &&
-      tenderData.applierType === "STOCKIST" &&
-      tenderData.supplierType === "STOCKIST") {
-      updateTenderData("tenderFees", []);
-    }
-  }, [type, tenderData.applierType, tenderData.supplierType])
+
+  // useEffect(() => {
+  //   if (type === "institutional" &&
+  //     tenderData.applierType === "STOCKIST" &&
+  //     tenderData.supplierType === "STOCKIST") {
+  //     updateTenderData("tenderFees", []);
+  //   }
+  // }, [type, tenderData.applierType, tenderData.supplierType])
 
   return (
     <>
@@ -44,18 +42,18 @@ const DsBasicDetails = () => {
       <div className={styles.container}>
         <DsApplierSupplierDetails />
       </div>
-      {!(
+      {/* {!(
         type === "institutional" &&
         tenderData.applierType === "STOCKIST" &&
         tenderData.supplierType === "STOCKIST"
-      ) && (
-          <>
-            <span className={styles.Seperator}></span>
-            <div className={styles.container}>
-              <DsDepositeDocuments />
-            </div>
-          </>
-        )}
+      ) && ( */}
+      <>
+        <span className={styles.Seperator}></span>
+        <div className={styles.container}>
+          <DsDepositeDocuments />
+        </div>
+      </>
+      {/* )} */}
       {type === "institutional" && (
         <>
           <span className={styles.Seperator}></span>

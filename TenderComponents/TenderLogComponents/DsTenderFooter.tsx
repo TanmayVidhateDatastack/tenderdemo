@@ -1,7 +1,7 @@
 "use client";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import React, { useEffect, useState } from "react";
-
+ 
 import btnStyles from "@/Elements/DsComponents/DsButtons/dsButton.module.css";
 import ContextMenu, {
   closeAllContext,
@@ -23,7 +23,7 @@ import {
 } from "@/Common/helpers/constant";
 import DsNavTo from "@/Elements/ERPComponents/DsNavigationComponent/DsNavTo";
 import DsSplitButton from "@/Elements/DsComponents/DsButtons/dsSplitButton";
-
+ 
 import Toaster from "@/Elements/DsComponents/DsToaster/DsToaster";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import { useTenderData } from "../AddUpdateTenderComponents/TenderDataContextProvider";
@@ -32,15 +32,16 @@ import { getYesterdayDate } from "@/Common/helpers/Method/conversion";
 import ApprovalPopup from "../AddUpdateTenderComponents/Approvelpopup/ApprovelPopup";
 import { ContractStatuses } from "../AddUpdateTenderComponents/CustomTabViews/ContractView";
 import { ClosePopup } from "@/Elements/DsComponents/dsPopup/dsPopup";
-
-
+import { useSearchParams } from "next/navigation";
+ 
+ 
 class ActionStatus {
   notiType: "success" | "bonus" | "info" | "error" | "cross" = "success";
   notiMsg: string | React.ReactNode = "";
   showNotification: boolean = false;
   isOkayButtonVisible?: boolean = false;
 }
-
+ 
 export const DSTendrFooter: React.FC = ({ }) => {
   const dispatch = useAppDispatch<AppDispatch>();
   const role = useAppSelector((state: RootState) => state.user.role);
@@ -72,7 +73,10 @@ export const DSTendrFooter: React.FC = ({ }) => {
       console.error("Fetch error: ", error);
     }
   };
-
+ 
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type") || "institutional" || "corporate";
+ 
   const permissions = useAppSelector((state: RootState) => state.permissions);
   const {
     saveButtonDisabled,
@@ -120,14 +124,14 @@ export const DSTendrFooter: React.FC = ({ }) => {
     paymentRecoverdDateDisable,
     recoveredAttachFileButton,
     ContractTypeDisable,
-
+ 
     //product Tab
     productTableDisable,
   } = permissions;
   useEffect(() => {
     handleFetch();
   }, []);
-
+ 
   const validateFields = (tenderData: TenderData) => {
     const errors: string[] = [];
     if (
@@ -202,7 +206,7 @@ export const DSTendrFooter: React.FC = ({ }) => {
       }
       const todaysdate = new Date();
       // todaysdate.setHours(0, 0, 0, 0);
-
+ 
       if (!tenderIssueDateDisable &&
         tenderData?.issueDate &&
         new Date(tenderData.issueDate) > todaysdate
@@ -236,7 +240,7 @@ export const DSTendrFooter: React.FC = ({ }) => {
       if (!submissionModeDisable && tenderData?.submissionMode?.trim() === "") {
         errors.push("Please select a submission mode.");
       }
-
+ 
       const urlPattern =
         /^(https?:\/\/)?([\w\-]+\.)+[\w\-]+(\/[\w\-._~:/?#[\]@!$&'()*+,;=]*)?$/;
       const tenderURL = tenderData?.tenderUrl?.trim() ?? "";
@@ -255,18 +259,15 @@ export const DSTendrFooter: React.FC = ({ }) => {
         console.log(tenderData);
         errors.push("Please select at least one shipping location.");
       }
-
+ 
       if (!stockistDiscountDisable && tenderData?.supplierDiscount === 0) {
         errors.push("Please enter the supplier discount.");
       }
-
+ 
       const fees = tenderData?.tenderFees ?? [];
-      const todaysDate = new Date();
-      // todaysdate.setHours(0, 0, 0, 0);
-
       fees.forEach((fee, index) => {
         if (fee.status == "ACTV") {
-
+ 
           if (
             type === "institutional" &&
             tenderData.applierType === "STOCKIST" &&
@@ -274,23 +275,23 @@ export const DSTendrFooter: React.FC = ({ }) => {
           ) {
             return;
           }
-
+ 
           if (!fee.feesType?.toString().trim()) {
             errors.push(`${fee.feesType}: Please select a fee type.`);
           }
-
+ 
           if (!amountDisable && (fee.amount == null || fee.amount === 0)) {
             errors.push(`${fee.feesType}: Please enter an amount.`);
           }
-
+ 
           if (!fee.currency?.trim()) {
             errors.push(`${fee.feesType}:  Please select a currency.`);
           }
-
+ 
           if (!paidByDisable && !fee.paidBy?.trim()) {
             errors.push(`${fee.feesType}: Please specify who paid the fee.`);
           }
-
+ 
           if (!PaymentdueDateDisable && !fee.paymentDueDate?.trim()) {
             errors.push(`${fee.feesType}: Payment due date is required.`);
           } else if (!PaymentdueDateDisable && new Date(fee.paymentDueDate) < getYesterdayDate()) {
@@ -298,15 +299,15 @@ export const DSTendrFooter: React.FC = ({ }) => {
               `${fee.feesType}:  The payment due date cannot be in the past.`
             );
           }
-
-          if (! instructionNotesDisable && !fee.instructionNotes?.trim()) {
+ 
+          if (!instructionNotesDisable && !fee.instructionNotes?.trim()) {
             errors.push(
               `${fee.feesType} ${index + 1}:  Please enter instruction notes.`
             );
           }
         }
       });
-
+ 
       if (!supplypointDisable && tenderData?.tenderSupplyCondition?.supplyPoint?.trim() === "") {
         errors.push("Please select a supply point.");
       }
@@ -314,15 +315,15 @@ export const DSTendrFooter: React.FC = ({ }) => {
         errors.push("Please enter the number of consignees.");
       }
       if (
-       ! testreportRequiredDisable && tenderData?.tenderSupplyCondition?.testReportRequired?.trim() === ""
+        !testreportRequiredDisable && tenderData?.tenderSupplyCondition?.testReportRequired?.trim() === ""
       ) {
         errors.push("Please specify whether a test report is required.");
       }
       if (!eligibilityDisable && tenderData?.tenderSupplyCondition?.eligibility.length == 0) {
         errors.push("Please select at least one eligibility criterion.");
       }
-
-
+ 
+ 
       const applicableConditions =
         tenderData?.tenderSupplyCondition?.applicableConditions ?? [];
       applicableConditions.forEach((condition, index) => {
@@ -414,7 +415,7 @@ export const DSTendrFooter: React.FC = ({ }) => {
     }
     return errors;
   };
-
+ 
   const validateAndSaveTender = () => {
     console.log(tenderData);
     const validate = validateFields(tenderData);
@@ -445,7 +446,7 @@ export const DSTendrFooter: React.FC = ({ }) => {
   const validateAndUpdateTender = () => {
     // console.log(tenderData);
     // updateTender(tenderData.status);
-
+ 
     const validate = validateFields(tenderData);
     if (validate.length === 0) {
       updateTender(tenderData.status);
@@ -470,12 +471,12 @@ export const DSTendrFooter: React.FC = ({ }) => {
       showToaster("create-order-toaster");
     }
   };
-
+ 
   useEffect(() => {
     if (role && role !== "") {
       dispatch(setVisibilityByRole(role));
       console.log("Role=", role);
-
+ 
       if (role === "ACCOUNTANCE" || role === "FINANCE") {
         setContextContext(
           <DsButton
@@ -483,9 +484,10 @@ export const DSTendrFooter: React.FC = ({ }) => {
             buttonSize="btnSmall"
             buttonViewStyle="btnText"
             className={btnStyles.btnTextPrimary}
-            onClick={() => {showToaster("toaster1");
-                 handleSaveReceipt();
-              
+            onClick={() => {
+              showToaster("toaster1");
+              tenderData.status = "Fees_Pending";
+              updateTender(tenderData.status);
             }}
           />
         );
@@ -579,7 +581,7 @@ export const DSTendrFooter: React.FC = ({ }) => {
           );
         }
       }
-
+ 
       // setContextContext(contextContent);
       // if (contextContent && !document.getElementById("SubmissionContext")) {
       //   createContext(
@@ -604,12 +606,12 @@ export const DSTendrFooter: React.FC = ({ }) => {
     //       tenderData.tenderContract?.contractStatus == undefined ||
     //       tenderData.tenderContract?.contractStatus == null
     //     );
-
+ 
     setSplitButtonDisbale(splitButtonDisable);
   }, [tenderData.id]);
   useEffect(() => {
     if (saveTenderClicked) {
-
+ 
       if (tenderDataCopy?.id) {
         // if (saveTender) validateAndSaveTender();
         // if (saveTender) saveTender("Draft");
@@ -617,7 +619,7 @@ export const DSTendrFooter: React.FC = ({ }) => {
         // updateTender("Draft")
       } else {
         validateAndSaveTender();
-        // saveTender("Draft"); 
+        // saveTender("Draft");
       }
       setSaveTenderClicked(false);
     }
@@ -638,17 +640,23 @@ export const DSTendrFooter: React.FC = ({ }) => {
         {tenderData.status == "AWARDED" ||
           tenderData.status == "PARTIALLY_AWARDED" ||
           tenderData.status == "LOST" ||
-          tenderData.status == "DRAFT" ? (
+          tenderData.status == "DRAFT" ||
+          tenderData.status =="UNDER_APPROVAL"  ? (
           <DsSplitButton
             //  disable={true}
             buttonViewStyle="btnContained"
             onClick={() => {
+              // if (tenderData.status == "DRAFT") {
+              //   const updtedstatus = (tenderData.status = "SAVE");
+              //   updateTender(updtedstatus);
+              // }
+
               if (
                 tenderData.status == "AWARDED" ||
                 tenderData.status == "PARTIALLY_AWARDED" ||
                 tenderData.status == "LOST"
               )
-              updateContractDetails("contractStatus", "DRAFT");
+                updateContractDetails("contractStatus", "DRAFT");
               setSaveTenderClicked(true);
             }}
             onSplitClick={(e) =>
@@ -656,7 +664,7 @@ export const DSTendrFooter: React.FC = ({ }) => {
             }
             buttonSize="btnLarge"
             // disable={splitButtonDisableState}
-            disable={saveButtonDisabled}
+            // disable={saveButtonDisabled}
           >
             Save
           </DsSplitButton>
@@ -737,7 +745,7 @@ export const DSTendrFooter: React.FC = ({ }) => {
         }
         setActionStatus={setActionStatusValues}
       />
-
+ 
       <Toaster
         id={"toaster1"}
         message={
@@ -760,8 +768,9 @@ export const DSTendrFooter: React.FC = ({ }) => {
     </>
   );
 };
-
+ 
 export default DSTendrFooter;
 function useCallBack(arg0: () => void, arg1: TenderData[]) {
   throw new Error("Function not implemented.");
 }
+ 
