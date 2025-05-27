@@ -213,6 +213,10 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
             setStatus("REJECT");
             setToasterType("error");
         }
+        else if (popupType === "Reviewed") {
+            setStatus("REVIEW");
+            setToasterType("success");
+        }
         setToasterVisible(true);
     }
 
@@ -226,6 +230,10 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
         } else if (popupType === "Reject") {
             setPopUpTitle("Reason for Rejection");
             setStatus("REJECT");
+        }
+        else if (popupType === "Reviewed") {
+            setPopUpTitle("Reviewed");
+            setStatus("REVIEW");
         }
     }, [popupType]);
 
@@ -247,7 +255,12 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
                 if (popupType === "Approve") {
                     justificationType = result?.justificationApproveType || [];
                   
-                } else if (popupType === "Reject") {
+                }
+                else if (popupType === "Reviewed") {
+                    justificationType = result?.justificationApproveType || [];
+                  
+                }
+                 else if (popupType === "Reject") {
                     justificationType = result?.justificationRejectType || [];
                    
                 } else if (popupType === "Revise") {
@@ -302,7 +315,32 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
                     />
                 </div>
                 <div className={styles.popupFooter}>
-                    {buttonColor === "btnPrimary" && popupType === "Approve" && (
+                    {buttonColor === "btnPrimary" && popupType === "Reviewed" && (
+                        <DsButton
+                            id="approveButton"
+                            label="Approve"
+                            buttonViewStyle="btnContained"
+                            buttonColor="btnPrimary"
+                            onClick={() => {
+                                if (selectedOption?.value) {
+                                    ShowToastermessage();
+                                } 
+                               
+                                handleSave();
+
+                                setTimeout(() => {
+                                    ClosePopup(id);
+                                }, closeTimeForSalesOrder - 600);
+                                setTimeout(() => {
+                                    DisplayPane("deviationPane");
+                                }, closeTimeForSalesOrder - 400);
+                                setTimeout(() => {
+                                    goBack();
+                                }, closeTimeForSalesOrder);
+                            }}
+                        />
+                    )}
+                                        {buttonColor === "btnPrimary" && popupType === "Approve" && (
                         <DsButton
                             id="approveButton"
                             label="Approve"

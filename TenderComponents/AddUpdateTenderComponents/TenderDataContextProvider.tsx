@@ -1966,9 +1966,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         const response = await fetchData({
           url: getTenderByTenderId + tenderId,
         });
-
         const tenderData = response.result;
-
         tenderData.tenders.lastPurchaseDate = undefined;
         tenderData.tenders.submissionDate = undefined;
         tenderData.tenders.issueDate = undefined;

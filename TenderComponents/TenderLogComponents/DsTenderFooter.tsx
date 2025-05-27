@@ -32,6 +32,8 @@ import { getYesterdayDate } from "@/Common/helpers/Method/conversion";
 import ApprovalPopup from "../AddUpdateTenderComponents/Approvelpopup/ApprovelPopup";
 import { ContractStatuses } from "../AddUpdateTenderComponents/CustomTabViews/ContractView";
 import { ClosePopup } from "@/Elements/DsComponents/dsPopup/dsPopup";
+import { useSearchParams } from "next/navigation";
+
 
 class ActionStatus {
   notiType: "success" | "bonus" | "info" | "error" | "cross" = "success";
@@ -72,6 +74,9 @@ export const DSTendrFooter: React.FC = ({}) => {
       console.error("Fetch error: ", error);
     }
   };
+
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type") || "institutional" || "corporate";
 
   const permissions = useAppSelector((state: RootState) => state.permissions);
   const {
@@ -120,6 +125,9 @@ export const DSTendrFooter: React.FC = ({}) => {
     paymentRecoverdDateDisable,
     recoveredAttachFileButton,
     ContractTypeDisable,
+
+    //product Tab
+    productTableDisable,
   } = permissions;
   useEffect(() => {
     handleFetch();
@@ -263,11 +271,17 @@ export const DSTendrFooter: React.FC = ({}) => {
       }
 
       const fees = tenderData?.tenderFees ?? [];
-      const todaysDate = new Date();
-      // todaysdate.setHours(0, 0, 0, 0);
-
       fees.forEach((fee, index) => {
         if (fee.status == "ACTV") {
+
+          if (
+            type === "institutional" &&
+            tenderData.applierType === "STOCKIST" &&
+            tenderData.supplierType === "STOCKIST"
+          ) {
+            return;
+          }
+
           if (!fee.feesType?.toString().trim()) {
             errors.push(`${fee.feesType}: Please select a fee type.`);
           }
@@ -327,6 +341,7 @@ export const DSTendrFooter: React.FC = ({}) => {
       ) {
         errors.push("Please select at least one eligibility criterion.");
       }
+
 
       const applicableConditions =
         tenderData?.tenderSupplyCondition?.applicableConditions ?? [];
@@ -497,7 +512,7 @@ export const DSTendrFooter: React.FC = ({}) => {
         setContextContext(
           <>
             <PopupOpenButton
-              popupId="popup1"
+              popupId="reviewedPopup"
               buttonSize="btnSmall"
               buttonText="Reviewed "
               buttonViewStyle="btnText"
@@ -508,7 +523,7 @@ export const DSTendrFooter: React.FC = ({}) => {
               }}
             />
             <PopupOpenButton
-              popupId="popup2"
+              popupId="rejectPopup"
               buttonSize="btnSmall"
               buttonText="Revise"
               buttonViewStyle="btnText"
@@ -524,7 +539,7 @@ export const DSTendrFooter: React.FC = ({}) => {
         setContextContext(
           <>
             <PopupOpenButton
-              popupId="popup1"
+              popupId="approvalPopup"
               buttonSize="btnSmall"
               buttonText="Approve"
               buttonViewStyle="btnText"
@@ -535,7 +550,7 @@ export const DSTendrFooter: React.FC = ({}) => {
               }}
             />
             <PopupOpenButton
-              popupId="popup2"
+              popupId="rejectPopup"
               buttonSize="btnSmall"
               buttonText="Revise"
               buttonViewStyle="btnText"
@@ -546,7 +561,7 @@ export const DSTendrFooter: React.FC = ({}) => {
               }}
             />
             <PopupOpenButton
-              popupId="popup3"
+              popupId="revisePopup"
               buttonSize="btnSmall"
               buttonText="Reject"
               buttonViewStyle="btnText"
@@ -714,7 +729,7 @@ export const DSTendrFooter: React.FC = ({}) => {
         )}
       </div>
       <ApprovalPopup
-        id="popup1"
+        id="approvalPopup"
         types={[]}
         popupType="Approve"
         tenderId={tenderData.id}
@@ -730,7 +745,7 @@ export const DSTendrFooter: React.FC = ({}) => {
         setActionStatus={setActionStatusValues}
       />
       <ApprovalPopup
-        id="popup2"
+        id="rejectPopup"
         types={[]}
         tenderId={tenderData.id}
         popupType="Revise"
@@ -740,7 +755,7 @@ export const DSTendrFooter: React.FC = ({}) => {
         setActionStatus={setActionStatusValues}
       />
       <ApprovalPopup
-        id="popup3"
+        id="revisePopup"
         types={[]}
         popupType="Reject"
         tenderId={tenderData.id}
@@ -749,6 +764,23 @@ export const DSTendrFooter: React.FC = ({}) => {
         toasterMessage={"The Tender has been Rejected & also note has sent "}
         setActionStatus={setActionStatusValues}
       />
+      <ApprovalPopup
+        id="reviewedPopup"
+        types={[]}
+        popupType="Reviewed"
+        tenderId={tenderData.id}
+        buttonColor="btnPrimary"
+        position="center"
+        toasterMessage={
+          role === "HOMANAGER"
+            ? "The Tender has been Approved"
+            : role === "CHECKER"
+              ? "The Tender has been successfully moved to under approval state"
+              : "The action was successful!"
+        }
+        setActionStatus={setActionStatusValues}
+      />
+
       <Toaster
         id={"toaster1"}
         message={

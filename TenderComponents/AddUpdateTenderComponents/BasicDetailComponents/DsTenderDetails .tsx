@@ -143,6 +143,14 @@ const DsTenderDetails: React.FC = () => {
     }
   }, [tenderData.submissionMode, metaData.submissionMode]);
 
+  // useEffect(() => {
+  //   if (!tenderData.tenderDetails.customerName) {
+  //     updateTenderData("customerAddressId", "");
+  //     updateTenderData("tenderDetails.customerAddressName", "");
+  //     setCustomerLocations([]); // Optional: clear the location options 
+  //   }
+  // }, [tenderData.tenderDetails.customerName]);
+
   return (
     <>
       <ContextMenu
@@ -157,12 +165,11 @@ const DsTenderDetails: React.FC = () => {
         }
         showArrow={true}
       />
-
       <div className={styles.inputDetails}>
         {/* <div className={deptStyle.fields}> */}
         <CustomerSearch
           customer={tenderData.tenderDetails.customerName}
-          orderData={undefined}
+          orderData={tenderData}
           setCustomerLocations={setCustomerLocations}
           updateTenderData={updateTenderData}
           disabled={searchCustomerDisable}
@@ -210,11 +217,11 @@ const DsTenderDetails: React.FC = () => {
           }))}
           selectedOption={
             tenderData.customerAddressId &&
-            tenderData.tenderDetails.customerAddressName
+              tenderData.tenderDetails.customerAddressName
               ? {
-                  label: tenderData.tenderDetails.customerAddressName,
-                  value: tenderData.customerAddressId.toString(),
-                }
+                label: tenderData.tenderDetails.customerAddressName,
+                value: tenderData.customerAddressId.toString(),
+              }
               : undefined
           }
           setSelectOption={(option) => {
@@ -282,8 +289,8 @@ const DsTenderDetails: React.FC = () => {
           initialDate={
             tenderData.lastPurchaseDate
               ? new Date(tenderData.lastPurchaseDate).toLocaleDateString(
-                  "en-GB"
-                )
+                "en-GB"
+              )
               : undefined
           }
           minDate={getYesterdayDate()}
@@ -325,10 +332,10 @@ const DsTenderDetails: React.FC = () => {
           setSelectOption={(option) => {
             if (typeof option.value == "string") {
               updateTenderData("contractType", option.value);
-              console.log("rateContractType", option.label);
+             
             }
           }}
-          // disable={tenderTypeDisable}
+        // disable={tenderTypeDisable}
         ></DsSingleSelect>
         {selectedRateContractType?.value === "RATE_CONTRACT" && (
           <DsTextField

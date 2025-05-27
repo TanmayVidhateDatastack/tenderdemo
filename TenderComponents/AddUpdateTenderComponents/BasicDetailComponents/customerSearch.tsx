@@ -44,8 +44,10 @@ const CustomerSearch: React.FC<{
   ) => void;
   setCustomerLocations?: Dispatch<SetStateAction<location[]>>;
 }> = React.memo(
-  ({ customer, disabled, updateTenderData, setCustomerLocations }) => {
+  ({ customer, disabled, updateTenderData, setCustomerLocations, orderData }) => {
     const [customers, setCustomers] = useState<datalistOptions[]>();
+    //Gaurav
+    const [customerName, setCustomerName] = useState<string>("");
     const [selectedCustomer, setSelectedCustomer] = useState<number>();
     const [customerInputValue, setCustomerInputValue] = useState(customer ?? "");
     const [customerSearchKey, setCustomerSearchKey] = useState(0);
@@ -55,19 +57,33 @@ const CustomerSearch: React.FC<{
     const { disable } = permissions;
 
 
+    const handleOnBlur = () =>{
+      setCustomerInputValue(customerName);
+    }
+
+
     async function setSelectedOptions(option: datalistOptions): Promise<void> {
       const selectedCustomerId = Number(option.id);
       setSelectedCustomer(selectedCustomerId);
+      setCustomerName(option.value ?? "");
       setCustomerInputValue(option.value ?? "");
+
       if (updateTenderData) {
         updateTenderData("customerId", selectedCustomerId);
         updateTenderData(
           "tenderDetails.customerName",
-          option.attributes.name || ""
+          option.value || ""
         );
+
+        updateTenderData("customerAddressId", 0);
+        updateTenderData(
+          "tenderDetails.customerAddressName",
+          ''
+        );
+        var a = orderData;  
       }
 
-      setSelectedAddress("");
+      // setSelectedAddress("");
 
       try {
         const response = await fetch(
@@ -99,14 +115,14 @@ const CustomerSearch: React.FC<{
       const val = e.target.value;
       setCustomerInputValue(val);
 
-      if (val.trim() === "") {
-        // If user cleared the field manually
-        updateTenderData?.("customerId", 0);
-        updateTenderData?.("tenderDetails.customerName", "");
-        setCustomerLocations?.([]);
-        setSelectedCustomer(undefined);
-        setCustomerSearchKey((prev) => prev + 1); // Force re-mount
-      }
+      // if (val.trim() === "") {
+      //   // If user cleared the field manually
+      //   // updateTenderData?.("customerId", 0);
+      //   // updateTenderData?.("tenderDetails.customerName", "");
+      //   // setCustomerLocations?.([]);
+      //   // setSelectedCustomer(undefined);
+      //   // setCustomerSearchKey((prev) => prev + 1); // Force re-mount
+      // }
     }
 
     function setOptions(values: unknown) {
@@ -129,6 +145,7 @@ const CustomerSearch: React.FC<{
     useEffect(() => {
       if (customer) {
         setCustomerInputValue(customer);
+        setCustomerName(customer);
       }
     }, [customer]);
 
@@ -146,6 +163,7 @@ const CustomerSearch: React.FC<{
         setSearchUrl={(searchTerm: string) => searchCustomerURL + searchTerm}
         setSelectedOption={setSelectedOptions}
         onChange={handleInputChange}
+        onBlur={handleOnBlur}
       />
     );
   }

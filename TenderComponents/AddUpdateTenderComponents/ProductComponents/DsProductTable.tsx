@@ -21,11 +21,14 @@ import ContextMenu, {
   displayContext,
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import trashbtn from "@/Common/TenderIcons/smallIcons/trashbtn.svg";
+
 import whitetrashbtn from "@/Common/TenderIcons/smallIcons/whitetrash.svg";
 import Image from "next/image";
-import { TenderProductDiscountPercentage } from "@/Common/helpers/constant";
+import { marginPercentLimit,TenderProductDiscountPercentage } from "@/Common/helpers/constant";
 import { v4 as uuidv4 } from "uuid";
 import clsx from "clsx";
+import { useAppSelector } from "@/Redux/hook/hook";
+import { RootState } from "@/Redux/store/store";
 
 interface DsProductTableProps {
   productList: TenderProduct[];
@@ -57,6 +60,16 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
     tenderDataCopy,
   } = useTenderData();
 
+
+  const permissions = useAppSelector((state: RootState) => state.permissions);
+  const {
+    productTableDisable
+  } = permissions;
+
+  // const [tenderProductTable, setTenderProductTable] = useState<
+  //   tableData | undefined
+  // >();
+
   const [localProducts, setLocalProducts] = useState<TenderProductWithRowId[]>(
     []
   );
@@ -85,8 +98,8 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         const discount = tenderproduct.stockistDiscountValue
           ? tenderproduct.stockistDiscountValue
           : ((tenderproduct.proposedRate || 0) *
-              TenderProductDiscountPercentage) /
-            100;
+            TenderProductDiscountPercentage) /
+          100;
 
         calculated.product.totalCost = parseFloat(
           (Number(tenderproduct.product.directCost) + Number(discount)).toFixed(
@@ -100,11 +113,11 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         );
         calculated.product.marginPercent =
           tenderproduct.proposedRate !== 0 &&
-          tenderproduct.proposedRate !== undefined &&
-          tenderproduct.proposedRate !== null
+            tenderproduct.proposedRate !== undefined &&
+            tenderproduct.proposedRate !== null
             ? (calculated.product.marginValue /
-                Number(tenderproduct.proposedRate)) *
-                100 || 0
+              Number(tenderproduct.proposedRate)) *
+            100 || 0
             : 0;
       }
       if (calculated.product)
