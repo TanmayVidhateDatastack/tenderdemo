@@ -11,6 +11,8 @@ import { TenderData } from "../TenderDataContextProvider";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import { useAppSelector } from "@/Redux/hook/hook";
 import { RootState } from "@/Redux/store/store";
+import { useSearchParams } from "next/navigation";
+
 
 //  interface CustomerSearchProps {
 //   orderData: TenderData | null;
@@ -43,6 +45,7 @@ const CustomerSearch: React.FC<{
     value: string | number
   ) => void;
   setCustomerLocations?: Dispatch<SetStateAction<location[]>>;
+  customerType?: "read-only";
 }> = React.memo(
   ({ customer, disabled, updateTenderData, setCustomerLocations, orderData }) => {
     const [customers, setCustomers] = useState<datalistOptions[]>();
@@ -52,12 +55,15 @@ const CustomerSearch: React.FC<{
     const [customerInputValue, setCustomerInputValue] = useState(customer ?? "");
     const [customerSearchKey, setCustomerSearchKey] = useState(0);
 
-    const [selectedAddress, setSelectedAddress] = useState<string>(""); 
+    const [selectedAddress, setSelectedAddress] = useState<string>("");
     const permissions = useAppSelector((state: RootState) => state.permissions);
     const { disable } = permissions;
 
+    // get the type value from URL
+    const searchParams = useSearchParams();
+    const type = searchParams.get("type") || "institutional";
 
-    const handleOnBlur = () =>{
+    const handleOnBlur = () => {
       setCustomerInputValue(customerName);
     }
 
@@ -80,7 +86,7 @@ const CustomerSearch: React.FC<{
           "tenderDetails.customerAddressName",
           ''
         );
-        var a = orderData;  
+        const a = orderData;
       }
 
       // setSelectedAddress("");
@@ -160,13 +166,21 @@ const CustomerSearch: React.FC<{
         label={"Search Customer"}
         options={customers || undefined}
         setOptions={setOptions}
-        setSearchUrl={(searchTerm: string) => searchCustomerURL + searchTerm}
+        // setSearchUrl={(searchTerm: string) => searchCustomerURL + searchTerm}
+        setSearchUrl={(searchTerm: string) => {
+          const queryParams = new URLSearchParams();
+          queryParams.set("", searchTerm);
+          if (type) queryParams.set("type", type);
+
+          return `${searchCustomerURL}${queryParams.toString()}`;
+        }}
+
         setSelectedOption={setSelectedOptions}
-        onChange={(e)=>{if(e)handleInputChange(e)}}
+        onChange={(e) => { if (e) handleInputChange(e) }}
         onBlur={handleOnBlur}
       />
     );
   }
 );
- 
+
 export default CustomerSearch;
