@@ -11,6 +11,8 @@ import { TenderData } from "../TenderDataContextProvider";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import { useAppSelector } from "@/Redux/hook/hook";
 import { RootState } from "@/Redux/store/store";
+import { useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 //  interface CustomerSearchProps {
 //   orderData: TenderData | null;
@@ -52,17 +54,21 @@ const CustomerSearch: React.FC<{
     const [customerInputValue, setCustomerInputValue] = useState(customer ?? "");
     const [customerSearchKey, setCustomerSearchKey] = useState(0);
 
-    const [selectedAddress, setSelectedAddress] = useState<string>(""); 
+    const [selectedAddress, setSelectedAddress] = useState<string>("");
     const permissions = useAppSelector((state: RootState) => state.permissions);
     const { disable } = permissions;
 
 
     const handleOnBlur = (e) => {
-      const n=e.target.value == '' ? '' : customerName
+      const n = e.target.value == '' ? '' : customerName
       setCustomerName(n);
       setCustomerInputValue(n);
-      
+
     }
+
+    // get the type value from URL
+    const searchParams = useSearchParams();
+    const type = searchParams.get("type") || "institutional";
 
 
     async function setSelectedOptions(option: datalistOptions): Promise<void> {
@@ -117,7 +123,7 @@ const CustomerSearch: React.FC<{
       const val = e.target.value;
       setCustomerInputValue(val);
 
-      if(val == ""){
+      if (val == "") {
         updateTenderData?.("customerId", 0);
         updateTenderData?.("tenderDetails.customerName", "");
         updateTenderData?.("customerAddressId", 0);
@@ -169,13 +175,15 @@ const CustomerSearch: React.FC<{
         label={"Search Customer"}
         options={customers || undefined}
         setOptions={setOptions}
-        setSearchUrl={(searchTerm: string) => searchCustomerURL + searchTerm}
-        setSelectedOption={setSelectedOptions}
-        onChange={(e)=>{if(e)handleInputChange(e)}}
+        setSearchUrl={(searchTerm: string) =>
+          searchCustomerURL(searchTerm, type)
+          // `${searchCustomerURL}${searchTerm}&type=${type}`
+        } setSelectedOption={setSelectedOptions}
+        onChange={(e) => { if (e) handleInputChange(e) }}
         onBlur={handleOnBlur}
       />
     );
   }
 );
- 
+
 export default CustomerSearch;
