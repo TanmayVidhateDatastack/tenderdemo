@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+'use client'
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { TenderProduct, useTenderData } from "../TenderDataContextProvider";
 import DsTextFieldEditor from "@/Elements/DsComponents/DsInputs/dsTextField";
@@ -308,12 +308,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
             onValueChange={(value) => {
               if (!value) value = "0";
               if (onChange) onChange(value);
-              setTimeout(() => {
-                if (cellEdit)
-                  cellEdit(row.rowId, "lastPurchaseRate", Number(value));
-
-                if (onCommit) onCommit();
-              }, 100);
+             
             }}
             onCompanyChange={(company) => {
               if (cellEdit) {
@@ -322,8 +317,19 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                 if (onCommit) onCommit();
               }
             }}
-            onBlur={() => {
+            onBlur={(e) => {
+              const value = (e?.target as HTMLInputElement).value;
+               setTimeout(() => {
+                if (cellEdit)
+                  cellEdit(row.rowId, "lastPurchaseRate", Number(value));
+
+                if (onCommit) onCommit();
+              }, 100);
               if (onCommit) onCommit();
+            }}
+            onCommit={()=>{
+              if (onCommit) onCommit();
+
             }}
             // onBlur={(e) => {
             autofocus={true}

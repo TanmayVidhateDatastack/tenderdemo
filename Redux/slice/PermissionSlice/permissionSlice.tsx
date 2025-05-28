@@ -60,7 +60,7 @@ type PermissionState = {
   saveButtonDisabled: boolean;
   ContractTypeDisable: boolean;
 
-  //Product Tab 
+  //Product Tab  
   productSearchDisable: boolean;
   productquantityDisable: boolean;
   addProductBtnDisable: boolean;
@@ -299,8 +299,6 @@ const permissionsSlice = createSlice({
 
               break;
             case "CHECKER":
-              break;
-            case "HOMANAGER":
               break;
           }
           break;
