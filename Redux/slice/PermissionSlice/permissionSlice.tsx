@@ -303,7 +303,6 @@ const permissionsSlice = createSlice({
           }
           break;
         case "APPROVED":
-        case "APPROVALPENDING":
           if (role === "ACCOUNTANCE" || role === "FINANCE") {
             state.paymentcompletedDisable = false;
             state.addDocumentTypeSlectDisable = false,

@@ -47,6 +47,7 @@ const DsTenderDetails: React.FC = () => {
   const { updateTenderData, tenderData, tenderDataCopy, metaData } =
     useTenderData();
   const [customerLocations, setCustomerLocations] = useState<location[]>([]);
+  const [addressName, setAddressName] = useState<DsSelectOption|undefined>();
 
   // const [tenderStatus, setTenderStatus] = useState<string>();
 
@@ -152,7 +153,6 @@ const DsTenderDetails: React.FC = () => {
   // }, [tenderData.tenderDetails.customerName]);
 
   //Gaurav Nalwade
-  const [addressName, setAddressName] = useState<DsSelectOption|undefined>();
 
   useEffect(() => {
       setAddressName(
@@ -163,7 +163,7 @@ const DsTenderDetails: React.FC = () => {
           } :
           undefined
       );
-  }, [tenderData?.customerId])
+  }, [tenderData?.customerId,tenderData.customerAddressId])
 
   return (
     <>

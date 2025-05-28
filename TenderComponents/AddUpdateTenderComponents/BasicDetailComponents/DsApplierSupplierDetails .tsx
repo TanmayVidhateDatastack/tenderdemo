@@ -239,7 +239,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
           isSearchable={true}
           options={suppliedBy}
           {...(tenderData.id
-            ? {
+            ? { 
                 selectedOption: {
                   attributes: { type: tenderData.supplierType },
                   id: "",
@@ -270,10 +270,10 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
           disable={depotDisable}
           containerClasses={styles.fields}
           selectedOptions={selectedDepo}
-          options={formatedDepot}
-          // type="multi"
+          options={formatedDepot}   
+          // type="multi" 
           label="Depot"
-          placeholder={"Please select here"}
+          placeholder={"Select Depots"}
           id={"depot"}
           setSelectOptions={(options) => {
             const shipIds = options.reduce<number[]>((acc, option) => {
