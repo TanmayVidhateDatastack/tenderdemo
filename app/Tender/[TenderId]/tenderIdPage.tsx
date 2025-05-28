@@ -53,6 +53,7 @@ const DsTenderIdPage: React.FC<{
     saveTender,
     updateTender,
     fetchAndSetOriginalTender,
+    updateTenderData
   } = useTenderData();
   const [isCsvWhite, setIsCsvWhite] = useState(false);
   const [isLatestVersion, setIsLatestVersion] = useState(false);
@@ -204,7 +205,7 @@ const DsTenderIdPage: React.FC<{
           tenderData.tenderRevisions.reduce((maxObj, currentObj) =>
             currentObj.version > maxObj.version ? currentObj : maxObj
           )?.version || 1;
-
+          // updateTenderData("status", "DRAFT");
         setTabId(`v${latestVersion}`);
       }
     }
