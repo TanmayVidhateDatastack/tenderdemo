@@ -13,7 +13,6 @@ import { useAppSelector } from "@/Redux/hook/hook";
 import { RootState } from "@/Redux/store/store";
 import { useSearchParams } from "next/navigation";
 
-
 //  interface CustomerSearchProps {
 //   orderData: TenderData | null;
 //   setSelectedCustomer?: Dispatch<SetStateAction<customer | undefined>>;
@@ -45,7 +44,6 @@ const CustomerSearch: React.FC<{
     value: string | number
   ) => void;
   setCustomerLocations?: Dispatch<SetStateAction<location[]>>;
-  customerType?: "read-only";
 }> = React.memo(
   ({ customer, disabled, updateTenderData, setCustomerLocations, orderData }) => {
     const [customers, setCustomers] = useState<datalistOptions[]>();
@@ -59,137 +57,132 @@ const CustomerSearch: React.FC<{
     const permissions = useAppSelector((state: RootState) => state.permissions);
     const { disable } = permissions;
 
+
+    const handleOnBlur = (e) => {
+      const n = e.target.value == '' ? '' : customerName
+      setCustomerName(n);
+      setCustomerInputValue(n);
+
+    }
+
     // get the type value from URL
     const searchParams = useSearchParams();
     const type = searchParams.get("type") || "institutional";
 
-    const handleOnBlur = () => {
-      setCustomerInputValue(customerName);
-      const handleOnBlur = (e) => {
-        const n = e.target.value == '' ? '' : customerName
-        setCustomerName(n);
-        setCustomerInputValue(n);
 
+    async function setSelectedOptions(option: datalistOptions): Promise<void> {
+      const selectedCustomerId = Number(option.id);
+      setSelectedCustomer(selectedCustomerId);
+      setCustomerName(option.value ?? "");
+      setCustomerInputValue(option.value ?? "");
+
+      if (updateTenderData) {
+        updateTenderData("customerId", selectedCustomerId);
+        updateTenderData(
+          "tenderDetails.customerName",
+          option.value || ""
+        );
+
+        updateTenderData("customerAddressId", 0);
+        updateTenderData(
+          "tenderDetails.customerAddressName",
+          ''
+        );
       }
 
+      // setSelectedAddress("");
 
-      async function setSelectedOptions(option: datalistOptions): Promise<void> {
-        const selectedCustomerId = Number(option.id);
-        setSelectedCustomer(selectedCustomerId);
-        setCustomerName(option.value ?? "");
-        setCustomerInputValue(option.value ?? "");
+      try {
+        const response = await fetch(
+          `${getAllCustomerLocationsURL}${selectedCustomerId}`
+        );
+        const data = await response.json();
 
-        if (updateTenderData) {
-          updateTenderData("customerId", selectedCustomerId);
-          updateTenderData(
-            "tenderDetails.customerName",
-            option.value || ""
-          );
-
-          updateTenderData("customerAddressId", 0);
-          updateTenderData(
-            "tenderDetails.customerAddressName",
-            ''
-          );
-          var a = orderData;
-        }
-
-        // setSelectedAddress("");
-
-        try {
-          const response = await fetch(
-            `${getAllCustomerLocationsURL}${selectedCustomerId}`
-          );
-          const data = await response.json();
-
-          if (data.code === 200 && Array.isArray(data.result)) {
-            const formattedAddresses: location[] = data.result.map((addr) => ({
-              id: addr.id,
-              address1: addr.address1,
-              address2: addr.address2,
-              address3: addr.address3,
-              address4: addr.address4,
-              city: addr.city,
-              state: addr.state,
-              pinCode: addr.pinCode,
-              isPrimary: addr.isPrimary === "Y",
-            }));
-            setCustomerLocations?.(formattedAddresses);
-          } else {
-            setCustomerLocations?.([]);
-          }
-        } catch (error) {
+        if (data.code === 200 && Array.isArray(data.result)) {
+          const formattedAddresses: location[] = data.result.map((addr) => ({
+            id: addr.id,
+            address1: addr.address1,
+            address2: addr.address2,
+            address3: addr.address3,
+            address4: addr.address4,
+            city: addr.city,
+            state: addr.state,
+            pinCode: addr.pinCode,
+            isPrimary: addr.isPrimary === "Y",
+          }));
+          setCustomerLocations?.(formattedAddresses);
+        } else {
           setCustomerLocations?.([]);
         }
+      } catch (error) {
+        setCustomerLocations?.([]);
       }
-      function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-        const val = e.target.value;
-        setCustomerInputValue(val);
-
-        if (val == "") {
-          updateTenderData?.("customerId", 0);
-          updateTenderData?.("tenderDetails.customerName", "");
-          updateTenderData?.("customerAddressId", 0);
-          updateTenderData?.("tenderDetails.customerAddressName", '');
-        }
-        // if (val.trim() === "") {
-        //   // If user cleared the field manually
-        //   // updateTenderData?.("customerId", 0);
-        //   // updateTenderData?.("tenderDetails.customerName", "");
-        //   // setCustomerLocations?.([]);
-        //   // setSelectedCustomer(undefined);
-        //   // setCustomerSearchKey((prev) => prev + 1); // Force re-mount
-        // }
-      }
-
-      function setOptions(values: unknown) {
-        if (
-          Array.isArray(values) &&
-          values.every((val) => val.id && val.name && val.code)
-        ) {
-          const customers: datalistOptions[] = values.map((x) => ({
-            id: x?.id?.toString(),
-            value: `${x.code.toUpperCase()} - ${x.name}`,
-            attributes: {
-              "customer-id": x.id.toString(),
-              name: x.name,
-              code: x.code,
-            },
-          }));
-          setCustomers(customers);
-        }
-      }
-
-      useEffect(() => {
-        if (customer) {
-          setCustomerInputValue(customer);
-          setCustomerName(customer);
-        }
-      }, [customer]);
-
-      return (
-        <DsSearchComponent
-          key={customerSearchKey}
-          containerClasses={styles.fields}
-          disable={disable || disabled}
-          id="customerSearch"
-          initialValue={customerInputValue}
-          dataListId="customerSearchDatalist"
-          label={"Search Customer"}
-          options={customers || undefined}
-          setOptions={setOptions}
-          // setSearchUrl={(searchTerm: string) => searchCustomerURL + searchTerm}
-          setSearchUrl={(searchTerm: string) =>
-            searchCustomerURL(searchTerm, type)
-            // `${searchCustomerURL}${searchTerm}&type=${type}`
-          }
-
-          setSelectedOption={setSelectedOptions}
-          onChange={(e) => { if (e) handleInputChange(e) }}
-          onBlur={handleOnBlur}
-        />
-      );
     }
+    function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+      const val = e.target.value;
+      setCustomerInputValue(val);
+
+      if (val == "") {
+        updateTenderData?.("customerId", 0);
+        updateTenderData?.("tenderDetails.customerName", "");
+        updateTenderData?.("customerAddressId", 0);
+        updateTenderData?.("tenderDetails.customerAddressName", '');
+      }
+      // if (val.trim() === "") {
+      //   // If user cleared the field manually
+      //   // updateTenderData?.("customerId", 0);
+      //   // updateTenderData?.("tenderDetails.customerName", "");
+      //   // setCustomerLocations?.([]);
+      //   // setSelectedCustomer(undefined);
+      //   // setCustomerSearchKey((prev) => prev + 1); // Force re-mount
+      // }
+    }
+
+    function setOptions(values: unknown) {
+      if (
+        Array.isArray(values) &&
+        values.every((val) => val.id && val.name && val.code)
+      ) {
+        const customers: datalistOptions[] = values.map((x) => ({
+          id: x?.id?.toString(),
+          value: `${x.code.toUpperCase()} - ${x.name}`,
+          attributes: {
+            "customer-id": x.id.toString(),
+            name: x.name,
+            code: x.code,
+          },
+        }));
+        setCustomers(customers);
+      }
+    }
+
+    useEffect(() => {
+      if (customer) {
+        setCustomerInputValue(customer);
+        setCustomerName(customer);
+      }
+    }, [customer]);
+
+    return (
+      <DsSearchComponent
+        key={customerSearchKey}
+        containerClasses={styles.fields}
+        disable={disable || disabled}
+        id="customerSearch"
+        initialValue={customerInputValue}
+        dataListId="customerSearchDatalist"
+        label={"Search Customer"}
+        options={customers || undefined}
+        setOptions={setOptions}
+        setSearchUrl={(searchTerm: string) =>
+          searchCustomerURL(searchTerm, type)
+          // `${searchCustomerURL}${searchTerm}&type=${type}`
+        } setSelectedOption={setSelectedOptions}
+        onChange={(e) => { if (e) handleInputChange(e) }}
+        onBlur={handleOnBlur}
+      />
+    );
+  }
 );
 
 export default CustomerSearch;
