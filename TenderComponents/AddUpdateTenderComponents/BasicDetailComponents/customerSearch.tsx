@@ -167,13 +167,9 @@ const CustomerSearch: React.FC<{
         options={customers || undefined}
         setOptions={setOptions}
         // setSearchUrl={(searchTerm: string) => searchCustomerURL + searchTerm}
-        setSearchUrl={(searchTerm: string) => {
-          const queryParams = new URLSearchParams();
-          queryParams.set("", searchTerm);
-          if (type) queryParams.set("type", type);
-
-          return `${searchCustomerURL}${queryParams.toString()}`;
-        }}
+        setSearchUrl={(searchTerm: string) =>
+          `${searchCustomerURL}${searchTerm}&type=${type}`
+        }
 
         setSelectedOption={setSelectedOptions}
         onChange={(e) => { if (e) handleInputChange(e) }}
