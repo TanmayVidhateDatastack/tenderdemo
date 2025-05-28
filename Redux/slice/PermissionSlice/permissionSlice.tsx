@@ -305,10 +305,10 @@ const permissionsSlice = createSlice({
         case "APPROVED":
           if (role === "ACCOUNTANCE" || role === "FINANCE") {
             state.paymentcompletedDisable = false;
-            state.addDocumentTypeSlectDisable = false,
-              state.addDocumentTypeButtonDisable = false,
-              state.uploadFileButtonDisabled = false,
-              state.transactionIdDisable = false;
+            state.addDocumentTypeSlectDisable = false;
+            state.addDocumentTypeButtonDisable = false;
+            state.uploadFileButtonDisabled = false;
+            state.transactionIdDisable = false;
             state.recieptIdDisable = false;
             state.saveButtonDisabled = false;
           }
@@ -324,10 +324,10 @@ const permissionsSlice = createSlice({
             state.saveButtonDisabled = false;
           }
           break;
-        case "UNDER_APPROVAL":      
-          case "HOMANAGER":
-            state.saveButtonDisabled = false;
-            break;
+        case "UNDER_APPROVAL":
+        case "HOMANAGER":
+          state.saveButtonDisabled = false;
+          break;
       }
       return state;
     }
