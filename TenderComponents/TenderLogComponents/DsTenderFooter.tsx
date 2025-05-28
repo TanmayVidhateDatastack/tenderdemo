@@ -681,59 +681,61 @@ export const DSTendrFooter: React.FC = ({ }) => {
         {tenderData.status == "AWARDED" ||
           tenderData.status == "PARTIALLY_AWARDED" ||
           tenderData.status == "LOST" ||
-          tenderData.status == "DRAFT" ? (
-          <DsSplitButton
-            //  disable={true}
-            buttonViewStyle="btnContained"
-            onClick={() => {
-              // if (tenderData.status == "DRAFT") {
-              //   const updtedstatus = (tenderData.status = "SAVE");
-              //   updateTender(updtedstatus);
-              // }
+          tenderData.status == "DRAFT" ||
+          tenderData.status == "UNDER_APPROVAL"
+          ? (
+            <DsSplitButton
+              //  disable={true}
+              buttonViewStyle="btnContained"
+              onClick={() => {
+                // if (tenderData.status == "DRAFT") {
+                //   const updtedstatus = (tenderData.status = "SAVE");
+                //   updateTender(updtedstatus);
+                // }
 
-              if (
-                tenderData.status == "AWARDED" ||
-                tenderData.status == "PARTIALLY_AWARDED" ||
-                tenderData.status == "LOST"
-              )
-                updateContractDetails("contractStatus", "DRAFT");
+                if (
+                  tenderData.status == "AWARDED" ||
+                  tenderData.status == "PARTIALLY_AWARDED" ||
+                  tenderData.status == "LOST"
+                )
+                  updateContractDetails("contractStatus", "DRAFT");
 
-              if (tenderData.status !== "CANCELLED") setToValidate(false);
-              setSaveTenderClicked(true);
-            }}
-            onSplitClick={(e) =>
-              displayContext(e, "SubmissionContext", "top", "right")
-            }
-            buttonSize="btnLarge"
-          // disable={splitButtonDisableState}
-          // disable={saveButtonDisabled}
-          >
-            Save
-          </DsSplitButton>
-        ) : (
-          <DsButton
-            disable={saveButtonDisabled}
-            buttonViewStyle="btnContained"
-            onClick={() => {
-              // if (saveTender) validateAndSaveTender();
-              // if (saveTender) saveTender("Draft");
-              if (tenderDataCopy?.id) {
-                validateAndUpdateTender();
-                // updateTender("Draft")
-              } else {
-                validateAndSaveTender();
-                // saveTender("Draft");
+                if (tenderData.status !== "CANCELLED") setToValidate(false);
+                setSaveTenderClicked(true);
+              }}
+              onSplitClick={(e) =>
+                displayContext(e, "SubmissionContext", "top", "right")
               }
-            }}
-            onSplitClick={(e) =>
-              displayContext(e, "SubmissionContext", "top", "right")
-            }
-            buttonSize="btnLarge"
-          // disable={tenderData.status !== "CANCELLED"}
-          >
-            {tenderData.status !== "CANCELLED" ? "Save" : "Submit"}
-          </DsButton>
-        )}
+              buttonSize="btnLarge"
+            // disable={splitButtonDisableState}
+            // disable={saveButtonDisabled}
+            >
+              Save
+            </DsSplitButton>
+          ) : (
+            <DsButton
+              disable={saveButtonDisabled}
+              buttonViewStyle="btnContained"
+              onClick={() => {
+                // if (saveTender) validateAndSaveTender();
+                // if (saveTender) saveTender("Draft");
+                if (tenderDataCopy?.id) {
+                  validateAndUpdateTender();
+                  // updateTender("Draft")
+                } else {
+                  validateAndSaveTender();
+                  // saveTender("Draft");
+                }
+              }}
+              onSplitClick={(e) =>
+                displayContext(e, "SubmissionContext", "top", "right")
+              }
+              buttonSize="btnLarge"
+            // disable={tenderData.status !== "CANCELLED"}
+            >
+              {tenderData.status !== "CANCELLED" ? "Save" : "Submit"}
+            </DsButton>
+          )}
       </div>
       <ApprovalPopup
         id="approvalPopup"
