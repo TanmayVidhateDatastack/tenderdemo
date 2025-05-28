@@ -42,18 +42,18 @@ const DsBasicDetails = () => {
       <div className={styles.container}>
         <DsApplierSupplierDetails />
       </div>
-      {!(
+      {/* {!(
         type === "institutional" &&
         tenderData.applierType === "STOCKIST" &&
         tenderData.supplierType === "STOCKIST"
-      ) && (
+      ) && ( */}
           <>
             <span className={styles.Seperator}></span>
             <div className={styles.container}>
               <DsDepositeDocuments />
             </div>
           </>
-        )}
+        {/* )} */}
       {type === "institutional" && (
         <>
           <span className={styles.Seperator}></span>

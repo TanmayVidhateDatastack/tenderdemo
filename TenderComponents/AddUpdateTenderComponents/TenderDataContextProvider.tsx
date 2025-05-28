@@ -595,6 +595,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             paymentDueDate: "",
             instructionNotes: "",
             status: active,
+
             paymentDate: "",
             paymentRefundDate: "",
             refundNotes: "",
