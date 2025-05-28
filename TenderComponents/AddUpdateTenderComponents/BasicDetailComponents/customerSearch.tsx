@@ -11,6 +11,7 @@ import { TenderData } from "../TenderDataContextProvider";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import { useAppSelector } from "@/Redux/hook/hook";
 import { RootState } from "@/Redux/store/store";
+import { useSearchParams } from "next/navigation";
 
 //  interface CustomerSearchProps {
 //   orderData: TenderData | null;
@@ -63,7 +64,9 @@ const CustomerSearch: React.FC<{
       setCustomerInputValue(n);
       
     }
-
+// get the type value from URL
+    const searchParams = useSearchParams();
+    const type = searchParams.get("type") || "institutional";
 
     async function setSelectedOptions(option: datalistOptions): Promise<void> {
       const selectedCustomerId = Number(option.id);
@@ -169,7 +172,7 @@ const CustomerSearch: React.FC<{
         label={"Search Customer"}
         options={customers || undefined}
         setOptions={setOptions}
-        setSearchUrl={(searchTerm: string) => searchCustomerURL + searchTerm}
+        setSearchUrl={(searchTerm: string) => searchCustomerURL(searchTerm, type)}
         setSelectedOption={setSelectedOptions}
         onChange={(e)=>{if(e)handleInputChange(e)}}
         onBlur={handleOnBlur}
