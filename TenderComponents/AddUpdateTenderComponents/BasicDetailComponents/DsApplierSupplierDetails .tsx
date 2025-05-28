@@ -285,7 +285,6 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
             updateTenderData("shippingLocations", shipIds);
             setSelectedDepo(options);
           }}
-          addButton={true}
         ></DsMultiSelect>
         <div></div>
         <DsTextField
