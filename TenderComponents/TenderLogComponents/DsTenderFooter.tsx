@@ -683,7 +683,8 @@ export const DSTendrFooter: React.FC = ({}) => {
           tenderData.status == "PARTIALLY_AWARDED" ||
           tenderData.status == "LOST" ||
           tenderData.status == "DRAFT" ||
-          tenderData.status == "UNDER_APPROVAL"
+          tenderData.status == "UNDER_APPROVAL"||
+          tenderData.status == "APPROVED"
         ? (
           <DsSplitButton
             //  disable={true}
