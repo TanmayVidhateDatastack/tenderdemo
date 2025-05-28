@@ -1724,15 +1724,15 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         ) {
           url = updatePaymentUrl(tenderData.id,action);
           dataToSendTenderCopy = stripReadOnlyProperties({
-            // ...dataToSendTenderCopy.tenderFee,
-            tenderFees: dataToSendTenderCopy.tenderFee,
+            // ...dataToSendTenderCopy.tenderFees,
+            tenderFees: dataToSendTenderCopy.tenderFees,
             tenderDocuments: dataToSendTenderCopy.tenderDocuments,
             status: dataToSendTenderCopy.status,
             lastUpdatedBy: dataToSendTenderCopy.lastUpdatedBy,
           });
           dataToSendOriginalTender = stripReadOnlyProperties({
             // ...dataToSendOriginalTender.tenderContract,
-            tenderFees: dataToSendOriginalTender.tenderFee,
+            tenderFees: dataToSendOriginalTender.tenderFees,
             tenderDocuments: dataToSendOriginalTender.tenderDocuments,
             status: dataToSendOriginalTender.status,
             lastUpdatedBy: dataToSendOriginalTender.lastUpdatedBy,
