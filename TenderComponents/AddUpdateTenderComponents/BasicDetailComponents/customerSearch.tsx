@@ -168,7 +168,8 @@ const CustomerSearch: React.FC<{
         setOptions={setOptions}
         // setSearchUrl={(searchTerm: string) => searchCustomerURL + searchTerm}
         setSearchUrl={(searchTerm: string) =>
-          `${searchCustomerURL}${searchTerm}&type=${type}`
+          searchCustomerURL(searchTerm, type)
+          // `${searchCustomerURL}${searchTerm}&type=${type}`
         }
 
         setSelectedOption={setSelectedOptions}
