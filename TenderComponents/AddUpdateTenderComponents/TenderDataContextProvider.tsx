@@ -1893,7 +1893,9 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           //   tenderData.tenders.status = tenderStatus;
         }
         else
+        if(tenderStatus == "newPricingVersion")
           tenderData.tenders.status = DsStatus.DRFT.toUpperCase();
+          
 
         tenderData.tenders.tenderDetails =
           tenderData.tenders.tenderDetailsReadOnly;
