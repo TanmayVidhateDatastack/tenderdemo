@@ -65,12 +65,12 @@ const metaDataTypes = ["TENDER_TYPE", "CUSTOMER_TYPE", "TENDER_STATUS"];
 //   "JUSTIFICATION_REJECT_TYPE"
 // ];
 
- export interface Metadata {
+export interface Metadata {
   documentType?: CodeItem[];
   eligibility?: CodeItem[];
   feesType?: CodeItem[];
   paymentMode?: CodeItem[];
-  refundEligibility?:CodeItem[];
+  refundEligibility?: CodeItem[];
   submissionMode?: CodeItem[];
   supplyPoint?: CodeItem[];
   tenderSupplyCondition?: CodeItem[];
@@ -89,7 +89,7 @@ type Depot = {
   code: string;
 };
 export default function Home() {
-  const [data, setData] = useState<Tender[]| null>(null); //for table data
+  const [data, setData] = useState<Tender[] | null>(null); //for table data
   const [searchQuery, setSearchQuery] = useState(""); //for search query
   const [selectedStatus, setSelectedStatus] = useState(""); //for quickfilter
   const [advFilter, setAdvFilter] = useState<Record<string, React.ReactNode>>(
@@ -112,6 +112,7 @@ export default function Home() {
   const [tenderStatus, setTenderStatus] = useState<CodeItem[]>([]);
   const [applierSupplier, setApplierSupplier] = useState<CodeItem[]>([]);
   const [depotList, setDepotList] = useState<Depot[]>([]);
+  const [filterCount, setFilterCount] = useState<number>(0);
   // const [uniqueAppliers, setUniqueAppliers] = useState<{ label: string; value: string }[]>([]);
   const permissions = useAppSelector((state: RootState) => state.permissions);
   const { newButtonVisible } = permissions;
@@ -318,14 +319,14 @@ export default function Home() {
       advFilter && Object.keys(advFilter).length > 0 && searchQuery
         ? advanceAndSearch
         : advFilter && Object.keys(advFilter).length > 0
-        ? advanceFilter
-        : selectedStatus && searchQuery
-        ? statusAndSearch
-        : selectedStatus
-        ? onlyStatus
-        : searchQuery
-        ? onlySearch
-        : { userId: 3, pageNo: 0, pageSize: 0 };
+          ? advanceFilter
+          : selectedStatus && searchQuery
+            ? statusAndSearch
+            : selectedStatus
+              ? onlyStatus
+              : searchQuery
+                ? onlySearch
+                : { userId: 3, pageNo: 0, pageSize: 0 };
     // console.log("json object :", JSON.stringify(tenderFilters));
     await fetchData({
       url: getAllTenders,
@@ -688,15 +689,14 @@ export default function Home() {
             content: t.status ? (
               <DsStatusIndicator
                 type="user_defined"
-                className={`${
+                className={`${t?.status?.statusDescription
+                  ? styles[
                   t?.status?.statusDescription
-                    ? styles[
-                        t?.status?.statusDescription
-                          ?.replaceAll(" ", "_")
-                          .toLowerCase()
-                      ]
-                    : ""
-                }`}
+                    ?.replaceAll(" ", "_")
+                    .toLowerCase()
+                  ]
+                  : ""
+                  }`}
                 status={t.status.statusDescription}
                 label={t.status.statusDescription}
                 status_icon={
@@ -727,12 +727,12 @@ export default function Home() {
   };
 
   const router = useRouter();
-  const goTo = (tenderId: number, status?: string) => { 
+  const goTo = (tenderId: number, status?: string) => {
     const location = `/Tender/${tenderId}`;
     if (status) sessionStorage.setItem("tenderStatus", status);
-    else { 
+    else {
       const storedStatus = sessionStorage.getItem("tenderStatus");
-      if (storedStatus) { 
+      if (storedStatus) {
         sessionStorage.removeItem("tenderStatus");
       }
     }
@@ -745,8 +745,8 @@ export default function Home() {
     rowIndex: number
   ) => {
     const row = tempTableData.rows[rowIndex];
-    const currentRow=e.currentTarget;
-    document.querySelector("."+styles.selectedRow)?.classList.remove(styles.selectedRow);
+    const currentRow = e.currentTarget;
+    document.querySelector("." + styles.selectedRow)?.classList.remove(styles.selectedRow);
     currentRow.classList.add(styles.selectedRow);
     // Convert statuscell to string if it's not already one
     const statuscell = String(
@@ -772,7 +772,7 @@ export default function Home() {
         return { e, rowIndex, statuscell, tenderId };
       }
     });
-    
+
   };
   const handleRowDoubleClick = (
     e: React.MouseEvent<HTMLElement>,
@@ -793,7 +793,7 @@ export default function Home() {
   useEffect(() => {
     // console.log("Data updated:", data);
     // if (data.length > 0) {
-    addTableData(data??[]);
+    addTableData(data ?? []);
     // }
   }, [data]);
 
@@ -808,6 +808,8 @@ export default function Home() {
               setSearchQuery={setSearchQuery}
               selectedStatus={selectedStatus}
               setSelectedStatus={setSelectedStatus}
+              isQuickFilterActive={isFilterActive}
+              filterCount={filterCount}
             />
             {newButtonVisible && (
               <DsButton
@@ -851,8 +853,8 @@ export default function Home() {
         }
       >
         <div className={styles.totalCal}>
-          <DsTotalTenders data={data??[]} />
-          <DsTotalValues data={data??[]} />
+          <DsTotalTenders data={data ?? []} />
+          <DsTotalValues data={data ?? []} />
         </div>
         <div className={styles.container}>
           {" "}
@@ -872,25 +874,25 @@ export default function Home() {
                 handelRowClick(e, rowIndex);
               }}
             />
-            { tempTableData.rows.length == 0 && data != null && <div className={styles.recordNotFound}>
+            {tempTableData.rows.length == 0 && data != null && <div className={styles.recordNotFound}>
 
-             No Record Found!
-             
+              No Record Found!
+
             </div>
             }
           </div>
           {/* {selectedRow && ( */}
-            <DsTenderTableFloatingMenu
-              e={selectedRow?.e}
-              rowIndex={selectedRow?.rowIndex}
-              statuscell={selectedRow?.statuscell}
-              handleFetch={handleFetch}
-              tenderId={selectedRow?.tenderId}
-              goTo={goTo}
-            />
+          <DsTenderTableFloatingMenu
+            e={selectedRow?.e}
+            rowIndex={selectedRow?.rowIndex}
+            statuscell={selectedRow?.statuscell}
+            handleFetch={handleFetch}
+            tenderId={selectedRow?.tenderId}
+            goTo={goTo}
+          />
           {/* )} */}
         </div>
-              
+
       </DsApplication>
 
       <DsAdvanceFilterPane
@@ -923,10 +925,10 @@ export default function Home() {
             filterFor: "Customer Types",
             filterType: "MultiSelection",
             multiSelectOptions: customerType.map((item) => ({
-            
+
               label: item.codeDescription,
               value: item.codeValue,
-        
+
             })),
           },
           {
@@ -997,6 +999,7 @@ export default function Home() {
         ]}
         onFiltersApplied={handleFiltersApplied}
         setIsQuickFilter={setIsFilterActive}
+        setFilterCount={setFilterCount}
       />
 
       <ContextMenu
