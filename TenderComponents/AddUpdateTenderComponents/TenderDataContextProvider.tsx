@@ -1724,7 +1724,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         ) {
           url = updatePaymentUrl(tenderData.id,action);
           dataToSendTenderCopy = stripReadOnlyProperties({
-            // ...dataToSendTenderCopy.tenderFee,
+            // ...dataToSendTenderCopy.tenderFees,
             tenderFees: dataToSendTenderCopy.tenderFees,
             tenderDocuments: dataToSendTenderCopy.tenderDocuments,
             status: dataToSendTenderCopy.status,
