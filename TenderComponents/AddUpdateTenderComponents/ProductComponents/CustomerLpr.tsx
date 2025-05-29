@@ -1,7 +1,10 @@
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import { useEffect, useRef, useCallback } from "react";
 import { Company, datalistOptions } from "@/Common/helpers/types";
-import ContextMenu, { closeContext, displayContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
+import ContextMenu, {
+  closeContext,
+  displayContext,
+} from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import CompanySearch from "./companySearch";
 import styles from "../../AddUpdateTenderComponents/BasicDetailComponents/tender.module.css";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
@@ -33,19 +36,23 @@ const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
   const lprRef = useRef<HTMLDivElement>(null);
 
   // Only call onCommit if focus leaves the .lpr container
-  const handleBlur = useCallback((e: React.FocusEvent<HTMLElement>) => {
-    const relatedTarget = e.relatedTarget as HTMLElement | null;
-    if (
-      relatedTarget &&
-      lprRef.current &&
-      lprRef.current.contains(relatedTarget)
-    ) {
-      // Focus is still inside .lpr, do not commit
-      return;
-    }
-    if (onBlur) onBlur(e);
-    if (onCommit) onCommit();
-  }, [onBlur, onCommit]);
+  const handleBlur = useCallback(
+    (e: React.FocusEvent<HTMLElement>) => {
+      const relatedTarget = e.relatedTarget as HTMLElement | null;
+      if (
+        (relatedTarget &&
+          lprRef.current &&
+          lprRef.current.contains(relatedTarget)) ||
+       (relatedTarget&&relatedTarget.closest(`#LprTo${index}`))
+      ) {
+        // Focus is still inside .lpr, do not commit
+        return;
+      }
+      if (onBlur) onBlur(e);
+      if (onCommit) onCommit();
+    },
+    [onBlur, onCommit]
+  );
 
   useEffect(() => {
     // Optionally, focus management logic here
@@ -58,7 +65,7 @@ const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
       ref={lprRef}
       tabIndex={0} // Make container focusable for accessibility
       onBlur={handleBlur}
-      onClick={e => e.stopPropagation()}
+      onClick={(e) => e.stopPropagation()}
       style={{ outline: "none" }} // Remove default outline if you style focus
     >
       {!disable ? (
@@ -69,8 +76,8 @@ const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
           tabIndex={0} // Input is in tab order
           onBlur={handleBlur}
           autofocus={autofocus}
-          onClick={e => e.stopPropagation()}
-          onChange={e => {
+          onClick={(e) => e.stopPropagation()}
+          onChange={(e) => {
             if (onValueChange) onValueChange(e.target.value);
           }}
         />
@@ -90,7 +97,7 @@ const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
         <div
           className={styles.lprwitharrow}
           tabIndex={0} // Make the icon button focusable
-          onClick={e => {
+          onClick={(e) => {
             e.stopPropagation();
             if (!disable) {
               displayContext(e, "LprTo" + index, "horizontal", "right");
@@ -100,7 +107,12 @@ const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
           <div style={{ height: "1em", width: "1em" }}>
             <IconFactory name={lprTo?.name ? "personSearch" : "person1"} />
           </div>
-          <div style={{ height: lprTo?.name ? "1em" : "0.875em", width: lprTo?.name ? "1em" : "0.875em" }}>
+          <div
+            style={{
+              height: lprTo?.name ? "1em" : "0.875em",
+              width: lprTo?.name ? "1em" : "0.875em",
+            }}
+          >
             <IconFactory name="dropDownArrow" />
           </div>
         </div>
@@ -112,7 +124,7 @@ const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
           <div className={styles.competitorContainer} tabIndex={0}>
             <CompanySearch
               lprTo={lprTo?.name}
-              setSelectedCompany={option => {
+              setSelectedCompany={(option) => {
                 if (option?.value && onCompanyChange) {
                   onCompanyChange({ id: option.id, name: option.value });
                 }

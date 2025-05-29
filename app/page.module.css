@@ -383,9 +383,9 @@ a.secondary {
 }
 .cellquantity {
   /* max-width: 100%; */
-  min-width: 12em !important;
-  max-width: 12em !important;
-  width: 12em !important;
+  min-width: 9em !important;
+  max-width: 9em !important;
+  width: 9em !important;
   white-space: nowrap;
   text-overflow: ellipsis;
   padding: 0rem 1rem !important;
@@ -491,9 +491,9 @@ a.secondary {
 }
 .celltotalcost {
   /* max-width: 100%; */
-  min-width: 11em !important;
-  max-width: 11em !important;
-  width: 11em !important;
+  min-width: 9em !important;
+  max-width: 9em !important;
+  width: 9em !important;
   white-space: nowrap;
   text-overflow: ellipsis;
   padding: 0rem 1rem !important;
@@ -614,7 +614,7 @@ a.secondary {
   color: var(--error-text) !important;
 }
 .warningAlert {
-  color: var(--readytodispatch) !important;
+  color: red !important;
 }
 .selectedRow{
   background-color: var(--tableRowSelect) !important;

@@ -1724,7 +1724,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         ) {
           url = updatePaymentUrl(tenderData.id,action);
           dataToSendTenderCopy = stripReadOnlyProperties({
-            // ...dataToSendTenderCopy.tenderFee,
+            // ...dataToSendTenderCopy.tenderFees,
             tenderFees: dataToSendTenderCopy.tenderFees,
             tenderDocuments: dataToSendTenderCopy.tenderDocuments,
             status: dataToSendTenderCopy.status,
@@ -1892,6 +1892,10 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           // }else{
           //   tenderData.tenders.status = tenderStatus;
         }
+        else
+        if(tenderStatus == "newPricingVersion")
+          tenderData.tenders.status = DsStatus.DRFT.toUpperCase();
+          
 
         tenderData.tenders.tenderDetails =
           tenderData.tenders.tenderDetailsReadOnly;
