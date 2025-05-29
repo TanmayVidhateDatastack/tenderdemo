@@ -296,6 +296,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   setTempOptions(options);
                   console.log("Selected options:", options);
                 }}
+                // selectedOptions={[]}
                 showOptions={false}
                 disable={addDocumentTypeSlectDisable}
               >
@@ -339,30 +340,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               />
             </div>
           </div>
-          {/* {selectedcheckbox &&
-          selectedOptions.map((option, index) => (
-            <UploadFile
-                 key={`upload-${type}-${option.value}-${index}`}
-              uploadLabel={`Upload ${option.label} here `}
-              id={typeof option.value === "string" ? option.value : ""}
-              onSelectedFileChange={(files) => {
-                const Documents =
-                  tenderData.tenderDocuments?.filter(
-                    (x) =>
-                      x.documentCategory == type &&
-                      x.documentType == type + "_UPLOADINSTRUCTION"
-                  ) || [];
-                updateDocuments(
-                  files,
-                  Documents,
-                  removeTenderDocument,
-                  addNewTenderDocument,
-                  type + "_UPLOADINSTRUCTION",
-                  type
-                );
-              }}
-            />
-          ))} */}
+
           {selectedcheckbox &&
             selectedOptions.map((option, index) => (
               <UploadFile
@@ -397,6 +375,23 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   <DsTextField
                     containerClasses={styles.feeFields}
                     label={`${option.label}   ID`}
+                    initialValue={(() => {
+                      const fee = tenderData.tenderFees.find(
+                        (x) => x.feesType === type
+                      );
+                      if (!fee) return "";
+                      if (typeof option.value === "string") {
+                        if (option.value.includes("ACKNOWLEDGMENT_RECEIPT"))
+                          return fee.acknowledgementReceiptId || "";
+                        if (option.value.includes("FUND_TRANSFER_CONFIRMATION"))
+                          return fee.fundTransferConfirmationId || "";
+                        if (option.value.includes("PAYMENT_RECEIPT"))
+                          return fee.paymentReceiptId || "";
+                        if (option.value.includes("TRANSACTION_RECEIPT"))
+                          return fee.paymentTransactionId || "";
+                      }
+                      return "";
+                    })()}
                     onBlur={(e) => {
                       if (typeof option.value == "string") {
                         if (option.value.includes("ACKNOWLEDGMENT_RECEIPT"))
