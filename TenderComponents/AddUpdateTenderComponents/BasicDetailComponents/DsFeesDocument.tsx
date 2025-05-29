@@ -113,7 +113,6 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
   const [selectedcheckbox, setSelectedCheckbox] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState<DsSelectOption[]>([]);
   const [tempOptions, setTempOptions] = useState<DsSelectOption[]>([]);
- 
 
   const permissions = useAppSelector((state: RootState) => state.permissions);
   const {
@@ -271,6 +270,10 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               name={"Payment Completed"}
               value={"Payment Completed"}
               label={"Payment Completed"}
+              isChecked={
+                tenderData.tenderFees.find((x) => x.feesType === type)
+                  ?.paymentStatus === "DONE"
+              }
               onChange={(e) => {
                 updateTenderFee(
                   type,
@@ -281,63 +284,62 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               disable={paymentcompletedDisable}
             />
           </div>
-        <div className={eleStyles.inputDetails}>
-          <div className={styles.fields}>
-            <DsMultiSelect
-              label="Add Document Type"
-              containerClasses={`${styles.feeFields} `}
-              className={`${styles.scrollableContainer}`}
-              id={id + "Documents"}
-              options={optionlist || []}
-              setSelectOptions={(options) => {
-                setTempOptions(options);
-                console.log("Selected options:", options);
-              }}
-              showOptions={false}
-              disable={addDocumentTypeSlectDisable}
-              
-            >
-            <div className={styles.addBtnSticky}>
-                <DsButton
-                  label="Add"
-                  buttonViewStyle="btnContained"
-                  buttonSize="btnSmall"
-                  className={styles.addBtn}
-                  onClick={() => {
-                    closeAllContext();
-                    setSelectedCheckbox(true);
-                    setSelectedOptions(tempOptions)
-                    console.log("Add button clicked");
-                  }}
-                  disable={addDocumentTypeButtonDisable}
-                />
-          </div>
-            </DsMultiSelect>
-          </div>
-          <div className={styles.fields}>
-            <DatePicker
-              containerClasses={styles.feeFields}
-              id={id + "paymentdate"}
-              initialDate={
-                tenderData.tenderFees
-                  ? new Date(
-                    tenderData.tenderFees[0]?.paymentDate || ""
-                  ).toLocaleDateString("en-GB")
-                  : undefined
-              }
-              maxDate={new Date()}
-              placeholder="DD/MM/YYYY"
-              label="Payment Date"
-              setDateValue={(date) => {
-                if (date instanceof Date) {
-                  updateTenderFee(type, "paymentDate", getTodayDate(date));
+          <div className={eleStyles.inputDetails}>
+            <div className={styles.fields}>
+              <DsMultiSelect
+                label="Add Document Type"
+                containerClasses={`${styles.feeFields} `}
+                className={`${styles.scrollableContainer}`}
+                id={id + "Documents"}
+                options={optionlist || []}
+                setSelectOptions={(options) => {
+                  setTempOptions(options);
+                  console.log("Selected options:", options);
+                }}
+                showOptions={false}
+                disable={addDocumentTypeSlectDisable}
+              >
+                <div className={styles.addBtnSticky}>
+                  <DsButton
+                    label="Add"
+                    buttonViewStyle="btnContained"
+                    buttonSize="btnSmall"
+                    className={styles.addBtn}
+                    onClick={() => {
+                      closeAllContext();
+                      setSelectedCheckbox(true);
+                      setSelectedOptions(tempOptions);
+                      console.log("Add button clicked");
+                    }}
+                    disable={addDocumentTypeButtonDisable}
+                  />
+                </div>
+              </DsMultiSelect>
+            </div>
+            <div className={styles.fields}>
+              <DatePicker
+                containerClasses={styles.feeFields}
+                id={id + "paymentdate"}
+                initialDate={
+                  tenderData.tenderFees
+                    ? new Date(
+                        tenderData.tenderFees[0]?.paymentDate || ""
+                      ).toLocaleDateString("en-GB")
+                    : undefined
                 }
-              }}
-               disable={paymentcompletedDisable}
-            />
+                maxDate={new Date()}
+                placeholder="DD/MM/YYYY"
+                label="Payment Date"
+                setDateValue={(date) => {
+                  if (date instanceof Date) {
+                    updateTenderFee(type, "paymentDate", getTodayDate(date));
+                  }
+                }}
+                disable={paymentcompletedDisable}
+              />
+            </div>
           </div>
-        </div>
-        {/* {selectedcheckbox &&
+          {/* {selectedcheckbox &&
           selectedOptions.map((option, index) => (
             <UploadFile
                  key={`upload-${type}-${option.value}-${index}`}
@@ -373,22 +375,19 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                     tenderData.tenderDocuments?.filter(
                       (x) =>
                         x.documentCategory === type &&
-                        x.documentType ===
-                          `${option.value}`
+                        x.documentType === `${option.value}`
                     ) || [];
                   updateDocuments(
                     files,
                     Documents,
                     removeTenderDocument,
                     addNewTenderDocument,
-                    `${type}_PAYMENT`,     
-                    `${type}` ,
-                    `${option.value}`,
-                  
+                    `${type}_PAYMENT`,
+                    `${type}`,
+                    `${option.value}`
                   );
                 }}
                 disable={uploadFileButtonDisabled}
-
               />
             ))}
           <div className={eleStyles.inputDetails}>
@@ -426,7 +425,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                           );
                       }
                     }}
-                  disable={recieptIdDisable}
+                    disable={recieptIdDisable}
                   />
                 </div>
               ))}
