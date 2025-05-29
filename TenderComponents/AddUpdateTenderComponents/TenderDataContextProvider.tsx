@@ -1892,6 +1892,8 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           // }else{
           //   tenderData.tenders.status = tenderStatus;
         }
+        else
+          tenderData.tenders.status = DsStatus.DRFT.toUpperCase();
 
         tenderData.tenders.tenderDetails =
           tenderData.tenders.tenderDetailsReadOnly;
