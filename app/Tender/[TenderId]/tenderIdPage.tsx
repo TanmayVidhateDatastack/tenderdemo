@@ -61,6 +61,7 @@ const DsTenderIdPage: React.FC<{
   const [appTitle, setAppTitle] = useState<string>("New");
   const dispatch = useAppDispatch<AppDispatch>();
   const userRole = useAppSelector((state) => state.user);
+  const [isDisabled, setIsDisabled] = useState(true);
   const version = 1;
 
   // get the type value from URL
@@ -180,6 +181,13 @@ const DsTenderIdPage: React.FC<{
       { tabId: "2", tabName: "Documents", disable: (displayFlag == "New") || (type != "institutional") },
     ]);
 
+    console.log("Tender Data 123 : ", tenderData);
+    console.log("Tender Data Copy 123 : ", tenderDataCopy);
+    //for disabling Add documents button in documents tab
+    if (tenderData.status == "DRAFT") {
+      setIsDisabled(false);
+    }
+
     if (
       tenderData.status == "AWARDED" ||
       tenderData.status == "PARTIALLY_AWARDED" ||
@@ -199,13 +207,14 @@ const DsTenderIdPage: React.FC<{
       });
     }
     if (tenderStatus) {
+
       if (tenderStatus !== "newPricingVersion") setTabId("Contract");
       else {
         const latestVersion =
           tenderData.tenderRevisions.reduce((maxObj, currentObj) =>
             currentObj.version > maxObj.version ? currentObj : maxObj
           )?.version || 1;
-          // updateTenderData("status", "DRAFT");
+        // updateTenderData("status", "DRAFT");
         setTabId(`v${latestVersion}`);
       }
     }
@@ -434,19 +443,19 @@ const DsTenderIdPage: React.FC<{
                     addTenderProduct(rev.version, product)
                   }
                 /> */} <div style={{ textDecoration: 'none' }}>
-                      <DsTenderProduct
-                        productList={rev.tenderItems || []}
-                        setProductList={(product) => {
-                          const isDuplicate = rev.tenderItems?.some(
-                            (item) => item.productId === product.productId
-                          );
+                        <DsTenderProduct
+                          productList={rev.tenderItems || []}
+                          setProductList={(product) => {
+                            const isDuplicate = rev.tenderItems?.some(
+                              (item) => item.productId === product.productId
+                            );
 
-                          if (!isDuplicate) {
-                            addTenderProduct(rev.version, product);
-                          }
-                        }}
-                        version={rev.version}
-                      />
+                            if (!isDuplicate) {
+                              addTenderProduct(rev.version, product);
+                            }
+                          }}
+                          version={rev.version}
+                        />
                       </div>
                     </TabView>
                   ))}
@@ -478,6 +487,7 @@ const DsTenderIdPage: React.FC<{
                                 </div>
                               </div>
                               <PaneOpenButton
+                                disable={isDisabled}
                                 className={styles.docPaneBtn}
                                 buttonViewStyle="btnText"
                                 id="documentPaneOpenBtn"
