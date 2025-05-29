@@ -253,8 +253,8 @@ const permissionsSlice = createSlice({
       state.productTableDisable = true;
       switch (status) {
         case "DRAFT":
-          switch (role) {
-            case "MAKER":
+          // switch (role) {
+            // case "MAKER":
               state.searchCustomerDisable = false;
               state.customerLocationDisable = false;
               state.tenderNumberDisable = false;
@@ -297,37 +297,45 @@ const permissionsSlice = createSlice({
               state.addProductBtnDisable = false;
               state.productTableDisable = false;
 
-              break;
-            case "CHECKER":
-              break;
-          }
+              // break;
+            // case "CHECKER":
+              state.productTableDisable = false;
+// 
+              // break;
+            // case "HOMANAGER":
+
+              // break;
+          // }
           break;
-        case "APPROVED":
-          if (role === "ACCOUNTANCE" || role === "FINANCE") {
+          case "APPROVALPENDING":
+              state.productTableDisable = false;
+
+          case "APPROVED":
+          // if (role === "ACCOUNTANCE" || role === "FINANCE") {
             state.paymentcompletedDisable = false;
             state.addDocumentTypeSlectDisable = false;
-            state.addDocumentTypeButtonDisable = false;
-            state.uploadFileButtonDisabled = false;
-            state.transactionIdDisable = false;
+              state.addDocumentTypeButtonDisable = false;
+              state.uploadFileButtonDisabled = false;
+              state.transactionIdDisable = false;
             state.recieptIdDisable = false;
             state.saveButtonDisabled = false;
-          }
+          // }
           break;
         case "LOST":
         case "CANCELLED":
         case "AWARDED":
-          if (role === "ACCOUNTANCE" || role === "FINANCE") {
+          // if (role === "ACCOUNTANCE" || role === "FINANCE") {
             state.paymentRecoveredDisable = false;
             state.paymentRecoverdDateDisable = false;
             state.recoveredNotesDisable = false;
             state.recoveredAttachFileButton = false;
             state.saveButtonDisabled = false;
-          }
+          // }
           break;
-        case "UNDER_APPROVAL":
-        case "HOMANAGER":
-          state.saveButtonDisabled = false;
-          break;
+        case "UNDER_APPROVAL":      
+          // case "HOMANAGER":
+            state.saveButtonDisabled = false;
+            break;
       }
       return state;
     }
