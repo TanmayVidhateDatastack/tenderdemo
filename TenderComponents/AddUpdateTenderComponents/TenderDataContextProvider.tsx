@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { showToaster } from "@/Elements/DsComponents/DsToaster/DsToaster";
 import {
   cancelTenderContractURl,
