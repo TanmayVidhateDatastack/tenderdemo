@@ -60,7 +60,7 @@ type PermissionState = {
   saveButtonDisabled: boolean;
   ContractTypeDisable: boolean;
 
-  //Product Tab 
+  //Product Tab  
   productSearchDisable: boolean;
   productquantityDisable: boolean;
   addProductBtnDisable: boolean;
@@ -332,6 +332,10 @@ const permissionsSlice = createSlice({
             state.saveButtonDisabled = false;
           // }
           break;
+        case "UNDER_APPROVAL":      
+          // case "HOMANAGER":
+            state.saveButtonDisabled = false;
+            break;
       }
       return state;
     }

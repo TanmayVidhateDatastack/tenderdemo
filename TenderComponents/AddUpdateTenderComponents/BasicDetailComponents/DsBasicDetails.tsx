@@ -20,11 +20,13 @@ export interface Deposit {
 
 const DsBasicDetails = () => {
   const { fetchMetaData, tenderData, updateTenderData } = useTenderData();
+
   useEffect(() => {
     fetchMetaData();
   }, []);
   const searchParams = useSearchParams();
   const type = searchParams.get("type") || "institutional" || "corporate";
+  
   useEffect(() => {
     if (type === "institutional" &&
       tenderData.applierType === "STOCKIST" &&
@@ -33,10 +35,16 @@ const DsBasicDetails = () => {
     }
   }, [type, tenderData.applierType, tenderData.supplierType])
 
+//  useEffect(() => {
+//     if (tenderData.applierType) {
+//       updateTenderData("tenderDetails.suppliedBy","");
+//     }
+//   }, [type, tenderData.applierType]) 
+
   return (
     <>
       <div className={styles.container}>
- <DsTenderDetails />
+        <DsTenderDetails />
       </div>
       <span className={styles.Seperator}></span>
       <div className={styles.container}>
@@ -53,7 +61,7 @@ const DsBasicDetails = () => {
               <DsDepositeDocuments />
             </div>
           </>
-        )}
+         )} 
       {type === "institutional" && (
         <>
           <span className={styles.Seperator}></span>

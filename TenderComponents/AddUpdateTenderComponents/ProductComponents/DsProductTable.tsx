@@ -8,6 +8,10 @@ import {
   TableProvider,
   useTableContext,
 } from "@/Elements/DsComponents/NewDsTable/TableProvider";
+// import {
+//   TableProvider,
+//   useTableContext,
+// } from "@/Elements/DsComponents/NewDsTable/TableProvider";
 import Table from "@/Elements/DsComponents/NewDsTable/Table";
 import { TableColumn } from "@/Elements/DsComponents/NewDsTable/types";
 import styles from "@/app/page.module.css";
@@ -24,10 +28,7 @@ import trashbtn from "@/Common/TenderIcons/smallIcons/trashbtn.svg";
 
 import whitetrashbtn from "@/Common/TenderIcons/smallIcons/whitetrash.svg";
 import Image from "next/image";
-import {
-  marginPercentLimit,
-  TenderProductDiscountPercentage,
-} from "@/Common/helpers/constant";
+import { marginPercentLimit, TenderProductDiscountPercentage } from "@/Common/helpers/constant";
 import { v4 as uuidv4 } from "uuid";
 import clsx from "clsx";
 import { useAppSelector } from "@/Redux/hook/hook";
@@ -345,7 +346,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
             // }}
             // onBlur={(e) => {
             autofocus={true}
-            // disable={latestVersion != version}
+          // disable={latestVersion != version}
           />
         ),
         className: styles.celllpr,
@@ -401,7 +402,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
             }}
             inputType="number"
 
-            // maximumNumber={1000000}
+          // maximumNumber={1000000}
           />
         ),
         align: "right",
@@ -477,9 +478,8 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
               // (e.target as HTMLInputElement).value = ptrPer.toFixed(2);
               if (onCommit) onCommit();
             }}
-            className={`${
-              (row.ptrPercentage || 0) <= 0 ? styles.warningAlert : ""
-            }`}
+            className={`${(row.ptrPercentage || 0) <= 0 ? styles.warningAlert : ""
+              }`}
           />
         ),
         cellRenderer: (cellValue, row, rowIndex) => (
@@ -647,9 +647,9 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         data={calculatedProducts}
         columns={columns}
         onCellEdit={handleUpdateCell}
-        // onSelectionChange={handleSelectionChange}
+      // onSelectionChange={handleSelectionChange}
 
-        // Optionally: onRowClick, onRowDoubleClick, etc.
+      // Optionally: onRowClick, onRowDoubleClick, etc.
       >
         <Table />
         <SelectionComponent version={version} />
@@ -745,7 +745,7 @@ const SelectionComponent: React.FC<{ version: number }> = ({ version }) => {
                 <span className={styles.selectedProduct}>
                   {selectedRows.length === 1
                     ? selectedRows[0]?.product?.productName ||
-                      selectedRows[0]?.requestedGenericName
+                    selectedRows[0]?.requestedGenericName
                     : `${selectedRows.length} products`}
                 </span>
               </div>

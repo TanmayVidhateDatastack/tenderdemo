@@ -374,15 +374,17 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                       (x) =>
                         x.documentCategory === type &&
                         x.documentType ===
-                          `${type}_${option.value}_UPLOADINSTRUCTION`
+                          `${option.value}`
                     ) || [];
                   updateDocuments(
                     files,
                     Documents,
                     removeTenderDocument,
                     addNewTenderDocument,
-                    `${type}_${option.value}_UPLOADINSTRUCTION`,
-                    type
+                    `${type}_PAYMENT`,     
+                    `${type}` ,
+                    `${option.value}`,
+                  
                   );
                 }}
                 disable={uploadFileButtonDisabled}

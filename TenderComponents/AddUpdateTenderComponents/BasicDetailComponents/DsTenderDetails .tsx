@@ -47,6 +47,7 @@ const DsTenderDetails: React.FC = () => {
   const { updateTenderData, tenderData, tenderDataCopy, metaData } =
     useTenderData();
   const [customerLocations, setCustomerLocations] = useState<location[]>([]);
+  const [addressName, setAddressName] = useState<DsSelectOption|undefined>();
 
   // const [tenderStatus, setTenderStatus] = useState<string>();
 
@@ -151,6 +152,19 @@ const DsTenderDetails: React.FC = () => {
   //   }
   // }, [tenderData.tenderDetails.customerName]);
 
+  //Gaurav Nalwade
+
+  useEffect(() => {
+      setAddressName(
+        tenderData.customerAddressId && tenderData.tenderDetails.customerAddressName ? 
+          {
+            label: tenderData.tenderDetails.customerAddressName,
+            value: tenderData.customerAddressId.toString(),
+          } :
+          undefined
+      );
+  }, [tenderData?.customerId,tenderData.customerAddressId])
+
   return (
     <>
       <ContextMenu
@@ -215,15 +229,16 @@ const DsTenderDetails: React.FC = () => {
             label: `${addr.city}, ${addr.state}, ${addr.pinCode}`,
             key: addr.id.toString(),
           }))}
-          selectedOption={
-            tenderData.customerAddressId &&
-              tenderData.tenderDetails.customerAddressName
-              ? {
-                label: tenderData.tenderDetails.customerAddressName,
-                value: tenderData.customerAddressId.toString(),
-              }
-              : undefined
-          }
+          selectedOption={addressName}
+          // selectedOption={
+          //   tenderData.customerAddressId &&
+          //     tenderData.tenderDetails.customerAddressName
+          //     ? {
+          //       label: tenderData.tenderDetails.customerAddressName,
+          //       value: tenderData.customerAddressId.toString(),
+          //     }
+          //     : undefined
+          // }
           setSelectOption={(option) => {
             if (typeof option.value == "string") {
               updateTenderData("customerAddressId", Number(option.value));
