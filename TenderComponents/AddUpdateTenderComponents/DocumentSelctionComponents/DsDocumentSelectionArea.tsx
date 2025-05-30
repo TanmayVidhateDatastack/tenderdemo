@@ -1,3 +1,4 @@
+"use client";
 import { useContext, useEffect, useState } from "react";
 import styles from "./document.module.css";
 import DocumentSelector from "@/Elements/DsComponents/dsDocumentSelector/dsDocumentSelector";

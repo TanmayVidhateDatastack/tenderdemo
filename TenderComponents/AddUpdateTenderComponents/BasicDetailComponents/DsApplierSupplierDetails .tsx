@@ -1,3 +1,4 @@
+"use client";
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import DsMultiSelect from "@/Elements/DsComponents/dsSelect/dsMultiSelect";
 import { useTenderData } from "../TenderDataContextProvider";
