@@ -1,3 +1,4 @@
+"use client";
 import { showToaster } from "@/Elements/DsComponents/DsToaster/DsToaster";
 import {
   cancelTenderContractURl,

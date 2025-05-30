@@ -1,3 +1,4 @@
+"use client";
 import { searchCustomerURL } from "@/Common/helpers/constant";
 import { datalistOptions } from "@/Common/helpers/types";
 import DsSearchComponent from "@/Elements/DsComponents/DsSearch/searchComponent";

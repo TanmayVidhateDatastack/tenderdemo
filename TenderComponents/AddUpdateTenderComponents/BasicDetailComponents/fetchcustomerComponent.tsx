@@ -1,3 +1,4 @@
+"use client";
 import React, { useCallback, useEffect, useState } from "react";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import style from "./deposite.module.css";
