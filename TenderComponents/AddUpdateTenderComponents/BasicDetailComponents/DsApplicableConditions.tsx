@@ -1,3 +1,4 @@
+"use client";
 import styles from "./deposite.module.css";
 import Image from "next/image";
 import downarrow from "@/Common/TenderIcons/smallIcons/verticleArrow.svg";

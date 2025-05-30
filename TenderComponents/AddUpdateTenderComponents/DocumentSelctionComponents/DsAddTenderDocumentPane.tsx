@@ -1,4 +1,5 @@
-import { useContext, useEffect, useState } from "react";
+"use client";
+import { use, useContext, useEffect, useState } from "react";
 import Accordion from "@/Elements/DsComponents/dsAccordion/accordion";
 import Ds_checkbox from "@/Elements/DsComponents/DsCheckbox/dsCheckbox";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";

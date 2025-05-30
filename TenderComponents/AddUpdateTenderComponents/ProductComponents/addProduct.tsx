@@ -1,3 +1,4 @@
+"use client";
 import ProductSearch from "@/TenderComponents/AddUpdateTenderComponents/ProductComponents/productSearch";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 

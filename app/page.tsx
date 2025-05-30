@@ -43,7 +43,7 @@ import DsAdvanceFilterPane from "@/TenderComponents/TenderLogComponents/DsAdvanc
 import style from "./page.module.css";
 import IconFactory from "@/Elements/IconComponent";
 import { areSearchCustomers } from "@/TenderComponents/AddUpdateTenderComponents/BasicDetailComponents/customerSearch";
-import DemoDocument from "@/Elements/DsComponents/dsDocumentSelector/dsDemoDocumentSelector";
+// import DemoDocument from "@/Elements/DsComponents/dsDocumentSelector/dsDemoDocumentSelector";
 // import DemoToaster from "@/Elements/DsComponents/DsToaster/dsDemoToaster";
 const metaDataTypes = ["TENDER_TYPE", "CUSTOMER_TYPE", "TENDER_STATUS"];
 
@@ -727,19 +727,25 @@ export default function Home() {
   };
 
   const router = useRouter();
-  const goTo = (tenderId: number, status?: string) => {
-    const location = `/Tender/${tenderId}`;
-    if (status) sessionStorage.setItem("tenderStatus", status);
-    else {
+ const goTo = (tenderId: number, status?: string) => { 
+  const location = `/Tender/${tenderId}`;
+  
+  // Check if we're in the browser
+  if (typeof window !== 'undefined') {
+    if (status) {
+      sessionStorage.setItem("tenderStatus", status);
+    } else { 
       const storedStatus = sessionStorage.getItem("tenderStatus");
       if (storedStatus) {
         sessionStorage.removeItem("tenderStatus");
       }
     }
-    if (location) {
-      router.push(location); // Navigate to the dynamic route
-    }
-  };
+  }
+  
+  if (location) {
+    router.push(location);
+  }
+};
   const handelRowClick = (
     e: React.MouseEvent<HTMLElement>,
     rowIndex: number
