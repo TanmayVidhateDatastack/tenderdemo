@@ -536,8 +536,8 @@ export default function Home() {
   const addTableData = (tender: Tender[]) => {
     // console.log("Adding table data:", tender);
     const newRows: DsTableRow[] = tender.map((t, index) => {
-      let rowIcon: "instituitional" | "corporate" = "corporate";
-      if (t.customerType == "Instituitional") rowIcon = "instituitional";
+      let rowIcon: "institutional" | "corporate" = "corporate";
+      if (t.customerType == "Institutional") rowIcon = "institutional";
       return {
         rowIndex: index,
         customAttributes: { tenderId: t.tenderId },
