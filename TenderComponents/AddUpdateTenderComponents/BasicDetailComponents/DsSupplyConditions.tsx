@@ -1,3 +1,4 @@
+"use client";
 import DsCsvUpload from "@/Elements/DsComponents/DsButtons/dsCsvUpload";
 import TextArea from "@/Elements/DsComponents/DsInputs/dsTextArea";
 import styles from "./deposite.module.css";

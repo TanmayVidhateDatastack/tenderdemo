@@ -1,3 +1,4 @@
+"use client";
 import React, { createContext, useState, ReactNode, Dispatch, SetStateAction, useEffect } from "react";
 import { TenderDocument, updateDocuments, useTenderData } from "../TenderDataContextProvider";
 

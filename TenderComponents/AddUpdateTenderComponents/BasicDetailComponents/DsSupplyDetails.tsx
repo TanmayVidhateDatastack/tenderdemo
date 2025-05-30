@@ -1,3 +1,4 @@
+"use client";
 import DsSingleSelect from "@/Elements/DsComponents/dsSelect/dsSingleSelect";
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import DsMultiSelect from "@/Elements/DsComponents/dsSelect/dsMultiSelect";

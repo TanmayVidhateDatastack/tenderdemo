@@ -1,3 +1,4 @@
+"use client";
 import DsCsvUpload from "@/Elements/DsComponents/DsButtons/dsCsvUpload";
 import TextArea from "@/Elements/DsComponents/DsInputs/dsTextArea";
 import DsSingleSelect from "@/Elements/DsComponents/dsSelect/dsSingleSelect";

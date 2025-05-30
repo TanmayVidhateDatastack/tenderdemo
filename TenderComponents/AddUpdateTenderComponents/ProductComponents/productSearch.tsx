@@ -1,3 +1,4 @@
+"use client";
 import DsInfoDisplay from "@/Elements/ERPComponents/DsInfoDisplay/DsInfoDisplay";
 import { DsStatus, searchProductsURL } from "@/Common/helpers/constant";
 import {  datalistOptions } from "@/Common/helpers/types";
