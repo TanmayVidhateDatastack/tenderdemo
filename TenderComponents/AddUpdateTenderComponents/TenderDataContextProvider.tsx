@@ -113,6 +113,7 @@ export type tenderFee = {
   paymentMode: string;
   refundEligibility: string;
   paymentDueDate: string;
+  paymentOptions:string[];
   paymentDate?: string;
   paymentRefundDate?: string;
   refundNotes?: string;
@@ -314,7 +315,7 @@ interface TenderDataContextType {
   updateTenderFee: (
     feeType: string,
     key: keyof tenderFee,
-    value: Document[] | string | number
+    value: Document[] |string[] |string | number
   ) => void;
   addTenderFee: (type: string) => void;
   removeTenderFeeByType: (feeType: string) => void;
@@ -538,7 +539,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     (
       feeType: string,
       key: keyof tenderFee,
-      value: Document[] | string | number
+      value: Document[] |string[]| string | number
     ) => {
       setTenderData((prev) => ({
         ...prev,
@@ -595,7 +596,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             paymentDueDate: "",
             instructionNotes: "",
             status: active,
-
+            paymentOptions:[],
             paymentDate: "",
             paymentRefundDate: "",
             refundNotes: "",
@@ -1250,7 +1251,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               refundEligibility: x.refundEligibility,
               paymentDueDate: x.paymentDueDate,
               instructionNotes: x.instructionNotes,
-
+              paymentOptions:x.paymentOptions,
               paymentDate: x.paymentDate,
               paymentRefundDate: x.paymentRefundDate,
               refundNotes: x.refundNotes,
@@ -1546,6 +1547,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 paidBy: x.paidBy,
                 paymentMode: x.paymentMode,
                 refundEligibility: x.refundEligibility,
+                paymentOptions:x.paymentOptions,
                 paymentDate: x.paymentDate,
                 paymentDueDate: x.paymentDueDate,
                 paymentRefundDate: x.paymentRefundDate,
@@ -1620,6 +1622,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 paidBy: x.paidBy,
                 paymentMode: x.paymentMode,
                 refundEligibility: x.refundEligibility,
+                paymentOptions:x.paymentOptions,
                 paymentDate: x.paymentDate,
                 paymentDueDate: x.paymentDueDate,
                 paymentRefundDate: x.paymentRefundDate,
@@ -2026,6 +2029,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             paymentDueDate: undefined,
             paidBy: undefined,
             refundEligibility: undefined,
+            paymentOptions:undefined,
             paymentDate: undefined,
             refundNotes: undefined,
             paymentRefundDate: undefined,

@@ -196,6 +196,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
     });
     setSelectedDepo(depo);
   }, [formatedDepot, tenderDataCopy.shippingLocations, tenderData.id]);
+  
 
   return (
     <div className={deptStyles.container}>
@@ -271,6 +272,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
           containerClasses={styles.fields}
           selectedOptions={selectedDepo}
           options={formatedDepot}   
+          addButton={true}
           // type="multi" 
           label="Depot"
           placeholder={"Select Depots"}

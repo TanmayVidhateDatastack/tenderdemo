@@ -110,10 +110,8 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     useState<DsSelectOption>();
   const [selectedRefund, setSelectedRefund] = useState<DsSelectOption>();
   const [selectedPaidBy, setSelectedPaidBy] = useState<DsSelectOption>();
-  const [selectedcheckbox, setSelectedCheckbox] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState<DsSelectOption[]>([]);
   const [tempOptions, setTempOptions] = useState<DsSelectOption[]>([]);
-
   const permissions = useAppSelector((state: RootState) => state.permissions);
   const {
     amountDisable,
@@ -239,6 +237,13 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     mode,
     refund,
   ]);
+
+  const addClick = () => {
+    closeAllContext();
+    setSelectedOptions(tempOptions);
+    console.log("Add button clicked", tempOptions);
+  };
+
   return (
     <>
       <div className={styles.feeContainer} id={id}>
@@ -292,11 +297,21 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 className={`${styles.scrollableContainer}`}
                 id={id + "Documents"}
                 options={optionlist || []}
+                selectedOptions={selectedOptions}
                 setSelectOptions={(options) => {
+                  //  updateTenderFee(
+                  //     type,
+                  //     "paymentOptions",
+                  //     options.reduce<string[]>((acc, option) => {
+                  //       if (typeof option.value === "string") {
+                  //         acc.push(option.value);
+                  //       }
+                  //       return acc;
+                  //     }, [])
+                  //   );
                   setTempOptions(options);
                   console.log("Selected options:", options);
                 }}
-                // selectedOptions={[]}
                 showOptions={false}
                 disable={addDocumentTypeSlectDisable}
               >
@@ -307,10 +322,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                     buttonSize="btnSmall"
                     className={styles.addBtn}
                     onClick={() => {
-                      closeAllContext();
-                      setSelectedCheckbox(true);
-                      setSelectedOptions(tempOptions);
-                      console.log("Add button clicked");
+                      addClick();
                     }}
                     disable={addDocumentTypeButtonDisable}
                   />
@@ -341,89 +353,86 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             </div>
           </div>
 
-          {selectedcheckbox &&
-            selectedOptions.map((option, index) => (
-              <UploadFile
-                key={`upload-${type}-${option.value}-${index}`}
-                uploadLabel={`Upload ${option.label} here `}
-                id={`${type}_${option.value}`}
-                onSelectedFileChange={(files) => {
-                  // Filter by both documentCategory and documentType for this option
-                  const Documents =
-                    tenderData.tenderDocuments?.filter(
-                      (x) =>
-                        x.documentCategory === type &&
-                        x.documentType === `${option.value}`
-                    ) || [];
-                  updateDocuments(
-                    files,
-                    Documents,
-                    removeTenderDocument,
-                    addNewTenderDocument,
-                    `${type}_PAYMENT`,
-                    `${type}`,
-                    `${option.value}`
-                  );
-                }}
-                disable={uploadFileButtonDisabled}
-              />
-            ))}
+          {selectedOptions.map((option, index) => (
+            <UploadFile
+              key={`upload-${type}-${option.value}-${index}`}
+              uploadLabel={`Upload ${option.label} here `}
+              id={`${type}_${option.value}`}
+              onSelectedFileChange={(files) => {
+                const Documents =
+                  tenderData.tenderDocuments?.filter(
+                    (x) =>
+                      x.documentCategory === type &&
+                      x.documentType === `${option.value}`
+                  ) || [];
+                updateDocuments(
+                  files,
+                  Documents,
+                  removeTenderDocument,
+                  addNewTenderDocument,
+                  `${type}_PAYMENT`,
+                  `${type}`,
+                  `${option.value}`
+                );
+              }}
+              disable={uploadFileButtonDisabled}
+            />
+          ))}
           <div className={eleStyles.inputDetails}>
-            {selectedcheckbox &&
-              selectedOptions.map((option) => (
-                <div key={""} className={styles.fields}>
-                  <DsTextField
-                    containerClasses={styles.feeFields}
-                    label={`${option.label}   ID`}
-                    initialValue={(() => {
-                      const fee = tenderData.tenderFees.find(
-                        (x) => x.feesType === type
-                      );
-                      if (!fee) return "";
-                      if (typeof option.value === "string") {
-                        if (option.value.includes("ACKNOWLEDGMENT_RECEIPT"))
-                          return fee.acknowledgementReceiptId || "";
-                        if (option.value.includes("FUND_TRANSFER_CONFIRMATION"))
-                          return fee.fundTransferConfirmationId || "";
-                        if (option.value.includes("PAYMENT_RECEIPT"))
-                          return fee.paymentReceiptId || "";
-                        if (option.value.includes("TRANSACTION_RECEIPT"))
-                          return fee.paymentTransactionId || "";
-                      }
-                      return "";
-                    })()}
-                    onBlur={(e) => {
-                      if (typeof option.value == "string") {
-                        if (option.value.includes("ACKNOWLEDGMENT_RECEIPT"))
-                          updateTenderFee(
-                            type,
-                            "acknowledgementReceiptId",
-                            Number((e.target as HTMLInputElement).value)
-                          );
-                        if (option.value.includes("FUND_TRANSFER_CONFIRMATION"))
-                          updateTenderFee(
-                            type,
-                            "fundTransferConfirmationId",
-                            Number((e.target as HTMLInputElement).value)
-                          );
-                        if (option.value.includes("PAYMENT_RECEIPT"))
-                          updateTenderFee(
-                            type,
-                            "paymentReceiptId",
-                            Number((e.target as HTMLInputElement).value)
-                          );
-                        if (option.value.includes("TRANSACTION_RECEIPT"))
-                          updateTenderFee(
-                            type,
-                            "paymentTransactionId",
-                            Number((e.target as HTMLInputElement).value)
-                          );
-                      }
-                    }}
-                    disable={recieptIdDisable}
-                  />
-                </div>
-              ))}
+            {selectedOptions.map((option) => (
+              <div key={""} className={styles.fields}>
+                <DsTextField
+                  containerClasses={styles.feeFields}
+                  label={`${option.label}   ID`}
+                  initialValue={(() => {
+                    const fee = tenderData.tenderFees.find(
+                      (x) => x.feesType === type
+                    );
+                    if (!fee) return "";
+                    if (typeof option.value === "string") {
+                      if (option.value.includes("ACKNOWLEDGMENT_RECEIPT"))
+                        return fee.acknowledgementReceiptId || "";
+                      if (option.value.includes("FUND_TRANSFER_CONFIRMATION"))
+                        return fee.fundTransferConfirmationId || "";
+                      if (option.value.includes("PAYMENT_RECEIPT"))
+                        return fee.paymentReceiptId || "";
+                      if (option.value.includes("TRANSACTION_RECEIPT"))
+                        return fee.paymentTransactionId || "";
+                    }
+                    return "";
+                  })()}
+                  onBlur={(e) => {
+                    if (typeof option.value == "string") {
+                      if (option.value.includes("ACKNOWLEDGMENT_RECEIPT"))
+                        updateTenderFee(
+                          type,
+                          "acknowledgementReceiptId",
+                          Number((e.target as HTMLInputElement).value)
+                        );
+                      if (option.value.includes("FUND_TRANSFER_CONFIRMATION"))
+                        updateTenderFee(
+                          type,
+                          "fundTransferConfirmationId",
+                          Number((e.target as HTMLInputElement).value)
+                        );
+                      if (option.value.includes("PAYMENT_RECEIPT"))
+                        updateTenderFee(
+                          type,
+                          "paymentReceiptId",
+                          Number((e.target as HTMLInputElement).value)
+                        );
+                      if (option.value.includes("TRANSACTION_RECEIPT"))
+                        updateTenderFee(
+                          type,
+                          "paymentTransactionId",
+                          Number((e.target as HTMLInputElement).value)
+                        );
+                    }
+                  }}
+                  disable={recieptIdDisable}
+                />
+              </div>
+            ))}
           </div>
           <div className={styles.separator}></div>
         </>

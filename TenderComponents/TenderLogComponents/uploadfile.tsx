@@ -7,44 +7,50 @@ import IconFactory from "@/Elements/IconComponent";
 interface UploadFileProps {
   uploadLabel?: string;
   id: string;
-  onSelectedFileChange?: (documents: { id?: number; document?: File }[]) => void; 
   disable?: boolean;
+  onSelectedFileChange?: (documents: { id?: number; document?: File }[]) => void;
+  previouslySelectedFile?: {
+    id?: number;
+    documentName?: string;
+    fileDownloadHref?: string;
+  };
 }
 
 const UploadFile: React.FC<UploadFileProps> = ({
   uploadLabel,
   id,
-  onSelectedFileChange, 
-  disable=false,
+  disable = false,
+  onSelectedFileChange,
+  previouslySelectedFile,
 }) => {
-  const [fileName, setFileName] = useState<string>(
-    uploadLabel || "Attach your File here"
-  );
-  const [file, setFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  useEffect(() => {
-    if (uploadLabel) {
-      setFileName(uploadLabel);
-    }
-  }, [uploadLabel]);
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [isRemoved, setIsRemoved] = useState<boolean>(false);
+
+const displayFileName = uploadedFile?.name
+  || (!isRemoved && previouslySelectedFile?.documentName)
+  || uploadLabel
+  || "Attach your File here";
+
+    
+
 
   useEffect(() => {
-   
     if (onSelectedFileChange) {
-      if (file) {
-        onSelectedFileChange([{ document: file }]);
+      if (uploadedFile) {
+        onSelectedFileChange([{ document: uploadedFile }]);
       } else {
-        onSelectedFileChange([]); 
+        onSelectedFileChange([]);
       }
     }
-  }, [file]);
+  }, [uploadedFile]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
     if (selectedFile) {
-      setFileName(selectedFile.name);
-      setFile(selectedFile);
+      setUploadedFile(selectedFile);
+      setIsRemoved(false);
     }
   };
 
@@ -52,18 +58,14 @@ const UploadFile: React.FC<UploadFileProps> = ({
     event.preventDefault();
     const droppedFile = event.dataTransfer.files?.[0];
     if (droppedFile) {
-      setFileName(droppedFile.name);
-      setFile(droppedFile);
+      setUploadedFile(droppedFile);
+      setIsRemoved(false);
     }
   };
 
-  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-  };
-
   const handleRemoveFile = () => {
-    setFile(null);
-    setFileName(uploadLabel || "Attach your File here");
+    setUploadedFile(null);
+    setIsRemoved(true);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -74,13 +76,15 @@ const UploadFile: React.FC<UploadFileProps> = ({
       <div
         className={`${styles.uploadfooter} ${styles.attachfile} ${disable ? styles.disabled : ""}`}
         onDrop={handleDrop}
-        onDragOver={handleDragOver}
-        onClick={() => document.getElementById(`selectfile-${id}`)?.click()}
-        
+        onDragOver={(e) => e.preventDefault()}
+        onClick={() => {
+          if (!disable) {
+            document.getElementById(`selectfile-${id}`)?.click();
+          }
+        }}
       >
-        <div className={disable?styles.disabled:""}> 
-          {fileName}
-        </div>
+        <div className={disable ? styles.disabled : ""}>{displayFileName}</div>
+
         <input
           type="file"
           id={`selectfile-${id}`}
@@ -90,15 +94,17 @@ const UploadFile: React.FC<UploadFileProps> = ({
           disabled={disable}
         />
 
-        {file && (
+        {(uploadedFile || (previouslySelectedFile && !isRemoved)) && (
           <div
             style={{ width: "1em", height: "1em" }}
-            onClick={(e)=> {
-              disable?"":
-              handleRemoveFile();
-              e.stopPropagation()}  }
+            onClick={(e) => {
+              e.stopPropagation();
+              if (!disable) {
+                handleRemoveFile();
+              }
+            }}
           >
-            <IconFactory name={"crossSmall"} />
+            <IconFactory name="crossSmall" />
           </div>
         )}
       </div>
@@ -107,13 +113,3 @@ const UploadFile: React.FC<UploadFileProps> = ({
 };
 
 export default UploadFile;
-
-
-
-
-
-
-
-
-
-
