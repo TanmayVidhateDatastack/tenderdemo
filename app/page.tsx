@@ -541,8 +541,8 @@ export default function Home() {
   const addTableData = (tender: Tender[]) => {
     // console.log("Adding table data:", tender);
     const newRows: DsTableRow[] = tender.map((t, index) => {
-      let rowIcon: "instituitional" | "corporate" = "corporate";
-      if (t.customerType == "Instituitional") rowIcon = "instituitional";
+      let rowIcon: "institutional" | "corporate" = "corporate";
+      if (t.customerType == "Institutional") rowIcon = "institutional";
       return {
         rowIndex: index,
         customAttributes: { tenderId: t.tenderId },
@@ -732,25 +732,25 @@ export default function Home() {
   };
 
   const router = useRouter();
- const goTo = (tenderId: number, status?: string) => { 
-  const location = `/Tender/${tenderId}`;
-  
-  // Check if we're in the browser
-  if (typeof window !== 'undefined') {
-    if (status) {
-      sessionStorage.setItem("tenderStatus", status);
-    } else { 
-      const storedStatus = sessionStorage.getItem("tenderStatus");
-      if (storedStatus) {
-        sessionStorage.removeItem("tenderStatus");
+  const goTo = (tenderId: number, status?: string) => {
+    const location = `/Tender/${tenderId}`;
+
+    // Check if we're in the browser
+    if (typeof window !== 'undefined') {
+      if (status) {
+        sessionStorage.setItem("tenderStatus", status);
+      } else {
+        const storedStatus = sessionStorage.getItem("tenderStatus");
+        if (storedStatus) {
+          sessionStorage.removeItem("tenderStatus");
+        }
       }
     }
-  }
-  
-  if (location) {
-    router.push(location);
-  }
-};
+
+    if (location) {
+      router.push(location);
+    }
+  };
   const handelRowClick = (
     e: React.MouseEvent<HTMLElement>,
     rowIndex: number
