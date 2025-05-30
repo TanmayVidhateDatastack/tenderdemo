@@ -247,6 +247,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
             onBlur={(e) => {
               if (onCommit) onCommit();
             }}
+            version={version}
             autofocus
           />
         ),
