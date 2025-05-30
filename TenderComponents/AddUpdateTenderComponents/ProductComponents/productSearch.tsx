@@ -1,35 +1,37 @@
 "use client";
 import DsInfoDisplay from "@/Elements/ERPComponents/DsInfoDisplay/DsInfoDisplay";
 import { DsStatus, searchProductsURL } from "@/Common/helpers/constant";
-import {  datalistOptions } from "@/Common/helpers/types";
+import { datalistOptions } from "@/Common/helpers/types";
 import { Dispatch, SetStateAction, useState } from "react";
 import DsSearchComponent from "@/Elements/DsComponents/DsSearch/searchComponent";
 import style from "@/TenderComponents/AddUpdateTenderComponents/BasicDetailComponents/tender.module.css";
 import IconFactory from "@/Elements/IconComponent";
+import { useTenderData } from "../TenderDataContextProvider";
 
 export interface ProductSearchProps {
-  initialValue?:string;
+  version?: number;
+  initialValue?: string;
   orderStatus?: string;
   setSelectedProductId: Dispatch<SetStateAction<number | undefined>>;
   setSelectedProductBatchId: Dispatch<SetStateAction<number | undefined>>;
   disabled?: boolean;
 }
-export type searchProduct={
-  id:number;
-  name:string;
-  quantity:number;
-  cartonSize:string;
-}
- 
-export function isSearchProduct(value: unknown):value is searchProduct {
+export type searchProduct = {
+  id: number;
+  name: string;
+  quantity: number;
+  cartonSize: string;
+};
+
+export function isSearchProduct(value: unknown): value is searchProduct {
   return (
     typeof value === "object" &&
     value !== null &&
     "id" in value &&
     "name" in value &&
     // "packSize" in value &&
-    typeof (value ).id === "number" &&
-    typeof (value ).name === "string" 
+    typeof value.id === "number" &&
+    typeof value.name === "string"
     // typeof (value as unknown as TenderProduct).packSize === "string"
   );
 }
@@ -37,15 +39,19 @@ export function areSearchProduct(value: unknown): value is searchProduct[] {
   return Array.isArray(value) && value.every(isSearchProduct);
 }
 const ProductSearch: React.FC<ProductSearchProps> = ({
+  version = 1,
   initialValue,
   orderStatus,
   disabled,
   setSelectedProductId,
   setSelectedProductBatchId,
 }) => {
+  const { tenderData } = useTenderData();
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [products, setProducts] = useState<datalistOptions[]>();
   // console.log("Product serach",orderStatus);
- 
+
   const setOptions = (values: unknown) => {
     // console.log("setOptions called with values:", values);
     if (areSearchProduct(values)) {
@@ -56,9 +62,8 @@ const ProductSearch: React.FC<ProductSearchProps> = ({
             value: x.name,
             attributes: {
               "product-id": x.id?.toString() || "0",
-         
             },
-       
+
             secondaryValue: (
               <>
                 <DsInfoDisplay detailOf="">
@@ -76,15 +81,26 @@ const ProductSearch: React.FC<ProductSearchProps> = ({
       // console.log("product values are = ", values);
     }
   };
- 
+
   const setSelectedOption = (option: datalistOptions) => {
     {
       const selectedProductId = option.attributes["batch-id"];
       const selectedProductBatchId = option.attributes["product-id"];
- 
+
+      if (
+        tenderData.tenderRevisions
+          .find((t) => t.version === version)
+          ?.tenderItems.findIndex((tp) => tp.productId == Number(option.id)) !==
+        -1
+      ) {
+        setErrorMessage("Duplicate.");
+        setIsError(true);
+        setSelectedProductId(undefined)
+        return;
+      }
       if (selectedProductId) {
         setSelectedProductId(parseInt(selectedProductId));
-  //  console.log("selected product id",selectedProductId);
+        //  console.log("selected product id",selectedProductId);
       }
       if (selectedProductBatchId) {
         setSelectedProductBatchId(parseInt(selectedProductBatchId));
@@ -93,35 +109,43 @@ const ProductSearch: React.FC<ProductSearchProps> = ({
     }
   };
   return (
-   
     <div className={style.addproduct}>
-    <DsSearchComponent
-      id="productSearch"
-      dataListId="productSearchDatalist"
-      label={"Add Product & quantity & hit enter"}
-      options={products ? products : undefined}
-      setOptions={(value) => setOptions(value)}
-      starticon={
-        <div style={{ width: "1em", height: "1.125em", position: "relative" ,marginLeft:"-0.2em"}}>
-          {/* <Image src={searchicon} layout="fill" objectFit="cover" alt="searchicon" /> */}
-          <IconFactory name={"search"}/>
-        </div>
-      }
-      setSearchUrl={(searchTerm: string) => {
-        // console.log("name", searchProductsURL +searchTerm);
-        return searchProductsURL +searchTerm;
-      }}
-      
-      initialValue={initialValue}
-      setSelectedOption={setSelectedOption}
-
-    
-      disable={disabled}
-    />
-  
- </div>
+      <DsSearchComponent
+        id="productSearch"
+        dataListId="productSearchDatalist"
+        label={"Add Product & quantity & hit enter"}
+        options={products ? products : undefined}
+        setOptions={(value) => setOptions(value)}
+        starticon={
+          <div
+            style={{
+              width: "1em",
+              height: "1.125em",
+              position: "relative",
+              marginLeft: "-0.2em",
+            }}
+          >
+            {/* <Image src={searchicon} layout="fill" objectFit="cover" alt="searchicon" /> */}
+            <IconFactory name={"search"} />
+          </div>
+        }
+        setSearchUrl={(searchTerm: string) => {
+          // console.log("name", searchProductsURL +searchTerm);
+          return searchProductsURL + searchTerm;
+        }}
+        onChange={(e) => {
+          if (isError) {
+            setIsError(false);
+            setErrorMessage("");
+          }
+        }}
+        initialValue={initialValue}
+        setSelectedOption={setSelectedOption}
+        disable={disabled}
+        errorMessage={errorMessage}
+        isError={isError}
+      />
+    </div>
   );
 };
 export default ProductSearch;
- 
- 
