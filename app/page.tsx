@@ -106,8 +106,8 @@ export default function Home() {
   });
 
   // get the type value from URL
-  const searchParams = useSearchParams();
-  const type = searchParams.get("type") || "institutional";
+  // const searchParams = useSearchParams();
+  // const type = searchParams.get("type") || "institutional";
 
   const [fetchedMetadata, setFetchedMetadata] = useState<Metadata>({});
   // console.log(isFilterActive);
@@ -919,7 +919,7 @@ export default function Home() {
                 setSearchOptions(customers);
               },
               setSearchUrl: (term) => {
-                return searchCustomerURL(term, type);
+                return searchCustomerURL(term, "");
               },
             },
           },
