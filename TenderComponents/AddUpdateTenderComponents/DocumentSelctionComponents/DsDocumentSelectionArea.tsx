@@ -25,8 +25,8 @@ const DocumentSelectorArea: React.FC = () => {
     // ✅ Remove document from context
     documentContext.setDocumentData((prevData) =>
       prevData
-        .map((group) => ({
-          ...group,
+        .map((group) => ({ 
+          ...group, 
           documents: group.documents.filter(
             (d) => d.document.documentName !== documentName
           ),
