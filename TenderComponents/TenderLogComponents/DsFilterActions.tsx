@@ -25,10 +25,12 @@ export interface DsFilterActionProps {
   setSearchQuery: Dispatch<SetStateAction<string>>;
   selectedStatus: string;
   setSelectedStatus: Dispatch<SetStateAction<string>>;
+  isQuickFilterActive: boolean;
+  filterCount: number;
 }
 const DsFilterActions: React.FC<DsFilterActionProps> = ({
   searchQuery,
-  setSearchQuery, selectedStatus, setSelectedStatus
+  setSearchQuery, selectedStatus, setSelectedStatus, isQuickFilterActive, filterCount
 }) => {
 
   const initialFilterState = Object.fromEntries(
@@ -86,7 +88,10 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
     }
   }, [role]);
 
-
+  useEffect(() => {
+    handleFilter(selectedStatus)
+  }, [isQuickFilterActive]
+  )
   const handleFilter = async (value: string) => {
     console.log("valueee", value);
     setIsFiltered((prev) => {
@@ -159,7 +164,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
                 height: "1.125em",
                 position: "relative",
               }}
-            > 
+            >
               <Image
                 src={searchicon}
                 layout="fill"
@@ -184,6 +189,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
             }
             onClick={() => handleFilter("NEAR_SUBMISSION")}
             label="Near Submission"
+            disable={!isQuickFilterActive}
           />
         )}
       </div>
@@ -210,6 +216,8 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
           }
           onClick={() => handleFilter("APPROVAL")}
           label="Approval"
+          disable={!isQuickFilterActive}
+
         />
       )}
       {myApprovalButtonVisible && (
@@ -221,6 +229,8 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
             isFiltered["UNDER_APPROVAL"] ? "btnContained" : "btnOutlined"
           }
           onClick={() => handleFilter("UNDER_APPROVAL")}
+          disable={!isQuickFilterActive}
+
         />
       )}
       {myApprovalButtonVisible && (
@@ -233,6 +243,8 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
             isFiltered["UNDER_REVIEW"] ? "btnContained" : "btnOutlined"
           }
           onClick={() => handleFilter("UNDER_REVIEW")}
+          disable={!isQuickFilterActive}
+
         />
       )}
       {filterButtonVisible && (
@@ -257,7 +269,8 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
               />
             </div>
           }
-          label="Filter"
+          label={filterCount > 1 ? `${filterCount} Filters Applied` : filterCount === 1 ? `${filterCount} Filter Applied` : "Filter"}
+
           onClick={() => DisplayPane("AdvancedFilterComponent")}
           iconSize="iconMedium"
         />
