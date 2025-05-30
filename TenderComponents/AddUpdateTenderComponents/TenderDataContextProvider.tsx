@@ -467,7 +467,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         tenderItems: [],
       },
     ],
-    tenderDocuments: [],
+    tenderDocuments: [], 
     tenderContract: {
       contractStatus: "AWARDED",
       contractJustification: "test",
@@ -2074,7 +2074,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       headers: {
         "Content-Type": "application/json",
         "x-tender-codes": JSON.stringify(metaDataTypes),
-      },
+      }, 
     })
       .then((res) => {
         if (res.code === 200) {
@@ -2142,7 +2142,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 label: item.codeDescription,
               })
             ),
-            applicableSupplyConditions: (
+            applicableSupplyConditions: ( 
               result.tenderSupplyCondition || []
             ).map((item: { codeValue: string; codeDescription: string }) => ({
               value: item.codeValue,

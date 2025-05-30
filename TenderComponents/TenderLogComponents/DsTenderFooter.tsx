@@ -310,7 +310,7 @@ export const DSTendrFooter: React.FC = ({ }) => {
 
           if (!instructionNotesDisable && !fee.instructionNotes?.trim()) {
             errors.push(
-              `${fee.feesType} ${index + 1}:  Please enter instruction notes.`
+              `${fee.feesType} :  Please enter instruction notes.`
             );
           }
         }
