@@ -1,4 +1,3 @@
-"use client";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import DsCsvUpload from "@/Elements/DsComponents/DsButtons/dsCsvUpload";
 import Ds_checkbox from "@/Elements/DsComponents/DsCheckbox/dsCheckbox";
@@ -95,6 +94,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     updateTenderFee,
     addNewTenderDocument,
     tenderData,
+    tenderDataCopy,
     removeTenderDocument,
   } = useTenderData();
   const metaDataTypes = [
@@ -113,6 +113,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
   const [selectedPaidBy, setSelectedPaidBy] = useState<DsSelectOption>();
   const [selectedOptions, setSelectedOptions] = useState<DsSelectOption[]>([]);
   const [tempOptions, setTempOptions] = useState<DsSelectOption[]>([]);
+
   const permissions = useAppSelector((state: RootState) => state.permissions);
   const {
     amountDisable,
@@ -238,13 +239,49 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     mode,
     refund,
   ]);
-
-  const addClick = () => {
+  useEffect(() => {
+    const currentFee = tenderDataCopy.tenderFees.find(
+      (x) => x.feesType == type
+    );
+    if (currentFee) {
+      const selectedOPtionArr: DsSelectOption[] = [];
+      if (currentFee.paymentTransactionId) {
+        const option = optionlist.find((x) =>
+          x.value.toString().includes("TRANSACTION_RECEIPT")
+        );
+        if (option) selectedOPtionArr.push(option);
+      }
+      if (currentFee.paymentReceiptId) {
+        {
+          const option = optionlist.find((x) =>
+            x.value.toString().includes("PAYMENT_RECEIPT")
+          );
+          if (option) selectedOPtionArr.push(option);
+        }
+      }
+      if (currentFee.acknowledgementReceiptId) {
+        {
+          const option = optionlist.find((x) =>
+            x.value.toString().includes("ACKNOWLEDGMENT_RECEIPT")
+          );
+          if (option) selectedOPtionArr.push(option);
+        }
+      }
+      if (currentFee.fundTransferConfirmationId) {
+        const option = optionlist.find((x) =>
+          x.value.toString().includes("FUND_TRANSFER_CONFIRMATION")
+        );
+        if (option) selectedOPtionArr.push(option);
+      }
+      setTempOptions(selectedOPtionArr);
+      setSelectedOptions(selectedOPtionArr);
+    }
+  }, [tenderDataCopy]);
+  const handleAdd = () => {
     closeAllContext();
     setSelectedOptions(tempOptions);
-    console.log("Add button clicked", tempOptions);
+    console.log("Add button clicked");
   };
-
   return (
     <>
       <div className={styles.feeContainer} id={id}>
@@ -298,7 +335,6 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 className={`${styles.scrollableContainer}`}
                 id={id + "Documents"}
                 options={optionlist || []}
-                selectedOptions={selectedOptions}
                 setSelectOptions={(options) => {
                   //  updateTenderFee(
                   //     type,
@@ -313,6 +349,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   setTempOptions(options);
                   console.log("Selected options:", options);
                 }}
+                selectedOptions={tempOptions}
                 showOptions={false}
                 disable={addDocumentTypeSlectDisable}
               >
@@ -323,7 +360,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                     buttonSize="btnSmall"
                     className={styles.addBtn}
                     onClick={() => {
-                      addClick();
+                      handleAdd();
                     }}
                     disable={addDocumentTypeButtonDisable}
                   />
@@ -359,8 +396,8 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               key={`upload-${type}-${option.value}-${index}`}
               uploadLabel={`Upload ${option.label} here `}
               id={`${type}_${option.value}`}
-              
               onSelectedFileChange={(files) => {
+                // Filter by both documentCategory and documentType for this option
                 const Documents =
                   tenderData.tenderDocuments?.filter(
                     (x) =>
@@ -377,6 +414,26 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   `${option.value}`
                 );
               }}
+              previouslySelectedFile={
+                tenderData.tenderDocuments
+                  ?.filter(
+                    (x) =>
+                      x.documentCategory == type &&
+                      x.documentType == type + "_PAYMENT" &&
+                      x.documentSubType == option.value
+                    // &&
+                    // x.id !== undefined
+                  )
+                  .map((x) => {
+                    return {
+                      ...x,
+                      fileDownloadHref: downloadDocumentUrl(
+                        tenderData.id,
+                        x.id
+                      ),
+                    };
+                  })[0]
+              }
               disable={uploadFileButtonDisabled}
             />
           ))}

@@ -34,6 +34,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
   const [allSuppliedBy, setAllSuppliedBy] = useState<
     DsMultiLevelSelectOption[]
   >([]);
+  
   const [depotList, setDepotList] = useState<Depot[]>([]);
   const [formatedDepot, setFormatedDepot] = useState<DsSelectOption[]>([]);
 
@@ -197,7 +198,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
     });
     setSelectedDepo(depo);
   }, [formatedDepot, tenderDataCopy.shippingLocations, tenderData.id]);
-  
+
 
   return (
     <div className={deptStyles.container}>
