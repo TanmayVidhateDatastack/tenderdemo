@@ -3,7 +3,7 @@ import { TenderDataProvider } from "@/TenderComponents/AddUpdateTenderComponents
 import DsTenderIdPage from "./tenderIdPage";
 import { closeAllContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import Toaster from "@/Elements/DsComponents/DsToaster/DsToaster";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 export type ParamType = {
   params: {
     TenderId: string | number;
@@ -11,7 +11,11 @@ export type ParamType = {
 };
 export default function Home(param: ParamType) {
   const paramOrderId: string | number = param?.params?.TenderId;
-  const storedStatus = sessionStorage?.getItem("tenderStatus") || undefined;
+  
+  const [storedStatus,setStat] = useState<string | undefined>(undefined);
+  useEffect(()=>{
+    setStat(sessionStorage?.getItem("tenderStatus") || undefined)
+  },[]);
   useEffect(() => {
     closeAllContext();
   }, []);

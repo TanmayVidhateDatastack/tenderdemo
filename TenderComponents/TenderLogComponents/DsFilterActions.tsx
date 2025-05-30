@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 import styles from "./filteractions.module.css";
 import Image from "next/image";
 import filter from "@/Common/TenderIcons/smallIcons/filtericon.svg";

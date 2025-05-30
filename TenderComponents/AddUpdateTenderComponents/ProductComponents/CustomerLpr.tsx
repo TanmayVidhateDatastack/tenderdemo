@@ -1,3 +1,4 @@
+"use client";
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import { useEffect, useRef, useCallback } from "react";
 import { Company, datalistOptions } from "@/Common/helpers/types";

@@ -1,3 +1,4 @@
+"use client";
 import { DsStatus, getCompetitorsURL } from "@/Common/helpers/constant";
 import { Company, datalistOptions } from "@/Common/helpers/types";
 import DsSearchComponent from "@/Elements/DsComponents/DsSearch/searchComponent";
