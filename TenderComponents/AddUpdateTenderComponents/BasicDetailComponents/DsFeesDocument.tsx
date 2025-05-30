@@ -359,6 +359,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               key={`upload-${type}-${option.value}-${index}`}
               uploadLabel={`Upload ${option.label} here `}
               id={`${type}_${option.value}`}
+              
               onSelectedFileChange={(files) => {
                 const Documents =
                   tenderData.tenderDocuments?.filter(
