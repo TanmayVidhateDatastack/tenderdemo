@@ -163,6 +163,7 @@ const permissionsSlice = createSlice({
 
         case "CHECKER":
           state.tenderDatalistVisible = true;
+          state.nearSubmissionButtonVisible = true;
           state.myApprovalButtonVisible = true;//replaced with underReviewButtonVisible
           state.filterButtonVisible = true;
           // state.newButtonVisible = true; 

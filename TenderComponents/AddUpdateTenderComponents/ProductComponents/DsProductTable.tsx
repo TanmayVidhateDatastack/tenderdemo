@@ -247,6 +247,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
             onBlur={(e) => {
               if (onCommit) onCommit();
             }}
+            version={version}
             autofocus
           />
         ),
@@ -314,6 +315,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
               id: row.competitorId || 0,
               name: row.product.competitorName || "",
             }}
+            disable={latestVersion!=version}
             onValueChange={(value) => {
               if (!value) value = "0";
               if (handleUpdateCell)

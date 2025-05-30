@@ -269,8 +269,8 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
               />
             </div>
           }
-          label={filterCount > 1 ? `${filterCount} Filters Applied` : filterCount === 1 ? `${filterCount} Filter Applied` : "Filter"}
-
+          label={filterCount > 1 ? `${filterCount} Filters Applied` : filterCount == 1 ? `${filterCount} Filter Applied` : "Filter"}
+          // label={`${filterCount}`}
           onClick={() => DisplayPane("AdvancedFilterComponent")}
           iconSize="iconMedium"
         />
