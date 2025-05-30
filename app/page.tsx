@@ -30,7 +30,7 @@ import {
 } from "@/Common/helpers/constant";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import DsTableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableComponent";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import DsCurrency from "@/Elements/DsComponents/dsCurrency/dsCurrency";
 
@@ -104,6 +104,11 @@ export default function Home() {
     userId: 3,
     metaDataTypes: [],
   });
+
+  // get the type value from URL
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type") || "institutional";
+
   const [fetchedMetadata, setFetchedMetadata] = useState<Metadata>({});
   // console.log(isFilterActive);
   const [isAddWhite, setIsAddWhite] = useState<boolean>(false);
@@ -727,25 +732,25 @@ export default function Home() {
   };
 
   const router = useRouter();
- const goTo = (tenderId: number, status?: string) => { 
-  const location = `/Tender/${tenderId}`;
-  
-  // Check if we're in the browser
-  if (typeof window !== 'undefined') {
-    if (status) {
-      sessionStorage.setItem("tenderStatus", status);
-    } else { 
-      const storedStatus = sessionStorage.getItem("tenderStatus");
-      if (storedStatus) {
-        sessionStorage.removeItem("tenderStatus");
+  const goTo = (tenderId: number, status?: string) => {
+    const location = `/Tender/${tenderId}`;
+
+    // Check if we're in the browser
+    if (typeof window !== 'undefined') {
+      if (status) {
+        sessionStorage.setItem("tenderStatus", status);
+      } else {
+        const storedStatus = sessionStorage.getItem("tenderStatus");
+        if (storedStatus) {
+          sessionStorage.removeItem("tenderStatus");
+        }
       }
     }
-  }
-  
-  if (location) {
-    router.push(location);
-  }
-};
+
+    if (location) {
+      router.push(location);
+    }
+  };
   const handelRowClick = (
     e: React.MouseEvent<HTMLElement>,
     rowIndex: number
@@ -914,7 +919,7 @@ export default function Home() {
                 setSearchOptions(customers);
               },
               setSearchUrl: (term) => {
-                return searchCustomerURL + term;
+                return searchCustomerURL(term, type);
               },
             },
           },
