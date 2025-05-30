@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect, useRef } from "react";
 import TabView from "@/Elements/DsComponents/dsTabs/TabView";
 import DsApplication from "@/Elements/ERPComponents/DsApplicationComponents/DsApplication";

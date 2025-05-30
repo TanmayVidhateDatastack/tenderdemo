@@ -1,4 +1,4 @@
-// import { TenderProduct } from "@/Common/helpers/types";
+"use client";
 import { useEffect, useState } from "react";
 import DsAddProduct from "./addProduct";
 import DsProductTable from "./DsProductTable";

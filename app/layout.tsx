@@ -477,7 +477,7 @@ const openSans = localFont({
 //   weight: "100 900",
 // });
 import { Viewport } from "next";
-// import LoginLayout from "./loginLayout";
+import LoginLayout from "./loginLayout";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -503,7 +503,7 @@ export default function RootLayout({
         className={` ${openSans.variable}`}
         style={{ width: "100vw", height: "100vh" }}
       >
-        <DsElLayout>{children}</DsElLayout>
+        <LoginLayout>{children}</LoginLayout>
       </body>
     </html>
   );
