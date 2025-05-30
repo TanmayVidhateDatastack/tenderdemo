@@ -22,12 +22,8 @@ const DsAddProduct: React.FC<addProductProps> = ({
   orderStatus,
   setProductList,
 }) => {
-
-
   const permissions = useAppSelector((state: RootState) => state.permissions);
-  const {
-    productTableDisable,
-  } = permissions;
+  const { productTableDisable } = permissions;
 
   // console.log("Add product ", orderStatus);
   const [selectedProductId, setSelectedProductId] = useState<number>();
@@ -70,7 +66,7 @@ const DsAddProduct: React.FC<addProductProps> = ({
         const tenderProduct: TenderProduct = {
           productId: product.result.id,
           requestedQuantity: Number(qtyInputVal),
-          lastQuotedRate:50,
+          lastQuotedRate: 50,
           lastPurchaseRate: 50,
           product: {
             type: "read-only",
@@ -81,11 +77,11 @@ const DsAddProduct: React.FC<addProductProps> = ({
             directCost: product.result.basicRate,
             dataSource: "fetch",
           },
-        }; 
+        };
         setProductList(tenderProduct); // Corrected
-      } 
+      }
       // console.log(product);
-      // console.log("product ", product); 
+      // console.log("product ", product);
     }
   };
   useEffect(() => {
@@ -101,6 +97,7 @@ const DsAddProduct: React.FC<addProductProps> = ({
     <div className={styles.input}>
       <>
         <ProductSearch
+          version={version}
           initialValue={productSearchVal}
           orderStatus={orderStatus}
           setSelectedProductId={(id) => setSelectedProductId(id)}
@@ -136,4 +133,4 @@ const DsAddProduct: React.FC<addProductProps> = ({
   );
 };
 
-export default DsAddProduct;  
+export default DsAddProduct;

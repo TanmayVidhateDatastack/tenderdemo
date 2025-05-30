@@ -112,7 +112,7 @@ export type tenderFee = {
   paidBy: string;
   paymentMode: string;
   refundEligibility: string;
-  paymentDueDate: string;np
+  paymentDueDate: string;
   paymentDate?: string;
   paymentRefundDate?: string;
   refundNotes?: string;
