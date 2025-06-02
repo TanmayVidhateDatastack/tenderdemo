@@ -57,7 +57,7 @@ const DsTotalTenders: React.FC<TotalTendersProps> = React.memo(({ data }) => {
     setTotalTenders(data.length);
     // setInstitutionalCount(institutional);
     // setCorporateCount(corporate);
-    console.log(data);
+    // console.log(data);
 
   }, [data]);
 

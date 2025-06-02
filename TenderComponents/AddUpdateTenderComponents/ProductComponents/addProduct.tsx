@@ -89,7 +89,7 @@ const DsAddProduct: React.FC<addProductProps> = ({
       tenderData.tenderRevisions.reduce((maxObj, currentObj) =>
         currentObj.version > maxObj.version ? currentObj : maxObj
       )?.version || 1;
-    console.log(latestVersion, version);
+    // console.log(latestVersion, version);
     setDisabled(latestVersion !== version || productTableDisable);
   }, [version, tenderData.tenderRevisions]);
 

@@ -9,10 +9,10 @@ type PermissionState = {
   newButtonVisible: boolean;
   filterButtonVisible: boolean;
   myApprovalButtonVisible: boolean;
-  fetchCustomerButtonVisible: boolean,
-  paymentCompletedVisible: boolean,
-  paymentRecoveryVisible: boolean,
-  disable: boolean,
+  fetchCustomerButtonVisible: boolean;
+  paymentCompletedVisible: boolean;
+  paymentRecoveryVisible: boolean;
+  disable: boolean;
   // myApprovalButtonVisible: boolean;
   searchCustomerDisable: boolean;
   customerLocationDisable: boolean;
@@ -48,11 +48,11 @@ type PermissionState = {
   condtionNotesDisable: boolean;
   attachFileConditionButtonDisable: boolean;
   paymentcompletedDisable: boolean;
-  addDocumentTypeSlectDisable: boolean,
-  addDocumentTypeButtonDisable: boolean,
-  uploadFileButtonDisabled: boolean,
-  transactionIdDisable: boolean,
-  recieptIdDisable: boolean,
+  addDocumentTypeSlectDisable: boolean;
+  addDocumentTypeButtonDisable: boolean;
+  uploadFileButtonDisabled: boolean;
+  transactionIdDisable: boolean;
+  recieptIdDisable: boolean;
   paymentRecoveredDisable: boolean;
   paymentRecoverdDateDisable: boolean;
   recoveredNotesDisable: boolean;
@@ -60,7 +60,7 @@ type PermissionState = {
   saveButtonDisabled: boolean;
   ContractTypeDisable: boolean;
 
-  //Product Tab  
+  //Product Tab
   productSearchDisable: boolean;
   productquantityDisable: boolean;
   addProductBtnDisable: boolean;
@@ -130,8 +130,6 @@ const initialState: PermissionState = {
   productquantityDisable: true,
   addProductBtnDisable: true,
   productTableDisable: true,
-
-
 };
 
 const permissionsSlice = createSlice({
@@ -148,7 +146,7 @@ const permissionsSlice = createSlice({
       state.feesPendingButtonVisible = false;
       state.myApprovalButtonVisible = false;
       state.fetchCustomerButtonVisible = false;
-      state.disable = false
+      state.disable = false;
 
       switch (role) {
         case "MAKER":
@@ -164,9 +162,9 @@ const permissionsSlice = createSlice({
         case "CHECKER":
           state.tenderDatalistVisible = true;
           state.nearSubmissionButtonVisible = true;
-          state.myApprovalButtonVisible = true;//replaced with underReviewButtonVisible
+          state.myApprovalButtonVisible = true; //replaced with underReviewButtonVisible
           state.filterButtonVisible = true;
-          // state.newButtonVisible = true; 
+          // state.newButtonVisible = true;
           break;
 
         case "HOMANAGER":
@@ -199,7 +197,10 @@ const permissionsSlice = createSlice({
       return state;
     },
 
-    setDisabledByStatusAndRole: (state, action: PayloadAction<{ role: string, status: string }>) => {
+    setDisabledByStatusAndRole: (
+      state,
+      action: PayloadAction<{ role: string; status: string }>
+    ) => {
       const { role, status } = action.payload;
       state.searchCustomerDisable = true;
       state.customerLocationDisable = true;
@@ -246,7 +247,7 @@ const permissionsSlice = createSlice({
       state.recoveredAttachFileButton = true;
       state.attachFileConditionButtonDisable = true;
       state.saveButtonDisabled = true;
-      state.disable = true
+      state.disable = true;
       //product tab
       state.productSearchDisable = true;
       state.productquantityDisable = true;
@@ -254,8 +255,8 @@ const permissionsSlice = createSlice({
       state.productTableDisable = true;
       switch (status) {
         case "DRAFT":
-          // switch (role) {
-            // case "MAKER":
+          switch (role) {
+            case "MAKER":
               state.searchCustomerDisable = false;
               state.customerLocationDisable = false;
               state.tenderNumberDisable = false;
@@ -298,50 +299,57 @@ const permissionsSlice = createSlice({
               state.addProductBtnDisable = false;
               state.productTableDisable = false;
 
-              // break;
-            // case "CHECKER":
+              break;
+            case "CHECKER":
               state.productTableDisable = false;
-// 
-              // break;
-            // case "HOMANAGER":
+              //
+              break;
+            case "HOMANAGER":
+              state.productTableDisable = false;
 
-              // break;
-          // }
+              break;
+          }
           break;
-          case "APPROVALPENDING":
-              state.productTableDisable = false;
+        case "APPROVALPENDING":
+          state.productTableDisable = false;
 
-          case "APPROVED":
-          // if (role === "ACCOUNTANCE" || role === "FINANCE") {
+        case "APPROVED":
+          if (role === "ACCOUNTANCE" || role === "FINANCE") {
             state.paymentcompletedDisable = false;
             state.addDocumentTypeSlectDisable = false;
-              state.addDocumentTypeButtonDisable = false;
-              state.uploadFileButtonDisabled = false;
-              state.transactionIdDisable = false;
+            state.addDocumentTypeButtonDisable = false;
+            state.uploadFileButtonDisabled = false;
+            state.transactionIdDisable = false;
             state.recieptIdDisable = false;
             state.saveButtonDisabled = false;
-          // }
+          }
           break;
         case "LOST":
         case "CANCELLED":
         case "AWARDED":
-          // if (role === "ACCOUNTANCE" || role === "FINANCE") {
+          if (role === "ACCOUNTANCE" || role === "FINANCE") {
             state.paymentRecoveredDisable = false;
             state.paymentRecoverdDateDisable = false;
             state.recoveredNotesDisable = false;
             state.recoveredAttachFileButton = false;
             state.saveButtonDisabled = false;
-          // }
+          }
+          if(role=="MAKER"){
+            state.saveButtonDisabled = false;
+          }
           break;
-        case "UNDER_APPROVAL":      
-          // case "HOMANAGER":
+        case "UNDER_APPROVAL":
+          if (role === "HOMANAGER") {
+            // case "HOMANAGER":
             state.saveButtonDisabled = false;
             break;
+          }
       }
       return state;
-    }
-  }
+    },
+  },
 });
 
-export const { setVisibilityByRole, setDisabledByStatusAndRole } = permissionsSlice.actions;
-export default permissionsSlice.reducer; 
+export const { setVisibilityByRole, setDisabledByStatusAndRole } =
+  permissionsSlice.actions;
+export default permissionsSlice.reducer;

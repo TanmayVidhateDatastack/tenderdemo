@@ -107,10 +107,10 @@ const DsAddTenderDocumentPane: React.FC = () => {
     setSelectedDocuments(updatedSelectedDocuments);
 
     const groupedDocs = Object.values(filterDocuments).flat();
-    console.log("Flat Grouped Docs:", groupedDocs);
+    // console.log("Flat Grouped Docs:", groupedDocs);
 
     const contextDocs = documentContext?.documentData?.flatMap(cd => cd.documents) || [];
-    console.log("Context Docs:", contextDocs);
+    // console.log("Context Docs:", contextDocs);
 
     const updatedGroupedDocuments = groupedDocs.filter((doc) =>
       contextDocs.some((d) => {
@@ -119,7 +119,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
       })
     );
 
-    console.log("Updated Grouped Documents:", updatedGroupedDocuments);
+    // console.log("Updated Grouped Documents:", updatedGroupedDocuments);
 
     setSelectedDocuments(updatedGroupedDocuments);
 
@@ -173,7 +173,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
               isVisible: false,
             } as TenderDocument;
 
-            console.log("New Document:", newdocs);
+            // console.log("New Document:", newdocs);
 
             updatedData.push({
               type: doc.documentType,
@@ -215,7 +215,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
 
   useEffect(() => {
     if (groupedDocuments) {
-      console.log("Grouped Documents:", groupedDocuments);
+      // console.log("Grouped Documents:", groupedDocuments);
       setFilterDocuments(groupedDocuments);
     }
 
@@ -308,7 +308,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
             handledocument();
             ClosePane(e);
             // setSearchText("ABC"); // Clear search text
-            console.log(" Search text:", searchText);
+            // console.log(" Search text:", searchText);
           }}
         />
       </div>
