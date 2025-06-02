@@ -177,7 +177,7 @@ const DsTenderIdPage: React.FC<{
   }, [userRole.role, tenderData?.status]);
 
   useEffect(() => {
-    console.log(displayFlag, "displayFlag");
+    // console.log(displayFlag, "displayFlag");
     const revisionTabs = tenderData.tenderRevisions.map((rev) => ({
       tabId: `v${rev.version}`,
       tabName: `Products ₹ (V${rev.version})`,
@@ -193,8 +193,8 @@ const DsTenderIdPage: React.FC<{
       },
     ]);
 
-    console.log("Tender Data 123 : ", tenderData);
-    console.log("Tender Data Copy 123 : ", tenderDataCopy);
+    // console.log("Tender Data 123 : ", tenderData);
+    // console.log("Tender Data Copy 123 : ", tenderDataCopy);
     //for disabling Add documents button in documents tab
     if (tenderData.status == "DRAFT") {
       setIsDisabled(false);
@@ -252,7 +252,7 @@ const DsTenderIdPage: React.FC<{
       tenderData.tenderRevisions.reduce((maxObj, currentObj) =>
         currentObj.version > maxObj.version ? currentObj : maxObj
       )?.version || 1;
-    console.log(latestVersion, version);
+    // console.log(latestVersion, version);
     setIsLatestVersion(latestVersion == version);
   }, [selectedTabId, tenderData.tenderRevisions]);
   useEffect(() => {

@@ -790,8 +790,8 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           currentObj.version > maxObj.version ? currentObj : maxObj
         ),
       };
-      console.log(latestRevision);
-      console.log(tenderData.tenderRevisions);
+      // console.log(latestRevision);
+      // console.log(tenderData.tenderRevisions);
       delete latestRevision.id;
 
       const newTenderRevision = [...tenderData.tenderRevisions];
@@ -1163,12 +1163,12 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
       const formData = new FormData();
 
       tenderSaveDocuments?.forEach((doc, index) => {
-        console.log(
-          doc.data,
-          typeof doc.data,
-          doc.data instanceof File,
-          doc.data instanceof Blob
-        );
+        // console.log(
+        //   doc.data,
+        //   typeof doc.data,
+        //   doc.data instanceof File,
+        //   doc.data instanceof Blob
+        // );
         // const blob = new Blob([doc.data.arrayBuffer()], {
         //   type: "application/pdf",
         // });
@@ -1327,7 +1327,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                   lastUpdatedBy: 3,
                 });
 
-                console.log("sAVEEEE", dataToSend);
+                // console.log("sAVEEEE", dataToSend);
                 await fetch(saveTenderUrl, {
                   method: "POST",
                   headers: {
@@ -1369,7 +1369,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             lastUpdatedBy: 3,
           });
 
-          console.log("sAVEEEE", dataToSend);
+          // console.log("sAVEEEE", dataToSend);
           await fetch(saveTenderUrl, {
             method: "POST",
             headers: {
@@ -1423,12 +1423,12 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         const formData = new FormData();
         let docCount = 0;
         tenderSaveDocuments?.forEach((doc) => {
-          console.log(
-            doc.data,
-            typeof doc.data,
-            doc.data instanceof File,
-            doc.data instanceof Blob
-          );
+          // console.log(
+          //   doc.data,
+          //   typeof doc.data,
+          //   doc.data instanceof File,
+          //   doc.data instanceof Blob
+          // );
           // const blob = new Blob([doc.data.arrayBuffer()], {
           //   type: "application/pdf",
           // });
@@ -1975,7 +1975,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         // tenderData.tenderFees.amount=undefined;
         // delete tenderData.tenders.lastPurchaseDate
 
-        console.log("tenderData.tenderFees.amount ", tenderData.feesType);
+        // console.log("tenderData.tenderFees.amount ", tenderData.feesType);
         if (
           tenderData.tenderRevisions.length == 0 ||
           tenderData.tenderRevisions == null
@@ -2002,14 +2002,14 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               }),
             };
           });
-        console.log("saved data", tenderData);
+        // console.log("saved data", tenderData);
 
         tenderData.tenders.tenderDetails =
           tenderData.tenders.tenderDetailsReadOnly;
         delete tenderData.tenders.tenderDetailsReadOnly;
         // delete tenderData.tenders.id;
 
-        console.log("saveddatais ", tenderData);
+        // console.log("saveddatais ", tenderData);
 
         const newTenderData: TenderData = {
           ...tenderData.tenders,
@@ -2225,7 +2225,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               })
             ),
           };
-          console.log("AAAAAAAAAAAAAAAAAA", metaData);
+          // console.log("AAAAAAAAAAAAAAAAAA", metaData);
           setMetaData(metaData);
         } else {
           console.error(

@@ -93,7 +93,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
   }, [isQuickFilterActive]
   )
   const handleFilter = async (value: string) => {
-    console.log("valueee", value);
+    // console.log("valueee", value);
     setIsFiltered((prev) => {
       const newFilterState = Object.fromEntries(
         Object.keys(prev).map((key) => [key, key === value ? !prev[key] : false])

@@ -53,7 +53,7 @@ const AwardedToSearch: React.FC<AwardedToSearchProps> = ({
       );
       setAwardedToOptions(awardedToValues);
     } else {
-      console.log("company values are = ", values);
+      // console.log("company values are = ", values);
     }
   };
   return (

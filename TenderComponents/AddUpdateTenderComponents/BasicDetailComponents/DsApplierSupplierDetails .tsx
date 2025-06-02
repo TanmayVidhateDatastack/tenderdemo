@@ -161,7 +161,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
     isDatalistOpt: boolean,
     option: datalistOptions
   ) => {
-    console.log(option);
+    // console.log(option);
     setSelected(option);
     if (isDatalistOpt) {
       const onlyStockist = allSuppliedBy.filter(
@@ -182,7 +182,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
     isDatalistOpt: boolean,
     option: datalistOptions
   ) => {
-    console.log(option);
+    // console.log(option);
     setSelecteds(option);
   };
   const [selectedDepo, setSelectedDepo] = useState<DsSelectOption[]>([]);
