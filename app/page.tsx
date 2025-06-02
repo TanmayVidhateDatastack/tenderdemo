@@ -45,6 +45,9 @@ import { areSearchCustomers } from "@/TenderComponents/AddUpdateTenderComponents
 import { useAppDispatch, useAppSelector } from "@/Redux/hook/hook";
 import { AppDispatch } from "@/Redux/store/store";
 import { setUserRole } from "@/Redux/slice/UserSlice/userSlice";
+
+import { Suspense } from "react";
+import Page from "./roleSelect";
 // import DemoDocument from "@/Elements/DsComponents/dsDocumentSelector/dsDemoDocumentSelector";
 // import DemoToaster from "@/Elements/DsComponents/DsToaster/dsDemoToaster";
 const metaDataTypes = ["TENDER_TYPE", "CUSTOMER_TYPE", "TENDER_STATUS"];
@@ -326,14 +329,14 @@ export default function Home() {
       advFilter && Object.keys(advFilter).length > 0 && searchQuery
         ? advanceAndSearch
         : advFilter && Object.keys(advFilter).length > 0
-          ? advanceFilter
-          : selectedStatus && searchQuery
-            ? statusAndSearch
-            : selectedStatus
-              ? onlyStatus
-              : searchQuery
-                ? onlySearch
-                : { userId: 3, pageNo: 0, pageSize: 0 };
+        ? advanceFilter
+        : selectedStatus && searchQuery
+        ? statusAndSearch
+        : selectedStatus
+        ? onlyStatus
+        : searchQuery
+        ? onlySearch
+        : { userId: 3, pageNo: 0, pageSize: 0 };
     // console.log("json object :", JSON.stringify(tenderFilters));
     await fetchData({
       url: getAllTenders,
@@ -364,7 +367,6 @@ export default function Home() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const formatTenders = (tenders: any[]): Tender[] => {
     return tenders.map((item) => ({
-
       customerName: item.customerName,
       submissionDate: item.submissionDate,
       daysToSubmit: item.daysToSubmit ?? "N/A",
@@ -420,13 +422,13 @@ export default function Home() {
     statuscell?: string;
     tenderId?: number;
   } | null>(null);
-//     const searchParams = useSearchParams();
-//     const dispatch = useAppDispatch<AppDispatch>();
-  
-// const role = searchParams.get("role")?.toUpperCase() || "MAKER";
-//   useEffect(() => {
-//     dispatch(setUserRole(role));
-//   }, [role]);
+  //     const searchParams = useSearchParams();
+  //     const dispatch = useAppDispatch<AppDispatch>();
+
+  // const role = searchParams.get("role")?.toUpperCase() || "MAKER";
+  //   useEffect(() => {
+  //     dispatch(setUserRole(role));
+  //   }, [role]);
   useEffect(() => {
     if (Array.isArray(data) && data.length > 0) {
       const names1 = data.map((item) => item.appliedBy);
@@ -700,6 +702,7 @@ export default function Home() {
             className: " cell cell-status ",
             customAttributes: { tenderId: t.tenderId },
             content: t.status ? (
+<<<<<<< HEAD
               <DsStatusIndicator 
                 type="user_defined" 
                 className={`${t?.status?.statusDescription 
@@ -710,6 +713,19 @@ export default function Home() {
                   ]
                   : ""
                   }`}
+=======
+              <DsStatusIndicator
+                type="user_defined"
+                className={`${
+                  t?.status?.statusDescription
+                    ? styles[
+                        t?.status?.statusDescription
+                          ?.replaceAll(" ", "_")
+                          .toLowerCase()
+                      ]
+                    : ""
+                }`}
+>>>>>>> 6f0cfa56fda5435af211674f0d8640e85408bea0
                 status={t.status.statusDescription}
                 label={t.status.statusDescription}
                 status_icon={
@@ -744,7 +760,7 @@ export default function Home() {
     const location = `/Tender/${tenderId}`;
 
     // Check if we're in the browser
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       if (status) {
         sessionStorage.setItem("tenderStatus", status);
       } else {
@@ -765,7 +781,9 @@ export default function Home() {
   ) => {
     const row = tempTableData.rows[rowIndex];
     const currentRow = e.currentTarget;
-    document.querySelector("." + styles.selectedRow)?.classList.remove(styles.selectedRow);
+    document
+      .querySelector("." + styles.selectedRow)
+      ?.classList.remove(styles.selectedRow);
     currentRow.classList.add(styles.selectedRow);
     // Convert statuscell to string if it's not already one
     const statuscell = String(
@@ -791,7 +809,6 @@ export default function Home() {
         return { e, rowIndex, statuscell, tenderId };
       }
     });
-
   };
   const handleRowDoubleClick = (
     e: React.MouseEvent<HTMLElement>,
@@ -893,12 +910,9 @@ export default function Home() {
                 handelRowClick(e, rowIndex);
               }}
             />
-            {tempTableData.rows.length == 0 && data != null && <div className={styles.recordNotFound}>
-
-              No Record Found!
-
-            </div>
-            }
+            {tempTableData.rows.length == 0 && data != null && (
+              <div className={styles.recordNotFound}>No Record Found!</div>
+            )}
           </div>
           {/* {selectedRow && ( */}
           <DsTenderTableFloatingMenu
@@ -911,9 +925,12 @@ export default function Home() {
           />
           {/* )} */}
         </div>
+<<<<<<< HEAD
  
+=======
+>>>>>>> 6f0cfa56fda5435af211674f0d8640e85408bea0
       </DsApplication>
-
+      <Page />
       <DsAdvanceFilterPane
         filters={[
           {
@@ -944,10 +961,8 @@ export default function Home() {
             filterFor: "Customer Types",
             filterType: "MultiSelection",
             multiSelectOptions: customerType.map((item) => ({
-
               label: item.codeDescription,
               value: item.codeValue,
-
             })),
           },
           { 
