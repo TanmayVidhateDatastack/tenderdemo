@@ -1,15 +1,14 @@
 "use client";
-
 import styles from "./CsvPopup.module.css";
 import React, { useRef, useState, useEffect } from "react";
 import IconFactory from "@/Elements/IconComponent";
 interface UploadFileProps {
   uploadLabel?: string;
   id: string;
-  disable?: boolean;
   onSelectedFileChange?: (
     documents: { id?: number; document?: File }[]
   ) => void;
+  disable?: boolean;
   previouslySelectedFile?: {
     id?: number;
     documentName?: string;
@@ -19,63 +18,89 @@ interface UploadFileProps {
 const UploadFile: React.FC<UploadFileProps> = ({
   uploadLabel,
   id,
-  disable = false,
   onSelectedFileChange,
+  disable = false,
   previouslySelectedFile,
-}) => {
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-  const [isRemoved, setIsRemoved] = useState<boolean>(false);
-
-  const [displayFileName, setDisplayFileName] = useState<string>(
-    uploadedFile?.name ||
-      (!isRemoved && previouslySelectedFile?.documentName) ||
-      uploadLabel ||
-      "Attach your File here"
+})=> {
+  const [fileName, setFileName] = useState<string>(
+    uploadLabel || "Attach your File here"
   );
+  const [file, setFile] = useState<File | null>(null);
+
+  const [hasManuallyChangedFile, setHasManuallyChangedFile] = useState(false);
+  const [prevFile, setPrevFile] = useState<
+    typeof previouslySelectedFile | null
+  >(previouslySelectedFile || null);
+  
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  useEffect(() => {
+    if (uploadLabel) {
+      setFileName(uploadLabel);
+    }
+  }, [uploadLabel]);
 
   useEffect(() => {
-    setDisplayFileName(
-      uploadedFile?.name ||
-        (!isRemoved && previouslySelectedFile?.documentName) ||
-        uploadLabel ||
-        "Attach your File here"
-    );
-  }, [previouslySelectedFile, uploadLabel, uploadedFile, isRemoved]);
+    if (!hasManuallyChangedFile && previouslySelectedFile) {
+      setPrevFile(previouslySelectedFile);
+      setFile(null);
+      setFileName(
+        previouslySelectedFile.documentName ||
+          uploadLabel ||
+          "Attach your File here"
+      );
+    }
+  }, [previouslySelectedFile, uploadLabel, hasManuallyChangedFile]);
 
   useEffect(() => {
     if (onSelectedFileChange) {
-      if (uploadedFile) {
-        onSelectedFileChange([{ document: uploadedFile }]);
+      if (file) {
+        onSelectedFileChange([{ document: file }]);
+      } else if (prevFile) {
+        onSelectedFileChange([
+          {
+            id: prevFile.id,
+            document: undefined,
+          },
+        ]);
       } else {
         onSelectedFileChange([]);
       }
     }
-  }, [uploadedFile, onSelectedFileChange]);
+  }, [file, prevFile]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
     if (selectedFile) {
-      setUploadedFile(selectedFile);
-      setIsRemoved(false);
+      setFileName(selectedFile.name);
+      setFile(selectedFile);
+      setPrevFile(null);
+      setHasManuallyChangedFile(true);
     }
   };
+
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     const droppedFile = event.dataTransfer.files?.[0];
     if (droppedFile) {
-      setUploadedFile(droppedFile);
-      setIsRemoved(false);
+      setFileName(droppedFile.name);
+      setFile(droppedFile);
+      setPrevFile(null);
+      setHasManuallyChangedFile(true);
     }
   };
+
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  };
+
   const handleRemoveFile = () => {
-    setUploadedFile(null);
-    setIsRemoved(true);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
+    setFile(null);
+    setPrevFile(null);
+    setFileName(uploadLabel || "Attach your File here");
+ 
   };
+  
+
   return (
     <div className={styles.container}>
       <div
@@ -83,16 +108,40 @@ const UploadFile: React.FC<UploadFileProps> = ({
           disable ? styles.disabled : ""
         }`}
         onDrop={handleDrop}
-        onDragOver={(e) => e.preventDefault()}
-        onClick={() => {
-          if (!disable) {
-            document.getElementById(`selectfile-${id}`)?.click();
-          }
-        }}
+        onDragOver={handleDragOver}
+        onClick={() =>
+          !disable && document.getElementById(`selectfile-${id}`)?.click()
+        }
       >
-        
-        <div className={disable ? styles.disabled : ""}>{displayFileName}</div>
-
+        <div className={disable ? styles.disabled : ""}>
+          {file ? (
+         
+            <a
+              href={URL.createObjectURL(file)}
+              download={file.name}
+              className={styles.document_Link}
+              onClick={e => e.stopPropagation()}
+            >
+              {fileName}
+            </a>
+          ) : prevFile ? (
+            prevFile.fileDownloadHref ? (
+              <a
+          href={prevFile.fileDownloadHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.document_Link}
+          onClick={e => e.stopPropagation()}
+              >
+          {prevFile.documentName}
+              </a>
+            ) : (
+              prevFile.documentName || fileName
+            )
+          ) : (
+            fileName
+          )}
+        </div>
         <input
           type="file"
           id={`selectfile-${id}`}
@@ -102,17 +151,15 @@ const UploadFile: React.FC<UploadFileProps> = ({
           disabled={disable}
         />
 
-        {(uploadedFile || (previouslySelectedFile && !isRemoved)) && (
+        {(file || prevFile) && (
           <div
             style={{ width: "1em", height: "1em" }}
             onClick={(e) => {
+              if (!disable) handleRemoveFile();
               e.stopPropagation();
-              if (!disable) {
-                handleRemoveFile();
-              }
             }}
           >
-            <IconFactory name="crossSmall" />
+            <IconFactory name={"crossSmall"} />
           </div>
         )}
       </div>
@@ -121,12 +168,3 @@ const UploadFile: React.FC<UploadFileProps> = ({
 };
 
 export default UploadFile;
-
-
-
-
-
-
-
-
-
