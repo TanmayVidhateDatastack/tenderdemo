@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import React, { useEffect, useState } from "react";
@@ -64,18 +65,18 @@ export const DSTendrFooter: React.FC = ({ }) => {
     updateTender,
     updateContractDetails,
   } = useTenderData();
-  const handleFetch = async () => {
-    try {
-      const res = await fetchData({ url: getTenderUserRoles });
-      if (res.code === 200) {
-        dispatch(setUserRole(res.result.roleName));
-      } else {
-        console.error("Error fetching data: ", res.message || "Unknown error");
-      }
-    } catch (error) {
-      console.error("Fetch error: ", error);
-    }
-  };
+  // const handleFetch = async () => {
+  //   try {
+  //     const res = await fetchData({ url: getTenderUserRoles });
+  //     if (res.code === 200) {
+  //       dispatch(setUserRole(res.result.roleName));
+  //     } else {
+  //       console.error("Error fetching data: ", res.message || "Unknown error");
+  //     }
+  //   } catch (error) {
+  //     console.error("Fetch error: ", error);
+  //   }
+  // };
 
   const searchParams = useSearchParams();
   const type = searchParams.get("type") || "institutional" || "corporate";
@@ -131,9 +132,9 @@ export const DSTendrFooter: React.FC = ({ }) => {
     //product Tab
     productTableDisable,
   } = permissions;
-  useEffect(() => {
-    handleFetch();
-  }, []);
+  // useEffect(() => {
+  //   handleFetch();
+  // }, []);
 
   const validateFields = (tenderData: TenderData) => {
     const errors: string[] = [];
@@ -261,7 +262,7 @@ export const DSTendrFooter: React.FC = ({ }) => {
         errors.push("Please select a supplier type.");
       }
       if (!depotDisable && tenderData?.shippingLocations?.length === 0) {
-        console.log(tenderData);
+        // console.log(tenderData);
         errors.push("Please select at least one shipping location.");
       }
 
@@ -436,7 +437,7 @@ export const DSTendrFooter: React.FC = ({ }) => {
   };
 
   const validateAndSaveTender = () => {
-    console.log(tenderData);
+    // console.log(tenderData);
     const validate = validateFields(tenderData);
     if (validate.length === 0) {
       saveTender("Draft");
@@ -452,7 +453,7 @@ export const DSTendrFooter: React.FC = ({ }) => {
           </div>
         </>
       );
-      console.log("Validation Errors:", validate);
+      // console.log("Validation Errors:", validate);
       setActionStatusValues({
         notiMsg: message,
         notiType: "info",
@@ -495,7 +496,7 @@ export const DSTendrFooter: React.FC = ({ }) => {
   useEffect(() => {
     if (role && role !== "") {
       dispatch(setVisibilityByRole(role));
-      console.log("Role=", role);
+      // console.log("Role=", role);
 
       if (role === "ACCOUNTANCE" || role === "FINANCE") {
         setContextContext(

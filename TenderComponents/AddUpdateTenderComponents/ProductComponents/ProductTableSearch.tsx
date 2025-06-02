@@ -108,26 +108,35 @@ const ProductTableSearch: React.FC<TableSearchProps> = ({
                 )
               );
               setTimeout(() => {
-                updateCell(rowId, "productId", product.result.id);
-                updateCell(rowId, "lastQuotedRate", 50);
-                updateCell(rowId, "lastPurchaseRate", 50);
-                updateCell(rowId, "product.productName", product.result.name);
-                updateCell(
-                  rowId,
-                  "product.productPackingSize",
-                  product.result.packingSize
-                );
-                updateCell(rowId, "product.mrp", product.result.mrpRate);
-                updateCell(
-                  rowId,
-                  "product.ptr",
-                  product.result.priceToRetailer
-                );
-                updateCell(
-                  rowId,
-                  "product.directCost",
-                  product.result.basicRate
-                );
+                updateCell(rowId, {
+                  productId: product.result.id,
+                  lastQuotedRate: 50,
+                  lastPurchaseRate: 50,
+                  "product.productName": product.result.name,
+                  "product.productPackingSize": product.result.packingSize,
+                  "product.mrp": product.result.mrpRate,
+                  "product.directCost": product.result.basicRate,
+                });
+                // updateCell(rowId, "productId", product.result.id);
+                // updateCell(rowId, "lastQuotedRate", 50);
+                // updateCell(rowId, "lastPurchaseRate", 50);
+                // updateCell(rowId, "product.productName", product.result.name);
+                // updateCell(
+                //   rowId,
+                //   "product.productPackingSize",
+                //   product.result.packingSize
+                // );
+                // updateCell(rowId, "product.mrp", product.result.mrpRate);
+                // updateCell(
+                //   rowId,
+                //   "product.ptr",
+                //   product.result.priceToRetailer
+                // );
+                // updateCell(
+                //   rowId,
+                //   "product.directCost",
+                //   product.result.basicRate
+                // );
               }, 10);
             }
           }

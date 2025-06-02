@@ -87,7 +87,7 @@ const DocumentSelectorArea: React.FC = () => {
   }, [documentData]);
 
   useEffect(() => {
-    console.log("Document Data Updated:", documentData); // Debugging Log
+    // console.log("Document Data Updated:", documentData); // Debugging Log
     const totalCount = documentData.reduce(
       (acc, { documents }) => acc + documents.length,
       0
@@ -120,7 +120,7 @@ const DocumentSelectorArea: React.FC = () => {
     );
 
     if (!doc) {
-      console.log("Document not found for ID:", docId);
+      // console.log("Document not found for ID:", docId);
       return;
     }
 

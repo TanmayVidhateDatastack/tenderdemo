@@ -146,8 +146,8 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
         };
     
         const apiUrl = approvelurl(tenderId)
-        console.log("apiurl",apiUrl)
-        console.log("Sending POST data:", approvalObject);
+        // console.log("apiurl",apiUrl)
+        // console.log("Sending POST data:", approvalObject);
     
         try {
             const response = await fetch(apiUrl, {
@@ -159,14 +159,14 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
             
             });
     
-            console.log("Response body", response);
-            console.log("POST status is", response.status);
-            console.log("approvel object", approvalObject);
+            // console.log("Response body", response);
+            // console.log("POST status is", response.status);
+            // console.log("approvel object", approvalObject);
     
             if (response.ok) {
                 const responseData = await response.json();
                 if (responseData.code === 200) {
-                    console.log("Response Status inside:", response.status);  
+                    // console.log("Response Status inside:", response.status);  
                    
                     setActionStatus({
                         notiMsg: "Status Updated Successfully!",
@@ -250,7 +250,7 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
             });
             if (metaData.code === 200) {
                 const result = metaData.result;
-                console.log("MetaData :-", result);
+                // console.log("MetaData :-", result);
 
                 let justificationType = [];
                 if (popupType === "Approve") {
@@ -269,7 +269,7 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
                    
                 }
 
-                console.log("Justification Type ", justificationType);
+                // console.log("Justification Type ", justificationType);
 
                 const formattedOptions = justificationType.map((item: any) => ({
                     value: item.codeValue,

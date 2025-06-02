@@ -146,7 +146,7 @@ const DsProductKpis: React.FC<ProductKpiProps> = ({ version }) => {
 
         const netValueNum = Number(netValue) || 0;
 
-        return sum + netValueNum;
+        return parseFloat((sum + netValueNum).toFixed(2));
       }, 0);
       const totalMarginProductSum = data.reduce((sum, item) => {
         const qty = item?.requestedQuantity ?? null;
@@ -161,7 +161,7 @@ const DsProductKpis: React.FC<ProductKpiProps> = ({ version }) => {
         const qtyNum = Number(qty) || 0;
         const marginValueNum = Number(marginValue) || 0;
 
-        return sum + qtyNum * marginValueNum;
+        return parseFloat((sum + qtyNum * marginValueNum).toFixed(2));
       }, 0);
       const totalStockistDiscountSum = data.reduce((sum, item) => {
         const qty = item?.requestedQuantity ?? null;
@@ -176,7 +176,7 @@ const DsProductKpis: React.FC<ProductKpiProps> = ({ version }) => {
         const qtyNum = Number(qty) || 0;
         const discountValueNum = Number(stockistDiscount) || 0;
 
-        return sum + qtyNum * discountValueNum;
+        return parseFloat((sum + qtyNum * discountValueNum).toFixed(2));
       }, 0);
       setTotalProducts(data.length);
 
@@ -188,7 +188,9 @@ const DsProductKpis: React.FC<ProductKpiProps> = ({ version }) => {
           isNaN(totalNetValueSum) ||
           totalNetValueSum === 0
           ? NaN
-          : (totalMarginProductSum / totalNetValueSum) * 100
+          : parseFloat(
+              ((totalMarginProductSum / totalNetValueSum) * 100).toFixed(2)
+            )
       );
       setTotalStockistDiscountSum(totalStockistDiscountSum);
       setTotalStockistPercentage(
@@ -196,7 +198,9 @@ const DsProductKpis: React.FC<ProductKpiProps> = ({ version }) => {
           isNaN(totalNetValueSum) ||
           totalNetValueSum === 0
           ? NaN
-          : (totalStockistDiscountSum / totalNetValueSum) * 100
+          : parseFloat(
+              ((totalStockistDiscountSum / totalNetValueSum) * 100).toFixed(2)
+            )
       );
     }
   }, [data]);

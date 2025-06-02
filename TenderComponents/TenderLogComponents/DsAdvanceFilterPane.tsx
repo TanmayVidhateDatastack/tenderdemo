@@ -68,7 +68,7 @@ const DsAdvanceFilterPane: React.FC<advProps> = ({ filters, onFiltersApplied, se
           break;
       }
     });
-    console.log("api for filter component ", apiFilter);
+    // console.log("api for filter component ", apiFilter);
     onFiltersApplied(apiFilter);
     setIsQuickFilter(() => filterValues.length == 0);
     return apiFilter;
@@ -93,12 +93,12 @@ const DsAdvanceFilterPane: React.FC<advProps> = ({ filters, onFiltersApplied, se
             ClosePane(e);
             setFilterCount(filterCount);
             ///api call to getAllOrderData with filters
-            console.log(
-              "filterValues:",
-              filterValues,
-              "filterConsole: ",
-              filterCount
-            );
+            // console.log(
+            //   "filterValues:",
+            //   filterValues,
+            //   "filterConsole: ",
+            //   filterCount
+            // );
             // return 0;
           }}
           clearFilters={function (): void {

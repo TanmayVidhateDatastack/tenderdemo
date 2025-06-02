@@ -81,7 +81,7 @@ export const DocumentProvider: React.FC<DocumentProviderProps> = ({ children }) 
     const types = Object.keys(fetchedDocuments);
 
     types.forEach((documentType) => {
-      console.log("Document Type:", documentType);
+      // console.log("Document Type:", documentType);
       const typeDocuments =
         tenderData.tenderDocuments?.filter(
           (x) =>
@@ -96,7 +96,7 @@ export const DocumentProvider: React.FC<DocumentProviderProps> = ({ children }) 
 
       const document = documentData.filter((doc) => doc.type === documentType).flatMap((doc) => doc.documents.map((d) => { return { ...d.document, id: d.document.documentId } }));
 
-      console.log("Document conpro :", document);
+      // console.log("Document conpro :", document);
       updateDocuments(
         document,
         updatedTypeDocuments,
