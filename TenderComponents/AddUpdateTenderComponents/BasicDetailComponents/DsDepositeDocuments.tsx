@@ -112,7 +112,7 @@ const DsDepositeDocuments: React.FC = () => {
         label: deposit.label,
         value: deposit.value,
       }));
-      console.log("mappedDeposits", mappedDeposits);
+      // console.log("mappedDeposits", mappedDeposits);
       SetApplicablefees(mappedDeposits);
       const options: Record<string, boolean> = mappedDeposits.reduce<
         Record<string, boolean>
@@ -169,7 +169,7 @@ const DsDepositeDocuments: React.FC = () => {
     applicablefees.forEach((opt) => {
       const id = opt.value.toString();
       const isEmpty = tenderData.tenderFees.find((fee) => fee.feesType === id);
-      console.log("isEmpty", isEmpty);
+      // console.log("isEmpty", isEmpty);
       const isActive = isEmpty?.status === "ACTV";
 
       if (tenderData.id === undefined || isActive) {

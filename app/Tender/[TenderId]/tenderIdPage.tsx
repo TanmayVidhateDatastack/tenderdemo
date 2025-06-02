@@ -35,10 +35,14 @@ import DsStatusIndicator, {
 import ContractView from "@/TenderComponents/AddUpdateTenderComponents/CustomTabViews/ContractView";
 import { tab } from "@/Common/helpers/types";
 import { setSelectedTabId } from "@/Redux/slice/TabSlice/TabSlice";
-import { setDisabledByStatusAndRole } from "@/Redux/slice/PermissionSlice/permissionSlice";
+import {
+  setDisabledByStatusAndRole,
+  setVisibilityByRole,
+} from "@/Redux/slice/PermissionSlice/permissionSlice";
 import { useAppDispatch, useAppSelector } from "@/Redux/hook/hook";
 import { AppDispatch } from "@/Redux/store/store";
 import { useSearchParams } from "next/navigation";
+import { setUserRole } from "@/Redux/slice/UserSlice/userSlice";
 
 const DsTenderIdPage: React.FC<{
   paramOrderId: string | number;
@@ -54,7 +58,7 @@ const DsTenderIdPage: React.FC<{
     saveTender,
     updateTender,
     fetchAndSetOriginalTender,
-    updateTenderData
+    updateTenderData,
   } = useTenderData();
   const [isCsvWhite, setIsCsvWhite] = useState(false);
   const [isLatestVersion, setIsLatestVersion] = useState(false);
@@ -68,11 +72,13 @@ const DsTenderIdPage: React.FC<{
   // get the type value from URL
   const searchParams = useSearchParams();
   const type = searchParams.get("type") || "institutional";
-
+  const role = searchParams.get("role")?.toUpperCase() || "MAKER";
+  useEffect(() => {
+    dispatch(setUserRole(role));
+  }, [role]);
   const [tabs, setTabs] = useState<tab[]>([
     { tabId: "0", tabName: "Basic Details" },
   ]);
-
 
   const [displayFlag, setDisplayFlag] = useState<"New" | "Existing">(
     "Existing"
@@ -135,9 +141,9 @@ const DsTenderIdPage: React.FC<{
 
     reader.readAsText(file);
   };
-  useEffect(() => {
-    // fetchAndSetOriginalTender(9917);
-  }, []);
+  // useEffect(() => {
+  // fetchAndSetOriginalTender(9917);
+  // }, []);
 
   useEffect(() => {
     // console.log("orderId", orderId);
@@ -167,10 +173,11 @@ const DsTenderIdPage: React.FC<{
         status: tenderData?.status.toUpperCase() ?? DsStatus.DRFT,
       })
     );
+    dispatch(setVisibilityByRole(userRole.role));
   }, [userRole.role, tenderData?.status]);
 
   useEffect(() => {
-    console.log(displayFlag, "displayFlag");
+    // console.log(displayFlag, "displayFlag");
     const revisionTabs = tenderData.tenderRevisions.map((rev) => ({
       tabId: `v${rev.version}`,
       tabName: `Products ₹ (V${rev.version})`,
@@ -179,11 +186,15 @@ const DsTenderIdPage: React.FC<{
     setTabs([
       { tabId: "0", tabName: "Basic Details" },
       ...revisionTabs,
-      { tabId: "2", tabName: "Documents", disable: (displayFlag == "New") || (type != "institutional") },
+      {
+        tabId: "2",
+        tabName: "Documents",
+        disable: displayFlag == "New" || type != "institutional",
+      },
     ]);
 
-    console.log("Tender Data 123 : ", tenderData);
-    console.log("Tender Data Copy 123 : ", tenderDataCopy);
+    // console.log("Tender Data 123 : ", tenderData);
+    // console.log("Tender Data Copy 123 : ", tenderDataCopy);
     //for disabling Add documents button in documents tab
     if (tenderData.status == "DRAFT") {
       setIsDisabled(false);
@@ -208,7 +219,6 @@ const DsTenderIdPage: React.FC<{
       });
     }
     if (tenderStatus) {
-
       if (tenderStatus !== "newPricingVersion") setTabId("Contract");
       else {
         const latestVersion =
@@ -223,12 +233,17 @@ const DsTenderIdPage: React.FC<{
     if (tenderDataCopy.id) {
       setAppTitle(
         tenderData.tenderNumber +
-        " ( " +
-        tenderData.tenderDetails.customerName +
-        " )"
+          " ( " +
+          tenderData.tenderDetails.customerName +
+          " )"
       );
     }
-  }, [tenderDataCopy, displayFlag, tenderData.tenderDetails.customerName, tenderData.tenderNumber]);
+  }, [
+    tenderDataCopy,
+    displayFlag,
+    tenderData.tenderDetails.customerName,
+    tenderData.tenderNumber,
+  ]);
 
   useEffect(() => {
     const version = Number(selectedTabId.split("v")[1]);
@@ -237,7 +252,7 @@ const DsTenderIdPage: React.FC<{
       tenderData.tenderRevisions.reduce((maxObj, currentObj) =>
         currentObj.version > maxObj.version ? currentObj : maxObj
       )?.version || 1;
-    console.log(latestVersion, version);
+    // console.log(latestVersion, version);
     setIsLatestVersion(latestVersion == version);
   }, [selectedTabId, tenderData.tenderRevisions]);
   useEffect(() => {
@@ -399,10 +414,11 @@ const DsTenderIdPage: React.FC<{
                 {
                   <>
                     <DsStatusIndicator
-                      label={`${displayFlag == "Existing"
-                        ? tenderData?.status
-                        : DsStatus.DRFT
-                        }`}
+                      label={`${
+                        displayFlag == "Existing"
+                          ? tenderData?.status
+                          : DsStatus.DRFT
+                      }`}
                       className={styles.statusIndicator}
                       type="user_defined"
                       id="state"
@@ -443,7 +459,8 @@ const DsTenderIdPage: React.FC<{
                   setProductList={(product) =>
                     addTenderProduct(rev.version, product)
                   }
-                /> */} <div style={{ textDecoration: 'none' }}>
+                /> */}{" "}
+                      <div style={{ textDecoration: "none" }}>
                         <DsTenderProduct
                           productList={rev.tenderItems || []}
                           setProductList={(product) => {
@@ -507,8 +524,8 @@ const DsTenderIdPage: React.FC<{
                       tenderData.status == "PARTIALLY_AWARDED" ||
                       tenderData.status == "LOST" ||
                       tenderData.status == "CANCELLED") && (
-                        <ContractView status={tenderData.status} />
-                      )}
+                      <ContractView status={tenderData.status} />
+                    )}
                   </TabView>
                 </>
               )}

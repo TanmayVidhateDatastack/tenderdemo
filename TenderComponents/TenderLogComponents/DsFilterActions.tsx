@@ -58,27 +58,27 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
 
   } = permissions;
 
-  const handleFetch = async () => {
-    try {
-      await fetchData({ url: getTenderUserRoles }).then((res) => {
-        if ((res.code = 200)) {
-          dispatch(setUserRole(res.result.roleName));
-          console.log("userrole=", res);
-          console.log("role", role);
-        } else {
-          console.error(
-            "Error fetching data: ",
-            res.message || "Unknown error"
-          );
-        }
-      });
-    } catch (error) {
-      console.error("Fetch error: ", error);
-    }
-  };
-  useEffect(() => {
-    handleFetch();
-  }, [role]);
+  // const handleFetch = async () => {
+  //   try {
+  //     await fetchData({ url: getTenderUserRoles }).then((res) => {
+  //       if ((res.code = 200)) {
+  //         dispatch(setUserRole(res.result.roleName));
+  //         console.log("userrole=", res);
+  //         console.log("role", role);
+  //       } else {
+  //         console.error(
+  //           "Error fetching data: ",
+  //           res.message || "Unknown error"
+  //         );
+  //       }
+  //     });
+  //   } catch (error) {
+  //     console.error("Fetch error: ", error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   handleFetch();
+  // }, [role]);
 
 
 
@@ -93,7 +93,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
   }, [isQuickFilterActive]
   )
   const handleFilter = async (value: string) => {
-    console.log("valueee", value);
+    // console.log("valueee", value);
     setIsFiltered((prev) => {
       const newFilterState = Object.fromEntries(
         Object.keys(prev).map((key) => [key, key === value ? !prev[key] : false])

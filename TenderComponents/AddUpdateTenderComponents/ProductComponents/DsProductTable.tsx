@@ -28,7 +28,10 @@ import trashbtn from "@/Common/TenderIcons/smallIcons/trashbtn.svg";
 
 import whitetrashbtn from "@/Common/TenderIcons/smallIcons/whitetrash.svg";
 import Image from "next/image";
-import { marginPercentLimit, TenderProductDiscountPercentage } from "@/Common/helpers/constant";
+import {
+  marginPercentLimit,
+  TenderProductDiscountPercentage,
+} from "@/Common/helpers/constant";
 import { v4 as uuidv4 } from "uuid";
 import clsx from "clsx";
 import { useAppSelector } from "@/Redux/hook/hook";
@@ -70,7 +73,8 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
     tenderData.tenderRevisions.reduce((maxObj, currentObj) =>
       currentObj.version > maxObj.version ? currentObj : maxObj
     )?.version || 1;
-  const tableIsEditable = productTableDisable
+  // const isTableEditable=version===latestVersion;
+  const isTableEditable = productTableDisable
     ? true
     : version === latestVersion;
   // const [tenderProductTable, setTenderProductTable] = useState<
@@ -101,12 +105,18 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
 
         calculated.ptrPercentage =
           100 -
-          Number((((tenderproduct.proposedRate || 0) / ptr) * 100).toFixed(2));
+          parseFloat(
+            (((tenderproduct.proposedRate || 0) / ptr) * 100).toFixed(2)
+          );
         const discount = tenderproduct.stockistDiscountValue
-          ? tenderproduct.stockistDiscountValue
-          : ((tenderproduct.proposedRate || 0) *
-              TenderProductDiscountPercentage) /
-            100;
+          ? parseFloat(tenderproduct.stockistDiscountValue.toFixed(2))
+          : parseFloat(
+              (
+                ((tenderproduct.proposedRate || 0) *
+                  TenderProductDiscountPercentage) /
+                100
+              ).toFixed(2)
+            );
 
         calculated.product.totalCost = parseFloat(
           (Number(tenderproduct.product.directCost) + Number(discount)).toFixed(
@@ -122,14 +132,21 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
           tenderproduct.proposedRate !== 0 &&
           tenderproduct.proposedRate !== undefined &&
           tenderproduct.proposedRate !== null
-            ? (calculated.product.marginValue /
-                Number(tenderproduct.proposedRate)) *
-                100 || 0
+            ? parseFloat(
+                (
+                  (calculated.product.marginValue /
+                    Number(tenderproduct.proposedRate)) *
+                    100 || 0
+                ).toFixed(2)
+              )
             : 0;
       }
       if (calculated.product)
-        calculated.product.netValue =
-          (calculated.proposedRate || 0) * (calculated.requestedQuantity || 0);
+        calculated.product.netValue = parseFloat(
+          (
+            (calculated.proposedRate || 0) * (calculated.requestedQuantity || 0)
+          ).toFixed(2)
+        );
       if (tenderproduct.product.dataSource === "csv") {
         calculated.productId = tenderproduct.productId;
         calculated.product.productName = tenderproduct.product.productName;
@@ -205,7 +222,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         id: "requestedGenericName",
         header: "Generic Name",
         accessor: "requestedGenericName",
-        editable: tableIsEditable,
+        editable: isTableEditable,
         editorComponent: DsTextFieldEditor,
         editorProps: { autofocus: true },
         className: styles.cellgenericname,
@@ -216,7 +233,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         id: "requestedQuantity",
         header: "Quantity",
         accessor: "requestedQuantity",
-        editable: tableIsEditable,
+        editable: isTableEditable,
         editorComponent: DsTextFieldEditor,
         editorProps: { inputType: "positiveInteger", autofocus: true },
         align: "right",
@@ -228,7 +245,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         id: "requestedPackingSize",
         header: "Packing Size",
         accessor: "requestedPackingSize",
-        editable: tableIsEditable,
+        editable: isTableEditable,
         editorComponent: DsTextFieldEditor,
         className: styles.cellpackingsize,
         editorProps: { autofocus: true },
@@ -238,7 +255,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         id: "productName",
         header: "Product Name",
         accessor: (row) => row.product?.productName,
-        editable: tableIsEditable,
+        editable: isTableEditable,
         editor: (row, onCommit) => (
           <ProductTableSearch
             rowId={row.rowId}
@@ -295,7 +312,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         id: "lastQuotedRate",
         header: "LQR",
         accessor: "lastQuotedRate",
-        editable: tableIsEditable,
+        editable: isTableEditable,
         editorComponent: DsTextFieldEditor,
         editorProps: { inputType: "positive", autofocus: true },
         align: "right",
@@ -306,7 +323,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         id: "lastPurchaseRate",
         header: "Customer LPR",
         accessor: "lastPurchaseRate",
-        editable: tableIsEditable,
+        editable: isTableEditable,
         cellRenderer: (value, row, rowIndex) => (
           <DsCustomerLPR
             index={rowIndex + 1}
@@ -315,7 +332,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
               id: row.competitorId || 0,
               name: row.product.competitorName || "",
             }}
-            disable={latestVersion!=version}
+            disable={latestVersion != version}
             onValueChange={(value) => {
               if (!value) value = "0";
               if (handleUpdateCell)
@@ -348,7 +365,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
             // }}
             // onBlur={(e) => {
             autofocus={true}
-          // disable={latestVersion != version}
+            // disable={latestVersion != version}
           />
         ),
         className: styles.celllpr,
@@ -358,7 +375,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         id: "proposedRate",
         header: "Proposed Rate",
         accessor: "proposedRate",
-        editable: tableIsEditable,
+        editable: isTableEditable,
         editor: (row, onCommit, onChange, cellEdit) => (
           <DsTextFieldEditor
             autofocus
@@ -382,18 +399,25 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                 ptrTemp !== undefined
                   ? typeof ptrTemp == "number"
                     ? ptrTemp
-                    : Number(ptrTemp)
+                    : parseFloat(Number(ptrTemp).toFixed(2))
                   : 1;
-              const ptrPer =
-                100 - Number(((proposedRate / ptr) * 100).toFixed(2));
-              const discount =
-                (proposedRate * TenderProductDiscountPercentage) / 100;
+              const ptrPer = parseFloat(
+                (100 - Number(((proposedRate / ptr) * 100).toFixed(2))).toFixed(
+                  2
+                )
+              );
+              const discount = parseFloat(
+                (
+                  (proposedRate * TenderProductDiscountPercentage) /
+                  100
+                ).toFixed(2)
+              );
               // console.log(proposedRate);
               // console.log(ptrPer);
               // console.log(discount);
               if (cellEdit) {
                 cellEdit(row.rowId, {
-                  proposedRate:proposedRate,
+                  proposedRate: proposedRate,
                   ptrPercentage: ptrPer,
                   stockistDiscountValue: discount,
                 });
@@ -404,7 +428,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
             }}
             inputType="number"
 
-          // maximumNumber={1000000}
+            // maximumNumber={1000000}
           />
         ),
         align: "right",
@@ -415,7 +439,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         id: "ptrPercentage",
         header: "PTR %",
         accessor: "ptrPercentage",
-        editable: tableIsEditable,
+        editable: isTableEditable,
         editor: (row, onCommit, onChange, cellEdit) => (
           <DsTextFieldEditor
             autofocus
@@ -437,20 +461,28 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
             onBlur={(e) => {
               if (onChange) onChange(e.target.value);
 
-              const ptrPer = Number((e.target as HTMLInputElement).value);
+              const ptrPer = parseFloat(
+                Number((e.target as HTMLInputElement).value).toFixed(2)
+              );
               // if (row.ptrPercentage !== ptrPer) {
               const ptrTemp = row.product.ptr;
               const ptr =
                 ptrTemp !== undefined
                   ? typeof ptrTemp == "number"
                     ? ptrTemp
-                    : Number(ptrTemp)
+                    : parseFloat(Number(ptrTemp).toFixed(2))
                   : 1;
 
-              const proposedRate = ((100 - ptrPer) * ptr) / 100;
+              const proposedRate = parseFloat(
+                (((100 - ptrPer) * ptr) / 100).toFixed(2)
+              );
 
-              const discount =
-                (proposedRate * TenderProductDiscountPercentage) / 100;
+              const discount = parseFloat(
+                (
+                  (proposedRate * TenderProductDiscountPercentage) /
+                  100
+                ).toFixed(2)
+              );
               // console.log(proposedRate);
               // console.log(ptrPer);
               // console.log(discount);
@@ -465,7 +497,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
               // }
               if (cellEdit) {
                 cellEdit(row.rowId, {
-                  proposedRate:proposedRate,
+                  proposedRate: proposedRate,
                   ptrPercentage: ptrPer,
                   stockistDiscountValue: discount,
                 });
@@ -480,8 +512,9 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
               // (e.target as HTMLInputElement).value = ptrPer.toFixed(2);
               if (onCommit) onCommit();
             }}
-            className={`${(row.ptrPercentage || 0) <= 0 ? styles.warningAlert : ""
-              }`}
+            className={`${
+              (row.ptrPercentage || 0) <= 0 ? styles.warningAlert : ""
+            }`}
           />
         ),
         cellRenderer: (cellValue, row, rowIndex) => (
@@ -497,7 +530,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         id: "stockistDiscountValue",
         header: "Discount",
         accessor: "stockistDiscountValue",
-        editable: tableIsEditable,
+        editable: isTableEditable,
         editor: (row, onCommit, onChange, cellEdit) => (
           <DsTextFieldEditor
             autofocus
@@ -520,7 +553,9 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
             onBlur={(e) => {
               if (onChange) onChange(e.target.value);
               // onChange={(e) => {
-              const discount = Number((e.target as HTMLInputElement).value);
+              const discount = parseFloat(
+                Number((e.target as HTMLInputElement).value).toFixed(2)
+              );
               // if (row.stockistDiscountValue !== discount) {
               const proposedRate =
                 (discount * 100) / TenderProductDiscountPercentage;
@@ -529,11 +564,14 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                 ptrTemp !== undefined
                   ? typeof ptrTemp == "number"
                     ? ptrTemp
-                    : Number(ptrTemp)
+                    : parseFloat(Number(ptrTemp).toFixed(2))
                   : 1;
 
-              const ptrPer =
-                100 - Number(((proposedRate / ptr) * 100).toFixed(2));
+              const ptrPer = parseFloat(
+                (100 - Number(((proposedRate / ptr) * 100).toFixed(2))).toFixed(
+                  2
+                )
+              );
               // console.log(proposedRate);
               // console.log(ptrPer);
               // console.log(discount);
@@ -548,7 +586,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
               // }
               if (cellEdit) {
                 cellEdit(row.rowId, {
-                  proposedRate:proposedRate,
+                  proposedRate: proposedRate,
                   ptrPercentage: ptrPer,
                   stockistDiscountValue: discount,
                 });
@@ -649,9 +687,10 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         data={calculatedProducts}
         columns={columns}
         onCellEdit={handleUpdateCell}
-      // onSelectionChange={handleSelectionChange}
+        isEditable={isTableEditable}
+        // onSelectionChange={handleSelectionChange}
 
-      // Optionally: onRowClick, onRowDoubleClick, etc.
+        // Optionally: onRowClick, onRowDoubleClick, etc.
       >
         <Table />
         <SelectionComponent version={version} />
@@ -747,7 +786,7 @@ const SelectionComponent: React.FC<{ version: number }> = ({ version }) => {
                 <span className={styles.selectedProduct}>
                   {selectedRows.length === 1
                     ? selectedRows[0]?.product?.productName ||
-                    selectedRows[0]?.requestedGenericName
+                      selectedRows[0]?.requestedGenericName
                     : `${selectedRows.length} products`}
                 </span>
               </div>
