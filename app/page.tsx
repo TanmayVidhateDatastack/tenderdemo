@@ -347,9 +347,9 @@ export default function Home() {
         // console.log("objevct to be send", tenderFilters);
 
         if (res?.code === 200 && Array.isArray(res?.result)) {
-          console.log("getAllTenders:", res);
+          // console.log("getAllTenders:", res);
           const formattedData = formatTenders(res?.result);
-          console.log("formatted data:", formattedData);
+          // console.log("formatted data:", formattedData);
           setData(formattedData);
         } else {
           setData([]);
@@ -471,7 +471,7 @@ const role = searchParams.get("role")?.toUpperCase() || "MAKER";
           // if(res?.c)
 
           setFetchedMetadata(res.result); // Store only tenderType
-          console.log("Stored Tender Type:", res.result);
+          // console.log("Stored Tender Type:", res.result);
         } else {
           console.error("Error: Invalid data format or empty tenderType");
         }
@@ -803,7 +803,7 @@ const role = searchParams.get("role")?.toUpperCase() || "MAKER";
 
     if (tenderId) {
       goTo(Number(tenderId));
-      console.log("TenderId:", tenderId);
+      // console.log("TenderId:", tenderId);
     } else {
       console.warn("TenderId not found on double-clicked row");
     }
