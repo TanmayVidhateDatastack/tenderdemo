@@ -115,20 +115,28 @@ const UploadFile: React.FC<UploadFileProps> = ({
       >
         <div className={disable ? styles.disabled : ""}>
           {file ? (
-            fileName
+         
+            <a
+              href={URL.createObjectURL(file)}
+              download={file.name}
+              className={styles.document_Link}
+              onClick={e => e.stopPropagation()}
+            >
+              {fileName}
+            </a>
           ) : prevFile ? (
             prevFile.fileDownloadHref ? (
               <a
-                href={prevFile.fileDownloadHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.document_Link}
-                onClick={(e) => e.stopPropagation()}
+          href={prevFile.fileDownloadHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.document_Link}
+          onClick={e => e.stopPropagation()}
               >
-                {prevFile.documentName}
+          {prevFile.documentName}
               </a>
             ) : (
-              prevFile.documentName
+              prevFile.documentName || fileName
             )
           ) : (
             fileName
