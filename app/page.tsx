@@ -202,7 +202,7 @@ export default function Home() {
         columnHeader: "SUPPLIED BY",
         isHidden: false,
         sort: "ASC",
-        columnContentType: "string",
+        columnContentType: "string", 
         hasSort: true,
       },
       {
@@ -695,24 +695,23 @@ export default function Home() {
             ),
             filterValue: t.value,
             customAttributes: { tenderId: t.tenderId },
-            contentType: "number",
+            contentType: "number", 
           },
           {
             columnIndex: 10,
             className: " cell cell-status ",
             customAttributes: { tenderId: t.tenderId },
             content: t.status ? (
-              <DsStatusIndicator
-                type="user_defined"
-                className={`${
-                  t?.status?.statusDescription
-                    ? styles[
-                        t?.status?.statusDescription
-                          ?.replaceAll(" ", "_")
-                          .toLowerCase()
-                      ]
-                    : ""
-                }`}
+              <DsStatusIndicator 
+                type="user_defined" 
+                className={`${t?.status?.statusDescription 
+                  ? styles[  
+                  t?.status?.statusDescription 
+                    ?.replaceAll(" ", "_")
+                    .toLowerCase() 
+                  ]
+                  : ""
+                  }`}
                 status={t.status.statusDescription}
                 label={t.status.statusDescription}
                 status_icon={
@@ -833,43 +832,43 @@ export default function Home() {
               setSelectedStatus={setSelectedStatus}
               isQuickFilterActive={isFilterActive}
               filterCount={filterCount}
-            />
-            {newButtonVisible && (
+            /> 
+            {newButtonVisible && ( 
               <DsButton
                 id="actionBtn"
                 buttonColor="btnPrimary"
                 className={btnStyles.btnOutlined}
                 startIcon={
-                  <div
-                    style={{
+                  <div 
+                    style={{ 
                       width: "0.875em",
-                      height: "0.875em",
+                      height: "0.875em", 
                       position: "relative",
-                    }}
+                    }}  
                   >
                     {/* <Image
                     src={iconSrc}
                     alt="Add Icon"
-                    layout="fill"
-                    objectFit="cover"
-                  /> */}
-                    <IconFactory name="add" isWhite={isAddWhite} />
-                  </div>
-                }
-                onClick={(e) =>
+                    layout="fill"  
+                    objectFit="cover"  
+                  /> */} 
+                    <IconFactory name="add" isWhite={isAddWhite} /> 
+                  </div> 
+                } 
+                onClick={(e) => 
                   displayContext(e, "CreateNewActions", "vertical", "right")
                 }
                 onHover={() => {
                   setIsAddWhite(true);
                   // changeImage(e, addIconWhite);
                 }}
-                onMouseLeave={() => {
+                onMouseLeave={() => {  
                   setIsAddWhite(false);
-                  // changeImage(e, addIcon);
+                  // changeImage(e, addIcon); 
                 }}
-                tooltip="variants : btnPrimary, btnOutlined, btnMedium"
-                label="New"
-                iconSize="iconMedium"
+                tooltip="variants : btnPrimary, btnOutlined, btnMedium" 
+                label="New" 
+                iconSize="iconMedium"  
               />
             )}
           </>
@@ -877,12 +876,12 @@ export default function Home() {
       >
         <div className={styles.totalCal}>
           <DsTotalTenders data={data ?? []} />
-          <DsTotalValues data={data ?? []} />
+          <DsTotalValues data={data ?? []} /> 
         </div>
         <div className={styles.container}>
           {" "}
-          <div className={tempTableData.className}>
-            <DsTableComponent
+          <div className={tempTableData.className}> 
+            <DsTableComponent 
               className={styles.tendertable}
               id={tempTableData.id}
               hasSearch={tempTableData.hasSearch}
@@ -904,10 +903,10 @@ export default function Home() {
           {/* {selectedRow && ( */}
           <DsTenderTableFloatingMenu
             e={selectedRow?.e}
-            rowIndex={selectedRow?.rowIndex}
-            statuscell={selectedRow?.statuscell}
-            handleFetch={handleFetch}
-            tenderId={selectedRow?.tenderId}
+            rowIndex={selectedRow?.rowIndex}  
+            statuscell={selectedRow?.statuscell} 
+            handleFetch={handleFetch} 
+            tenderId={selectedRow?.tenderId} 
             goTo={goTo}
           />
           {/* )} */}
@@ -930,7 +929,7 @@ export default function Home() {
                 return searchCustomerURL(term, "");
               },
             },
-          },
+          }, 
           {
             filterId: "1",
             filterFor: "Date",
@@ -948,7 +947,7 @@ export default function Home() {
               value: item.codeValue,
             })),
           },
-          {
+          { 
             filterId: "3",
             filterFor: "Tender Types",
             filterType: "MultiSelection",
