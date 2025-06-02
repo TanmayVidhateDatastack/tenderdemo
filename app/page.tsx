@@ -702,7 +702,6 @@ export default function Home() {
             className: " cell cell-status ",
             customAttributes: { tenderId: t.tenderId },
             content: t.status ? (
-<<<<<<< HEAD
               <DsStatusIndicator 
                 type="user_defined" 
                 className={`${t?.status?.statusDescription 
@@ -713,19 +712,6 @@ export default function Home() {
                   ]
                   : ""
                   }`}
-=======
-              <DsStatusIndicator
-                type="user_defined"
-                className={`${
-                  t?.status?.statusDescription
-                    ? styles[
-                        t?.status?.statusDescription
-                          ?.replaceAll(" ", "_")
-                          .toLowerCase()
-                      ]
-                    : ""
-                }`}
->>>>>>> 6f0cfa56fda5435af211674f0d8640e85408bea0
                 status={t.status.statusDescription}
                 label={t.status.statusDescription}
                 status_icon={
@@ -925,10 +911,6 @@ export default function Home() {
           />
           {/* )} */}
         </div>
-<<<<<<< HEAD
- 
-=======
->>>>>>> 6f0cfa56fda5435af211674f0d8640e85408bea0
       </DsApplication>
       <Page />
       <DsAdvanceFilterPane

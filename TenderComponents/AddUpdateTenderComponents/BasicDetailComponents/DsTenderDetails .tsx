@@ -120,7 +120,7 @@ const DsTenderDetails: React.FC = () => {
     }
   };
   useEffect(() => {
-    if (tenderData.customerId && tenderData.tenderNumber)
+    if ( !(tenderDataCopy.id &&tenderDataCopy.customerId == tenderData.customerId && tenderDataCopy.tenderNumber == tenderData.tenderNumber)&&tenderData.customerId && tenderData.tenderNumber)
       validateCustomerIdTenderNumber();
   }, [tenderData.customerId, tenderData.tenderNumber]);
 
