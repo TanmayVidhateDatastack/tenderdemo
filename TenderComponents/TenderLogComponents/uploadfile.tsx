@@ -31,6 +31,7 @@ const UploadFile: React.FC<UploadFileProps> = ({
   const [prevFile, setPrevFile] = useState<
     typeof previouslySelectedFile | null
   >(previouslySelectedFile || null);
+  
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
     if (uploadLabel) {
@@ -96,10 +97,7 @@ const UploadFile: React.FC<UploadFileProps> = ({
     setFile(null);
     setPrevFile(null);
     setFileName(uploadLabel || "Attach your File here");
-    // setHasManuallyChangedFile(false);
-    // if (fileInputRef.current) {
-    //   fileInputRef.current.value = "";
-    // }
+ 
   };
   
 
