@@ -4,7 +4,7 @@ import DsSingleSelect from "@/Elements/DsComponents/dsSelect/dsSingleSelect";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import deptStyle from "./deposite.module.css";
 import { useEffect, useState } from "react";
-import { getTenderUserRoles } from "@/Common/helpers/constant";
+import { getTenderUserRoles, validateDuplicateTender } from "@/Common/helpers/constant";
 import {
   // tenderDetailsProps,
   location,
@@ -48,7 +48,9 @@ const DsTenderDetails: React.FC = () => {
   const { updateTenderData, tenderData, tenderDataCopy, metaData } =
     useTenderData();
   const [customerLocations, setCustomerLocations] = useState<location[]>([]);
-  const [addressName, setAddressName] = useState<DsSelectOption|undefined>();
+  const [addressName, setAddressName] = useState<DsSelectOption | undefined>();
+  const [validateCustomer, setValidateCustomer] = useState<string>();
+  const [isErrormsg, setIsErrormsg] = useState<boolean>(false);
 
   // const [tenderStatus, setTenderStatus] = useState<string>();
 
@@ -95,6 +97,32 @@ const DsTenderDetails: React.FC = () => {
   useEffect(() => {
     handleRoleFetch();
   }, []);
+
+
+  const validateCustomerIdTenderNumber = async () => {
+    try {
+      const res = await fetchData({ url: validateDuplicateTender(tenderData.customerId, tenderData.tenderNumber) });
+      if (res.code === 200) {
+        const result = res.result;
+        // if (result) {
+          setValidateCustomer("Duplicate Tender Found");
+          setIsErrormsg(true);
+        // }
+      } else if (res.code == 404) {
+        setValidateCustomer("");
+        setIsErrormsg(false);
+      }
+      else {
+        console.error("Error fetching data: ", res.message || "Unknown error");
+      }
+    } catch (error) {
+      console.error("Fetch error: ", error);
+    }
+  };
+  useEffect(() => {
+    if ( !(tenderDataCopy.id &&tenderDataCopy.customerId == tenderData.customerId && tenderDataCopy.tenderNumber == tenderData.tenderNumber)&&tenderData.customerId && tenderData.tenderNumber)
+      validateCustomerIdTenderNumber();
+  }, [tenderData.customerId, tenderData.tenderNumber]);
 
   const getTodayDate = (date: Date) => {
     const year = date.getFullYear();
@@ -156,15 +184,15 @@ const DsTenderDetails: React.FC = () => {
   //Gaurav Nalwade
 
   useEffect(() => {
-      setAddressName(
-        tenderData.customerAddressId && tenderData.tenderDetails.customerAddressName ? 
-          {
-            label: tenderData.tenderDetails.customerAddressName,
-            value: tenderData.customerAddressId.toString(),
-          } :
-          undefined
-      );
-  }, [tenderData?.customerId,tenderData.customerAddressId])
+    setAddressName(
+      tenderData.customerAddressId && tenderData.tenderDetails.customerAddressName ?
+        {
+          label: tenderData.tenderDetails.customerAddressName,
+          value: tenderData.customerAddressId.toString(),
+        } :
+        undefined
+    );
+  }, [tenderData?.customerId, tenderData.customerAddressId])
 
   return (
     <>
@@ -188,6 +216,9 @@ const DsTenderDetails: React.FC = () => {
           setCustomerLocations={setCustomerLocations}
           updateTenderData={updateTenderData}
           disabled={searchCustomerDisable}
+          errorMessage={validateCustomer}
+          isError={isErrormsg}
+          
         />
         {/* </div> */}
 
@@ -266,6 +297,8 @@ const DsTenderDetails: React.FC = () => {
             )
           }
           disable={tenderNumberDisable}
+          errorMessage={validateCustomer}
+          isError={isErrormsg}
         ></DsTextField>
         <DsSingleSelect
           containerClasses={styles.fields}
@@ -348,7 +381,7 @@ const DsTenderDetails: React.FC = () => {
           setSelectOption={(option) => {
             if (typeof option.value == "string") {
               updateTenderData("contractType", option.value);
-             
+
             }
           }}
         // disable={tenderTypeDisable}

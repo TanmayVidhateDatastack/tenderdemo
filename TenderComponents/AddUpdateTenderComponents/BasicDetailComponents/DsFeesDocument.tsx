@@ -436,7 +436,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           ))}
           <div className={eleStyles.inputDetails}>
             {selectedOptions.map((option) => (
-              <div key={""} className={styles.fields}>
+              <div className={styles.fields}>
                 <DsTextField
                   containerClasses={styles.feeFields}
                   label={`${option.label}   ID`}
