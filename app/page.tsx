@@ -420,13 +420,13 @@ export default function Home() {
     statuscell?: string;
     tenderId?: number;
   } | null>(null);
-    const searchParams = useSearchParams();
-    const dispatch = useAppDispatch<AppDispatch>();
+//     const searchParams = useSearchParams();
+//     const dispatch = useAppDispatch<AppDispatch>();
   
-const role = searchParams.get("role")?.toUpperCase() || "MAKER";
-  useEffect(() => {
-    dispatch(setUserRole(role));
-  }, [role]);
+// const role = searchParams.get("role")?.toUpperCase() || "MAKER";
+//   useEffect(() => {
+//     dispatch(setUserRole(role));
+//   }, [role]);
   useEffect(() => {
     if (Array.isArray(data) && data.length > 0) {
       const names1 = data.map((item) => item.appliedBy);
