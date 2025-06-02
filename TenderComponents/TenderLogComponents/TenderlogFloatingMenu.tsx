@@ -24,7 +24,7 @@ import {
 import path from "path";
 import style from "./filteractions.module.css";
 import { stat } from "fs";
-import Toaster, {
+import Toaster, { 
   hideToaster,
   showToaster,
 } from "@/Elements/DsComponents/DsToaster/DsToaster";
@@ -88,7 +88,7 @@ export const DsTenderTableFloatingMenu: React.FC<
       setIsSubmitVisible(true);
       setLostBtnVisible(false);
       setIsAwardedBtnVisible(false);
-      setIsNewVersionBtnVisible(false);
+      setIsNewVersionBtnVisible(true);
     } else {
       setIsCancelBtnVisible(true);
       setLostBtnVisible(false);
