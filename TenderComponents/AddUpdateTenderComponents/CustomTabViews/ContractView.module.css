@@ -35,25 +35,25 @@
 .cell-generic-name,
 .cell-product-name {
   /* max-width: 100%; */
-  min-width: 15em !important;
-  max-width: 15em !important;
-  width: 15em !important;
+  min-width: 18% !important;
+  max-width: 18% !important;
+  width: 18% !important;
 }
 .cell-packing-size {
-  min-width: 10em !important;
-  max-width: 10em !important;
-  width: 10em !important;
+  min-width: 10% !important;
+  max-width: 10% !important;
+  width: 10% !important;
 }
 .cell-award-rate,
 .cell-award-quantity {
-  min-width: 17em !important;
-  max-width: 17em !important;
-  width: 17em !important;
+  min-width: 18% !important;
+  max-width: 18% !important;
+  width: 18% !important;
 }
 .cell-awarded-to {
-  min-width: 18em !important;
-  max-width: 18em !important;
-  width: 18em !important;
+  min-width: 18% !important;
+  max-width: 18% !important;
+  width: 18% !important;
 }
 td.cell-generic-name,
 td.cell-product-name {
