@@ -58,27 +58,27 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
 
   } = permissions;
 
-  const handleFetch = async () => {
-    try {
-      await fetchData({ url: getTenderUserRoles }).then((res) => {
-        if ((res.code = 200)) {
-          dispatch(setUserRole(res.result.roleName));
-          console.log("userrole=", res);
-          console.log("role", role);
-        } else {
-          console.error(
-            "Error fetching data: ",
-            res.message || "Unknown error"
-          );
-        }
-      });
-    } catch (error) {
-      console.error("Fetch error: ", error);
-    }
-  };
-  useEffect(() => {
-    handleFetch();
-  }, [role]);
+  // const handleFetch = async () => {
+  //   try {
+  //     await fetchData({ url: getTenderUserRoles }).then((res) => {
+  //       if ((res.code = 200)) {
+  //         dispatch(setUserRole(res.result.roleName));
+  //         console.log("userrole=", res);
+  //         console.log("role", role);
+  //       } else {
+  //         console.error(
+  //           "Error fetching data: ",
+  //           res.message || "Unknown error"
+  //         );
+  //       }
+  //     });
+  //   } catch (error) {
+  //     console.error("Fetch error: ", error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   handleFetch();
+  // }, [role]);
 
 
 

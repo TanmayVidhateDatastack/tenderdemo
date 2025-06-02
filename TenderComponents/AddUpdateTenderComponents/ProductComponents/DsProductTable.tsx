@@ -70,7 +70,8 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
     tenderData.tenderRevisions.reduce((maxObj, currentObj) =>
       currentObj.version > maxObj.version ? currentObj : maxObj
     )?.version || 1;
-  const tableIsEditable = productTableDisable
+    // const isTableEditable=version===latestVersion;
+  const isTableEditable = productTableDisable
     ? true
     : version === latestVersion;
   // const [tenderProductTable, setTenderProductTable] = useState<
@@ -205,7 +206,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         id: "requestedGenericName",
         header: "Generic Name",
         accessor: "requestedGenericName",
-        editable: tableIsEditable,
+        editable: isTableEditable,
         editorComponent: DsTextFieldEditor,
         editorProps: { autofocus: true },
         className: styles.cellgenericname,
@@ -216,7 +217,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         id: "requestedQuantity",
         header: "Quantity",
         accessor: "requestedQuantity",
-        editable: tableIsEditable,
+        editable: isTableEditable,
         editorComponent: DsTextFieldEditor,
         editorProps: { inputType: "positiveInteger", autofocus: true },
         align: "right",
@@ -228,7 +229,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         id: "requestedPackingSize",
         header: "Packing Size",
         accessor: "requestedPackingSize",
-        editable: tableIsEditable,
+        editable: isTableEditable,
         editorComponent: DsTextFieldEditor,
         className: styles.cellpackingsize,
         editorProps: { autofocus: true },
@@ -238,7 +239,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         id: "productName",
         header: "Product Name",
         accessor: (row) => row.product?.productName,
-        editable: tableIsEditable,
+        editable: isTableEditable,
         editor: (row, onCommit) => (
           <ProductTableSearch
             rowId={row.rowId}
@@ -295,7 +296,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         id: "lastQuotedRate",
         header: "LQR",
         accessor: "lastQuotedRate",
-        editable: tableIsEditable,
+        editable: isTableEditable,
         editorComponent: DsTextFieldEditor,
         editorProps: { inputType: "positive", autofocus: true },
         align: "right",
@@ -306,7 +307,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         id: "lastPurchaseRate",
         header: "Customer LPR",
         accessor: "lastPurchaseRate",
-        editable: tableIsEditable,
+        editable: isTableEditable,
         cellRenderer: (value, row, rowIndex) => (
           <DsCustomerLPR
             index={rowIndex + 1}
@@ -358,7 +359,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         id: "proposedRate",
         header: "Proposed Rate",
         accessor: "proposedRate",
-        editable: tableIsEditable,
+        editable: isTableEditable,
         editor: (row, onCommit, onChange, cellEdit) => (
           <DsTextFieldEditor
             autofocus
@@ -415,7 +416,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         id: "ptrPercentage",
         header: "PTR %",
         accessor: "ptrPercentage",
-        editable: tableIsEditable,
+        editable: isTableEditable,
         editor: (row, onCommit, onChange, cellEdit) => (
           <DsTextFieldEditor
             autofocus
@@ -497,7 +498,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         id: "stockistDiscountValue",
         header: "Discount",
         accessor: "stockistDiscountValue",
-        editable: tableIsEditable,
+        editable: isTableEditable,
         editor: (row, onCommit, onChange, cellEdit) => (
           <DsTextFieldEditor
             autofocus
@@ -649,6 +650,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         data={calculatedProducts}
         columns={columns}
         onCellEdit={handleUpdateCell}
+        isEditable={isTableEditable}
       // onSelectionChange={handleSelectionChange}
 
       // Optionally: onRowClick, onRowDoubleClick, etc.

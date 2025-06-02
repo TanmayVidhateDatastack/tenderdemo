@@ -35,7 +35,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import DsCurrency from "@/Elements/DsComponents/dsCurrency/dsCurrency";
 
 import { RootState } from "@/Redux/store/store";
-import { useAppSelector } from "@/Redux/hook/hook";
 import DsName from "@/Elements/DsComponents/DsName/DsName";
 import btnStyles from "@/Elements/DsComponents/DsButtons/dsButton.module.css";
 import DsTenderTableFloatingMenu from "@/TenderComponents/TenderLogComponents/TenderlogFloatingMenu";
@@ -43,6 +42,9 @@ import DsAdvanceFilterPane from "@/TenderComponents/TenderLogComponents/DsAdvanc
 import style from "./page.module.css";
 import IconFactory from "@/Elements/IconComponent";
 import { areSearchCustomers } from "@/TenderComponents/AddUpdateTenderComponents/BasicDetailComponents/customerSearch";
+import { useAppDispatch, useAppSelector } from "@/Redux/hook/hook";
+import { AppDispatch } from "@/Redux/store/store";
+import { setUserRole } from "@/Redux/slice/UserSlice/userSlice";
 // import DemoDocument from "@/Elements/DsComponents/dsDocumentSelector/dsDemoDocumentSelector";
 // import DemoToaster from "@/Elements/DsComponents/DsToaster/dsDemoToaster";
 const metaDataTypes = ["TENDER_TYPE", "CUSTOMER_TYPE", "TENDER_STATUS"];
@@ -418,7 +420,13 @@ export default function Home() {
     statuscell?: string;
     tenderId?: number;
   } | null>(null);
-
+    const searchParams = useSearchParams();
+    const dispatch = useAppDispatch<AppDispatch>();
+  
+const role = searchParams.get("role")?.toUpperCase() || "MAKER";
+  useEffect(() => {
+    dispatch(setUserRole(role));
+  }, [role]);
   useEffect(() => {
     if (Array.isArray(data) && data.length > 0) {
       const names1 = data.map((item) => item.appliedBy);
