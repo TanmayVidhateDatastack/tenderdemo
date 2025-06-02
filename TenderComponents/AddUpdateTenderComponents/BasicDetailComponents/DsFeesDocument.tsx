@@ -208,11 +208,11 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
       if (modeValue) {
         const option = mode.find((x) => x.value == modeValue);
         if (option) setSelectedPaymentMode(option);
-        console.log(
-          "Fetched Notes Values are",
-          tenderData.tenderFees.find((x) => x.feesType == type)
-            ?.instructionNotes
-        );
+        // console.log(
+        //   "Fetched Notes Values are",
+        //   tenderData.tenderFees.find((x) => x.feesType == type)
+        //     ?.instructionNotes
+        // );
       }
     }
     if (refund) {
@@ -280,7 +280,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
   const handleAdd = () => {
     closeAllContext();
     setSelectedOptions(tempOptions);
-    console.log("Add button clicked");
+    // console.log("Add button clicked");
   };
   return (
     <>
@@ -347,7 +347,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   //     }, [])
                   //   );
                   setTempOptions(options);
-                  console.log("Selected options:", options);
+                  // console.log("Selected options:", options);
                 }}
                 selectedOptions={tempOptions}
                 showOptions={false}
@@ -397,6 +397,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               uploadLabel={`Upload ${option.label} here `}
               id={`${type}_${option.value}`}
               onSelectedFileChange={(files) => {
+                // Filter by both documentCategory and documentType for this option
                 const Documents =
                   tenderData.tenderDocuments?.filter(
                     (x) =>
@@ -420,6 +421,8 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                       x.documentCategory == type &&
                       x.documentType == type + "_PAYMENT" &&
                       x.documentSubType == option.value
+                    // &&
+                    // x.id !== undefined
                   )
                   .map((x) => {
                     return {
@@ -562,6 +565,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           }}
         ></DsSingleSelect>
         {/* </div> */}
+
         {/* <div className={styles.fieldColors}> */}
         <DatePicker
           containerClasses={styles.feeFields}
