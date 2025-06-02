@@ -397,7 +397,6 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               uploadLabel={`Upload ${option.label} here `}
               id={`${type}_${option.value}`}
               onSelectedFileChange={(files) => {
-                // Filter by both documentCategory and documentType for this option
                 const Documents =
                   tenderData.tenderDocuments?.filter(
                     (x) =>
@@ -421,8 +420,6 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                       x.documentCategory == type &&
                       x.documentType == type + "_PAYMENT" &&
                       x.documentSubType == option.value
-                    // &&
-                    // x.id !== undefined
                   )
                   .map((x) => {
                     return {
