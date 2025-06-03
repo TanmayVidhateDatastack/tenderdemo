@@ -38,6 +38,7 @@ const CustomerSearch: React.FC<{
   customer: string;
   orderData?: TenderData;
   disabled?: boolean;
+
   updateTenderData?: (
     key:
       | keyof TenderData
@@ -45,8 +46,10 @@ const CustomerSearch: React.FC<{
     value: string | number
   ) => void;
   setCustomerLocations?: Dispatch<SetStateAction<location[]>>;
+  errorMessage?: string;
+  isError?: boolean;
 }> = React.memo(
-  ({ customer, disabled, updateTenderData, setCustomerLocations, orderData }) => {
+  ({ customer, disabled, updateTenderData, setCustomerLocations, orderData, errorMessage, isError }) => {
     const [customers, setCustomers] = useState<datalistOptions[]>();
     //Gaurav
     const [customerName, setCustomerName] = useState<string>("");
@@ -181,6 +184,8 @@ const CustomerSearch: React.FC<{
         } setSelectedOption={setSelectedOptions}
         onChange={(e) => { if (e) handleInputChange(e) }}
         onBlur={handleOnBlur}
+        errorMessage={errorMessage}
+        isError={isError}
       />
     );
   }
