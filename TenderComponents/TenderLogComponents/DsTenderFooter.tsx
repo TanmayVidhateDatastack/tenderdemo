@@ -79,7 +79,7 @@ export const DSTendrFooter: React.FC = ({}) => {
 
   const searchParams = useSearchParams();
 
-    const type =
+  const type =
     searchParams.get("type") == "institutional" ? "institutional" : "corporate";
   const permissions = useAppSelector((state: RootState) => state.permissions);
   const {
@@ -314,44 +314,45 @@ export const DSTendrFooter: React.FC = ({}) => {
           }
         }
       });
-
-      if (
-        !supplypointDisable &&
-        tenderData?.tenderSupplyCondition?.supplyPoint?.trim() === ""
-      ) {
-        errors.push("Please select a supply point.");
-      }
-      if (
-        !consignessCountDisable &&
-        tenderData?.tenderSupplyCondition?.consigneesCount === 0
-      ) {
-        errors.push("Please enter the number of consignees.");
-      }
-      if (
-        !testreportRequiredDisable &&
-        tenderData?.tenderSupplyCondition?.testReportRequired?.trim() === ""
-      ) {
-        errors.push("Please specify whether a test report is required.");
-      }
-      if (
-        !eligibilityDisable &&
-        tenderData?.tenderSupplyCondition?.eligibility.length == 0
-      ) {
-        errors.push("Please select at least one eligibility criterion.");
-      }
-
-      const applicableConditions =
-        tenderData?.tenderSupplyCondition?.applicableConditions ?? [];
-      applicableConditions.forEach((condition, index) => {
-        if (condition.status == "ACTV") {
-          if (condition.type?.toString().trim() == "") {
-            errors.push(`${condition.type} :Please select a type.`);
-          }
-          if (!condtionNotesDisable && condition.notes?.trim() == "") {
-            errors.push(`${condition.type}: Please enter notes.`);
-          }
+      if (type == "institutional") {
+        if (
+          !supplypointDisable &&
+          tenderData?.tenderSupplyCondition?.supplyPoint?.trim() === ""
+        ) {
+          errors.push("Please select a supply point.");
         }
-      });
+        if (
+          !consignessCountDisable &&
+          tenderData?.tenderSupplyCondition?.consigneesCount === 0
+        ) {
+          errors.push("Please enter the number of consignees.");
+        }
+        if (
+          !testreportRequiredDisable &&
+          tenderData?.tenderSupplyCondition?.testReportRequired?.trim() === ""
+        ) {
+          errors.push("Please specify whether a test report is required.");
+        }
+        if (
+          !eligibilityDisable &&
+          tenderData?.tenderSupplyCondition?.eligibility.length == 0
+        ) {
+          errors.push("Please select at least one eligibility criterion.");
+        }
+
+        const applicableConditions =
+          tenderData?.tenderSupplyCondition?.applicableConditions ?? [];
+        applicableConditions.forEach((condition, index) => {
+          if (condition.status == "ACTV") {
+            if (condition.type?.toString().trim() == "") {
+              errors.push(`${condition.type} :Please select a type.`);
+            }
+            if (!condtionNotesDisable && condition.notes?.trim() == "") {
+              errors.push(`${condition.type}: Please enter notes.`);
+            }
+          }
+        });
+      }
       if (toValidate)
         if (tenderData.tenderRevisions.length > 0) {
           const latestRevision = tenderData.tenderRevisions.reduce(
@@ -434,12 +435,12 @@ export const DSTendrFooter: React.FC = ({}) => {
   };
 
   const validateAndSaveTender = (
-   customerType?: "institutional" | "corporate"
+    customerType?: "institutional" | "corporate"
   ) => {
-    console.log( "validateAndSaveTender",tenderData);
+    console.log("validateAndSaveTender", tenderData);
     const validate = validateFields(tenderData);
     if (validate.length === 0) {
-      saveTender("Draft",type);
+      saveTender("Draft", type);
     } else {
       const message = (
         <>
