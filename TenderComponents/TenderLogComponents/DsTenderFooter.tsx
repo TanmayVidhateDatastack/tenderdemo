@@ -29,7 +29,7 @@ import DsSplitButton from "@/Elements/DsComponents/DsButtons/dsSplitButton";
 
 import Toaster from "@/Elements/DsComponents/DsToaster/DsToaster";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
-import { useTenderData } from "../AddUpdateTenderComponents/TenderDataContextProvider";
+import { approvalObject, useTenderData } from "../AddUpdateTenderComponents/TenderDataContextProvider";
 import { TenderData } from "@/TenderComponents/AddUpdateTenderComponents/TenderDataContextProvider";
 import { getYesterdayDate } from "@/Common/helpers/Method/conversion";
 import ApprovalPopup from "../AddUpdateTenderComponents/Approvelpopup/ApprovelPopup";
@@ -463,14 +463,14 @@ export const DSTendrFooter: React.FC = ({}) => {
       showToaster("create-order-toaster");
     }
   };
-  const validateAndUpdateTender = () => {
+  const validateAndUpdateTender = (approval?:approvalObject) => {
     // console.log(tenderData);
     // updateTender(tenderData.status);
 
     const validate = validateFields(tenderData);
     if (validate.length === 0) {
-      if (toValidate) updateTender(tenderData.status, "SUBMIT");
-      else updateTender(tenderData.status, "SAVE");
+      if (toValidate) updateTender(tenderData.status, "SUBMIT",approval);
+      else updateTender(tenderData.status, "SAVE",approval);
     } else {
       const message = (
         <>
@@ -752,6 +752,8 @@ export const DSTendrFooter: React.FC = ({}) => {
             : "The action was successful!"
         }
         setActionStatus={setActionStatusValues}
+        validateAndUpdateTender={validateAndUpdateTender}
+
       />
       <ApprovalPopup
         id="rejectPopup"
@@ -762,6 +764,7 @@ export const DSTendrFooter: React.FC = ({}) => {
         position="center"
         toasterMessage={"The Tender has been sent for Revision "}
         setActionStatus={setActionStatusValues}
+        validateAndUpdateTender={validateAndUpdateTender}
       />
       <ApprovalPopup
         id="revisePopup"
@@ -772,6 +775,8 @@ export const DSTendrFooter: React.FC = ({}) => {
         position="center"
         toasterMessage={"The Tender has been Rejected & also note has sent "}
         setActionStatus={setActionStatusValues}
+        validateAndUpdateTender={validateAndUpdateTender}
+        
       />
       <ApprovalPopup
         id="reviewedPopup"
@@ -788,6 +793,8 @@ export const DSTendrFooter: React.FC = ({}) => {
             : "The action was successful!"
         }
         setActionStatus={setActionStatusValues}
+        validateAndUpdateTender={validateAndUpdateTender}
+
       />
 
       <Toaster
