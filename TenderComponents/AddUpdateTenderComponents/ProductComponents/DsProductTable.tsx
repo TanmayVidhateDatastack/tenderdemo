@@ -121,7 +121,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                 ) / 100
               ).toFixed(2)
             );
-
+        calculated.stockistDiscountValue=discount;
         calculated.product.totalCost = parseFloat(
           (Number(tenderproduct.product.directCost) + Number(discount)).toFixed(
             2
