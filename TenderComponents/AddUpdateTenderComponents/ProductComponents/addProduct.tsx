@@ -65,9 +65,14 @@ const DsAddProduct: React.FC<addProductProps> = ({
         }
         const tenderProduct: TenderProduct = {
           productId: product.result.id,
+          requestedGenericName:product.result.name,
+          requestedPackingSize:product.result.packingSize,
           requestedQuantity: Number(qtyInputVal),
           lastQuotedRate: 50,
           lastPurchaseRate: 50,
+          proposedRate:50,
+          // ptrPercentage:100,
+          // stockistDiscountValue:0,
           product: {
             type: "read-only",
             productName: product.result.name,

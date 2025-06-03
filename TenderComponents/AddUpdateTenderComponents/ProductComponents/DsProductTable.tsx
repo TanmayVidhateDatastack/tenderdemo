@@ -99,15 +99,18 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         const ptr =
           ptrTemp !== undefined
             ? typeof ptrTemp == "number"
-              ? ptrTemp
-              : Number(ptrTemp)
+              ? parseFloat(Number(ptrTemp).toFixed(2))
+              : parseFloat(Number(ptrTemp).toFixed(2))
             : 1;
 
-        calculated.ptrPercentage =
-          100 -
-          parseFloat(
-            (((tenderproduct.proposedRate || 0) / ptr) * 100).toFixed(2)
-          );
+        calculated.ptrPercentage = parseFloat(
+          (
+            100 -
+            parseFloat(
+              (((tenderproduct.proposedRate || 0) / ptr) * 100).toFixed(2)
+            )
+          ).toFixed(2)
+        );
         const discount = tenderproduct.stockistDiscountValue
           ? parseFloat(Number(tenderproduct.stockistDiscountValue).toFixed(2))
           : parseFloat(
@@ -126,7 +129,8 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         );
         calculated.product.marginValue = parseFloat(
           (
-            Number(tenderproduct.proposedRate) - Number(calculated.product.totalCost)
+            Number(tenderproduct.proposedRate) -
+            Number(calculated.product.totalCost)
           ).toFixed(2)
         );
         calculated.product.marginPercent =
@@ -135,9 +139,10 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
           tenderproduct.proposedRate !== null
             ? parseFloat(
                 Number(
-                  Number(Number(calculated.product.marginValue) /
-                    Number(tenderproduct.proposedRate)) *
-                    100 || 0
+                  Number(
+                    Number(calculated.product.marginValue) /
+                      Number(tenderproduct.proposedRate)
+                  ) * 100 || 0
                 ).toFixed(2)
               )
             : 0;
@@ -145,7 +150,8 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
       if (calculated.product)
         calculated.product.netValue = parseFloat(
           (
-            Number(calculated.proposedRate || 0) * Number(calculated.requestedQuantity || 0)
+            Number(calculated.proposedRate || 0) *
+            Number(calculated.requestedQuantity || 0)
           ).toFixed(2)
         );
       if (tenderproduct.product.dataSource === "csv") {
@@ -393,13 +399,15 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
             onBlur={(e) => {
               if (onChange) onChange(e.target.value);
 
-              const proposedRate = Number((e.target as HTMLInputElement).value);
+              const proposedRate = parseFloat(
+                Number((e.target as HTMLInputElement).value).toFixed(2)
+              );
               // if (row.proposedRate !== proposedRate) {
               const ptrTemp = row.product.ptr;
               const ptr =
                 ptrTemp !== undefined
                   ? typeof ptrTemp == "number"
-                    ? ptrTemp
+                    ? parseFloat(Number(ptrTemp).toFixed(2))
                     : parseFloat(Number(ptrTemp).toFixed(2))
                   : 1;
               const ptrPer = parseFloat(
@@ -470,7 +478,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
               const ptr =
                 ptrTemp !== undefined
                   ? typeof ptrTemp == "number"
-                    ? ptrTemp
+                    ? parseFloat(Number(ptrTemp).toFixed(2))
                     : parseFloat(Number(ptrTemp).toFixed(2))
                   : 1;
 
