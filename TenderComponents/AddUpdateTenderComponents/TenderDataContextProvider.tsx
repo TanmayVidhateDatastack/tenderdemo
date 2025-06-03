@@ -14,6 +14,7 @@ import {
   updateContractUrl,
   saveTenderUrl,
   updatePaymentUrl,
+  proDeskUrl,
 } from "@/Common/helpers/constant";
 import fetchData, { fileToBase64 } from "@/Common/helpers/Method/fetchData";
 import { useRouter } from "next/navigation";
@@ -1117,7 +1118,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const router = useRouter();
   const goBack = () => {
-    router.back();
+   router.replace(proDeskUrl);
   };
 
   // Update the ref whenever orderDataCopy changes
@@ -2047,7 +2048,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           issueDate:undefined,
           submissionDate:undefined,
           lastPurchaseDate:undefined,
-          
+
           tenderRevisions: [
             {
               version: 1,

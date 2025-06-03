@@ -1,6 +1,6 @@
 "use client";
 
-import { approvelurl, closeTimeForSalesOrder, getAllMetaData, updateApprovalTypes } from "@/Common/helpers/constant";
+import { approvelurl, closeTimeForSalesOrder, getAllMetaData, proDeskUrl, updateApprovalTypes } from "@/Common/helpers/constant";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import { DsSelectOption } from "@/Common/helpers/types";
 import DsPopup, { ClosePopup } from "@/Elements/DsComponents/dsPopup/dsPopup";
@@ -99,7 +99,7 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
 
     const router = useRouter();
     const goBack = () => {
-        router.back();
+         router.replace(proDeskUrl);
     };
     const handleOptionChange = (e: React.FormEvent<HTMLElement>) => {
         const target = e.target as HTMLSelectElement; // Cast target to the appropriate type
