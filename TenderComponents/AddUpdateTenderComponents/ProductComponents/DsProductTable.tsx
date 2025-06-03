@@ -109,12 +109,13 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
             (((tenderproduct.proposedRate || 0) / ptr) * 100).toFixed(2)
           );
         const discount = tenderproduct.stockistDiscountValue
-          ? parseFloat(tenderproduct.stockistDiscountValue.toFixed(2))
+          ? parseFloat(Number(tenderproduct.stockistDiscountValue).toFixed(2))
           : parseFloat(
               (
-                ((tenderproduct.proposedRate || 0) *
-                  TenderProductDiscountPercentage) /
-                100
+                Number(
+                  Number(tenderproduct.proposedRate || 0) *
+                    Number(TenderProductDiscountPercentage)
+                ) / 100
               ).toFixed(2)
             );
 
@@ -125,7 +126,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         );
         calculated.product.marginValue = parseFloat(
           (
-            Number(tenderproduct.proposedRate) - calculated.product.totalCost
+            Number(tenderproduct.proposedRate) - Number(calculated.product.totalCost)
           ).toFixed(2)
         );
         calculated.product.marginPercent =
@@ -133,8 +134,8 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
           tenderproduct.proposedRate !== undefined &&
           tenderproduct.proposedRate !== null
             ? parseFloat(
-                (
-                  (calculated.product.marginValue /
+                Number(
+                  Number(Number(calculated.product.marginValue) /
                     Number(tenderproduct.proposedRate)) *
                     100 || 0
                 ).toFixed(2)
@@ -144,7 +145,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
       if (calculated.product)
         calculated.product.netValue = parseFloat(
           (
-            (calculated.proposedRate || 0) * (calculated.requestedQuantity || 0)
+            Number(calculated.proposedRate || 0) * Number(calculated.requestedQuantity || 0)
           ).toFixed(2)
         );
       if (tenderproduct.product.dataSource === "csv") {
@@ -156,9 +157,9 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
       return calculated;
     });
   }, [localProducts]);
-  useEffect(() => {
-    console.log(calculatedProducts);
-  }, [calculatedProducts]);
+  // useEffect(() => {
+  //   console.log(calculatedProducts);
+  // }, [calculatedProducts]);
   // Handle cell update from inline editing
   const handleUpdateCell = useCallback(
     (rowId, changesOrColumnId, value?) => {
@@ -557,13 +558,14 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                 Number((e.target as HTMLInputElement).value).toFixed(2)
               );
               // if (row.stockistDiscountValue !== discount) {
-              const proposedRate =
-                (discount * 100) / TenderProductDiscountPercentage;
+              const proposedRate = parseFloat(
+                ((discount * 100) / TenderProductDiscountPercentage).toFixed(2)
+              );
               const ptrTemp = row.product.ptr;
               const ptr =
                 ptrTemp !== undefined
                   ? typeof ptrTemp == "number"
-                    ? ptrTemp
+                    ? parseFloat(Number(ptrTemp).toFixed(2))
                     : parseFloat(Number(ptrTemp).toFixed(2))
                   : 1;
 
