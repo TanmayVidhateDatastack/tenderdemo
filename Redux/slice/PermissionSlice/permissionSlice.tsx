@@ -334,12 +334,12 @@ const permissionsSlice = createSlice({
             state.recoveredAttachFileButton = false;
             state.saveButtonDisabled = false;
           }
-          if(role=="MAKER"){
+          if (role == "MAKER") {
             state.saveButtonDisabled = false;
           }
           break;
         case "UNDER_APPROVAL":
-          if (role === "HOMANAGER") {
+          if (role === "HOMANAGER" || role == "CHECKER") {
             // case "HOMANAGER":
             state.saveButtonDisabled = false;
             break;
