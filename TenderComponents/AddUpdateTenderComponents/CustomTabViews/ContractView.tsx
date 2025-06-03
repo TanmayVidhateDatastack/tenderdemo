@@ -69,7 +69,7 @@ const ContractView: React.FC<ContractViewProps> = ({
       value: tenderData.tenderContract?.contractJustification || "",
       label: tenderData.tenderContract?.contractJustification || "",
     });
-  
+
   useEffect(() => {
     // fetchJustificationOptions(status);
     if (status == "AWARDED")
@@ -164,51 +164,57 @@ const ContractView: React.FC<ContractViewProps> = ({
         editorComponent: DsTextField,
         editorProps: { inputType: "positiveInteger", autofocus: true },
         editable: true,
-        autoFocus:true,
+        autoFocus: true,
         align: "right",
         className: styles["cell-award-quantity"],
       },
-    
-      {
-        id: "awardedAtRate",
-        header: "Awarded At Rate",
-        accessor: (row) => row.awardedRate,
-         editorComponent: DsTextField,
-        editorProps: { inputType: "positiveInteger", autofocus: true },
-        editable: true,
-        autoFocus:true,
-        align: "right",
-        className: styles["cell-award-rate"],
-      },
-        {
+ {
         id: "awardedTo",
         header: "Awarded To",
         accessor: (row) => row.product.awardedToName,
-        editor: (row, onCommit, onChange, cellEdit) => (
+        // editable: true,
+        cellRenderer: (value, row, rowIndex) => (
           <AwardedToSearch
             awardedTo={{
               id: row.awardedToId || 0,
               name: row.product.awardedToName,
             }}
-            index={row.rowId}
+            index={rowIndex}
             setAwardedTo={(option) => {
               if (row.id && option.id && option.value) {
-                if (cellEdit)
-                  cellEdit(row.rowId, {
-                    awardedTo: Number(option.id),
-                    "product.awardedToName": option.value,
-                  });
+                // if (cellEdit)
+                handleUpdateCell(row.rowId, "awardedTo", Number(option.id));
+                handleUpdateCell(
+                  row.rowId,
+                  "product.awardedToName",
+                  option.value
+                );
+                // cellEdit(row.rowId, {
+                //   awardedTo: Number(option.id),
+                //   "product.awardedToName": option.value,
+                // });
               }
             }}
-            onBlur={() => {
-              if (onCommit) onCommit();
-            }}
-            autofocus={true}
+            // onBlur={() => {
+            //   if (onCommit) onCommit();
+            // }}
+            // autofocus={true}
           />
         ),
-        editable: true,
         className: styles["cell-awarded-to"],
       },
+      {
+        id: "awardedAtRate",
+        header: "Awarded At Rate",
+        accessor: (row) => row.awardedRate,
+        editorComponent: DsTextField,
+        editorProps: { inputType: "positiveInteger", autofocus: true },
+        editable: true,
+        autoFocus: true,
+        align: "right",
+        className: styles["cell-award-rate"],
+      },
+     
     ],
     []
   );

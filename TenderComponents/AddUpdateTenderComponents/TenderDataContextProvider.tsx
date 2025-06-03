@@ -367,6 +367,7 @@ interface TenderDataContextType {
     value: string | number
   ) => void;
   saveTender: (status: string,customerType:"institutional" | "corporate") => Promise<void>;
+  saveTender: (status: string,customerType:"institutional" | "corporate") => Promise<void>;
   updateTender: (status: string, action: "SAVE" | "SUBMIT") => Promise<void>;
   fetchAndSetOriginalTender: (
     tenderId: number,
