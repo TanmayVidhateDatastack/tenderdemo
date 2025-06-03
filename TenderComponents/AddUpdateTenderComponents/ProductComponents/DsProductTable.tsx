@@ -677,9 +677,9 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
   // (You can use the selectionState from TableProvider context for this in the new system)
 
   // Render
-  if (calculatedProducts.length === 0) {
-    return <div className={styles.noDataFound}>Loading products...</div>;
-  }
+  // if (calculatedProducts.length === 0) {
+  //   return <div className={styles.noDataFound}>Loading products...</div>;
+  // }
 
   return (
     <div className="tender-product-container" style={{ overflowY: "hidden" }}>
@@ -696,7 +696,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         <SelectionComponent version={version} />
       </TableProvider>
 
-      {calculatedProducts.length === 0 && (
+      {/* {calculatedProducts.length === 0 && (
         <div className={styles.noDataFound}>
           <div className={styles.noData}>
             <div style={{ width: "2em", height: "3em" }}>
@@ -706,7 +706,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
           </div>
           <div className={styles.noDataBorders}></div>
         </div>
-      )}
+      )} */}
 
       {/* FloatingMenu and ContextMenu logic can remain as before, using selection from context */}
     </div>
