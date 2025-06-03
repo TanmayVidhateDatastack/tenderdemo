@@ -114,8 +114,8 @@ const UploadFile: React.FC<UploadFileProps> = ({
         }
       >
         <div className={disable ? styles.disabled : ""}>
-          {file ? (
-         
+       {file ? (
+          
             <a
               href={URL.createObjectURL(file)}
               download={file.name}
