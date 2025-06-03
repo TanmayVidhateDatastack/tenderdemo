@@ -37,7 +37,6 @@ import { ContractStatuses } from "../AddUpdateTenderComponents/CustomTabViews/Co
 import { ClosePopup } from "@/Elements/DsComponents/dsPopup/dsPopup";
 import { useSearchParams } from "next/navigation";
 
-
 class ActionStatus {
   notiType: "success" | "bonus" | "info" | "error" | "cross" = "success";
   notiMsg: string | React.ReactNode = "";
@@ -45,7 +44,7 @@ class ActionStatus {
   isOkayButtonVisible?: boolean = false;
 }
 
-export const DSTendrFooter: React.FC = ({ }) => {
+export const DSTendrFooter: React.FC = ({}) => {
   const dispatch = useAppDispatch<AppDispatch>();
   const role = useAppSelector((state: RootState) => state.user.role);
   const [toasterVisible, setToasterVisible] = useState<boolean>(false);
@@ -79,8 +78,9 @@ export const DSTendrFooter: React.FC = ({ }) => {
   // };
 
   const searchParams = useSearchParams();
-  const type = searchParams.get("type") || "institutional" || "corporate";
 
+    const type =
+    searchParams.get("type") == "institutional" ? "institutional" : "corporate";
   const permissions = useAppSelector((state: RootState) => state.permissions);
   const {
     saveButtonDisabled,
@@ -150,7 +150,8 @@ export const DSTendrFooter: React.FC = ({ }) => {
       ) {
         if (tenderData?.tenderContract?.contractJustification == undefined) {
           errors.push(
-            `Please select a Tender ${tenderData.status ? ContractStatuses[tenderData.status] : " "
+            `Please select a Tender ${
+              tenderData.status ? ContractStatuses[tenderData.status] : " "
             }Justification.`
           );
         }
@@ -273,7 +274,6 @@ export const DSTendrFooter: React.FC = ({ }) => {
       const fees = tenderData?.tenderFees ?? [];
       fees.forEach((fee, index) => {
         if (fee.status == "ACTV") {
-
           if (
             type === "institutional" &&
             tenderData.applierType === "STOCKIST" &&
@@ -310,9 +310,7 @@ export const DSTendrFooter: React.FC = ({ }) => {
           }
 
           if (!instructionNotesDisable && !fee.instructionNotes?.trim()) {
-            errors.push(
-              `${fee.feesType} :  Please enter instruction notes.`
-            );
+            errors.push(`${fee.feesType} :  Please enter instruction notes.`);
           }
         }
       });
@@ -341,7 +339,6 @@ export const DSTendrFooter: React.FC = ({ }) => {
       ) {
         errors.push("Please select at least one eligibility criterion.");
       }
-
 
       const applicableConditions =
         tenderData?.tenderSupplyCondition?.applicableConditions ?? [];
@@ -436,11 +433,13 @@ export const DSTendrFooter: React.FC = ({ }) => {
     return errors;
   };
 
-  const validateAndSaveTender = () => {
-    // console.log(tenderData);
+  const validateAndSaveTender = (
+   customerType?: "institutional" | "corporate"
+  ) => {
+    console.log( "validateAndSaveTender",tenderData);
     const validate = validateFields(tenderData);
     if (validate.length === 0) {
-      saveTender("Draft");
+      saveTender("Draft",type);
     } else {
       const message = (
         <>
@@ -505,7 +504,9 @@ export const DSTendrFooter: React.FC = ({ }) => {
             buttonSize="btnSmall"
             buttonViewStyle="btnText"
             className={btnStyles.btnTextPrimary}
-            onClick={() => { showToaster("toaster1") }}
+            onClick={() => {
+              showToaster("toaster1");
+            }}
           />
         );
       } else if (role === "CHECKER") {
@@ -519,7 +520,6 @@ export const DSTendrFooter: React.FC = ({ }) => {
               className={btnStyles.btnTextPrimary}
               onClick={(e) => {
                 closeAllContext();
-
               }}
             />
             <PopupOpenButton
@@ -530,7 +530,6 @@ export const DSTendrFooter: React.FC = ({ }) => {
               className={btnStyles.btnTextPrimary}
               onClick={(e) => {
                 closeAllContext();
-
               }}
             />
           </>
@@ -546,7 +545,6 @@ export const DSTendrFooter: React.FC = ({ }) => {
               className={btnStyles.btnTextPrimary}
               onClick={(e) => {
                 closeAllContext();
-
               }}
             />
             <PopupOpenButton
@@ -557,7 +555,6 @@ export const DSTendrFooter: React.FC = ({ }) => {
               className={btnStyles.btnTextPrimary}
               onClick={(e) => {
                 closeAllContext();
-
               }}
             />
             <PopupOpenButton
@@ -616,7 +613,7 @@ export const DSTendrFooter: React.FC = ({ }) => {
                 setToValidate(true);
                 setSaveTenderClicked(true);
               }}
-            // onClick={() => showToaster("toaster1")}
+              // onClick={() => showToaster("toaster1")}
             />
           );
         }
@@ -681,64 +678,63 @@ export const DSTendrFooter: React.FC = ({ }) => {
           disable={false}
         />
         {tenderData.status == "AWARDED" ||
-          tenderData.status == "PARTIALLY_AWARDED" ||
-          tenderData.status == "LOST" ||
-          tenderData.status == "DRAFT" ||
-          tenderData.status == "UNDER_APPROVAL" ||
-          tenderData.status == "APPROVED"
-          ? (
-            <DsSplitButton
-              //  disable={true}
-              buttonViewStyle="btnContained"
-              onClick={() => {
-                // if (tenderData.status == "DRAFT") {
-                //   const updtedstatus = (tenderData.status = "SAVE");
-                //   updateTender(updtedstatus);
-                // }
+        tenderData.status == "PARTIALLY_AWARDED" ||
+        tenderData.status == "LOST" ||
+        tenderData.status == "DRAFT" ||
+        tenderData.status == "UNDER_APPROVAL" ||
+        tenderData.status == "APPROVED" ? (
+          <DsSplitButton
+            //  disable={true}
+            buttonViewStyle="btnContained"
+            onClick={() => {
+              // if (tenderData.status == "DRAFT") {
+              //   const updtedstatus = (tenderData.status = "SAVE");
+              //   updateTender(updtedstatus);
+              // }
 
-                if (
-                  tenderData.status == "AWARDED" ||
-                  tenderData.status == "PARTIALLY_AWARDED" ||
-                  tenderData.status == "LOST"
-                )
-                  updateContractDetails("contractStatus", "DRAFT");
+              if (
+                tenderData.status == "AWARDED" ||
+                tenderData.status == "PARTIALLY_AWARDED" ||
+                tenderData.status == "LOST"
+              )
+                updateContractDetails("contractStatus", "DRAFT");
 
-                if (tenderData.status !== "CANCELLED") setToValidate(false);
-                setSaveTenderClicked(true);
-              }}
-              onSplitClick={(e) =>
-                displayContext(e, "SubmissionContext", "top", "right")
+              if (tenderData.status !== "CANCELLED") setToValidate(false);
+              setSaveTenderClicked(true);
+            }}
+            onSplitClick={(e) =>
+              displayContext(e, "SubmissionContext", "top", "right")
+            }
+            buttonSize="btnLarge"
+            // disable={splitButtonDisableState}
+            disable={saveButtonDisabled}
+          >
+            Save
+          </DsSplitButton>
+        ) : (
+          <DsButton
+            disable={saveButtonDisabled}
+            buttonViewStyle="btnContained"
+            onClick={() => {
+              // if (saveTender) validateAndSaveTender();
+              // if (saveTender) saveTender("Draft");
+              if (tenderDataCopy?.id) {
+                validateAndUpdateTender();
+                // updateTender("Draft")
+              } else {
+                validateAndSaveTender();
+                // saveTender("Draft");
               }
-              buttonSize="btnLarge"
-              // disable={splitButtonDisableState}
-              disable={saveButtonDisabled}
-            >
-              Save
-            </DsSplitButton>
-          ) : (
-            <DsButton
-              disable={saveButtonDisabled}
-              buttonViewStyle="btnContained"
-              onClick={() => {
-                // if (saveTender) validateAndSaveTender();
-                // if (saveTender) saveTender("Draft");
-                if (tenderDataCopy?.id) {
-                  validateAndUpdateTender();
-                  // updateTender("Draft")
-                } else {
-                  validateAndSaveTender();
-                  // saveTender("Draft");
-                }
-              }}
-              onSplitClick={(e) =>
-                displayContext(e, "SubmissionContext", "top", "right")
-              }
-              buttonSize="btnLarge"
+            }}
+            onSplitClick={(e) =>
+              displayContext(e, "SubmissionContext", "top", "right")
+            }
+            buttonSize="btnLarge"
             // disable={tenderData.status !== "CANCELLED"}
-            >
-              {tenderData.status !== "CANCELLED" ? "Save" : "Submit"}
-            </DsButton>
-          )}
+          >
+            {tenderData.status !== "CANCELLED" ? "Save" : "Submit"}
+          </DsButton>
+        )}
       </div>
       <ApprovalPopup
         id="approvalPopup"
@@ -751,8 +747,8 @@ export const DSTendrFooter: React.FC = ({ }) => {
           role === "HOMANAGER"
             ? "The Tender has been Approved"
             : role === "CHECKER"
-              ? "The Tender has been successfully moved to under approval state"
-              : "The action was successful!"
+            ? "The Tender has been successfully moved to under approval state"
+            : "The action was successful!"
         }
         setActionStatus={setActionStatusValues}
       />
@@ -787,8 +783,8 @@ export const DSTendrFooter: React.FC = ({ }) => {
           role === "HOMANAGER"
             ? "The Tender has been Approved"
             : role === "CHECKER"
-              ? "The Tender has been successfully moved to under approval state"
-              : "The action was successful!"
+            ? "The Tender has been successfully moved to under approval state"
+            : "The action was successful!"
         }
         setActionStatus={setActionStatusValues}
       />
@@ -799,8 +795,8 @@ export const DSTendrFooter: React.FC = ({ }) => {
           role === "ACCOUNTANCE" || role === "FINANCE"
             ? "The Data has been Submitted by Review "
             : role === "MAKER"
-              ? "The receipt has been submitted successfully"
-              : "The action was successful!"
+            ? "The receipt has been submitted successfully"
+            : "The action was successful!"
         }
         type={"success"}
         position={"top"}
