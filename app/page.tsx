@@ -125,6 +125,8 @@ export default function Home() {
   const [filterCount, setFilterCount] = useState<number>(0);
   // const [uniqueAppliers, setUniqueAppliers] = useState<{ label: string; value: string }[]>([]);
   const permissions = useAppSelector((state: RootState) => state.permissions);
+  const userRole = useAppSelector((state) => state.user);
+  
   const { newButtonVisible } = permissions;
   const [tempTableData, setTempTableData] = useState<tableData>({
     className: style.tenderTable,
@@ -743,7 +745,9 @@ export default function Home() {
 
   const router = useRouter();
   const goTo = (tenderId: number, status?: string) => {
-    const location = `/Tender/${tenderId}`;
+    const rowData = data?.find((x) => Number(x.tenderId) == tenderId);
+    const type = rowData?.customerType || "institutional";
+    const location = `/Tender/${tenderId}?type=${type}&role=${userRole.role}`;
 
     // Check if we're in the browser
     if (typeof window !== "undefined") {

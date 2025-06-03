@@ -367,7 +367,7 @@ interface TenderDataContextType {
     id: number,
     value: string | number
   ) => void;
-  saveTender: (status: string) => Promise<void>;
+  saveTender: (status: string,customerType:"institutional" | "corporate") => Promise<void>;
   updateTender: (status: string, action: "SAVE" | "SUBMIT") => Promise<void>;
   fetchAndSetOriginalTender: (
     tenderId: number,
@@ -1153,7 +1153,11 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     return new Blob([new Uint8Array(arrayBuffer)], { type: file.type });
   }
   const saveTender = useCallback(
-    async (status: string) => {
+    async (
+      status: string,
+      customerType?: "institutional" | "corporate" 
+    ) => {
+      if(!customerType)customerType="institutional"
       if (!tenderData) return;
       let documentRequestId = 0;
       const tenderSaveDocuments = tenderData.tenderDocuments?.map((x) => {
@@ -1262,14 +1266,17 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               paymentStatus: x.paymentStatus,
             };
           }),
-        tenderSupplyCondition: {
-          ...tenderData.tenderSupplyCondition,
-          eligibility: tenderData.tenderSupplyCondition.eligibility,
-          applicableConditions:
-            tenderData.tenderSupplyCondition.applicableConditions.filter(
-              (x) => x.status == "ACTV"
-            ),
-        },
+        tenderSupplyCondition:
+          tenderData.tenderSupplyCondition && customerType == "institutional"
+            ? {
+                ...tenderData.tenderSupplyCondition,
+                eligibility: tenderData.tenderSupplyCondition.eligibility,
+                applicableConditions:
+                  tenderData.tenderSupplyCondition.applicableConditions.filter(
+                    (x) => x.status == "ACTV"
+                  ),
+              }
+            : null,
 
         tenderDocuments:
           tenderSaveDocuments?.map((x) => {
@@ -1289,7 +1296,14 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           }) || [],
         comments: null,
       };
-      delete tenderSaveData.tenderSupplyCondition.id;
+
+      if (
+        tenderSaveData.tenderSupplyCondition &&
+        tenderSaveData.tenderSupplyCondition.id
+      ) {
+        delete tenderSaveData.tenderSupplyCondition.id;
+      }
+
       try {
         if (
           tenderData?.tenderDocuments &&
