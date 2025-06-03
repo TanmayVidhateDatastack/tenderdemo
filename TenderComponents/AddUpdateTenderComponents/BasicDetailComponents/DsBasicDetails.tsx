@@ -52,7 +52,7 @@ const DsBasicDetails = () => {
         <DsApplierSupplierDetails />
       </div>
       {!(
-        type === "institutional" &&
+        type.toLowerCase() === "institutional" &&
         tenderData.applierType === "STOCKIST" &&
         tenderData.supplierType === "STOCKIST"
       ) && (
@@ -63,7 +63,7 @@ const DsBasicDetails = () => {
             </div>
           </>
          )} 
-      {type === "institutional" && (
+      {type.toLowerCase() === "institutional" && (
         <>
           <span className={styles.Seperator}></span>
           <div className={styles.container}>
