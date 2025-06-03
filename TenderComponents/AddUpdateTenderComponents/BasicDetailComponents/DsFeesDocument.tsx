@@ -436,7 +436,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           ))}
           <div className={eleStyles.inputDetails}>
             {selectedOptions.map((option) => (
-              <div className={styles.fields}>
+              <div key={""} className={styles.fields}>
                 <DsTextField
                   containerClasses={styles.feeFields}
                   label={`${option.label}   ID`}
@@ -562,6 +562,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           }}
         ></DsSingleSelect>
         {/* </div> */}
+
         {/* <div className={styles.fieldColors}> */}
         <DatePicker
           containerClasses={styles.feeFields}

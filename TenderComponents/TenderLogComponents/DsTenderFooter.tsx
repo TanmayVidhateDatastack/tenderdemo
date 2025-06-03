@@ -79,8 +79,9 @@ export const DSTendrFooter: React.FC = ({ }) => {
   // };
 
   const searchParams = useSearchParams();
-  const type = searchParams.get("type") || "institutional" || "corporate";
 
+    const type =
+    searchParams.get("type") == "institutional" ? "institutional" : "corporate";
   const permissions = useAppSelector((state: RootState) => state.permissions);
   const {
     saveButtonDisabled,
@@ -436,11 +437,13 @@ export const DSTendrFooter: React.FC = ({ }) => {
     return errors;
   };
 
-  const validateAndSaveTender = () => {
-    // console.log(tenderData);
+  const validateAndSaveTender = (
+   customerType?: "institutional" | "corporate"
+  ) => {
+    console.log( "validateAndSaveTender",tenderData);
     const validate = validateFields(tenderData);
     if (validate.length === 0) {
-      saveTender("Draft");
+      saveTender("Draft",type);
     } else {
       const message = (
         <>
