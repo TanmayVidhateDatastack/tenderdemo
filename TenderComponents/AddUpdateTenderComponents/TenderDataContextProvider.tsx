@@ -2043,6 +2043,11 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
 
         const newTenderData: TenderData = {
           ...tenderData.tenders,
+          tenderNumber:undefined,
+          issueDate:undefined,
+          submissionDate:undefined,
+          lastPurchaseDate:undefined,
+          
           tenderRevisions: [
             {
               version: 1,
