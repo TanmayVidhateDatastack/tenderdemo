@@ -371,7 +371,6 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
             // if (onCommit) onCommit();
             // }}
             // onBlur={(e) => {
-            autofocus={true}
             // disable={latestVersion != version}
           />
         ),
