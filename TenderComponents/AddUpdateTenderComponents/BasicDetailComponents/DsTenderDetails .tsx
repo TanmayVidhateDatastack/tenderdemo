@@ -4,7 +4,10 @@ import DsSingleSelect from "@/Elements/DsComponents/dsSelect/dsSingleSelect";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import deptStyle from "./deposite.module.css";
 import { useEffect, useState } from "react";
-import { getTenderUserRoles, validateDuplicateTender } from "@/Common/helpers/constant";
+import {
+  getTenderUserRoles,
+  validateDuplicateTender,
+} from "@/Common/helpers/constant";
 import {
   // tenderDetailsProps,
   location,
@@ -51,7 +54,7 @@ const DsTenderDetails: React.FC = () => {
   const [addressName, setAddressName] = useState<DsSelectOption | undefined>();
   const [validateCustomer, setValidateCustomer] = useState<string>();
   const [isErrormsg, setIsErrormsg] = useState<boolean>(false);
-
+  const [lastPurchaseMin, setLastPurchaseMin] = useState<Date>();
   // const [tenderStatus, setTenderStatus] = useState<string>();
 
   const [toasterVisible, setToasterVisible] = useState<boolean>(false);
@@ -98,21 +101,24 @@ const DsTenderDetails: React.FC = () => {
     handleRoleFetch();
   }, []);
 
-
   const validateCustomerIdTenderNumber = async () => {
     try {
-      const res = await fetchData({ url: validateDuplicateTender(tenderData.customerId, tenderData.tenderNumber) });
+      const res = await fetchData({
+        url: validateDuplicateTender(
+          tenderData.customerId,
+          tenderData.tenderNumber
+        ),
+      });
       if (res.code === 200) {
         const result = res.result;
         // if (result) {
-          setValidateCustomer("Duplicate Tender Found");
-          setIsErrormsg(true);
+        setValidateCustomer("Duplicate Tender Found");
+        setIsErrormsg(true);
         // }
       } else if (res.code == 404) {
         setValidateCustomer("");
         setIsErrormsg(false);
-      }
-      else {
+      } else {
         console.error("Error fetching data: ", res.message || "Unknown error");
       }
     } catch (error) {
@@ -120,7 +126,15 @@ const DsTenderDetails: React.FC = () => {
     }
   };
   useEffect(() => {
-    if ( !(tenderDataCopy.id &&tenderDataCopy.customerId == tenderData.customerId && tenderDataCopy.tenderNumber == tenderData.tenderNumber)&&tenderData.customerId && tenderData.tenderNumber)
+    if (
+      !(
+        tenderDataCopy.id &&
+        tenderDataCopy.customerId == tenderData.customerId &&
+        tenderDataCopy.tenderNumber == tenderData.tenderNumber
+      ) &&
+      tenderData.customerId &&
+      tenderData.tenderNumber
+    )
       validateCustomerIdTenderNumber();
   }, [tenderData.customerId, tenderData.tenderNumber]);
 
@@ -177,7 +191,7 @@ const DsTenderDetails: React.FC = () => {
   //   if (!tenderData.tenderDetails.customerName) {
   //     updateTenderData("customerAddressId", "");
   //     updateTenderData("tenderDetails.customerAddressName", "");
-  //     setCustomerLocations([]); // Optional: clear the location options 
+  //     setCustomerLocations([]); // Optional: clear the location options
   //   }
   // }, [tenderData.tenderDetails.customerName]);
 
@@ -185,15 +199,26 @@ const DsTenderDetails: React.FC = () => {
 
   useEffect(() => {
     setAddressName(
-      tenderData.customerAddressId && tenderData.tenderDetails.customerAddressName ?
-        {
-          label: tenderData.tenderDetails.customerAddressName,
-          value: tenderData.customerAddressId.toString(),
-        } :
-        undefined
+      tenderData.customerAddressId &&
+        tenderData.tenderDetails.customerAddressName
+        ? {
+            label: tenderData.tenderDetails.customerAddressName,
+            value: tenderData.customerAddressId.toString(),
+          }
+        : undefined
     );
-  }, [tenderData?.customerId, tenderData.customerAddressId])
-
+  }, [tenderData?.customerId, tenderData.customerAddressId]);
+  useEffect(() => {
+    console.log("data", tenderData.lastPurchaseDate?.substring(0, 10));
+    console.log("copy", tenderDataCopy.lastPurchaseDate?.substring(0, 10));
+    const min =
+      tenderDataCopy.lastPurchaseDate &&
+      tenderData.lastPurchaseDate?.substring(0, 10) ==
+        tenderDataCopy.lastPurchaseDate?.substring(0, 10)
+        ? getYesterdayDate(new Date(tenderDataCopy.lastPurchaseDate))
+        : getYesterdayDate();
+    setLastPurchaseMin(min);
+  }, [tenderData.lastPurchaseDate, tenderDataCopy.lastPurchaseDate]);
   return (
     <>
       <ContextMenu
@@ -218,7 +243,6 @@ const DsTenderDetails: React.FC = () => {
           disabled={searchCustomerDisable}
           errorMessage={validateCustomer}
           isError={isErrormsg}
-          
         />
         {/* </div> */}
 
@@ -338,11 +362,11 @@ const DsTenderDetails: React.FC = () => {
           initialDate={
             tenderData.lastPurchaseDate
               ? new Date(tenderData.lastPurchaseDate).toLocaleDateString(
-                "en-GB"
-              )
+                  "en-GB"
+                )
               : undefined
           }
-          minDate={getYesterdayDate()}
+          minDate={lastPurchaseMin}
           id={"lastPurchaseDate"}
           setDateValue={(date) => {
             if (date instanceof Date) {
@@ -381,10 +405,9 @@ const DsTenderDetails: React.FC = () => {
           setSelectOption={(option) => {
             if (typeof option.value == "string") {
               updateTenderData("contractType", option.value);
-
             }
           }}
-        // disable={tenderTypeDisable}
+          // disable={tenderTypeDisable}
         ></DsSingleSelect>
         {selectedRateContractType?.value === "RATE_CONTRACT" && (
           <DsTextField
