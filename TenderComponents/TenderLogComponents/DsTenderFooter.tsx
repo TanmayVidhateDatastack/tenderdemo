@@ -504,8 +504,20 @@ export const DSTendrFooter: React.FC = ({}) => {
             buttonSize="btnSmall"
             buttonViewStyle="btnText"
             className={btnStyles.btnTextPrimary}
-            onClick={() => {
-              showToaster("toaster1");
+            // onClick={() => {
+             
+              
+            // }}
+              onClick={() => {
+              // if (saveTender) validateAndSaveTender();
+              // if (saveTender) saveTender("Draft");
+              if (tenderDataCopy?.id) {
+                validateAndUpdateTender();
+                // updateTender("Draft")
+              } else {
+                validateAndSaveTender();
+                // saveTender("Draft");
+              }
             }}
           />
         );

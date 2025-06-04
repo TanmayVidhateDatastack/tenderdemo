@@ -135,47 +135,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     recoveredAttachFileButton,
   } = permissions;
 
-  // const handleFetchpayments = async () => {
-  //   try {
-  //     const metaData = await fetchData({
-  //       url: getAllMetaData,
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "x-tender-codes": JSON.stringify(metaDataTypes),
-  //       },
-  //     });
-  //     if (metaData.code === 200) {
-  //       const result = metaData.result;
-  //       console.log("MetaData ", result);
-
-  //       let tenderpayments = [];
-
-  //       tenderpayments = result?.tenderEmdPayment || [];
-
-  //       tenderpayments = result?.tenderFeesPayment || [];
-
-  //       tenderpayments = result?.tenderPsdPayment || [];
-  //       let  feestype = result?.feesType || [];
-  //       console.log("feestype is ", feestype[0]);
-  //       console.log("tenderpayments", tenderpayments);
-
-  //       const formattedOptions = tenderpayments.map((item: any) => ({
-  //         value: item.codeValue,
-  //         label: item.codeDescription,
-  //       }));
-
-  //       setOptions(formattedOptions);
-  //     }
-  //   } catch (error) {
-  //     console.error("Fetch error: ", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   handleFetchpayments();
-  // }, []);
-
+ 
   const handleAppliedSuppliedFetch = async () => {
     try {
       const res = await fetchData({ url: paidBys });
@@ -336,6 +296,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 id={id + "Documents"}
                 options={optionlist || []}
                 setSelectOptions={(options) => {
+                  
                   //  updateTenderFee(
                   //     type,
                   //     "paymentOptions",
@@ -392,6 +353,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           </div>
 
           {selectedOptions.map((option, index) => (
+           
             <UploadFile
               key={`upload-${type}-${option.value}-${index}`}
               uploadLabel={`Upload ${option.label} here `}
@@ -445,7 +407,9 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                       (x) => x.feesType === type
                     );
                     if (!fee) return "";
+                    console.log("selecetd option of receipt ",option.value)
                     if (typeof option.value === "string") {
+                  
                       if (option.value.includes("ACKNOWLEDGMENT_RECEIPT"))
                         return fee.acknowledgementReceiptId || "";
                       if (option.value.includes("FUND_TRANSFER_CONFIRMATION"))
@@ -472,12 +436,14 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                           Number((e.target as HTMLInputElement).value)
                         );
                       if (option.value.includes("PAYMENT_RECEIPT"))
+                    
                         updateTenderFee(
                           type,
                           "paymentReceiptId",
                           Number((e.target as HTMLInputElement).value)
                         );
                       if (option.value.includes("TRANSACTION_RECEIPT"))
+                       
                         updateTenderFee(
                           type,
                           "paymentTransactionId",

@@ -367,7 +367,6 @@ interface TenderDataContextType {
     value: string | number
   ) => void;
   saveTender: (status: string,customerType:"institutional" | "corporate") => Promise<void>;
-  saveTender: (status: string,customerType:"institutional" | "corporate") => Promise<void>;
   updateTender: (status: string, action: "SAVE" | "SUBMIT") => Promise<void>;
   fetchAndSetOriginalTender: (
     tenderId: number,
@@ -1155,11 +1154,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
 
   
   const saveTender = useCallback(
-    async (
-      status: string,
-      customerType?: "institutional" | "corporate"
-    ) => {
-      if(!customerType)customerType="institutional"
+    async (status: string) => {
       if (!tenderData) return;
       let documentRequestId = 0;
       const tenderSaveDocuments = tenderData.tenderDocuments?.map((x) => {
@@ -1257,7 +1252,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               refundEligibility: x.refundEligibility,
               paymentDueDate: x.paymentDueDate,
               instructionNotes: x.instructionNotes,
- 
+
               paymentDate: x.paymentDate,
               paymentRefundDate: x.paymentRefundDate,
               refundNotes: x.refundNotes,
@@ -1268,18 +1263,15 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               paymentStatus: x.paymentStatus,
             };
           }),
-        tenderSupplyCondition:
-          tenderData.tenderSupplyCondition && customerType == "institutional"
-            ? {
-                ...tenderData.tenderSupplyCondition,
-                eligibility: tenderData.tenderSupplyCondition.eligibility,
-                applicableConditions:
-                  tenderData.tenderSupplyCondition.applicableConditions.filter(
-                    (x) => x.status == "ACTV"
-                  ),
-              }
-            : undefined,
- 
+        tenderSupplyCondition: {
+          ...tenderData.tenderSupplyCondition,
+          eligibility: tenderData.tenderSupplyCondition.eligibility,
+          applicableConditions:
+            tenderData.tenderSupplyCondition.applicableConditions.filter(
+              (x) => x.status == "ACTV"
+            ),
+        },
+
         tenderDocuments:
           tenderSaveDocuments?.map((x) => {
             // const newDocs=new FormData();
@@ -1298,14 +1290,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           }) || [],
         comments: null,
       };
- 
-      if (
-        tenderSaveData.tenderSupplyCondition &&
-        tenderSaveData.tenderSupplyCondition.id
-      ) {
-        delete tenderSaveData.tenderSupplyCondition.id;
-      }
- 
+      delete tenderSaveData.tenderSupplyCondition.id;
       try {
         if (
           tenderData?.tenderDocuments &&
