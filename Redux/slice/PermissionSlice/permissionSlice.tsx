@@ -341,6 +341,8 @@ const permissionsSlice = createSlice({
         case "UNDER_APPROVAL":
           if (role === "HOMANAGER" || role == "CHECKER") {
             // case "HOMANAGER":
+            state.productTableDisable = false;
+
             state.saveButtonDisabled = false;
             break;
           }
