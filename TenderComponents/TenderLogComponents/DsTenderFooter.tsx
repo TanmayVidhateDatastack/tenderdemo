@@ -29,7 +29,10 @@ import DsSplitButton from "@/Elements/DsComponents/DsButtons/dsSplitButton";
 
 import Toaster from "@/Elements/DsComponents/DsToaster/DsToaster";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
-import { approvalObject, useTenderData } from "../AddUpdateTenderComponents/TenderDataContextProvider";
+import {
+  approvalObject,
+  useTenderData,
+} from "../AddUpdateTenderComponents/TenderDataContextProvider";
 import { TenderData } from "@/TenderComponents/AddUpdateTenderComponents/TenderDataContextProvider";
 import { getYesterdayDate } from "@/Common/helpers/Method/conversion";
 import ApprovalPopup from "../AddUpdateTenderComponents/Approvelpopup/ApprovelPopup";
@@ -225,14 +228,26 @@ export const DSTendrFooter: React.FC = ({}) => {
       if (!lastPurchaseDateDisable && tenderData?.lastPurchaseDate === "") {
         errors.push("Please enter the last purchase date.");
       }
-      if (
-        !lastPurchaseDateDisable &&
-        tenderData?.lastPurchaseDate &&
-        new Date(tenderData.lastPurchaseDate) < getYesterdayDate()
-      ) {
-        errors.push(
-          "The last purchase date should not be earlier than today's date."
-        );
+      if (!lastPurchaseDateDisable && tenderData?.lastPurchaseDate) {
+        const min =
+          tenderDataCopy.lastPurchaseDate &&
+          tenderData.lastPurchaseDate?.substring(0, 10) ==
+            tenderDataCopy.lastPurchaseDate?.substring(0, 10)
+            ? getYesterdayDate(
+                new Date(tenderDataCopy.lastPurchaseDate.substring(0, 10))
+              )
+            : getYesterdayDate();
+        if (
+          new Date(
+            new Date(tenderData.lastPurchaseDate.substring(0, 10))
+              .toISOString()
+              .substring(0, 10)
+          ) < new Date(min.toISOString().substring(0, 10))
+        ) {
+          errors.push(
+            "The last purchase date should not be earlier than today's date."
+          );
+        }
       }
       if (!submissionDateDisable && tenderData?.submissionDate === "") {
         errors.push("Please enter the submission date.");
@@ -297,16 +312,29 @@ export const DSTendrFooter: React.FC = ({}) => {
           if (!paidByDisable && !fee.paidBy?.trim()) {
             errors.push(`${fee.feesType}: Please specify who paid the fee.`);
           }
-
+          
           if (!PaymentdueDateDisable && !fee.paymentDueDate?.trim()) {
             errors.push(`${fee.feesType}: Payment due date is required.`);
-          } else if (
-            !PaymentdueDateDisable &&
-            new Date(fee.paymentDueDate) < getYesterdayDate()
-          ) {
-            errors.push(
-              `${fee.feesType}:  The payment due date cannot be in the past.`
-            );
+          } else if (!PaymentdueDateDisable) {
+            const curDate = tenderData.tenderFees.find(
+              (x) => x.feesType == fee.feesType
+            )?.paymentDueDate;
+            const oriDate = tenderDataCopy.tenderFees.find(
+              (x) => x.feesType == fee.feesType
+            )?.paymentDueDate;
+            const min =
+              oriDate && curDate?.substring(0, 10) == oriDate.substring(0, 10)
+                ? getYesterdayDate(new Date(oriDate.substring(0, 10)))
+                : getYesterdayDate();
+
+            const paymentDueDate = fee.paymentDueDate?.substring(0, 10);
+            const minDate = min.toISOString().substring(0, 10);
+
+            if (paymentDueDate < minDate) {
+              errors.push(
+                `${fee.feesType}:  The payment due date cannot be in the past.`
+              );
+            }
           }
 
           if (!instructionNotesDisable && !fee.instructionNotes?.trim()) {
@@ -463,15 +491,14 @@ export const DSTendrFooter: React.FC = ({}) => {
       showToaster("create-order-toaster");
     }
   };
-  const validateAndUpdateTender = (approval?:approvalObject) => {
+  const validateAndUpdateTender = (approval?: approvalObject) => {
     // console.log(tenderData);
     // updateTender(tenderData.status);
 
     const validate = validateFields(tenderData);
     if (validate.length === 0) {
-      if (toValidate) 
-        updateTender(tenderData.status, "SUBMIT",approval);
-      else updateTender(tenderData.status, "SAVE",approval);
+      if (toValidate) updateTender(tenderData.status, "SUBMIT", approval);
+      else updateTender(tenderData.status, "SAVE", approval);
     } else {
       const message = (
         <>
@@ -755,7 +782,6 @@ export const DSTendrFooter: React.FC = ({}) => {
         }
         setActionStatus={setActionStatusValues}
         validateAndUpdateTender={validateAndUpdateTender}
-
       />
       <ApprovalPopup
         id="rejectPopup"
@@ -778,7 +804,6 @@ export const DSTendrFooter: React.FC = ({}) => {
         toasterMessage={"The Tender has been Rejected & also note has sent "}
         setActionStatus={setActionStatusValues}
         validateAndUpdateTender={validateAndUpdateTender}
-        
       />
       <ApprovalPopup
         id="reviewedPopup"
@@ -796,7 +821,6 @@ export const DSTendrFooter: React.FC = ({}) => {
         }
         setActionStatus={setActionStatusValues}
         validateAndUpdateTender={validateAndUpdateTender}
-
       />
 
       <Toaster

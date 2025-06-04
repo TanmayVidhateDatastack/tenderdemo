@@ -103,6 +103,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     "TENDER_PSD_PAYMENT",
     "FEES_TYPE",
   ];
+  const [dueDateMin, setDueDateMin] = useState<Date>();
 
   const [depositeDocuments, setDepositeDocuments] = useState<DsSelectOption[]>(
     []
@@ -238,11 +239,28 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
       setSelectedOptions(selectedOPtionArr);
     }
   }, [tenderDataCopy]);
+
+  useEffect(() => {
+    console.log("data", tenderData.lastPurchaseDate?.substring(0, 10));
+    console.log("copy", tenderDataCopy.lastPurchaseDate?.substring(0, 10));
+    const curDate = tenderData.tenderFees.find(
+      (x) => x.feesType == type
+    )?.paymentDueDate;
+    const oriDate = tenderDataCopy.tenderFees.find(
+      (x) => x.feesType == type
+    )?.paymentDueDate;
+    const min =
+      oriDate && curDate?.substring(0, 10) == oriDate.substring(0, 10)
+        ? getYesterdayDate(new Date(oriDate.substring(0, 10)))
+        : getYesterdayDate();
+    setDueDateMin(min);
+  }, [tenderData.tenderFees, tenderDataCopy.tenderFees]);
   const handleAdd = () => {
     closeAllContext();
     setSelectedOptions(tempOptions);
     console.log("Add button clicked");
   };
+
   return (
     <>
       <div className={styles.feeContainer} id={id}>
@@ -537,7 +555,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           containerClasses={styles.feeFields}
           disable={PaymentdueDateDisable}
           id={id + "dueDate"}
-          minDate={getYesterdayDate()}
+          minDate={dueDateMin}
           initialDate={
             tenderData.tenderFees.find((x) => x.feesType == type)
               ?.paymentDueDate

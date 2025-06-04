@@ -1,0 +1,47 @@
+:root {
+  --application-background: var(--tnd-background);
+
+  --background-hover: var(--table-hover-tender-green);
+  --tableRowSelect: var(--table-select-tender-green);
+
+  --text-primary: var(--tender-green);
+  --text-primary-hover: var(--tender-green-hover);
+  --text-white: var(--background);
+  --text-dark: var(--black);
+  --text-warning: var(--red);
+
+  --primary: var(--tender-green);
+  --primary-hover: var(--tndPrimary-hover);
+  --secondary: var(--tndSecondary);
+  --secondary-hover: var(--tndSecondary);
+  --danger: var(--tndDanger);
+  --danger-hover: var(--tndDanger-hover);
+  --warning: var(--tndWarning);
+  --warning-hover: var(--tndWarning-hover);
+  --dark: var(--tndDark);
+  --info: var(--tndInfo);
+  --info-hover: var(--tndInfo-hover);
+  --midviolet: var(--tndMidviolet);
+  --semiviolet: var(--tndSemiviolet);
+  --lightviolet: var(--tndLightviolet);
+  --lightgrey: var(--lightgrey);
+
+  --tndPrimary: var(--tender-green);
+  --tndPrimary-hover: var(--tender-green);
+  --tndSecondary: var(--grey);
+  --tndDanger: var(--red);
+  --tndDanger-hover: var(--orange);
+  --tndWarning: var(--lightred);
+  --tndWarning-hover: var(--brick);
+  --tndDark: var(--black);
+  --tndInfo: var(--darkskyblue);
+  --tndInfo-hover: var(--skyblue);
+  --tndMidviolet: var(--blush);
+  --tndSemiviolet: var(--periwinkle);
+  --tndLightviolet: var(--lightviolet);
+  --tndLightGrey: var(--lightgrey);
+
+  --btngroup-primary-hover: var(--hover-primary-1);
+
+  --btngroup-text-primary-hover: var(--primary);
+}
