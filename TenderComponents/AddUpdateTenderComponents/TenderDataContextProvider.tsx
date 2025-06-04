@@ -15,6 +15,7 @@ import {
   saveTenderUrl,
   updatePaymentUrl,
   proDeskUrl,
+  approvelurl,
 } from "@/Common/helpers/constant";
 import fetchData, { fileToBase64 } from "@/Common/helpers/Method/fetchData";
 import { useRouter } from "next/navigation";
@@ -1773,6 +1774,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           });
         }
         if (approval) {
+          url= approvelurl(tenderData.id)
           dataToSendTenderCopy = stripReadOnlyProperties({
             ...dataToSendTenderCopy,
             approval: {
