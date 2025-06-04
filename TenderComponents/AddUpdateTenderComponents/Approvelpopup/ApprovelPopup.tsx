@@ -330,15 +330,15 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
 
                 handleSave();
 
-                setTimeout(() => {
-                  ClosePopup(id);
-                }, closeTimeForSalesOrder - 600);
-                setTimeout(() => {
-                  DisplayPane("deviationPane");
-                }, closeTimeForSalesOrder - 400);
-                setTimeout(() => {
-                  goBack();
-                }, closeTimeForSalesOrder);
+                // setTimeout(() => {
+                //   ClosePopup(id);
+                // }, closeTimeForSalesOrder - 600);
+                // setTimeout(() => {
+                //   DisplayPane("deviationPane");
+                // }, closeTimeForSalesOrder - 400);
+                // setTimeout(() => {
+                //   goBack();
+                // }, closeTimeForSalesOrder);
               }}
             />
           )}
@@ -356,15 +356,15 @@ const ApprovalPopup: React.FC<ApprovalProps> = ({
 
                 handleSave();
 
-                setTimeout(() => {
-                  ClosePopup(id);
-                }, closeTimeForSalesOrder - 600);
-                setTimeout(() => {
-                  DisplayPane("deviationPane");
-                }, closeTimeForSalesOrder - 400);
-                setTimeout(() => {
-                  goBack();
-                }, closeTimeForSalesOrder);
+                // setTimeout(() => {
+                //   ClosePopup(id);
+                // }, closeTimeForSalesOrder - 600);
+                // setTimeout(() => {
+                //   DisplayPane("deviationPane");
+                // }, closeTimeForSalesOrder - 400);
+                // setTimeout(() => {
+                //   goBack();
+                // }, closeTimeForSalesOrder);
               }}
             />
           )}
