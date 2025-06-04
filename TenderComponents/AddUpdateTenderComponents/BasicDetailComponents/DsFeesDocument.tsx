@@ -221,8 +221,9 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
       }
       if (currentFee.acknowledgementReceiptId) {
         {
+          
           const option = optionlist.find((x) =>
-            x.value.toString().includes("ACKNOWLEDGMENT_RECEIPT")
+            x.value.toString().includes("ACKNOWLEDGEMENT_RECEIPT")
           );
           if (option) selectedOPtionArr.push(option);
         }
@@ -412,7 +413,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                     console.log("selecetd option of receipt ",option.value)
                     if (typeof option.value === "string") {
                   
-                      if (option.value.includes("ACKNOWLEDGMENT_RECEIPT"))
+                      if (option.value.includes("ACKNOWLEDGEMENT_RECEIPT"))
                         return fee.acknowledgementReceiptId || "";
                       if (option.value.includes("FUND_TRANSFER_CONFIRMATION"))
                         return fee.fundTransferConfirmationId || "";
@@ -425,7 +426,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   })()}
                   onBlur={(e) => {
                     if (typeof option.value == "string") {
-                      if (option.value.includes("ACKNOWLEDGMENT_RECEIPT"))
+                      if (option.value.includes("ACKNOWLEDGEMENT_RECEIPT"))
                         updateTenderFee(
                           type,
                           "acknowledgementReceiptId",
