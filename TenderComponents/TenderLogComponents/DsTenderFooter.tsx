@@ -469,7 +469,8 @@ export const DSTendrFooter: React.FC = ({}) => {
 
     const validate = validateFields(tenderData);
     if (validate.length === 0) {
-      if (toValidate) updateTender(tenderData.status, "SUBMIT",approval);
+      if (toValidate) 
+        updateTender(tenderData.status, "SUBMIT",approval);
       else updateTender(tenderData.status, "SAVE",approval);
     } else {
       const message = (
@@ -505,10 +506,10 @@ export const DSTendrFooter: React.FC = ({}) => {
             buttonSize="btnSmall"
             buttonViewStyle="btnText"
             className={btnStyles.btnTextPrimary}
-              onClick={() => {
-                // setToValidate(true);
-                setSaveTenderClicked(true);
-              }}
+            onClick={() => {
+              setToValidate(true); 
+              setSaveTenderClicked(true);
+            }}
           />
         );
       } else if (role === "CHECKER") {
@@ -727,8 +728,7 @@ export const DSTendrFooter: React.FC = ({}) => {
                 validateAndSaveTender();
                 // saveTender("Draft");
               }
-            }
-          }
+            }}
             onSplitClick={(e) =>
               displayContext(e, "SubmissionContext", "top", "right")
             }

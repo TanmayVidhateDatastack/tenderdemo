@@ -296,17 +296,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 id={id + "Documents"}
                 options={optionlist || []}
                 setSelectOptions={(options) => {
-                  
-                  //  updateTenderFee(
-                  //     type,
-                  //     "paymentOptions",
-                  //     options.reduce<string[]>((acc, option) => {
-                  //       if (typeof option.value === "string") {
-                  //         acc.push(option.value);
-                  //       }
-                  //       return acc;
-                  //     }, [])
-                  //   );
+               
                   setTempOptions(options);
                   console.log("Selected options:", options);
                 }}
@@ -331,7 +321,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             <div className={styles.fields}>
               <DatePicker
                 containerClasses={styles.feeFields}
-                id={id + "paymentdate"}
+                id={type + "paymentdate"}
                 initialDate={
                   tenderData.tenderFees
                     ? new Date(
@@ -347,6 +337,18 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                     updateTenderFee(type, "paymentDate", getTodayDate(date));
                   }
                 }}
+                // setDateValue={(date)=>{
+                //   if (date instanceof Date)
+                //   {
+                //      if (typeof type == "string")
+                //      {
+                //       if (type.includes("TENDER_EMD_PAYMENT"))
+                      
+                //          updateTenderFee(type, "paymentDate", getTodayDate(date));
+                      
+                //      }
+                //   }
+                // }}
                 disable={paymentcompletedDisable}
               />
             </div>
