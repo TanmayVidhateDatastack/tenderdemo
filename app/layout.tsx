@@ -250,6 +250,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "@/Common/globals.css";
+import "@/app/layout.css";
 import DsElLayout from "@/Elements/ERPComponents/DsElLayout/DsElLayout";
 
 const openSans = localFont({

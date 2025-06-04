@@ -215,7 +215,7 @@ const DsTenderDetails: React.FC = () => {
       tenderDataCopy.lastPurchaseDate &&
       tenderData.lastPurchaseDate?.substring(0, 10) ==
         tenderDataCopy.lastPurchaseDate?.substring(0, 10)
-        ? getYesterdayDate(new Date(tenderDataCopy.lastPurchaseDate))
+        ? getYesterdayDate(new Date(tenderDataCopy.lastPurchaseDate.substring(0, 10)))
         : getYesterdayDate();
     setLastPurchaseMin(min);
   }, [tenderData.lastPurchaseDate, tenderDataCopy.lastPurchaseDate]);
