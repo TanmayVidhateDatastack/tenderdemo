@@ -14,6 +14,7 @@ import {
   updateContractUrl,
   saveTenderUrl,
   updatePaymentUrl,
+  proDeskUrl,
 } from "@/Common/helpers/constant";
 import fetchData, { fileToBase64 } from "@/Common/helpers/Method/fetchData";
 import { useRouter } from "next/navigation";
@@ -201,6 +202,11 @@ export type TenderData = {
   tenderContract?: TenderContract;
   tenderDocuments?: TenderDocument[];
 };
+export type approvalObject = {
+  approvalComments: string;
+  justificationType: string;
+  approvalStatus: string;
+};
 
 export function updateDocuments(
   files: {
@@ -366,8 +372,15 @@ interface TenderDataContextType {
     id: number,
     value: string | number
   ) => void;
-  saveTender: (status: string,customerType:"institutional" | "corporate") => Promise<void>;
-  updateTender: (status: string, action: "SAVE" | "SUBMIT") => Promise<void>;
+  saveTender: (
+    status: string,
+    customerType: "institutional" | "corporate"
+  ) => Promise<void>;
+  updateTender: (
+    status: string,
+    action: "SAVE" | "SUBMIT",
+    approval?: approvalObject
+  ) => Promise<void>;
   fetchAndSetOriginalTender: (
     tenderId: number,
     tenderStatus?: string
@@ -1114,7 +1127,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const router = useRouter();
   const goBack = () => {
-    router.back();
+    router.replace(proDeskUrl);
   };
 
   // Update the ref whenever orderDataCopy changes
@@ -1152,9 +1165,9 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     return new Blob([new Uint8Array(arrayBuffer)], { type: file.type });
   }
 
-  
   const saveTender = useCallback(
-    async (status: string) => {
+    async (status: string, customerType?: "institutional" | "corporate") => {
+      if (!customerType) customerType = "institutional";
       if (!tenderData) return;
       let documentRequestId = 0;
       const tenderSaveDocuments = tenderData.tenderDocuments?.map((x) => {
@@ -1162,7 +1175,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         return { ...x, requestId: documentRequestId };
       });
       const formData = new FormData();
- 
+
       tenderSaveDocuments?.forEach((doc, index) => {
         // console.log(
         //   doc.data,
@@ -1178,7 +1191,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             `tenderDocuments[${index}].requestId`,
             doc.requestId.toString()
           );
- 
+
           formData.append(
             `tenderDocuments[${index}].document`,
             doc.data,
@@ -1192,7 +1205,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             `tenderDocuments[${index}].documentType`,
             doc.documentType
           );
- 
+
           formData.append(
             `tenderDocuments[${index}].documentSubType`,
             doc.data,
@@ -1263,14 +1276,17 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               paymentStatus: x.paymentStatus,
             };
           }),
-        tenderSupplyCondition: {
-          ...tenderData.tenderSupplyCondition,
-          eligibility: tenderData.tenderSupplyCondition.eligibility,
-          applicableConditions:
-            tenderData.tenderSupplyCondition.applicableConditions.filter(
-              (x) => x.status == "ACTV"
-            ),
-        },
+        tenderSupplyCondition:
+          tenderData.tenderSupplyCondition && customerType == "institutional"
+            ? {
+                ...tenderData.tenderSupplyCondition,
+                eligibility: tenderData.tenderSupplyCondition.eligibility,
+                applicableConditions:
+                  tenderData.tenderSupplyCondition.applicableConditions.filter(
+                    (x) => x.status == "ACTV"
+                  ),
+              }
+            : undefined,
 
         tenderDocuments:
           tenderSaveDocuments?.map((x) => {
@@ -1290,7 +1306,14 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           }) || [],
         comments: null,
       };
-      delete tenderSaveData.tenderSupplyCondition.id;
+
+      if (
+        tenderSaveData.tenderSupplyCondition &&
+        tenderSaveData.tenderSupplyCondition.id
+      ) {
+        delete tenderSaveData.tenderSupplyCondition.id;
+      }
+
       try {
         if (
           tenderData?.tenderDocuments &&
@@ -1327,7 +1350,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                   // status: status.toUpperCase(),
                   lastUpdatedBy: 3,
                 });
- 
+
                 // console.log("sAVEEEE", dataToSend);
                 await fetch(saveTenderUrl, {
                   method: "POST",
@@ -1339,7 +1362,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                   result.json().then((res) => {
                     if (res.code === 200) {
                       setActionStatus({
-                        notiMsg: "Tender Created Successfully",
+                        notiMsg: res.message,
                         notiType: "success",
                         showNotification: true,
                       });
@@ -1349,7 +1372,11 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                       }, closeTimeForTender);
                     } else {
                       setActionStatus({
-                        notiMsg: "Tender could not be saved",
+                        notiMsg:
+                          `${res.message}.\r\n` +
+                          `${res.error.errorDetails
+                            .map((x) => x.message)
+                            .join("\r\n")}`,
                         notiType: "error",
                         showNotification: true,
                       });
@@ -1369,7 +1396,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             // status: status.toUpperCase(),
             lastUpdatedBy: 3,
           });
- 
+
           // console.log("sAVEEEE", dataToSend);
           await fetch(saveTenderUrl, {
             method: "POST",
@@ -1381,7 +1408,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             result.json().then((res) => {
               if (res.code === 200) {
                 setActionStatus({
-                  notiMsg: "Tender Created Successfully",
+                  notiMsg: `${res.message}`,
                   notiType: "success",
                   showNotification: true,
                 });
@@ -1391,7 +1418,11 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 }, closeTimeForTender);
               } else {
                 setActionStatus({
-                  notiMsg: "Tender could not be saved",
+                  notiMsg:
+                    `${res.message}.\r\n` +
+                    `${res.error.errorDetails
+                      .map((x) => x.message)
+                      .join("\r\n")}`,
                   notiType: "error",
                   showNotification: true,
                 });
@@ -1406,10 +1437,13 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
     },
     [tenderData, tenderDataCopy, fetchData]
   );
- 
 
   const updateTender = useCallback(
-    async (status: string, action: "SAVE" | "SUBMIT") => {
+    async (
+      status: string,
+      action: "SAVE" | "SUBMIT",
+      approval?: approvalObject
+    ) => {
       try {
         let documentRequestId = 0;
         const tenderOriginalDocuments = tenderDataCopy.tenderDocuments?.map(
@@ -1740,7 +1774,20 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             lastUpdatedBy: dataToSendOriginalTender.lastUpdatedBy,
           });
         }
-
+        if (approval) {
+          dataToSendTenderCopy = stripReadOnlyProperties({
+            ...dataToSendTenderCopy,
+            approval: {
+              approvalComments: "",
+              justificationType: "",
+              approvalStatus: "",
+            },
+          });
+          dataToSendOriginalTender = stripReadOnlyProperties({
+            ...dataToSendOriginalTender,
+            approval: { ...approval },
+          });
+        }
         //user uploaded documents
         if (
           tenderData?.tenderDocuments &&
@@ -1789,7 +1836,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 }).then((res) => {
                   if (res.code === 200) {
                     setActionStatus({
-                      notiMsg: "Tender Updated Successfully",
+                      notiMsg: `${res.message}`,
                       notiType: "success",
                       showNotification: true,
                     });
@@ -1799,7 +1846,11 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                     }, closeTimeForTender);
                   } else {
                     setActionStatus({
-                      notiMsg: "Tender could not be updated",
+                      notiMsg:
+                        `${res.message}.\r\n` +
+                        `${res.error.errorDetails
+                          .map((x) => x.message)
+                          .join("\r\n")}`,
                       notiType: "error",
                       showNotification: true,
                     });
@@ -1822,7 +1873,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           }).then((res) => {
             if (res.code === 200) {
               setActionStatus({
-                notiMsg: "Tender Updated Successfully",
+                notiMsg: `${res.message}`,
                 notiType: "success",
                 showNotification: true,
               });
@@ -1832,7 +1883,11 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               }, closeTimeForTender);
             } else {
               setActionStatus({
-                notiMsg: "Tender could not be updated",
+                notiMsg:
+                  `${res.message}.\r\n` +
+                  `${res.error.errorDetails
+                    .map((x) => x.message)
+                    .join("\r\n")}`,
                 notiType: "error",
                 showNotification: true,
               });
@@ -2015,6 +2070,11 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
 
         const newTenderData: TenderData = {
           ...tenderData.tenders,
+          tenderNumber: undefined,
+          issueDate: undefined,
+          submissionDate: undefined,
+          lastPurchaseDate: undefined,
+
           tenderRevisions: [
             {
               version: 1,

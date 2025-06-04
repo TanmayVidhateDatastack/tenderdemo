@@ -99,25 +99,29 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         const ptr =
           ptrTemp !== undefined
             ? typeof ptrTemp == "number"
-              ? ptrTemp
-              : Number(ptrTemp)
+              ? parseFloat(Number(ptrTemp).toFixed(2))
+              : parseFloat(Number(ptrTemp).toFixed(2))
             : 1;
 
-        calculated.ptrPercentage =
-          100 -
-          parseFloat(
-            (((tenderproduct.proposedRate || 0) / ptr) * 100).toFixed(2)
-          );
+        calculated.ptrPercentage = parseFloat(
+          (
+            100 -
+            parseFloat(
+              (((tenderproduct.proposedRate || 0) / ptr) * 100).toFixed(2)
+            )
+          ).toFixed(2)
+        );
         const discount = tenderproduct.stockistDiscountValue
-          ? parseFloat(tenderproduct.stockistDiscountValue.toFixed(2))
+          ? parseFloat(Number(tenderproduct.stockistDiscountValue).toFixed(2))
           : parseFloat(
               (
-                ((tenderproduct.proposedRate || 0) *
-                  TenderProductDiscountPercentage) /
-                100
+                Number(
+                  Number(tenderproduct.proposedRate || 0) *
+                    Number(TenderProductDiscountPercentage)
+                ) / 100
               ).toFixed(2)
             );
-
+        calculated.stockistDiscountValue=discount;
         calculated.product.totalCost = parseFloat(
           (Number(tenderproduct.product.directCost) + Number(discount)).toFixed(
             2
@@ -125,7 +129,8 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         );
         calculated.product.marginValue = parseFloat(
           (
-            Number(tenderproduct.proposedRate) - calculated.product.totalCost
+            Number(tenderproduct.proposedRate) -
+            Number(calculated.product.totalCost)
           ).toFixed(2)
         );
         calculated.product.marginPercent =
@@ -133,10 +138,11 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
           tenderproduct.proposedRate !== undefined &&
           tenderproduct.proposedRate !== null
             ? parseFloat(
-                (
-                  (calculated.product.marginValue /
-                    Number(tenderproduct.proposedRate)) *
-                    100 || 0
+                Number(
+                  Number(
+                    Number(calculated.product.marginValue) /
+                      Number(tenderproduct.proposedRate)
+                  ) * 100 || 0
                 ).toFixed(2)
               )
             : 0;
@@ -144,7 +150,8 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
       if (calculated.product)
         calculated.product.netValue = parseFloat(
           (
-            (calculated.proposedRate || 0) * (calculated.requestedQuantity || 0)
+            Number(calculated.proposedRate || 0) *
+            Number(calculated.requestedQuantity || 0)
           ).toFixed(2)
         );
       if (tenderproduct.product.dataSource === "csv") {
@@ -156,9 +163,9 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
       return calculated;
     });
   }, [localProducts]);
-  useEffect(() => {
-    console.log(calculatedProducts);
-  }, [calculatedProducts]);
+  // useEffect(() => {
+  //   console.log(calculatedProducts);
+  // }, [calculatedProducts]);
   // Handle cell update from inline editing
   const handleUpdateCell = useCallback(
     (rowId, changesOrColumnId, value?) => {
@@ -392,13 +399,15 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
             onBlur={(e) => {
               if (onChange) onChange(e.target.value);
 
-              const proposedRate = Number((e.target as HTMLInputElement).value);
+              const proposedRate = parseFloat(
+                Number((e.target as HTMLInputElement).value).toFixed(2)
+              );
               // if (row.proposedRate !== proposedRate) {
               const ptrTemp = row.product.ptr;
               const ptr =
                 ptrTemp !== undefined
                   ? typeof ptrTemp == "number"
-                    ? ptrTemp
+                    ? parseFloat(Number(ptrTemp).toFixed(2))
                     : parseFloat(Number(ptrTemp).toFixed(2))
                   : 1;
               const ptrPer = parseFloat(
@@ -469,7 +478,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
               const ptr =
                 ptrTemp !== undefined
                   ? typeof ptrTemp == "number"
-                    ? ptrTemp
+                    ? parseFloat(Number(ptrTemp).toFixed(2))
                     : parseFloat(Number(ptrTemp).toFixed(2))
                   : 1;
 
@@ -557,13 +566,14 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                 Number((e.target as HTMLInputElement).value).toFixed(2)
               );
               // if (row.stockistDiscountValue !== discount) {
-              const proposedRate =
-                (discount * 100) / TenderProductDiscountPercentage;
+              const proposedRate = parseFloat(
+                ((discount * 100) / TenderProductDiscountPercentage).toFixed(2)
+              );
               const ptrTemp = row.product.ptr;
               const ptr =
                 ptrTemp !== undefined
                   ? typeof ptrTemp == "number"
-                    ? ptrTemp
+                    ? parseFloat(Number(ptrTemp).toFixed(2))
                     : parseFloat(Number(ptrTemp).toFixed(2))
                   : 1;
 
@@ -677,9 +687,9 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
   // (You can use the selectionState from TableProvider context for this in the new system)
 
   // Render
-  if (calculatedProducts.length === 0) {
-    return <div className={styles.noDataFound}>Loading products...</div>;
-  }
+  // if (calculatedProducts.length === 0) {
+  //   return <div className={styles.noDataFound}>Loading products...</div>;
+  // }
 
   return (
     <div className="tender-product-container" style={{ overflowY: "hidden" }}>
@@ -696,7 +706,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         <SelectionComponent version={version} />
       </TableProvider>
 
-      {calculatedProducts.length === 0 && (
+      {/* {calculatedProducts.length === 0 && (
         <div className={styles.noDataFound}>
           <div className={styles.noData}>
             <div style={{ width: "2em", height: "3em" }}>
@@ -706,7 +716,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
           </div>
           <div className={styles.noDataBorders}></div>
         </div>
-      )}
+      )} */}
 
       {/* FloatingMenu and ContextMenu logic can remain as before, using selection from context */}
     </div>

@@ -29,7 +29,7 @@ import DsSplitButton from "@/Elements/DsComponents/DsButtons/dsSplitButton";
 
 import Toaster from "@/Elements/DsComponents/DsToaster/DsToaster";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
-import { useTenderData } from "../AddUpdateTenderComponents/TenderDataContextProvider";
+import { approvalObject, useTenderData } from "../AddUpdateTenderComponents/TenderDataContextProvider";
 import { TenderData } from "@/TenderComponents/AddUpdateTenderComponents/TenderDataContextProvider";
 import { getYesterdayDate } from "@/Common/helpers/Method/conversion";
 import ApprovalPopup from "../AddUpdateTenderComponents/Approvelpopup/ApprovelPopup";
@@ -79,7 +79,7 @@ export const DSTendrFooter: React.FC = ({}) => {
 
   const searchParams = useSearchParams();
 
-    const type =
+  const type =
     searchParams.get("type") == "institutional" ? "institutional" : "corporate";
   const permissions = useAppSelector((state: RootState) => state.permissions);
   const {
@@ -314,44 +314,45 @@ export const DSTendrFooter: React.FC = ({}) => {
           }
         }
       });
-
-      if (
-        !supplypointDisable &&
-        tenderData?.tenderSupplyCondition?.supplyPoint?.trim() === ""
-      ) {
-        errors.push("Please select a supply point.");
-      }
-      if (
-        !consignessCountDisable &&
-        tenderData?.tenderSupplyCondition?.consigneesCount === 0
-      ) {
-        errors.push("Please enter the number of consignees.");
-      }
-      if (
-        !testreportRequiredDisable &&
-        tenderData?.tenderSupplyCondition?.testReportRequired?.trim() === ""
-      ) {
-        errors.push("Please specify whether a test report is required.");
-      }
-      if (
-        !eligibilityDisable &&
-        tenderData?.tenderSupplyCondition?.eligibility.length == 0
-      ) {
-        errors.push("Please select at least one eligibility criterion.");
-      }
-
-      const applicableConditions =
-        tenderData?.tenderSupplyCondition?.applicableConditions ?? [];
-      applicableConditions.forEach((condition, index) => {
-        if (condition.status == "ACTV") {
-          if (condition.type?.toString().trim() == "") {
-            errors.push(`${condition.type} :Please select a type.`);
-          }
-          if (!condtionNotesDisable && condition.notes?.trim() == "") {
-            errors.push(`${condition.type}: Please enter notes.`);
-          }
+      if (type == "institutional") {
+        if (
+          !supplypointDisable &&
+          tenderData?.tenderSupplyCondition?.supplyPoint?.trim() === ""
+        ) {
+          errors.push("Please select a supply point.");
         }
-      });
+        if (
+          !consignessCountDisable &&
+          tenderData?.tenderSupplyCondition?.consigneesCount === 0
+        ) {
+          errors.push("Please enter the number of consignees.");
+        }
+        if (
+          !testreportRequiredDisable &&
+          tenderData?.tenderSupplyCondition?.testReportRequired?.trim() === ""
+        ) {
+          errors.push("Please specify whether a test report is required.");
+        }
+        if (
+          !eligibilityDisable &&
+          tenderData?.tenderSupplyCondition?.eligibility.length == 0
+        ) {
+          errors.push("Please select at least one eligibility criterion.");
+        }
+
+        const applicableConditions =
+          tenderData?.tenderSupplyCondition?.applicableConditions ?? [];
+        applicableConditions.forEach((condition, index) => {
+          if (condition.status == "ACTV") {
+            if (condition.type?.toString().trim() == "") {
+              errors.push(`${condition.type} :Please select a type.`);
+            }
+            if (!condtionNotesDisable && condition.notes?.trim() == "") {
+              errors.push(`${condition.type}: Please enter notes.`);
+            }
+          }
+        });
+      }
       if (toValidate)
         if (tenderData.tenderRevisions.length > 0) {
           const latestRevision = tenderData.tenderRevisions.reduce(
@@ -434,12 +435,12 @@ export const DSTendrFooter: React.FC = ({}) => {
   };
 
   const validateAndSaveTender = (
-   customerType?: "institutional" | "corporate"
+    customerType?: "institutional" | "corporate"
   ) => {
-    console.log( "validateAndSaveTender",tenderData);
+    console.log("validateAndSaveTender", tenderData);
     const validate = validateFields(tenderData);
     if (validate.length === 0) {
-      saveTender("Draft",type);
+      saveTender("Draft", type);
     } else {
       const message = (
         <>
@@ -462,14 +463,14 @@ export const DSTendrFooter: React.FC = ({}) => {
       showToaster("create-order-toaster");
     }
   };
-  const validateAndUpdateTender = () => {
+  const validateAndUpdateTender = (approval?:approvalObject) => {
     // console.log(tenderData);
     // updateTender(tenderData.status);
 
     const validate = validateFields(tenderData);
     if (validate.length === 0) {
-      if (toValidate) updateTender(tenderData.status, "SUBMIT");
-      else updateTender(tenderData.status, "SAVE");
+      if (toValidate) updateTender(tenderData.status, "SUBMIT",approval);
+      else updateTender(tenderData.status, "SAVE",approval);
     } else {
       const message = (
         <>
@@ -763,6 +764,8 @@ export const DSTendrFooter: React.FC = ({}) => {
             : "The action was successful!"
         }
         setActionStatus={setActionStatusValues}
+        validateAndUpdateTender={validateAndUpdateTender}
+
       />
       <ApprovalPopup
         id="rejectPopup"
@@ -773,6 +776,7 @@ export const DSTendrFooter: React.FC = ({}) => {
         position="center"
         toasterMessage={"The Tender has been sent for Revision "}
         setActionStatus={setActionStatusValues}
+        validateAndUpdateTender={validateAndUpdateTender}
       />
       <ApprovalPopup
         id="revisePopup"
@@ -783,6 +787,8 @@ export const DSTendrFooter: React.FC = ({}) => {
         position="center"
         toasterMessage={"The Tender has been Rejected & also note has sent "}
         setActionStatus={setActionStatusValues}
+        validateAndUpdateTender={validateAndUpdateTender}
+        
       />
       <ApprovalPopup
         id="reviewedPopup"
@@ -799,6 +805,8 @@ export const DSTendrFooter: React.FC = ({}) => {
             : "The action was successful!"
         }
         setActionStatus={setActionStatusValues}
+        validateAndUpdateTender={validateAndUpdateTender}
+
       />
 
       <Toaster
