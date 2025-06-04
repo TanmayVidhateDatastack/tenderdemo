@@ -505,21 +505,10 @@ export const DSTendrFooter: React.FC = ({}) => {
             buttonSize="btnSmall"
             buttonViewStyle="btnText"
             className={btnStyles.btnTextPrimary}
-            // onClick={() => {
-             
-              
-            // }}
               onClick={() => {
-              // if (saveTender) validateAndSaveTender();
-              // if (saveTender) saveTender("Draft");
-              if (tenderDataCopy?.id) {
-                validateAndUpdateTender();
-                // updateTender("Draft")
-              } else {
-                validateAndSaveTender();
-                // saveTender("Draft");
-              }
-            }}
+                // setToValidate(true);
+                setSaveTenderClicked(true);
+              }}
           />
         );
       } else if (role === "CHECKER") {
@@ -738,7 +727,8 @@ export const DSTendrFooter: React.FC = ({}) => {
                 validateAndSaveTender();
                 // saveTender("Draft");
               }
-            }}
+            }
+          }
             onSplitClick={(e) =>
               displayContext(e, "SubmissionContext", "top", "right")
             }
