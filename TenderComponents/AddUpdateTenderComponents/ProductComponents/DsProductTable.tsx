@@ -121,7 +121,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
                 ) / 100
               ).toFixed(2)
             );
-        calculated.stockistDiscountValue=discount;
+        calculated.stockistDiscountValue = discount;
         calculated.product.totalCost = parseFloat(
           (Number(tenderproduct.product.directCost) + Number(discount)).toFixed(
             2
@@ -163,7 +163,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
       return calculated;
     });
   }, [localProducts]);
-  // useEffect(() => {
+
   //   console.log(calculatedProducts);
   // }, [calculatedProducts]);
   // Handle cell update from inline editing
@@ -371,7 +371,6 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
             // if (onCommit) onCommit();
             // }}
             // onBlur={(e) => {
-            autofocus={true}
             // disable={latestVersion != version}
           />
         ),
@@ -682,7 +681,37 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
       }))
     );
   }, [tenderData, productList, version]);
+  useEffect(() => {
+    calculatedProducts.forEach((calculated, idx) => {
+      const original = localProducts[idx];
+      if (!original) return;
 
+      // List all calculated fields you want to sync
+      const fieldsToSync: Array<
+        keyof TenderProduct | `product.${keyof TenderProduct["product"]}`
+      > = [
+        "ptrPercentage",
+        "stockistDiscountValue",
+        "proposedRate",
+        // ...add other calculated fields as needed
+      ];
+
+      fieldsToSync.forEach((field) => {
+        if (calculated[field] !== original[field]) {
+          // Call updateTenderProduct for the changed/calculated field
+          updateTenderProduct(
+            version,
+            field,
+            calculated[field],
+            calculated.id,
+            calculated.productId,
+            calculated.requestedGenericName
+          );
+        }
+      });
+    });
+  }, [calculatedProducts, localProducts, updateTenderProduct, version]);
+  // useEffect(() => {
   // Handle row selection for floating menu, context menu, etc.
   // (You can use the selectionState from TableProvider context for this in the new system)
 

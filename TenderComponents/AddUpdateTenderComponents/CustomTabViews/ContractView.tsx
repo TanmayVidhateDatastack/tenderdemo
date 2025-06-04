@@ -204,7 +204,7 @@ const ContractView: React.FC<ContractViewProps> = ({
         className: styles["cell-awarded-to"],
       },
       {
-        id: "awardedAtRate",
+        id: "awardedRate",
         header: "Awarded At Rate",
         accessor: (row) => row.awardedRate,
         editorComponent: DsTextField,

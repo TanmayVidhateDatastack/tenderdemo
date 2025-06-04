@@ -14,6 +14,8 @@ import {
   updateContractUrl,
   saveTenderUrl,
   updatePaymentUrl,
+  proDeskUrl,
+  approvelurl,
 } from "@/Common/helpers/constant";
 import fetchData, { fileToBase64 } from "@/Common/helpers/Method/fetchData";
 import { useRouter } from "next/navigation";
@@ -201,6 +203,11 @@ export type TenderData = {
   tenderContract?: TenderContract;
   tenderDocuments?: TenderDocument[];
 };
+export type approvalObject = {
+  approvalComments: string;
+  justificationType: string;
+  approvalStatus: string;
+};
 
 export function updateDocuments(
   files: {
@@ -370,7 +377,11 @@ interface TenderDataContextType {
     status: string,
     customerType: "institutional" | "corporate"
   ) => Promise<void>;
-  updateTender: (status: string, action: "SAVE" | "SUBMIT") => Promise<void>;
+  updateTender: (
+    status: string,
+    action: "SAVE" | "SUBMIT",
+    approval?: approvalObject
+  ) => Promise<void>;
   fetchAndSetOriginalTender: (
     tenderId: number,
     tenderStatus?: string
@@ -1117,7 +1128,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const router = useRouter();
   const goBack = () => {
-    router.back();
+    router.replace(proDeskUrl);
   };
 
   // Update the ref whenever orderDataCopy changes
@@ -1429,7 +1440,11 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 
   const updateTender = useCallback(
-    async (status: string, action: "SAVE" | "SUBMIT") => {
+    async (
+      status: string,
+      action: "SAVE" | "SUBMIT",
+      approval?: approvalObject
+    ) => {
       try {
         let documentRequestId = 0;
         const tenderOriginalDocuments = tenderDataCopy.tenderDocuments?.map(
@@ -1760,7 +1775,21 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             lastUpdatedBy: dataToSendOriginalTender.lastUpdatedBy,
           });
         }
-
+        if (approval) {
+          url= approvelurl(tenderData.id)
+          dataToSendTenderCopy = stripReadOnlyProperties({
+            ...dataToSendTenderCopy,
+            approval: {
+              approvalComments: "",
+              justificationType: "",
+              approvalStatus: "",
+            },
+          });
+          dataToSendOriginalTender = stripReadOnlyProperties({
+            ...dataToSendOriginalTender,
+            approval: { ...approval },
+          });
+        }
         //user uploaded documents
         if (
           tenderData?.tenderDocuments &&
@@ -2043,11 +2072,11 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
 
         const newTenderData: TenderData = {
           ...tenderData.tenders,
-          tenderNumber:undefined,
-          issueDate:undefined,
-          submissionDate:undefined,
-          lastPurchaseDate:undefined,
-          
+          tenderNumber: undefined,
+          issueDate: undefined,
+          submissionDate: undefined,
+          lastPurchaseDate: undefined,
+
           tenderRevisions: [
             {
               version: 1,
