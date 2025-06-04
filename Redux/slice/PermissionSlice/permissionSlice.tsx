@@ -341,9 +341,47 @@ const permissionsSlice = createSlice({
         case "UNDER_APPROVAL":
           if (role === "HOMANAGER" || role == "CHECKER") {
             // case "HOMANAGER":
-            state.productTableDisable = false;
-
+            state.searchCustomerDisable = false;
+            state.customerLocationDisable = false;
+            state.tenderNumberDisable = false;
+            state.tenderTypeDisable = false;
+            state.tenderIssueDateDisable = false;
+            state.lastPurchaseDateDisable = false;
+            state.submissionDateDisable = false;
+            state.ContractTypeDisable = false;
+            state.rateContractvalidityDisable = false;
+            state.submissionModeDisable = false;
+            state.deliveryPeriodDisable = false;
+            state.extendedDeliveryPeriodDisable = false;
+            state.penaltyLastDeliveryDisable = false;
+            state.tenderUrlDisable = false;
+            state.appliedByDisable = false;
+            state.suppliedDisable = false;
+            state.depotDisable = false;
+            state.stockistNameDisable = false;
+            state.stockistDiscountDisable = false;
+            state.applicableDepositButtonDisable = false;
+            state.amountDisable = false;
+            state.paidByDisable = false;
+            state.modesDisable = false;
+            state.refundEligibilityDisable = false;
+            state.PaymentdueDateDisable = false;
+            state.instructionNotesDisable = false;
+            state.attachFileButtonDisable = false;
+            state.supplypointDisable = false;
+            state.consignessCountDisable = false;
+            state.testreportRequiredDisable = false;
+            state.eligibilityDisable = false;
+            state.applicableConditionButtonDisable = false;
+            state.condtionNotesDisable = false;
+            state.attachFileConditionButtonDisable = false;
             state.saveButtonDisabled = false;
+            state.disable = false;
+            //product tab
+            state.productSearchDisable = false;
+            state.productquantityDisable = false;
+            state.addProductBtnDisable = false;
+            state.productTableDisable = false;
             break;
           }
       }
