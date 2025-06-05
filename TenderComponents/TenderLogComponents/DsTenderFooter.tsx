@@ -848,5 +848,4 @@ export const DSTendrFooter: React.FC = ({}) => {
 
 export default DSTendrFooter;
 function useCallBack(arg0: () => void, arg1: TenderData[]) {
-  throw new Error("Function not implemented.");
-}
+  throw new Error("Function not implemented.");}
