@@ -158,6 +158,13 @@ export const DsTenderTableFloatingMenu: React.FC<
     })
       .then((res) => {
         if (res?.code === 200 && res?.result) {
+            console.error("success");
+          setActionStatus({
+            notiType: "success",
+            notiMsg: res?.message || "success in submission",
+          });
+          showToaster("tenderSubmissionToaster");
+
           handleFetch();
         } else {
           console.error("Error");

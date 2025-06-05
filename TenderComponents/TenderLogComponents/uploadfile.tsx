@@ -3,11 +3,15 @@ import styles from "./CsvPopup.module.css";
 import React, { useRef, useState, useEffect } from "react";
 import IconFactory from "@/Elements/IconComponent";
 interface UploadFileProps {
+  onRemoveFiles?: (documentName: string) => void;
+  onAddFiles?: (
+    documents: {
+      documentName?: string;
+      document?: File;
+    }[]
+  ) => void;
   uploadLabel?: string;
   id: string;
-  onSelectedFileChange?: (
-    documents: { id?: number; document?: File }[]
-  ) => void;
   disable?: boolean;
   previouslySelectedFile?: {
     id?: number;
@@ -16,9 +20,11 @@ interface UploadFileProps {
   };
 }
 const UploadFile: React.FC<UploadFileProps> = ({
+  onRemoveFiles,
+  onAddFiles,
   uploadLabel,
   id,
-  onSelectedFileChange,
+
   disable = false,
   previouslySelectedFile,
 })=> {
@@ -41,6 +47,7 @@ const UploadFile: React.FC<UploadFileProps> = ({
 
   useEffect(() => {
     if (!hasManuallyChangedFile && previouslySelectedFile) {
+      
       setPrevFile(previouslySelectedFile);
       setFile(null);
       setFileName(
@@ -51,22 +58,7 @@ const UploadFile: React.FC<UploadFileProps> = ({
     }
   }, [previouslySelectedFile, uploadLabel, hasManuallyChangedFile]);
 
-  useEffect(() => {
-    if (onSelectedFileChange) {
-      if (file) {
-        onSelectedFileChange([{ document: file }]);
-      } else if (prevFile) {
-        onSelectedFileChange([
-          {
-            id: prevFile.id,
-            document: undefined,
-          },
-        ]);
-      } else {
-        onSelectedFileChange([]);
-      }
-    }
-  }, [file, prevFile]);
+
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
@@ -76,8 +68,18 @@ const UploadFile: React.FC<UploadFileProps> = ({
       setPrevFile(null);
       setHasManuallyChangedFile(true);
     }
+     if (onAddFiles && selectedFile) {
+      onAddFiles([
+        {
+          documentName: selectedFile.name,
+          document: selectedFile,
+        },
+      ]);
+    }
   };
 
+  
+  
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     const droppedFile = event.dataTransfer.files?.[0];
@@ -87,18 +89,34 @@ const UploadFile: React.FC<UploadFileProps> = ({
       setPrevFile(null);
       setHasManuallyChangedFile(true);
     }
+    if (onAddFiles) {
+      onAddFiles([
+        {
+          documentName: droppedFile.name,
+          document: droppedFile,
+        },
+      ]);
+    }
   };
+  
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
   };
 
-  const handleRemoveFile = () => {
-    setFile(null);
-    setPrevFile(null);
-    setFileName(uploadLabel || "Attach your File here");
-  };
-  
+ 
+const handleRemoveFile = () => {
+  if (file && onRemoveFiles) {
+    onRemoveFiles(file.name);
+  } else if (prevFile && prevFile.documentName && onRemoveFiles) {
+    onRemoveFiles(prevFile.documentName);
+  }
+  setFile(null);
+  setPrevFile(null);
+  setFileName(uploadLabel || "Attach your File here");
+  setHasManuallyChangedFile(true); 
+};
+
 
   return (
     <div className={styles.container}>
@@ -111,6 +129,7 @@ const UploadFile: React.FC<UploadFileProps> = ({
         onClick={() =>
           !disable && document.getElementById(`selectfile-${id}`)?.click()
         }
+
       >
         <div className={disable ? styles.disabled : ""}>
        {file ? (
@@ -148,13 +167,15 @@ const UploadFile: React.FC<UploadFileProps> = ({
           onChange={handleFileChange}
           ref={fileInputRef}
           disabled={disable}
+          
         />
 
         {(file || prevFile) && (
           <div
             style={{ width: "1em", height: "1em" }}
             onClick={(e) => {
-              if (!disable) handleRemoveFile();
+              if (!disable)
+                 handleRemoveFile();
               e.stopPropagation();
               
             }}
@@ -168,3 +189,5 @@ const UploadFile: React.FC<UploadFileProps> = ({
 };
 
 export default UploadFile;
+
+ 
