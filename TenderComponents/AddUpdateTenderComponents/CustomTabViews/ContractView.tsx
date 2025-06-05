@@ -77,7 +77,7 @@ const ContractView: React.FC<ContractViewProps> = ({
     else if (status == "PARTIALLY_AWARDED")
       setJustificationOptions(metaData.tenderPartiallyAwardedJustification);
     else if (status == "CANCELLED")
-      setJustificationOptions(metaData.tenderAwardedJustification);
+      setJustificationOptions(metaData.tenderCancelledJustification);
     else if (status == "LOST")
       setJustificationOptions(metaData.tenderLostJustification);
   }, [status, metaData, tenderData.id, tenderDataCopy.id]);
@@ -265,21 +265,38 @@ const ContractView: React.FC<ContractViewProps> = ({
               // && x.id !== undefined
             ) || []
           }
-          onSelectedFileChange={(files) => {
-            const typeDocuments =
-              tenderData.tenderDocuments?.filter(
-                (x) =>
-                  x.documentCategory == "TENDER_CONTRACT_DOCUMENT" &&
-                  x.documentType == status + "_DOCUMENT"
-              ) || [];
-            updateDocuments(
-              files,
-              typeDocuments,
-              removeTenderDocument,
-              addNewTenderDocument,
-              status + "_DOCUMENT",
-              "TENDER_CONTRACT_DOCUMENT"
-            );
+          // onSelectedFileChange={(files) => {
+          //   const typeDocuments =
+          //     tenderData.tenderDocuments?.filter(
+          //       (x) =>
+          //         x.documentCategory == "TENDER_CONTRACT_DOCUMENT" &&
+          //         x.documentType == status + "_DOCUMENT"
+          //     ) || [];
+          //   updateDocuments(
+          //     files,
+          //     typeDocuments,
+          //     removeTenderDocument,
+          //     addNewTenderDocument,
+          //     status + "_DOCUMENT",
+          //     "TENDER_CONTRACT_DOCUMENT"
+          //   );
+          // }}
+           onRemoveFiles={(documentName) => {
+            removeTenderDocument(status + "_DOCUMENT", "TENDER_CONTRACT_DOCUMENT", documentName);
+          }}
+          onAddFiles={(
+            documents: {
+              documentName?: string;
+              document?: File;
+            }[]
+          ) => {
+            documents.forEach((file) => {
+              addNewTenderDocument(status + "_DOCUMENT", "TENDER_CONTRACT_DOCUMENT", {
+                document: file.document,
+                documentName: file.documentName,
+                name: file.documentName,
+              });
+            });
           }}
         ></DsCsvUpload>
       </div>

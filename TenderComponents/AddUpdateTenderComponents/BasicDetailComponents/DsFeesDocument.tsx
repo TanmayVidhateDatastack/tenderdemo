@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import DsCsvUpload from "@/Elements/DsComponents/DsButtons/dsCsvUpload";
 import Ds_checkbox from "@/Elements/DsComponents/DsCheckbox/dsCheckbox";
@@ -653,22 +654,39 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 };
               }) || []
           }
-          onSelectedFileChange={(files) => {
-            const typeDocuments =
-              tenderData.tenderDocuments?.filter(
-                (x) =>
-                  x.documentCategory == type &&
-                  x.documentType == type + "_INSTRUCTION"
-              ) || [];
-            updateDocuments(
-              files,
-              typeDocuments,
-              removeTenderDocument,
-              addNewTenderDocument,
-              type + "_INSTRUCTION",
-              type
-            );
+          onRemoveFiles={(documentName) => {
+            removeTenderDocument(type + "_INSTRUCTION", type, documentName);
           }}
+          onAddFiles={(
+            documents: {
+              documentName?: string;
+              document?: File;
+            }[]
+          ) => {
+            documents.forEach((file) => {
+              addNewTenderDocument(type + "_INSTRUCTION", type, {
+                document: file.document,
+                documentName: file.documentName,
+                name: file.documentName,
+              });
+            });
+          }}
+          // onSelectedFileChange={(files) => {
+          //   const typeDocuments =
+          //     tenderData.tenderDocuments?.filter(
+          //       (x) =>
+          //         x.documentCategory == type &&
+          //         x.documentType == type + "_INSTRUCTION"
+          //     ) || [];
+          //   updateDocuments(
+          //     files,
+          //     typeDocuments,
+          //     removeTenderDocument,
+          //     addNewTenderDocument,
+          //     type + "_INSTRUCTION",
+          //     type
+          //   );
+          // }}
         ></DsCsvUpload>
       </div>
       {recoverycheckvisibible && (
@@ -767,22 +785,39 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                     };
                   }) || []
               }
-              onSelectedFileChange={(files) => {
-                const typeDocuments =
-                  tenderData.tenderDocuments?.filter(
-                    (x) =>
-                      x.documentCategory == type &&
-                      x.documentType == type + "_INSTRUCTION"
-                  ) || [];
-                updateDocuments(
-                  files,
-                  typeDocuments,
-                  removeTenderDocument,
-                  addNewTenderDocument,
-                  type + "_INSTRUCTION",
-                  type
-                );
+              onRemoveFiles={(documentName) => {
+                removeTenderDocument(type + "_INSTRUCTION", type, documentName);
               }}
+              onAddFiles={(
+                documents: {
+                  documentName?: string;
+                  document?: File;
+                }[]
+              ) => {
+                documents.forEach((file) => {
+                  addNewTenderDocument(type + "_INSTRUCTION", type, {
+                    document: file.document,
+                    documentName: file.documentName,
+                    name: file.documentName,
+                  });
+                });
+              }}
+              // onSelectedFileChange={(files) => {
+              //   const typeDocuments =
+              //     tenderData.tenderDocuments?.filter(
+              //       (x) =>
+              //         x.documentCategory == type &&
+              //         x.documentType == type + "_INSTRUCTION"
+              //     ) || [];
+              //   updateDocuments(
+              //     files,
+              //     typeDocuments,
+              //     removeTenderDocument,
+              //     addNewTenderDocument,
+              //     type + "_INSTRUCTION",
+              //     type
+              //   );
+              // }}
             ></DsCsvUpload>
           </div>
         </>
