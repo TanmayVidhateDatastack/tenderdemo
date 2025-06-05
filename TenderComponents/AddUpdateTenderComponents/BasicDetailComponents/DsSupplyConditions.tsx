@@ -26,7 +26,8 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
     removeTenderDocument,
   } = useTenderData();
   const permissions = useAppSelector((state: RootState) => state.permissions);
-  const { condtionNotesDisable, attachFileConditionButtonDisable } = permissions;
+  const { condtionNotesDisable, attachFileConditionButtonDisable } =
+    permissions;
   return (
     <>
       <div className={styles.emdContainer}>
@@ -66,42 +67,66 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
             startIcon={
               <IconFactory
                 name="fileAttach"
-                disabled={attachFileConditionButtonDisable} />}
-            previouslySelectedFile={
-              tenderData.tenderDocuments?.filter(
-                (x) =>
-                  x.documentType == type &&
-                  x.documentCategory == "TENDER_SUPPLY_CONDITION"
-                  // x.id !== undefined
-              ).map((x) => {
-                return {
-                  ...x,
-                  fileDownloadHref: downloadDocumentUrl(tenderData.id, x.id),
-                };
-              }) || []
+                disabled={attachFileConditionButtonDisable}
+              />
             }
-            onSelectedFileChange={(files) => {
-              const typeDocuments =
-                tenderData.tenderDocuments?.filter(
+            previouslySelectedFile={
+              tenderData.tenderDocuments
+                ?.filter(
                   (x) =>
                     x.documentType == type &&
                     x.documentCategory == "TENDER_SUPPLY_CONDITION"
-                ) || [];
-              // console.log("updateDocuments",files); 
-              updateDocuments(
-                files,
-                typeDocuments,
-                removeTenderDocument,
-                addNewTenderDocument,
+                  // x.id !== undefined
+                )
+                .map((x) => {
+                  return {
+                    ...x,
+                    fileDownloadHref: downloadDocumentUrl(tenderData.id, x.id),
+                  };
+                }) || []
+            }
+            onRemoveFiles={(documentName) => {
+              removeTenderDocument(
                 type,
                 "TENDER_SUPPLY_CONDITION",
+                documentName
               );
-
             }}
+            onAddFiles={(
+              documents: {
+                documentName?: string;
+                document?: File;
+              }[]
+            ) => {
+              documents.forEach((file) => {
+                addNewTenderDocument(type, "TENDER_SUPPLY_CONDITION", {
+                  document: file.document,
+                  documentName: file.documentName,
+                  name: file.documentName,
+                });
+              });
+            }}
+            // onSelectedFileChange={(files) => {
+            //   const typeDocuments =
+            //     tenderData.tenderDocuments?.filter(
+            //       (x) =>
+            //         x.documentType == type &&
+            //         x.documentCategory == "TENDER_SUPPLY_CONDITION"
+            //     ) || [];
+            //   // console.log("updateDocuments",files);
+            //   updateDocuments(
+            //     files,
+            //     typeDocuments,
+            //     removeTenderDocument,
+            //     addNewTenderDocument,
+            //     type,
+            //     "TENDER_SUPPLY_CONDITION"
+            //   );
+            // }}
           ></DsCsvUpload>
         </div>
       </div>
     </>
   );
 };
-export default DsSupplyConditions; 
+export default DsSupplyConditions;
