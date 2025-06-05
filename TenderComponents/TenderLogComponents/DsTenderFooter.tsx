@@ -534,7 +534,8 @@ export const DSTendrFooter: React.FC = ({}) => {
             buttonViewStyle="btnText"
             className={btnStyles.btnTextPrimary}
             onClick={() => {
-              showToaster("toaster1");
+              setToValidate(true); 
+              setSaveTenderClicked(true);
             }}
           />
         );

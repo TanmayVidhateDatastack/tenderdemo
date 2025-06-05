@@ -1167,8 +1167,11 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
   }
 
   const saveTender = useCallback(
-    async (status: string, customerType?: "institutional" | "corporate") => {
-      if (!customerType) customerType = "institutional";
+    async (
+      status: string,
+      customerType?: "institutional" | "corporate"
+    ) => {
+      if(!customerType)customerType="institutional"
       if (!tenderData) return;
       let documentRequestId = 0;
       const tenderSaveDocuments = tenderData.tenderDocuments?.map((x) => {
@@ -1288,7 +1291,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                   ),
               }
             : undefined,
-
+ 
         tenderDocuments:
           tenderSaveDocuments?.map((x) => {
             // const newDocs=new FormData();
@@ -1307,14 +1310,14 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           }) || [],
         comments: null,
       };
-
+ 
       if (
         tenderSaveData.tenderSupplyCondition &&
         tenderSaveData.tenderSupplyCondition.id
       ) {
         delete tenderSaveData.tenderSupplyCondition.id;
       }
-
+ 
       try {
         if (
           tenderData?.tenderDocuments &&
@@ -1685,12 +1688,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           },
           tenderDocuments:
             tenderSaveDocuments?.map((x) => {
-              // const newDocs=new FormData();
-              // newDocs.append("name",x.name);
-              // newDocs.append("data",x.data as Blob);
-              // newDocs.append("documentType",x.name);
-              // newDocs.append("category",x.name);
-              // const base64String = x.data ? await fileToBase64(x.data) : "";
+
               return {
                 id: x.id,
                 documentName: x.documentName,
@@ -1964,7 +1962,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           tenderRevisions: tenderData.tenderRevisions,
           tenderFees: tenderData.tenderFees.map((fee) => ({
             ...fee,
-            paymentReceiptId: fee.paymentRecieptId,
+         
             status: "ACTV",
           })),
           tenderSupplyCondition: {
