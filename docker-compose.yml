@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile
 
-    image: datastackdevops/tender_ui:0.0.69
+    image: datastackdevops/tender_ui:0.0.70
     ports:
       - 7003:3000
     volumes:
