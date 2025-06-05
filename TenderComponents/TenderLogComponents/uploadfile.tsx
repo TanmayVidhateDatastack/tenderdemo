@@ -97,7 +97,6 @@ const UploadFile: React.FC<UploadFileProps> = ({
     setFile(null);
     setPrevFile(null);
     setFileName(uploadLabel || "Attach your File here");
- 
   };
   
 
@@ -157,6 +156,7 @@ const UploadFile: React.FC<UploadFileProps> = ({
             onClick={(e) => {
               if (!disable) handleRemoveFile();
               e.stopPropagation();
+              
             }}
           >
             <IconFactory name={"crossSmall"} />
