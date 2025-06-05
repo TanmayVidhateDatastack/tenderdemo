@@ -239,13 +239,13 @@ export function updateDocuments(
   //If all current files array is empty (all documents are removed) then simply empty/remove the tenderDocument array (with their corresponding document_type, category and sub-category).
   if (files.length == 0) {
     typeDocuments?.forEach((x) => {
-      if (x.id == undefined)
-        removeDocumentFunction(
-          x.documentType,
-          x.documentCategory,
-          x.documentName,
-          x.documentSubType
-        );
+      // if (x.id == undefined)
+      removeDocumentFunction(
+        x.documentType,
+        x.documentCategory,
+        x.documentName,
+        x.documentSubType
+      );
     });
     return;
   }
@@ -698,7 +698,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
         tenderDocuments: [
           ...(prev.tenderDocuments || []),
           {
-            id: document?.id,
+            id: document?.id || documentId || document?.documentId,
             documentType: documentType,
             documentCategory: documentCategory,
             documentSubType: documentSubType,
@@ -1773,8 +1773,8 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             lastUpdatedBy: dataToSendOriginalTender.lastUpdatedBy,
           });
         }
-        if (approval) {
-          url= approvelurl(tenderData.id)
+        if (approval !== undefined) {
+          url = approvelurl(tenderData.id);
           dataToSendTenderCopy = stripReadOnlyProperties({
             ...dataToSendTenderCopy,
             approval: {
