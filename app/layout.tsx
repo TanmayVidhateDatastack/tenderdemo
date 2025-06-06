@@ -1,4 +1,3 @@
-
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "@/Common/globals.css";
@@ -12,8 +11,6 @@ const openSans = localFont({
   variable: "--font-Open-sans",
   weight: "100 900",
 });
-
-
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -32,7 +29,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   return (
     <html lang="en">
       <body
@@ -44,4 +40,3 @@ export default function RootLayout({
     </html>
   );
 }
-

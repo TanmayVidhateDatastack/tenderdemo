@@ -11,8 +11,8 @@ export type ParamType = {
 };
 export default function Home(param: ParamType) {
   const paramOrderId: string | number = param?.params?.TenderId;
-  
-  const storedStatus=sessionStorage?.getItem("tenderStatus")||undefined;
+
+  const storedStatus = sessionStorage?.getItem("tenderStatus") || undefined;
   // },[]);
   useEffect(() => {
     closeAllContext();

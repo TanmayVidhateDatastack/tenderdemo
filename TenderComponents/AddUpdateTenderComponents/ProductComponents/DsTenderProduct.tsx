@@ -43,14 +43,14 @@ const DsTenderProduct: React.FC<{
           gap: "17.5em",
           alignItems: "flex-start",
           margin: "20px",
-          justifyContent:"space-between"
+          justifyContent: "space-between",
         }}
       >
-        <DsAddProduct setProductList={setProductList} version={version}/>
+        <DsAddProduct setProductList={setProductList} version={version} />
         <DsProductKpis version={version} />
       </div>
 
-      <DsProductTable productList={productList} version={version}  />
+      <DsProductTable productList={productList} version={version} />
     </>
   );
 };

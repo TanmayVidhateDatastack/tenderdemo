@@ -25,8 +25,8 @@ const DocumentSelectorArea: React.FC = () => {
     // ✅ Remove document from context
     documentContext.setDocumentData((prevData) =>
       prevData
-        .map((group) => ({ 
-          ...group, 
+        .map((group) => ({
+          ...group,
           documents: group.documents.filter(
             (d) => d.document.documentName !== documentName
           ),
@@ -76,11 +76,11 @@ const DocumentSelectorArea: React.FC = () => {
   //   });
   // };
 
-
-
   const [totalSelectedDocuments, setTotalSelectedDocuments] = useState(0);
   const [title, setTitle] = useState({});
-  const [updatedDocumentsData, setUpdatedDocumentData] = useState<DocumentType[]>([]);
+  const [updatedDocumentsData, setUpdatedDocumentData] = useState<
+    DocumentType[]
+  >([]);
 
   useEffect(() => {
     setUpdatedDocumentData(documentData);
@@ -100,7 +100,9 @@ const DocumentSelectorArea: React.FC = () => {
       const labelMap = {};
 
       documentData.forEach(({ type }) => {
-        const typeDescription = metaData.tenderDocument.find(item => item.value === type);
+        const typeDescription = metaData.tenderDocument.find(
+          (item) => item.value === type
+        );
         if (typeDescription) {
           labelMap[type] = typeDescription.label;
         }
@@ -108,8 +110,6 @@ const DocumentSelectorArea: React.FC = () => {
       setTitle(labelMap);
     }
   }, [documentData, metaData.tenderDocument]);
-
-
 
   const handleDownloadDocument = (type, docId) => {
     const doc = tenderData.tenderDocuments?.find(
@@ -135,7 +135,6 @@ const DocumentSelectorArea: React.FC = () => {
     link.click();
     document.body.removeChild(link);
   };
-
 
   // const handleDownloadDocument = (type, e) => {
   //   const target = e.target.value;
@@ -164,8 +163,6 @@ const DocumentSelectorArea: React.FC = () => {
   //     document.body.removeChild(link);
   //   });
   // };
-
-
 
   return (
     <>
@@ -215,7 +212,6 @@ const DocumentSelectorArea: React.FC = () => {
           </div>
         ) : null
       )}*/}
-
     </>
   );
 };

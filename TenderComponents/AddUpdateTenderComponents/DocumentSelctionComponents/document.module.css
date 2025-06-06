@@ -1,8 +1,8 @@
 .SaveBtn {
-margin: 0;
-position: absolute;
-width: 100%;
-bottom:0;
+  margin: 0;
+  position: absolute;
+  width: 100%;
+  bottom: 0;
 }
 
 /* .documents {
@@ -100,6 +100,6 @@ bottom:0;
   margin-bottom: 0.5rem !important;
   font-size: var(--font-13);
 }
-.documentSelectionPane{
-  padding:1.5em ;
+.documentSelectionPane {
+  padding: 1.5em;
 }

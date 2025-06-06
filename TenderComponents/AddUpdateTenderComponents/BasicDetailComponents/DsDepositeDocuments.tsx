@@ -91,7 +91,7 @@ const DsDepositeDocuments: React.FC = () => {
         TENDER_FEES: metaData.tenderFeesPayment,
       });
     }
-  }, [role, metaData,tenderData.status]);
+  }, [role, metaData, tenderData.status]);
   useEffect(() => {
     if (metaData) {
       // const modesData = metaData.paymentModes || [];

@@ -3,7 +3,7 @@
 // import React, { createContext, useContext, useState } from "react";
 
 // export type CsvContextType = {
-//   csvData: string[][]; 
+//   csvData: string[][];
 //   setCsvData: React.Dispatch<React.SetStateAction<string[][]>>;
 // };
 
@@ -71,4 +71,3 @@
 //   if (!context) throw new Error('useCsvData must be used within CsvDataProvider');
 //   return context;
 // };
-

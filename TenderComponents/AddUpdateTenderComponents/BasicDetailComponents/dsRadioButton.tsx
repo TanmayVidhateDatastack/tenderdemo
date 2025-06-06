@@ -30,9 +30,9 @@ const RadioButton: React.FC<RadioButtonProps> = ({
   return (
     <div
       className={`${styles.wrapper} ${className}`}
-      onMouseEnter={onHover} 
-      onClick={onClick}  
-      onBlur={onBlur} 
+      onMouseEnter={onHover}
+      onClick={onClick}
+      onBlur={onBlur}
     >
       <input
         type="radio"

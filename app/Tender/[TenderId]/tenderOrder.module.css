@@ -347,14 +347,14 @@
   border-radius: 4px;
   margin: 0 !important;
 }
-.my1{
+.my1 {
   margin-top: 0.5em;
   margin-bottom: 0.5em;
 }
 /* .flex{
   display: flex;
 } */
-.recordNotFound{
+.recordNotFound {
   justify-content: center;
   color: red;
   font-size: 1.5625em;
@@ -365,4 +365,3 @@
   text-align: center;
   margin-top: 0.625em;
 }
- 

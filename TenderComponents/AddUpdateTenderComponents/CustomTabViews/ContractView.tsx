@@ -223,7 +223,8 @@ const ContractView: React.FC<ContractViewProps> = ({
     <div className={styles.ContractPage}>
       <div className={styles.justification}>
         <div className={styles.title}>
-          Tender{status ? ` ${ContractStatuses[status]} ` : " "}Justification{" "}
+          Tender{status ? ` ${ContractStatuses[status]} ` : " "}
+          Justification{" "}
         </div>
         <DsSingleSelect
           id={"contractJustification"}

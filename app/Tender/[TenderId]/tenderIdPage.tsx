@@ -424,7 +424,7 @@ const DsTenderIdPage: React.FC<{
                       id="state"
                       status={
                         displayFlag == "Existing"
-                          ? tenderData?.status ?? DsStatus.DRFT
+                          ? (tenderData?.status ?? DsStatus.DRFT)
                           : DsStatus.DRFT
                       }
                     />
