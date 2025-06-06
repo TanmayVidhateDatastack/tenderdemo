@@ -165,6 +165,7 @@ export const DSTendrFooter: React.FC = ({}) => {
           errors.push(`Please enter Supporting Notes.`);
         }
         if (
+          tenderData.status.toLowerCase() != DsStatus.CNCL.toLowerCase() &&
           tenderData.tenderContract?.tenderRevisions?.[0].tenderItems?.find(
             (x) =>
               x.product.awardedToName == undefined ||
@@ -312,7 +313,7 @@ export const DSTendrFooter: React.FC = ({}) => {
           if (!paidByDisable && !fee.paidBy?.trim()) {
             errors.push(`${fee.feesType}: Please specify who paid the fee.`);
           }
-          
+
           if (!PaymentdueDateDisable && !fee.paymentDueDate?.trim()) {
             errors.push(`${fee.feesType}: Payment due date is required.`);
           } else if (!PaymentdueDateDisable) {
@@ -534,7 +535,7 @@ export const DSTendrFooter: React.FC = ({}) => {
             buttonViewStyle="btnText"
             className={btnStyles.btnTextPrimary}
             onClick={() => {
-              setToValidate(true); 
+              setToValidate(true);
               setSaveTenderClicked(true);
             }}
           />
@@ -848,4 +849,5 @@ export const DSTendrFooter: React.FC = ({}) => {
 
 export default DSTendrFooter;
 function useCallBack(arg0: () => void, arg1: TenderData[]) {
-  throw new Error("Function not implemented.");}
+  throw new Error("Function not implemented.");
+}

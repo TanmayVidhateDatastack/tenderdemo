@@ -98,12 +98,25 @@ const DsSupplyConditions: React.FC<DsApplicableConditionsProps> = ({
                 document?: File;
               }[]
             ) => {
+              const typeDocuments =
+                tenderData.tenderDocuments?.filter(
+                  (x) =>
+                    x.documentType == type &&
+                    x.documentCategory == "TENDER_SUPPLY_CONDITION"
+                ) || [];
               documents.forEach((file) => {
-                addNewTenderDocument(type, "TENDER_SUPPLY_CONDITION", {
-                  document: file.document,
-                  documentName: file.documentName,
-                  name: file.documentName,
-                });
+                if (
+                  !typeDocuments?.find(
+                    (f) =>
+                      f.documentName == file.documentName ||
+                      f.documentName == file.document?.name
+                  )
+                )
+                  addNewTenderDocument(type, "TENDER_SUPPLY_CONDITION", {
+                    document: file.document,
+                    documentName: file.documentName,
+                    name: file.documentName,
+                  });
               });
             }}
             // onSelectedFileChange={(files) => {
