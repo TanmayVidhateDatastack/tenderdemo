@@ -34,7 +34,6 @@ const DsTenderProduct: React.FC<{
   // useEffect(() => {
   //     handleFetch();
   // }, []);
-
   return (
     <>
       <div
@@ -49,7 +48,6 @@ const DsTenderProduct: React.FC<{
         <DsAddProduct setProductList={setProductList} version={version}/>
         <DsProductKpis version={version} />
       </div>
-
       <DsProductTable productList={productList} version={version}  />
     </>
   );
