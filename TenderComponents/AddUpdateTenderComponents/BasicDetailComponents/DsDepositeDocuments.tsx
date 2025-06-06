@@ -57,14 +57,14 @@ const DsDepositeDocuments: React.FC = () => {
   const role = useAppSelector((state: RootState) => state.user.role);
 
   useEffect(() => {
-    if (role == "MAKER" || role == "CHECKER" || role == "HOMANAGER") {
+    if (role.toUpperCase() == "MAKER" || role.toUpperCase() == "CHECKER" || role.toUpperCase() == "HOMANAGER") {
       setPaymentCheckVisible(false);
     } else {
       setPaymentCheckVisible(true);
     }
     if (
-      role === "ACCOUNTANCE" ||
-      (role === "FINANCE" &&
+      role.toUpperCase() === "ACCOUNTANCE" ||
+      (role.toUpperCase() === "FINANCE" &&
         (tenderData.status === "AWARDED" ||
           tenderData.status === "LOST" ||
           tenderData.status === "CANCELLED"))
@@ -296,7 +296,7 @@ const DsDepositeDocuments: React.FC = () => {
         const isBankGuarantee = selectedMode === "BANK_GUARANTEE";
 
         if (
-          role === "ACCOUNTANCE" &&
+          role.toUpperCase() === "ACCOUNTANCE" &&
           (deposit.value === "TENDER_EMD" || deposit.value === "TENDER_PSD")
         ) {
           if (!isBankGuarantee) return null;

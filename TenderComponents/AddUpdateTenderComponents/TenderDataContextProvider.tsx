@@ -1721,7 +1721,7 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             status.toLowerCase() == DsStatus.PAWRD.toLowerCase() ||
             status.toLowerCase() == DsStatus.LOST.toLowerCase() ||
             status.toLowerCase() == DsStatus.CNCL.toLowerCase()) &&
-          role === "MAKER"
+          role.toUpperCase() === "MAKER"
         ) {
           // url = getTenderByTenderId + tenderData.id + "/contract";
           if (status.toLowerCase() == DsStatus.CNCL.toLowerCase())
@@ -1754,8 +1754,8 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
             // status.toLowerCase() == DsStatus.PAWRD.toLowerCase() ||
             status.toLowerCase() == DsStatus.LOST.toLowerCase() ||
             status.toLowerCase() == DsStatus.CNCL.toLowerCase()) &&
-            role === "ACCOUNTANCE") ||
-          role === "FINANCE"
+            role.toUpperCase() === "ACCOUNTANCE") ||
+          role.toUpperCase() === "FINANCE"
         ) {
           url = updatePaymentUrl(tenderData.id, action);
           dataToSendTenderCopy = stripReadOnlyProperties({
