@@ -24,7 +24,7 @@ import {
 import path from "path";
 import style from "./filteractions.module.css";
 import { stat } from "fs";
-import Toaster, { 
+import Toaster, {
   hideToaster,
   showToaster,
 } from "@/Elements/DsComponents/DsToaster/DsToaster";
@@ -66,7 +66,10 @@ export const DsTenderTableFloatingMenu: React.FC<
   useEffect(() => {
     // console.log("statuscell on load:", statuscell); // Debugging
 
-    if (statuscell?.toUpperCase() === "CANCELLED" || statuscell?.toUpperCase() === "LOST") {
+    if (
+      statuscell?.toUpperCase() === "CANCELLED" ||
+      statuscell?.toUpperCase() === "LOST"
+    ) {
       setIsFloatingMenuVisible(false);
     } else {
       if (statuscell !== undefined) {
@@ -75,14 +78,14 @@ export const DsTenderTableFloatingMenu: React.FC<
       }
     }
 
-    if (statuscell?.toUpperCase()  === "TENDER_SUBMITTED") {
+    if (statuscell?.toUpperCase() === "TENDER_SUBMITTED") {
       setIsCancelBtnVisible(true);
       setLostBtnVisible(true);
       setIsPartiallyAwardedBtnVisible(true);
       setIsAwardedBtnVisible(true);
       setIsNewVersionBtnVisible(true);
       setIsSubmitVisible(false);
-    } else if (statuscell?.toUpperCase()  === "APPROVED") {
+    } else if (statuscell?.toUpperCase() === "APPROVED") {
       setIsCancelBtnVisible(true);
       setIsPartiallyAwardedBtnVisible(true);
       setIsSubmitVisible(true);
@@ -104,8 +107,16 @@ export const DsTenderTableFloatingMenu: React.FC<
     const row = document.querySelector(".tableRow-" + rowIndex) as HTMLElement;
     // if (isFloatingMenuVisible) {
     if (e && tenderId) {
-      displayTableMenu(e, "tenderfloatingmenu", "bottom", "center");
-      setIsFloatingMenuVisible(true);
+      if (
+        statuscell?.toUpperCase() === "CANCELLED" ||
+        statuscell?.toUpperCase() === "LOST"
+      ) {
+        setIsFloatingMenuVisible(false);
+        closeContext("tenderfloatingmenu");
+      } else {
+        displayTableMenu(e, "tenderfloatingmenu", "bottom", "center");
+        setIsFloatingMenuVisible(true);
+      }
     } else {
       row?.click();
       closeContext("tenderfloatingmenu");
@@ -124,13 +135,13 @@ export const DsTenderTableFloatingMenu: React.FC<
     const slectedClass = row.classList
       .values()
       ?.find((x) => x.includes("selectedRow"));
-      if (row) {
-        row.click();
-        closeContext("tenderfloatingmenu");
-        
-        setIsFloatingMenuVisible(false);
-      }
-      if (slectedClass) row.classList.remove(slectedClass);
+    if (row) {
+      row.click();
+      closeContext("tenderfloatingmenu");
+
+      setIsFloatingMenuVisible(false);
+    }
+    if (slectedClass) row.classList.remove(slectedClass);
     // setIsFloatingMenuVisible(false);
   };
 
@@ -158,7 +169,7 @@ export const DsTenderTableFloatingMenu: React.FC<
     })
       .then((res) => {
         if (res?.code === 200 && res?.result) {
-            console.error("success");
+          console.error("success");
           setActionStatus({
             notiType: "success",
             notiMsg: res?.message || "success in submission",
