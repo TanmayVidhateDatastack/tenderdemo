@@ -66,6 +66,8 @@ const DsDepositeDocuments: React.FC = () => {
     } else {
       setPaymentCheckVisible(true);
     }
+    // console.log(role);
+    // console.log(tenderData.status)
     if (
       (role.toUpperCase() === "ACCOUNTANCE" ||
         role.toUpperCase() === "FINANCE") &&
@@ -89,7 +91,7 @@ const DsDepositeDocuments: React.FC = () => {
         TENDER_FEES: metaData.tenderFeesPayment,
       });
     }
-  }, [role, metaData]);
+  }, [role, metaData,tenderData.status]);
   useEffect(() => {
     if (metaData) {
       // const modesData = metaData.paymentModes || [];

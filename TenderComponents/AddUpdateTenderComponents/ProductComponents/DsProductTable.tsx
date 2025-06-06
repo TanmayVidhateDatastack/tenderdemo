@@ -670,7 +670,6 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
 
   // Load data on mount or when dependencies change
   useEffect(() => {
-    console.log(tenderData);
     setLocalProducts(
       (
         tenderData.tenderRevisions.find((x) => x.version == version)
