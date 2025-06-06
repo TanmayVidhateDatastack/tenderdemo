@@ -240,8 +240,6 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
   }, [tenderDataCopy]);
 
   useEffect(() => {
-    console.log("data", tenderData.lastPurchaseDate?.substring(0, 10));
-    console.log("copy", tenderDataCopy.lastPurchaseDate?.substring(0, 10));
     const curDate = tenderData.tenderFees.find(
       (x) => x.feesType == type
     )?.paymentDueDate;
@@ -257,7 +255,6 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
   const handleAdd = () => {
     closeAllContext();
     setSelectedOptions(tempOptions);
-    console.log("Add button clicked");
   };
 
   return (
@@ -315,7 +312,6 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 options={optionlist || []}
                 setSelectOptions={(options) => {
                   setTempOptions(options);
-                  console.log("Selected options:", options);
                 }}
                 selectedOptions={tempOptions}
                 showOptions={false}
@@ -465,7 +461,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                       (x) => x.feesType === type
                     );
                     if (!fee) return "";
-                    console.log("selecetd option of receipt ", option.value);
+                    // console.log("selecetd option of receipt ", option.value);
                     if (typeof option.value === "string") {
                       if (option.value.includes("ACKNOWLEDGEMENT_RECEIPT"))
                         return fee.acknowledgementReceiptId || "";
