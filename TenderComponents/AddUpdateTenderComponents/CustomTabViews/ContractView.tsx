@@ -91,15 +91,15 @@ const ContractView: React.FC<ContractViewProps> = ({
     // addTableData(
     //   tenderData.tenderContract?.tenderRevisions?.[0].tenderItems || []
     // );
-    if(status!="CANCELLED")
-    setContractProducts(
-      (tenderData.tenderContract?.tenderRevisions?.[0].tenderItems || []).map(
-        (row) => ({
-          ...row,
-          rowId: uuidv4(),
-        })
-      )
-    );
+    if (status != "CANCELLED")
+      setContractProducts(
+        (tenderData.tenderContract?.tenderRevisions?.[0].tenderItems || []).map(
+          (row) => ({
+            ...row,
+            rowId: uuidv4(),
+          })
+        )
+      );
   }, [tenderData.tenderContract?.tenderRevisions]);
   const handleUpdateCell = useCallback(
     (rowId, changesOrColumnId, value?) => {
@@ -228,6 +228,7 @@ const ContractView: React.FC<ContractViewProps> = ({
         <DsSingleSelect
           id={"contractJustification"}
           options={justificationOptions || []}
+          disable={tenderDataCopy.tenderContract?.contractStatus == "SUBMITTED"}
           selectedOption={selectedJustification}
           setSelectOption={(option) => {
             setSlectedJustification(option);
@@ -243,6 +244,7 @@ const ContractView: React.FC<ContractViewProps> = ({
           <div className={styles.title}>Supporting Notes</div>
         )}
         <TextArea
+          disable={tenderDataCopy.tenderContract?.contractStatus == "SUBMITTED"}
           onBlur={(e) => {
             updateContractDetails(
               "contractStatusNotes",
@@ -257,6 +259,7 @@ const ContractView: React.FC<ContractViewProps> = ({
           label="Attach File"
           buttonViewStyle="btnText"
           buttonSize="btnSmall"
+          disable={tenderDataCopy.tenderContract?.contractStatus == "SUBMITTED"}
           startIcon={<IconFactory name="fileAttach" />}
           previouslySelectedFile={
             tenderData.tenderDocuments
@@ -338,7 +341,9 @@ const ContractView: React.FC<ContractViewProps> = ({
               columns={columns}
               onCellEdit={handleUpdateCell}
               isSelectable={false}
-              isEditable={true}
+              isEditable={
+                !(tenderDataCopy.tenderContract?.contractStatus == "SUBMITTED")
+              }
             >
               <Table />
             </TableProvider>
