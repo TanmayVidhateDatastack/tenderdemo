@@ -74,7 +74,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
       currentObj.version > maxObj.version ? currentObj : maxObj
     )?.version || 1;
   // const isTableEditable=version===latestVersion;
-  const isTableEditable = productTableDisable
+  const isTableEditable = !productTableDisable
     ? true
     : version === latestVersion;
   // const [tenderProductTable, setTenderProductTable] = useState<
@@ -670,7 +670,6 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
 
   // Load data on mount or when dependencies change
   useEffect(() => {
-    console.log(tenderData);
     setLocalProducts(
       (
         tenderData.tenderRevisions.find((x) => x.version == version)

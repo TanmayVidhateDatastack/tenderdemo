@@ -27,6 +27,7 @@ import { TableProvider } from "@/Elements/DsComponents/NewDsTable/TableProvider"
 import Table from "@/Elements/DsComponents/NewDsTable/Table";
 import { TableColumn } from "@/Elements/DsComponents/NewDsTable/types";
 import { v4 as uuidv4 } from "uuid";
+import { downloadDocumentUrl } from "@/Common/helpers/constant";
 
 export interface ContractViewProps {
   status: "AWARDED" | "PARTIALLY_AWARDED" | "LOST" | "CANCELLED";
@@ -90,6 +91,7 @@ const ContractView: React.FC<ContractViewProps> = ({
     // addTableData(
     //   tenderData.tenderContract?.tenderRevisions?.[0].tenderItems || []
     // );
+    if(status!="CANCELLED")
     setContractProducts(
       (tenderData.tenderContract?.tenderRevisions?.[0].tenderItems || []).map(
         (row) => ({
@@ -168,7 +170,7 @@ const ContractView: React.FC<ContractViewProps> = ({
         align: "right",
         className: styles["cell-award-quantity"],
       },
- {
+      {
         id: "awardedTo",
         header: "Awarded To",
         accessor: (row) => row.product.awardedToName,
@@ -214,7 +216,6 @@ const ContractView: React.FC<ContractViewProps> = ({
         align: "right",
         className: styles["cell-award-rate"],
       },
-     
     ],
     []
   );
@@ -258,12 +259,19 @@ const ContractView: React.FC<ContractViewProps> = ({
           buttonSize="btnSmall"
           startIcon={<IconFactory name="fileAttach" />}
           previouslySelectedFile={
-            tenderData.tenderDocuments?.filter(
-              (x) =>
-                x.documentCategory == "TENDER_CONTRACT_DOCUMENT" &&
-                x.documentType == status + "_DOCUMENT"
-              // && x.id !== undefined
-            ) || []
+            tenderData.tenderDocuments
+              ?.filter(
+                (x) =>
+                  x.documentCategory == "TENDER_CONTRACT_DOCUMENT" &&
+                  x.documentType == status + "_DOCUMENT"
+                // && x.id !== undefined
+              )
+              .map((x) => {
+                return {
+                  ...x,
+                  fileDownloadHref: downloadDocumentUrl(tenderData.id, x.id),
+                };
+              }) || []
           }
           // onSelectedFileChange={(files) => {
           //   const typeDocuments =
@@ -281,8 +289,12 @@ const ContractView: React.FC<ContractViewProps> = ({
           //     "TENDER_CONTRACT_DOCUMENT"
           //   );
           // }}
-           onRemoveFiles={(documentName) => {
-            removeTenderDocument(status + "_DOCUMENT", "TENDER_CONTRACT_DOCUMENT", documentName);
+          onRemoveFiles={(documentName) => {
+            removeTenderDocument(
+              status + "_DOCUMENT",
+              "TENDER_CONTRACT_DOCUMENT",
+              documentName
+            );
           }}
           onAddFiles={(
             documents: {
@@ -290,12 +302,29 @@ const ContractView: React.FC<ContractViewProps> = ({
               document?: File;
             }[]
           ) => {
+            const typeDocuments =
+              tenderData.tenderDocuments?.filter(
+                (x) =>
+                  x.documentCategory == "TENDER_CONTRACT_DOCUMENT" &&
+                  x.documentType == status + "_DOCUMENT"
+              ) || [];
             documents.forEach((file) => {
-              addNewTenderDocument(status + "_DOCUMENT", "TENDER_CONTRACT_DOCUMENT", {
-                document: file.document,
-                documentName: file.documentName,
-                name: file.documentName,
-              });
+              if (
+                !typeDocuments?.find(
+                  (f) =>
+                    f.documentName == file.documentName ||
+                    f.documentName == file.document?.name
+                )
+              )
+                addNewTenderDocument(
+                  status + "_DOCUMENT",
+                  "TENDER_CONTRACT_DOCUMENT",
+                  {
+                    document: file.document,
+                    documentName: file.documentName,
+                    name: file.documentName,
+                  }
+                );
             });
           }}
         ></DsCsvUpload>

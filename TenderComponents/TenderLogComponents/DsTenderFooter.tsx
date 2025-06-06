@@ -165,6 +165,7 @@ export const DSTendrFooter: React.FC = ({}) => {
           errors.push(`Please enter Supporting Notes.`);
         }
         if (
+          tenderData.status.toLowerCase() != DsStatus.CNCL.toLowerCase() &&
           tenderData.tenderContract?.tenderRevisions?.[0].tenderItems?.find(
             (x) =>
               x.product.awardedToName == undefined ||
@@ -312,7 +313,7 @@ export const DSTendrFooter: React.FC = ({}) => {
           if (!paidByDisable && !fee.paidBy?.trim()) {
             errors.push(`${fee.feesType}: Please specify who paid the fee.`);
           }
-          
+
           if (!PaymentdueDateDisable && !fee.paymentDueDate?.trim()) {
             errors.push(`${fee.feesType}: Payment due date is required.`);
           } else if (!PaymentdueDateDisable) {
@@ -526,7 +527,7 @@ export const DSTendrFooter: React.FC = ({}) => {
       dispatch(setVisibilityByRole(role));
       // console.log("Role=", role);
 
-      if (role === "ACCOUNTANCE" || role === "FINANCE") {
+      if (role.toUpperCase() === "ACCOUNTANCE" || role.toUpperCase() === "FINANCE") {
         setContextContext(
           <DsButton
             label="Submit Receipt"
@@ -534,12 +535,12 @@ export const DSTendrFooter: React.FC = ({}) => {
             buttonViewStyle="btnText"
             className={btnStyles.btnTextPrimary}
             onClick={() => {
-              setToValidate(true); 
+              setToValidate(true);
               setSaveTenderClicked(true);
             }}
           />
         );
-      } else if (role === "CHECKER") {
+      } else if (role.toUpperCase() === "CHECKER") {
         setContextContext(
           <>
             <PopupOpenButton
@@ -564,7 +565,7 @@ export const DSTendrFooter: React.FC = ({}) => {
             />
           </>
         );
-      } else if (role === "HOMANAGER") {
+      } else if (role.toUpperCase() === "HOMANAGER") {
         setContextContext(
           <>
             <PopupOpenButton
@@ -599,7 +600,7 @@ export const DSTendrFooter: React.FC = ({}) => {
             />
           </>
         );
-      } else if (role === "MAKER") {
+      } else if (role.toUpperCase() === "MAKER") {
         if (
           tenderData.status == "AWARDED" ||
           tenderData.status == "PARTIALLY_AWARDED" ||
@@ -743,7 +744,10 @@ export const DSTendrFooter: React.FC = ({}) => {
           </DsSplitButton>
         ) : (
           <DsButton
-            disable={saveButtonDisabled}
+            disable={
+              tenderDataCopy.tenderContract?.contractStatus == "SUBMITTED" ||
+              saveButtonDisabled
+            }
             buttonViewStyle="btnContained"
             onClick={() => {
               // if (saveTender) validateAndSaveTender();
@@ -774,9 +778,9 @@ export const DSTendrFooter: React.FC = ({}) => {
         buttonColor="btnPrimary"
         position="center"
         toasterMessage={
-          role === "HOMANAGER"
+          role.toUpperCase() === "HOMANAGER"
             ? "The Tender has been Approved"
-            : role === "CHECKER"
+            : role.toUpperCase() === "CHECKER"
             ? "The Tender has been successfully moved to under approval state"
             : "The action was successful!"
         }
@@ -813,9 +817,9 @@ export const DSTendrFooter: React.FC = ({}) => {
         buttonColor="btnPrimary"
         position="center"
         toasterMessage={
-          role === "HOMANAGER"
+          role.toUpperCase() === "HOMANAGER"
             ? "The Tender has been Approved"
-            : role === "CHECKER"
+            : role.toUpperCase() === "CHECKER"
             ? "The Tender has been successfully moved to under approval state"
             : "The action was successful!"
         }
@@ -826,9 +830,9 @@ export const DSTendrFooter: React.FC = ({}) => {
       <Toaster
         id={"toaster1"}
         message={
-          role === "ACCOUNTANCE" || role === "FINANCE"
+          role.toUpperCase() === "ACCOUNTANCE" || role.toUpperCase() === "FINANCE"
             ? "The Data has been Submitted by Review "
-            : role === "MAKER"
+            : role.toUpperCase() === "MAKER"
             ? "The receipt has been submitted successfully"
             : "The action was successful!"
         }
@@ -848,4 +852,5 @@ export const DSTendrFooter: React.FC = ({}) => {
 
 export default DSTendrFooter;
 function useCallBack(arg0: () => void, arg1: TenderData[]) {
-  throw new Error("Function not implemented.");}
+  throw new Error("Function not implemented.");
+}

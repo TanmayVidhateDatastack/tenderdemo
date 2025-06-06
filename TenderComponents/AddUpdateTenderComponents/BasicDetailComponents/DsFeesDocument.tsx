@@ -137,7 +137,6 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     recoveredAttachFileButton,
   } = permissions;
 
- 
   const handleAppliedSuppliedFetch = async () => {
     try {
       const res = await fetchData({ url: paidBys });
@@ -223,7 +222,6 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
       }
       if (currentFee.acknowledgementReceiptId) {
         {
-          
           const option = optionlist.find((x) =>
             x.value.toString().includes("ACKNOWLEDGEMENT_RECEIPT")
           );
@@ -242,8 +240,6 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
   }, [tenderDataCopy]);
 
   useEffect(() => {
-    console.log("data", tenderData.lastPurchaseDate?.substring(0, 10));
-    console.log("copy", tenderDataCopy.lastPurchaseDate?.substring(0, 10));
     const curDate = tenderData.tenderFees.find(
       (x) => x.feesType == type
     )?.paymentDueDate;
@@ -259,7 +255,6 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
   const handleAdd = () => {
     closeAllContext();
     setSelectedOptions(tempOptions);
-    console.log("Add button clicked");
   };
 
   return (
@@ -316,9 +311,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 id={id + "Documents"}
                 options={optionlist || []}
                 setSelectOptions={(options) => {
-               
                   setTempOptions(options);
-                  console.log("Selected options:", options);
                 }}
                 selectedOptions={tempOptions}
                 showOptions={false}
@@ -363,9 +356,9 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 //      if (typeof type == "string")
                 //      {
                 //       if (type.includes("TENDER_EMD_PAYMENT"))
-                      
+
                 //          updateTenderFee(type, "paymentDate", getTodayDate(date));
-                      
+
                 //      }
                 //   }
                 // }}
@@ -375,7 +368,6 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           </div>
 
           {selectedOptions.map((option, index) => (
-           
             <UploadFile
               key={`upload-${type}-${option.value}-${index}`}
               uploadLabel={`Upload ${option.label} here `}
@@ -397,8 +389,13 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               //     `${option.value}`
               //   );
               // }}
-                onRemoveFiles={(documentName) => {
-                removeTenderDocument(type + "_PAYMENT", `${type}`, documentName,`${option.value}`);
+              onRemoveFiles={(documentName) => {
+                removeTenderDocument(
+                  type + "_PAYMENT",
+                  `${type}`,
+                  documentName,
+                  `${option.value}`
+                );
               }}
               onAddFiles={(
                 documents: {
@@ -406,14 +403,30 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   document?: File;
                 }[]
               ) => {
+                const Documents =
+                  tenderData.tenderDocuments?.filter(
+                    (x) =>
+                      x.documentCategory === type &&
+                      x.documentType === `${option.value}`
+                  ) || [];
                 documents.forEach((file) => {
-                  addNewTenderDocument(type + "_PAYMENT", type, {
-                    document: file.document,
-                    documentName: file.documentName,
-                    name: file.documentName,
-                  }
-                  ,`${option.value}`
-                );
+                  if (
+                    !Documents?.find(
+                      (f) =>
+                        f.documentName == file.documentName ||
+                        f.documentName == file.document?.name
+                    )
+                  )
+                    addNewTenderDocument(
+                      type + "_PAYMENT",
+                      type,
+                      {
+                        document: file.document,
+                        documentName: file.documentName,
+                        name: file.documentName,
+                      },
+                      `${option.value}`
+                    );
                 });
               }}
               previouslySelectedFile={
@@ -434,7 +447,6 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                     };
                   })[0]
               }
-              
               disable={uploadFileButtonDisabled}
             />
           ))}
@@ -449,9 +461,8 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                       (x) => x.feesType === type
                     );
                     if (!fee) return "";
-                    console.log("selecetd option of receipt ",option.value)
+                    // console.log("selecetd option of receipt ", option.value);
                     if (typeof option.value === "string") {
-                  
                       if (option.value.includes("ACKNOWLEDGEMENT_RECEIPT"))
                         return fee.acknowledgementReceiptId || "";
                       if (option.value.includes("FUND_TRANSFER_CONFIRMATION"))
@@ -478,14 +489,12 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                           Number((e.target as HTMLInputElement).value)
                         );
                       if (option.value.includes("PAYMENT_RECEIPT"))
-                    
                         updateTenderFee(
                           type,
                           "paymentReceiptId",
                           Number((e.target as HTMLInputElement).value)
                         );
                       if (option.value.includes("TRANSACTION_RECEIPT"))
-                       
                         updateTenderFee(
                           type,
                           "paymentTransactionId",
@@ -652,12 +661,25 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               document?: File;
             }[]
           ) => {
+            const typeDocuments =
+              tenderData.tenderDocuments?.filter(
+                (x) =>
+                  x.documentCategory == type &&
+                  x.documentType == type + "_INSTRUCTION"
+              ) || [];
             documents.forEach((file) => {
-              addNewTenderDocument(type + "_INSTRUCTION", type, {
-                document: file.document,
-                documentName: file.documentName,
-                name: file.documentName,
-              });
+              if (
+                !typeDocuments?.find(
+                  (f) =>
+                    f.documentName == file.documentName ||
+                    f.documentName == file.document?.name
+                )
+              )
+                addNewTenderDocument(type + "_INSTRUCTION", type, {
+                  document: file.document,
+                  documentName: file.documentName,
+                  name: file.documentName,
+                });
             });
           }}
           // onSelectedFileChange={(files) => {
@@ -783,12 +805,25 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   document?: File;
                 }[]
               ) => {
+                const typeDocuments =
+                  tenderData.tenderDocuments?.filter(
+                    (x) =>
+                      x.documentCategory == type &&
+                      x.documentType == type + "_INSTRUCTION"
+                  ) || [];
                 documents.forEach((file) => {
-                  addNewTenderDocument(type + "_INSTRUCTION", type, {
-                    document: file.document,
-                    documentName: file.documentName,
-                    name: file.documentName,
-                  });
+                  if (
+                    !typeDocuments?.find(
+                      (f) =>
+                        f.documentName == file.documentName ||
+                        f.documentName == file.document?.name
+                    )
+                  )
+                    addNewTenderDocument(type + "_INSTRUCTION", type, {
+                      document: file.document,
+                      documentName: file.documentName,
+                      name: file.documentName,
+                    });
                 });
               }}
               // onSelectedFileChange={(files) => {
