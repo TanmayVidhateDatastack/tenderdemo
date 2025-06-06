@@ -66,7 +66,7 @@ export const DsTenderTableFloatingMenu: React.FC<
   useEffect(() => {
     // console.log("statuscell on load:", statuscell); // Debugging
 
-    if (statuscell === "CANCELLED" || statuscell === "LOST") {
+    if (statuscell?.toUpperCase() === "CANCELLED" || statuscell?.toUpperCase() === "LOST") {
       setIsFloatingMenuVisible(false);
     } else {
       if (statuscell !== undefined) {
@@ -75,14 +75,14 @@ export const DsTenderTableFloatingMenu: React.FC<
       }
     }
 
-    if (statuscell === "TENDER_SUBMITTED") {
+    if (statuscell?.toUpperCase()  === "TENDER_SUBMITTED") {
       setIsCancelBtnVisible(true);
       setLostBtnVisible(true);
       setIsPartiallyAwardedBtnVisible(true);
       setIsAwardedBtnVisible(true);
       setIsNewVersionBtnVisible(true);
       setIsSubmitVisible(false);
-    } else if (statuscell === "APPROVED") {
+    } else if (statuscell?.toUpperCase()  === "APPROVED") {
       setIsCancelBtnVisible(true);
       setIsPartiallyAwardedBtnVisible(true);
       setIsSubmitVisible(true);
