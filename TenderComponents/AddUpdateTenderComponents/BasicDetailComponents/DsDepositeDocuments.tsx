@@ -69,12 +69,11 @@ const DsDepositeDocuments: React.FC = () => {
     // console.log(role);
     // console.log(tenderData.status)
     if (
-      (role.toUpperCase() === "ACCOUNTANCE" ||
-        role.toUpperCase() === "FINANCE") &&
-      (tenderData.status.toUpperCase() === "AWARDED" ||
-        tenderData.status.toUpperCase() === "PARTIALLY_AWARDED" ||
-        tenderData.status.toUpperCase() === "LOST" ||
-        tenderData.status.toUpperCase() === "CANCELLED")
+      role === "ACCOUNTANCE" ||
+      (role === "FINANCE" &&
+        (tenderData.status === "AWARDED" ||
+          tenderData.status === "LOST" ||
+          tenderData.status === "CANCELLED"))
     ) {
       setrecoveryPaymentVisible(true);
     } else {
@@ -176,7 +175,7 @@ const DsDepositeDocuments: React.FC = () => {
     applicablefees.forEach((opt) => {
       const id = opt.value.toString();
       const isEmpty = tenderData.tenderFees.find((fee) => fee.feesType === id);
-      // console.log("isEmpty", isEmpty);
+      console.log("isEmpty", applicablefees);
       const isActive = isEmpty?.status === "ACTV";
 
       if (tenderData.id === undefined || isActive) {
@@ -308,7 +307,16 @@ const DsDepositeDocuments: React.FC = () => {
         ) {
           if (!isBankGuarantee) return null;
         }
-
+// when  status is APProved and role = == "ACCOUNTANCE" || role === "FINANCE" hiding psd 
+    if (
+    deposit.value === "TENDER_PSD" &&
+    tenderData.status === "APPROVED" && 
+    role === "ACCOUNTANCE" || role === "FINANCE"
+  
+  ) {
+    return null;
+  }
+  //// when  status is APProved and role = == "ACCOUNTANCE" || role === "FINANCE" hiding psd 
         return (
           feeVisibility[deposit.value] && (
             <div className={styles.emdContainer2} key={deposit.value}>
