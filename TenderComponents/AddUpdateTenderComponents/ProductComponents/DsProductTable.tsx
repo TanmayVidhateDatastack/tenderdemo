@@ -74,7 +74,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
       currentObj.version > maxObj.version ? currentObj : maxObj
     )?.version || 1;
   // const isTableEditable=version===latestVersion;
-  const isTableEditable = productTableDisable
+  const isTableEditable = !productTableDisable
     ? true
     : version === latestVersion;
   // const [tenderProductTable, setTenderProductTable] = useState<
