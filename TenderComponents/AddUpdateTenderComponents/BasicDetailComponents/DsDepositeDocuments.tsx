@@ -66,6 +66,7 @@ const DsDepositeDocuments: React.FC = () => {
       role === "ACCOUNTANCE" ||
       (role === "FINANCE" &&
         (tenderData.status === "AWARDED" ||
+          
           tenderData.status === "LOST" ||
           tenderData.status === "CANCELLED"))
     ) {

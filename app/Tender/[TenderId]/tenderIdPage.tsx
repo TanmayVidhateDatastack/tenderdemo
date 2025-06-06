@@ -68,7 +68,6 @@ const DsTenderIdPage: React.FC<{
   const userRole = useAppSelector((state) => state.user);
   const [isDisabled, setIsDisabled] = useState(true);
   const version = 1;
-
   // get the type value from URL
   const searchParams = useSearchParams();
   const type = searchParams.get("type") || "institutional";
@@ -84,12 +83,10 @@ const DsTenderIdPage: React.FC<{
     "Existing"
   );
   const [message, setMessage] = useState<string>("");
-
   const handleUpload = (file: File | null) => {
     if (!file) {
       return;
     }
-
     const reader = new FileReader();
     reader.onload = (event) => {
       const fileContent = event.target?.result;
@@ -189,7 +186,7 @@ const DsTenderIdPage: React.FC<{
       {
         tabId: "2",
         tabName: "Documents",
-        disable: displayFlag == "New" || type != "institutional",
+        disable: displayFlag == "New" || type === "institutional",
       },
     ]);
 
