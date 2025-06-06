@@ -34,7 +34,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
   const [allSuppliedBy, setAllSuppliedBy] = useState<
     DsMultiLevelSelectOption[]
   >([]);
-  
+
   const [depotList, setDepotList] = useState<Depot[]>([]);
   const [formatedDepot, setFormatedDepot] = useState<DsSelectOption[]>([]);
 
@@ -199,7 +199,6 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
     setSelectedDepo(depo);
   }, [formatedDepot, tenderDataCopy.shippingLocations, tenderData.id]);
 
-
   return (
     <div className={deptStyles.container}>
       <div className={styles.inputDetails}>
@@ -242,7 +241,7 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
           isSearchable={true}
           options={suppliedBy}
           {...(tenderData.id
-            ? { 
+            ? {
                 selectedOption: {
                   attributes: { type: tenderData.supplierType },
                   id: "",
@@ -273,9 +272,9 @@ const DsApplierSupplierDetails: React.FC = ({}) => {
           disable={depotDisable}
           containerClasses={styles.fields}
           selectedOptions={selectedDepo}
-          options={formatedDepot}   
+          options={formatedDepot}
           addButton={true}
-          // type="multi" 
+          // type="multi"
           label="Depot"
           placeholder={"Select Depots"}
           id={"depot"}

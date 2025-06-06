@@ -44,7 +44,7 @@ export default function CsvPopup({ onUpload }: CsvPopupProps) {
     event.preventDefault();
   };
 
-  const handleRemoveFile = (e:React.MouseEvent) => {
+  const handleRemoveFile = (e: React.MouseEvent) => {
     e.stopPropagation();
     setFile(null);
     setFileName("Attach your File here");
@@ -127,7 +127,6 @@ export default function CsvPopup({ onUpload }: CsvPopupProps) {
               <div
                 style={{ width: "1em", height: "1em" }}
                 onClick={handleRemoveFile}
-                
               >
                 <IconFactory name={"crossSmall"}></IconFactory>
               </div>

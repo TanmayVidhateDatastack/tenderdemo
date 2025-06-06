@@ -5,10 +5,10 @@ import DsSearchComponent from "@/Elements/DsComponents/DsSearch/searchComponent"
 import { useState } from "react";
 export interface CompanySearchProps {
   orderStatus?: string;
-  setSelectedCompany: (company:datalistOptions) => void;
-  lprTo?:string;
+  setSelectedCompany: (company: datalistOptions) => void;
+  lprTo?: string;
 }
- 
+
 export function isSearchCompany(value: unknown): value is Company {
   return (
     typeof value === "object" &&
@@ -28,15 +28,11 @@ const CompanySearch: React.FC<CompanySearchProps> = ({
   lprTo,
 }) => {
   const [company, setCompanys] = useState<datalistOptions[]>([]);
- 
- 
- 
- 
- 
+
   const setOptions = (values: unknown[]) => {
     if (areSearchCompanys(values)) {
       const company: datalistOptions[] = values.map(
-        (x: { id: number|string; name?: string }) => {
+        (x: { id: number | string; name?: string }) => {
           return {
             id: x.id.toString(),
             value: x.name,
@@ -51,19 +47,17 @@ const CompanySearch: React.FC<CompanySearchProps> = ({
       // console.log("company values are = ", values);
     }
   };
- 
+
   const setSelectedOption = (option: datalistOptions) => {
     {
       const selectedCompanyId = option.attributes["company-id"];
- 
+
       if (selectedCompanyId) {
         setSelectedCompany(option);
       }
     }
   };
- 
- 
- 
+
   return (
     <DsSearchComponent
       id="companySearch"
@@ -74,7 +68,7 @@ const CompanySearch: React.FC<CompanySearchProps> = ({
       options={company ? company : undefined}
       setOptions={setOptions}
       setSearchUrl={(searchTerm: string) => {
-        return getCompetitorsURL  + searchTerm;
+        return getCompetitorsURL + searchTerm;
       }}
       tabIndex={0}
       autofocus={true}
@@ -83,7 +77,5 @@ const CompanySearch: React.FC<CompanySearchProps> = ({
     />
   );
 };
- 
+
 export default CompanySearch;
- 
- 

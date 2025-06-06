@@ -13,7 +13,6 @@ export const activeObjectSlice = createSlice({
       state.rows = action.payload;
       return state;
     },
-    
   },
 });
 

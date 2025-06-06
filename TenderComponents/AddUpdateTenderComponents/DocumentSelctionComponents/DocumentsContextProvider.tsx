@@ -1,6 +1,17 @@
 "use client";
-import React, { createContext, useState, ReactNode, Dispatch, SetStateAction, useEffect } from "react";
-import { TenderDocument, updateDocuments, useTenderData } from "../TenderDataContextProvider";
+import React, {
+  createContext,
+  useState,
+  ReactNode,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+} from "react";
+import {
+  TenderDocument,
+  updateDocuments,
+  useTenderData,
+} from "../TenderDataContextProvider";
 
 export interface Document {
   document: TenderDocument;
@@ -28,29 +39,35 @@ export interface DocumentSelectorProps {
   initialDocuments: Document[];
   handleOnRemoveClick?: (doc: string) => void;
 }
-export const DocumentContext = createContext<DocumentContextType | undefined>(undefined);
+export const DocumentContext = createContext<DocumentContextType | undefined>(
+  undefined
+);
 
 interface DocumentProviderProps {
   children: ReactNode;
 }
 
-export const DocumentProvider: React.FC<DocumentProviderProps> = ({ children }) => {
+export const DocumentProvider: React.FC<DocumentProviderProps> = ({
+  children,
+}) => {
   const [documentData, setDocumentData] = useState<DocumentType[]>([]);
   const [fetchedDocuments, setFetchedDocuments] = useState<DocumentType[]>([]);
   const [selectedDocuments, setSelectedDocuments] = useState<Document[]>([]);
   const [totalSelectedDocuments, setTotalSelectedDocuments] = useState(0);
-  const { tenderData, removeTenderDocument,
-    addNewTenderDocument } = useTenderData();
+  const { tenderData, removeTenderDocument, addNewTenderDocument } =
+    useTenderData();
   const toggleDocumentVisibility = (type: string, documentName: string) => {
     setDocumentData((prevData) =>
       prevData.map((docType) =>
         docType.type === type
           ? {
-            ...docType,
-            documents: docType.documents.map((doc) =>
-              doc.document.documentName === documentName ? { ...doc, isVisible: !doc.isVisible } : doc
-            ),
-          }
+              ...docType,
+              documents: docType.documents.map((doc) =>
+                doc.document.documentName === documentName
+                  ? { ...doc, isVisible: !doc.isVisible }
+                  : doc
+              ),
+            }
           : docType
       )
     );
@@ -60,7 +77,9 @@ export const DocumentProvider: React.FC<DocumentProviderProps> = ({ children }) 
     setSelectedDocuments((prevSelected) =>
       prevSelected.filter((doc) =>
         documentData.some((group) =>
-          group.documents.some((d) => d.document.documentName === doc.document.documentName)
+          group.documents.some(
+            (d) => d.document.documentName === doc.document.documentName
+          )
         )
       )
     );
@@ -68,7 +87,10 @@ export const DocumentProvider: React.FC<DocumentProviderProps> = ({ children }) 
 
   // ✅ Update totalSelectedDocuments count when documentData changes
   useEffect(() => {
-    const totalCount = documentData.reduce((acc, { documents }) => acc + documents.length, 0);
+    const totalCount = documentData.reduce(
+      (acc, { documents }) => acc + documents.length,
+      0
+    );
     setTotalSelectedDocuments(totalCount);
     // const types = Array.from(new Set(documentData.map((x) => x.type)));
     // const types = Array.from(
@@ -94,7 +116,13 @@ export const DocumentProvider: React.FC<DocumentProviderProps> = ({ children }) 
         id: undefined, // Set the ID to undefined
       }));
 
-      const document = documentData.filter((doc) => doc.type === documentType).flatMap((doc) => doc.documents.map((d) => { return { ...d.document, id: d.document.documentId } }));
+      const document = documentData
+        .filter((doc) => doc.type === documentType)
+        .flatMap((doc) =>
+          doc.documents.map((d) => {
+            return { ...d.document, id: d.document.documentId };
+          })
+        );
 
       // console.log("Document conpro :", document);
       updateDocuments(
@@ -107,7 +135,6 @@ export const DocumentProvider: React.FC<DocumentProviderProps> = ({ children }) 
         documentType,
         "TENDER_DOCUMENT"
       );
-
     });
   }, [documentData]);
 
@@ -149,8 +176,6 @@ export const DocumentProvider: React.FC<DocumentProviderProps> = ({ children }) 
   //   });
   // }, [documentData]);
 
-
-
   useEffect(() => {
     // console.log("Context Updated SelectedDocuments:", selectedDocuments);
   }, [selectedDocuments]); // ✅ Debugging
@@ -159,27 +184,33 @@ export const DocumentProvider: React.FC<DocumentProviderProps> = ({ children }) 
   useEffect(() => {
     if (tenderData.tenderDocuments) {
       // Group documents by type
-      const groupedDocuments = tenderData.tenderDocuments.reduce((acc: DocumentType[], doc) => {
-        // Filter out documents that are type "TENDER_DOCUMENT"
-        const { documentType } = doc;
-        if (doc.documentCategory !== "TENDER_DOCUMENT") return acc;
-        // Check if the document type already exists in the accumulator
-        const existingGroup = acc.find((group) => group.type === documentType);
-        if (existingGroup) {
-          // If it exists, push the document to the existing group's documents array
-          existingGroup.documents.push({ document: doc, isVisible: true });
-        } else {
-          // If it doesn't exist, create a new group and add the document
-          acc.push({ type: documentType, documents: [{ document: doc, isVisible: true }] });
-        }
-        //return the accumulator with the new document
-        return acc;
-      }, []);
+      const groupedDocuments = tenderData.tenderDocuments.reduce(
+        (acc: DocumentType[], doc) => {
+          // Filter out documents that are type "TENDER_DOCUMENT"
+          const { documentType } = doc;
+          if (doc.documentCategory !== "TENDER_DOCUMENT") return acc;
+          // Check if the document type already exists in the accumulator
+          const existingGroup = acc.find(
+            (group) => group.type === documentType
+          );
+          if (existingGroup) {
+            // If it exists, push the document to the existing group's documents array
+            existingGroup.documents.push({ document: doc, isVisible: true });
+          } else {
+            // If it doesn't exist, create a new group and add the document
+            acc.push({
+              type: documentType,
+              documents: [{ document: doc, isVisible: true }],
+            });
+          }
+          //return the accumulator with the new document
+          return acc;
+        },
+        []
+      );
       setDocumentData(groupedDocuments);
     }
   }, [tenderData.tenderDocuments]);
-
-
 
   const contextValue: DocumentContextType = {
     totalSelectedDocuments,
@@ -191,6 +222,10 @@ export const DocumentProvider: React.FC<DocumentProviderProps> = ({ children }) 
     fetchedDocuments,
     setFetchedDocuments,
   };
-  return <DocumentContext.Provider value={contextValue}>{children}</DocumentContext.Provider>;
+  return (
+    <DocumentContext.Provider value={contextValue}>
+      {children}
+    </DocumentContext.Provider>
+  );
 };
 export default DocumentProvider;

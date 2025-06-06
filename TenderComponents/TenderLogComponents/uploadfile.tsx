@@ -27,7 +27,7 @@ const UploadFile: React.FC<UploadFileProps> = ({
 
   disable = false,
   previouslySelectedFile,
-})=> {
+}) => {
   const [fileName, setFileName] = useState<string>(
     uploadLabel || "Attach your File here"
   );
@@ -37,7 +37,7 @@ const UploadFile: React.FC<UploadFileProps> = ({
   const [prevFile, setPrevFile] = useState<
     typeof previouslySelectedFile | null
   >(previouslySelectedFile || null);
-  
+
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
     if (uploadLabel) {
@@ -47,7 +47,6 @@ const UploadFile: React.FC<UploadFileProps> = ({
 
   useEffect(() => {
     if (!hasManuallyChangedFile && previouslySelectedFile) {
-      
       setPrevFile(previouslySelectedFile);
       setFile(null);
       setFileName(
@@ -58,8 +57,6 @@ const UploadFile: React.FC<UploadFileProps> = ({
     }
   }, [previouslySelectedFile, uploadLabel, hasManuallyChangedFile]);
 
-
-
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
     if (selectedFile) {
@@ -68,7 +65,7 @@ const UploadFile: React.FC<UploadFileProps> = ({
       setPrevFile(null);
       setHasManuallyChangedFile(true);
     }
-     if (onAddFiles && selectedFile) {
+    if (onAddFiles && selectedFile) {
       onAddFiles([
         {
           documentName: selectedFile.name,
@@ -78,8 +75,6 @@ const UploadFile: React.FC<UploadFileProps> = ({
     }
   };
 
-  
-  
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     const droppedFile = event.dataTransfer.files?.[0];
@@ -98,25 +93,22 @@ const UploadFile: React.FC<UploadFileProps> = ({
       ]);
     }
   };
-  
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
   };
 
- 
-const handleRemoveFile = () => {
-  if (file && onRemoveFiles) {
-    onRemoveFiles(file.name);
-  } else if (prevFile && prevFile.documentName && onRemoveFiles) {
-    onRemoveFiles(prevFile.documentName);
-  }
-  setFile(null);
-  setPrevFile(null);
-  setFileName(uploadLabel || "Attach your File here");
-  setHasManuallyChangedFile(true); 
-};
-
+  const handleRemoveFile = () => {
+    if (file && onRemoveFiles) {
+      onRemoveFiles(file.name);
+    } else if (prevFile && prevFile.documentName && onRemoveFiles) {
+      onRemoveFiles(prevFile.documentName);
+    }
+    setFile(null);
+    setPrevFile(null);
+    setFileName(uploadLabel || "Attach your File here");
+    setHasManuallyChangedFile(true);
+  };
 
   return (
     <div className={styles.container}>
@@ -129,29 +121,27 @@ const handleRemoveFile = () => {
         onClick={() =>
           !disable && document.getElementById(`selectfile-${id}`)?.click()
         }
-
       >
         <div className={disable ? styles.disabled : ""}>
-       {file ? (
-          
+          {file ? (
             <a
               href={URL.createObjectURL(file)}
               download={file.name}
               className={styles.document_Link}
-              onClick={e => e.stopPropagation()}
+              onClick={(e) => e.stopPropagation()}
             >
               {fileName}
             </a>
           ) : prevFile ? (
             prevFile.fileDownloadHref ? (
               <a
-          href={prevFile.fileDownloadHref}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={styles.document_Link}
-          onClick={e => e.stopPropagation()}
+                href={prevFile.fileDownloadHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.document_Link}
+                onClick={(e) => e.stopPropagation()}
               >
-          {prevFile.documentName}
+                {prevFile.documentName}
               </a>
             ) : (
               prevFile.documentName || fileName
@@ -167,17 +157,14 @@ const handleRemoveFile = () => {
           onChange={handleFileChange}
           ref={fileInputRef}
           disabled={disable}
-          
         />
 
         {(file || prevFile) && (
           <div
             style={{ width: "1em", height: "1em" }}
             onClick={(e) => {
-              if (!disable)
-                 handleRemoveFile();
+              if (!disable) handleRemoveFile();
               e.stopPropagation();
-              
             }}
           >
             <IconFactory name={"crossSmall"} />
@@ -189,5 +176,3 @@ const handleRemoveFile = () => {
 };
 
 export default UploadFile;
-
- 

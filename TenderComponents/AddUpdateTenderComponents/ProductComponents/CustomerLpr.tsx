@@ -44,7 +44,7 @@ const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
         (relatedTarget &&
           lprRef.current &&
           lprRef.current.contains(relatedTarget)) ||
-       (relatedTarget&&relatedTarget.closest(`#LprTo${index}`))
+        (relatedTarget && relatedTarget.closest(`#LprTo${index}`))
       ) {
         // Focus is still inside .lpr, do not commit
         return;

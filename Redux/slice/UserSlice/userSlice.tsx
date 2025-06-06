@@ -82,13 +82,13 @@ const userSlice = createSlice({
     setUserRole: (state, action: PayloadAction<string>) => {
       state.role = action.payload; // Update roles to the new string value
       return state;
-    }
+    },
     // setUser: (state, action: PayloadAction<User>) => {
     //   state.user = action.payload; // Update roles to the new string value
     //   return state;
     // },
-  }
+  },
 });
 
 export const { setUserRoles, setUserRole } = userSlice.actions;
-export default userSlice.reducer;  
+export default userSlice.reducer;

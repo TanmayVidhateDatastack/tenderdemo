@@ -6,15 +6,14 @@ import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import styles from "./document.module.css";
 import DsDataList from "@/Elements/DsComponents/DsInputs/dsDatalist";
 import Image from "next/image";
-import search from "@/Common/TenderIcons/searchicon.svg"
+import search from "@/Common/TenderIcons/searchicon.svg";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import { DocumentContext } from "./DocumentsContextProvider";
 import { getTenderTabsDocuments } from "@/Common/helpers/constant";
-import buttonstyle from "@/Elements/DsComponents/DsButtons/dsButton.module.css"
+import buttonstyle from "@/Elements/DsComponents/DsButtons/dsButton.module.css";
 import { TenderDocument, useTenderData } from "../TenderDataContextProvider";
 import { ClosePane } from "@/Elements/DsComponents/DsPane/DsPane";
 import { showToaster } from "@/Elements/DsComponents/DsToaster/DsToaster";
-
 
 class ActionStatus {
   notiType: "success" | "bonus" | "info" | "error" | "cross" = "success";
@@ -24,20 +23,22 @@ class ActionStatus {
 }
 
 const DsAddTenderDocumentPane: React.FC = () => {
-  const [openAccordion, setOpenAccordion] = useState<string | null | number>(null);
-  const [groupedDocuments, setGroupedDocuments] = useState<Record<string, TenderDocument[]>>({});
-  const [selectedDocuments, setSelectedDocuments] = useState<TenderDocument[]>([]);
+  const [openAccordion, setOpenAccordion] = useState<string | null | number>(
+    null
+  );
+  const [groupedDocuments, setGroupedDocuments] = useState<
+    Record<string, TenderDocument[]>
+  >({});
+  const [selectedDocuments, setSelectedDocuments] = useState<TenderDocument[]>(
+    []
+  );
   const [filterDocuments, setFilterDocuments] = useState(groupedDocuments);
   const [searchText, setSearchText] = useState("");
   const [title, setTitle] = useState({});
 
-
   // const [isApplyDisabled, setIsApplyDisabled] = useState(true);
 
-  const {
-    metaData,
-    setActionStatusValues
-  } = useTenderData();
+  const { metaData, setActionStatusValues } = useTenderData();
 
   const documentContext = useContext(DocumentContext);
 
@@ -50,7 +51,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
       const res = await fetchData({ url: getTenderTabsDocuments });
       if (res.code === 200) {
         const tenderDocuments = res.result.filter(
-          (doc: TenderDocument) => doc.documentCategory === "TENDER_DOCUMENT"//doc.documentType === "TENDER_DOCUMENT" to doc.documentCategory === "TENDER_DOCUMENT"
+          (doc: TenderDocument) => doc.documentCategory === "TENDER_DOCUMENT" //doc.documentType === "TENDER_DOCUMENT" to doc.documentCategory === "TENDER_DOCUMENT"
         );
 
         const grouped = tenderDocuments.reduce(
@@ -66,7 +67,6 @@ const DsAddTenderDocumentPane: React.FC = () => {
 
         setGroupedDocuments(grouped);
         documentContext?.setFetchedDocuments(grouped);
-
       } else {
         console.error("Error fetching data: ", res.message || "Unknown error");
       }
@@ -93,14 +93,14 @@ const DsAddTenderDocumentPane: React.FC = () => {
     });
   };
 
-
-
   useEffect(() => {
     if (!documentContext || !documentContext.documentData) return;
 
     const updatedSelectedDocuments = selectedDocuments.filter((doc) =>
       documentContext.documentData.some((contextDoc) =>
-        contextDoc.documents.some((d) => d.document.documentName === doc.documentName)
+        contextDoc.documents.some(
+          (d) => d.document.documentName === doc.documentName
+        )
       )
     );
 
@@ -109,7 +109,8 @@ const DsAddTenderDocumentPane: React.FC = () => {
     const groupedDocs = Object.values(filterDocuments).flat();
     // console.log("Flat Grouped Docs:", groupedDocs);
 
-    const contextDocs = documentContext?.documentData?.flatMap(cd => cd.documents) || [];
+    const contextDocs =
+      documentContext?.documentData?.flatMap((cd) => cd.documents) || [];
     // console.log("Context Docs:", contextDocs);
 
     const updatedGroupedDocuments = groupedDocs.filter((doc) =>
@@ -122,11 +123,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
     // console.log("Updated Grouped Documents:", updatedGroupedDocuments);
 
     setSelectedDocuments(updatedGroupedDocuments);
-
   }, [documentContext]);
-
-
-
 
   const handledocument = () => {
     if (searchText.length > 0) {
@@ -143,11 +140,16 @@ const DsAddTenderDocumentPane: React.FC = () => {
         }[] = [...prevData]; // Explicit type declaration
 
         selectedDocuments.forEach((doc) => {
-          const existingType = updatedData.find((group) => group.type === doc.documentType);
+          const existingType = updatedData.find(
+            (group) => group.type === doc.documentType
+          );
 
           if (existingType) {
-            if (!existingType.documents.some((d) => d.document.documentName === doc.documentName)) {
-
+            if (
+              !existingType.documents.some(
+                (d) => d.document.documentName === doc.documentName
+              )
+            ) {
               const newdocs = {
                 documentName: doc.documentName,
                 documentType: doc.documentType,
@@ -177,26 +179,27 @@ const DsAddTenderDocumentPane: React.FC = () => {
 
             updatedData.push({
               type: doc.documentType,
-              documents: [
-                { document: newdocs, isVisible: false },
-              ],
+              documents: [{ document: newdocs, isVisible: false }],
             });
           }
         });
 
-
         // Remove documents that are not in selectedDocuments
-        updatedData = updatedData.map((group) => {
-          return {
-            ...group,
-            documents: group.documents.filter((doc) =>
-              selectedDocuments.some((selectedDoc) =>
-                selectedDoc.documentName === doc.document.documentName && selectedDoc.documentType === group.type
-              )
-            ),
-          };
-        }).filter(group => group.documents.length > 0);
-        // console.log("Updated Document Context:", updatedData); 
+        updatedData = updatedData
+          .map((group) => {
+            return {
+              ...group,
+              documents: group.documents.filter((doc) =>
+                selectedDocuments.some(
+                  (selectedDoc) =>
+                    selectedDoc.documentName === doc.document.documentName &&
+                    selectedDoc.documentType === group.type
+                )
+              ),
+            };
+          })
+          .filter((group) => group.documents.length > 0);
+        // console.log("Updated Document Context:", updatedData);
         if (updatedData.length > 0) {
           setActionStatusValues({
             notiMsg: "The documents has been successfully added",
@@ -206,11 +209,8 @@ const DsAddTenderDocumentPane: React.FC = () => {
           showToaster("create-order-toaster");
         }
         return updatedData;
-
       });
-
     }
-
   };
 
   useEffect(() => {
@@ -218,7 +218,6 @@ const DsAddTenderDocumentPane: React.FC = () => {
       // console.log("Grouped Documents:", groupedDocuments);
       setFilterDocuments(groupedDocuments);
     }
-
   }, [groupedDocuments]);
 
   const handleSearch = (text: string) => {
@@ -253,7 +252,9 @@ const DsAddTenderDocumentPane: React.FC = () => {
     if (metaData.tenderDocument) {
       const labelMap = {};
       Object.entries(filterDocuments).forEach(([type]) => {
-        const typeDescription = metaData.tenderDocument.find(item => item.value === type);
+        const typeDescription = metaData.tenderDocument.find(
+          (item) => item.value === type
+        );
         if (typeDescription) {
           labelMap[type] = typeDescription.label;
         }
@@ -271,7 +272,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
           label="Search Document Here"
           iconEnd={<Image src={search} alt="search" />}
           options={[]}
-          onChange={(e) => handleSearch(e?.target.value||"")}
+          onChange={(e) => handleSearch(e?.target.value || "")}
           className={styles.searchDocument}
         />
         {Object.entries(filterDocuments).map(([type, docs]) => (
@@ -293,8 +294,7 @@ const DsAddTenderDocumentPane: React.FC = () => {
                   label={doc.documentName}
                   onChange={() => handleCheckboxChange(doc)}
                   isChecked={selectedDocuments.some((d) => d.id === doc.id)}
-                // isChecked={selectedDocuments.some((d) => d.id === doc.documentId)}
-
+                  // isChecked={selectedDocuments.some((d) => d.id === doc.documentId)}
                 />
               ))}
             </div>

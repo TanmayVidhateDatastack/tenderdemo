@@ -1,211 +1,203 @@
-.container{
-    width: 100%;
-    padding-top: var(--ds-padding);
-    background: inherit;
-  }
-  
-  .containerHead{
-    display: flex;
-    justify-content: space-between;
-    background: inherit;
-  }
-  .fieldColors{
-    /* background-color: white; */
-  }
-  
-  .applicationDeposits{
-    border-radius: 25px !important;
-    padding: 2px !important;
-    background:inherit;
-  }
-  .emdContainer2{
-    margin-top: 10px;
-    border: 1px solid var(--grey-200);
-    background: inherit;
-    background-color: #D9D9D91A;
-    padding: 5px;
-    width: 100%;
-    border-radius: 0.25em;
-    padding:0.5em;
-    position: relative;
-min-height: fit-content;
-    }
-    .conditionHolder{
-      min-width: 100%;
-      display: flex;
-      justify-content: end;
-    }
-    .conditions{
-      margin-top:-2.4em;
-    }
-  .headContainer{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.6em;
-  }
-  .emdContainer{
-    background-color: transparent;
-    padding: 5px;
-    width: 100%;
-    }
-    
-    .attachFileBtn{
-      display: flex;
-      /* justify-content: start !important; */
-      align-items: center; 
-    }
-  
+.container {
+  width: 100%;
+  padding-top: var(--ds-padding);
+  background: inherit;
+}
 
-  .headTitle{
-    font-size: var(--font-14);
-    color: var(--grey-800);
-    /* font-weight: 600; */
-    /* margin-left: 10px; */
-    /* margin-top: 5px; */
-  }
-  
+.containerHead {
+  display: flex;
+  justify-content: space-between;
+  background: inherit;
+}
+.fieldColors {
+  /* background-color: white; */
+}
 
-  .feeFields{
-    background-color: var(--background) !important;
-    border-radius: 4px;
-    width:20px;
-    margin:0;
-  }
-  
-  .notes{
-    /* padding: 3px; */
-    padding-top: 20px;
-    background-color:transparent;
-  }
-  .notesTitle{
-    font-size:var(--font-13);
-    color: var(--grey-700);
-    margin-bottom:0.5em;
-  }
-  .notesField{
-    resize:vertical;
-    min-height: 4em;
-  }
-  .optionBtn{
-    background-color: transparent !important;
-    color: var(--text-primary) !important;
-    border: 0px !important;
-  }
-  .optionBtn:hover{
-    background-color: var(--text-primary-hover) !important;
-    /* color: var(--text-white) !important; */
-    border-radius: 25px !important;
-  }
-  .copyBtnDiv{
-    /* background-color: transparent !important; */
-    /* color: var(--text-primary) !important; */
-    /* max-height: 2.25em !important; */
-    /* height: 2.25em !important; */
-    /* border: 0px !important; */
-    display: flex; 
-    justify-content: flex-start;
-    margin: 0;
-    align-items: center;
-    text-align: left;
-  }
-  .copyBtn{
-    padding: var(--ds-padding);
-    justify-content: flex-start;
-  }
- 
- 
-  .copyBtn:hover{
-    background-color: var(--background) !important;
-    max-height: 2.25em !important;
-    height: 2.25em !important;
+.applicationDeposits {
+  border-radius: 25px !important;
+  padding: 2px !important;
+  background: inherit;
+}
+.emdContainer2 {
+  margin-top: 10px;
+  border: 1px solid var(--grey-200);
+  background: inherit;
+  background-color: #d9d9d91a;
+  padding: 5px;
+  width: 100%;
+  border-radius: 0.25em;
+  padding: 0.5em;
+  position: relative;
+  min-height: fit-content;
+}
+.conditionHolder {
+  min-width: 100%;
+  display: flex;
+  justify-content: end;
+}
+.conditions {
+  margin-top: -2.4em;
+}
+.headContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.6em;
+}
+.emdContainer {
+  background-color: transparent;
+  padding: 5px;
+  width: 100%;
+}
+
+.attachFileBtn {
+  display: flex;
+  /* justify-content: start !important; */
+  align-items: center;
+}
+
+.headTitle {
+  font-size: var(--font-14);
+  color: var(--grey-800);
+  /* font-weight: 600; */
+  /* margin-left: 10px; */
+  /* margin-top: 5px; */
+}
+
+.feeFields {
+  background-color: var(--background) !important;
+  border-radius: 4px;
+  width: 20px;
+  margin: 0;
+}
+
+.notes {
+  /* padding: 3px; */
+  padding-top: 20px;
+  background-color: transparent;
+}
+.notesTitle {
+  font-size: var(--font-13);
+  color: var(--grey-700);
+  margin-bottom: 0.5em;
+}
+.notesField {
+  resize: vertical;
+  min-height: 4em;
+}
+.optionBtn {
+  background-color: transparent !important;
+  color: var(--text-primary) !important;
+  border: 0px !important;
+}
+.optionBtn:hover {
+  background-color: var(--text-primary-hover) !important;
+  /* color: var(--text-white) !important; */
+  border-radius: 25px !important;
+}
+.copyBtnDiv {
+  /* background-color: transparent !important; */
+  /* color: var(--text-primary) !important; */
+  /* max-height: 2.25em !important; */
+  /* height: 2.25em !important; */
+  /* border: 0px !important; */
+  display: flex;
+  justify-content: flex-start;
+  margin: 0;
+  align-items: center;
+  text-align: left;
+}
+.copyBtn {
+  padding: var(--ds-padding);
+  justify-content: flex-start;
+}
+
+.copyBtn:hover {
+  background-color: var(--background) !important;
+  max-height: 2.25em !important;
+  height: 2.25em !important;
   color: var(--primary) !important;
-    /* color: var(--text-white) !important; */
-    /* border-radius: 25px !important; */
-  }
+  /* color: var(--text-white) !important; */
+  /* border-radius: 25px !important; */
+}
 
-  .addBtn{
-    min-width: 100% !important;
-    max-width: fit-content !important;
-    background-color: var(--primary) !important;
-    color: var(--background) !important;
-    margin-right: 0;
-    margin-left: 0;
-    margin-top:1em;
-  }
-  .addBtn:hover{
-    background-color: var(--primary);
-    color: var(--background);
-  }
+.addBtn {
+  min-width: 100% !important;
+  max-width: fit-content !important;
+  background-color: var(--primary) !important;
+  color: var(--background) !important;
+  margin-right: 0;
+  margin-left: 0;
+  margin-top: 1em;
+}
+.addBtn:hover {
+  background-color: var(--primary);
+  color: var(--background);
+}
 
-  .feesCheckboxes{
-    padding: 0.1rem !important;
-  }
-  .applicableDeposit{
-    padding: 8px;
-  }
-  .downloadReceipt{
-    background-color: inherit !important;
-    margin-top:0;
-  }
-  .fetchButtons{
-    display: flex;
-    justify-content: flex-end;
-    padding: 5px;
-    
-  }
-  .fetcustomerContainer{
-    padding: 15px;
-    overflow-y: scroll;
-    border-left: 6px solid var(--tender-green);
-    border-radius: 4px 4px 4px 4px;
-  }
-  .fetchMessage {
-    white-space: normal;
-    word-break: break-word;
-    line-height: 1.5;
-    font-size: var(--font-12);
-    color:#555555;
-    text-align: left;
-    margin: 10px 10px 10px 0px; 
+.feesCheckboxes {
+  padding: 0.1rem !important;
+}
+.applicableDeposit {
+  padding: 8px;
+}
+.downloadReceipt {
+  background-color: inherit !important;
+  margin-top: 0;
+}
+.fetchButtons {
+  display: flex;
+  justify-content: flex-end;
+  padding: 5px;
+}
+.fetcustomerContainer {
+  padding: 15px;
+  overflow-y: scroll;
+  border-left: 6px solid var(--tender-green);
+  border-radius: 4px 4px 4px 4px;
+}
+.fetchMessage {
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.5;
+  font-size: var(--font-12);
+  color: #555555;
+  text-align: left;
+  margin: 10px 10px 10px 0px;
 
-    /* padding:px; */ 
-  }
-  .fetchInfo{
-    text-align: left;
-    display: flex;
-    gap:5px;
-    /* font-size: var(--font-14); */
-  }
-  .fetchinfolabel{
-    font-weight: bold;
-  }
-  .fetchTable{
-    margin: 10px 10px 10px 0px; 
-    
-    max-height: 150px;
-    /* overflow-y: auto;      
+  /* padding:px; */
+}
+.fetchInfo {
+  text-align: left;
+  display: flex;
+  gap: 5px;
+  /* font-size: var(--font-14); */
+}
+.fetchinfolabel {
+  font-weight: bold;
+}
+.fetchTable {
+  margin: 10px 10px 10px 0px;
+
+  max-height: 150px;
+  /* overflow-y: auto;      
     overflow-x: hidden;    
     scroll-behavior: smooth;  */
-    padding-right: 10px;   
-  }
-  
-.fields
-{
+  padding-right: 10px;
+}
+
+.fields {
   margin-top: 20px !important;
 }
-.checkbox
-{
+.checkbox {
   margin-bottom: 20px;
 }
-.separator
-{
+.separator {
   border-bottom: 1px solid var(--grey-300) !important;
   padding: 10px;
   margin-bottom: 20px;
 }
-.uploadfile
-{
+.uploadfile {
   margin-top: 20px;
 }
 .scrollableContainer {
@@ -213,12 +205,12 @@ min-height: fit-content;
   overflow-y: auto;
   position: relative;
 }
- 
+
 .addBtnSticky {
- position: sticky;
+  position: sticky;
   bottom: 0;
   background-color: white;
   text-align: center;
-  padding:8px;
+  padding: 8px;
   z-index: 110;
 }

@@ -125,26 +125,25 @@
 
 //   const calculateDueStatus = (submissionDate: string) => {
 //     if (!submissionDate) return "-"; // Handle empty values
-  
+
 //     const dateParts = submissionDate.split("/");
 //     if (dateParts.length !== 3) return "-"; // Invalid format
-  
+
 //     const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
 //     const subDate = new Date(formattedDate);
 //     const currentDate = new Date();
-  
+
 //     if (isNaN(subDate.getTime())) return "-"; // Invalid date
-  
+
 //     const diffTime = subDate.getTime() - currentDate.getTime();
 //     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  
+
 //     const result = diffDays < 0 ? `Overdue by ${Math.abs(diffDays)} days` : ` ${diffDays} Days to Left`;
 //     console.log(`Submission Date: ${submissionDate}, Status: ${result}`);
-  
+
 //     return result;
 //   };
-  
-  
+
 //   useEffect(() => {
 //     if (filteredData && filteredData.length >= 0) {
 //       console.log("filter data in tabel : ", filteredData);
@@ -520,7 +519,7 @@
 //           rows={tempTableData.rows}
 //           isFooterRequired={true}
 //           isSortable={true}
-      
+
 //         />
 //       </DsApplication>
 //       <DsPane id="y" side="right" title="Filter">

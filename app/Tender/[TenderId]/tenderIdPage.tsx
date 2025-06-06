@@ -187,7 +187,7 @@ const DsTenderIdPage: React.FC<{
         tabId: "2",
         tabName: "Documents",
         // disable: displayFlag == "New" || type !="Corporate",
-        disable:type==="corporate"
+        disable: type === "corporate",
       },
     ]);
 
@@ -422,7 +422,7 @@ const DsTenderIdPage: React.FC<{
                       id="state"
                       status={
                         displayFlag == "Existing"
-                          ? tenderData?.status ?? DsStatus.DRFT
+                          ? (tenderData?.status ?? DsStatus.DRFT)
                           : DsStatus.DRFT
                       }
                     />
@@ -477,7 +477,6 @@ const DsTenderIdPage: React.FC<{
                   ))}
 
                   <TabView tabId="2">
-                    
                     <DocumentContext.Consumer>
                       {(context) => {
                         if (!context) {

@@ -49,30 +49,37 @@ const CustomerSearch: React.FC<{
   errorMessage?: string;
   isError?: boolean;
 }> = React.memo(
-  ({ customer, disabled, updateTenderData, setCustomerLocations, orderData, errorMessage, isError }) => {
+  ({
+    customer,
+    disabled,
+    updateTenderData,
+    setCustomerLocations,
+    orderData,
+    errorMessage,
+    isError,
+  }) => {
     const [customers, setCustomers] = useState<datalistOptions[]>();
     //Gaurav
     const [customerName, setCustomerName] = useState<string>("");
     const [selectedCustomer, setSelectedCustomer] = useState<number>();
-    const [customerInputValue, setCustomerInputValue] = useState(customer ?? "");
+    const [customerInputValue, setCustomerInputValue] = useState(
+      customer ?? ""
+    );
     const [customerSearchKey, setCustomerSearchKey] = useState(0);
 
     const [selectedAddress, setSelectedAddress] = useState<string>("");
     const permissions = useAppSelector((state: RootState) => state.permissions);
     const { disable } = permissions;
 
-
     const handleOnBlur = (e) => {
-      const n = e.target.value == '' ? '' : customerName
+      const n = e.target.value == "" ? "" : customerName;
       setCustomerName(n);
       setCustomerInputValue(n);
-
-    }
+    };
 
     // get the type value from URL
     const searchParams = useSearchParams();
     const type = searchParams.get("type") || "institutional";
-
 
     async function setSelectedOptions(option: datalistOptions): Promise<void> {
       const selectedCustomerId = Number(option.id);
@@ -82,16 +89,10 @@ const CustomerSearch: React.FC<{
 
       if (updateTenderData) {
         updateTenderData("customerId", selectedCustomerId);
-        updateTenderData(
-          "tenderDetails.customerName",
-          option.value || ""
-        );
+        updateTenderData("tenderDetails.customerName", option.value || "");
 
         updateTenderData("customerAddressId", 0);
-        updateTenderData(
-          "tenderDetails.customerAddressName",
-          ''
-        );
+        updateTenderData("tenderDetails.customerAddressName", "");
       }
 
       // setSelectedAddress("");
@@ -130,7 +131,7 @@ const CustomerSearch: React.FC<{
         updateTenderData?.("customerId", 0);
         updateTenderData?.("tenderDetails.customerName", "");
         updateTenderData?.("customerAddressId", 0);
-        updateTenderData?.("tenderDetails.customerAddressName", '');
+        updateTenderData?.("tenderDetails.customerAddressName", "");
       }
       // if (val.trim() === "") {
       //   // If user cleared the field manually
@@ -178,11 +179,14 @@ const CustomerSearch: React.FC<{
         label={"Search Customer"}
         options={customers || undefined}
         setOptions={setOptions}
-        setSearchUrl={(searchTerm: string) =>
-          searchCustomerURL(searchTerm, type)
+        setSearchUrl={
+          (searchTerm: string) => searchCustomerURL(searchTerm, type)
           // `${searchCustomerURL}${searchTerm}&type=${type}`
-        } setSelectedOption={setSelectedOptions}
-        onChange={(e) => { if (e) handleInputChange(e) }}
+        }
+        setSelectedOption={setSelectedOptions}
+        onChange={(e) => {
+          if (e) handleInputChange(e);
+        }}
         onBlur={handleOnBlur}
         errorMessage={errorMessage}
         isError={isError}
