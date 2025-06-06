@@ -57,29 +57,19 @@ const DsDepositeDocuments: React.FC = () => {
   const role = useAppSelector((state: RootState) => state.user.role);
 
   useEffect(() => {
-    if (
-      role.toUpperCase() == "MAKER" ||
-      role.toUpperCase() == "CHECKER" ||
-      role.toUpperCase() == "HOMANAGER"
-    ) {
-      setPaymentCheckVisible(false);
-    } else {
-      setPaymentCheckVisible(true);
-    }
-    // console.log(role);
-    // console.log(tenderData.status)
-    if (
-      (role.toUpperCase() === "ACCOUNTANCE" ||
-        role.toUpperCase() === "FINANCE") &&
-      (tenderData.status.toUpperCase() === "AWARDED" ||
-        tenderData.status.toUpperCase() === "PARTIALLY_AWARDED" ||
-        tenderData.status.toUpperCase() === "LOST" ||
-        tenderData.status.toUpperCase() === "CANCELLED")
-    ) {
-      setrecoveryPaymentVisible(true);
-    } else {
-      setrecoveryPaymentVisible(false);
-    }
+    const upperRole = role.toUpperCase();
+    const upperStatus = tenderData.status?.toUpperCase() || "";
+
+    setPaymentCheckVisible(
+      !["MAKER", "CHECKER", "HOMANAGER"].includes(upperRole)
+    );
+
+    setrecoveryPaymentVisible(
+      ["ACCOUNTANCE", "FINANCE"].includes(upperRole) &&
+        ["AWARDED", "PARTIALLY_AWARDED", "LOST", "CANCELLED"].includes(
+          upperStatus
+        )
+    );
     if (
       metaData.tenderEmdPayment &&
       metaData.tenderFeesPayment &&
@@ -176,7 +166,7 @@ const DsDepositeDocuments: React.FC = () => {
     applicablefees.forEach((opt) => {
       const id = opt.value.toString();
       const isEmpty = tenderData.tenderFees.find((fee) => fee.feesType === id);
-      // console.log("isEmpty", isEmpty);
+      console.log("isEmpty", applicablefees);
       const isActive = isEmpty?.status === "ACTV";
 
       if (tenderData.id === undefined || isActive) {
@@ -308,7 +298,16 @@ const DsDepositeDocuments: React.FC = () => {
         ) {
           if (!isBankGuarantee) return null;
         }
-
+        // when  status is APProved and role = == "ACCOUNTANCE" || role === "FINANCE" hiding psd
+        if (
+          (deposit.value === "TENDER_PSD" &&
+            tenderData.status === "APPROVED" &&
+            role === "ACCOUNTANCE") ||
+          role === "FINANCE"
+        ) {
+          return null;
+        }
+        //// when  status is APProved and role = == "ACCOUNTANCE" || role === "FINANCE" hiding psd
         return (
           feeVisibility[deposit.value] && (
             <div className={styles.emdContainer2} key={deposit.value}>
