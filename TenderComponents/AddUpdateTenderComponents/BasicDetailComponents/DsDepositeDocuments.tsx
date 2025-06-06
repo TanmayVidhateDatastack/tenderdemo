@@ -57,17 +57,22 @@ const DsDepositeDocuments: React.FC = () => {
   const role = useAppSelector((state: RootState) => state.user.role);
 
   useEffect(() => {
-    if (role.toUpperCase() == "MAKER" || role.toUpperCase() == "CHECKER" || role.toUpperCase() == "HOMANAGER") {
+    if (
+      role.toUpperCase() == "MAKER" ||
+      role.toUpperCase() == "CHECKER" ||
+      role.toUpperCase() == "HOMANAGER"
+    ) {
       setPaymentCheckVisible(false);
     } else {
       setPaymentCheckVisible(true);
     }
     if (
-      role.toUpperCase() === "ACCOUNTANCE" ||
-      (role.toUpperCase() === "FINANCE" &&
-        (tenderData.status === "AWARDED" ||
-          tenderData.status === "LOST" ||
-          tenderData.status === "CANCELLED"))
+      (role.toUpperCase() === "ACCOUNTANCE" ||
+        role.toUpperCase() === "FINANCE") &&
+      (tenderData.status.toUpperCase() === "AWARDED" ||
+        tenderData.status.toUpperCase() === "PARTIALLY_AWARDED" ||
+        tenderData.status.toUpperCase() === "LOST" ||
+        tenderData.status.toUpperCase() === "CANCELLED")
     ) {
       setrecoveryPaymentVisible(true);
     } else {
@@ -317,7 +322,6 @@ const DsDepositeDocuments: React.FC = () => {
                 completedpayment={paymentCheckVisible}
                 recoverycheckvisibible={recoveryPaymentVisible}
               />
-                
             </div>
           )
         );
