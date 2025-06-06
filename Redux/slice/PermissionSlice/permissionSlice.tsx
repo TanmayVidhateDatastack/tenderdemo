@@ -314,7 +314,7 @@ const permissionsSlice = createSlice({
           state.productTableDisable = false;
 
         case "APPROVED":
-          if (role === "ACCOUNTANCE" || role === "FINANCE") {
+          if (role.toUpperCase() === "ACCOUNTANCE" || role.toUpperCase() === "FINANCE") {
             state.paymentcompletedDisable = false;
             state.addDocumentTypeSlectDisable = false;
             state.addDocumentTypeButtonDisable = false;
@@ -327,19 +327,19 @@ const permissionsSlice = createSlice({
         case "LOST":
         case "CANCELLED":
         case "AWARDED":
-          if (role === "ACCOUNTANCE" || role === "FINANCE") {
+          if (role.toUpperCase() === "ACCOUNTANCE" || role.toUpperCase() === "FINANCE") {
             state.paymentRecoveredDisable = false;
             state.paymentRecoverdDateDisable = false;
             state.recoveredNotesDisable = false;
             state.recoveredAttachFileButton = false;
             state.saveButtonDisabled = false;
           }
-          if (role == "MAKER") {
+          if (role.toUpperCase() == "MAKER") {
             state.saveButtonDisabled = false;
           }
           break;
         case "UNDER_APPROVAL":
-          if (role === "HOMANAGER" || role == "CHECKER") {
+          if (role.toUpperCase() === "HOMANAGER" || role.toUpperCase() == "CHECKER") {
             // case "HOMANAGER":
             state.searchCustomerDisable = false;
             state.customerLocationDisable = false;
