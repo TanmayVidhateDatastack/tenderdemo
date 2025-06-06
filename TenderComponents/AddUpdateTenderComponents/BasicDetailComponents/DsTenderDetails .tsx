@@ -209,8 +209,6 @@ const DsTenderDetails: React.FC = () => {
     );
   }, [tenderData?.customerId, tenderData.customerAddressId]);
   useEffect(() => {
-    console.log("data", tenderData.lastPurchaseDate?.substring(0, 10));
-    console.log("copy", tenderDataCopy.lastPurchaseDate?.substring(0, 10));
     const min =
       tenderDataCopy.lastPurchaseDate &&
       tenderData.lastPurchaseDate?.substring(0, 10) ==
