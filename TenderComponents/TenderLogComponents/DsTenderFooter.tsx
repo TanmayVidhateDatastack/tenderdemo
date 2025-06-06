@@ -744,7 +744,10 @@ export const DSTendrFooter: React.FC = ({}) => {
           </DsSplitButton>
         ) : (
           <DsButton
-            disable={saveButtonDisabled}
+            disable={
+              tenderDataCopy.tenderContract?.contractStatus == "SUBMITTED" ||
+              saveButtonDisabled
+            }
             buttonViewStyle="btnContained"
             onClick={() => {
               // if (saveTender) validateAndSaveTender();
