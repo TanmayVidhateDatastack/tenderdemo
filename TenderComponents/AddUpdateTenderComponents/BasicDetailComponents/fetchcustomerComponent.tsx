@@ -103,7 +103,8 @@ const FetchCustomer: React.FC<FetchCustomerProps> = ({
     <>
       <div className={style.fetcustomerContainer}>
         <div className={style.fetchInfo}>
-          <div className={style.fetchinfolabel}>Fetch Information </div> <div>({customerName})</div>
+          <div className={style.fetchinfolabel}>Fetch Information </div>{" "}
+          <div>({customerName})</div>
         </div>
         <div className={style.fetchMessage}>
           Do you want to fetch information from previous tender. Please select

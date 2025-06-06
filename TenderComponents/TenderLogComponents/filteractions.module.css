@@ -1,36 +1,33 @@
-.filterContainer{
+.filterContainer {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  margin:0.01rem;
+  margin: 0.01rem;
   /* gap: 0.3rem !important; */
-
- 
 }
-.innerfilterContainer
-{
-display: flex;
-justify-content: space-evenly;
-align-items: center;
-gap:1rem;
-width : 35.0rem !important;
+.innerfilterContainer {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 1rem;
+  width: 35rem !important;
 }
 
-.submissionBtn .feesBtn .approvalBtn{
+.submissionBtn .feesBtn .approvalBtn {
   border: 1px solid var(--primary) !important;
   color: var(--primary) !important;
   margin: 2px !important;
 }
-.submissionBtn:hover .feesBtn:hover .approvalBtn:hover{
+.submissionBtn:hover .feesBtn:hover .approvalBtn:hover {
   border: 1px solid var(--primary) !important;
   color: var(--primary) !important;
   background-color: var(--backgroundt);
 }
-.filterBtn{
+.filterBtn {
   color: var(--primary) !important;
   border: 0px !important;
 }
-.filterBtn:hover{
+.filterBtn:hover {
   background-color: var(--text-primary-hover) !important;
 }
 
@@ -38,32 +35,32 @@ width : 35.0rem !important;
   background-color: var(--deviationpending-o) !important;
   color: var(--deviationpending-text) !important;
 }
- 
+
 .approved {
   background-color: var(--approved-o) !important;
   color: var(--approved-text) !important;
 }
- 
+
 .cancelled {
   background-color: var(--cancelled-o) !important;
   color: var(--cancelled-text) !important;
 }
- 
+
 .ready_to_dispatch {
   background-color: var(--readytodispatch-o) !important;
   color: var(--readytodispatch-text) !important;
 }
- 
+
 .rejected {
   background-color: var(--rejected-o) !important;
   color: var(--rejected-text) !important;
 }
- 
+
 .open {
   background-color: var(--open-o) !important;
   color: var(--open-text) !important;
 }
- 
+
 .draft {
   background-color: var(--draft-o) !important;
   color: var(--draft-text) !important;
@@ -83,25 +80,21 @@ width : 35.0rem !important;
   background-color: var(--under-approval-o) !important;
   color: var(--under-approval-text) !important;
 }
- 
- 
-.contentsubmissionBtn
-{
- min-width: fit-content!important;
-  margin:0rem!important;
-   white-space:nowrap;
+
+.contentsubmissionBtn {
+  min-width: fit-content !important;
+  margin: 0rem !important;
+  white-space: nowrap;
 }
 
-.contentfeesBtn
-{
-border-radius:1rem;
-width:15rem!important;
-min-width: fit-content;
-margin:0rem !important;
+.contentfeesBtn {
+  border-radius: 1rem;
+  width: 15rem !important;
+  min-width: fit-content;
+  margin: 0rem !important;
 }
-.contentaprrove
-{
-margin:0rem!important;
+.contentaprrove {
+  margin: 0rem !important;
 }
 
 /* .filterbtns
@@ -112,14 +105,14 @@ gap:0px;
 } */
 .totalorder {
   padding: 0px !important;
-  font-size : var(--font-12) !important;
+  font-size: var(--font-12) !important;
 }
 .datalist {
-  width: 30%!important;
+  width: 30% !important;
   margin-right: 1rem;
   /* background-color: inherit !important; */
-  background-color: var(--background)!important;
-  box-shadow: #0000000F 0.2rem 0.2rem 0.4rem  !important;
+  background-color: var(--background) !important;
+  box-shadow: #0000000f 0.2rem 0.2rem 0.4rem !important;
 }
 /* .dis{
   margin: 0.3rem 0.2vw !important;
@@ -131,43 +124,30 @@ gap:0px;
   display: flex;
   gap: 0px;
 }
-.awardedbtn
-{
-  background-color:var(--tender-green-hover) !important;
-  color:var(--tender-green)!important;
-
-
+.awardedbtn {
+  background-color: var(--tender-green-hover) !important;
+  color: var(--tender-green) !important;
 }
-.awardedbtn:hover
-{
-  background-color:var(--tender-green) !important;
-  color:white!important;
-
+.awardedbtn:hover {
+  background-color: var(--tender-green) !important;
+  color: white !important;
 }
-.tenderlost
-{
-  background-color:#8909151a !important;
-  color:#890915!important;
+.tenderlost {
+  background-color: #8909151a !important;
+  color: #890915 !important;
 }
 
-
-.tenderlost:hover
-{
-  background-color:#890915 !important;
-  color:white!important;
+.tenderlost:hover {
+  background-color: #890915 !important;
+  color: white !important;
 }
 
-.crosscircle
-{
-
-  fill:#890915 !important;
+.crosscircle {
+  fill: #890915 !important;
 }
-.crosscirclered
-{
-
-  fill:#D20C0C !important;
+.crosscirclered {
+  fill: #d20c0c !important;
 }
-
 
 /* @media screen  and (max-width: 1450px) {
   .contentsubmissionBtn

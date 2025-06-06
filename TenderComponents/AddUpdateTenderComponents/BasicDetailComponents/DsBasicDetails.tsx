@@ -27,20 +27,22 @@ const DsBasicDetails = () => {
   }, []);
   const searchParams = useSearchParams();
   const type = searchParams.get("type") || "institutional" || "corporate";
-  
+
   useEffect(() => {
-    if (type === "institutional" &&
+    if (
+      type === "institutional" &&
       tenderData.applierType === "STOCKIST" &&
-      tenderData.supplierType === "STOCKIST") {
+      tenderData.supplierType === "STOCKIST"
+    ) {
       updateTenderData("tenderFees", []);
     }
-  }, [type, tenderData.applierType, tenderData.supplierType])
+  }, [type, tenderData.applierType, tenderData.supplierType]);
 
-//  useEffect(() => {
-//     if (tenderData.applierType) {
-//       updateTenderData("tenderDetails.suppliedBy","");
-//     }
-//   }, [type, tenderData.applierType]) 
+  //  useEffect(() => {
+  //     if (tenderData.applierType) {
+  //       updateTenderData("tenderDetails.suppliedBy","");
+  //     }
+  //   }, [type, tenderData.applierType])
 
   return (
     <>
@@ -56,13 +58,13 @@ const DsBasicDetails = () => {
         tenderData.applierType === "STOCKIST" &&
         tenderData.supplierType === "STOCKIST"
       ) && (
-          <>
-            <span className={styles.Seperator}></span>
-            <div className={styles.container}>
-              <DsDepositeDocuments />
-            </div>
-          </>
-         )} 
+        <>
+          <span className={styles.Seperator}></span>
+          <div className={styles.container}>
+            <DsDepositeDocuments />
+          </div>
+        </>
+      )}
       {type.toLowerCase() === "institutional" && (
         <>
           <span className={styles.Seperator}></span>

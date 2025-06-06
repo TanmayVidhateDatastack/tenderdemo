@@ -527,7 +527,10 @@ export const DSTendrFooter: React.FC = ({}) => {
       dispatch(setVisibilityByRole(role));
       // console.log("Role=", role);
 
-      if (role.toUpperCase() === "ACCOUNTANCE" || role.toUpperCase() === "FINANCE") {
+      if (
+        role.toUpperCase() === "ACCOUNTANCE" ||
+        role.toUpperCase() === "FINANCE"
+      ) {
         setContextContext(
           <DsButton
             label="Submit Receipt"
@@ -781,8 +784,8 @@ export const DSTendrFooter: React.FC = ({}) => {
           role.toUpperCase() === "HOMANAGER"
             ? "The Tender has been Approved"
             : role.toUpperCase() === "CHECKER"
-            ? "The Tender has been successfully moved to under approval state"
-            : "The action was successful!"
+              ? "The Tender has been successfully moved to under approval state"
+              : "The action was successful!"
         }
         setActionStatus={setActionStatusValues}
         validateAndUpdateTender={validateAndUpdateTender}
@@ -820,8 +823,8 @@ export const DSTendrFooter: React.FC = ({}) => {
           role.toUpperCase() === "HOMANAGER"
             ? "The Tender has been Approved"
             : role.toUpperCase() === "CHECKER"
-            ? "The Tender has been successfully moved to under approval state"
-            : "The action was successful!"
+              ? "The Tender has been successfully moved to under approval state"
+              : "The action was successful!"
         }
         setActionStatus={setActionStatusValues}
         validateAndUpdateTender={validateAndUpdateTender}
@@ -830,11 +833,12 @@ export const DSTendrFooter: React.FC = ({}) => {
       <Toaster
         id={"toaster1"}
         message={
-          role.toUpperCase() === "ACCOUNTANCE" || role.toUpperCase() === "FINANCE"
+          role.toUpperCase() === "ACCOUNTANCE" ||
+          role.toUpperCase() === "FINANCE"
             ? "The Data has been Submitted by Review "
             : role.toUpperCase() === "MAKER"
-            ? "The receipt has been submitted successfully"
-            : "The action was successful!"
+              ? "The receipt has been submitted successfully"
+              : "The action was successful!"
         }
         type={"success"}
         position={"top"}

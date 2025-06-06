@@ -32,8 +32,8 @@ const DsTotalValues: React.FC<TotalValuesProps> = React.memo(({ data }) => {
         const rawValue = tender.value ?? "0";
         const cleanedValue = Number(rawValue.toString().replace(/,/g, ""));
 
-        if (!isNaN(cleanedValue)) { 
-          netValues[statusValue] = (netValues[statusValue] || 0) + cleanedValue; 
+        if (!isNaN(cleanedValue)) {
+          netValues[statusValue] = (netValues[statusValue] || 0) + cleanedValue;
         }
       });
 

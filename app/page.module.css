@@ -161,7 +161,10 @@
   padding: 0 20px;
   border: none;
   border: 1px solid transparent;
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -329,12 +332,12 @@ a.secondary {
   padding: 10px;
 }
 .noDataFound {
-  font-size:var(--font-48);
+  font-size: var(--font-48);
   min-height: 4em;
   min-width: 100%;
   display: flex;
   flex-direction: column;
-  position:relative;
+  position: relative;
 
   justify-content: space-between;
   /* align-items: center; */
@@ -349,7 +352,7 @@ a.secondary {
 
 .noData {
   /* position:absolute; */
-  margin-top:4em;
+  margin-top: 4em;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -527,21 +530,21 @@ a.secondary {
 }
 .tendertable {
   font-size: var(--font-12) !important;
-  min-width:100% !important;
+  min-width: 100% !important;
 }
 .tender-product-table {
   font-size: var(--font-13);
   overflow-y: hidden !important;
 }
-.tender-product-table tbody{
+.tender-product-table tbody {
   min-height: fit-content !important;
   height: 25em !important;
   max-height: 25em;
 }
-.tender-product-table tbody tr{
+.tender-product-table tbody tr {
   min-height: 3em !important;
 }
-.tender-product-table thead tr{
+.tender-product-table thead tr {
   min-height: 2.5em !important;
 }
 .productContext {
@@ -616,13 +619,13 @@ a.secondary {
 .warningAlert {
   color: red !important;
 }
-.selectedRow{
+.selectedRow {
   background-color: var(--tableRowSelect) !important;
 }
 .advPane {
   padding: 1rem !important;
 }
-.recordNotFound{
+.recordNotFound {
   justify-content: center;
   color: red;
   font-size: 1.5625em;
@@ -633,4 +636,3 @@ a.secondary {
   text-align: center;
   margin-top: 0.625em;
 }
- 

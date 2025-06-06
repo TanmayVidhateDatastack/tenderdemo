@@ -95,7 +95,7 @@ const ProductSearch: React.FC<ProductSearchProps> = ({
       ) {
         setErrorMessage("Duplicate.");
         setIsError(true);
-        setSelectedProductId(undefined)
+        setSelectedProductId(undefined);
         return;
       }
       if (selectedProductId) {

@@ -19,8 +19,6 @@ import { DisplayPane } from "@/Elements/DsComponents/DsPane/DsPane";
 import btnStyles from "@/Elements/DsComponents/DsButtons/dsButton.module.css";
 
 export interface DsFilterActionProps {
-
-
   searchQuery: string;
   setSearchQuery: Dispatch<SetStateAction<string>>;
   selectedStatus: string;
@@ -30,13 +28,20 @@ export interface DsFilterActionProps {
 }
 const DsFilterActions: React.FC<DsFilterActionProps> = ({
   searchQuery,
-  setSearchQuery, selectedStatus, setSelectedStatus, isQuickFilterActive, filterCount
+  setSearchQuery,
+  selectedStatus,
+  setSelectedStatus,
+  isQuickFilterActive,
+  filterCount,
 }) => {
-
   const initialFilterState = Object.fromEntries(
-    ["NEAR_SUBMISSION", "FEES_PENDING", "APPROVAL", "UNDER_APPROVAL", "UNDER_REVIEW"].map(
-      (status) => [status, false]
-    )
+    [
+      "NEAR_SUBMISSION",
+      "FEES_PENDING",
+      "APPROVAL",
+      "UNDER_APPROVAL",
+      "UNDER_REVIEW",
+    ].map((status) => [status, false])
   );
 
   const [isFiltered, setIsFiltered] =
@@ -55,7 +60,6 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
     approvalButtonVisible,
     myApprovalButtonVisible,
     // myApprovalButtonVisible
-
   } = permissions;
 
   // const handleFetch = async () => {
@@ -80,8 +84,6 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
   //   handleFetch();
   // }, [role]);
 
-
-
   useEffect(() => {
     if (role && role !== "") {
       dispatch(setVisibilityByRole(role));
@@ -89,24 +91,24 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
   }, [role]);
 
   useEffect(() => {
-    handleFilter(selectedStatus)
-  }, [isQuickFilterActive]
-  )
+    handleFilter(selectedStatus);
+  }, [isQuickFilterActive]);
   const handleFilter = async (value: string) => {
     // console.log("valueee", value);
     setIsFiltered((prev) => {
       const newFilterState = Object.fromEntries(
-        Object.keys(prev).map((key) => [key, key === value ? !prev[key] : false])
+        Object.keys(prev).map((key) => [
+          key,
+          key === value ? !prev[key] : false,
+        ])
       );
 
       const isFilterActive = !newFilterState[value];
 
       if (isFilterActive) {
-
         setSelectedStatus("");
       } else {
         const lowerCaseValue = value.toUpperCase();
-
 
         setSelectedStatus(lowerCaseValue);
       }
@@ -116,12 +118,10 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
   };
   const handleSearch = (e) => {
     if (e.key === "Enter") {
-
       //
       const searchQueryLower = searchText;
 
       setSearchQuery(searchQueryLower);
-
     }
   };
 
@@ -146,8 +146,6 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
       return false;
     });
   };
-
-
 
   return (
     <>
@@ -217,7 +215,6 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
           onClick={() => handleFilter("APPROVAL")}
           label="Approval"
           disable={!isQuickFilterActive}
-
         />
       )}
       {myApprovalButtonVisible && (
@@ -230,7 +227,6 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
           }
           onClick={() => handleFilter("UNDER_APPROVAL")}
           disable={!isQuickFilterActive}
-
         />
       )}
       {myApprovalButtonVisible && (
@@ -244,7 +240,6 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
           }
           onClick={() => handleFilter("UNDER_REVIEW")}
           disable={!isQuickFilterActive}
-
         />
       )}
       {filterButtonVisible && (
@@ -269,7 +264,13 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
               />
             </div>
           }
-          label={filterCount > 1 ? `${filterCount} Filters Applied` : filterCount == 1 ? `${filterCount} Filter Applied` : "Filter"}
+          label={
+            filterCount > 1
+              ? `${filterCount} Filters Applied`
+              : filterCount == 1
+                ? `${filterCount} Filter Applied`
+                : "Filter"
+          }
           // label={`${filterCount}`}
           onClick={() => DisplayPane("AdvancedFilterComponent")}
           iconSize="iconMedium"
@@ -280,4 +281,3 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
 };
 
 export default DsFilterActions;
-
