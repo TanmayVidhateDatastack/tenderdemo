@@ -1,6 +1,10 @@
 "use client";
 import DsInfoDisplay from "@/Elements/ERPComponents/DsInfoDisplay/DsInfoDisplay";
-import { getProductURL, searchProductsURL } from "@/Common/helpers/constant";
+import {
+  getProductURL,
+  getTenderProductHistory,
+  searchProductsURL,
+} from "@/Common/helpers/constant";
 // import { TenderProduct } from "@/Common/helpers/types";
 import { useEffect, useState } from "react";
 import { areSearchProduct } from "./productSearch";
@@ -81,63 +85,73 @@ const ProductTableSearch: React.FC<TableSearchProps> = ({
               data.find((p) => p.rowId === rowId)?.product?.requestedQuantity ||
                 0
             );
+            const productHistoryUrl = getTenderProductHistory(
+              tenderData.id,
+              selected.id
+            );
             const product = await fetchData({
               url: productUrl,
 
               // getProductURL + selectedProductId + "?requestedQuantity=" + quantity,
             });
             if (product?.code === 200) {
-              setLocalProducts((prev) =>
-                prev.map((p) =>
-                  p.rowId === rowId
-                    ? {
-                        ...p,
-                        productId: product.result.id,
-                        lastQuotedRate: 50,
-                        lastPurchaseRate: 50,
-                        product: {
-                          ...p.product,
-                          productName: product.result.name,
-                          productPackingSize: product.result.packingSize,
-                          mrp: product.result.mrpRate,
-                          ptr: product.result.priceToRetailer,
-                          directCost: product.result.basicRate,
-                        },
-                      }
-                    : p
-                )
-              );
-              setTimeout(() => {
+              const productHistory = await fetchData({
+                url: productHistoryUrl,
+              });
+              // setLocalProducts((prev) =>
+              //   prev.map((p) =>
+              //     p.rowId === rowId
+              //       ? {
+              //           ...p,
+              //           productId: product.result.id,
+              //           lastQuotedRate: 50,
+              //           lastPurchaseRate: 50,
+              //           product: {
+              //             ...p.product,
+              //             productName: product.result.name,
+              //             productPackingSize: product.result.packingSize,
+              //             mrp: product.result.mrpRate,
+              //             ptr: product.result.priceToRetailer,
+              //             directCost: product.result.basicRate,
+              //           },
+              //         }
+              //       : p
+              //   )
+              // );
+              // setTimeout(() => {
+              if (productHistory.code !== 500)
                 updateCell(rowId, {
                   productId: product.result.id,
-                  lastQuotedRate: 50,
-                  lastPurchaseRate: 50,
+                  lastQuotedRate: productHistory.result.lastQuotedRate,
+                  lastPurchaseRate: productHistory.result.lastPurchaseRate,
+                  proposedRate: productHistory.result.lastPurchaseRate,
                   "product.productName": product.result.name,
                   "product.productPackingSize": product.result.packingSize,
                   "product.mrp": product.result.mrpRate,
+                  "product.ptr": product.result.priceToRetailer,
                   "product.directCost": product.result.basicRate,
                 });
-                // updateCell(rowId, "productId", product.result.id);
-                // updateCell(rowId, "lastQuotedRate", 50);
-                // updateCell(rowId, "lastPurchaseRate", 50);
-                // updateCell(rowId, "product.productName", product.result.name);
-                // updateCell(
-                //   rowId,
-                //   "product.productPackingSize",
-                //   product.result.packingSize
-                // );
-                // updateCell(rowId, "product.mrp", product.result.mrpRate);
-                // updateCell(
-                //   rowId,
-                //   "product.ptr",
-                //   product.result.priceToRetailer
-                // );
-                // updateCell(
-                //   rowId,
-                //   "product.directCost",
-                //   product.result.basicRate
-                // );
-              }, 10);
+              // updateCell(rowId, "productId", product.result.id);
+              // updateCell(rowId, "lastQuotedRate", 50);
+              // updateCell(rowId, "lastPurchaseRate", 50);
+              // updateCell(rowId, "product.productName", product.result.name);
+              // updateCell(
+              //   rowId,
+              //   "product.productPackingSize",
+              //   product.result.packingSize
+              // );
+              // updateCell(rowId, "product.mrp", product.result.mrpRate);
+              // updateCell(
+              //   rowId,
+              //   "product.ptr",
+              //   product.result.priceToRetailer
+              // );
+              // updateCell(
+              //   rowId,
+              //   "product.directCost",
+              //   product.result.basicRate
+              // );
+              // }, 10);
             }
           }
         }

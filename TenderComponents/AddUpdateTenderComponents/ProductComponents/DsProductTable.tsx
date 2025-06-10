@@ -74,8 +74,8 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
       currentObj.version > maxObj.version ? currentObj : maxObj
     )?.version || 1;
   // const isTableEditable=version===latestVersion;
-  const isTableEditable = !productTableDisable
-    ? true
+  const isTableEditable = productTableDisable
+    ? false
     : version === latestVersion;
   // const [tenderProductTable, setTenderProductTable] = useState<
   //   tableData | undefined
@@ -339,7 +339,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
               id: row.competitorId || 0,
               name: row.product.competitorName || "",
             }}
-            disable={latestVersion != version}
+            disable={!isTableEditable}
             onValueChange={(value) => {
               if (!value) value = "0";
               if (handleUpdateCell)
