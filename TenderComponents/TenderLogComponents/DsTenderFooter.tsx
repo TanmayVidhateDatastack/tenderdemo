@@ -288,7 +288,7 @@ export const DSTendrFooter: React.FC = ({}) => {
       }
 
       const fees = tenderData?.tenderFees ?? [];
-      if (fees.length <= 0 && toValidate) {
+      if ((fees.length <= 0||fees.filter((x)=>x.status=="ACTV").length<=0) && toValidate) {
         errors.push(`At least one fee should be applicable`);
       }
       fees.forEach((fee, index) => {
