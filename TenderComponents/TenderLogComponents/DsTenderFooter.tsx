@@ -288,6 +288,9 @@ export const DSTendrFooter: React.FC = ({}) => {
       }
 
       const fees = tenderData?.tenderFees ?? [];
+      if (fees.length <= 0 && toValidate) {
+        errors.push(`At least one fee should be applicable`);
+      }
       fees.forEach((fee, index) => {
         if (fee.status == "ACTV") {
           if (
@@ -343,6 +346,7 @@ export const DSTendrFooter: React.FC = ({}) => {
           }
         }
       });
+
       if (type == "institutional") {
         if (
           !supplypointDisable &&
@@ -457,6 +461,8 @@ export const DSTendrFooter: React.FC = ({}) => {
                 }
               }
             });
+          } else {
+            errors.push(`At least one product should be selected`);
           }
         }
     }

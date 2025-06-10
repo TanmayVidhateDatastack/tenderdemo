@@ -69,7 +69,7 @@ const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
       onClick={(e) => e.stopPropagation()}
       style={{ outline: "none" }} // Remove default outline if you style focus
     >
-      {!disable ? (
+      {/* {!disable ? ( */}
         <DsTextField
           id={"LprValue" + index}
           inputType="positive"
@@ -81,12 +81,13 @@ const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
           onChange={(e) => {
             if (onValueChange) onValueChange(e.target.value);
           }}
+          disable={disable}
         />
-      ) : lprValue ? (
-        lprValue.toString()
-      ) : (
-        ""
-      )}
+      {/* // ) : lprValue ? (
+      //   lprValue.toString()
+      // ) : (
+      //   ""
+      // )} */}
 
       <div
         style={{
