@@ -23,6 +23,7 @@ import {
   DsStatus,
   devHostUrl,
   hostUrl,
+  validateDuplicateTender,
 } from "@/Common/helpers/constant";
 import DsNavTo from "@/Elements/ERPComponents/DsNavigationComponent/DsNavTo";
 import DsSplitButton from "@/Elements/DsComponents/DsButtons/dsSplitButton";
@@ -135,10 +136,44 @@ export const DSTendrFooter: React.FC = ({}) => {
     //product Tab
     productTableDisable,
   } = permissions;
+  const [saveButtonDisable,setSaveButtonDisabled]=useState<boolean>(false)
   // useEffect(() => {
   //   handleFetch();
   // }, []);
-
+   const validateCustomerIdTenderNumber = async () => {
+    try {
+      const res = await fetchData({
+        url: validateDuplicateTender(
+          tenderData.customerId,
+          tenderData.tenderNumber
+        ),
+      });
+      if (res.code === 200) {
+        const result = res.result;
+        // if (result) {
+        setSaveButtonDisabled(true);
+        // }
+      } else if (res.code == 404) {
+        setSaveButtonDisabled(false);
+      } else {
+        console.error("Error fetching data: ", res.message || "Unknown error");
+      }
+    } catch (error) {
+      console.error("Fetch error: ", error);
+    }
+  };
+  useEffect(() => {
+    if (
+      !(
+        tenderDataCopy.id &&
+        tenderDataCopy.customerId == tenderData.customerId &&
+        tenderDataCopy.tenderNumber == tenderData.tenderNumber
+      ) &&
+      tenderData.customerId &&
+      tenderData.tenderNumber
+    )
+      validateCustomerIdTenderNumber();
+  }, [tenderData.customerId, tenderData.tenderNumber]);
   const validateFields = (tenderData: TenderData) => {
     const errors: string[] = [];
     if (
@@ -288,7 +323,7 @@ export const DSTendrFooter: React.FC = ({}) => {
       }
 
       const fees = tenderData?.tenderFees ?? [];
-      if (fees.length <= 0 && toValidate) {
+      if ((fees.length <= 0||fees.filter((x)=>x.status=="ACTV").length<=0) && toValidate) {
         errors.push(`At least one fee should be applicable`);
       }
       fees.forEach((fee, index) => {
@@ -747,7 +782,7 @@ export const DSTendrFooter: React.FC = ({}) => {
             }
             buttonSize="btnLarge"
             // disable={splitButtonDisableState}
-            disable={saveButtonDisabled}
+            disable={saveButtonDisabled||saveButtonDisable}
           >
             Save
           </DsSplitButton>
@@ -755,7 +790,7 @@ export const DSTendrFooter: React.FC = ({}) => {
           <DsButton
             disable={
               tenderDataCopy.tenderContract?.contractStatus == "SUBMITTED" ||
-              saveButtonDisabled
+              saveButtonDisabled||saveButtonDisable
             }
             buttonViewStyle="btnContained"
             onClick={() => {
