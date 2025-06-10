@@ -456,6 +456,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 <DsTextField
                   containerClasses={styles.feeFields}
                   label={`${option.label}   ID`}
+                  inputType="positive"
                   initialValue={(() => {
                     const fee = tenderData.tenderFees.find(
                       (x) => x.feesType === type

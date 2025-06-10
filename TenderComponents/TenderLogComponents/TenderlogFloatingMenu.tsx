@@ -87,11 +87,11 @@ export const DsTenderTableFloatingMenu: React.FC<
       setIsSubmitVisible(false);
     } else if (statuscell?.toUpperCase() === "APPROVED") {
       setIsCancelBtnVisible(true);
-      setIsPartiallyAwardedBtnVisible(true);
+      setIsPartiallyAwardedBtnVisible(false);
       setIsSubmitVisible(true);
       setLostBtnVisible(false);
       setIsAwardedBtnVisible(false);
-      setIsNewVersionBtnVisible(true);
+      setIsNewVersionBtnVisible(false);
     } else {
       setIsCancelBtnVisible(true);
       setLostBtnVisible(false);
