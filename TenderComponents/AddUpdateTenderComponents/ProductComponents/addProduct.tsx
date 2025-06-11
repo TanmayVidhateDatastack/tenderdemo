@@ -46,7 +46,7 @@ const DsAddProduct: React.FC<addProductProps> = ({
       const productUrl = getProductURL(selectedProductId, qtyInputVal);
       const productHistoryUrl = getTenderProductHistory(
         tenderData.id,
-        setSelectedProductId
+        selectedProductId
       );
 
       const product = await fetchData({
