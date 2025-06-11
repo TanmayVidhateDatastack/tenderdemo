@@ -302,17 +302,21 @@ const DsDepositeDocuments: React.FC = () => {
 
         const isBankGuarantee = selectedMode === "BANK_GUARANTEE";
 
-        if (
-          role.toUpperCase() === "ACCOUNTANCE" &&
-          (deposit.value === "TENDER_EMD" || deposit.value === "TENDER_PSD")
-        ) {
-          if (!isBankGuarantee) return null;
+        // if (
+        //   role.toUpperCase() === "ACCOUNTANCE" &&
+        //   (deposit.value === "TENDER_EMD" || deposit.value === "TENDER_PSD")
+        // ) {
+        //   if (!isBankGuarantee) return null;
+        // }
+        if (isBankGuarantee && role.toUpperCase() === "FINANCE") {
+          return null;
         }
         // when  status is APProved and role = == "ACCOUNTANCE" || role === "FINANCE" hiding psd
         if (
           deposit.value === "TENDER_PSD" &&
           tenderData.status === "APPROVED" &&
-          (role.toUpperCase()  === "ACCOUNTANCE" || role.toUpperCase()  === "FINANCE")
+          (role.toUpperCase() === "ACCOUNTANCE" ||
+            role.toUpperCase() === "FINANCE")
         ) {
           return null;
         }
@@ -330,7 +334,9 @@ const DsDepositeDocuments: React.FC = () => {
                 downloadVisible={true}
                 refund={refund}
                 completedpayment={paymentCheckVisible}
-                recoverycheckvisibible={recoveryPaymentVisible}
+                recoverycheckvisibible={
+                  recoveryPaymentVisible && selectedFee?.refundEligibility=="REFUNDABLE"
+                }
               />
             </div>
           )
