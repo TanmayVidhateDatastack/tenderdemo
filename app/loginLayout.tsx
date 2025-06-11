@@ -41,7 +41,7 @@ const defaultUser = {
   department: {
     id: 0,
     code: "",
-    name: "",
+    name: "Formulation",
   },
 };
 const LoginLayout = ({ children }) => {
