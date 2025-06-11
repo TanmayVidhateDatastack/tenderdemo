@@ -97,6 +97,7 @@ const ContractView: React.FC<ContractViewProps> = ({
           (row) => ({
             ...row,
             rowId: uuidv4(),
+           
           })
         )
       );
