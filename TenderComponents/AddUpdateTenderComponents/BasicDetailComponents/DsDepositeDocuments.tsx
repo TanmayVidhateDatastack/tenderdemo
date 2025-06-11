@@ -335,7 +335,9 @@ const DsDepositeDocuments: React.FC = () => {
                 refund={refund}
                 completedpayment={paymentCheckVisible}
                 recoverycheckvisibible={
-                  recoveryPaymentVisible && selectedFee?.refundEligibility=="REFUNDABLE"
+                  recoveryPaymentVisible &&
+                  selectedFee?.refundEligibility == "REFUNDABLE" &&
+                  deposit.value !== "TENDER_PSD"
                 }
               />
             </div>

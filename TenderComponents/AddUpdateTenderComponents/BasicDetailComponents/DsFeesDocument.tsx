@@ -334,11 +334,11 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             <div className={styles.fields}>
               <DatePicker
                 containerClasses={styles.feeFields}
-                id={type + "paymentdate"}
+                id={id + "paymentdate"}
                 initialDate={
                   tenderData.tenderFees
                     ? new Date(
-                        tenderData.tenderFees[0]?.paymentDate || ""
+                        tenderData.tenderFees.find((x) => x.feesType == type)?.paymentDate || ""
                       ).toLocaleDateString("en-GB")
                     : undefined
                 }
