@@ -26,6 +26,7 @@ import UploadFile from "@/TenderComponents/TenderLogComponents/uploadfile";
 import { closeAllContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import { useAppSelector } from "@/Redux/hook/hook";
 import { RootState } from "@/Redux/store/store";
+import { ContractStatuses } from "../CustomTabViews/ContractView";
 
 export type tenderDocument = {
   name: string;
@@ -299,7 +300,15 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   e.target.checked ? "DONE" : "PEND"
                 );
               }}
-              disable={paymentcompletedDisable}
+              disable={
+                (tenderData.status.toLowerCase() ==
+                  ContractStatuses.AWARDED.toLowerCase() ||
+                  tenderData.status.toLowerCase() ==
+                    ContractStatuses.PARTIALLY_AWARDED.toLowerCase()) &&
+                type == "TENDER_PSD"
+                  ? false
+                  : paymentcompletedDisable
+              }
             />
           </div>
           <div className={eleStyles.inputDetails}>
@@ -315,7 +324,15 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 }}
                 selectedOptions={tempOptions}
                 showOptions={false}
-                disable={addDocumentTypeSlectDisable}
+                disable={
+                  (tenderData.status.toLowerCase() ==
+                    ContractStatuses.AWARDED.toLowerCase() ||
+                    tenderData.status.toLowerCase() ==
+                      ContractStatuses.PARTIALLY_AWARDED.toLowerCase()) &&
+                  type == "TENDER_PSD"
+                    ? false
+                    : addDocumentTypeSlectDisable
+                }
               >
                 <div className={styles.addBtnSticky}>
                   <DsButton
@@ -326,7 +343,15 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                     onClick={() => {
                       handleAdd();
                     }}
-                    disable={addDocumentTypeButtonDisable}
+                    disable={
+                      (tenderData.status.toLowerCase() ==
+                        ContractStatuses.AWARDED.toLowerCase() ||
+                        tenderData.status.toLowerCase() ==
+                          ContractStatuses.PARTIALLY_AWARDED.toLowerCase()) &&
+                      type == "TENDER_PSD"
+                        ? false
+                        : addDocumentTypeButtonDisable
+                    }
                   />
                 </div>
               </DsMultiSelect>
@@ -338,7 +363,8 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 initialDate={
                   tenderData.tenderFees
                     ? new Date(
-                        tenderData.tenderFees.find((x) => x.feesType == type)?.paymentDate || ""
+                        tenderData.tenderFees.find((x) => x.feesType == type)
+                          ?.paymentDate || ""
                       ).toLocaleDateString("en-GB")
                     : undefined
                 }
@@ -362,7 +388,15 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 //      }
                 //   }
                 // }}
-                disable={paymentcompletedDisable}
+                disable={
+                  (tenderData.status.toLowerCase() ==
+                    ContractStatuses.AWARDED.toLowerCase() ||
+                    tenderData.status.toLowerCase() ==
+                      ContractStatuses.PARTIALLY_AWARDED.toLowerCase()) &&
+                  type == "TENDER_PSD"
+                    ? false
+                    : paymentcompletedDisable
+                }
               />
             </div>
           </div>
@@ -447,7 +481,15 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                     };
                   })[0]
               }
-              disable={uploadFileButtonDisabled}
+              disable={
+                (tenderData.status.toLowerCase() ==
+                  ContractStatuses.AWARDED.toLowerCase() ||
+                  tenderData.status.toLowerCase() ==
+                    ContractStatuses.PARTIALLY_AWARDED.toLowerCase()) &&
+                type == "TENDER_PSD"
+                  ? false
+                  : uploadFileButtonDisabled
+              }
             />
           ))}
           <div className={eleStyles.inputDetails}>
@@ -503,7 +545,15 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                         );
                     }
                   }}
-                  disable={recieptIdDisable}
+                  disable={
+                    (tenderData.status.toLowerCase() ==
+                      ContractStatuses.AWARDED.toLowerCase() ||
+                      tenderData.status.toLowerCase() ==
+                        ContractStatuses.PARTIALLY_AWARDED.toLowerCase()) &&
+                    type == "TENDER_PSD"
+                      ? false
+                      : recieptIdDisable
+                  }
                 />
               </div>
             ))}
