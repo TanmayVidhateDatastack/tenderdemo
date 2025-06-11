@@ -1746,12 +1746,13 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
           });
         }
         if (
-          ((status.toLowerCase() == DsStatus.AWRD.toLowerCase() ||
-            // status.toLowerCase() == DsStatus.PAWRD.toLowerCase() ||
+          (status.toLowerCase() == DsStatus.APRV.toLowerCase() ||
+            status.toLowerCase() == DsStatus.AWRD.toLowerCase() ||
+            status.toLowerCase() == DsStatus.PAWRD.toLowerCase() ||
             status.toLowerCase() == DsStatus.LOST.toLowerCase() ||
             status.toLowerCase() == DsStatus.CNCL.toLowerCase()) &&
-            role.toUpperCase() === "ACCOUNTANCE") ||
-          role.toUpperCase() === "FINANCE"
+          (role.toUpperCase() === "ACCOUNTANCE" ||
+            role.toUpperCase() === "FINANCE")
         ) {
           url = updatePaymentUrl(tenderData.id, action);
           dataToSendTenderCopy = stripReadOnlyProperties({

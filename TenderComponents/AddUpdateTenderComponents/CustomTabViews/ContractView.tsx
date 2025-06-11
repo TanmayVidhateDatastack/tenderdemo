@@ -97,7 +97,7 @@ const ContractView: React.FC<ContractViewProps> = ({
           (row) => ({
             ...row,
             rowId: uuidv4(),
-           
+            
           })
         )
       );
@@ -179,7 +179,7 @@ const ContractView: React.FC<ContractViewProps> = ({
         cellRenderer: (value, row, rowIndex) => (
           <AwardedToSearch
             awardedTo={{
-              id: row.awardedToId || 0,
+              id: row.awardedTo || 0,
               name: row.product.awardedToName,
             }}
             index={rowIndex}
