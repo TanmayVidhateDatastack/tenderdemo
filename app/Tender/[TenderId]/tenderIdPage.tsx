@@ -187,7 +187,9 @@ const DsTenderIdPage: React.FC<{
         tabId: "2",
         tabName: "Documents",
         // disable: displayFlag == "New" || type !="Corporate",
-        disable: type === "corporate",
+        disable:
+          displayFlag.toLowerCase() == "new" ||
+          type.toLowerCase() === "corporate",
       },
     ]);
 
