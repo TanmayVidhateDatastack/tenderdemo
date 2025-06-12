@@ -330,6 +330,7 @@ const permissionsSlice = createSlice({
         case "LOST":
         case "CANCELLED":
         case "AWARDED":
+        case "PARTIALLY_AWARDED":
           if (
             role.toUpperCase() === "ACCOUNTANCE" ||
             role.toUpperCase() === "FINANCE"
