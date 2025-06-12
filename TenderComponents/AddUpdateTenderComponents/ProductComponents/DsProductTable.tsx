@@ -720,7 +720,7 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
   // }
 
   return (
-    <div className="tender-product-container" style={{ overflowY: "hidden" }}>
+    <div className="tender-product-container" style={{ overflowY: "hidden",height:"100%" }}>
       <TableProvider
         data={calculatedProducts}
         columns={columns}
