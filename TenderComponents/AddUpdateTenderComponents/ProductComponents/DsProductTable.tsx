@@ -720,7 +720,8 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
   // }
 
   return (
-    <div className="tender-product-container" style={{ overflowY: "hidden" }}>
+    <>
+      {/* <div className="tender-product-container" style={{ overflowY: "hidden" }}> */}
       <TableProvider
         data={calculatedProducts}
         columns={columns}
@@ -733,7 +734,6 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
         <Table />
         <SelectionComponent version={version} />
       </TableProvider>
-
       {/* {calculatedProducts.length === 0 && (
         <div className={styles.noDataFound}>
           <div className={styles.noData}>
@@ -745,9 +745,9 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
           <div className={styles.noDataBorders}></div>
         </div>
       )} */}
-
       {/* FloatingMenu and ContextMenu logic can remain as before, using selection from context */}
-    </div>
+      {/* </div> */}
+    </>
   );
 };
 const SelectionComponent: React.FC<{ version: number }> = ({ version }) => {

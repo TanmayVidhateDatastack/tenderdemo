@@ -459,8 +459,7 @@ const DsTenderIdPage: React.FC<{
                   setProductList={(product) =>
                     addTenderProduct(rev.version, product)
                   }
-                /> */}{" "}
-                      <div style={{ textDecoration: "none" }}>
+                /> */}
                         <DsTenderProduct
                           productList={rev.tenderItems || []}
                           setProductList={(product) => {
@@ -474,7 +473,6 @@ const DsTenderIdPage: React.FC<{
                           }}
                           version={rev.version}
                         />
-                      </div>
                     </TabView>
                   ))}
 
