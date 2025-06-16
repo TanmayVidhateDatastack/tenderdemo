@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import DsCsvUpload from "@/Elements/DsComponents/DsButtons/dsCsvUpload";
 import Ds_checkbox from "@/Elements/DsComponents/DsCheckbox/dsCheckbox";
@@ -25,6 +26,7 @@ import UploadFile from "@/TenderComponents/TenderLogComponents/uploadfile";
 import { closeAllContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import { useAppSelector } from "@/Redux/hook/hook";
 import { RootState } from "@/Redux/store/store";
+import { ContractStatuses } from "../CustomTabViews/ContractView";
 
 export type tenderDocument = {
   name: string;
@@ -32,15 +34,15 @@ export type tenderDocument = {
 };
 
 export type tenderFee = {
-  type: string; 
+  type: string;
   amount: number;
-  currency: string;  
+  currency: string;
   paidBy: string;
   paymentMode: string;
   refundEligibility: string;
   paymentDueDate: string;
   notes: string;
-  recoverypaymentDate?: string; 
+  recoverypaymentDate?: string;
   refundNotes?: string;
   paymentTransactionId?: string;
   paymentReceiptId?: string;
@@ -94,6 +96,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     updateTenderFee,
     addNewTenderDocument,
     tenderData,
+    tenderDataCopy,
     removeTenderDocument,
   } = useTenderData();
   const metaDataTypes = [
@@ -102,6 +105,8 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     "TENDER_PSD_PAYMENT",
     "FEES_TYPE",
   ];
+  const [dueDateMin, setDueDateMin] = useState<Date>();
+
   const [depositeDocuments, setDepositeDocuments] = useState<DsSelectOption[]>(
     []
   );
@@ -109,70 +114,29 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     useState<DsSelectOption>();
   const [selectedRefund, setSelectedRefund] = useState<DsSelectOption>();
   const [selectedPaidBy, setSelectedPaidBy] = useState<DsSelectOption>();
-  const [selectedcheckbox, setSelectedCheckbox] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState<DsSelectOption[]>([]);
+  const [tempOptions, setTempOptions] = useState<DsSelectOption[]>([]);
 
-    const permissions = useAppSelector((state: RootState) => state.permissions);
-    const {
-      amountDisable,
-      paidByDisable,
-      modesDisable,
-      refundEligibilityDisable,
-      PaymentdueDateDisable,
-      instructionNotesDisable,
-      attachFileButtonDisable,
-      paymentcompletedDisable,
-      addDocumentTypeButtonDisable,
-      addDocumentTypeSlectDisable,
-      uploadFileButtonDisabled,
-      transactionIdDisable,
-      recieptIdDisable,
-      paymentRecoverdDateDisable,
-      paymentRecoveredDisable,
-      recoveredNotesDisable,
-      recoveredAttachFileButton,
-    } = permissions;
- 
-  // const handleFetchpayments = async () => {
-  //   try {
-  //     const metaData = await fetchData({
-  //       url: getAllMetaData,
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "x-tender-codes": JSON.stringify(metaDataTypes),
-  //       },
-  //     });
-  //     if (metaData.code === 200) {
-  //       const result = metaData.result;
-  //       console.log("MetaData ", result);
-
-  //       let tenderpayments = [];
-
-  //       tenderpayments = result?.tenderEmdPayment || [];
-
-  //       tenderpayments = result?.tenderFeesPayment || [];
-
-  //       tenderpayments = result?.tenderPsdPayment || [];
-  //       let  feestype = result?.feesType || [];
-  //       console.log("feestype is ", feestype[0]);
-  //       console.log("tenderpayments", tenderpayments);
-
-  //       const formattedOptions = tenderpayments.map((item: any) => ({
-  //         value: item.codeValue,
-  //         label: item.codeDescription,
-  //       }));
-
-  //       setOptions(formattedOptions);
-  //     }
-  //   } catch (error) {
-  //     console.error("Fetch error: ", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   handleFetchpayments();
-  // }, []);
+  const permissions = useAppSelector((state: RootState) => state.permissions);
+  const {
+    amountDisable,
+    paidByDisable,
+    modesDisable,
+    refundEligibilityDisable,
+    PaymentdueDateDisable,
+    instructionNotesDisable,
+    attachFileButtonDisable,
+    paymentcompletedDisable,
+    addDocumentTypeButtonDisable,
+    addDocumentTypeSlectDisable,
+    uploadFileButtonDisabled,
+    transactionIdDisable,
+    recieptIdDisable,
+    paymentRecoverdDateDisable,
+    paymentRecoveredDisable,
+    recoveredNotesDisable,
+    recoveredAttachFileButton,
+  } = permissions;
 
   const handleAppliedSuppliedFetch = async () => {
     try {
@@ -223,7 +187,6 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
         // console.log("Fetched Notes Values are", tenderData.tenderFees.find((x) => x.feesType == type)?.instructionNotes);
       }
     }
-
     const paidByvalue = tenderData.tenderFees.find(
       (x) => x.feesType == type
     )?.paidBy;
@@ -238,14 +201,68 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     mode,
     refund,
   ]);
+  useEffect(() => {
+    const currentFee = tenderDataCopy.tenderFees.find(
+      (x) => x.feesType == type
+    );
+    if (currentFee) {
+      const selectedOPtionArr: DsSelectOption[] = [];
+      if (currentFee.paymentTransactionId) {
+        const option = optionlist.find((x) =>
+          x.value.toString().includes("TRANSACTION_RECEIPT")
+        );
+        if (option) selectedOPtionArr.push(option);
+      }
+      if (currentFee.paymentReceiptId) {
+        {
+          const option = optionlist.find((x) =>
+            x.value.toString().includes("PAYMENT_RECEIPT")
+          );
+          if (option) selectedOPtionArr.push(option);
+        }
+      }
+      if (currentFee.acknowledgementReceiptId) {
+        {
+          const option = optionlist.find((x) =>
+            x.value.toString().includes("ACKNOWLEDGEMENT_RECEIPT")
+          );
+          if (option) selectedOPtionArr.push(option);
+        }
+      }
+      if (currentFee.fundTransferConfirmationId) {
+        const option = optionlist.find((x) =>
+          x.value.toString().includes("FUND_TRANSFER_CONFIRMATION")
+        );
+        if (option) selectedOPtionArr.push(option);
+      }
+      setTempOptions(selectedOPtionArr);
+      setSelectedOptions(selectedOPtionArr);
+    }
+  }, [tenderDataCopy]);
+
+  useEffect(() => {
+    const curDate = tenderData.tenderFees.find(
+      (x) => x.feesType == type
+    )?.paymentDueDate;
+    const oriDate = tenderDataCopy.tenderFees.find(
+      (x) => x.feesType == type
+    )?.paymentDueDate;
+    const min =
+      oriDate && curDate?.substring(0, 10) == oriDate.substring(0, 10)
+        ? getYesterdayDate(new Date(oriDate.substring(0, 10)))
+        : getYesterdayDate();
+    setDueDateMin(min);
+  }, [tenderData.tenderFees, tenderDataCopy.tenderFees]);
+  const handleAdd = () => {
+    closeAllContext();
+    setSelectedOptions(tempOptions);
+  };
 
   return (
     <>
-      {/* <div> */}
       <div className={styles.feeContainer} id={id}>
         <div className={styles.headContainer}>
           <div className={styles.headTitle}>{title}</div>
-          {/* {downloadVisible && ( */}
           <DsButton
             className={styles.downloadReceipt}
             buttonViewStyle="btnText"
@@ -263,112 +280,246 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             }
           />
         </div>
-
-        {/* // { )} } */}
       </div>
-
-      {completedpayment && (      <>
-        <div className={styles.fields}>
-          <Ds_checkbox
-            id={"payment"}
-            name={"Payment Completed"}
-            value={"Payment Completed"}
-            label={"Payment Completed"}
-            onChange={(e) => {
-              updateTenderFee(
-                type,
-                "paymentStatus",
-                e.target.checked ? "DONE" : "PEND"
-              );
-            }}
-          />
-        </div>
-
-        <div className={eleStyles.inputDetails}>
+      {completedpayment && (
+        <>
           <div className={styles.fields}>
-            <DsMultiSelect
-              label="Add document type"
-              containerClasses={styles.feeFields}
-              id={id + "Documents"}
-              options={optionlist || []}
-              setSelectOptions={(options) => {
-                setSelectedOptions(options);
-                console.log("Selected options:", options);
-              }}
-            >
-              <div className={styles.addBtn}>
-                <DsButton
-                  label="Add"
-                  buttonViewStyle="btnContained"
-                  buttonSize="btnSmall"
-                  className={styles.addBtn}
-                  onClick={() => {
-                    closeAllContext();
-                     setSelectedCheckbox(true);
-                    
-                    console.log("Add button clicked");
-                  }}
-                />
-              </div>
-            </DsMultiSelect>
-          </div>
-          <div className={styles.fields}>
-            <DatePicker
-              containerClasses={styles.feeFields}
-              id={id + "paymentdate"}
-              initialDate={
-                tenderData.tenderFees
-                  ? new Date(
-                      tenderData.tenderFees[0]?.paymentDate || ""
-                    ).toLocaleDateString("en-GB")
-                  : undefined
+            <Ds_checkbox
+              id={"payment"}
+              name={"Payment Completed"}
+              value={"Payment Completed"}
+              label={"Payment Completed"}
+              isChecked={
+                tenderData.tenderFees.find((x) => x.feesType === type)
+                  ?.paymentStatus === "DONE"
               }
-              maxDate={new Date()}
-              placeholder="DD/MM/YYYY"
-              label="payment Date"
-              setDateValue={(date) => {
-                if (date instanceof Date) {
-                  updateTenderFee(type, "paymentDate", getTodayDate(date));
-                }
+              onChange={(e) => {
+                updateTenderFee(
+                  type,
+                  "paymentStatus",
+                  e.target.checked ? "DONE" : "PEND"
+                );
               }}
+              disable={
+                (tenderData.status.toLowerCase() ==
+                  ContractStatuses.AWARDED.toLowerCase() ||
+                  tenderData.status.toLowerCase() ==
+                    ContractStatuses.PARTIALLY_AWARDED.toLowerCase()) &&
+                type == "TENDER_PSD"
+                  ? false
+                  : paymentcompletedDisable
+              }
             />
           </div>
-        </div>
-        {selectedcheckbox  &&
-          selectedOptions.map((option, index) => (
+          <div className={eleStyles.inputDetails}>
+            <div className={styles.fields}>
+              <DsMultiSelect
+                label="Add Document Type"
+                containerClasses={`${styles.feeFields} `}
+                className={`${styles.scrollableContainer}`}
+                id={id + "Documents"}
+                options={optionlist || []}
+                setSelectOptions={(options) => {
+                  setTempOptions(options);
+                }}
+                selectedOptions={tempOptions}
+                showOptions={false}
+                disable={
+                  (tenderData.status.toLowerCase() ==
+                    ContractStatuses.AWARDED.toLowerCase() ||
+                    tenderData.status.toLowerCase() ==
+                      ContractStatuses.PARTIALLY_AWARDED.toLowerCase()) &&
+                  type == "TENDER_PSD"
+                    ? false
+                    : addDocumentTypeSlectDisable
+                }
+              >
+                <div className={styles.addBtnSticky}>
+                  <DsButton
+                    label="Add"
+                    buttonViewStyle="btnContained"
+                    buttonSize="btnSmall"
+                    className={styles.addBtn}
+                    onClick={() => {
+                      handleAdd();
+                    }}
+                    disable={
+                      (tenderData.status.toLowerCase() ==
+                        ContractStatuses.AWARDED.toLowerCase() ||
+                        tenderData.status.toLowerCase() ==
+                          ContractStatuses.PARTIALLY_AWARDED.toLowerCase()) &&
+                      type == "TENDER_PSD"
+                        ? false
+                        : addDocumentTypeButtonDisable
+                    }
+                  />
+                </div>
+              </DsMultiSelect>
+            </div>
+            <div className={styles.fields}>
+              <DatePicker
+                containerClasses={styles.feeFields}
+                id={id + "paymentdate"}
+                initialDate={
+                  tenderData.tenderFees
+                    ? new Date(
+                        tenderData.tenderFees.find((x) => x.feesType == type)
+                          ?.paymentDate || ""
+                      ).toLocaleDateString("en-GB")
+                    : undefined
+                }
+                maxDate={new Date()}
+                placeholder="DD/MM/YYYY"
+                label="Payment Date"
+                setDateValue={(date) => {
+                  if (date instanceof Date) {
+                    updateTenderFee(type, "paymentDate", getTodayDate(date));
+                  }
+                }}
+                // setDateValue={(date)=>{
+                //   if (date instanceof Date)
+                //   {
+                //      if (typeof type == "string")
+                //      {
+                //       if (type.includes("TENDER_EMD_PAYMENT"))
+
+                //          updateTenderFee(type, "paymentDate", getTodayDate(date));
+
+                //      }
+                //   }
+                // }}
+                disable={
+                  (tenderData.status.toLowerCase() ==
+                    ContractStatuses.AWARDED.toLowerCase() ||
+                    tenderData.status.toLowerCase() ==
+                      ContractStatuses.PARTIALLY_AWARDED.toLowerCase()) &&
+                  type == "TENDER_PSD"
+                    ? false
+                    : paymentcompletedDisable
+                }
+              />
+            </div>
+          </div>
+
+          {selectedOptions.map((option, index) => (
             <UploadFile
-              key={`upload-${index}`}
+              key={`upload-${type}-${option.value}-${index}`}
               uploadLabel={`Upload ${option.label} here `}
-              id={typeof option.value === "string" ? option.value : ""}
-              onSelectedFileChange={(files) => {
+              id={`${type}_${option.value}`}
+              // onSelectedFileChange={(files) => {
+              //   const Documents =
+              //     tenderData.tenderDocuments?.filter(
+              //       (x) =>
+              //         x.documentCategory === type &&
+              //         x.documentType === `${option.value}`
+              //     ) || [];
+              //   updateDocuments(
+              //     files,
+              //     Documents,
+              //     removeTenderDocument,
+              //     addNewTenderDocument,
+              //     `${type}_PAYMENT`,
+              //     `${type}`,
+              //     `${option.value}`
+              //   );
+              // }}
+              onRemoveFiles={(documentName) => {
+                removeTenderDocument(
+                  type + "_PAYMENT",
+                  `${type}`,
+                  documentName,
+                  `${option.value}`
+                );
+              }}
+              onAddFiles={(
+                documents: {
+                  documentName?: string;
+                  document?: File;
+                }[]
+              ) => {
                 const Documents =
                   tenderData.tenderDocuments?.filter(
                     (x) =>
-                      x.documentCategory == type &&
-                      x.documentType == type + "_UPLOADINSTRUCTION"
+                      x.documentCategory === type &&
+                      x.documentType === `${option.value}`
                   ) || [];
-                updateDocuments(
-                  files,
-                  Documents,
-                  removeTenderDocument,
-                  addNewTenderDocument,
-                  type + "_UPLOADINSTRUCTION",
-                  type
-                );
+                documents.forEach((file) => {
+                  if (
+                    !Documents?.find(
+                      (f) =>
+                        f.documentName == file.documentName ||
+                        f.documentName == file.document?.name
+                    )
+                  )
+                    addNewTenderDocument(
+                      type + "_PAYMENT",
+                      type,
+                      {
+                        document: file.document,
+                        documentName: file.documentName,
+                        name: file.documentName,
+                      },
+                      `${option.value}`
+                    );
+                });
               }}
+              previouslySelectedFile={
+                tenderData.tenderDocuments
+                  ?.filter(
+                    (x) =>
+                      x.documentCategory == type &&
+                      x.documentType == type + "_PAYMENT" &&
+                      x.documentSubType == option.value
+                  )
+                  .map((x) => {
+                    return {
+                      ...x,
+                      fileDownloadHref: downloadDocumentUrl(
+                        tenderData.id,
+                        x.id
+                      ),
+                    };
+                  })[0]
+              }
+              disable={
+                (tenderData.status.toLowerCase() ==
+                  ContractStatuses.AWARDED.toLowerCase() ||
+                  tenderData.status.toLowerCase() ==
+                    ContractStatuses.PARTIALLY_AWARDED.toLowerCase()) &&
+                type == "TENDER_PSD"
+                  ? false
+                  : uploadFileButtonDisabled
+              }
             />
           ))}
-
-        <div className={eleStyles.inputDetails}>
-          {selectedcheckbox &&
-            selectedOptions.map((option) => (
-              <div className={styles.fields}>
+          <div className={eleStyles.inputDetails}>
+            {selectedOptions.map((option) => (
+              <div key={""} className={styles.fields}>
                 <DsTextField
                   containerClasses={styles.feeFields}
                   label={`${option.label}   ID`}
+                  inputType="positive"
+                  initialValue={(() => {
+                    const fee = tenderData.tenderFees.find(
+                      (x) => x.feesType === type
+                    );
+                    if (!fee) return "";
+                    // console.log("selecetd option of receipt ", option.value);
+                    if (typeof option.value === "string") {
+                      if (option.value.includes("ACKNOWLEDGEMENT_RECEIPT"))
+                        return fee.acknowledgementReceiptId || "";
+                      if (option.value.includes("FUND_TRANSFER_CONFIRMATION"))
+                        return fee.fundTransferConfirmationId || "";
+                      if (option.value.includes("PAYMENT_RECEIPT"))
+                        return fee.paymentReceiptId || "";
+                      if (option.value.includes("TRANSACTION_RECEIPT"))
+                        return fee.paymentTransactionId || "";
+                    }
+                    return "";
+                  })()}
                   onBlur={(e) => {
                     if (typeof option.value == "string") {
-                      if (option.value.includes("ACKNOWLEDGMENT_RECEIPT"))
+                      if (option.value.includes("ACKNOWLEDGEMENT_RECEIPT"))
                         updateTenderFee(
                           type,
                           "acknowledgementReceiptId",
@@ -394,12 +545,21 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                         );
                     }
                   }}
+                  disable={
+                    (tenderData.status.toLowerCase() ==
+                      ContractStatuses.AWARDED.toLowerCase() ||
+                      tenderData.status.toLowerCase() ==
+                        ContractStatuses.PARTIALLY_AWARDED.toLowerCase()) &&
+                    type == "TENDER_PSD"
+                      ? false
+                      : recieptIdDisable
+                  }
                 />
               </div>
             ))}
-        </div>
-        <div className={styles.separator}></div>
-      </>
+          </div>
+          <div className={styles.separator}></div>
+        </>
       )}
 
       <div className={eleStyles.inputDetails}>
@@ -476,7 +636,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           containerClasses={styles.feeFields}
           disable={PaymentdueDateDisable}
           id={id + "dueDate"}
-          minDate={getYesterdayDate()}
+          minDate={dueDateMin}
           initialDate={
             tenderData.tenderFees.find((x) => x.feesType == type)
               ?.paymentDueDate
@@ -510,7 +670,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
           disable={instructionNotesDisable}
           minRows={2}
           onBlur={(e) => {
-            updateTenderFee( 
+            updateTenderFee(
               type,
               "instructionNotes",
               (e.target as HTMLInputElement).value
@@ -532,9 +692,9 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               ?.filter(
                 (x) =>
                   x.documentCategory == type &&
-                  x.documentType == type + "_INSTRUCTION" 
-                  // &&
-                  // x.id !== undefined
+                  x.documentType == type + "_INSTRUCTION"
+                // &&
+                // x.id !== undefined
               )
               .map((x) => {
                 return {
@@ -543,35 +703,68 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 };
               }) || []
           }
-          onSelectedFileChange={(files) => {
+          onRemoveFiles={(documentName) => {
+            removeTenderDocument(type + "_INSTRUCTION", type, documentName);
+          }}
+          onAddFiles={(
+            documents: {
+              documentName?: string;
+              document?: File;
+            }[]
+          ) => {
             const typeDocuments =
               tenderData.tenderDocuments?.filter(
                 (x) =>
                   x.documentCategory == type &&
                   x.documentType == type + "_INSTRUCTION"
               ) || [];
-            updateDocuments(
-              files,
-              typeDocuments,
-              removeTenderDocument,
-              addNewTenderDocument,
-              type + "_INSTRUCTION",
-              type
-            );
+            documents.forEach((file) => {
+              if (
+                !typeDocuments?.find(
+                  (f) =>
+                    f.documentName == file.documentName ||
+                    f.documentName == file.document?.name
+                )
+              )
+                addNewTenderDocument(type + "_INSTRUCTION", type, {
+                  document: file.document,
+                  documentName: file.documentName,
+                  name: file.documentName,
+                });
+            });
           }}
-          
+          // onSelectedFileChange={(files) => {
+          //   const typeDocuments =
+          //     tenderData.tenderDocuments?.filter(
+          //       (x) =>
+          //         x.documentCategory == type &&
+          //         x.documentType == type + "_INSTRUCTION"
+          //     ) || [];
+          //   updateDocuments(
+          //     files,
+          //     typeDocuments,
+          //     removeTenderDocument,
+          //     addNewTenderDocument,
+          //     type + "_INSTRUCTION",
+          //     type
+          //   );
+          // }}
         ></DsCsvUpload>
       </div>
       {recoverycheckvisibible && (
         <>
           <div className={styles.separator}></div>
-          
+
           <Ds_checkbox
             disable={paymentRecoveredDisable}
             id={"paymentrefund"}
             name={"Payment Recovered "}
             value={"Payment Recovered"}
             label={"Payment Recovered"}
+            isChecked={
+              tenderData.tenderFees.find((x) => x.feesType === type)
+                ?.paymentRefundStatus === "DONE"
+            }
             onChange={(e) => {
               updateTenderFee(
                 type,
@@ -590,13 +783,14 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 initialDate={
                   tenderData.tenderFees
                     ? new Date(
-                        tenderData.tenderFees[0]?.paymentRefundDate || ""
+                        tenderData.tenderFees.find((x) => x.feesType == type)
+                          ?.paymentRefundDate || ""
                       ).toLocaleDateString("en-GB")
                     : undefined
                 }
                 maxDate={new Date()}
                 placeholder="DD/MM/YYYY"
-                label="payment Date"
+                label="Payment Date"
                 setDateValue={(date) => {
                   if (date instanceof Date) {
                     updateTenderFee(
@@ -617,7 +811,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               className={styles.notesField}
               initialValue={
                 tenderData.tenderFees.find((x) => x.feesType == type)
-                  ?.instructionNotes || ""
+                  ?.refundNotes || ""
               }
               placeholder="Please type here"
               disable={recoveredNotesDisable}
@@ -644,9 +838,9 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   ?.filter(
                     (x) =>
                       x.documentCategory == type &&
-                      x.documentType == type + "_INSTRUCTION" 
-                      // &&
-                      // x.id !== undefined
+                      x.documentType == type + "_REFUND"
+                    // &&
+                    // x.id !== undefined
                   )
                   .map((x) => {
                     return {
@@ -658,22 +852,52 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                     };
                   }) || []
               }
-              onSelectedFileChange={(files) => {
+              onRemoveFiles={(documentName) => {
+                removeTenderDocument(type + "_REFUND", type, documentName);
+              }}
+              onAddFiles={(
+                documents: {
+                  documentName?: string;
+                  document?: File;
+                }[]
+              ) => {
                 const typeDocuments =
                   tenderData.tenderDocuments?.filter(
-                    (x) => 
+                    (x) =>
                       x.documentCategory == type &&
-                      x.documentType == type + "_INSTRUCTION"
+                      x.documentType == type + "_REFUND"
                   ) || [];
-                updateDocuments(
-                  files,
-                  typeDocuments,
-                  removeTenderDocument,
-                  addNewTenderDocument,
-                  type + "_INSTRUCTION",
-                  type
-                );
-              }}  
+                documents.forEach((file) => {
+                  if (
+                    !typeDocuments?.find(
+                      (f) =>
+                        f.documentName == file.documentName ||
+                        f.documentName == file.document?.name
+                    )
+                  )
+                    addNewTenderDocument(type + "_REFUND", type, {
+                      document: file.document,
+                      documentName: file.documentName,
+                      name: file.documentName,
+                    });
+                });
+              }}
+              // onSelectedFileChange={(files) => {
+              //   const typeDocuments =
+              //     tenderData.tenderDocuments?.filter(
+              //       (x) =>
+              //         x.documentCategory == type &&
+              //         x.documentType == type + "_INSTRUCTION"
+              //     ) || [];
+              //   updateDocuments(
+              //     files,
+              //     typeDocuments,
+              //     removeTenderDocument,
+              //     addNewTenderDocument,
+              //     type + "_INSTRUCTION",
+              //     type
+              //   );
+              // }}
             ></DsCsvUpload>
           </div>
         </>
@@ -681,5 +905,5 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
     </>
   );
 };
- 
+
 export default DsFeesDocument;

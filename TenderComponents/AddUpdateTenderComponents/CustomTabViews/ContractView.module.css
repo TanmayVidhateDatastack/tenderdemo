@@ -1,26 +1,81 @@
-.ContractPage{
-    padding:0.9em;
-    padding-top:0;
+.ContractPage {
+  padding: 0.9em;
+  padding-top: 0;
 }
-.ContractTable{
-    font-size: var(--font-13);
+.ContractTable {
+  font-size: var(--font-13);
 }
-.justification,.notes,.table{
-    margin-top:0.9em;
+.justification,
+.notes,
+.table {
+  margin-top: 0.9em;
 }
-.title{
-    margin-bottom:0.3em;
-    font-size:var(--font-13);
-    font-weight:600
+.title {
+  margin-bottom: 0.3em;
+  font-size: var(--font-13);
+  font-weight: 600;
 }
-.awardTableTitle{
-    margin-top:1em;
-    margin-bottom:1em;
+.awardTableTitle {
+  margin-top: 1em;
+  margin-bottom: 1em;
 
-    font-size:var(--font-14);
-    font-weight:600
-
+  font-size: var(--font-14);
+  font-weight: 600;
 }
-.cell-generic-name{
-    padding-left:0.25em !important;
+.cell-generic-name,
+.cell-product-name,
+.cell-packing-size,
+.cell-award-quantity,
+.cell-awarded-to,
+.cell-award-rate {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 0rem 1rem !important;
 }
+.cell-generic-name,
+.cell-product-name {
+  /* max-width: 100%; */
+  min-width: 18% !important;
+  max-width: 18% !important;
+  width: 18% !important;
+}
+.cell-packing-size {
+  min-width: 10% !important;
+  max-width: 10% !important;
+  width: 10% !important;
+}
+.cell-award-rate,
+.cell-award-quantity {
+  min-width: 18% !important;
+  max-width: 18% !important;
+  width: 18% !important;
+}
+.cell-awarded-to {
+  min-width: 18% !important;
+  max-width: 18% !important;
+  width: 18% !important;
+}
+td.cell-generic-name,
+td.cell-product-name {
+  min-height: 2.8em !important;
+  height: 2.8em;
+}
+th.cell-generic-name,
+th.cell-product-name {
+  min-height: 2em !important;
+  height: 2em;
+}
+/* (alias) type ContractItems = {
+    id?: number;
+    productId?: number;
+    product: {
+        type: "read-only";
+        requestedGenericName: string;
+        requestedPackingSize: string;
+        productName: string;
+        awardedToName: string;
+    };
+    awardedQuantity?: number;
+    awardedToId?: number;
+    awardedRate?: number;
+} */

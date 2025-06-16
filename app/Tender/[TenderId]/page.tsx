@@ -3,6 +3,7 @@ import { TenderDataProvider } from "@/TenderComponents/AddUpdateTenderComponents
 import DsTenderIdPage from "./tenderIdPage";
 import { closeAllContext } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import Toaster from "@/Elements/DsComponents/DsToaster/DsToaster";
+import { useEffect, useState } from "react";
 export type ParamType = {
   params: {
     TenderId: string | number;
@@ -10,22 +11,28 @@ export type ParamType = {
 };
 export default function Home(param: ParamType) {
   const paramOrderId: string | number = param?.params?.TenderId;
+
   const storedStatus = sessionStorage?.getItem("tenderStatus") || undefined;
-  closeAllContext();
+  // },[]);
+  useEffect(() => {
+    closeAllContext();
+  }, []);
   return (
     <>
       <TenderDataProvider>
-        <DsTenderIdPage paramOrderId={paramOrderId} tenderStatus={storedStatus}/>    
+        <DsTenderIdPage
+          paramOrderId={paramOrderId}
+          tenderStatus={storedStatus}
+        />
         <Toaster
-            id="fetchCustomer"
-            type="success"
-            message="The information has been fetched"
-            duration={2000}
-            position={"top"}
-            handleClose={() => {}}
-          />
+          id="fetchCustomer"
+          type="success"
+          message="The information has been fetched"
+          duration={2000}
+          position={"top"}
+          handleClose={() => {}}
+        />
       </TenderDataProvider>
-
     </>
   );
 }

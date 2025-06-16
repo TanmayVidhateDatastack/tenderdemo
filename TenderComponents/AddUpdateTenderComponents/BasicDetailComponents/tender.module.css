@@ -39,11 +39,12 @@
   /* gap: var(--ds-margin); */
   /* spacing between items */
   gap: 1.5rem;
+
   /* border-bottom: 0.5px solid var(--grey-100); */
   /* padding: var(--ds-padding);  */
   /* background: inherit; */
 }
- 
+
 .inputDetails > div {
   margin: 0; /* Remove margin if you want exact grid alignment */
 }
@@ -91,15 +92,15 @@
   display: flex;
   direction: column;
   gap: 0.5em;
-  padding-left:0.5em ;
+  padding-left: 0.5em;
 }
-.competitorContainer{
+.competitorContainer {
   display: flex;
   flex-direction: column;
   gap: 0.5em;
-  padding:0.5em ;
+  padding: 0.5em;
 }
-.competitorSaveContainer{
+.competitorSaveContainer {
   justify-items: flex-end;
 }
 

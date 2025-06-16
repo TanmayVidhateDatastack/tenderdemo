@@ -30,12 +30,11 @@ import {
 } from "@/Common/helpers/constant";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import DsTableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableComponent";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import DsCurrency from "@/Elements/DsComponents/dsCurrency/dsCurrency";
 
 import { RootState } from "@/Redux/store/store";
-import { useAppSelector } from "@/Redux/hook/hook";
 import DsName from "@/Elements/DsComponents/DsName/DsName";
 import btnStyles from "@/Elements/DsComponents/DsButtons/dsButton.module.css";
 import DsTenderTableFloatingMenu from "@/TenderComponents/TenderLogComponents/TenderlogFloatingMenu";
@@ -43,7 +42,13 @@ import DsAdvanceFilterPane from "@/TenderComponents/TenderLogComponents/DsAdvanc
 import style from "./page.module.css";
 import IconFactory from "@/Elements/IconComponent";
 import { areSearchCustomers } from "@/TenderComponents/AddUpdateTenderComponents/BasicDetailComponents/customerSearch";
-import DemoDocument from "@/Elements/DsComponents/dsDocumentSelector/dsDemoDocumentSelector";
+import { useAppDispatch, useAppSelector } from "@/Redux/hook/hook";
+import { AppDispatch } from "@/Redux/store/store";
+import { setUserRole } from "@/Redux/slice/UserSlice/userSlice";
+
+import { Suspense } from "react";
+import Page from "./roleSelect";
+// import DemoDocument from "@/Elements/DsComponents/dsDocumentSelector/dsDemoDocumentSelector";
 // import DemoToaster from "@/Elements/DsComponents/DsToaster/dsDemoToaster";
 const metaDataTypes = ["TENDER_TYPE", "CUSTOMER_TYPE", "TENDER_STATUS"];
 
@@ -65,12 +70,12 @@ const metaDataTypes = ["TENDER_TYPE", "CUSTOMER_TYPE", "TENDER_STATUS"];
 //   "JUSTIFICATION_REJECT_TYPE"
 // ];
 
- export interface Metadata {
+export interface Metadata {
   documentType?: CodeItem[];
   eligibility?: CodeItem[];
   feesType?: CodeItem[];
   paymentMode?: CodeItem[];
-  refundEligibility?:CodeItem[];
+  refundEligibility?: CodeItem[];
   submissionMode?: CodeItem[];
   supplyPoint?: CodeItem[];
   tenderSupplyCondition?: CodeItem[];
@@ -79,7 +84,8 @@ const metaDataTypes = ["TENDER_TYPE", "CUSTOMER_TYPE", "TENDER_STATUS"];
   tenderStatus?: CodeItem[];
   justificationApproveType?: CodeItem[];
   justificationReviseType?: CodeItem[];
-  justificationRejectType?: CodeItem[];
+  justificationReviewedjectType?: CodeItem[];
+  justificationType?: CodeItem[];
   customerType?: CodeItem[];
 }
 type Depot = {
@@ -88,7 +94,7 @@ type Depot = {
   code: string;
 };
 export default function Home() {
-  const [data, setData] = useState<Tender[]>([]); //for table data
+  const [data, setData] = useState<Tender[] | null>(null); //for table data
   const [searchQuery, setSearchQuery] = useState(""); //for search query
   const [selectedStatus, setSelectedStatus] = useState(""); //for quickfilter
   const [advFilter, setAdvFilter] = useState<Record<string, React.ReactNode>>(
@@ -103,6 +109,11 @@ export default function Home() {
     userId: 3,
     metaDataTypes: [],
   });
+
+  // get the type value from URL
+  // const searchParams = useSearchParams();
+  // const type = searchParams.get("type") || "institutional";
+
   const [fetchedMetadata, setFetchedMetadata] = useState<Metadata>({});
   // console.log(isFilterActive);
   const [isAddWhite, setIsAddWhite] = useState<boolean>(false);
@@ -111,8 +122,11 @@ export default function Home() {
   const [tenderStatus, setTenderStatus] = useState<CodeItem[]>([]);
   const [applierSupplier, setApplierSupplier] = useState<CodeItem[]>([]);
   const [depotList, setDepotList] = useState<Depot[]>([]);
+  const [filterCount, setFilterCount] = useState<number>(0);
   // const [uniqueAppliers, setUniqueAppliers] = useState<{ label: string; value: string }[]>([]);
   const permissions = useAppSelector((state: RootState) => state.permissions);
+  const userRole = useAppSelector((state) => state.user);
+
   const { newButtonVisible } = permissions;
   const [tempTableData, setTempTableData] = useState<tableData>({
     className: style.tenderTable,
@@ -273,7 +287,6 @@ export default function Home() {
 
     return getStyledDueStatus(result, diffDays);
   };
-
   const getStyledDueStatus = (result: string, diffDays: number) => {
     let className = styles.blackText;
     if (diffDays <= 0) className = styles.zeroText;
@@ -281,7 +294,6 @@ export default function Home() {
 
     return <span className={className}>{result}</span>;
   };
-
   const handleFetch = async () => {
     const onlyStatus = {
       userId: 3,
@@ -319,14 +331,14 @@ export default function Home() {
       advFilter && Object.keys(advFilter).length > 0 && searchQuery
         ? advanceAndSearch
         : advFilter && Object.keys(advFilter).length > 0
-        ? advanceFilter
-        : selectedStatus && searchQuery
-        ? statusAndSearch
-        : selectedStatus
-        ? onlyStatus
-        : searchQuery
-        ? onlySearch
-        : { userId: 3, pageNo: 0, pageSize: 0 };
+          ? advanceFilter
+          : selectedStatus && searchQuery
+            ? statusAndSearch
+            : selectedStatus
+              ? onlyStatus
+              : searchQuery
+                ? onlySearch
+                : { userId: 3, pageNo: 0, pageSize: 0 };
     // console.log("json object :", JSON.stringify(tenderFilters));
     await fetchData({
       url: getAllTenders,
@@ -340,16 +352,16 @@ export default function Home() {
         // console.log("objevct to be send", tenderFilters);
 
         if (res?.code === 200 && Array.isArray(res?.result)) {
-          console.log("getAllTenders:", res);
+          // console.log("getAllTenders:", res);
           const formattedData = formatTenders(res?.result);
           // console.log("formatted data:", formattedData);
           setData(formattedData);
-          // addOrder(formattedData);
         } else {
           setData([]);
         }
       })
       .catch((error) => {
+        setData([]);
         // console.error("Error fetching orders:", error);
       });
   };
@@ -357,7 +369,6 @@ export default function Home() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const formatTenders = (tenders: any[]): Tender[] => {
     return tenders.map((item) => ({
-
       customerName: item.customerName,
       submissionDate: item.submissionDate,
       daysToSubmit: item.daysToSubmit ?? "N/A",
@@ -413,7 +424,13 @@ export default function Home() {
     statuscell?: string;
     tenderId?: number;
   } | null>(null);
+  //     const searchParams = useSearchParams();
+  //     const dispatch = useAppDispatch<AppDispatch>();
 
+  // const role = searchParams.get("role")?.toUpperCase() || "MAKER";
+  //   useEffect(() => {
+  //     dispatch(setUserRole(role));
+  //   }, [role]);
   useEffect(() => {
     if (Array.isArray(data) && data.length > 0) {
       const names1 = data.map((item) => item.appliedBy);
@@ -458,7 +475,7 @@ export default function Home() {
           // if(res?.c)
 
           setFetchedMetadata(res.result); // Store only tenderType
-          console.log("Stored Tender Type:", res.result);
+          // console.log("Stored Tender Type:", res.result);
         } else {
           console.error("Error: Invalid data format or empty tenderType");
         }
@@ -536,8 +553,8 @@ export default function Home() {
   const addTableData = (tender: Tender[]) => {
     // console.log("Adding table data:", tender);
     const newRows: DsTableRow[] = tender.map((t, index) => {
-      let rowIcon: "instituitional" | "corporate" = "corporate";
-      if (t.customerType == "Instituitional") rowIcon = "instituitional";
+      let rowIcon: "institutional" | "corporate" = "corporate";
+      if (t.customerType == "Institutional") rowIcon = "institutional";
       return {
         rowIndex: index,
         customAttributes: { tenderId: t.tenderId },
@@ -729,16 +746,24 @@ export default function Home() {
 
   const router = useRouter();
   const goTo = (tenderId: number, status?: string) => {
-    const location = `/Tender/${tenderId}`;
-    if (status) sessionStorage.setItem("tenderStatus", status);
-    else {
-      const storedStatus = sessionStorage.getItem("tenderStatus");
-      if (storedStatus) {
-        sessionStorage.removeItem("tenderStatus");
+    const rowData = data?.find((x) => Number(x.tenderId) == tenderId);
+    const type = rowData?.customerType || "institutional";
+    const location = `/Tender/${tenderId}?type=${type}&role=${userRole.role}`;
+
+    // Check if we're in the browser
+    if (typeof window !== "undefined") {
+      if (status) {
+        sessionStorage.setItem("tenderStatus", status);
+      } else {
+        const storedStatus = sessionStorage.getItem("tenderStatus");
+        if (storedStatus) {
+          sessionStorage.removeItem("tenderStatus");
+        }
       }
     }
+
     if (location) {
-      router.push(location); // Navigate to the dynamic route
+      router.push(location);
     }
   };
   const handelRowClick = (
@@ -746,8 +771,10 @@ export default function Home() {
     rowIndex: number
   ) => {
     const row = tempTableData.rows[rowIndex];
-    const currentRow=e.currentTarget;
-    document.querySelector("."+styles.selectedRow)?.classList.remove(styles.selectedRow);
+    const currentRow = e.currentTarget;
+    document
+      .querySelector("." + styles.selectedRow)
+      ?.classList.remove(styles.selectedRow);
     currentRow.classList.add(styles.selectedRow);
     // Convert statuscell to string if it's not already one
     const statuscell = String(
@@ -784,7 +811,7 @@ export default function Home() {
 
     if (tenderId) {
       goTo(Number(tenderId));
-      console.log("TenderId:", tenderId);
+      // console.log("TenderId:", tenderId);
     } else {
       console.warn("TenderId not found on double-clicked row");
     }
@@ -793,7 +820,7 @@ export default function Home() {
   useEffect(() => {
     // console.log("Data updated:", data);
     // if (data.length > 0) {
-    addTableData(data);
+    addTableData(data ?? []);
     // }
   }, [data]);
 
@@ -808,6 +835,8 @@ export default function Home() {
               setSearchQuery={setSearchQuery}
               selectedStatus={selectedStatus}
               setSelectedStatus={setSelectedStatus}
+              isQuickFilterActive={isFilterActive}
+              filterCount={filterCount}
             />
             {newButtonVisible && (
               <DsButton
@@ -825,8 +854,8 @@ export default function Home() {
                     {/* <Image
                     src={iconSrc}
                     alt="Add Icon"
-                    layout="fill"
-                    objectFit="cover"
+                    layout="fill"  
+                    objectFit="cover"  
                   /> */}
                     <IconFactory name="add" isWhite={isAddWhite} />
                   </div>
@@ -851,8 +880,8 @@ export default function Home() {
         }
       >
         <div className={styles.totalCal}>
-          <DsTotalTenders data={data} />
-          <DsTotalValues data={data} />
+          <DsTotalTenders data={data ?? []} />
+          <DsTotalValues data={data ?? []} />
         </div>
         <div className={styles.container}>
           {" "}
@@ -865,28 +894,30 @@ export default function Home() {
               hasIcons={true}
               isSelectAble={false}
               rows={tempTableData.rows}
-              isFooterRequired={true}
+              // isFooterRequired={true}
               isSortable={true}
               handleRowDoubleClick={handleRowDoubleClick}
               handleRowClick={(e, rowIndex) => {
                 handelRowClick(e, rowIndex);
               }}
             />
+            {tempTableData.rows.length == 0 && data != null && (
+              <div className={styles.recordNotFound}>No Record Found!</div>
+            )}
           </div>
           {/* {selectedRow && ( */}
-            <DsTenderTableFloatingMenu
-              e={selectedRow?.e}
-              rowIndex={selectedRow?.rowIndex}
-              statuscell={selectedRow?.statuscell}
-              handleFetch={handleFetch}
-              tenderId={selectedRow?.tenderId}
-              goTo={goTo}
-            />
+          <DsTenderTableFloatingMenu
+            e={selectedRow?.e}
+            rowIndex={selectedRow?.rowIndex}
+            statuscell={selectedRow?.statuscell}
+            handleFetch={handleFetch}
+            tenderId={selectedRow?.tenderId}
+            goTo={goTo}
+          />
           {/* )} */}
         </div>
-              
       </DsApplication>
-
+      <Page />
       <DsAdvanceFilterPane
         filters={[
           {
@@ -900,7 +931,7 @@ export default function Home() {
                 setSearchOptions(customers);
               },
               setSearchUrl: (term) => {
-                return searchCustomerURL + term;
+                return searchCustomerURL(term, "");
               },
             },
           },
@@ -917,10 +948,8 @@ export default function Home() {
             filterFor: "Customer Types",
             filterType: "MultiSelection",
             multiSelectOptions: customerType.map((item) => ({
-            
               label: item.codeDescription,
               value: item.codeValue,
-        
             })),
           },
           {
@@ -991,6 +1020,7 @@ export default function Home() {
         ]}
         onFiltersApplied={handleFiltersApplied}
         setIsQuickFilter={setIsFilterActive}
+        setFilterCount={setFilterCount}
       />
 
       <ContextMenu
@@ -1003,7 +1033,7 @@ export default function Home() {
               buttonColor="btnPrimary"
               buttonViewStyle="btnText"
               className={styles.MenuBtn}
-              location="Tender/New"
+              location="/Tender/New?type=institutional"
               label="Institutional"
             />
             <DsNavTo
@@ -1011,7 +1041,7 @@ export default function Home() {
               buttonColor="btnPrimary"
               buttonViewStyle="btnText"
               className={styles.MenuBtn}
-              location="/Tender/New"
+              location="/Tender/New?type=corporate"
               label="Corporate"
             />
           </div>

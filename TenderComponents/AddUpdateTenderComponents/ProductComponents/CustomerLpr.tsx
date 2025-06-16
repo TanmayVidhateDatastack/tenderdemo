@@ -1,20 +1,15 @@
+"use client";
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
-import lprSelectedSVG from "@/Common/TenderIcons/smallIcons/lprSelected.svg";
-import lprSVG from "@/Common/TenderIcons/smallIcons/lpr.svg";
-import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { Company, datalistOptions } from "@/Common/helpers/types";
 import ContextMenu, {
   closeContext,
-  createContext,
   displayContext,
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import CompanySearch from "./companySearch";
 import styles from "../../AddUpdateTenderComponents/BasicDetailComponents/tender.module.css";
-
-import DsIconButton from "@/Elements/DsComponents/DsButtons/dsIconButton";
-import IconFactory from "@/Elements/IconComponent";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
+import IconFactory from "@/Elements/IconComponent";
 
 export interface CustomerLPRProps {
   index: number;
@@ -22,134 +17,120 @@ export interface CustomerLPRProps {
   lprTo?: Company;
   onValueChange?: (value: string) => void;
   onCompanyChange?: (company: Company) => void;
-  disable: boolean;
+  disable?: boolean;
+  autofocus?: boolean;
+  onBlur?: (e?: React.FocusEvent<HTMLElement>) => void;
+  onCommit?: () => void;
 }
+
 const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
   index,
   lprValue,
   lprTo,
   onValueChange,
   onCompanyChange,
-  disable,
+  disable = false,
+  autofocus = false,
+  onBlur,
+  onCommit,
 }) => {
-  const [isLPR, setIsLpr] = useState<boolean>(false);
+  const lprRef = useRef<HTMLDivElement>(null);
 
-  const setSelectedCompany = (option: datalistOptions | undefined) => {
-    if (option?.value && onCompanyChange) {
-      onCompanyChange({ id: option.id, name: option.value });
-      setIsLpr(true);
-    } else {
-      setIsLpr(false);
-    }
-  };
+  // Only call onCommit if focus leaves the .lpr container
+  const handleBlur = useCallback(
+    (e: React.FocusEvent<HTMLElement>) => {
+      const relatedTarget = e.relatedTarget as HTMLElement | null;
+      if (
+        (relatedTarget &&
+          lprRef.current &&
+          lprRef.current.contains(relatedTarget)) ||
+        (relatedTarget && relatedTarget.closest(`#LprTo${index}`))
+      ) {
+        // Focus is still inside .lpr, do not commit
+        return;
+      }
+      if (onBlur) onBlur(e);
+      if (onCommit) onCommit();
+    },
+    [onBlur, onCommit]
+  );
 
-  // useEffect(() => {
-  //   createContext("LprTo" + index);
-  // }, [index, lprTo]);
   useEffect(() => {
-    if (lprTo?.name) {
-      setIsLpr(true);
-    }
+    // Optionally, focus management logic here
   }, [lprTo]);
+
   return (
     <div
-      className={styles.LPR}
+      className={`${styles.LPR} lpr`}
       id={"Lpr" + index}
+      ref={lprRef}
+      tabIndex={0} // Make container focusable for accessibility
+      onBlur={handleBlur}
       onClick={(e) => e.stopPropagation()}
+      style={{ outline: "none" }} // Remove default outline if you style focus
     >
-      {!disable ? (
+      {/* {!disable ? ( */}
         <DsTextField
           id={"LprValue" + index}
           inputType="positive"
           initialValue={lprValue ? lprValue.toString() : ""}
-          onBlur={(e) => {
-            if ((e.target as HTMLInputElement).value && onValueChange)
-              onValueChange((e.target as HTMLInputElement).value);
-          }}
+          tabIndex={0} // Input is in tab order
+          onBlur={handleBlur}
+          autofocus={autofocus}
           onClick={(e) => e.stopPropagation()}
+          onChange={(e) => {
+            if (onValueChange) onValueChange(e.target.value);
+          }}
+          disable={disable}
         />
-      ) : lprValue ? (
-        lprValue.toString()
-      ) : (
-        ""
-      )}
+      {/* // ) : lprValue ? (
+      //   lprValue.toString()
+      // ) : (
+      //   ""
+      // )} */}
 
       <div
         style={{
           position: "relative",
           display: "flex",
           alignItems: "center",
-
-          // height: "1em"
-          // width: "1em",
         }}
       >
-        {isLPR ? (
-          <>
-            <div
-              className={styles.lprwitharrow}
-              onClick={(e) => {
-                e.stopPropagation();
-
-                if (!disable) {
-                  displayContext(e, "LprTo" + index, "horizontal", "right");
-                }
-              }}
-            >
-              <div style={{ height: "1em", width: "1em" }}>
-                <IconFactory name="personSearch" />
-              </div>
-              <div style={{ height: "1em", width: "1em" }}>
-                <IconFactory name="dropDownArrow" />
-              </div>
-            </div>
-          </>
-        ) : (
-          <>
-            <div
-              className={styles.lprwitharrow}
-              onClick={(e) => {
-                e.stopPropagation();
-                displayContext(e, "LprTo" + index, "horizontal", "right");
-              }}
-            >
-              <div style={{ height: "1.225em", width: "1.225em" }}>
-                <IconFactory name="person1" />
-              </div>
-              <div style={{ height: "0.875em", width: "0.875em" }}>
-                <IconFactory name="dropDownArrow" />
-              </div>
-            </div>
-          </>
-        )}{" "}
+        <div
+          className={styles.lprwitharrow}
+          tabIndex={0} // Make the icon button focusable
+          onClick={(e) => {
+            e.stopPropagation();
+            if (!disable) {
+              displayContext(e, "LprTo" + index, "horizontal", "right");
+            }
+          }}
+        >
+          <div style={{ height: "1em", width: "1em" }}>
+            <IconFactory name={lprTo?.name ? "personSearch" : "person1"} />
+          </div>
+          <div
+            style={{
+              height: lprTo?.name ? "1em" : "0.875em",
+              width: lprTo?.name ? "1em" : "0.875em",
+            }}
+          >
+            <IconFactory name="dropDownArrow" />
+          </div>
+        </div>
       </div>
       <ContextMenu
         id={"LprTo" + index}
         showArrow={true}
         content={
-          // <div
-          //   style={{
-          //     display: "flex",
-          //     padding: "0.5em",
-          //     flexDirection: "column",
-          //     // gap: "0.5em",
-          //   }}
-          // >
-          //   <DsTextField id="customerlpr" label="Write Competiter name" />
-
-          //   <DsButton
-          //     id="competitorSave"
-          //     label="Save"
-          //     buttonViewStyle="btnContained"
-          //     buttonColor="btnPrimary"
-          //     buttonSize="btnSmall"
-          //     className={styles.competitorSave}
-          //   />
-          // </div>
-          <div className={styles.competitorContainer}>
+          <div className={styles.competitorContainer} tabIndex={0}>
             <CompanySearch
               lprTo={lprTo?.name}
-              setSelectedCompany={setSelectedCompany}
+              setSelectedCompany={(option) => {
+                if (option?.value && onCompanyChange) {
+                  onCompanyChange({ id: option.id, name: option.value });
+                }
+              }}
             />
             <div className={styles.competitorSaveContainer}>
               <DsButton
@@ -159,12 +140,8 @@ const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
                 buttonColor="btnPrimary"
                 buttonSize="btnSmall"
                 className={styles.competitorSave}
-                onClick={() => {
-                  closeContext("LprTo" + index);
-                  // if(onCompanyChange) {
-                  //   onCompanyChange(lprTo as Company);
-                  // setIsLpr(true);
-                }}
+                onClick={() => closeContext("LprTo" + index)}
+                tabIndex={0}
               />
             </div>
           </div>
@@ -173,4 +150,5 @@ const DsCustomerLPR: React.FC<CustomerLPRProps> = ({
     </div>
   );
 };
+
 export default DsCustomerLPR;

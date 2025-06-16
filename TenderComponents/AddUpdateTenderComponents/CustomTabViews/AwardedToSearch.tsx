@@ -1,3 +1,4 @@
+"use client";
 import { searchCustomerURL } from "@/Common/helpers/constant";
 import { datalistOptions } from "@/Common/helpers/types";
 import DsSearchComponent from "@/Elements/DsComponents/DsSearch/searchComponent";
@@ -7,6 +8,8 @@ export interface AwardedToSearchProps {
   awardedTo: awardedTo;
   index: number;
   setAwardedTo: (option: datalistOptions) => void;
+  onBlur?: (e?: React.FocusEvent<HTMLElement>) => void;
+  autofocus?: boolean;
 }
 export type awardedTo = {
   id: number;
@@ -29,6 +32,8 @@ const AwardedToSearch: React.FC<AwardedToSearchProps> = ({
   awardedTo,
   index,
   setAwardedTo,
+  onBlur,
+  autofocus = false,
 }) => {
   const [awardedToOptions, setAwardedToOptions] = useState<datalistOptions[]>(
     []
@@ -48,7 +53,7 @@ const AwardedToSearch: React.FC<AwardedToSearchProps> = ({
       );
       setAwardedToOptions(awardedToValues);
     } else {
-      console.log("company values are = ", values);
+      // console.log("company values are = ", values);
     }
   };
   return (
@@ -56,12 +61,16 @@ const AwardedToSearch: React.FC<AwardedToSearchProps> = ({
       options={awardedToOptions}
       setOptions={setAwardedToSearchOptions}
       setSearchUrl={function (searchTerm: string): string {
-        return searchCustomerURL + searchTerm;
+        return searchCustomerURL(searchTerm, "");
       }}
       setSelectedOption={setAwardedTo}
       id={"awardedToSearch" + index}
       dataListId={"awardedToSearchDatalist" + index}
       initialValue={awardedTo.name}
+      onBlur={(e) => {
+        if (onBlur) onBlur(e);
+      }}
+      autofocus={autofocus}
     />
   );
 };

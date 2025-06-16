@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 import styles from "./filteractions.module.css";
 import Image from "next/image";
 import filter from "@/Common/TenderIcons/smallIcons/filtericon.svg";
@@ -17,22 +19,29 @@ import { DisplayPane } from "@/Elements/DsComponents/DsPane/DsPane";
 import btnStyles from "@/Elements/DsComponents/DsButtons/dsButton.module.css";
 
 export interface DsFilterActionProps {
-
-
   searchQuery: string;
   setSearchQuery: Dispatch<SetStateAction<string>>;
   selectedStatus: string;
   setSelectedStatus: Dispatch<SetStateAction<string>>;
+  isQuickFilterActive: boolean;
+  filterCount: number;
 }
 const DsFilterActions: React.FC<DsFilterActionProps> = ({
   searchQuery,
-  setSearchQuery, selectedStatus, setSelectedStatus
+  setSearchQuery,
+  selectedStatus,
+  setSelectedStatus,
+  isQuickFilterActive,
+  filterCount,
 }) => {
-
   const initialFilterState = Object.fromEntries(
-    ["NEAR_SUBMISSION", "FEES_PENDING", "APPROVAL", "UNDER_APPROVAL", "UNDER_REVIEW"].map(
-      (status) => [status, false]
-    )
+    [
+      "NEAR_SUBMISSION",
+      "FEES_PENDING",
+      "APPROVAL",
+      "UNDER_APPROVAL",
+      "UNDER_REVIEW",
+    ].map((status) => [status, false])
   );
 
   const [isFiltered, setIsFiltered] =
@@ -51,32 +60,29 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
     approvalButtonVisible,
     myApprovalButtonVisible,
     // myApprovalButtonVisible
-
   } = permissions;
 
-  const handleFetch = async () => {
-    try {
-      await fetchData({ url: getTenderUserRoles }).then((res) => {
-        if ((res.code = 200)) {
-          dispatch(setUserRole(res.result.roleName));
-          console.log("userrole=", res);
-          console.log("role", role);
-        } else {
-          console.error(
-            "Error fetching data: ",
-            res.message || "Unknown error"
-          );
-        }
-      });
-    } catch (error) {
-      console.error("Fetch error: ", error);
-    }
-  };
-  useEffect(() => {
-    handleFetch();
-  }, [role]);
-
-
+  // const handleFetch = async () => {
+  //   try {
+  //     await fetchData({ url: getTenderUserRoles }).then((res) => {
+  //       if ((res.code = 200)) {
+  //         dispatch(setUserRole(res.result.roleName));
+  //         console.log("userrole=", res);
+  //         console.log("role", role);
+  //       } else {
+  //         console.error(
+  //           "Error fetching data: ",
+  //           res.message || "Unknown error"
+  //         );
+  //       }
+  //     });
+  //   } catch (error) {
+  //     console.error("Fetch error: ", error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   handleFetch();
+  // }, [role]);
 
   useEffect(() => {
     if (role && role !== "") {
@@ -84,22 +90,25 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
     }
   }, [role]);
 
-
+  useEffect(() => {
+    handleFilter(selectedStatus);
+  }, [isQuickFilterActive]);
   const handleFilter = async (value: string) => {
-    console.log("valueee", value);
+    // console.log("valueee", value);
     setIsFiltered((prev) => {
       const newFilterState = Object.fromEntries(
-        Object.keys(prev).map((key) => [key, key === value ? !prev[key] : false])
+        Object.keys(prev).map((key) => [
+          key,
+          key === value ? !prev[key] : false,
+        ])
       );
 
       const isFilterActive = !newFilterState[value];
 
       if (isFilterActive) {
-
         setSelectedStatus("");
       } else {
         const lowerCaseValue = value.toUpperCase();
-
 
         setSelectedStatus(lowerCaseValue);
       }
@@ -109,12 +118,10 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
   };
   const handleSearch = (e) => {
     if (e.key === "Enter") {
-
       //
       const searchQueryLower = searchText;
 
       setSearchQuery(searchQueryLower);
-
     }
   };
 
@@ -140,13 +147,11 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
     });
   };
 
-
-
   return (
     <>
       {tenderDatalistVisible && (
         <DsTextField
-          placeholder="Search Tender by Id, Name & Value"
+          placeholder="Search Tender by Id or Name "
           id="userSelect"
           disable={false}
           initialValue=""
@@ -182,6 +187,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
             }
             onClick={() => handleFilter("NEAR_SUBMISSION")}
             label="Near Submission"
+            disable={!isQuickFilterActive}
           />
         )}
       </div>
@@ -208,6 +214,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
           }
           onClick={() => handleFilter("APPROVAL")}
           label="Approval"
+          disable={!isQuickFilterActive}
         />
       )}
       {myApprovalButtonVisible && (
@@ -219,6 +226,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
             isFiltered["UNDER_APPROVAL"] ? "btnContained" : "btnOutlined"
           }
           onClick={() => handleFilter("UNDER_APPROVAL")}
+          disable={!isQuickFilterActive}
         />
       )}
       {myApprovalButtonVisible && (
@@ -231,6 +239,7 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
             isFiltered["UNDER_REVIEW"] ? "btnContained" : "btnOutlined"
           }
           onClick={() => handleFilter("UNDER_REVIEW")}
+          disable={!isQuickFilterActive}
         />
       )}
       {filterButtonVisible && (
@@ -255,7 +264,14 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
               />
             </div>
           }
-          label="Filter"
+          label={
+            filterCount > 1
+              ? `${filterCount} Filters Applied`
+              : filterCount == 1
+                ? `${filterCount} Filter Applied`
+                : "Filter"
+          }
+          // label={`${filterCount}`}
           onClick={() => DisplayPane("AdvancedFilterComponent")}
           iconSize="iconMedium"
         />
@@ -265,4 +281,3 @@ const DsFilterActions: React.FC<DsFilterActionProps> = ({
 };
 
 export default DsFilterActions;
-

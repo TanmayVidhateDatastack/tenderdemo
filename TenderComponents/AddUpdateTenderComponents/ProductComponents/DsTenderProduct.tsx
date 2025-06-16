@@ -1,4 +1,4 @@
-// import { TenderProduct } from "@/Common/helpers/types";
+"use client";
 import { useEffect, useState } from "react";
 import DsAddProduct from "./addProduct";
 import DsProductTable from "./DsProductTable";
@@ -14,7 +14,6 @@ const DsTenderProduct: React.FC<{
   version: number;
 }> = ({ productList, setProductList, version }) => {
   // const [fetchdata, setfetchdata] = useState<TenderProduct[] | null>(null);
-
   // const handleFetch = async () => {
   //     try {
   //         const res = await fetchData({ url:  getProductURL});
@@ -35,7 +34,6 @@ const DsTenderProduct: React.FC<{
   // useEffect(() => {
   //     handleFetch();
   // }, []);
-
   return (
     <>
       <div
@@ -44,13 +42,12 @@ const DsTenderProduct: React.FC<{
           gap: "17.5em",
           alignItems: "flex-start",
           margin: "20px",
-          justifyContent:"space-between"
+          justifyContent: "space-between",
         }}
       >
-        <DsAddProduct setProductList={setProductList} version={version}/>
+        <DsAddProduct setProductList={setProductList} version={version} />
         <DsProductKpis version={version} />
       </div>
-
       <DsProductTable productList={productList} version={version} />
     </>
   );

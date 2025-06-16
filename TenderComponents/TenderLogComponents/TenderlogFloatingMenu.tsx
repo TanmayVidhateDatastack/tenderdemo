@@ -42,7 +42,7 @@ interface DsTenderTableFloatingMenuProps {
 export const DsTenderTableFloatingMenu: React.FC<
   DsTenderTableFloatingMenuProps
 > = ({ e, rowIndex, statuscell, handleFetch, tenderId, goTo }) => {
-  console.log("statuscell", statuscell);
+  // console.log("statuscell", statuscell);
   const [actionStatus, setActionStatus] = useState<{
     notiType: "bonus" | "error" | "info" | "success" | "cross";
     notiMsg: string;
@@ -64,9 +64,12 @@ export const DsTenderTableFloatingMenu: React.FC<
   const [IsSubmissionWhite, setIsSubmissionWhite] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log("statuscell on load:", statuscell); // Debugging
+    // console.log("statuscell on load:", statuscell); // Debugging
 
-    if (statuscell === "CANCELLED" || statuscell === "LOST") {
+    if (
+      statuscell?.toUpperCase() === "CANCELLED" ||
+      statuscell?.toUpperCase() === "LOST"
+    ) {
       setIsFloatingMenuVisible(false);
     } else {
       if (statuscell !== undefined) {
@@ -75,16 +78,16 @@ export const DsTenderTableFloatingMenu: React.FC<
       }
     }
 
-    if (statuscell === "TENDER_SUBMITTED") {
+    if (statuscell?.toUpperCase() === "TENDER_SUBMITTED") {
       setIsCancelBtnVisible(true);
       setLostBtnVisible(true);
       setIsPartiallyAwardedBtnVisible(true);
       setIsAwardedBtnVisible(true);
       setIsNewVersionBtnVisible(true);
       setIsSubmitVisible(false);
-    } else if (statuscell === "APPROVED") {
+    } else if (statuscell?.toUpperCase() === "APPROVED") {
       setIsCancelBtnVisible(true);
-      setIsPartiallyAwardedBtnVisible(true);
+      setIsPartiallyAwardedBtnVisible(false);
       setIsSubmitVisible(true);
       setLostBtnVisible(false);
       setIsAwardedBtnVisible(false);
@@ -100,12 +103,20 @@ export const DsTenderTableFloatingMenu: React.FC<
   }, [statuscell]);
 
   useEffect(() => {
-    console.log("tenderId on load:", tenderId); // Debugging
+    // console.log("tenderId on load:", tenderId); // Debugging
     const row = document.querySelector(".tableRow-" + rowIndex) as HTMLElement;
     // if (isFloatingMenuVisible) {
     if (e && tenderId) {
-      displayTableMenu(e, "tenderfloatingmenu", "bottom", "center");
-      setIsFloatingMenuVisible(true);
+      if (
+        statuscell?.toUpperCase() === "CANCELLED" ||
+        statuscell?.toUpperCase() === "LOST"
+      ) {
+        setIsFloatingMenuVisible(false);
+        closeContext("tenderfloatingmenu");
+      } else {
+        displayTableMenu(e, "tenderfloatingmenu", "bottom", "center");
+        setIsFloatingMenuVisible(true);
+      }
     } else {
       row?.click();
       closeContext("tenderfloatingmenu");
@@ -119,18 +130,18 @@ export const DsTenderTableFloatingMenu: React.FC<
     }
   }, [e, rowIndex, tenderId]);
   const handleClose = () => {
-    console.log("close");
+    // console.log("close");
     const row = document.querySelector(".tableRow-" + rowIndex) as HTMLElement;
     const slectedClass = row.classList
       .values()
       ?.find((x) => x.includes("selectedRow"));
-      if (row) {
-        row.click();
-        closeContext("tenderfloatingmenu");
-        
-        setIsFloatingMenuVisible(false);
-      }
-      if (slectedClass) row.classList.remove(slectedClass);
+    if (row) {
+      row.click();
+      closeContext("tenderfloatingmenu");
+
+      setIsFloatingMenuVisible(false);
+    }
+    if (slectedClass) row.classList.remove(slectedClass);
     // setIsFloatingMenuVisible(false);
   };
 
@@ -158,6 +169,13 @@ export const DsTenderTableFloatingMenu: React.FC<
     })
       .then((res) => {
         if (res?.code === 200 && res?.result) {
+          console.error("success");
+          setActionStatus({
+            notiType: "success",
+            notiMsg: res?.message || "success in submission",
+          });
+          showToaster("tenderSubmissionToaster");
+
           handleFetch();
         } else {
           console.error("Error");

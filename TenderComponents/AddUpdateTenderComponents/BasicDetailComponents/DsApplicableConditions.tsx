@@ -1,3 +1,4 @@
+"use client";
 import styles from "./deposite.module.css";
 import Image from "next/image";
 import downarrow from "@/Common/TenderIcons/smallIcons/verticleArrow.svg";
@@ -14,24 +15,20 @@ import {
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
 import { DsSelectOption } from "@/Common/helpers/types";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
- 
+
 import DsSupplyConditions from "./DsSupplyConditions";
 import { useTenderData } from "../TenderDataContextProvider";
 import IconFactory from "@/Elements/IconComponent";
 import { useAppSelector } from "@/Redux/hook/hook";
 import { RootState } from "@/Redux/store/store";
- 
-//  interface ApplicableConditionsProps {
-//   applicableConditions: DsSelectOption[] | [];
-// }
- 
-const DsApplicableConditions: React.FC=() => {
+
+const DsApplicableConditions: React.FC = () => {
   const contextMenuId = "context-display-11";
   const [context, setContext] = useState(false);
   const [applicableCheckboxes, setApplicableCheckboxes] = useState<
     DsSelectOption[]
   >([]);
- 
+
   const {
     addApplicableCondition,
     removeApplicableCondition,
@@ -43,7 +40,7 @@ const DsApplicableConditions: React.FC=() => {
   const [conditionsVisibility, setConditionsVisibility] = useState<
     Record<string, boolean>
   >({});
- 
+
   function handleonclick(
     e:
       | React.MouseEvent<HTMLElement, MouseEvent>
@@ -53,17 +50,16 @@ const DsApplicableConditions: React.FC=() => {
     setContext(true);
     displayContext(e, contextMenuId, "vertical", "right");
   }
- 
-  const selectedConditions = new Set(); // 🔥 Store selected checkboxes globally
+  const selectedConditions = new Set(); // Store selected checkboxes globally
   const permissions = useAppSelector((state: RootState) => state.permissions);
-  const {applicableConditionButtonDisable} = permissions;
- 
+  const { applicableConditionButtonDisable } = permissions;
+
   const handleAdd = () => {
     applicableCheckboxes.forEach((opt) => {
       const id = opt.value.toString();
       const checkbox = document.getElementById(id) as HTMLInputElement;
       if (checkbox?.checked) {
-        selectedConditions.add(id); // 🔥 Add to Set (prevents duplicates)
+        selectedConditions.add(id); //  Add to Set (prevents duplicates)
         conditionsVisibility[id] = true;
         if (
           tenderData.tenderSupplyCondition.applicableConditions?.some(
@@ -73,7 +69,7 @@ const DsApplicableConditions: React.FC=() => {
           updateApplicableCondition(id, "status", "ACTV");
         else addApplicableCondition(id);
       } else {
-        selectedConditions.delete(id); // 🔥 Remove if unchecked
+        selectedConditions.delete(id); // Remove if unchecked
         conditionsVisibility[id] = false;
         updateApplicableCondition(id, "status", "INAC");
       }
@@ -82,7 +78,8 @@ const DsApplicableConditions: React.FC=() => {
     // console.log("Currently Selected:", Array.from(selectedConditions)); // Debugging output
   };
   // useEffect(() =>{},[handleAdd]);
- useEffect(() => {
+
+  useEffect(() => {
     const checkConditionVisible = { ...conditionsVisibility };
 
     (metaData.applicableSupplyConditions || []).forEach((opt) => {
@@ -116,13 +113,18 @@ const DsApplicableConditions: React.FC=() => {
   }, [metaData.applicableSupplyConditions, tenderData.id]);
 
   useEffect(() => {
-    if (metaData.applicableSupplyConditions && metaData.applicableSupplyConditions.length > 0) {
-      const mappedConditions = metaData.applicableSupplyConditions.map((conditions) => ({
-        label: conditions.label,
-        value: conditions.value,
-      }));
-      setApplicableCheckboxes(mappedConditions||[]);
- 
+    if (
+      metaData.applicableSupplyConditions &&
+      metaData.applicableSupplyConditions.length > 0
+    ) {
+      const mappedConditions = metaData.applicableSupplyConditions.map(
+        (conditions) => ({
+          label: conditions.label,
+          value: conditions.value,
+        })
+      );
+      setApplicableCheckboxes(mappedConditions || []);
+
       const options: Record<string, boolean> = mappedConditions.reduce<
         Record<string, boolean>
       >((acc, opt) => {
@@ -134,27 +136,24 @@ const DsApplicableConditions: React.FC=() => {
               )
             : true; // Add string keys directly to the object
         }
- 
+
         return acc;
       }, {});
- 
+
       setConditionsVisibility(options);
     }
-   
-  },[
+  }, [
     metaData?.applicableSupplyConditions,
     tenderDataCopy.tenderSupplyCondition,
   ]);
- 
- 
- 
-  useEffect(() => {  
+
+  useEffect(() => {
     window.addEventListener("click", (e) => {
       const target = (e.target as HTMLElement).closest(
         `.${styles["depositsBtn"]}`
       );
       const target2 = (e.target as HTMLElement).closest(`#${contextMenuId}`);
- 
+
       if (!target && !target2) {
         closeContext(contextMenuId);
         return;
@@ -166,7 +165,7 @@ const DsApplicableConditions: React.FC=() => {
           `.${styles["depositsBtn"]}`
         );
         const target2 = (e.target as HTMLElement).closest(`#${contextMenuId}`);
- 
+
         if (!target && !target2) {
           closeContext(contextMenuId);
           return;
@@ -198,22 +197,23 @@ const DsApplicableConditions: React.FC=() => {
             onClick={(e) => handleonclick(e)}
           />
         </div>
-        {conditionsVisibility&&Object.values(conditionsVisibility).filter((x) => x).length > 0 && (
-          <div className={styles.conditions}>
-            {(metaData.applicableSupplyConditions||[]).map((conditions) => {
-              if (typeof conditions.value == "string")
-                return (
-                  conditionsVisibility[conditions.value] && (
-                    <DsSupplyConditions
-                      type={conditions.value.toString()}
-                      title={conditions.label}
-                      id={conditions.value + "conditionsView"}
-                    />
-                  )
-                );
-            })}
-          </div>
-        )}
+        {conditionsVisibility &&
+          Object.values(conditionsVisibility).filter((x) => x).length > 0 && (
+            <div className={styles.conditions}>
+              {(metaData.applicableSupplyConditions || []).map((conditions) => {
+                if (typeof conditions.value == "string")
+                  return (
+                    conditionsVisibility[conditions.value] && (
+                      <DsSupplyConditions
+                        type={conditions.value.toString()}
+                        title={conditions.label}
+                        id={conditions.value + "conditionsView"}
+                      />
+                    )
+                  );
+              })}
+            </div>
+          )}
       </div>
       <ContextMenu
         id={contextMenuId}
@@ -225,7 +225,6 @@ const DsApplicableConditions: React.FC=() => {
                 <Ds_checkbox
                   key={index} // Unique key
                   containerClassName={styles.feesCheckboxContainer}
- 
                   id={checkbox.value.toString()}
                   name={checkbox.label}
                   value={checkbox.value.toString()}
@@ -233,7 +232,6 @@ const DsApplicableConditions: React.FC=() => {
                   defaultChecked={
                     conditionsVisibility[checkbox.value.toString()]
                   }
-                 
                 />
               ))}
               <DsButton
@@ -243,7 +241,6 @@ const DsApplicableConditions: React.FC=() => {
                 buttonSize="btnSmall"
                 onClick={() => handleAdd()}
                 // disable={}
- 
               />{" "}
             </div>
           </>
@@ -254,4 +251,3 @@ const DsApplicableConditions: React.FC=() => {
   );
 };
 export default DsApplicableConditions;
- 

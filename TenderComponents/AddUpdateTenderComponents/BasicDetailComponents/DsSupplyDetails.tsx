@@ -1,11 +1,9 @@
+"use client";
 import DsSingleSelect from "@/Elements/DsComponents/dsSelect/dsSingleSelect";
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import DsMultiSelect from "@/Elements/DsComponents/dsSelect/dsMultiSelect";
 import DsSelectMultiLevel from "@/Elements/DsComponents/dsSelect/dsSelectMultiLevel";
-import {
-  datalistOptions,
-  DsSelectOption,
-} from "@/Common/helpers/types";
+import { datalistOptions, DsSelectOption } from "@/Common/helpers/types";
 // import { datalistOptions, supplyDetailsProps } from "@/Common/helpers/types";
 import { useTenderData } from "../TenderDataContextProvider";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
@@ -16,9 +14,9 @@ const DsSupplyDetails: React.FC = () => {
   const { updateSupplyCondition, tenderData, tenderDataCopy, metaData } =
     useTenderData();
   const [selectedEligibility, setSelectedEligibility] = useState<
-    DsSelectOption[] 
+    DsSelectOption[]
   >([]);
-   const permissions = useAppSelector((state: RootState) => state.permissions);
+  const permissions = useAppSelector((state: RootState) => state.permissions);
   const {
     supplypointDisable,
     consignessCountDisable,
@@ -40,7 +38,9 @@ const DsSupplyDetails: React.FC = () => {
   useEffect(() => {
     const supplyPoint = tenderData.tenderSupplyCondition.supplyPoint;
     // if (supplyPoint) {
-    const option = (metaData.supplyPoints||[]).find((x) => x.value == supplyPoint);
+    const option = (metaData.supplyPoints || []).find(
+      (x) => x.value == supplyPoint
+    );
     setSelectedSupplyPoint(option);
     // }
   }, [
@@ -53,7 +53,7 @@ const DsSupplyDetails: React.FC = () => {
     const testReportRequired =
       tenderData.tenderSupplyCondition.testReportRequired;
     // if (testReportRequired) {
-    const option = (metaData.testReportRequired||[]).find(
+    const option = (metaData.testReportRequired || []).find(
       (x) => x.value == testReportRequired
     );
     setSelectedtTestReportRequired(option);
@@ -85,8 +85,8 @@ const DsSupplyDetails: React.FC = () => {
             containerClasses={styles.fields}
             disable={supplypointDisable}
             selectedOption={selectedSupplyPoint}
-            options={metaData.supplyPoints||[]}
-            label="Supply point"
+            options={metaData.supplyPoints || []}
+            label="Supply Point"
             placeholder={"Please select here"}
             id={"supplyPoints"}
             setSelectOption={(option) => {
@@ -100,7 +100,7 @@ const DsSupplyDetails: React.FC = () => {
             disable={consignessCountDisable}
             initialValue={tenderData.tenderSupplyCondition.consigneesCount?.toString()}
             inputType="positiveInteger"
-            label="Provide no. of consignees"
+            label="Provide No. of Consignees"
             // placeholder="Please type here"
             onBlur={(e) =>
               updateSupplyCondition(
@@ -110,25 +110,25 @@ const DsSupplyDetails: React.FC = () => {
             }
           ></DsTextField>
 
-          <DsSingleSelect   
+          <DsSingleSelect
             containerClasses={styles.fields}
             selectedOption={selectedtTestReportRequired}
-            options={metaData.testReportRequired||[]}
+            options={metaData.testReportRequired || []}
             disable={testreportRequiredDisable}
-            label="Test report requirement"
+            label="Test Report Requirement"
             placeholder={"Please select here"}
             id={"reportReq"}
-            setSelectOption={(option) => {  
-              if (typeof option.value == "string") {   
+            setSelectOption={(option) => {
+              if (typeof option.value == "string") {
                 updateSupplyCondition("testReportRequired", option.value);
-              } 
-            }}   
+              }
+            }}
           ></DsSingleSelect>
           <DsMultiSelect
             //  const selectedDepo=useMemo(()=>{
             //    return tenderData.shippingLocations.map((x) => {
-            //       return ( 
-            //         formatedDepot.find((d) => Number(d.value) == x) || {  
+            //       return (
+            //         formatedDepot.find((d) => Number(d.value) == x) || {
             //           value: "",
             //           label: "",
             //         }
@@ -137,10 +137,10 @@ const DsSupplyDetails: React.FC = () => {
             //   },[formatedDepot,tenderData.shippingLocations]);
             containerClasses={styles.fields}
             selectedOptions={selectedEligibility}
-            options={metaData.eligibility||[]}
+            options={metaData.eligibility || []}
             disable={eligibilityDisable}
             label="Eligibility"
-            placeholder={"Please search and select here"}
+            placeholder={"Please select here"}
             id={"eligibility"}
             setSelectOptions={(options) => {
               updateSupplyCondition(

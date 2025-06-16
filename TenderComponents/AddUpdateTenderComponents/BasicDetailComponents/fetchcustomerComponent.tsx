@@ -1,3 +1,4 @@
+"use client";
 import React, { useCallback, useEffect, useState } from "react";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import style from "./deposite.module.css";
@@ -7,7 +8,10 @@ import { closeContext } from "@/Elements/DsComponents/dsContextHolder/dsContextH
 import btnStyles from "@/Elements/DsComponents/DsButtons/dsButton.module.css";
 import RadioButton from "./dsRadioButton";
 import fetchData from "@/Common/helpers/Method/fetchData";
-import { getTenderByTenderId, getTendersByCustomerId } from "@/Common/helpers/constant";
+import {
+  getTenderByTenderId,
+  getTendersByCustomerId,
+} from "@/Common/helpers/constant";
 import Toaster, {
   hideToaster,
   showToaster,
@@ -89,7 +93,8 @@ const FetchCustomer: React.FC<FetchCustomerProps> = ({
       console.error("Error fetching data", error);
     }
   }, [customerId]);
-  const {fetchAndSetPreviousTender}=useTenderData();
+
+  const { fetchAndSetPreviousTender } = useTenderData();
 
   useEffect(() => {
     handleFetch();
@@ -98,7 +103,8 @@ const FetchCustomer: React.FC<FetchCustomerProps> = ({
     <>
       <div className={style.fetcustomerContainer}>
         <div className={style.fetchInfo}>
-          <div>Fetch Information:</div> {customerName}
+          <div className={style.fetchinfolabel}>Fetch Information </div>{" "}
+          <div>({customerName})</div>
         </div>
         <div className={style.fetchMessage}>
           Do you want to fetch information from previous tender. Please select
@@ -113,7 +119,7 @@ const FetchCustomer: React.FC<FetchCustomerProps> = ({
         ></DsTableComponent>
 
         <div className={style.fetchButtons}>
-         <DsButton
+          <DsButton
             label="Cancel"
             className={btnStyles.btnOutlined}
             buttonColor="btnDark"
@@ -122,20 +128,18 @@ const FetchCustomer: React.FC<FetchCustomerProps> = ({
             onClick={() => {
               closeContext("contextMenuId5");
             }}
-            />
-          
+          />
+
           <DsButton
             label="Fetch"
-            onClick={() => {    
+            onClick={() => {
               fetchAndSetPreviousTender(selectedTender.tenderId);
               closeContext("contextMenuId5");
               showToaster("fetchCustomer");
             }}
           />
-       
         </div>
       </div>
-     
     </>
   );
 };

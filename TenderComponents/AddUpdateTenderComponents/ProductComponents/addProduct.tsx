@@ -1,12 +1,19 @@
+"use client";
 import ProductSearch from "@/TenderComponents/AddUpdateTenderComponents/ProductComponents/productSearch";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 
-import { getProductURL, DsStatus } from "@/Common/helpers/constant";
+import {
+  getProductURL,
+  DsStatus,
+  getTenderProductHistory,
+} from "@/Common/helpers/constant";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import DsButton from "../../../Elements/DsComponents/DsButtons/dsButton";
 import DsTextField from "../../../Elements/DsComponents/DsInputs/dsTextField";
 import { useEffect, useState } from "react";
 import { TenderProduct, useTenderData } from "../TenderDataContextProvider";
+import { useAppSelector } from "@/Redux/hook/hook";
+import { RootState } from "@/Redux/store/store";
 
 export interface addProductProps {
   version?: number;
@@ -19,6 +26,9 @@ const DsAddProduct: React.FC<addProductProps> = ({
   orderStatus,
   setProductList,
 }) => {
+  const permissions = useAppSelector((state: RootState) => state.permissions);
+  const { productTableDisable } = permissions;
+
   // console.log("Add product ", orderStatus);
   const [selectedProductId, setSelectedProductId] = useState<number>();
   const [disabled, setDisabled] = useState<boolean>(false);
@@ -34,6 +44,11 @@ const DsAddProduct: React.FC<addProductProps> = ({
 
     if (selectedProductId) {
       const productUrl = getProductURL(selectedProductId, qtyInputVal);
+      const productHistoryUrl = getTenderProductHistory(
+        tenderData.id,
+        selectedProductId
+      );
+
       const product = await fetchData({
         url: productUrl,
 
@@ -48,7 +63,7 @@ const DsAddProduct: React.FC<addProductProps> = ({
         if (!product.result) {
           // console.error(
           //   " product.result is undefined! Full response:",
-          //   product
+          //   product 
           // );
           return;
         }
@@ -57,13 +72,29 @@ const DsAddProduct: React.FC<addProductProps> = ({
           // console.error(" setProductList is undefined! Check prop passing.");
           return;
         }
+        const productHistory = await fetchData({
+          url: productHistoryUrl,
+        });
+        if (productHistory.code === 500) {
+          return;
+        }
         const tenderProduct: TenderProduct = {
           productId: product.result.id,
+          requestedGenericName: product.result.name,
+          requestedPackingSize: product.result.packingSize,
           requestedQuantity: Number(qtyInputVal),
+          lastQuotedRate: productHistory.result.lastQuotedRate,
+          lastPurchaseRate: productHistory.result.lastPurchaseRate,
+          proposedRate: productHistory.result.lastPurchaseRate,
+          // ptrPercentage:100,
+          // stockistDiscountValue:0,
           product: {
             type: "read-only",
             productName: product.result.name,
-            productPackingSize: product.result.cartonSize,
+            productPackingSize: product.result.packingSize,
+            mrp: product.result.mrpRate,
+            ptr: product.result.priceToRetailer,
+            directCost: product.result.basicRate,
             dataSource: "fetch",
           },
         };
@@ -78,14 +109,15 @@ const DsAddProduct: React.FC<addProductProps> = ({
       tenderData.tenderRevisions.reduce((maxObj, currentObj) =>
         currentObj.version > maxObj.version ? currentObj : maxObj
       )?.version || 1;
-    console.log(latestVersion, version);
-    setDisabled(latestVersion !== version);
+    // console.log(latestVersion, version);
+    setDisabled(latestVersion !== version || productTableDisable);
   }, [version, tenderData.tenderRevisions]);
 
   return (
     <div className={styles.input}>
       <>
         <ProductSearch
+          version={version}
           initialValue={productSearchVal}
           orderStatus={orderStatus}
           setSelectedProductId={(id) => setSelectedProductId(id)}
@@ -100,7 +132,7 @@ const DsAddProduct: React.FC<addProductProps> = ({
           id="qty"
           inputType="positiveInteger"
           containerClasses={styles.qtyinproductContainer}
-          disable={disabled}
+          disable={disabled || !selectedProductId}
           className={styles.qtyinproduct}
         ></DsTextField>
 

@@ -1,3 +1,4 @@
+"use client";
 import styles from "./deposite.module.css";
 import Image from "next/image";
 import downarrow from "@/Common/TenderIcons/smallIcons/verticleArrow.svg";
@@ -16,33 +17,14 @@ import { DsSelectOption } from "@/Common/helpers/types";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import DsFeesDocument from "./DsFeesDocument";
 import { useTenderData } from "../TenderDataContextProvider";
- 
+
 import IconFactory from "@/Elements/IconComponent";
 import DsTenderDetails from "./DsTenderDetails ";
 import { useAppSelector } from "@/Redux/hook/hook";
 import { RootState } from "@/Redux/store/store";
- 
-//  interface DepositDocument {
-//   modes: DsSelectOption[];
-//   refunds:DsSelectOption[];
-//   // paidBy: DsSelectOption[];
-// }
-// export interface Deposit {
-//   paidBy: DsSelectOption[];
-// }
- 
-//  interface FeesDocument {
-//   applicableDeposits: DsSelectOption[];
-// }
-//  interface DepositeDocumentsProps {
-//   setDepositeDocuments: (depositeDocuments: DepositDocument[]) => void;
-//   depositeDocument: DepositDocument[] | null;
-//   applicableDeposits: DsSelectOption[] | [];
-//   role: string;
-// }
 const DsDepositeDocuments: React.FC = () => {
   const contextMenuId = "context-display-10";
-  const { 
+  const {
     addTenderFee,
     removeTenderFeeByType,
     tenderData,
@@ -51,6 +33,9 @@ const DsDepositeDocuments: React.FC = () => {
     metaData,
   } = useTenderData();
   const [documentTypeOptions, setDocumentTypeOptions] = useState<
+    Record<string, DsSelectOption[]>
+  >({});
+  const [documentTypeModes, setDocumentTypeModes] = useState<
     Record<string, DsSelectOption[]>
   >({});
   const [mode, setMode] = useState<DsSelectOption[]>([]);
@@ -65,25 +50,31 @@ const DsDepositeDocuments: React.FC = () => {
     "": true,
   });
   const permissions = useAppSelector((state: RootState) => state.permissions);
-  const {
- applicableDepositButtonDisable
-  } = permissions;
+  const { applicableDepositButtonDisable } = permissions;
 
   // const [feeVisibility1, setFeeVisibility1] = useState<Record<string, boolean>>({"": true,});
- 
+
   const role = useAppSelector((state: RootState) => state.user.role);
- 
+
   useEffect(() => {
-    if (role == "MAKER" || role == "CHECKER" || role == "HOMANAGER") {
+    if (
+      role.toUpperCase() == "MAKER" ||
+      role.toUpperCase() == "CHECKER" ||
+      role.toUpperCase() == "HOMANAGER"
+    ) {
       setPaymentCheckVisible(false);
     } else {
       setPaymentCheckVisible(true);
     }
+    // console.log(role);
+    // console.log(tenderData.status)
     if (
-      role === "ACCOUNTANCE" &&
-      (tenderData.status === "AWARDED" ||
-        tenderData.status === "LOST" ||
-        tenderData.status === "CANCELLED")
+      (role.toUpperCase() === "ACCOUNTANCE" ||
+        role.toUpperCase() === "FINANCE") &&
+      (tenderData.status.toUpperCase() === "AWARDED" ||
+        tenderData.status.toUpperCase() === "PARTIALLY_AWARDED" ||
+        tenderData.status.toUpperCase() === "LOST" ||
+        tenderData.status.toUpperCase() === "CANCELLED")
     ) {
       setrecoveryPaymentVisible(true);
     } else {
@@ -100,29 +91,41 @@ const DsDepositeDocuments: React.FC = () => {
         TENDER_FEES: metaData.tenderFeesPayment,
       });
     }
-  }, [role, metaData]);
+  }, [role, metaData, tenderData.status]);
   useEffect(() => {
     if (metaData) {
-      const modesData = metaData.paymentModes || [];
+      // const modesData = metaData.paymentModes || [];
       // const paidByData = depositeDocument[0]?.paidBy || [];
       const refundData = metaData.refundEligibility || [];
-      setMode(modesData);
+      // setMode(modesData);
       setRefund(refundData);
       // setPaidBy(paidByData);
     }
+    if (
+      metaData.emdPaymentMode &&
+      metaData.tenderFeePaymentMode &&
+      metaData.psdPaymentMode
+    ) {
+      setDocumentTypeModes({
+        TENDER_EMD: metaData.emdPaymentMode,
+        TENDER_PSD: metaData.psdPaymentMode,
+        TENDER_FEES: metaData.tenderFeePaymentMode,
+      });
+    }
+
     if (metaData.feesType && metaData.feesType.length > 0) {
       // console.log("000 : ", applicableDeposits);
       const mappedDeposits = metaData.feesType.map((deposit) => ({
         label: deposit.label,
         value: deposit.value,
       }));
-      console.log("mappedDeposits", mappedDeposits);
+      // console.log("mappedDeposits", mappedDeposits);
       SetApplicablefees(mappedDeposits);
       const options: Record<string, boolean> = mappedDeposits.reduce<
         Record<string, boolean>
       >((acc, opt) => {
         const val = opt.value;
- 
+
         if (typeof val === "string") {
           acc[val] = tenderData.tenderFees.some(
             (fee) => fee.feesType == opt.value && fee.status == "ACTV"
@@ -133,7 +136,7 @@ const DsDepositeDocuments: React.FC = () => {
       setFeeVisibility(options);
     }
   }, [metaData, tenderDataCopy.tenderFees]);
- 
+
   function handleonclick(
     e:
       | React.MouseEvent<HTMLElement, MouseEvent>
@@ -145,11 +148,11 @@ const DsDepositeDocuments: React.FC = () => {
   const selectedFees = new Set();
   const handleAdd = () => {
     const checkFeeVisible = { ...feeVisibility };
- 
+
     applicablefees.forEach((opt) => {
       const id = opt.value.toString();
       const checkbox = document.getElementById(id) as HTMLInputElement;
- 
+
       if (checkbox?.checked) {
         selectedFees.add(id);
         checkFeeVisible[id] = true;
@@ -163,17 +166,17 @@ const DsDepositeDocuments: React.FC = () => {
       }
     });
     setFeeVisibility(checkFeeVisible);
- 
+
     closeAllContext();
     // console.log("Currently Selected:", Array.from(selectedFees));
   };
- 
- useEffect(() => {
+
+  useEffect(() => {
     const checkFeeVisible = { ...feeVisibility };
     applicablefees.forEach((opt) => {
       const id = opt.value.toString();
       const isEmpty = tenderData.tenderFees.find((fee) => fee.feesType === id);
-      console.log("isEmpty", isEmpty);
+      console.log("isEmpty", applicablefees);
       const isActive = isEmpty?.status === "ACTV";
 
       if (tenderData.id === undefined || isActive) {
@@ -198,7 +201,7 @@ const DsDepositeDocuments: React.FC = () => {
   // useEffect(() => {
   //   console.log("feevisibility : ", feeVisibility);
   // }, [feeVisibility]);
- 
+
   useEffect(() => {
     window.addEventListener("click", (e) => {
       const target = (e.target as HTMLElement).closest(
@@ -223,7 +226,7 @@ const DsDepositeDocuments: React.FC = () => {
       });
     };
   }, [applicablefees]);
- 
+
   useEffect(() => {
     const handleScroll = (event: any) => {
       const excludedElement = document.getElementById("optionBtn");
@@ -237,7 +240,7 @@ const DsDepositeDocuments: React.FC = () => {
       window.removeEventListener("scroll", handleScroll, true);
     };
   }, []);
- 
+
   return (
     <div className={styles.container}>
       <div className={styles.containerHead}>
@@ -258,13 +261,16 @@ const DsDepositeDocuments: React.FC = () => {
                 }}
                 className={styles.DownArrow}
               >
-                <IconFactory name="dropDownArrow"  disabled={applicableDepositButtonDisable}/>
+                <IconFactory
+                  name="dropDownArrow"
+                  disabled={applicableDepositButtonDisable}
+                />
               </div>
             }
           />
         </div>
       </div>
-      {(metaData.feesType || []).map((deposit) => {
+      {/* {(metaData.feesType || []).map((deposit) => {
         if (typeof deposit.value == "string")
           return (
             feeVisibility[deposit.value] && (
@@ -274,7 +280,7 @@ const DsDepositeDocuments: React.FC = () => {
                   type={deposit.value.toString()}
                   title={deposit.label}
                   id={deposit.value + "DocumentView"}
-                  mode={mode}
+                  mode={documentTypeModes[deposit.value]}
                   paidBy={paidBy}
                   downloadVisible={true}
                   refund={refund}
@@ -284,6 +290,59 @@ const DsDepositeDocuments: React.FC = () => {
               </div>
             )
           );
+      })} */}
+      {(metaData.feesType || []).map((deposit) => {
+        if (typeof deposit.value !== "string") return null;
+
+        const selectedFee = tenderData.tenderFees.find(
+          (fee) => fee.feesType === deposit.value
+        );
+
+        const selectedMode = selectedFee?.paymentMode || "";
+
+        const isBankGuarantee = selectedMode === "BANK_GUARANTEE";
+
+        // if (
+        //   role.toUpperCase() === "ACCOUNTANCE" &&
+        //   (deposit.value === "TENDER_EMD" || deposit.value === "TENDER_PSD")
+        // ) {
+        //   if (!isBankGuarantee) return null;
+        // }
+        if (isBankGuarantee && role.toUpperCase() === "FINANCE") {
+          return null;
+        }
+        // when  status is APProved and role = == "ACCOUNTANCE" || role === "FINANCE" hiding psd
+        if (
+          deposit.value === "TENDER_PSD" &&
+          tenderData.status === "APPROVED" &&
+          (role.toUpperCase() === "ACCOUNTANCE" ||
+            role.toUpperCase() === "FINANCE")
+        ) {
+          return null;
+        }
+        //// when  status is APProved and role = == "ACCOUNTANCE" || role === "FINANCE" hiding psd
+        return (
+          feeVisibility[deposit.value] && (
+            <div className={styles.emdContainer2} key={deposit.value}>
+              <DsFeesDocument
+                optionlist={documentTypeOptions[deposit.value]}
+                type={deposit.value.toString()}
+                title={deposit.label}
+                id={deposit.value + "DocumentView"}
+                mode={documentTypeModes[deposit.value]}
+                paidBy={paidBy}
+                downloadVisible={true}
+                refund={refund}
+                completedpayment={paymentCheckVisible}
+                recoverycheckvisibible={
+                  recoveryPaymentVisible &&
+                  selectedFee?.refundEligibility == "REFUNDABLE" &&
+                  deposit.value !== "TENDER_PSD"
+                }
+              />
+            </div>
+          )
+        );
       })}
       <ContextMenu
         id={contextMenuId}
@@ -301,7 +360,6 @@ const DsDepositeDocuments: React.FC = () => {
                     value={checkbox.value.toString()}
                     label={checkbox.label}
                     defaultChecked={feeVisibility[checkbox.value.toString()]}
-
                   />
                 ))}
               </div>
@@ -321,5 +379,3 @@ const DsDepositeDocuments: React.FC = () => {
   );
 };
 export default DsDepositeDocuments;
- 
- 

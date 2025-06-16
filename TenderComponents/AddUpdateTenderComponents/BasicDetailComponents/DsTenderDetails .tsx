@@ -1,12 +1,16 @@
+"use client";
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import DsSingleSelect from "@/Elements/DsComponents/dsSelect/dsSingleSelect";
 import styles from "@/app/Tender/[TenderId]/tenderOrder.module.css";
 import deptStyle from "./deposite.module.css";
 import { useEffect, useState } from "react";
-import { getTenderUserRoles } from "@/Common/helpers/constant"; 
 import {
-  // tenderDetailsProps, 
-  location, 
+  getTenderUserRoles,
+  validateDuplicateTender,
+} from "@/Common/helpers/constant";
+import {
+  // tenderDetailsProps,
+  location,
   DsSelectOption,
   // tenderDetailsProps,
 } from "@/Common/helpers/types";
@@ -15,8 +19,9 @@ import DsDatePicker from "@/Elements/DsComponents/DsDatePicker/DsDatePicker";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import CustomerSearch from "./customerSearch";
-import IconFactory from "@/Elements/IconComponent"; 
-import { getYesterdayDate } from "@/Common/helpers/Method/conversion"; 
+
+import IconFactory from "@/Elements/IconComponent";
+import { getYesterdayDate } from "@/Common/helpers/Method/conversion";
 import ContextMenu, {
   displayContext,
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
@@ -46,16 +51,18 @@ const DsTenderDetails: React.FC = () => {
   const { updateTenderData, tenderData, tenderDataCopy, metaData } =
     useTenderData();
   const [customerLocations, setCustomerLocations] = useState<location[]>([]);
-
+  const [addressName, setAddressName] = useState<DsSelectOption | undefined>();
+  const [validateCustomer, setValidateCustomer] = useState<string>();
+  const [isErrormsg, setIsErrormsg] = useState<boolean>(false);
+  const [lastPurchaseMin, setLastPurchaseMin] = useState<Date>();
   // const [tenderStatus, setTenderStatus] = useState<string>();
 
-    const [toasterVisible, setToasterVisible] = useState<boolean>(false);
-  
+  const [toasterVisible, setToasterVisible] = useState<boolean>(false);
 
   // const [cust, setCust] = useState<DsSelectOption>();
   //     value:
   //     label:
- 
+
   const permissions = useAppSelector((state: RootState) => state.permissions);
   const {
     fetchCustomerButtonVisible,
@@ -72,6 +79,7 @@ const DsTenderDetails: React.FC = () => {
     extendedDeliveryPeriodDisable,
     penaltyLastDeliveryDisable,
     tenderUrlDisable,
+    ContractTypeDisable,
   } = permissions;
 
   const handleRoleFetch = async () => {
@@ -93,6 +101,43 @@ const DsTenderDetails: React.FC = () => {
     handleRoleFetch();
   }, []);
 
+  const validateCustomerIdTenderNumber = async () => {
+    try {
+      const res = await fetchData({
+        url: validateDuplicateTender(
+          tenderData.customerId,
+          tenderData.tenderNumber
+        ),
+      });
+      if (res.code === 200) {
+        const result = res.result;
+        // if (result) {
+        setValidateCustomer("Duplicate Tender Found");
+        setIsErrormsg(true);
+        // }
+      } else if (res.code == 404) {
+        setValidateCustomer("");
+        setIsErrormsg(false);
+      } else {
+        console.error("Error fetching data: ", res.message || "Unknown error");
+      }
+    } catch (error) {
+      console.error("Fetch error: ", error);
+    }
+  };
+  useEffect(() => {
+    if (
+      !(
+        tenderDataCopy.id &&
+        tenderDataCopy.customerId == tenderData.customerId &&
+        tenderDataCopy.tenderNumber == tenderData.tenderNumber
+      ) &&
+      tenderData.customerId &&
+      tenderData.tenderNumber
+    )
+      validateCustomerIdTenderNumber();
+  }, [tenderData.customerId, tenderData.tenderNumber]);
+
   const getTodayDate = (date: Date) => {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -113,6 +158,23 @@ const DsTenderDetails: React.FC = () => {
     }
   }, [tenderData.tenderType, metaData.tenderType]);
 
+  const [selectedRateContractType, setselectedRateContractType] =
+    useState<DsSelectOption>();
+
+  useEffect(() => {
+    const rateContractType = tenderData.contractType;
+
+    if (rateContractType) {
+      const option = (metaData.rateContractType || []).find(
+        (x) => x.value === rateContractType
+      );
+
+      if (option) {
+        setselectedRateContractType(option);
+      }
+    }
+  }, [tenderData.contractType, metaData.rateContractType]);
+
   const [selectedSubmissionMode, setSelectedSubmissionMode] =
     useState<DsSelectOption>();
   useEffect(() => {
@@ -124,7 +186,39 @@ const DsTenderDetails: React.FC = () => {
       if (option) setSelectedSubmissionMode(option);
     }
   }, [tenderData.submissionMode, metaData.submissionMode]);
-  
+
+  // useEffect(() => {
+  //   if (!tenderData.tenderDetails.customerName) {
+  //     updateTenderData("customerAddressId", "");
+  //     updateTenderData("tenderDetails.customerAddressName", "");
+  //     setCustomerLocations([]); // Optional: clear the location options
+  //   }
+  // }, [tenderData.tenderDetails.customerName]);
+
+  //Gaurav Nalwade
+
+  useEffect(() => {
+    setAddressName(
+      tenderData.customerAddressId &&
+        tenderData.tenderDetails.customerAddressName
+        ? {
+            label: tenderData.tenderDetails.customerAddressName,
+            value: tenderData.customerAddressId.toString(),
+          }
+        : undefined
+    );
+  }, [tenderData?.customerId, tenderData.customerAddressId]);
+  useEffect(() => {
+    const min =
+      tenderDataCopy.lastPurchaseDate &&
+      tenderData.lastPurchaseDate?.substring(0, 10) ==
+        tenderDataCopy.lastPurchaseDate?.substring(0, 10)
+        ? getYesterdayDate(
+            new Date(tenderDataCopy.lastPurchaseDate.substring(0, 10))
+          )
+        : getYesterdayDate();
+    setLastPurchaseMin(min);
+  }, [tenderData.lastPurchaseDate, tenderDataCopy.lastPurchaseDate]);
   return (
     <>
       <ContextMenu
@@ -133,21 +227,22 @@ const DsTenderDetails: React.FC = () => {
           <div className={styles.ContextCreateNew}>
             <FetchCustomer
               customerId={tenderData.customerId}
-              customerName="(Directorate of Health Services)"
+              customerName={tenderData.tenderDetails.customerName}
             />
           </div>
         }
         showArrow={true}
       />
-
       <div className={styles.inputDetails}>
         {/* <div className={deptStyle.fields}> */}
         <CustomerSearch
           customer={tenderData.tenderDetails.customerName}
-          orderData={undefined}
+          orderData={tenderData}
           setCustomerLocations={setCustomerLocations}
           updateTenderData={updateTenderData}
           disabled={searchCustomerDisable}
+          errorMessage={validateCustomer}
+          isError={isErrormsg}
         />
         {/* </div> */}
 
@@ -159,7 +254,7 @@ const DsTenderDetails: React.FC = () => {
               label="Fetch Information"
               buttonViewStyle="btnText"
               buttonSize="btnSmall"
-              disable={tenderData.customerId ? false : true }
+              disable={tenderData.customerId ? false : true}
               className={deptStyle.copyBtn}
               startIcon={
                 <div style={{ width: "0.95625em", height: "1.125em" }}>
@@ -182,7 +277,7 @@ const DsTenderDetails: React.FC = () => {
         <DsSingleSelect
           containerClasses={styles.fields}
           disable={customerLocationDisable}
-          id="CustomerAddress" 
+          id="CustomerAddress"
           placeholder="Select Customer Location"
           options={customerLocations.map((addr) => ({
             value: addr.id.toString(),
@@ -190,15 +285,16 @@ const DsTenderDetails: React.FC = () => {
             label: `${addr.city}, ${addr.state}, ${addr.pinCode}`,
             key: addr.id.toString(),
           }))}
-          selectedOption={
-            tenderData.customerAddressId &&
-            tenderData.tenderDetails.customerAddressName
-              ? {
-                  label: tenderData.tenderDetails.customerAddressName,
-                  value: tenderData.customerAddressId.toString(),
-                }
-              : undefined
-          }
+          selectedOption={addressName}
+          // selectedOption={
+          //   tenderData.customerAddressId &&
+          //     tenderData.tenderDetails.customerAddressName
+          //     ? {
+          //       label: tenderData.tenderDetails.customerAddressName,
+          //       value: tenderData.customerAddressId.toString(),
+          //     }
+          //     : undefined
+          // }
           setSelectOption={(option) => {
             if (typeof option.value == "string") {
               updateTenderData("customerAddressId", Number(option.value));
@@ -209,13 +305,13 @@ const DsTenderDetails: React.FC = () => {
 
               // console.log("customerLocationId",option.value)
             }
-          }} 
+          }}
         />
         <DsTextField
           containerClasses={styles.fields}
           initialValue={tenderData.tenderNumber}
           maxLength={50}
-          label="Tender number"
+          label="Tender Number"
           inputType="alphaNumeric"
           // placeholder="Please Type Here"
           onBlur={(e) =>
@@ -225,17 +321,19 @@ const DsTenderDetails: React.FC = () => {
             )
           }
           disable={tenderNumberDisable}
+          errorMessage={validateCustomer}
+          isError={isErrormsg}
         ></DsTextField>
         <DsSingleSelect
           containerClasses={styles.fields}
           options={metaData.tenderType || []}
-          label="Tender type"  
+          label="Tender Type"
           id={"tenderType"}
           selectedOption={selectedTenderType}
           setSelectOption={(option) => {
             if (typeof option.value == "string") {
               updateTenderData("tenderType", option.value);
-              console.log("tendertype", option.label);
+              // console.log("tendertype", option.label);
             }
           }}
           disable={tenderTypeDisable}
@@ -256,7 +354,7 @@ const DsTenderDetails: React.FC = () => {
             }
           }}
           placeholder="DD/MM/YYYY"
-          label="Tender issue date"
+          label="Tender Issue Date"
           disable={tenderIssueDateDisable}
         />
         <DsDatePicker
@@ -268,7 +366,7 @@ const DsTenderDetails: React.FC = () => {
                 )
               : undefined
           }
-          minDate={getYesterdayDate()}
+          minDate={lastPurchaseMin}
           id={"lastPurchaseDate"}
           setDateValue={(date) => {
             if (date instanceof Date) {
@@ -276,7 +374,7 @@ const DsTenderDetails: React.FC = () => {
             }
           }}
           placeholder="DD/MM/YYYY"
-          label="Last date of purchasing"
+          label="Last Date of Purchasing"
           disable={lastPurchaseDateDisable}
         />
         <DsDatePicker
@@ -294,29 +392,46 @@ const DsTenderDetails: React.FC = () => {
             }
           }}
           placeholder="DD/MM/YYYY"
-          label="Submission date"
+          label="Submission Date"
           disable={submissionDateDisable}
         />
-        <DsTextField
+        <DsSingleSelect
           containerClasses={styles.fields}
-          maxLength={6}
-          initialValue={tenderData.rateContractValidity}
-          inputType="positiveInteger"
-          label="Rate contract validity"
-          onBlur={(e) =>
-            updateTenderData(
-              "rateContractValidity",
-              (e.target as HTMLInputElement).value
-            )
-          }
-          disable={rateContractvalidityDisable}
-        ></DsTextField>
+          options={metaData.rateContractType || []}
+          label="Contract Type"
+          id={"contractType"}
+          disable={ContractTypeDisable}
+          selectedOption={selectedRateContractType}
+          setSelectOption={(option) => {
+            if (typeof option.value == "string") {
+              updateTenderData("contractType", option.value);
+            }
+          }}
+          // disable={tenderTypeDisable}
+        ></DsSingleSelect>
+        {selectedRateContractType?.value === "RATE_CONTRACT" && (
+          <DsTextField
+            containerClasses={styles.fields}
+            maxLength={6}
+            initialValue={tenderData.rateContractValidity}
+            inputType="positiveInteger"
+            label="Rate Contract Validity"
+            onBlur={(e) =>
+              updateTenderData(
+                "rateContractValidity",
+                (e.target as HTMLInputElement).value
+              )
+            }
+            disable={rateContractvalidityDisable}
+          />
+        )}
+
         <DsSingleSelect
           containerClasses={styles.fields}
           selectedOption={selectedSubmissionMode}
           options={metaData.submissionMode || []}
           // type={"single"}
-          label="Submission mode"
+          label="Submission Mode"
           id={"submissionMode"}
           setSelectOption={(option) => {
             if (typeof option.value == "string") {
@@ -330,7 +445,7 @@ const DsTenderDetails: React.FC = () => {
           initialValue={tenderData.deliveryPeriod?.toString()}
           maxLength={5}
           inputType="positiveInteger"
-          label={"Delivery period (In days)"}
+          label={"Delivery Period (In days)"}
           onBlur={(e) =>
             updateTenderData(
               "deliveryPeriod",
@@ -344,7 +459,7 @@ const DsTenderDetails: React.FC = () => {
           initialValue={tenderData.extendedDeliveryPeriod?.toString()}
           maxLength={5}
           inputType="positiveInteger"
-          label={"Extended delivery period (In days)"}
+          label={"Extended Delivery Period (In days)"}
           onBlur={(e) =>
             updateTenderData(
               "extendedDeliveryPeriod",
@@ -358,7 +473,7 @@ const DsTenderDetails: React.FC = () => {
           containerClasses={styles.fields}
           maxLength={5}
           initialValue={tenderData.lateDeliveryPenalty?.toString()}
-          label="Penalty for late delivery %"
+          label="Penalty for Late Delivery %"
           inputType="positive"
           iconEnd={<pre>{" %"}</pre>}
           onBlur={(e) =>
@@ -373,7 +488,7 @@ const DsTenderDetails: React.FC = () => {
           containerClasses={styles.fields}
           maxLength={2000}
           initialValue={tenderData.tenderUrl}
-          label="Tender site/url"
+          label="Tender Site/Url"
           onBlur={(e) =>
             updateTenderData("tenderUrl", (e.target as HTMLInputElement).value)
           }

@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 import fetchData from "@/Common/helpers/Method/fetchData";
 import {
@@ -12,17 +13,36 @@ import DsTenderDetails from "./DsTenderDetails ";
 import DsSupplyDetails from "./DsSupplyDetails";
 import DsApplicableConditions from "./DsApplicableConditions";
 import { useTenderData } from "../TenderDataContextProvider";
+import { useSearchParams } from "next/navigation";
 
 export interface Deposit {
   paidBy: DsSelectOption[];
 }
 
 const DsBasicDetails = () => {
-  const { fetchMetaData } = useTenderData();
+  const { fetchMetaData, tenderData, updateTenderData } = useTenderData();
 
   useEffect(() => {
     fetchMetaData();
   }, []);
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type")?.toLowerCase() || "institutional" || "corporate";
+
+  useEffect(() => {
+    if (
+      type === "institutional" &&
+      tenderData.applierType === "STOCKIST" &&
+      tenderData.supplierType === "STOCKIST"
+    ) {
+      updateTenderData("tenderFees", []);
+    }
+  }, [type, tenderData.applierType, tenderData.supplierType]);
+
+  //  useEffect(() => {
+  //     if (tenderData.applierType) {
+  //       updateTenderData("tenderDetails.suppliedBy","");
+  //     }
+  //   }, [type, tenderData.applierType])
 
   return (
     <>
@@ -33,18 +53,28 @@ const DsBasicDetails = () => {
       <div className={styles.container}>
         <DsApplierSupplierDetails />
       </div>
-      <span className={styles.Seperator}></span>
-      <div className={styles.container}>
-        <DsDepositeDocuments />
-      </div>
-      <span className={styles.Seperator}></span>
-      <div className={styles.container}>
-        <DsSupplyDetails />
-        {/* </div>
-      <span className={styles.Seperator}></span>
-      <div> */}
-        <DsApplicableConditions />
-      </div>
+      {!(
+        type.toLowerCase() === "institutional" &&
+        tenderData.applierType === "STOCKIST" &&
+        tenderData.supplierType === "STOCKIST"
+      ) && (
+        <>
+          <span className={styles.Seperator}></span>
+          <div className={styles.container}>
+            <DsDepositeDocuments />
+          </div>
+        </>
+      )}
+      {type.toLowerCase() === "institutional" && (
+        <>
+          <span className={styles.Seperator}></span>
+          <div className={styles.container}>
+            <DsSupplyDetails />
+
+            <DsApplicableConditions />
+          </div>
+        </>
+      )}
     </>
   );
 };

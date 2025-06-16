@@ -161,7 +161,10 @@
   padding: 0 20px;
   border: none;
   border: 1px solid transparent;
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -329,12 +332,12 @@ a.secondary {
   padding: 10px;
 }
 .noDataFound {
-  font-size:var(--font-48);
+  font-size: var(--font-48);
   min-height: 4em;
   min-width: 100%;
   display: flex;
   flex-direction: column;
-  position:relative;
+  position: relative;
 
   justify-content: space-between;
   /* align-items: center; */
@@ -349,7 +352,7 @@ a.secondary {
 
 .noData {
   /* position:absolute; */
-  margin-top:4em;
+  margin-top: 4em;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -373,63 +376,71 @@ a.secondary {
   font-size: var(--font-12);
 }
 .cellgenericname {
-  max-width: 100%;
+  /* max-width: 100%; */
   min-width: 15em !important;
+  max-width: 15em !important;
   width: 15em !important;
   white-space: nowrap;
   text-overflow: ellipsis;
   padding: 0rem 1rem !important;
 }
 .cellquantity {
-  max-width: 100%;
-  min-width: 12em !important;
-  width: 12em !important;
+  /* max-width: 100%; */
+  min-width: 9em !important;
+  max-width: 9em !important;
+  width: 9em !important;
   white-space: nowrap;
   text-overflow: ellipsis;
   padding: 0rem 1rem !important;
 }
 .cellpackingsize {
-  max-width: 100%;
+  /* max-width: 100%; */
   min-width: 10em !important;
+  max-width: 10em !important;
   width: 10em !important;
   white-space: nowrap;
   text-overflow: ellipsis;
   padding: 0rem 1rem !important;
 }
 .cellproductname {
-  max-width: 100%;
+  /* max-width: 100%; */
   min-width: 15em !important;
+  max-width: 15em !important;
   width: 15em !important;
   white-space: nowrap;
   text-overflow: ellipsis;
   padding: 0rem 1rem !important;
 }
 .cellproductpakingsize {
-  max-width: 100%;
-  min-width: 15em !important;
-  width: 15em !important;
+  /* max-width: 100%; */
+  min-width: 7em !important;
+  max-width: 7em !important;
+  width: 7em !important;
   white-space: nowrap;
   text-overflow: ellipsis;
   padding: 0rem 1rem !important;
 }
 .cellmrp {
-  max-width: 100%;
+  /* max-width: 100%; */
   min-width: 7em !important;
+  max-width: 7em !important;
   width: 7em !important;
   white-space: nowrap;
   text-overflow: ellipsis;
   padding: 0rem 1rem !important;
 }
 .cellptr {
-  max-width: 100%;
+  /* max-width: 100%; */
   min-width: 7em !important;
+  max-width: 7em !important;
   width: 7em !important;
   white-space: nowrap;
   text-overflow: ellipsis;
   padding: 0rem 1rem !important;
 }
 .celldirectcost {
-  max-width: 100%;
+  /* max-width: 100%; */
+  max-width: 8em !important;
   min-width: 8em !important;
   width: 8em !important;
   white-space: nowrap;
@@ -437,7 +448,8 @@ a.secondary {
   padding: 0rem 1rem !important;
 }
 .celllqr {
-  max-width: 100%;
+  /* max-width: 100%; */
+  max-width: 7em !important;
   min-width: 7em !important;
   width: 7em !important;
   white-space: nowrap;
@@ -445,64 +457,72 @@ a.secondary {
   padding: 0rem 1rem !important;
 }
 .celllpr {
-  max-width: 100%;
+  /* max-width: 100%; */
   min-width: 15em !important;
+  max-width: 15em !important;
   width: 15em !important;
   white-space: nowrap;
   text-overflow: ellipsis;
   padding: 0rem 1rem !important;
 }
 .cellproposedrate {
-  max-width: 100%;
+  /* max-width: 100%; */
   min-width: 10em !important;
+  max-width: 10em !important;
   width: 10em !important;
   white-space: nowrap;
   text-overflow: ellipsis;
   padding: 0rem 1rem !important;
 }
-.cellptr {
-  max-width: 100%;
-  min-width: 7em !important;
-  width: 7em !important;
+.cellptrpercentage {
+  /* max-width: 100%; */
+  min-width: 10em !important;
+  max-width: 10em !important;
+  width: 10em !important;
   white-space: nowrap;
   text-overflow: ellipsis;
   padding: 0rem 1rem !important;
 }
 .celldiscount {
-  max-width: 100%;
+  /* max-width: 100%; */
   min-width: 8em !important;
+  max-width: 8em !important;
   width: 8em !important;
   white-space: nowrap;
   text-overflow: ellipsis;
   padding: 0rem 1rem !important;
 }
 .celltotalcost {
-  max-width: 100%;
-  min-width: 11em !important;
-  width: 11em !important;
+  /* max-width: 100%; */
+  min-width: 9em !important;
+  max-width: 9em !important;
+  width: 9em !important;
   white-space: nowrap;
   text-overflow: ellipsis;
   padding: 0rem 1rem !important;
 }
 .cellmargin {
-  max-width: 100%;
+  /* max-width: 100%; */
   min-width: 6em !important;
+  max-width: 6em !important;
   width: 6em !important;
   white-space: nowrap;
   text-overflow: ellipsis;
   padding: 0rem 1rem !important;
 }
 .cellmarginper {
-  max-width: 100%;
+  /* max-width: 100%; */
   min-width: 7em !important;
+  max-width: 7em !important;
   width: 7em !important;
   white-space: nowrap;
   text-overflow: ellipsis;
   padding: 0rem 1rem !important;
 }
 .cellnetvalue {
-  max-width: 100%;
+  /* max-width: 100%; */
   min-width: 11em !important;
+  max-width: 11em !important;
   width: 11em !important;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -510,15 +530,21 @@ a.secondary {
 }
 .tendertable {
   font-size: var(--font-12) !important;
-  min-width:100% !important;
+  min-width: 100% !important;
 }
 .tender-product-table {
   font-size: var(--font-13);
+  overflow-y: hidden !important;
 }
-.tender-product-table tbody tr{
+.tender-product-table tbody {
+  min-height: fit-content !important;
+  height: 25em !important;
+  max-height: 25em;
+}
+.tender-product-table tbody tr {
   min-height: 3em !important;
 }
-.tender-product-table thead tr{
+.tender-product-table thead tr {
   min-height: 2.5em !important;
 }
 .productContext {
@@ -591,12 +617,22 @@ a.secondary {
   color: var(--error-text) !important;
 }
 .warningAlert {
-  color: var(--readytodispatch) !important;
+  color: red !important;
 }
-.selectedRow{
+.selectedRow {
   background-color: var(--tableRowSelect) !important;
 }
 .advPane {
   padding: 1rem !important;
 }
- 
+.recordNotFound {
+  justify-content: center;
+  color: red;
+  font-size: 1.5625em;
+  font-weight: bold;
+  align-items: center;
+  height: 85%;
+  align-content: center;
+  text-align: center;
+  margin-top: 0.625em;
+}

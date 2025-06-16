@@ -1,6 +1,5 @@
 import React from "react";
 import styles from "./dsRadioButton.module.css";
-
 type RadioButtonProps = {
   id: string;
   label: string;
@@ -31,9 +30,9 @@ const RadioButton: React.FC<RadioButtonProps> = ({
   return (
     <div
       className={`${styles.wrapper} ${className}`}
-      onMouseEnter={onHover} 
-      onClick={onClick}  
-      onBlur={onBlur} 
+      onMouseEnter={onHover}
+      onClick={onClick}
+      onBlur={onBlur}
     >
       <input
         type="radio"

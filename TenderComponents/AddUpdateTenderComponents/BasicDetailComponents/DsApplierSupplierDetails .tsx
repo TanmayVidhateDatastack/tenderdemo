@@ -1,3 +1,4 @@
+"use client";
 import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
 import DsMultiSelect from "@/Elements/DsComponents/dsSelect/dsMultiSelect";
 import { useTenderData } from "../TenderDataContextProvider";
@@ -22,13 +23,18 @@ type Depot = {
   code: string;
 };
 const DsApplierSupplierDetails: React.FC = ({}) => {
-const permissions = useAppSelector((state: RootState) => state.permissions);
-const {
-appliedByDisable,suppliedDisable,depotDisable,stockistNameDisable,stockistDiscountDisable
+  const permissions = useAppSelector((state: RootState) => state.permissions);
+  const {
+    appliedByDisable,
+    suppliedDisable,
+    depotDisable,
+    stockistNameDisable,
+    stockistDiscountDisable,
   } = permissions;
   const [allSuppliedBy, setAllSuppliedBy] = useState<
     DsMultiLevelSelectOption[]
   >([]);
+
   const [depotList, setDepotList] = useState<Depot[]>([]);
   const [formatedDepot, setFormatedDepot] = useState<DsSelectOption[]>([]);
 
@@ -50,7 +56,6 @@ appliedByDisable,suppliedDisable,depotDisable,stockistNameDisable,stockistDiscou
     }
     return customers;
   }
-
   function setStockistSearchOptionss(values: unknown) {
     let customers: datalistOptions[] = [];
     if (Array.isArray(values) && values.every((val) => val.id && val.name)) {
@@ -63,7 +68,6 @@ appliedByDisable,suppliedDisable,depotDisable,stockistNameDisable,stockistDiscou
     }
     return customers;
   }
-
   const onStockistSelect = (selectedOption: datalistOptions) => {
     // updateTenderData("appliedBy", "Stockist");
     // updateTenderData("applierId", selectedOption.value);
@@ -74,13 +78,11 @@ appliedByDisable,suppliedDisable,depotDisable,stockistNameDisable,stockistDiscou
     // updateTenderData("applierId", selectedOption.value);
     // console.log("selected option ",selectedOption);
   };
-
   const handleAppliedSuppliedFetch = async () => {
     try {
       const res = await fetchData({ url: appliedBySuppliedBy });
       if (res.code === 200) {
         const result = res.result;
-
         const appliedBys: DsMultiLevelSelectOption[] = result.organization.map(
           (item: any) => ({
             value: item.id + "_" + item.type,
@@ -100,7 +102,6 @@ appliedByDisable,suppliedDisable,depotDisable,stockistNameDisable,stockistDiscou
           label: "Stockist",
         });
         setAppliedBy(appliedBys);
-
         const suppliedBys: DsMultiLevelSelectOption[] = result.organization.map(
           (item: any) => ({
             value: item.id + "_" + item.type,
@@ -115,7 +116,7 @@ appliedByDisable,suppliedDisable,depotDisable,stockistNameDisable,stockistDiscou
             onSelect: onStockistSelects,
             id: "SuppliedBy",
             selectedOption: selecteds,
-            label: "Search Stockist", 
+            label: "Search Stockist",
           },
           label: "Stockist",
         });
@@ -128,11 +129,9 @@ appliedByDisable,suppliedDisable,depotDisable,stockistNameDisable,stockistDiscou
       console.error("Fetch error: ", error);
     }
   };
-
   useEffect(() => {
     handleAppliedSuppliedFetch();
   }, []);
-
   const handleFetchDepot = async () => {
     await fetchData({
       url: getAllDepots,
@@ -162,7 +161,7 @@ appliedByDisable,suppliedDisable,depotDisable,stockistNameDisable,stockistDiscou
     isDatalistOpt: boolean,
     option: datalistOptions
   ) => {
-    console.log(option);
+    // console.log(option);
     setSelected(option);
     if (isDatalistOpt) {
       const onlyStockist = allSuppliedBy.filter(
@@ -183,7 +182,7 @@ appliedByDisable,suppliedDisable,depotDisable,stockistNameDisable,stockistDiscou
     isDatalistOpt: boolean,
     option: datalistOptions
   ) => {
-    console.log(option);
+    // console.log(option);
     setSelecteds(option);
   };
   const [selectedDepo, setSelectedDepo] = useState<DsSelectOption[]>([]);
@@ -199,12 +198,12 @@ appliedByDisable,suppliedDisable,depotDisable,stockistNameDisable,stockistDiscou
     });
     setSelectedDepo(depo);
   }, [formatedDepot, tenderDataCopy.shippingLocations, tenderData.id]);
-  
+
   return (
     <div className={deptStyles.container}>
       <div className={styles.inputDetails}>
         <DsSelectMultiLevel
-        disable={appliedByDisable}
+          disable={appliedByDisable}
           containerClasses={styles.fields}
           isSearchable={true}
           options={appliedBy}
@@ -270,13 +269,14 @@ appliedByDisable,suppliedDisable,depotDisable,stockistNameDisable,stockistDiscou
           isOpen={false}
         ></DsSelectMultiLevel>
         <DsMultiSelect
-        disable={depotDisable}
+          disable={depotDisable}
           containerClasses={styles.fields}
           selectedOptions={selectedDepo}
           options={formatedDepot}
+          addButton={true}
           // type="multi"
           label="Depot"
-          placeholder={"Please search or select here"} 
+          placeholder={"Select Depots"}
           id={"depot"}
           setSelectOptions={(options) => {
             const shipIds = options.reduce<number[]>((acc, option) => {
@@ -293,8 +293,8 @@ appliedByDisable,suppliedDisable,depotDisable,stockistNameDisable,stockistDiscou
         <DsTextField
           containerClasses={styles.fields}
           initialValue={tenderData.supplierName}
-          label="Stockist / Liasioner name"
-          inputType="alphaNumeric"
+          label="Stockist / Liasioner Name"
+          inputType="text"
           // placeholder="Please type here"
           onBlur={(e) =>
             updateTenderData(
@@ -310,7 +310,7 @@ appliedByDisable,suppliedDisable,depotDisable,stockistNameDisable,stockistDiscou
           initialValue={tenderData.supplierDiscount?.toString()}
           inputType="positive"
           maxLength={5}
-          label="Stockist / Liasioner discount %"
+          label="Stockist / Liasioner Discount %"
           iconEnd={<pre>{" %"}</pre>}
           // placeholder="Please type here"
           onBlur={(e) =>

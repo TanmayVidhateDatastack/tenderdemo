@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface TabState {
   [pageName: string]: string;
@@ -7,10 +7,13 @@ interface TabState {
 const initialState: TabState = {};
 
 const tabSlice = createSlice({
-  name: 'tab',
+  name: "tab",
   initialState,
   reducers: {
-    setSelectedTabId: (state, action: PayloadAction<{ pageName: string; tabId: string }>) => {
+    setSelectedTabId: (
+      state,
+      action: PayloadAction<{ pageName: string; tabId: string }>
+    ) => {
       const { pageName, tabId } = action.payload;
       state[pageName] = tabId;
     },

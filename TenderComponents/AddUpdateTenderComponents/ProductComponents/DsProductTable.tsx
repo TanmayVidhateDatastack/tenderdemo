@@ -1,37 +1,61 @@
+"use client";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import TableComponent from "@/Elements/DsComponents/DsTablecomponent/DsTableComponent";
-import { tableData, tcolumn, DsTableRow } from "@/Common/helpers/types";
 import { TenderProduct, useTenderData } from "../TenderDataContextProvider";
-import DsTextField from "@/Elements/DsComponents/DsInputs/dsTextField";
-import DsCustomerLPR from "./CustomerLpr";
+import DsTextFieldEditor from "@/Elements/DsComponents/DsInputs/dsTextField";
 import ProductTableSearch from "./ProductTableSearch";
-import styles from "@/app/page.module.css";
-import IconFactory from "@/Elements/IconComponent";
+import DsCustomerLPR from "./CustomerLpr";
 import {
+  TableProvider,
+  useTableContext,
+} from "@/Elements/DsComponents/NewDsTable/TableProvider";
+// import {
+//   TableProvider,
+//   useTableContext,
+// } from "@/Elements/DsComponents/NewDsTable/TableProvider";
+import Table from "@/Elements/DsComponents/NewDsTable/Table";
+import { TableColumn } from "@/Elements/DsComponents/NewDsTable/types";
+import styles from "@/app/page.module.css";
+import FloatingMenu, {
   displayTableMenu,
-  FloatingMenu,
 } from "@/Elements/DsComponents/FloatingMenu/dsFloatingMenu";
 import DsButton from "@/Elements/DsComponents/DsButtons/dsButton";
-import Image from "next/image";
-import { changeImage } from "@/Common/helpers/Method/conversion";
+import IconFactory from "@/Elements/IconComponent";
 import ContextMenu, {
-  closeAllContext,
   closeContext,
   displayContext,
 } from "@/Elements/DsComponents/dsContextHolder/dsContextHolder";
-import whitetrashbtn from "@/Common/TenderIcons/smallIcons/whitetrash.svg";
 import trashbtn from "@/Common/TenderIcons/smallIcons/trashbtn.svg";
+
+import whitetrashbtn from "@/Common/TenderIcons/smallIcons/whitetrash.svg";
+import Image from "next/image";
 import {
   marginPercentLimit,
   TenderProductDiscountPercentage,
 } from "@/Common/helpers/constant";
+import { v4 as uuidv4 } from "uuid";
+import clsx from "clsx";
+import { useAppSelector } from "@/Redux/hook/hook";
+import { RootState } from "@/Redux/store/store";
 
 interface DsProductTableProps {
   productList: TenderProduct[];
   version: number;
-  // removeTenderProduct: (version: number, id: number) => void;
 }
-
+export type TenderProductWithRowId = TenderProduct & { rowId: number | string };
+type TenderProductColumnKey =
+  | keyof TenderProduct
+  | `product.${keyof TenderProduct["product"] & string}`;
+function isTenderProductColumnKey(
+  col: string,
+  product: TenderProduct
+): col is TenderProductColumnKey {
+  if (col in product) return true;
+  if (col.startsWith("product.")) {
+    const key = col.slice(8);
+    return key in product.product;
+  }
+  return false;
+}
 const DsProductTable: React.FC<DsProductTableProps> = ({
   productList,
   version,
@@ -40,67 +64,96 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
     tenderData,
     updateTenderProduct,
     removeTenderProduct,
-    saveTender,
     tenderDataCopy,
   } = useTenderData();
-  // const [tenderProductTable, setTenderProductTable] = useState<
-  //   tableData | undefined
-  // >();
 
-  const [localProducts, setLocalProducts] = useState<TenderProduct[]>([]);
-  const [hasChanges, setHasChanges] = useState(false);
-  const [productIds, setProductIds] = useState<number[]>([]);
-  const [selectedProduct, setSelectedProduct] = useState<number | undefined>();
-  const [selectedProductName, setSelectedProductName] = useState<
-    string | undefined
-  >();
-  const [selectedRowIndices, setSelectedRowIndices] = useState<number[]>([]);
+  const permissions = useAppSelector((state: RootState) => state.permissions);
+  const { productTableDisable } = permissions;
   const latestVersion =
     tenderData.tenderRevisions.reduce((maxObj, currentObj) =>
       currentObj.version > maxObj.version ? currentObj : maxObj
     )?.version || 1;
+  // const isTableEditable=version===latestVersion;
+  const isTableEditable = productTableDisable
+    ? false
+    : version === latestVersion;
+  // const [tenderProductTable, setTenderProductTable] = useState<
+  //   tableData | undefined
+  // >();
 
+  const [localProducts, setLocalProducts] = useState<TenderProductWithRowId[]>(
+    []
+  );
+  const [productIds, setProductIds] = useState<number[]>([]);
+  const [selectedProductName, setSelectedProductName] = useState<
+    string | undefined
+  >();
+  const [selectedRowIndices, setSelectedRowIndices] = useState<number[]>([]);
+
+  // Calculate derived fields for each row
   const calculatedProducts = useMemo(() => {
     return localProducts.map((tenderproduct) => {
-      const calculated: TenderProduct = { ...tenderproduct };
+      const calculated: TenderProductWithRowId = { ...tenderproduct };
       if (tenderproduct.product.directCost) {
         const ptrTemp = tenderproduct.product.ptr;
         const ptr =
           ptrTemp !== undefined
             ? typeof ptrTemp == "number"
-              ? ptrTemp
-              : Number(ptrTemp)
+              ? parseFloat(Number(ptrTemp).toFixed(2))
+              : parseFloat(Number(ptrTemp).toFixed(2))
             : 1;
 
-        calculated.ptrPercentage =
-          100 -
-          Number((((tenderproduct.proposedRate || 0) / ptr) * 100).toFixed(2));
+        calculated.ptrPercentage = parseFloat(
+          (
+            100 -
+            parseFloat(
+              (((tenderproduct.proposedRate || 0) / ptr) * 100).toFixed(2)
+            )
+          ).toFixed(2)
+        );
         const discount = tenderproduct.stockistDiscountValue
-          ? tenderproduct.stockistDiscountValue
-          : ((tenderproduct.proposedRate || 0) *
-              TenderProductDiscountPercentage) /
-            100;
-
-        calculated.product.totalCost =
-          Number(tenderproduct.product.directCost) + Number(discount);
-        calculated.product.marginValue =
-          Number(tenderproduct.proposedRate) - calculated.product.totalCost;
+          ? parseFloat(Number(tenderproduct.stockistDiscountValue).toFixed(2))
+          : parseFloat(
+              (
+                Number(
+                  Number(tenderproduct.proposedRate || 0) *
+                    Number(TenderProductDiscountPercentage)
+                ) / 100
+              ).toFixed(2)
+            );
+        calculated.stockistDiscountValue = discount;
+        calculated.product.totalCost = parseFloat(
+          (Number(tenderproduct.product.directCost) + Number(discount)).toFixed(
+            2
+          )
+        );
+        calculated.product.marginValue = parseFloat(
+          (
+            Number(tenderproduct.proposedRate) -
+            Number(calculated.product.totalCost)
+          ).toFixed(2)
+        );
         calculated.product.marginPercent =
           tenderproduct.proposedRate !== 0 &&
           tenderproduct.proposedRate !== undefined &&
           tenderproduct.proposedRate !== null
-            ? (calculated.product.marginValue /
-                Number(tenderproduct.proposedRate)) *
-                100 || 0
+            ? parseFloat(
+                Number(
+                  Number(
+                    Number(calculated.product.marginValue) /
+                      Number(tenderproduct.proposedRate)
+                  ) * 100 || 0
+                ).toFixed(2)
+              )
             : 0;
       }
-      // if (tenderproduct.ptrPercentage && tenderproduct.product.ptr)
-      //   calculated.stockistDiscountValue =
-      //     Number(tenderproduct.product.ptr) *
-      //     (tenderproduct.ptrPercentage / 100);
       if (calculated.product)
-        calculated.product.netValue =
-          (calculated.proposedRate || 0) * (calculated.requestedQuantity || 0);
+        calculated.product.netValue = parseFloat(
+          (
+            Number(calculated.proposedRate || 0) *
+            Number(calculated.requestedQuantity || 0)
+          ).toFixed(2)
+        );
       if (tenderproduct.product.dataSource === "csv") {
         calculated.productId = tenderproduct.productId;
         calculated.product.productName = tenderproduct.product.productName;
@@ -111,894 +164,714 @@ const DsProductTable: React.FC<DsProductTableProps> = ({
     });
   }, [localProducts]);
 
-  const handleFieldChange = (
-    index: number,
-    field: keyof TenderProduct | `product.${keyof TenderProduct["product"]}`,
-    value: string | number
-  ) => {
-    setLocalProducts((prev) =>
-      prev.map((p, i) =>
-        i === index
-          ? field.startsWith("product.")
-            ? {
-                ...p,
-                product: {
-                  ...p.product,
-                  [field.split(".")[1]]: value, // Update the nested product field
-                },
-              }
-            : { ...p, [field]: value }
-          : p
-      )
-    );
-    setHasChanges(true);
-    // setTimeout(() => handleSave(), 2);
-  };
- const rows: DsTableRow[] = useMemo(
-    () =>
-      calculatedProducts.map((tenderproduct, index) => ({
-        rowIndex: index + 1,
-        customAttributes: {
-          genericName: tenderproduct.requestedGenericName || "",
-          productId: tenderproduct.productId || 0,
-          productName: tenderproduct.product.productName || "",
-        },
-
-        content: [
-          {
-            columnIndex: 1,
-            render: () =>  tenderproduct.product?.dataSource === "fetch" &&
-                latestVersion == version ? (
-                <DsTextField
-                  initialValue={tenderproduct.requestedGenericName || ""}
-                  onBlur={(e) =>
-                    handleFieldChange(
-                      index,
-                      "requestedGenericName",
-                      (e.target as HTMLInputElement).value
-                    )
-                  }
-                  onClick={(e) => e.stopPropagation()}
-                />
-              ) : (
-                tenderproduct.requestedGenericName || "-"
-              )
-            ,
-            className: styles.cellgenericname,
-          },
-
-          {
-            columnIndex: 2,
-            render: () =>  tenderproduct.product?.dataSource === "csv" ? (
-                tenderproduct.requestedQuantity || "-"
-              ) : latestVersion != version ? (
-                tenderproduct.requestedQuantity || "-"
-              ) : (
-                <DsTextField
-                  initialValue={
-                    tenderproduct.requestedQuantity?.toString() || ""
-                  }
-                  inputType="positiveInteger"
-                  onBlur={(e) =>
-                    handleFieldChange(
-                      index,
-                      "requestedQuantity",
-                      Number((e.target as HTMLInputElement).value)
-                    )
-                  }
-                  onClick={(e) => e.stopPropagation()}
-                />
-              )
-            ,
-
-            className: styles.cellquantity,
-          },
-
-          {
-            columnIndex: 3,
-            render: () =>  tenderproduct.product?.dataSource === "fetch" &&
-                latestVersion == version ? (
-                <DsTextField
-                  initialValue={tenderproduct.requestedPackingSize || ""}
-                  onBlur={(e) =>
-                    handleFieldChange(
-                      index,
-                      "requestedPackingSize",
-                      (e.target as HTMLInputElement).value
-                    )
-                  }
-                  onClick={(e) => e.stopPropagation()}
-                />
-              ) : (
-                tenderproduct.requestedPackingSize || "-"
-              )
-            ,
-            className: styles.cellpackingsize,
-          },
-
-          {
-            columnIndex: 4,
-            render: () =>  tenderproduct.product?.dataSource === "csv" &&
-                latestVersion == version ? (
-                <ProductTableSearch
-                  tableRowIndex={index + 1}
-                  setLocalProducts={setLocalProducts}
-                  setHasChanges={setHasChanges}
-                  initialValue={tenderproduct.product?.productName || ""}
-                />
-              ) : (
-                tenderproduct.product?.productName || "-"
-              )
-            ,
-
-            className: styles.cellproductname,
-          },
-          {
-            columnIndex: 5,
-            render: () => 
-              // tenderproduct.product?.dataSource === "csv" ? (
-              tenderproduct.product.productPackingSize || "-",
-            // ) : latestVersion != version ? (
-            //   tenderproduct.product.productPackingSize || "-"
-            // ) : (
-            //   <DsTextField
-            //     initialValue={tenderproduct.product?.productPackingSize || ""}
-            //     onBlur={(e) =>
-            //       handleFieldChange(
-            //         index,
-            //         "product.productPackingSize",
-            //         (e.target as HTMLInputElement).value
-            //       )
-            //     }
-            //   />
-            // ),
-            className: styles.cellproductpakingsize,
-          },
-
-          {
-            columnIndex: 6,
-            render: () => 
-              tenderproduct.product?.dataSource == "saved"
-                ? tenderproduct.product.mrp?.toString() || "-"
-                : "-",
-            className: styles.cellmrp,
-          },
-          {
-            columnIndex: 7,
-           render: () => 
-              tenderproduct.product?.dataSource == "saved"
-                ? tenderproduct.product.ptr?.toString() || "-"
-                : "-",
-            className: styles.cellptr,
-          },
-          {
-            columnIndex: 8,
-            render: () => 
-              tenderproduct.product?.dataSource == "saved"
-                ? tenderproduct.product.directCost?.toString() || "-"
-                : "-",
-            className: styles.celldirectcost,
-          },
-          {
-            columnIndex: 9,
-            render: () => 
-              tenderproduct.product?.dataSource == "saved"
-                ? tenderproduct.product.lqr?.toString() || "-"
-                : "-",
-            className: styles.celllqr,
-          },
-          {
-            columnIndex: 10,
-            render: () =>  tenderproduct.product?.dataSource == "saved" ? (
-                latestVersion != version ? (
-                  tenderproduct.lastPurchaseRate ? (
-                    <DsCustomerLPR
-                      index={index + 1}
-                      lprValue={tenderproduct.lastPurchaseRate}
-                      lprTo={{
-                        id: tenderproduct.competitorId || 0,
-                        name: tenderproduct.product.competitorName || "",
-                      }}
-                      onValueChange={(value) =>
-                        handleFieldChange(
-                          index,
-                          "lastPurchaseRate",
-                          Number(value)
-                        )
-                      }
-                      onCompanyChange={(company) => {
-                        handleFieldChange(index, "competitorId", company.id);
-                        handleFieldChange(
-                          index,
-                          "product.competitorName",
-                          company.name
-                        );
-                      }}
-                      disable={latestVersion != version}
-                    />
-                  ) : (
-                    "-"
-                  )
-                ) : (
-                  <DsCustomerLPR
-                    index={index + 1}
-                    lprValue={tenderproduct.lastPurchaseRate}
-                    lprTo={{
-                      id: tenderproduct.competitorId || 0,
-                      name: tenderproduct.product.competitorName || "",
-                    }}
-                    onValueChange={(value) =>
-                      handleFieldChange(
-                        index,
-                        "lastPurchaseRate",
-                        Number(value)
-                      )
-                    }
-                    onCompanyChange={(company) => {
-                      handleFieldChange(index, "competitorId", company.id);
-                      handleFieldChange(
-                        index,
-                        "product.competitorName",
-                        company.name
-                      );
-                    }}
-                    disable={latestVersion != version}
-                  />
-                )
-              ) : (
-                "-"
-              )
-            ,
-            className: styles.celllpr,
-          },
-          {
-            columnIndex: 11,
-             render: () =>  tenderproduct.product?.dataSource == "saved" &&
-              latestVersion == version ? (
-                <DsTextField
-                  inputType="positive"
-                  initialValue={tenderproduct.proposedRate?.toString() || ""}
-                  onKeyUp={(e) => {
-                    if (e.key === "Enter") {
-                      (e.target as HTMLElement).blur();
-                    }
-                  }}
-                  onClick={(e) => e.stopPropagation()}
-                  onBlur={(e) => {
-                    const proposedRate = Number(
-                      (e.target as HTMLInputElement).value
-                    );
-                    if (tenderproduct.proposedRate !== proposedRate) {
-                      const ptrTemp = tenderproduct.product.ptr;
-                      const ptr =
-                        ptrTemp !== undefined
-                          ? typeof ptrTemp == "number"
-                            ? ptrTemp
-                            : Number(ptrTemp)
-                          : 1;
-                      const ptrPer =
-                        100 - Number(((proposedRate / ptr) * 100).toFixed(2));
-                      const discount =
-                        (proposedRate * TenderProductDiscountPercentage) / 100;
-                      // console.log(proposedRate);
-                      // console.log(ptrPer);
-                      // console.log(discount);
-                      handleFieldChange(index, "proposedRate", proposedRate);
-                      handleFieldChange(index, "ptrPercentage", ptrPer);
-                      handleFieldChange(
-                        index,
-                        "stockistDiscountValue",
-                        discount
-                      );
-                    }
-                  }}
-                />
-              ) : (
-                "-"
-              ),
-            className: styles.cellproposedrate,
-          },
-          {
-            columnIndex: 12,
-            render: () =>  tenderproduct.product?.dataSource == "saved" &&
-              latestVersion == version ? (
-                <DsTextField
-                  inputType="number"
-                  maximumNumber={100.0}
-                  initialValue={
-                    Number(
-                      tenderproduct.ptrPercentage?.toFixed(2)
-                    ).toString() || ""
-                  }
-                  onKeyUp={(e) => {
-                    if (e.key === "Enter") {
-                      (e.target as HTMLElement).blur();
-                    }
-                  }}
-                  onClick={(e) => e.stopPropagation()}
-                  onBlur={(e) => {
-                    const ptrPer = Number((e.target as HTMLInputElement).value);
-                    if (tenderproduct.ptrPercentage !== ptrPer) {
-                      const ptrTemp = tenderproduct.product.ptr;
-                      const ptr =
-                        ptrTemp !== undefined
-                          ? typeof ptrTemp == "number"
-                            ? ptrTemp
-                            : Number(ptrTemp)
-                          : 1;
-
-                      const proposedRate = ((100 - ptrPer) * ptr) / 100;
-
-                      const discount =
-                        (proposedRate * TenderProductDiscountPercentage) / 100;
-                      // console.log(proposedRate);
-                      // console.log(ptrPer);
-                      // console.log(discount);
-                      handleFieldChange(
-                        index,
-                        "ptrPercentage",
-                        parseFloat(ptrPer.toFixed(2))
-                      );
-                      handleFieldChange(index, "proposedRate", proposedRate);
-                      handleFieldChange(
-                        index,
-                        "stockistDiscountValue",
-                        discount
-                      );
-                    }
-                    (e.target as HTMLInputElement).value = ptrPer.toFixed(2);
-                  }}
-                  className={`${
-                    (tenderproduct.ptrPercentage || 0) <= 0
-                      ? styles.warningAlert
-                      : ""
-                  }`}
-                />
-              ) : (
-                "-"
-              ),
-            className: styles.cellptr,
-          },
-          {
-            columnIndex: 13,
-            render: () =>  tenderproduct.product?.dataSource == "saved" &&
-              latestVersion == version ? (
-                <DsTextField
-                  inputType="number"
-                  initialValue={
-                    (
-                      ((tenderproduct.proposedRate || 0) *
-                        TenderProductDiscountPercentage) /
-                      100
-                    ).toFixed(2) || ""
-                  }
-                  onKeyUp={(e) => {
-                    if (e.key === "Enter") {
-                      (e.target as HTMLElement).blur();
-                    }
-                  }}
-                  onClick={(e) => e.stopPropagation()}
-                  onBlur={(e) => {
-                    const discount = Number(
-                      (e.target as HTMLInputElement).value
-                    );
-                    if (tenderproduct.stockistDiscountValue !== discount) {
-                      const proposedRate =
-                        (discount * 100) / TenderProductDiscountPercentage;
-                      const ptrTemp = tenderproduct.product.ptr;
-                      const ptr =
-                        ptrTemp !== undefined
-                          ? typeof ptrTemp == "number"
-                            ? ptrTemp
-                            : Number(ptrTemp)
-                          : 1;
-
-                      const ptrPer =
-                        100 - Number(((proposedRate / ptr) * 100).toFixed(2));
-                      // console.log(proposedRate);
-                      // console.log(ptrPer);
-                      // console.log(discount);
-                      handleFieldChange(
-                        index,
-                        "stockistDiscountValue",
-                        discount
-                      );
-                      handleFieldChange(index, "proposedRate", proposedRate);
-                      handleFieldChange(index, "ptrPercentage", ptrPer);
-                    }
-                  }}
-                />
-              ) : (
-                "-"
-              ),
-            className: styles.celldiscount,
-          },
-          {
-            columnIndex: 14,
-            render: () =>  tenderproduct.product?.dataSource == "saved"
-                ? tenderproduct.product.totalCost?.toFixed(2) || "-"
-                : "-",
-            className: styles.celltotalcost,
-          },
-          {
-            columnIndex: 15,
-             render: () => 
-              tenderproduct.product?.dataSource == "saved"
-                ? tenderproduct.product.marginValue?.toFixed(2) || "-"
-                : "-",
-            className: `${
-              (tenderproduct.product.marginValue || 0) <= 0
-                ? styles.warningAlert
-                : ""
-            } ${styles.cellmargin}`,
-          },
-          {
-            columnIndex: 16,
-             render: () =>  tenderproduct.product?.dataSource == "saved"
-                ? (tenderproduct.product.marginPercent || 0).toFixed(2) + "%" ||
-                  "-"
-                : "-",
-            className: `${styles.cellmarginper} ${
-              (tenderproduct.product.marginPercent || 0) < marginPercentLimit
-                ? styles.red
-                : ""
-            }`,
-          },
-          {
-            columnIndex: 17,
-            render: () =>  tenderproduct.product?.dataSource == "saved"
-                ? tenderproduct.product.netValue?.toFixed(2) || "-"
-                : "-",
-            className: styles.cellnetvalue,
-          },
-        ],
-      })),
-    [calculatedProducts]
-  );
-  const handleSave = () => {
-    calculatedProducts.forEach((product) => {
-      if (product.id) {
-        updateTenderProduct(
-          version,
-          "product.productName",
-          product.product.productName || "",
-          product.id
+  //   console.log(calculatedProducts);
+  // }, [calculatedProducts]);
+  // Handle cell update from inline editing
+  const handleUpdateCell = useCallback(
+    (rowId, changesOrColumnId, value?) => {
+      setLocalProducts((prev) => {
+        const updatedProducts = prev.map((row) => {
+          if (row.rowId !== rowId) return row;
+          if (typeof changesOrColumnId === "object") {
+            // Batch update (object of changes)
+            return { ...row, ...changesOrColumnId };
+          } else {
+            // Single field update
+            return { ...row, [changesOrColumnId]: value };
+          }
+        });
+        const rowIndex = updatedProducts.findIndex(
+          (row) => row.rowId === rowId
         );
-        updateTenderProduct(
-          version,
-          "requestedQuantity",
-          product.requestedQuantity || 0,
-          product.id
-        );
-        updateTenderProduct(
-          version,
-          "requestedPackingSize",
-          product.requestedPackingSize || "",
-          product.id
-        );
-        updateTenderProduct(
-          version,
-          "product.totalCost",
-          product.product.totalCost || 0,
-          product.id
-        );
-        updateTenderProduct(
-          version,
-          "product.marginValue",
-          product.product.marginValue || 0,
-          product.id
-        );
-        updateTenderProduct(
-          version,
-          "product.marginPercent",
-          product.product.marginPercent || 0,
-          product.id
-        );
-        updateTenderProduct(
-          version,
-          "product.netValue",
-          product.product.netValue || 0,
-          product.id
-        );
-        updateTenderProduct(
-          version,
-          "proposedRate",
-          product.proposedRate || 0,
-          product.id
-        );
-        updateTenderProduct(
-          version,
-          "ptrPercentage",
-          product.ptrPercentage || 0,
-          product.id
-        );
-        updateTenderProduct(
-          version,
-          "stockistDiscountValue",
-          product.stockistDiscountValue || 0,
-          product.id
-        );
-      }
-      if (product.product.dataSource === "fetch") {
-        if (product.requestedGenericName)
-          updateTenderProduct(
-            version,
-            "requestedGenericName",
-            product.requestedGenericName,
-            undefined,
-            product.productId
-          );
-        if (product.requestedPackingSize)
-          updateTenderProduct(
-            version,
-            "requestedPackingSize",
-            product.requestedPackingSize,
-            undefined,
-            product.productId
-          );
-        if (product.requestedQuantity)
-          updateTenderProduct(
-            version,
-            "requestedQuantity",
-            product.requestedQuantity,
-            undefined,
-            product.productId
-          );
-        if (product.product.productPackingSize)
-          updateTenderProduct(
-            version,
-            "product.productPackingSize",
-            product.product.productPackingSize,
-            undefined,
-            product.productId
-          );
-      }
-      if (product.product.dataSource === "csv") {
-        if (product.requestedGenericName && product.productId) {
-          updateTenderProduct(
-            version,
-            "productId",
-            product.productId,
-            undefined,
-            undefined,
-            product.requestedGenericName
-          );
-          updateTenderProduct(
-            version,
-            "product.productName",
-            product.product.productName || "",
-            undefined,
-            undefined,
-            product.requestedGenericName
-          );
+        const product = updatedProducts[rowIndex];
+
+        if (product) {
+          if (typeof changesOrColumnId === "object") {
+            Object.entries(changesOrColumnId).forEach(([col, val]) => {
+              return updateTenderProduct(
+                version,
+                col as TenderProductColumnKey,
+                val as string | number,
+                product.id,
+                product.productId,
+                product.requestedGenericName
+              );
+            });
+          } else {
+            updateTenderProduct(
+              version,
+              changesOrColumnId,
+              value,
+              product.id,
+              product.productId,
+              product.requestedGenericName
+            );
+          }
         }
-      }
-    });
-    setHasChanges(false);
-  };
+        return updatedProducts;
+      });
+    },
+    [tenderData]
+  );
 
-  const columns: tcolumn[] = useMemo(
+  // const handleSelectionChange = (
+  //   ids: Set<string | number>,
+  //   rows: TenderProduct[]
+  // ) => {
+  //   setSelectedIds(new Set(ids));
+  //   setSelectedRows(rows);
+  // };
+
+  // Table columns definition
+  const columns: TableColumn<TenderProduct>[] = useMemo(
     () => [
       {
-        columnIndex: 1,
-        columnHeader: "Generic Name",
+        id: "requestedGenericName",
+        header: "Generic Name",
+        accessor: "requestedGenericName",
+        editable: isTableEditable,
+        editorComponent: DsTextFieldEditor,
+        editorProps: { autofocus: true },
         className: styles.cellgenericname,
+        // cellStyle: { minWidth: 150 },
+        // sortable: true,
       },
       {
-        columnIndex: 2,
-        columnHeader: "Quantity",
+        id: "requestedQuantity",
+        header: "Quantity",
+        accessor: "requestedQuantity",
+        editable: isTableEditable,
+        editorComponent: DsTextFieldEditor,
+        editorProps: { inputType: "positiveInteger", autofocus: true },
+        align: "right",
         className: styles.cellquantity,
+        // cellStyle: { minWidth: 100 },
+        // sortable: true,
       },
       {
-        columnIndex: 3,
-        columnHeader: "Packing Size",
+        id: "requestedPackingSize",
+        header: "Packing Size",
+        accessor: "requestedPackingSize",
+        editable: isTableEditable,
+        editorComponent: DsTextFieldEditor,
         className: styles.cellpackingsize,
+        editorProps: { autofocus: true },
+        // cellStyle: { minWidth: 100 },
       },
       {
-        columnIndex: 4,
-        columnHeader: "Product Name",
+        id: "productName",
+        header: "Product Name",
+        accessor: (row) => row.product?.productName,
+        editable: isTableEditable,
+        editor: (row, onCommit) => (
+          <ProductTableSearch
+            rowId={row.rowId}
+            setLocalProducts={setLocalProducts}
+            initialValue={row.product?.productName || ""}
+            onBlur={(e) => {
+              if (onCommit) onCommit();
+            }}
+            version={version}
+            autofocus
+          />
+        ),
         className: styles.cellproductname,
+        editorProps: {},
+        // cellStyle: { minWidth: 200 },
       },
       {
-        columnIndex: 5,
-        columnHeader: "Product Packing Size",
+        id: "productPackingSize",
+        header: "Pack Size",
+        accessor: (row) => row.product?.productPackingSize,
+        editable: false,
+        align: "right",
         className: styles.cellproductpakingsize,
+        // cellStyle: { minWidth: 100 },
       },
-      { columnIndex: 6, columnHeader: "MRP", className: styles.cellmrp },
-      { columnIndex: 7, columnHeader: "PTR", className: styles.cellptr },
       {
-        columnIndex: 8,
-        columnHeader: "Direct Cost",
+        id: "mrp",
+        header: "MRP",
+        accessor: (row) => row.product?.mrp,
+        editable: false,
+        align: "right",
+        className: styles.cellmrp,
+        // cellStyle: { minWidth: 100 },
+      },
+      {
+        id: "ptr",
+        header: "PTR",
+        accessor: (row) => row.product?.ptr,
+        editable: false,
+        align: "right",
+        className: styles.cellptr,
+        // cellStyle: { minWidth: 100 },
+      },
+      {
+        id: "directCost",
+        header: "Direct Cost",
+        accessor: (row) => row.product?.directCost,
+        editable: false,
+        align: "right",
         className: styles.celldirectcost,
+        // cellStyle: { minWidth: 100 },
       },
-      { columnIndex: 9, columnHeader: "IP LQR", className: styles.celllqr },
       {
-        columnIndex: 10,
-        columnHeader: "Customer LPR",
+        id: "lastQuotedRate",
+        header: "LQR",
+        accessor: "lastQuotedRate",
+        editable: isTableEditable,
+        editorComponent: DsTextFieldEditor,
+        editorProps: { inputType: "positive", autofocus: true },
+        align: "right",
+        className: styles.celllqr,
+        // cellStyle: { minWidth: 100 },
+      },
+      {
+        id: "lastPurchaseRate",
+        header: "Customer LPR",
+        accessor: "lastPurchaseRate",
+        editable: isTableEditable,
+        cellRenderer: (value, row, rowIndex) => (
+          <DsCustomerLPR
+            index={rowIndex + 1}
+            lprValue={row.lastPurchaseRate}
+            lprTo={{
+              id: row.competitorId || 0,
+              name: row.product.competitorName || "",
+            }}
+            disable={!isTableEditable}
+            onValueChange={(value) => {
+              if (!value) value = "0";
+              if (handleUpdateCell)
+                handleUpdateCell(row.rowId, "lastPurchaseRate", Number(value));
+              // if (onChange) onChange(value);
+            }}
+            onCompanyChange={(company) => {
+              if (handleUpdateCell) {
+                handleUpdateCell(row.rowId, "competitorId", company.id);
+                handleUpdateCell(
+                  row.rowId,
+                  "product.competitorName",
+                  company.name
+                );
+                // if (onCommit) onCommit();
+              }
+            }}
+            // onBlur={(e) => {
+            //   const value = (e?.target as HTMLInputElement).value;
+            //   // setTimeout(() => {
+            //     if (cellEdit)
+            //       cellEdit(row.rowId, "lastPurchaseRate", Number(value));
+
+            //   //   if (onCommit) onCommit();
+            //   // }, 100);
+            //   if (onCommit) onCommit();
+            // }}
+            // onCommit={() => {
+            // if (onCommit) onCommit();
+            // }}
+            // onBlur={(e) => {
+            // disable={latestVersion != version}
+          />
+        ),
         className: styles.celllpr,
+        // cellStyle: { minWidth: 120 },
       },
       {
-        columnIndex: 11,
-        columnHeader: "Proposed Rate",
+        id: "proposedRate",
+        header: "Proposed Rate",
+        accessor: "proposedRate",
+        editable: isTableEditable,
+        editor: (row, onCommit, onChange, cellEdit) => (
+          <DsTextFieldEditor
+            autofocus
+            initialValue={row.proposedRate || ""}
+            onChange={(e) => {
+              if (onChange) onChange(e.target.value);
+            }}
+            onKeyUp={(e) => {
+              if (e.key === "Enter") {
+                (e.target as HTMLElement).blur();
+              }
+            }}
+            // onChange={(e) => {
+            onBlur={(e) => {
+              if (onChange) onChange(e.target.value);
+
+              const proposedRate = parseFloat(
+                Number((e.target as HTMLInputElement).value).toFixed(2)
+              );
+              // if (row.proposedRate !== proposedRate) {
+              const ptrTemp = row.product.ptr;
+              const ptr =
+                ptrTemp !== undefined
+                  ? typeof ptrTemp == "number"
+                    ? parseFloat(Number(ptrTemp).toFixed(2))
+                    : parseFloat(Number(ptrTemp).toFixed(2))
+                  : 1;
+              const ptrPer = parseFloat(
+                (100 - Number(((proposedRate / ptr) * 100).toFixed(2))).toFixed(
+                  2
+                )
+              );
+              const discount = parseFloat(
+                (
+                  (proposedRate * TenderProductDiscountPercentage) /
+                  100
+                ).toFixed(2)
+              );
+              // console.log(proposedRate);
+              // console.log(ptrPer);
+              // console.log(discount);
+              if (cellEdit) {
+                cellEdit(row.rowId, {
+                  proposedRate: proposedRate,
+                  ptrPercentage: ptrPer,
+                  stockistDiscountValue: discount,
+                });
+              }
+              // }
+              // }}
+              if (onCommit) onCommit();
+            }}
+            inputType="number"
+
+            // maximumNumber={1000000}
+          />
+        ),
+        align: "right",
         className: styles.cellproposedrate,
+        // cellStyle: { minWidth: 120 },
       },
-      { columnIndex: 12, columnHeader: "PTR %", className: styles.cellptr },
       {
-        columnIndex: 13,
-        columnHeader: "Discount",
+        id: "ptrPercentage",
+        header: "PTR %",
+        accessor: "ptrPercentage",
+        editable: isTableEditable,
+        editor: (row, onCommit, onChange, cellEdit) => (
+          <DsTextFieldEditor
+            autofocus
+            inputType="number"
+            maximumNumber={100.0}
+            initialValue={
+              Number(row.ptrPercentage?.toFixed(2)).toString() || ""
+            }
+            onChange={(e) => {
+              if (onChange) onChange(e.target.value);
+            }}
+            onKeyUp={(e) => {
+              if (e.key === "Enter") {
+                (e.target as HTMLElement).blur();
+              }
+            }}
+            onClick={(e) => e.stopPropagation()}
+            // onChange={(e) => {
+            onBlur={(e) => {
+              if (onChange) onChange(e.target.value);
+
+              const ptrPer = parseFloat(
+                Number((e.target as HTMLInputElement).value).toFixed(2)
+              );
+              // if (row.ptrPercentage !== ptrPer) {
+              const ptrTemp = row.product.ptr;
+              const ptr =
+                ptrTemp !== undefined
+                  ? typeof ptrTemp == "number"
+                    ? parseFloat(Number(ptrTemp).toFixed(2))
+                    : parseFloat(Number(ptrTemp).toFixed(2))
+                  : 1;
+
+              const proposedRate = parseFloat(
+                (((100 - ptrPer) * ptr) / 100).toFixed(2)
+              );
+
+              const discount = parseFloat(
+                (
+                  (proposedRate * TenderProductDiscountPercentage) /
+                  100
+                ).toFixed(2)
+              );
+              // console.log(proposedRate);
+              // console.log(ptrPer);
+              // console.log(discount);
+              // if (cellEdit) {
+              //   cellEdit(
+              //     row.rowId,
+              //     "ptrPercentage",
+              //     parseFloat(ptrPer.toFixed(2))
+              //   );
+              //   cellEdit(row.rowId, "proposedRate", proposedRate);
+              //   cellEdit(row.rowId, "stockistDiscountValue", discount);
+              // }
+              if (cellEdit) {
+                cellEdit(row.rowId, {
+                  proposedRate: proposedRate,
+                  ptrPercentage: ptrPer,
+                  stockistDiscountValue: discount,
+                });
+              }
+              // handleUpdateCell(row.rowId, {
+              //   proposedRate,
+              //   ptrPercentage: ptrPer,
+              //   stockistDiscountValue: discount,
+              // });
+              // }
+              // }}
+              // (e.target as HTMLInputElement).value = ptrPer.toFixed(2);
+              if (onCommit) onCommit();
+            }}
+            className={`${
+              (row.ptrPercentage || 0) <= 0 ? styles.warningAlert : ""
+            }`}
+          />
+        ),
+        cellRenderer: (cellValue, row, rowIndex) => (
+          <span className={clsx((cellValue || 0) <= 0 && styles.warningAlert)}>
+            {cellValue}
+          </span>
+        ),
+        align: "right",
+        className: styles.cellptrpercentage,
+        // cellStyle: { minWidth: 100 },
+      },
+      {
+        id: "stockistDiscountValue",
+        header: "Discount",
+        accessor: "stockistDiscountValue",
+        editable: isTableEditable,
+        editor: (row, onCommit, onChange, cellEdit) => (
+          <DsTextFieldEditor
+            autofocus
+            inputType="number"
+            initialValue={
+              (
+                ((row.proposedRate || 0) * TenderProductDiscountPercentage) /
+                100
+              ).toFixed(2) || ""
+            }
+            onChange={(e) => {
+              if (onChange) onChange(e.target.value);
+            }}
+            onKeyUp={(e) => {
+              if (e.key === "Enter") {
+                (e.target as HTMLElement).blur();
+              }
+            }}
+            onClick={(e) => e.stopPropagation()}
+            onBlur={(e) => {
+              if (onChange) onChange(e.target.value);
+              // onChange={(e) => {
+              const discount = parseFloat(
+                Number((e.target as HTMLInputElement).value).toFixed(2)
+              );
+              // if (row.stockistDiscountValue !== discount) {
+              const proposedRate = parseFloat(
+                ((discount * 100) / TenderProductDiscountPercentage).toFixed(2)
+              );
+              const ptrTemp = row.product.ptr;
+              const ptr =
+                ptrTemp !== undefined
+                  ? typeof ptrTemp == "number"
+                    ? parseFloat(Number(ptrTemp).toFixed(2))
+                    : parseFloat(Number(ptrTemp).toFixed(2))
+                  : 1;
+
+              const ptrPer = parseFloat(
+                (100 - Number(((proposedRate / ptr) * 100).toFixed(2))).toFixed(
+                  2
+                )
+              );
+              // console.log(proposedRate);
+              // console.log(ptrPer);
+              // console.log(discount);
+              // if (cellEdit) {
+              //   cellEdit(
+              //     row.rowId,
+              //     "stockistDiscountValue",
+              //     parseFloat(discount.toFixed(2))
+              //   );
+              //   cellEdit(row.rowId, "proposedRate", proposedRate);
+              //   cellEdit(row.rowId, "ptrPercentage", ptrPer);
+              // }
+              if (cellEdit) {
+                cellEdit(row.rowId, {
+                  proposedRate: proposedRate,
+                  ptrPercentage: ptrPer,
+                  stockistDiscountValue: discount,
+                });
+              }
+              // handleUpdateCell(row.rowId, {
+              //   proposedRate,
+              //   ptrPercentage: ptrPer,
+              //   stockistDiscountValue: discount,
+              // });
+              // }
+              // }}
+              // (e.target as HTMLInputElement).value = discount.toFixed(2);
+              if (onCommit) onCommit();
+            }}
+          />
+        ),
         className: styles.celldiscount,
+        align: "right",
+
+        // cellStyle: { minWidth: 100 },
       },
       {
-        columnIndex: 14,
-        columnHeader: "Total Cost",
+        id: "totalCost",
+        header: "Total Cost",
+        accessor: (row) => row.product?.totalCost,
+        editable: false,
         className: styles.celltotalcost,
+        align: "right",
+
+        // cellStyle: { minWidth: 100 },
       },
-      { columnIndex: 15, columnHeader: "Margin", className: styles.cellmargin },
       {
-        columnIndex: 16,
-        columnHeader: "Margin %",
+        id: "marginValue",
+        header: "Margin",
+        accessor: (row) => row.product?.marginValue,
+        editable: false,
+        className: styles.cellmargin,
+        align: "right",
+        // cellStyle: { minWidth: 100 },
+      },
+      {
+        id: "marginPercent",
+        header: "Margin %",
+        accessor: (row) => row.product?.marginPercent,
+        editable: false,
+        cellRenderer: (cellValue, row, rowIndex) => (
+          <span
+            className={clsx(
+              (cellValue || 0) <= marginPercentLimit && styles.warningAlert
+            )}
+          >
+            {(cellValue || 0).toFixed(2)}%{/* {cellValue} */}
+          </span>
+        ),
+        align: "right",
+        // cellRenderer: (value) => `${(value || 0).toFixed(2)}%`,
         className: styles.cellmarginper,
+        // cellStyle: { minWidth: 100 },
       },
       {
-        columnIndex: 17,
-        columnHeader: "Net Value",
+        id: "netValue",
+        header: "Net Value",
+        accessor: (row) => row.product?.netValue,
+        editable: false,
+        align: "right",
         className: styles.cellnetvalue,
+        // cellStyle: { minWidth: 100 },
       },
     ],
     []
   );
 
-   const tenderProductTable = useMemo(() => ({
-  className: styles["tender-product-table"],
-  id: "productTable",
-  type: "InterActive",
-  isSortable: false,
-  hasSearch: false,
-  columns,
-  rows,
-}), [columns, rows]);
+  // Load data on mount or when dependencies change
   useEffect(() => {
     setLocalProducts(
-      tenderData.tenderRevisions.find((x) => x.version == version)
-        ?.tenderItems || []
+      (
+        tenderData.tenderRevisions.find((x) => x.version == version)
+          ?.tenderItems || []
+      ).map((row) => ({
+        ...row,
+        rowId: uuidv4(),
+      }))
     );
-  }, [tenderDataCopy, productList.length, version]);
+  }, [tenderData, productList, version]);
+  useEffect(() => {
+    calculatedProducts.forEach((calculated, idx) => {
+      const original = localProducts[idx];
+      if (!original) return;
 
-  // useEffect(() => {
-  //   const revision = tenderData.tenderRevisions.find(
-  //     (rev) => rev.version === version
-  //   );
-  //   if (revision) {
-  //     setLocalProducts(revision.tenderItems);
-  //   }
-  // }, [version, tenderData]);
+      // List all calculated fields you want to sync
+      const fieldsToSync: Array<
+        keyof TenderProduct | `product.${keyof TenderProduct["product"]}`
+      > = [
+        "ptrPercentage",
+        "stockistDiscountValue",
+        "proposedRate",
+        // ...add other calculated fields as needed
+      ];
 
-  const handleCheckBoxClick = (
-    e: React.MouseEvent<HTMLElement>,
-    rowIndex: number,
-    isChecked: boolean
-  ) => {
-    e.stopPropagation();
-
-    const table = (e.target as HTMLElement).closest("table");
-    if (table) {
-      const checkbox = table?.querySelector(
-        `.row-checkbox-${rowIndex}`
-      ) as HTMLInputElement;
-
-      // if (checkbox) {
-      const row = tenderProductTable?.rows?.find(
-        (row) => row.rowIndex === rowIndex
-      );
-      if (row) {
-        const productId = row?.customAttributes?.productId;
-
-        if (isChecked === true) {
-          setSelectedRowIndices((prev) => [...prev, rowIndex]);
-          if (!productIds.includes(Number(productId))) {
-            const products = productIds.length + 1;
-            //   const productName =
-            // row?.customAttributes?.productName?.toString();
-            const productName = String(
-              row.customAttributes?.productName ||
-                row.customAttributes?.genericName ||
-                "-"
-            );
-
-            setProductIds((prev) => [...prev, Number(productId)]);
-            setSelectedProductName(productName);
-
-            if (products !== 0) {
-              displayTableMenu(e, "sales-product", "bottom", "center");
-            }
-          }
-        } else {
-          setSelectedRowIndices((prev) =>
-            prev.filter((index) => index !== rowIndex)
+      fieldsToSync.forEach((field) => {
+        if (calculated[field] !== original[field]) {
+          // Call updateTenderProduct for the changed/calculated field
+          updateTenderProduct(
+            version,
+            field,
+            calculated[field],
+            calculated.id,
+            calculated.productId,
+            calculated.requestedGenericName
           );
-          const updatedProductIds = productIds.filter(
-            (pid) => pid !== Number(productId)
-          );
-
-          setProductIds(updatedProductIds);
-          setSelectedProduct(Number(productId));
         }
-      }
-    }
-  };
+      });
+    });
+  }, [calculatedProducts, localProducts, updateTenderProduct, version]);
+  // useEffect(() => {
+  // Handle row selection for floating menu, context menu, etc.
+  // (You can use the selectionState from TableProvider context for this in the new system)
 
-  const handleUnselectRows = (e: React.MouseEvent<HTMLElement>) => {
-    const checkboxes = document.querySelectorAll(
-      `#${tenderProductTable?.id} .table-body-checkboxes:checked`
-    );
-    if (checkboxes) {
-      checkboxes.forEach((ch) => (ch as HTMLInputElement).click());
-    }
-    closeContext("sales-product");
-    closeContext("delete-menu");
-  };
+  // Render
+  // if (calculatedProducts.length === 0) {
+  //   return <div className={styles.noDataFound}>Loading products...</div>;
+  // }
+
+  return (
+    <div className="tender-product-container" style={{ overflowY: "hidden",height:"100%" }}>
+      <TableProvider
+        data={calculatedProducts}
+        columns={columns}
+        onCellEdit={handleUpdateCell}
+        isEditable={isTableEditable}
+        // onSelectionChange={handleSelectionChange}
+
+        // Optionally: onRowClick, onRowDoubleClick, etc.
+      >
+        <Table />
+        <SelectionComponent version={version} />
+      </TableProvider>
+
+      {/* {calculatedProducts.length === 0 && (
+        <div className={styles.noDataFound}>
+          <div className={styles.noData}>
+            <div style={{ width: "2em", height: "3em" }}>
+              <IconFactory name={"emptyHourGlass"} />
+            </div>
+            <div>Products Not Available</div>
+          </div>
+          <div className={styles.noDataBorders}></div>
+        </div>
+      )} */}
+
+      {/* FloatingMenu and ContextMenu logic can remain as before, using selection from context */}
+    </div>
+  );
+};
+const SelectionComponent: React.FC<{ version: number }> = ({ version }) => {
+  const { removeTenderProduct } = useTenderData();
+  const { selectionState, clearSelection, data } = useTableContext();
+
+  // Always derive selectedIds and selectedRows from context
+  const selectedIds = Array.from(selectionState.selectedRowIds);
+  const selectedRows = data.filter((row) =>
+    selectedIds.includes(row.rowId || 0)
+  );
+
   useEffect(() => {
-    if (tenderProductTable?.id) {
-      document
-        .getElementById(tenderProductTable.id)
-        ?.addEventListener("scroll", (e) => {
-          closeAllContext(["sales-product"]);
-        });
+    if (selectedIds.length > 0) {
+      displayTableMenu(
+        new MouseEvent("click"),
+        "sales-product",
+        "bottom",
+        "center"
+      );
+    } else {
+      closeContext("sales-product");
+      closeContext("delete-menu");
     }
-  }, [tenderProductTable?.id]);
-  useEffect(() => {
-    handleSave();
-  }, [hasChanges]);
+  }, [selectedIds.length]);
 
   return (
     <>
-      <div className="tender-product-container" style={{ overflowY: "hidden" }}>
-        {tenderProductTable && (
-          <TableComponent
-            className={tenderProductTable.className}
-            id={tenderProductTable.id}
-            columns={tenderProductTable.columns}
-            rows={tenderProductTable.rows}
-            handleCheckboxClick={handleCheckBoxClick}
-            isSelectAble={true}
-          />
-        )}
-
-        {tenderProductTable?.rows.length == 0 && (
+      <FloatingMenu
+        selected={selectedIds.length}
+        id={"sales-product"}
+        onCloseClick={() => {
+          clearSelection();
+          closeContext("sales-product");
+          closeContext("delete-menu");
+        }}
+      >
+        <DsButton
+          id="deleteBtn"
+          buttonColor="btnWarning"
+          buttonViewStyle="btnContained"
+          onClick={(e) => {
+            displayContext(e, "delete-menu", "vertical", "center");
+          }}
+          startIcon={
+            <div
+              style={{
+                width: "1.0625em",
+                height: "1.195625em",
+                position: "relative",
+              }}
+            >
+              <Image
+                src={trashbtn}
+                alt="icon"
+                layout="fill"
+                objectFit="cover"
+              />
+            </div>
+          }
+          tooltip="variants : btnWarning, btnContained, btnMedium"
+          label="Delete"
+        />
+      </FloatingMenu>
+      <ContextMenu
+        id={"delete-menu"}
+        showArrow={false}
+        className={styles.productContext}
+        content={
           <>
-            <div className={styles.noDataFound}>
-              <div className={styles.noData}>
-                <div
-                  style={{
-                    width: "2em",
-                    height: "3em",
-                    // display: "flex",
-                    // alignItems: "center",
-                    // justifyContent: "center",
-                    // color: "black",
-                  }}
-                >
-                  <IconFactory name={"emptyHourGlass"} />
-                </div>
-                <div>Products Not Available</div>
+            <div className={styles.contextcontainer}>
+              <div className={styles.deleteText}>
+                Delete{" "}
+                <span className={styles.selectedProduct}>
+                  {selectedRows.length === 1
+                    ? selectedRows[0]?.product?.productName ||
+                      selectedRows[0]?.requestedGenericName
+                    : `${selectedRows.length} products`}
+                </span>
               </div>
             </div>
-            <div className={styles.noDataBorders}></div>
-          </>
-        )}
-
-        <FloatingMenu
-          selected={productIds.length}
-          id={"sales-product"}
-          onCloseClick={handleUnselectRows}
-        >
-          <>
-            <DsButton
-              id="deleteBtn"
-              buttonColor="btnWarning"
-              buttonViewStyle="btnContained"
-              onClick={(e) => {
-                changeImage(e, whitetrashbtn);
-                displayContext(e, "delete-menu", "vertical", "center");
-              }}
-              startIcon={
-                <div
-                  style={{
-                    width: "1.0625em",
-                    height: "1.195625em",
-                    position: "relative",
+            <p className={styles.confirmationtext}>
+              Are you sure you want to delete this product line item?
+            </p>
+            <div className={styles.btncontext}>
+              <div className={styles.delelbtn}>
+                <DsButton
+                  id="cancelBtn"
+                  buttonColor="btnDark"
+                  buttonViewStyle="btnOutlined"
+                  onClick={() => closeContext("delete-menu")}
+                  tooltip="variants : btnDark, btnOutlined, btnSmall"
+                  label="Cancel"
+                />
+              </div>
+              <div>
+                <DsButton
+                  id="deleteBtn"
+                  buttonColor="btnDanger"
+                  buttonSize="btnMedium"
+                  buttonViewStyle="btnContained"
+                  onClick={() => {
+                    if (selectedIds.length > 0) {
+                      selectedIds.forEach((id) => {
+                        const row = selectedRows.find((r) => r.rowId === id);
+                        removeTenderProduct(
+                          version,
+                          row?.productId,
+                          row?.requestedGenericName
+                        );
+                      });
+                      clearSelection();
+                    }
+                    closeContext("sales-product");
+                    closeContext("delete-menu");
                   }}
-                >
-                  <Image
-                    src={trashbtn}
-                    alt="icon"
-                    layout="fill"
-                    objectFit="cover"
-                  />
-                </div>
-              }
-              tooltip="variants : btnWarning, btnContained, btnMedium"
-              label="Delete"
-            />
+                  tooltip="variants : btnDanger, btnContained, btnMedium"
+                  label="Delete"
+                />
+              </div>
+            </div>
           </>
-        </FloatingMenu>
-        <ContextMenu
-          id={"delete-menu"}
-          showArrow={false}
-          className={styles.productContext}
-          content={
-            <>
-              <div className={styles.contextcontainer}>
-                <div className={styles.deleteText}>
-                  Delete{" "}
-                  <span className={styles.selectedProduct}>
-                    {" "}
-                    {productIds.length === 1
-                      ? selectedProductName
-                      : `${productIds.length} products`}
-                  </span>
-                </div>
-              </div>
-              <p className={styles.confirmationtext}>
-                Are you sure you want to delete this product line item?
-              </p>
-
-              <div className={styles.btncontext}>
-                <div className={styles.delelbtn}>
-                  <DsButton
-                    id="cancelBtn"
-                    buttonColor="btnDark"
-                    buttonViewStyle="btnOutlined"
-                    onClick={(e) => {
-                      // closeContext("contextMenuId4");
-                      closeContext("delete-menu");
-                    }}
-                    tooltip="variants : btnDark, btnOutlined, btnSmall"
-                    label="Cancel"
-                  />
-                </div>
-
-                <div>
-                  <DsButton
-                    id="deleteBtn"
-                    buttonColor="btnDanger"
-                    buttonSize="btnMedium"
-                    buttonViewStyle="btnContained"
-                    onClick={() => {
-                      if (productIds.length > 0) {
-                        productIds.forEach((id) => {
-                          removeTenderProduct(version, id, undefined);
-                        });
-                      }
-                      if (selectedRowIndices.length > 0) {
-                        selectedRowIndices.forEach((rowIndex) => {
-                          const row = tenderProductTable?.rows?.find(
-                            (r) => r.rowIndex === rowIndex
-                          );
-
-                          const genericName = String(
-                            row?.customAttributes?.genericName
-                          );
-
-                          removeTenderProduct(version, undefined, genericName);
-                        });
-                      }
-
-                      // console.log(productIds.length);
-                      setProductIds([]);
-                      setSelectedRowIndices([]); // clear selected IDs
-                      closeContext("sales-product");
-                      closeContext("delete-menu");
-                    }}
-                    tooltip="variants : btnDanger, btnContained, btnMedium"
-                    label="Delete"
-                  />
-                </div>
-              </div>
-            </>
-          }
-        ></ContextMenu>
-      </div>
+        }
+      />
     </>
   );
 };
