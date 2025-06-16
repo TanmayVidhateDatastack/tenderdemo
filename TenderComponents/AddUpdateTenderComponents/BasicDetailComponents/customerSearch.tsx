@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 "use client";
 import {
   searchCustomerURL,
@@ -79,7 +80,7 @@ const CustomerSearch: React.FC<{
 
     // get the type value from URL
     const searchParams = useSearchParams();
-    const type = searchParams.get("type") || "institutional";
+    const type = searchParams.get("type")?.toLowerCase() || "institutional";
 
     async function setSelectedOptions(option: datalistOptions): Promise<void> {
       const selectedCustomerId = Number(option.id);

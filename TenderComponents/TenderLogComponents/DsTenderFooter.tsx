@@ -136,11 +136,11 @@ export const DSTendrFooter: React.FC = ({}) => {
     //product Tab
     productTableDisable,
   } = permissions;
-  const [saveButtonDisable,setSaveButtonDisabled]=useState<boolean>(false)
+  const [saveButtonDisable, setSaveButtonDisabled] = useState<boolean>(false);
   // useEffect(() => {
   //   handleFetch();
   // }, []);
-   const validateCustomerIdTenderNumber = async () => {
+  const validateCustomerIdTenderNumber = async () => {
     try {
       const res = await fetchData({
         url: validateDuplicateTender(
@@ -240,13 +240,22 @@ export const DSTendrFooter: React.FC = ({}) => {
       //   //Gaurav Changed
       //   errors.push("Please select a customer address.");
       // }
-      if (!tenderNumberDisable && tenderData?.tenderNumber?.trim() === "") {
+      if (
+        !tenderNumberDisable &&
+        (tenderData?.tenderNumber?.trim() === "" || !tenderData.tenderNumber)
+      ) {
         errors.push("Please enter a tender number.");
       }
-      if (!tenderTypeDisable && tenderData?.tenderType === "") {
+      if (
+        !tenderTypeDisable &&
+        (tenderData?.tenderType === "" || !tenderData.tenderType)
+      ) {
         errors.push("Please enter a tender type.");
       }
-      if (!tenderIssueDateDisable && tenderData?.issueDate === "") {
+      if (
+        !tenderIssueDateDisable &&
+        (tenderData?.issueDate === "" || !tenderData.issueDate)
+      ) {
         errors.push("Please enter the tender issue date.");
       }
       const todaysdate = new Date();
@@ -261,7 +270,10 @@ export const DSTendrFooter: React.FC = ({}) => {
           "The tender issue date should not be later than today's date."
         );
       }
-      if (!lastPurchaseDateDisable && tenderData?.lastPurchaseDate === "") {
+      if (
+        !lastPurchaseDateDisable &&
+        (tenderData?.lastPurchaseDate === "" || !tenderData.lastPurchaseDate)
+      ) {
         errors.push("Please enter the last purchase date.");
       }
       if (!lastPurchaseDateDisable && tenderData?.lastPurchaseDate) {
@@ -285,7 +297,10 @@ export const DSTendrFooter: React.FC = ({}) => {
           );
         }
       }
-      if (!submissionDateDisable && tenderData?.submissionDate === "") {
+      if (
+        !submissionDateDisable &&
+        (tenderData?.submissionDate === "" || !tenderData.submissionDate)
+      ) {
         errors.push("Please enter the submission date.");
       }
       if (
@@ -323,7 +338,11 @@ export const DSTendrFooter: React.FC = ({}) => {
       }
 
       const fees = tenderData?.tenderFees ?? [];
-      if ((fees.length <= 0||fees.filter((x)=>x.status=="ACTV").length<=0) && toValidate) {
+      if (
+        (fees.length <= 0 ||
+          fees.filter((x) => x.status == "ACTV").length <= 0) &&
+        toValidate
+      ) {
         errors.push(`At least one fee should be applicable`);
       }
       fees.forEach((fee, index) => {
@@ -382,7 +401,7 @@ export const DSTendrFooter: React.FC = ({}) => {
         }
       });
 
-      if (type == "institutional") {
+      if (type.toLowerCase() == "institutional") {
         if (
           !supplypointDisable &&
           tenderData?.tenderSupplyCondition?.supplyPoint?.trim() === ""
@@ -782,7 +801,7 @@ export const DSTendrFooter: React.FC = ({}) => {
             }
             buttonSize="btnLarge"
             // disable={splitButtonDisableState}
-            disable={saveButtonDisabled||saveButtonDisable}
+            disable={saveButtonDisabled || saveButtonDisable}
           >
             Save
           </DsSplitButton>
@@ -790,7 +809,8 @@ export const DSTendrFooter: React.FC = ({}) => {
           <DsButton
             disable={
               tenderDataCopy.tenderContract?.contractStatus == "SUBMITTED" ||
-              saveButtonDisabled||saveButtonDisable
+              saveButtonDisabled ||
+              saveButtonDisable
             }
             buttonViewStyle="btnContained"
             onClick={() => {
@@ -896,4 +916,3 @@ export const DSTendrFooter: React.FC = ({}) => {
 };
 
 export default DSTendrFooter;
-

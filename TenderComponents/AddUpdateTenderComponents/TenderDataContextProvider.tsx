@@ -16,6 +16,7 @@ import {
   updatePaymentUrl,
   proDeskUrl,
   approvelurl,
+  updateRecoveryUrl,
 } from "@/Common/helpers/constant";
 import fetchData, { fileToBase64 } from "@/Common/helpers/Method/fetchData";
 import { useRouter } from "next/navigation";
@@ -1820,11 +1821,34 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                       };
                     }) || [],
                 });
-
-                const patchDocument = generatePatchDocument(
+                let patchDocument = generatePatchDocument(
                   dataToSendTenderCopy,
                   dataToSendOriginalTender
                 );
+                if (
+                  (status.toLowerCase() == DsStatus.AWRD.toLowerCase() ||
+                    status.toLowerCase() == DsStatus.PAWRD.toLowerCase() ||
+                    status.toLowerCase() == DsStatus.LOST.toLowerCase() ||
+                    status.toLowerCase() == DsStatus.CNCL.toLowerCase()) &&
+                  (role.toUpperCase() === "ACCOUNTANCE" ||
+                    role.toUpperCase() === "FINANCE")
+                ) {
+                  url = updatePaymentUrl(tenderData.id, action);
+                  patchDocument = generatePatchDocument(
+                    {
+                      ...dataToSendTenderCopy,
+                      tenderFees: dataToSendTenderCopy.tenderFees.filter(
+                        (x) => x.feesType == "TENDER_PSD"
+                      ),
+                    },
+                    {
+                      ...dataToSendOriginalTender,
+                      tenderFees: dataToSendOriginalTender.tenderFees.filter(
+                        (x) => x.feesType == "TENDER_PSD"
+                      ),
+                    }
+                  );
+                }
 
                 await fetchData({
                   url: url,
@@ -1839,7 +1863,21 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                     });
                     showToaster("create-order-toaster");
                     setTimeout(() => {
-                      goBack();
+                      if (
+                        !(
+                          (status.toLowerCase() ==
+                            DsStatus.AWRD.toLowerCase() ||
+                            status.toLowerCase() ==
+                              DsStatus.PAWRD.toLowerCase() ||
+                            status.toLowerCase() ==
+                              DsStatus.LOST.toLowerCase() ||
+                            status.toLowerCase() ==
+                              DsStatus.CNCL.toLowerCase()) &&
+                          (role.toUpperCase() === "ACCOUNTANCE" ||
+                            role.toUpperCase() === "FINANCE")
+                        )
+                      )
+                        goBack();
                     }, closeTimeForTender);
                   } else {
                     setActionStatus({
@@ -1854,14 +1892,92 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                     showToaster("create-order-toaster");
                   }
                 });
+
+                if (
+                  (status.toLowerCase() == DsStatus.AWRD.toLowerCase() ||
+                    status.toLowerCase() == DsStatus.PAWRD.toLowerCase() ||
+                    status.toLowerCase() == DsStatus.LOST.toLowerCase() ||
+                    status.toLowerCase() == DsStatus.CNCL.toLowerCase()) &&
+                  (role.toUpperCase() === "ACCOUNTANCE" ||
+                    role.toUpperCase() === "FINANCE")
+                ) {
+                  url = updateRecoveryUrl(tenderData.id, action);
+                  patchDocument = generatePatchDocument(
+                    {
+                      ...dataToSendTenderCopy,
+                      tenderFees: dataToSendTenderCopy.tenderFees.filter(
+                        (x) => x.feesType !== "TENDER_PSD"
+                      ),
+                    },
+                    {
+                      ...dataToSendOriginalTender,
+                      tenderFees: dataToSendOriginalTender.tenderFees.filter(
+                        (x) => x.feesType !== "TENDER_PSD"
+                      ),
+                    }
+                  );
+
+                  await fetchData({
+                    url: url,
+                    method: "PATCH",
+                    dataObject: patchDocument,
+                  }).then((res) => {
+                    if (res.code === 200) {
+                      setActionStatus({
+                        notiMsg: `${res.message}`,
+                        notiType: "success",
+                        showNotification: true,
+                      });
+                      showToaster("create-order-toaster");
+                      setTimeout(() => {
+                        goBack();
+                      }, closeTimeForTender);
+                    } else {
+                      setActionStatus({
+                        notiMsg:
+                          `${res.message}.\r\n` +
+                          `${res.error.errorDetails
+                            .map((x) => x.message)
+                            .join("\r\n")}`,
+                        notiType: "error",
+                        showNotification: true,
+                      });
+                      showToaster("create-order-toaster");
+                    }
+                  });
+                }
               }
             });
           });
         } else {
-          const patchDocument = generatePatchDocument(
+          let patchDocument = generatePatchDocument(
             dataToSendTenderCopy,
             dataToSendOriginalTender
           );
+          if (
+            (status.toLowerCase() == DsStatus.AWRD.toLowerCase() ||
+              status.toLowerCase() == DsStatus.PAWRD.toLowerCase() ||
+              status.toLowerCase() == DsStatus.LOST.toLowerCase() ||
+              status.toLowerCase() == DsStatus.CNCL.toLowerCase()) &&
+            (role.toUpperCase() === "ACCOUNTANCE" ||
+              role.toUpperCase() === "FINANCE")
+          ) {
+            url = updatePaymentUrl(tenderData.id, action);
+            patchDocument = generatePatchDocument(
+              {
+                ...dataToSendTenderCopy,
+                tenderFees: dataToSendTenderCopy.tenderFees.filter(
+                  (x) => x.feesType == "TENDER_PSD"
+                ),
+              },
+              {
+                ...dataToSendOriginalTender,
+                tenderFees: dataToSendOriginalTender.tenderFees.filter(
+                  (x) => x.feesType == "TENDER_PSD"
+                ),
+              }
+            );
+          }
 
           await fetchData({
             url: url,
@@ -1876,7 +1992,17 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               });
               showToaster("create-order-toaster");
               setTimeout(() => {
-                goBack();
+                if (
+                  !(
+                    (status.toLowerCase() == DsStatus.AWRD.toLowerCase() ||
+                      status.toLowerCase() == DsStatus.PAWRD.toLowerCase() ||
+                      status.toLowerCase() == DsStatus.LOST.toLowerCase() ||
+                      status.toLowerCase() == DsStatus.CNCL.toLowerCase()) &&
+                    (role.toUpperCase() === "ACCOUNTANCE" ||
+                      role.toUpperCase() === "FINANCE")
+                  )
+                )
+                  goBack();
               }, closeTimeForTender);
             } else {
               setActionStatus({
@@ -1891,6 +2017,59 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               showToaster("create-order-toaster");
             }
           });
+          if (
+            (status.toLowerCase() == DsStatus.AWRD.toLowerCase() ||
+              status.toLowerCase() == DsStatus.PAWRD.toLowerCase() ||
+              status.toLowerCase() == DsStatus.LOST.toLowerCase() ||
+              status.toLowerCase() == DsStatus.CNCL.toLowerCase()) &&
+            (role.toUpperCase() === "ACCOUNTANCE" ||
+              role.toUpperCase() === "FINANCE")
+          ) {
+            url = updateRecoveryUrl(tenderData.id, action);
+            patchDocument = generatePatchDocument(
+              {
+                ...dataToSendTenderCopy,
+                tenderFees: dataToSendTenderCopy.tenderFees.filter(
+                  (x) => x.feesType !== "TENDER_PSD"
+                ),
+              },
+              {
+                ...dataToSendOriginalTender,
+                tenderFees: dataToSendOriginalTender.tenderFees.filter(
+                  (x) => x.feesType !== "TENDER_PSD"
+                ),
+              }
+            );
+
+            await fetchData({
+              url: url,
+              method: "PATCH",
+              dataObject: patchDocument,
+            }).then((res) => {
+              if (res.code === 200) {
+                setActionStatus({
+                  notiMsg: `${res.message}`,
+                  notiType: "success",
+                  showNotification: true,
+                });
+                showToaster("create-order-toaster");
+                setTimeout(() => {
+                  goBack();
+                }, closeTimeForTender);
+              } else {
+                setActionStatus({
+                  notiMsg:
+                    `${res.message}.\r\n` +
+                    `${res.error.errorDetails
+                      .map((x) => x.message)
+                      .join("\r\n")}`,
+                  notiType: "error",
+                  showNotification: true,
+                });
+                showToaster("create-order-toaster");
+              }
+            });
+          }
         }
       } catch (error) {
         console.error("Error saving order:", error);
