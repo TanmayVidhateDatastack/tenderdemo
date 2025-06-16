@@ -761,6 +761,10 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
             name={"Payment Recovered "}
             value={"Payment Recovered"}
             label={"Payment Recovered"}
+            isChecked={
+              tenderData.tenderFees.find((x) => x.feesType === type)
+                ?.paymentRefundStatus === "DONE"
+            }
             onChange={(e) => {
               updateTenderFee(
                 type,
@@ -779,7 +783,8 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                 initialDate={
                   tenderData.tenderFees
                     ? new Date(
-                        tenderData.tenderFees[0]?.paymentRefundDate || ""
+                        tenderData.tenderFees.find((x) => x.feesType == type)
+                          ?.paymentRefundDate || ""
                       ).toLocaleDateString("en-GB")
                     : undefined
                 }
@@ -806,7 +811,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
               className={styles.notesField}
               initialValue={
                 tenderData.tenderFees.find((x) => x.feesType == type)
-                  ?.instructionNotes || ""
+                  ?.refundNotes || ""
               }
               placeholder="Please type here"
               disable={recoveredNotesDisable}
@@ -833,7 +838,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   ?.filter(
                     (x) =>
                       x.documentCategory == type &&
-                      x.documentType == type + "_INSTRUCTION"
+                      x.documentType == type + "_REFUND"
                     // &&
                     // x.id !== undefined
                   )
@@ -848,7 +853,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   }) || []
               }
               onRemoveFiles={(documentName) => {
-                removeTenderDocument(type + "_INSTRUCTION", type, documentName);
+                removeTenderDocument(type + "_REFUND", type, documentName);
               }}
               onAddFiles={(
                 documents: {
@@ -860,7 +865,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                   tenderData.tenderDocuments?.filter(
                     (x) =>
                       x.documentCategory == type &&
-                      x.documentType == type + "_INSTRUCTION"
+                      x.documentType == type + "_REFUND"
                   ) || [];
                 documents.forEach((file) => {
                   if (
@@ -870,7 +875,7 @@ const DsFeesDocument: React.FC<DsFeesProps> = ({
                         f.documentName == file.document?.name
                     )
                   )
-                    addNewTenderDocument(type + "_INSTRUCTION", type, {
+                    addNewTenderDocument(type + "_REFUND", type, {
                       document: file.document,
                       documentName: file.documentName,
                       name: file.documentName,
