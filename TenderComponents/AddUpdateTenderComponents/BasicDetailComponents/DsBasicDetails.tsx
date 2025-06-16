@@ -26,7 +26,7 @@ const DsBasicDetails = () => {
     fetchMetaData();
   }, []);
   const searchParams = useSearchParams();
-  const type = searchParams.get("type") || "institutional" || "corporate";
+  const type = searchParams.get("type")?.toLowerCase() || "institutional" || "corporate";
 
   useEffect(() => {
     if (
