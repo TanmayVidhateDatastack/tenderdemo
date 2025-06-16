@@ -58,29 +58,3 @@ ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 CMD ["node", "server.js"]
 
-
-
-
-# FROM mcr.microsoft.com/node:18-windowsservercore-ltsc2019
-
-# WORKDIR /app
-
-# # Copy package files and install dependencies
-# COPY package*.json ./
-
-# RUN npm install
-
-# # Copy source code
-# COPY . .
-
-# # Build the app
-# RUN npm run build
-
-# # Expose port 
-# EXPOSE 3000
-
-# # Set environment variable
-# ENV NODE_ENV=production
-
-# # Run the server
-# CMD ["node", "server.js"]
