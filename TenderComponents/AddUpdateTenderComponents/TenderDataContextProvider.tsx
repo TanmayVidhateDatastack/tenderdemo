@@ -1863,7 +1863,21 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
                     });
                     showToaster("create-order-toaster");
                     setTimeout(() => {
-                      goBack();
+                      if (
+                        !(
+                          (status.toLowerCase() ==
+                            DsStatus.AWRD.toLowerCase() ||
+                            status.toLowerCase() ==
+                              DsStatus.PAWRD.toLowerCase() ||
+                            status.toLowerCase() ==
+                              DsStatus.LOST.toLowerCase() ||
+                            status.toLowerCase() ==
+                              DsStatus.CNCL.toLowerCase()) &&
+                          (role.toUpperCase() === "ACCOUNTANCE" ||
+                            role.toUpperCase() === "FINANCE")
+                        )
+                      )
+                        goBack();
                     }, closeTimeForTender);
                   } else {
                     setActionStatus({
@@ -1978,7 +1992,17 @@ export const TenderDataProvider: React.FC<{ children: React.ReactNode }> = ({
               });
               showToaster("create-order-toaster");
               setTimeout(() => {
-                goBack();
+                if (
+                  !(
+                    (status.toLowerCase() == DsStatus.AWRD.toLowerCase() ||
+                      status.toLowerCase() == DsStatus.PAWRD.toLowerCase() ||
+                      status.toLowerCase() == DsStatus.LOST.toLowerCase() ||
+                      status.toLowerCase() == DsStatus.CNCL.toLowerCase()) &&
+                    (role.toUpperCase() === "ACCOUNTANCE" ||
+                      role.toUpperCase() === "FINANCE")
+                  )
+                )
+                  goBack();
               }, closeTimeForTender);
             } else {
               setActionStatus({
