@@ -360,7 +360,7 @@ const ContractView: React.FC<ContractViewProps> = ({
         </>
       )}
       <div>
-        <DsInfoDisplay detailOf="Updated By" value={"Val"} />
+        <DsInfoDisplay detailOf="Updated By" value={"Rajat Sharma"} />
       </div>
     </div>
   );
