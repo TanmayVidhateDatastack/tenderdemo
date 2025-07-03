@@ -28,8 +28,16 @@
   justify-content: end;
   align-items: center;
   margin-top: 2rem;
+  margin-right: 18px !important;
 }
-
+.popupsize
+{
+   max-width: 45vw;
+  min-width: 45vw;
+  height: 40vh !important;
+  max-height: 48vh !important;
+  min-height: 48vh !important;
+}
 .approveBtn {
   color: var(--btnText) !important;
   background-color: var(--background) !important;
